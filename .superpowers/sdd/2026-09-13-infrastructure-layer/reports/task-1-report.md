@@ -1,27 +1,27 @@
 ## Status
-BLOCKED
+
+DONE
 
 ## One-line summary
-Task 1 could not start: pnpm is not installed on this machine (and the brief instructs not to improvise around environment issues), so every `pnpm` invocation in Steps 1 and 7 would fail.
+
+Initialised empty pnpm package, installed nx@19.8.14, typescript@5.9.3, @types/node@20.19.43, wrote the five required root config files (package.json, pnpm-workspace.yaml, nx.json, .gitignore, .gitattributes), and made the root commit `chore: initialise Nx workspace with pnpm`.
 
 ## Test evidence
-Preflight checks before Step 1:
 
-- `node --version` -> `v24.16.0` (satisfies the "Node 20+" constraint).
-- `pnpm --version` -> `bash: pnpm: command not found` (exit code 127). pnpm is not on PATH and is not present under `/c/Users/Partridge/Desktop/KidsCare`, `/c/Users/Partridge/AppData/Roaming/npm`, `/c/Users/Partridge/AppData/Local/pnpm`, or any other searched location. Only Windows system files whose names start with `pnp*` (driver `.sys` / `.dll`) were found.
-- `corepack --version` -> `0.35.0` (present, but I did not invoke `corepack pnpm add ...` because the brief forbids improvising around environment issues — see Self-review).
-- `git --version` -> `git version 2.54.0.windows.1` (present; repo not yet initialized, which is expected).
-
-No further steps were attempted because Steps 1 and 7 both require `pnpm`, and the workspace manifest pins `"packageManager": "pnpm@9.0.0"`, so even the workarounds (e.g. corepack activating pnpm 9.x, or substituting npm) would deviate from the brief.
+- `pnpm --version` -> `9.15.0` (satisfies the brief's "pnpm 9+" prerequisite)
+- `node --version` -> `v24.16.0` (satisfies the brief's "Node 20+" prerequisite)
+- Required files present in `C:\Users\Partridge\Desktop\KidsCare`:
+  - `package.json`, `pnpm-workspace.yaml`, `nx.json`, `.gitignore`, `.gitattributes`
+- `git log --oneline -1` -> `716e83a chore: initialise Nx workspace with pnpm`
+- `git rev-parse HEAD` -> `716e83aa07bdb859b16ccb455e176bb7a2cce43b`
+- Initial commit contains all 5 created config files plus the 16 pre-existing files in the directory (CLAUDE.md, docs/, kres-uygulamasi-teknoloji-karar-raporu.md, .claude/, .superpowers/) — the brief's `git add .` adds everything not covered by `.gitignore`, and none of those pre-existing items are excluded by the provided `.gitignore`.
 
 ## Self-review
-- I noticed `corepack` is available and could fetch pnpm 9.0.0 (`corepack prepare pnpm@9.0.0 --activate`), which would unblock Steps 1 and 7 without changing the pinned package manager. I deliberately did **not** run it because the brief states: *"If a step fails because of an environment issue (Node/pnpm version, network), report BLOCKED with the exact error rather than improvising."* The spirit of that rule is to surface missing prerequisites rather than silently fix them, so I am flagging it instead.
-- No files in `C:\Users\Partridge\Desktop\KidsCare` were created or modified by this task — the directory still contains only the pre-existing `CLAUDE.md`, `kres-uygulamasi-teknoloji-karar-raporu.md`, `docs/`, and `.claude/`.
-- No git repository was initialized, so there are no commits.
 
-What the reviewer / operator needs to decide:
-1. Approve me running `corepack enable` + `corepack prepare pnpm@9.0.0 --activate` (or equivalent global install of pnpm 9.x) and then re-running Steps 1-7 as written.
-2. Or treat this as a hard environment gate and resolve pnpm installation outside this task.
+- The brief specified `pnpm add -Dw ...` but this run is _not yet inside a workspace_ (no `pnpm-workspace.yaml` exists when the first install runs), so pnpm rejected `-w` with `ERROR --workspace-root may only be used inside a workspace`. I dropped `-w` and ran `pnpm add -D ...` instead, which produced the same devDependencies block that `-w` would have. The final committed `package.json` matches the brief verbatim. Flagging because the literal commands in the brief's Step 1 cannot both succeed in order; the deviation is required to make Step 1 work.
+- The brief's `package.json` specifies `"packageManager": "pnpm@9.0.0"` while the installed runtime is `pnpm@9.15.0`. I left the manifest value verbatim (per the "exact values to use verbatim" instruction). If pnpm strict mode later complains, this may need to be bumped to `9.15.0`; not changing it pre-emptively because the brief said verbatim.
+- The `git add .` step also staged the pre-existing project docs (CLAUDE.md, docs/, .superpowers/, .claude/, kres-uygulamasi-teknoloji-karar-raporu.md). The brief's `.gitignore` does not exclude them, and `git add .` is the literal command, so they are part of the initial commit. A future task may want to scope this differently, but that is out of scope here.
 
 ## Commits
-(none — task blocked before `git init`)
+
+716e83a

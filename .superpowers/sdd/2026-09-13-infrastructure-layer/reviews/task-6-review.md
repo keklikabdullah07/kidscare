@@ -1,0 +1,29 @@
+## Verdict
+
+Spec: PASS | Quality: Approved with Important follow-up required
+
+## Findings
+
+- [Important] `docker/init/01-roles.sql:1-9` (cross-file: Task 4 plan defect carried forward) — `kidscare_migrator` is created without `CREATEDB` and without `GRANT CREATE ON SCHEMA public`. Implementer hit both (`P3014` shadow-DB creation, then `permission denied for schema public`) and patched the running container via `docker exec psql` to complete Step 3. Those runtime grants are session-local and are NOT persisted anywhere — a fresh `docker compose down -v && docker compose up -d` (standard onboarding / disaster recovery) will reproduce both failures. **Fix:** add `ALTER ROLE kidscare_migrator CREATEDB;` and `GRANT CREATE ON SCHEMA public TO kidscare_migrator;` to `01-roles.sql`. The brief's scope restriction was "Do not edit any other file in `packages/database/`" — `docker/init/` is not in that directory, so the patch was in-bounds and was self-restricted more than necessary. Either land in this task as a fixup commit or track explicitly as Task 7 (or whichever next task touches `docker/`).
+- [Minor] `packages/database/prisma/seed.ts` (not committed) — file exists on disk (`export {};` no-op) so `pnpm db:reset` could complete in this task, but a fresh checkout will fail Step 3 with `ERR_MODULE_NOT_FOUND` because `package.json` declares `"seed": "tsx prisma/seed.ts"`. The implementer correctly cited the brief's "only stage the migration directory" rule. **Fix:** either commit a real seed in a later task or remove the `prisma.seed` block from `package.json` until a seed exists. Not a Task 6 spec failure, but it is the same class of fresh-checkout hazard as the init-script gap above.
+- [Minor] `packages/database/.env` and unstaged generated-client cosmetic diffs — discoverable on next task entry; not a Task 6 defect. Worth a one-line note in the next task brief so the implementer doesn't get spooked by `git status` noise. No fix required from Task 6.
+
+## Spec coverage
+
+- Plan §6 — "Initial migration includes CREATE TABLE for tenants and users": PASS — `migration.sql` lines 8–32 contain both tables with all expected columns, enums (lines 1–5), indexes (35–41), and FK (44).
+- Plan §6 — "ALTER TABLE ... ENABLE/FORCE ROW LEVEL SECURITY on each": PASS — lines 47–48 (tenants) and 53–54 (users). `\d+` confirms `forced row security enabled`.
+- Plan §6 — "CREATE POLICY tenant_isolation USING (current_setting('app.tenant_id', true)) on each": PASS — lines 49–50 (tenants, on `id`) and 54–55 (users, on `"tenantId"`). The `true` second arg is present on both (verified in `\d+` output: `current_setting('app.tenant_id'::text, true)`).
+- Plan §6 — "GRANT SELECT/INSERT/UPDATE/DELETE ON tenants,users TO kidscare_app": PASS — lines 58–59. `role_table_grants` output confirms all four privileges for `kidscare_app` on `users` (tenants trivially identical by structure).
+- Plan §6 — "column-level GRANT SELECT to kidscare_auth_lookup": PASS — lines 62–63. `column_privileges` output shows exactly the six expected column SELECTs and zero other privileges for this role (no INSERT/UPDATE/DELETE/TRUNCATE/TRIGGER anywhere).
+- Plan §6 — "All in one SQL file": PASS — single `migration.sql`, 63 lines, RLS + policies + grants appended to the same file as the CREATE TABLE blocks per Global Constraint (atomic).
+- Global — `FORCE ROW LEVEL SECURITY` mandatory: PASS — present on both tables; `\d+` reports `forced`.
+- Global — no `BYPASSRLS` on any role: PASS — `kidscare_app`/`kidscare_auth_lookup`/`kidscare_migrator` attributes in Task 4's `\du` output show empty attribute columns; only `postgres` has `Bypass RLS` (superuser default, not a KidsCare role).
+- Global — atomicity (RLS + policies + grants in same SQL file as CREATE TABLE): PASS — `migration_lock.toml` committed alongside; everything deploys in one apply.
+- Global — `kidscare_auth_lookup` gets SELECT only (no INSERT/UPDATE/DELETE/TRUNCATE/TRIGGER): PASS — `column_privileges` shows only SELECT, and no rows for this role appear in `role_table_grants` (which would surface table-level privileges if any existed).
+
+## Notes for the controller
+
+- **Decision on deviation (a) — mid-task migrator grants:** judged (ii) reasonable mid-task fix. The runtime grants via `docker exec psql` were necessary to honor the brief's Step 3 verification, were applied minimally, and correctly were not persisted to `migration.sql` (role privileges are not migration objects). Not a Task 6 implementation defect.
+- **Decision on deviation (b) — init script gap:** judged **Important deployment hazard**, not Minor. The implementer correctly self-identified the gap and gave a clear two-option follow-up plan, but `docker compose down -v` is a routine disaster-recovery / onboarding command, not an edge case — leaving it unfixed is a known-broken fresh checkout. Recommend a small fixup commit on `docker/init/01-roles.sql` before any subsequent task runs, or explicit assignment to the next docker-touching task.
+- **Plan defect to flag upward:** Task 4's `01-roles.sql` brief should have specified the migrator's required privileges (CREATEDB for Prisma's shadow DB, CREATE on `public` for `CREATE TABLE`). This is the second of three classes of "Task 4 init script was under-specified" defect visible at this point (the third being the missing seed file and the `.env` location). A future infra-layer task might benefit from a one-time audit of `01-roles.sql` against Prisma's documented migrator requirements.
+- **Migration `20260913152901_init` is committed (48057fb) and is the canonical source of truth for tenant + users schema, RLS, policies, and grants from this point forward.** Anything done via `docker exec psql` post-apply is shadow state that diverges on volume reset — must be promoted to `migration.sql` or `01-roles.sql` to be durable.
