@@ -1,0 +1,14 @@
+{
+  "name": "tenant-context",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/tenant-context/src",
+  "projectType": "library",
+  "targets": {
+    "lint": { "executor": "@nx/eslint:lint" },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": { "jestConfig": "packages/tenant-context/jest.config.ts" }
+    }
+  },
+  "tags": ["scope:shared"]
+}
