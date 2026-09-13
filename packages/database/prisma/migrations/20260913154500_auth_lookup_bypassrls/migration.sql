@@ -1,0 +1,15 @@
+-- Auth-lookup role needs to query users by email BEFORE a tenant context
+-- exists (the login flow). The RLS policy `tenantId =
+-- current_setting('app.tenant_id', true)` evaluates to NULL when no
+-- tenant context is set, so without this grant the lookup would silently
+-- return zero rows and login would be impossible.
+--
+-- This BYPASSRLS is scoped to `kidscare_auth_lookup` only; the
+-- `kidscare_app` role remains subject to FORCE ROW LEVEL SECURITY on both
+-- tenants and users. Per CLAUDE.md §5, tenant-scoped data access from the
+-- application runtime continues to flow through the `withTenantContext`
+-- middleware (Task 8) which sets `app.tenant_id` per request.
+--
+-- Added by task 11 review. Applied directly on the dev DB by
+-- `ALTER ROLE kidscare_auth_lookup BYPASSRLS;` on 2026-09-13.
+ALTER ROLE kidscare_auth_lookup BYPASSRLS;
