@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@kidscare/shared-types": ["packages/shared-types/src"],
+      "@kidscare/shared-schemas": ["packages/shared-schemas/src"],
+      "@kidscare/database": ["packages/database/src"],
+      "@kidscare/tenant-context": ["packages/tenant-context/src"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".nx", "apps/mobile/node_modules"]
+}
