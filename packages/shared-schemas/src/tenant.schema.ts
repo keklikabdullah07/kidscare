@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const tenantStatusSchema = z.enum(['ACTIVE', 'SUSPENDED', 'DELETED']);
+
 export const tenantInputSchema = z.object({
   slug: z
     .string()
@@ -9,4 +11,17 @@ export const tenantInputSchema = z.object({
   name: z.string().min(2).max(128),
 });
 
+export const tenantCreateSchema = tenantInputSchema.extend({
+  status: tenantStatusSchema.optional(),
+});
+
+export const tenantUpdateSchema = z
+  .object({
+    name: z.string().min(2).max(128).optional(),
+    status: tenantStatusSchema.optional(),
+  })
+  .strict();
+
 export type TenantInput = z.infer<typeof tenantInputSchema>;
+export type TenantCreate = z.infer<typeof tenantCreateSchema>;
+export type TenantUpdate = z.infer<typeof tenantUpdateSchema>;

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { PrismaClient, createAuthLookupClient } from '@kidscare/database';
+import { AUTH_LOOKUP_USER_COLUMNS, PrismaClient, createAuthLookupClient } from '@kidscare/database';
 import { runWithTenant } from '@kidscare/tenant-context';
 
 // kidscare_app role → RLS is FORCE'd; this is what production sees.
@@ -175,7 +175,7 @@ describe('tenant isolation (RLS + AsyncLocalStorage)', () => {
       // other columns.
       const user = await lookup.user.findFirst({
         where: { email: emailA },
-        select: { id: true, tenantId: true, email: true, passwordHash: true },
+        select: AUTH_LOOKUP_USER_COLUMNS,
       });
       expect(user?.tenantId).toBe(a.id);
     } finally {
