@@ -1,0 +1,24 @@
+{
+  "name": "@kidscare/api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start:dev": "nest start --watch",
+    "start": "node -r tsx/cjs dist/apps/api/src/main.js",
+    "test": "jest",
+    "test:integration": "jest --config jest.config.integration.ts --runInBand"
+  },
+  "dependencies": {
+    "@kidscare/database": "workspace:*",
+    "@kidscare/tenant-context": "workspace:*",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0"
+  }
+}
