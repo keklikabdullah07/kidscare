@@ -1,0 +1,28 @@
+{
+  "name": "kidscare",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "pnpm --filter @kidscare/database prisma migrate deploy",
+    "db:migrate:dev": "pnpm --filter @kidscare/database prisma migrate dev",
+    "db:seed": "pnpm --filter @kidscare/database prisma db seed",
+    "db:reset": "pnpm --filter @kidscare/database prisma migrate reset --force",
+    "dev:api": "pnpm --filter @kidscare/api start:dev",
+    "dev:admin": "pnpm --filter @kidscare/admin-web dev",
+    "dev:marketing": "pnpm --filter @kidscare/marketing dev",
+    "dev:mobile": "pnpm --filter @kidscare/mobile start",
+    "test": "pnpm exec nx run-many --target=test",
+    "test:integration": "pnpm --filter @kidscare/api test:integration",
+    "lint": "pnpm exec nx run-many --target=lint",
+    "format": "pnpm exec nx format:write"
+  },
+  "devDependencies": {
+    "nx": "^19.0.0",
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  }
+}

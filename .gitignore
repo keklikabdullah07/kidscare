@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.nx/
+.turbo/
+*.log
+.env
+.env.local
+apps/mobile/.expo/
+apps/mobile/node_modules/
+coverage/
+.next/
