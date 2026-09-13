@@ -1,0 +1,13 @@
+{
+  "name": "admin-web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/admin-web/src",
+  "projectType": "application",
+  "targets": {
+    "dev": { "executor": "@nx/vite:dev-server", "options": { "buildTarget": "build" } },
+    "build": { "executor": "@nx/vite:build", "options": { "outputPath": "dist/apps/admin-web" } },
+    "lint": { "executor": "@nx/eslint:lint" },
+    "test": { "executor": "@nx/vite:test" }
+  },
+  "tags": ["scope:web"]
+}
