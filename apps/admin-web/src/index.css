@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* App-wide base styles. Component-level styling lives inline as
+ * Tailwind utility classes. */
