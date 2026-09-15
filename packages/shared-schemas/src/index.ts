@@ -1,3 +1,4 @@
+export * from './attendance.schema';
 export * from './auth.schema';
 export * from './daily-report.schema';
 export * from './student.schema';
