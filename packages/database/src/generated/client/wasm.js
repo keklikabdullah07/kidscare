@@ -139,9 +139,29 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.StudentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  notes: 'notes',
+  passport: 'passport',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
 };
 
 exports.Prisma.QueryMode = {
@@ -152,6 +172,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last',
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull,
 };
 exports.TenantStatus = exports.$Enums.TenantStatus = {
   ACTIVE: 'ACTIVE',
@@ -168,6 +194,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
+  Student: 'Student',
 };
 
 /**

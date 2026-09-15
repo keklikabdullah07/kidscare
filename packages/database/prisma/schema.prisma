@@ -29,6 +29,7 @@ model Tenant {
   updatedAt DateTime     @updatedAt
 
   users User[]
+  students Student[]
 
   @@map("tenants")
 }
@@ -49,4 +50,25 @@ model User {
   @@unique([tenantId, email])
   @@index([tenantId])
   @@map("users")
+}
+
+model Student {
+  id          String   @id @default(cuid())
+  tenantId    String
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime
+  gender      String?
+  notes       String?
+  passport    Json?    @default("{}")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([tenantId, deletedAt])
+  @@map("students")
 }

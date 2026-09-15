@@ -17,7 +17,7 @@ export default [
       '**/app.json',
       '**/package.json',
       'packages/**/src/generated/**',
-      'packages/**/prisma/migrations/**',
+      'packages/**/prisma/**',
       'scripts/**',
     ],
   },
