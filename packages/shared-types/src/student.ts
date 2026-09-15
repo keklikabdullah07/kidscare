@@ -1,3 +1,6 @@
+import type { Attendance } from './attendance';
+import type { DailyReport } from './daily-report';
+
 export type BloodType = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | '0+' | '0-' | 'UNKNOWN';
 
 export type EmergencyContact = {
@@ -23,6 +26,7 @@ export type StudentPassport = {
 export type Student = {
   id: string;
   tenantId: string;
+  parentId?: string | null | undefined;
   firstName: string;
   lastName: string;
   dateOfBirth: string; // ISO 8601
@@ -36,3 +40,9 @@ export type Student = {
 };
 
 export type StudentSummary = Pick<Student, 'id' | 'firstName' | 'lastName' | 'isActive'>;
+
+export type ParentChildOverview = {
+  student: Student;
+  todayAttendance: Attendance | null;
+  todayDailyReport: DailyReport | null;
+};

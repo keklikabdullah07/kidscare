@@ -10,6 +10,7 @@ export class Student {
   constructor(
     public readonly id: string,
     public readonly tenantId: string,
+    public readonly parentId: string | null,
     public readonly firstName: string,
     public readonly lastName: string,
     public readonly dateOfBirth: Date,
@@ -26,6 +27,7 @@ export class Student {
     return new Student(
       p.id,
       p.tenantId,
+      p.parentId ?? null,
       p.firstName,
       p.lastName,
       p.dateOfBirth,

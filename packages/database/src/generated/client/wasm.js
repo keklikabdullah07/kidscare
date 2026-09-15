@@ -142,6 +142,7 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.StudentScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
+  parentId: 'parentId',
   firstName: 'firstName',
   lastName: 'lastName',
   dateOfBirth: 'dateOfBirth',
@@ -237,6 +238,7 @@ exports.TenantStatus = exports.$Enums.TenantStatus = {
 };
 
 exports.UserRole = exports.$Enums.UserRole = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN',
   TEACHER: 'TEACHER',
   PARENT: 'PARENT',

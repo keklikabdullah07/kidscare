@@ -5,6 +5,7 @@ import { StudentsRepository } from './students.repository';
 const mockStudent: PrismaStudent = {
   id: 's-1',
   tenantId: 't-1',
+  parentId: null,
   firstName: 'Ada',
   lastName: 'Yılmaz',
   dateOfBirth: new Date('2020-05-12'),

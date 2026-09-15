@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from './src/auth/AuthContext';
 import { LoginScreen } from './src/auth/LoginScreen';
 import { SignupScreen } from './src/auth/SignupScreen';
 import { StudentsScreen } from './src/students/StudentsScreen';
+import { ParentHomeScreen } from './src/parent/ParentHomeScreen';
 
 type AuthStackParams = {
   Login: undefined;
@@ -60,7 +61,15 @@ function AppNavigator(): React.ReactElement {
       </View>
     );
   }
-  return state.status === 'unauthenticated' ? <AuthNavigator /> : <StudentsScreen />;
+  if (state.status === 'unauthenticated') {
+    return <AuthNavigator />;
+  }
+
+  if (state.user.role === 'PARENT') {
+    return <ParentHomeScreen />;
+  }
+
+  return <StudentsScreen />;
 }
 
 export default function App(): React.ReactElement {

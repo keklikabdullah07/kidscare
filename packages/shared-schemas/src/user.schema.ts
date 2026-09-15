@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const userRoleSchema = z.enum(['ADMIN', 'TEACHER', 'PARENT']);
+export const userRoleSchema = z.enum(['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT']);
 
 export const userCreateSchema = z.object({
   tenantId: z.string().cuid(),

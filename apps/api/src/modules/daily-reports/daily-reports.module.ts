@@ -7,11 +7,12 @@ import { DailyReportsService } from './services/daily-reports.service';
   controllers: [DailyReportsController],
   providers: [
     DailyReportsService,
+    DailyReportsRepository,
     {
       provide: 'IDailyReportsRepository',
       useClass: DailyReportsRepository,
     },
   ],
-  exports: [DailyReportsService],
+  exports: [DailyReportsService, DailyReportsRepository],
 })
 export class DailyReportsModule {}

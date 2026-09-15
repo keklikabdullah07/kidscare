@@ -121,6 +121,7 @@ export class StudentsController {
     return {
       id: s.id,
       tenantId: s.tenantId,
+      parentId: s.parentId,
       firstName: s.firstName,
       lastName: s.lastName,
       dateOfBirth: s.dateOfBirth.toISOString().slice(0, 10),

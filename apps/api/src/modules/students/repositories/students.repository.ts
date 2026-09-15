@@ -56,7 +56,12 @@ export class StudentsRepository implements IStudentsRepository {
     return this.prisma.withTenant((client) =>
       // tenantId comes from the explicit arg (matches the RLS session
       // variable set by withTenantContext); the relation field needs it.
-      client.student.create({ data: { ...data, tenantId } }),
+      client.student.create({
+        data: {
+          ...data,
+          tenantId,
+        },
+      }),
     );
   }
 

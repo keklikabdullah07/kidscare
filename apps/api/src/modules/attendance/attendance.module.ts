@@ -7,11 +7,12 @@ import { AttendanceService } from './services/attendance.service';
   controllers: [AttendanceController],
   providers: [
     AttendanceService,
+    AttendanceRepository,
     {
       provide: 'IAttendanceRepository',
       useClass: AttendanceRepository,
     },
   ],
-  exports: [AttendanceService],
+  exports: [AttendanceService, AttendanceRepository],
 })
 export class AttendanceModule {}

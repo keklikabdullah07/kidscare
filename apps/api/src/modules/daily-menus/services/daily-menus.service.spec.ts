@@ -21,6 +21,7 @@ const mockStudents: PrismaStudent[] = [
   {
     id: 's-1',
     tenantId: 't-1',
+    parentId: null,
     firstName: 'Ada',
     lastName: 'Yılmaz',
     dateOfBirth: new Date('2020-05-12'),
@@ -37,6 +38,7 @@ const mockStudents: PrismaStudent[] = [
   {
     id: 's-2',
     tenantId: 't-1',
+    parentId: null,
     firstName: 'Can',
     lastName: 'Demir',
     dateOfBirth: new Date('2019-08-23'),

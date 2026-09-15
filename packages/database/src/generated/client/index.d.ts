@@ -55,6 +55,7 @@ export namespace $Enums {
   export type TenantStatus = (typeof TenantStatus)[keyof typeof TenantStatus];
 
   export const UserRole: {
+    SUPER_ADMIN: 'SUPER_ADMIN';
     ADMIN: 'ADMIN';
     TEACHER: 'TEACHER';
     PARENT: 'PARENT';
@@ -1398,6 +1399,42 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: DailyMenuWhereInput;
+  };
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    children: number;
+  };
+
+  export type UserCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    children?: boolean | UserCountOutputTypeCountChildrenArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountChildrenArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: StudentWhereInput;
   };
 
   /**
@@ -2830,6 +2867,8 @@ export namespace Prisma {
         createdAt?: boolean;
         updatedAt?: boolean;
         tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+        children?: boolean | User$childrenArgs<ExtArgs>;
+        _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['user']
     >;
@@ -2866,6 +2905,8 @@ export namespace Prisma {
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    children?: boolean | User$childrenArgs<ExtArgs>;
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
@@ -2877,6 +2918,7 @@ export namespace Prisma {
     name: 'User';
     objects: {
       tenant: Prisma.$TenantPayload<ExtArgs>;
+      children: Prisma.$StudentPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -3328,6 +3370,11 @@ export namespace Prisma {
       Null,
       ExtArgs
     >;
+    children<T extends User$childrenArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$childrenArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3702,6 +3749,28 @@ export namespace Prisma {
   };
 
   /**
+   * User.children
+   */
+  export type User$childrenArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Student
+     */
+    select?: StudentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentInclude<ExtArgs> | null;
+    where?: StudentWhereInput;
+    orderBy?: StudentOrderByWithRelationInput | StudentOrderByWithRelationInput[];
+    cursor?: StudentWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: StudentScalarFieldEnum | StudentScalarFieldEnum[];
+  };
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
@@ -3729,6 +3798,7 @@ export namespace Prisma {
   export type StudentMinAggregateOutputType = {
     id: string | null;
     tenantId: string | null;
+    parentId: string | null;
     firstName: string | null;
     lastName: string | null;
     dateOfBirth: Date | null;
@@ -3743,6 +3813,7 @@ export namespace Prisma {
   export type StudentMaxAggregateOutputType = {
     id: string | null;
     tenantId: string | null;
+    parentId: string | null;
     firstName: string | null;
     lastName: string | null;
     dateOfBirth: Date | null;
@@ -3757,6 +3828,7 @@ export namespace Prisma {
   export type StudentCountAggregateOutputType = {
     id: number;
     tenantId: number;
+    parentId: number;
     firstName: number;
     lastName: number;
     dateOfBirth: number;
@@ -3773,6 +3845,7 @@ export namespace Prisma {
   export type StudentMinAggregateInputType = {
     id?: true;
     tenantId?: true;
+    parentId?: true;
     firstName?: true;
     lastName?: true;
     dateOfBirth?: true;
@@ -3787,6 +3860,7 @@ export namespace Prisma {
   export type StudentMaxAggregateInputType = {
     id?: true;
     tenantId?: true;
+    parentId?: true;
     firstName?: true;
     lastName?: true;
     dateOfBirth?: true;
@@ -3801,6 +3875,7 @@ export namespace Prisma {
   export type StudentCountAggregateInputType = {
     id?: true;
     tenantId?: true;
+    parentId?: true;
     firstName?: true;
     lastName?: true;
     dateOfBirth?: true;
@@ -3890,6 +3965,7 @@ export namespace Prisma {
   export type StudentGroupByOutputType = {
     id: string;
     tenantId: string;
+    parentId: string | null;
     firstName: string;
     lastName: string;
     dateOfBirth: Date;
@@ -3922,6 +3998,7 @@ export namespace Prisma {
       {
         id?: boolean;
         tenantId?: boolean;
+        parentId?: boolean;
         firstName?: boolean;
         lastName?: boolean;
         dateOfBirth?: boolean;
@@ -3933,6 +4010,7 @@ export namespace Prisma {
         updatedAt?: boolean;
         deletedAt?: boolean;
         tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+        parent?: boolean | Student$parentArgs<ExtArgs>;
         dailyReports?: boolean | Student$dailyReportsArgs<ExtArgs>;
         attendances?: boolean | Student$attendancesArgs<ExtArgs>;
         _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>;
@@ -3946,6 +4024,7 @@ export namespace Prisma {
     {
       id?: boolean;
       tenantId?: boolean;
+      parentId?: boolean;
       firstName?: boolean;
       lastName?: boolean;
       dateOfBirth?: boolean;
@@ -3957,6 +4036,7 @@ export namespace Prisma {
       updatedAt?: boolean;
       deletedAt?: boolean;
       tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      parent?: boolean | Student$parentArgs<ExtArgs>;
     },
     ExtArgs['result']['student']
   >;
@@ -3964,6 +4044,7 @@ export namespace Prisma {
   export type StudentSelectScalar = {
     id?: boolean;
     tenantId?: boolean;
+    parentId?: boolean;
     firstName?: boolean;
     lastName?: boolean;
     dateOfBirth?: boolean;
@@ -3978,6 +4059,7 @@ export namespace Prisma {
 
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    parent?: boolean | Student$parentArgs<ExtArgs>;
     dailyReports?: boolean | Student$dailyReportsArgs<ExtArgs>;
     attendances?: boolean | Student$attendancesArgs<ExtArgs>;
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>;
@@ -3986,6 +4068,7 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    parent?: boolean | Student$parentArgs<ExtArgs>;
   };
 
   export type $StudentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
@@ -3993,6 +4076,7 @@ export namespace Prisma {
       name: 'Student';
       objects: {
         tenant: Prisma.$TenantPayload<ExtArgs>;
+        parent: Prisma.$UserPayload<ExtArgs> | null;
         dailyReports: Prisma.$DailyReportPayload<ExtArgs>[];
         attendances: Prisma.$AttendancePayload<ExtArgs>[];
       };
@@ -4000,6 +4084,7 @@ export namespace Prisma {
         {
           id: string;
           tenantId: string;
+          parentId: string | null;
           firstName: string;
           lastName: string;
           dateOfBirth: Date;
@@ -4447,6 +4532,13 @@ export namespace Prisma {
       Null,
       ExtArgs
     >;
+    parent<T extends Student$parentArgs<ExtArgs> = {}>(
+      args?: Subset<T, Student$parentArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null,
+      null,
+      ExtArgs
+    >;
     dailyReports<T extends Student$dailyReportsArgs<ExtArgs> = {}>(
       args?: Subset<T, Student$dailyReportsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
@@ -4490,6 +4582,7 @@ export namespace Prisma {
   interface StudentFieldRefs {
     readonly id: FieldRef<'Student', 'String'>;
     readonly tenantId: FieldRef<'Student', 'String'>;
+    readonly parentId: FieldRef<'Student', 'String'>;
     readonly firstName: FieldRef<'Student', 'String'>;
     readonly lastName: FieldRef<'Student', 'String'>;
     readonly dateOfBirth: FieldRef<'Student', 'DateTime'>;
@@ -4840,6 +4933,23 @@ export namespace Prisma {
      * Filter which Students to delete
      */
     where?: StudentWhereInput;
+  };
+
+  /**
+   * Student.parent
+   */
+  export type Student$parentArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null;
+    where?: UserWhereInput;
   };
 
   /**
@@ -8387,6 +8497,7 @@ export namespace Prisma {
   export const StudentScalarFieldEnum: {
     id: 'id';
     tenantId: 'tenantId';
+    parentId: 'parentId';
     firstName: 'firstName';
     lastName: 'lastName';
     dateOfBirth: 'dateOfBirth';
@@ -8680,6 +8791,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<'User'> | Date | string;
     updatedAt?: DateTimeFilter<'User'> | Date | string;
     tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    children?: StudentListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -8693,6 +8805,7 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     tenant?: TenantOrderByWithRelationInput;
+    children?: StudentOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -8711,6 +8824,7 @@ export namespace Prisma {
       createdAt?: DateTimeFilter<'User'> | Date | string;
       updatedAt?: DateTimeFilter<'User'> | Date | string;
       tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      children?: StudentListRelationFilter;
     },
     'id' | 'tenantId_email'
   >;
@@ -8751,6 +8865,7 @@ export namespace Prisma {
     NOT?: StudentWhereInput | StudentWhereInput[];
     id?: StringFilter<'Student'> | string;
     tenantId?: StringFilter<'Student'> | string;
+    parentId?: StringNullableFilter<'Student'> | string | null;
     firstName?: StringFilter<'Student'> | string;
     lastName?: StringFilter<'Student'> | string;
     dateOfBirth?: DateTimeFilter<'Student'> | Date | string;
@@ -8762,6 +8877,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'Student'> | Date | string;
     deletedAt?: DateTimeNullableFilter<'Student'> | Date | string | null;
     tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    parent?: XOR<UserNullableRelationFilter, UserWhereInput> | null;
     dailyReports?: DailyReportListRelationFilter;
     attendances?: AttendanceListRelationFilter;
   };
@@ -8769,6 +8885,7 @@ export namespace Prisma {
   export type StudentOrderByWithRelationInput = {
     id?: SortOrder;
     tenantId?: SortOrder;
+    parentId?: SortOrderInput | SortOrder;
     firstName?: SortOrder;
     lastName?: SortOrder;
     dateOfBirth?: SortOrder;
@@ -8780,6 +8897,7 @@ export namespace Prisma {
     updatedAt?: SortOrder;
     deletedAt?: SortOrderInput | SortOrder;
     tenant?: TenantOrderByWithRelationInput;
+    parent?: UserOrderByWithRelationInput;
     dailyReports?: DailyReportOrderByRelationAggregateInput;
     attendances?: AttendanceOrderByRelationAggregateInput;
   };
@@ -8791,6 +8909,7 @@ export namespace Prisma {
       OR?: StudentWhereInput[];
       NOT?: StudentWhereInput | StudentWhereInput[];
       tenantId?: StringFilter<'Student'> | string;
+      parentId?: StringNullableFilter<'Student'> | string | null;
       firstName?: StringFilter<'Student'> | string;
       lastName?: StringFilter<'Student'> | string;
       dateOfBirth?: DateTimeFilter<'Student'> | Date | string;
@@ -8802,6 +8921,7 @@ export namespace Prisma {
       updatedAt?: DateTimeFilter<'Student'> | Date | string;
       deletedAt?: DateTimeNullableFilter<'Student'> | Date | string | null;
       tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      parent?: XOR<UserNullableRelationFilter, UserWhereInput> | null;
       dailyReports?: DailyReportListRelationFilter;
       attendances?: AttendanceListRelationFilter;
     },
@@ -8811,6 +8931,7 @@ export namespace Prisma {
   export type StudentOrderByWithAggregationInput = {
     id?: SortOrder;
     tenantId?: SortOrder;
+    parentId?: SortOrderInput | SortOrder;
     firstName?: SortOrder;
     lastName?: SortOrder;
     dateOfBirth?: SortOrder;
@@ -8832,6 +8953,7 @@ export namespace Prisma {
     NOT?: StudentScalarWhereWithAggregatesInput | StudentScalarWhereWithAggregatesInput[];
     id?: StringWithAggregatesFilter<'Student'> | string;
     tenantId?: StringWithAggregatesFilter<'Student'> | string;
+    parentId?: StringNullableWithAggregatesFilter<'Student'> | string | null;
     firstName?: StringWithAggregatesFilter<'Student'> | string;
     lastName?: StringWithAggregatesFilter<'Student'> | string;
     dateOfBirth?: DateTimeWithAggregatesFilter<'Student'> | Date | string;
@@ -9237,6 +9359,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -9249,6 +9372,7 @@ export namespace Prisma {
     lastLoginAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
   };
 
   export type UserUpdateInput = {
@@ -9261,6 +9385,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -9273,6 +9398,7 @@ export namespace Prisma {
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -9323,6 +9449,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
     tenant: TenantCreateNestedOneWithoutStudentsInput;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
     dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
     attendances?: AttendanceCreateNestedManyWithoutStudentInput;
   };
@@ -9330,6 +9457,7 @@ export namespace Prisma {
   export type StudentUncheckedCreateInput = {
     id?: string;
     tenantId: string;
+    parentId?: string | null;
     firstName: string;
     lastName: string;
     dateOfBirth: Date | string;
@@ -9357,6 +9485,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
   };
@@ -9364,6 +9493,7 @@ export namespace Prisma {
   export type StudentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
     firstName?: StringFieldUpdateOperationsInput | string;
     lastName?: StringFieldUpdateOperationsInput | string;
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -9381,6 +9511,7 @@ export namespace Prisma {
   export type StudentCreateManyInput = {
     id?: string;
     tenantId: string;
+    parentId?: string | null;
     firstName: string;
     lastName: string;
     dateOfBirth: Date | string;
@@ -9410,6 +9541,7 @@ export namespace Prisma {
   export type StudentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
     firstName?: StringFieldUpdateOperationsInput | string;
     lastName?: StringFieldUpdateOperationsInput | string;
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -10044,9 +10176,15 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
   };
 
+  export type UserNullableRelationFilter = {
+    is?: UserWhereInput | null;
+    isNot?: UserWhereInput | null;
+  };
+
   export type StudentCountOrderByAggregateInput = {
     id?: SortOrder;
     tenantId?: SortOrder;
+    parentId?: SortOrder;
     firstName?: SortOrder;
     lastName?: SortOrder;
     dateOfBirth?: SortOrder;
@@ -10062,6 +10200,7 @@ export namespace Prisma {
   export type StudentMaxOrderByAggregateInput = {
     id?: SortOrder;
     tenantId?: SortOrder;
+    parentId?: SortOrder;
     firstName?: SortOrder;
     lastName?: SortOrder;
     dateOfBirth?: SortOrder;
@@ -10076,6 +10215,7 @@ export namespace Prisma {
   export type StudentMinOrderByAggregateInput = {
     id?: SortOrder;
     tenantId?: SortOrder;
+    parentId?: SortOrder;
     firstName?: SortOrder;
     lastName?: SortOrder;
     dateOfBirth?: SortOrder;
@@ -10726,6 +10866,28 @@ export namespace Prisma {
     connect?: TenantWhereUniqueInput;
   };
 
+  export type StudentCreateNestedManyWithoutParentInput = {
+    create?:
+      | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
+      | StudentCreateWithoutParentInput[]
+      | StudentUncheckedCreateWithoutParentInput[];
+    connectOrCreate?:
+      StudentCreateOrConnectWithoutParentInput | StudentCreateOrConnectWithoutParentInput[];
+    createMany?: StudentCreateManyParentInputEnvelope;
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+  };
+
+  export type StudentUncheckedCreateNestedManyWithoutParentInput = {
+    create?:
+      | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
+      | StudentCreateWithoutParentInput[]
+      | StudentUncheckedCreateWithoutParentInput[];
+    connectOrCreate?:
+      StudentCreateOrConnectWithoutParentInput | StudentCreateOrConnectWithoutParentInput[];
+    createMany?: StudentCreateManyParentInputEnvelope;
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+  };
+
   export type EnumUserRoleFieldUpdateOperationsInput = {
     set?: $Enums.UserRole;
   };
@@ -10749,10 +10911,62 @@ export namespace Prisma {
     >;
   };
 
+  export type StudentUpdateManyWithoutParentNestedInput = {
+    create?:
+      | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
+      | StudentCreateWithoutParentInput[]
+      | StudentUncheckedCreateWithoutParentInput[];
+    connectOrCreate?:
+      StudentCreateOrConnectWithoutParentInput | StudentCreateOrConnectWithoutParentInput[];
+    upsert?:
+      | StudentUpsertWithWhereUniqueWithoutParentInput
+      | StudentUpsertWithWhereUniqueWithoutParentInput[];
+    createMany?: StudentCreateManyParentInputEnvelope;
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+    update?:
+      | StudentUpdateWithWhereUniqueWithoutParentInput
+      | StudentUpdateWithWhereUniqueWithoutParentInput[];
+    updateMany?:
+      StudentUpdateManyWithWhereWithoutParentInput | StudentUpdateManyWithWhereWithoutParentInput[];
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[];
+  };
+
+  export type StudentUncheckedUpdateManyWithoutParentNestedInput = {
+    create?:
+      | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
+      | StudentCreateWithoutParentInput[]
+      | StudentUncheckedCreateWithoutParentInput[];
+    connectOrCreate?:
+      StudentCreateOrConnectWithoutParentInput | StudentCreateOrConnectWithoutParentInput[];
+    upsert?:
+      | StudentUpsertWithWhereUniqueWithoutParentInput
+      | StudentUpsertWithWhereUniqueWithoutParentInput[];
+    createMany?: StudentCreateManyParentInputEnvelope;
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+    update?:
+      | StudentUpdateWithWhereUniqueWithoutParentInput
+      | StudentUpdateWithWhereUniqueWithoutParentInput[];
+    updateMany?:
+      StudentUpdateManyWithWhereWithoutParentInput | StudentUpdateManyWithWhereWithoutParentInput[];
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutStudentsInput = {
     create?: XOR<TenantCreateWithoutStudentsInput, TenantUncheckedCreateWithoutStudentsInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutStudentsInput;
     connect?: TenantWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutChildrenInput = {
+    create?: XOR<UserCreateWithoutChildrenInput, UserUncheckedCreateWithoutChildrenInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutChildrenInput;
+    connect?: UserWhereUniqueInput;
   };
 
   export type DailyReportCreateNestedManyWithoutStudentInput = {
@@ -10813,6 +11027,19 @@ export namespace Prisma {
     update?: XOR<
       XOR<TenantUpdateToOneWithWhereWithoutStudentsInput, TenantUpdateWithoutStudentsInput>,
       TenantUncheckedUpdateWithoutStudentsInput
+    >;
+  };
+
+  export type UserUpdateOneWithoutChildrenNestedInput = {
+    create?: XOR<UserCreateWithoutChildrenInput, UserUncheckedCreateWithoutChildrenInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutChildrenInput;
+    upsert?: UserUpsertWithoutChildrenInput;
+    disconnect?: UserWhereInput | boolean;
+    delete?: UserWhereInput | boolean;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutChildrenInput, UserUpdateWithoutChildrenInput>,
+      UserUncheckedUpdateWithoutChildrenInput
     >;
   };
 
@@ -11295,6 +11522,7 @@ export namespace Prisma {
     lastLoginAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    children?: StudentCreateNestedManyWithoutParentInput;
   };
 
   export type UserUncheckedCreateWithoutTenantInput = {
@@ -11306,6 +11534,7 @@ export namespace Prisma {
     lastLoginAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
   };
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -11330,12 +11559,14 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
     dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
     attendances?: AttendanceCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutTenantInput = {
     id?: string;
+    parentId?: string | null;
     firstName: string;
     lastName: string;
     dateOfBirth: Date | string;
@@ -11531,6 +11762,7 @@ export namespace Prisma {
     NOT?: StudentScalarWhereInput | StudentScalarWhereInput[];
     id?: StringFilter<'Student'> | string;
     tenantId?: StringFilter<'Student'> | string;
+    parentId?: StringNullableFilter<'Student'> | string | null;
     firstName?: StringFilter<'Student'> | string;
     lastName?: StringFilter<'Student'> | string;
     dateOfBirth?: DateTimeFilter<'Student'> | Date | string;
@@ -11678,6 +11910,50 @@ export namespace Prisma {
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
   };
 
+  export type StudentCreateWithoutParentInput = {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    tenant: TenantCreateNestedOneWithoutStudentsInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentUncheckedCreateWithoutParentInput = {
+    id?: string;
+    tenantId: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentCreateOrConnectWithoutParentInput = {
+    where: StudentWhereUniqueInput;
+    create: XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>;
+  };
+
+  export type StudentCreateManyParentInputEnvelope = {
+    data: StudentCreateManyParentInput | StudentCreateManyParentInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>;
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
@@ -11715,6 +11991,22 @@ export namespace Prisma {
     dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
+  export type StudentUpsertWithWhereUniqueWithoutParentInput = {
+    where: StudentWhereUniqueInput;
+    update: XOR<StudentUpdateWithoutParentInput, StudentUncheckedUpdateWithoutParentInput>;
+    create: XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>;
+  };
+
+  export type StudentUpdateWithWhereUniqueWithoutParentInput = {
+    where: StudentWhereUniqueInput;
+    data: XOR<StudentUpdateWithoutParentInput, StudentUncheckedUpdateWithoutParentInput>;
+  };
+
+  export type StudentUpdateManyWithWhereWithoutParentInput = {
+    where: StudentScalarWhereInput;
+    data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutParentInput>;
+  };
+
   export type TenantCreateWithoutStudentsInput = {
     id?: string;
     slug: string;
@@ -11744,6 +12036,35 @@ export namespace Prisma {
   export type TenantCreateOrConnectWithoutStudentsInput = {
     where: TenantWhereUniqueInput;
     create: XOR<TenantCreateWithoutStudentsInput, TenantUncheckedCreateWithoutStudentsInput>;
+  };
+
+  export type UserCreateWithoutChildrenInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+  };
+
+  export type UserUncheckedCreateWithoutChildrenInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type UserCreateOrConnectWithoutChildrenInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutChildrenInput, UserUncheckedCreateWithoutChildrenInput>;
   };
 
   export type DailyReportCreateWithoutStudentInput = {
@@ -11868,6 +12189,41 @@ export namespace Prisma {
     dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
+  export type UserUpsertWithoutChildrenInput = {
+    update: XOR<UserUpdateWithoutChildrenInput, UserUncheckedUpdateWithoutChildrenInput>;
+    create: XOR<UserCreateWithoutChildrenInput, UserUncheckedCreateWithoutChildrenInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutChildrenInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutChildrenInput, UserUncheckedUpdateWithoutChildrenInput>;
+  };
+
+  export type UserUpdateWithoutChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type DailyReportUpsertWithWhereUniqueWithoutStudentInput = {
     where: DailyReportWhereUniqueInput;
     update: XOR<
@@ -11956,12 +12312,14 @@ export namespace Prisma {
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
     tenant: TenantCreateNestedOneWithoutStudentsInput;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
     attendances?: AttendanceCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutDailyReportsInput = {
     id?: string;
     tenantId: string;
+    parentId?: string | null;
     firstName: string;
     lastName: string;
     dateOfBirth: Date | string;
@@ -12059,12 +12417,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutDailyReportsInput = {
     id?: StringFieldUpdateOperationsInput | string;
     tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
     firstName?: StringFieldUpdateOperationsInput | string;
     lastName?: StringFieldUpdateOperationsInput | string;
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -12122,12 +12482,14 @@ export namespace Prisma {
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
     tenant: TenantCreateNestedOneWithoutStudentsInput;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
     dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutAttendancesInput = {
     id?: string;
     tenantId: string;
+    parentId?: string | null;
     firstName: string;
     lastName: string;
     dateOfBirth: Date | string;
@@ -12216,12 +12578,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string;
     tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
     firstName?: StringFieldUpdateOperationsInput | string;
     lastName?: StringFieldUpdateOperationsInput | string;
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -12316,6 +12680,7 @@ export namespace Prisma {
 
   export type StudentCreateManyTenantInput = {
     id?: string;
+    parentId?: string | null;
     firstName: string;
     lastName: string;
     dateOfBirth: Date | string;
@@ -12381,6 +12746,7 @@ export namespace Prisma {
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUpdateManyWithoutParentNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTenantInput = {
@@ -12392,6 +12758,7 @@ export namespace Prisma {
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
   };
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -12417,12 +12784,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
     firstName?: StringFieldUpdateOperationsInput | string;
     lastName?: StringFieldUpdateOperationsInput | string;
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -12439,6 +12808,7 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateManyWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
     firstName?: StringFieldUpdateOperationsInput | string;
     lastName?: StringFieldUpdateOperationsInput | string;
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -12583,6 +12953,70 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type StudentCreateManyParentInput = {
+    id?: string;
+    tenantId: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+  };
+
+  export type StudentUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type StudentUncheckedUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type StudentUncheckedUpdateManyWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
   export type DailyReportCreateManyStudentInput = {
     id?: string;
     tenantId: string;
@@ -12716,6 +13150,12 @@ export namespace Prisma {
   export type TenantCountOutputTypeArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = TenantCountOutputTypeDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use UserCountOutputTypeDefaultArgs instead
+   */
+  export type UserCountOutputTypeArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = UserCountOutputTypeDefaultArgs<ExtArgs>;
   /**
    * @deprecated Use StudentCountOutputTypeDefaultArgs instead
    */

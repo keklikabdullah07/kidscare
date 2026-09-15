@@ -6,6 +6,7 @@ import { Student } from '../entities/student.entity';
 const entity = new Student(
   's-1',
   't-1',
+  null,
   'Ada',
   'Yılmaz',
   new Date('2020-05-12'),
@@ -139,6 +140,7 @@ describe('StudentsController', () => {
           new Student(
             entity.id,
             entity.tenantId,
+            entity.parentId,
             'Yeni',
             entity.lastName,
             entity.dateOfBirth,
@@ -171,6 +173,7 @@ describe('StudentsController', () => {
           new Student(
             entity.id,
             entity.tenantId,
+            entity.parentId,
             entity.firstName,
             entity.lastName,
             entity.dateOfBirth,

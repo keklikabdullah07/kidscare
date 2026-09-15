@@ -10,6 +10,7 @@ import { AttendanceModule } from './modules/attendance/attendance.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DailyMenusModule } from './modules/daily-menus/daily-menus.module';
 import { DailyReportsModule } from './modules/daily-reports/daily-reports.module';
+import { ParentModule } from './modules/parent/parent.module';
 import { StudentsModule } from './modules/students/students.module';
 
 @Module({
@@ -24,6 +25,7 @@ import { StudentsModule } from './modules/students/students.module';
     DailyReportsModule,
     AttendanceModule,
     DailyMenusModule,
+    ParentModule,
   ],
   providers: [Reflector, { provide: APP_GUARD, useClass: TenantGuard }],
 })
