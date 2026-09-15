@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { TenantGuard } from './common/guards/tenant.guard';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { DailyReportsModule } from './modules/daily-reports/daily-reports.module';
 import { StudentsModule } from './modules/students/students.module';
 
 @Module({
@@ -18,6 +19,7 @@ import { StudentsModule } from './modules/students/students.module';
     AuthModule,
     TenantsModule,
     StudentsModule,
+    DailyReportsModule,
   ],
   providers: [Reflector, { provide: APP_GUARD, useClass: TenantGuard }],
 })
