@@ -28,7 +28,7 @@
     "test:integration": "pnpm --filter @kidscare/api test:integration",
     "lint": "pnpm exec nx run-many --target=lint",
     "format": "pnpm exec nx format:write",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
