@@ -5,9 +5,10 @@ import { SignupPage } from './features/auth/SignupPage';
 import { TenantSettings } from './features/tenant/TenantSettings';
 import { StudentsPage } from './features/students/StudentsPage';
 
+import { AttendancePage } from './features/attendance/AttendancePage';
 import { DailyTrackingPage } from './features/daily-reports/DailyTrackingPage';
 
-type View = 'students' | 'daily-tracking' | 'settings';
+type View = 'students' | 'daily-tracking' | 'attendance' | 'settings';
 
 function AppContent(): JSX.Element {
   const { state, logout } = useAuth();
@@ -55,6 +56,17 @@ function AppContent(): JSX.Element {
             </button>
             <button
               type="button"
+              onClick={() => setPage('attendance')}
+              className={
+                page === 'attendance'
+                  ? 'text-blue-600 font-semibold'
+                  : 'text-gray-600 hover:text-gray-900'
+              }
+            >
+              🛡️ Yoklama & Giriş/Çıkış
+            </button>
+            <button
+              type="button"
               onClick={() => setPage('settings')}
               className={
                 page === 'settings'
@@ -84,6 +96,8 @@ function AppContent(): JSX.Element {
           <StudentsPage />
         ) : page === 'daily-tracking' ? (
           <DailyTrackingPage />
+        ) : page === 'attendance' ? (
+          <AttendancePage />
         ) : (
           <TenantSettings />
         )}
