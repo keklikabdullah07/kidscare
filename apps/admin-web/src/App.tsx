@@ -6,9 +6,10 @@ import { TenantSettings } from './features/tenant/TenantSettings';
 import { StudentsPage } from './features/students/StudentsPage';
 
 import { AttendancePage } from './features/attendance/AttendancePage';
+import { DailyMenuPage } from './features/daily-menus/DailyMenuPage';
 import { DailyTrackingPage } from './features/daily-reports/DailyTrackingPage';
 
-type View = 'students' | 'daily-tracking' | 'attendance' | 'settings';
+type View = 'students' | 'daily-tracking' | 'attendance' | 'daily-menus' | 'settings';
 
 function AppContent(): JSX.Element {
   const { state, logout } = useAuth();
@@ -67,6 +68,17 @@ function AppContent(): JSX.Element {
             </button>
             <button
               type="button"
+              onClick={() => setPage('daily-menus')}
+              className={
+                page === 'daily-menus'
+                  ? 'text-blue-600 font-semibold'
+                  : 'text-gray-600 hover:text-gray-900'
+              }
+            >
+              🍲 Yemek Listesi
+            </button>
+            <button
+              type="button"
               onClick={() => setPage('settings')}
               className={
                 page === 'settings'
@@ -98,6 +110,8 @@ function AppContent(): JSX.Element {
           <DailyTrackingPage />
         ) : page === 'attendance' ? (
           <AttendancePage />
+        ) : page === 'daily-menus' ? (
+          <DailyMenuPage />
         ) : (
           <TenantSettings />
         )}
