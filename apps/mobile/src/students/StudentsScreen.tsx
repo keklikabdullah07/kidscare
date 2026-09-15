@@ -17,6 +17,7 @@ import { createStudent, deleteStudent, listStudents } from '../api/students';
 import { useAuth } from '../auth/AuthContext';
 import { colors, spacing } from '../theme';
 import { StudentPassportModal } from './StudentPassportModal';
+import { DailyReportModal } from '../daily-reports/DailyReportModal';
 
 type Status = 'loading' | 'ready' | 'error';
 
@@ -28,6 +29,7 @@ export function StudentsScreen(): React.ReactElement {
   const [modalOpen, setModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [passportStudent, setPassportStudent] = useState<Student | null>(null);
+  const [trackingStudent, setTrackingStudent] = useState<Student | null>(null);
 
   function reload(): void {
     setStatus('loading');
@@ -102,7 +104,7 @@ export function StudentsScreen(): React.ReactElement {
             <Pressable
               style={styles.row}
               onLongPress={() => handleDelete(item)}
-              onPress={() => setPassportStudent(item)}
+              onPress={() => setTrackingStudent(item)}
             >
               <View style={styles.flex1}>
                 <View style={styles.nameRow}>
@@ -147,9 +149,14 @@ export function StudentsScreen(): React.ReactElement {
                     {item.isActive ? 'Aktif' : 'Pasif'}
                   </Text>
                 </View>
-                <Pressable style={styles.passportBtn} onPress={() => setPassportStudent(item)}>
-                  <Text style={styles.passportBtnText}>📋 Pasaport</Text>
-                </Pressable>
+                <View style={styles.actionBtnRow}>
+                  <Pressable style={styles.passportBtn} onPress={() => setPassportStudent(item)}>
+                    <Text style={styles.passportBtnText}>📋 Pasaport</Text>
+                  </Pressable>
+                  <Pressable style={styles.trackingBtn} onPress={() => setTrackingStudent(item)}>
+                    <Text style={styles.trackingBtnText}>🌟 Günlük</Text>
+                  </Pressable>
+                </View>
               </View>
             </Pressable>
           )}
@@ -179,6 +186,13 @@ export function StudentsScreen(): React.ReactElement {
             setPassportStudent(updated);
           }
         }}
+      />
+
+      <DailyReportModal
+        student={trackingStudent}
+        date={new Date().toISOString().slice(0, 10)}
+        visible={trackingStudent !== null}
+        onClose={() => setTrackingStudent(null)}
       />
     </View>
   );
@@ -376,6 +390,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   badgeText: { fontSize: 11, fontWeight: '600' },
+  actionBtnRow: { flexDirection: 'row', gap: 4 },
   passportBtn: {
     paddingHorizontal: spacing.xs,
     paddingVertical: 2,
@@ -385,6 +400,15 @@ const styles = StyleSheet.create({
     borderColor: '#BFDBFE',
   },
   passportBtnText: { fontSize: 11, color: '#1D4ED8', fontWeight: '600' },
+  trackingBtn: {
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 2,
+    backgroundColor: '#FEF3C7',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+  },
+  trackingBtnText: { fontSize: 11, color: '#92400E', fontWeight: '600' },
 
   modalBackdrop: {
     flex: 1,
