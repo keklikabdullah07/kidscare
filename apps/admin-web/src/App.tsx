@@ -5,7 +5,9 @@ import { SignupPage } from './features/auth/SignupPage';
 import { TenantSettings } from './features/tenant/TenantSettings';
 import { StudentsPage } from './features/students/StudentsPage';
 
-type View = 'students' | 'settings';
+import { DailyTrackingPage } from './features/daily-reports/DailyTrackingPage';
+
+type View = 'students' | 'daily-tracking' | 'settings';
 
 function AppContent(): JSX.Element {
   const { state, logout } = useAuth();
@@ -27,8 +29,8 @@ function AppContent(): JSX.Element {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
-          <nav className="flex gap-4 text-sm">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+          <nav className="flex gap-5 text-sm">
             <button
               type="button"
               onClick={() => setPage('students')}
@@ -39,6 +41,17 @@ function AppContent(): JSX.Element {
               }
             >
               Öğrenciler
+            </button>
+            <button
+              type="button"
+              onClick={() => setPage('daily-tracking')}
+              className={
+                page === 'daily-tracking'
+                  ? 'text-blue-600 font-semibold'
+                  : 'text-gray-600 hover:text-gray-900'
+              }
+            >
+              🌟 Günlük Takip
             </button>
             <button
               type="button"
@@ -66,8 +79,14 @@ function AppContent(): JSX.Element {
           </div>
         </div>
       </header>
-      <main className="max-w-3xl mx-auto px-4 py-6">
-        {page === 'students' ? <StudentsPage /> : <TenantSettings />}
+      <main className="max-w-5xl mx-auto px-4 py-6">
+        {page === 'students' ? (
+          <StudentsPage />
+        ) : page === 'daily-tracking' ? (
+          <DailyTrackingPage />
+        ) : (
+          <TenantSettings />
+        )}
       </main>
     </div>
   );
