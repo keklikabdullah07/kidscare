@@ -11,31 +11,52 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import type { Student } from '@kidscare/shared-types';
+import type { Attendance, AttendanceStatus, Student } from '@kidscare/shared-types';
+import { getAttendanceByDate } from '../api/attendance';
 import { ApiError } from '../api/client';
 import { createStudent, deleteStudent, listStudents } from '../api/students';
+import { AttendanceCheckModal } from '../attendance/AttendanceCheckModal';
 import { useAuth } from '../auth/AuthContext';
+import { DailyReportModal } from '../daily-reports/DailyReportModal';
 import { colors, spacing } from '../theme';
 import { StudentPassportModal } from './StudentPassportModal';
-import { DailyReportModal } from '../daily-reports/DailyReportModal';
 
 type Status = 'loading' | 'ready' | 'error';
+
+const ATTENDANCE_BADGES: Record<
+  AttendanceStatus,
+  { label: string; emoji: string; bg: string; text: string }
+> = {
+  PRESENT: { label: 'İçeride', emoji: '🟢', bg: '#D1FAE5', text: '#065F46' },
+  LEFT: { label: 'Ayrıldı', emoji: '🔵', bg: '#DBEAFE', text: '#1E40AF' },
+  EXCUSED: { label: 'İzinli', emoji: '🟡', bg: '#FEF3C7', text: '#92400E' },
+  ABSENT: { label: 'Yok', emoji: '⚪', bg: '#F3F4F6', text: '#6B7280' },
+};
 
 export function StudentsScreen(): React.ReactElement {
   const { logout, state } = useAuth();
   const [status, setStatus] = useState<Status>('loading');
   const [students, setStudents] = useState<Student[]>([]);
+  const [attendanceMap, setAttendanceMap] = useState<Record<string, Attendance>>({});
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [passportStudent, setPassportStudent] = useState<Student | null>(null);
   const [trackingStudent, setTrackingStudent] = useState<Student | null>(null);
+  const [attendanceStudent, setAttendanceStudent] = useState<Student | null>(null);
+
+  const todayStr = new Date().toISOString().slice(0, 10);
 
   function reload(): void {
     setStatus('loading');
-    listStudents()
-      .then((rows) => {
+    Promise.all([listStudents(), getAttendanceByDate(todayStr)])
+      .then(([rows, attList]) => {
         setStudents(rows);
+        const map: Record<string, Attendance> = {};
+        for (const a of attList) {
+          map[a.studentId] = a;
+        }
+        setAttendanceMap(map);
         setStatus('ready');
       })
       .catch((err: unknown) => {
@@ -100,66 +121,85 @@ export function StudentsScreen(): React.ReactElement {
         <FlatList
           data={students}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Pressable
-              style={styles.row}
-              onLongPress={() => handleDelete(item)}
-              onPress={() => setTrackingStudent(item)}
-            >
-              <View style={styles.flex1}>
-                <View style={styles.nameRow}>
-                  <Text style={styles.rowName}>
-                    {item.firstName} {item.lastName}
+          renderItem={({ item }) => {
+            const att = attendanceMap[item.id];
+            const attStatus: AttendanceStatus = att?.status ?? 'ABSENT';
+            const attInfo = ATTENDANCE_BADGES[attStatus];
+
+            return (
+              <Pressable
+                style={styles.row}
+                onLongPress={() => handleDelete(item)}
+                onPress={() => setTrackingStudent(item)}
+              >
+                <View style={styles.flex1}>
+                  <View style={styles.nameRow}>
+                    <Text style={styles.rowName}>
+                      {item.firstName} {item.lastName}
+                    </Text>
+                    {item.passport?.bloodType && item.passport.bloodType !== 'UNKNOWN' && (
+                      <View style={styles.bloodPill}>
+                        <Text style={styles.bloodPillText}>🩸 {item.passport.bloodType}</Text>
+                      </View>
+                    )}
+                    {item.passport?.allergies && item.passport.allergies.length > 0 && (
+                      <View style={styles.allergyPill}>
+                        <Text style={styles.allergyPillText}>
+                          ⚠️ {item.passport.allergies.length} Alerji
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                  <Text style={styles.rowMeta}>
+                    {item.dateOfBirth} · {item.gender ?? '—'}
                   </Text>
-                  {item.passport?.bloodType && item.passport.bloodType !== 'UNKNOWN' && (
-                    <View style={styles.bloodPill}>
-                      <Text style={styles.bloodPillText}>🩸 {item.passport.bloodType}</Text>
-                    </View>
+                  {item.notes && (
+                    <Text style={styles.rowNotes} numberOfLines={2}>
+                      {item.notes}
+                    </Text>
                   )}
-                  {item.passport?.allergies && item.passport.allergies.length > 0 && (
-                    <View style={styles.allergyPill}>
-                      <Text style={styles.allergyPillText}>
-                        ⚠️ {item.passport.allergies.length} Alerji
+                </View>
+                <View style={styles.rightCol}>
+                  <View style={styles.badgeRow}>
+                    <View style={[styles.attBadge, { backgroundColor: attInfo.bg }]}>
+                      <Text style={[styles.attBadgeText, { color: attInfo.text }]}>
+                        {attInfo.emoji} {attInfo.label}
                       </Text>
                     </View>
-                  )}
+                    <View
+                      style={[
+                        styles.badge,
+                        { backgroundColor: item.isActive ? colors.successBg : '#E5E7EB' },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.badgeText,
+                          { color: item.isActive ? colors.successText : colors.textMuted },
+                        ]}
+                      >
+                        {item.isActive ? 'Aktif' : 'Pasif'}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.actionBtnRow}>
+                    <Pressable
+                      style={styles.attendanceBtn}
+                      onPress={() => setAttendanceStudent(item)}
+                    >
+                      <Text style={styles.attendanceBtnText}>🛡️ Yoklama</Text>
+                    </Pressable>
+                    <Pressable style={styles.passportBtn} onPress={() => setPassportStudent(item)}>
+                      <Text style={styles.passportBtnText}>📋 Pasaport</Text>
+                    </Pressable>
+                    <Pressable style={styles.trackingBtn} onPress={() => setTrackingStudent(item)}>
+                      <Text style={styles.trackingBtnText}>🌟 Günlük</Text>
+                    </Pressable>
+                  </View>
                 </View>
-                <Text style={styles.rowMeta}>
-                  {item.dateOfBirth} · {item.gender ?? '—'}
-                </Text>
-                {item.notes && (
-                  <Text style={styles.rowNotes} numberOfLines={2}>
-                    {item.notes}
-                  </Text>
-                )}
-              </View>
-              <View style={styles.rightCol}>
-                <View
-                  style={[
-                    styles.badge,
-                    { backgroundColor: item.isActive ? colors.successBg : '#E5E7EB' },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.badgeText,
-                      { color: item.isActive ? colors.successText : colors.textMuted },
-                    ]}
-                  >
-                    {item.isActive ? 'Aktif' : 'Pasif'}
-                  </Text>
-                </View>
-                <View style={styles.actionBtnRow}>
-                  <Pressable style={styles.passportBtn} onPress={() => setPassportStudent(item)}>
-                    <Text style={styles.passportBtnText}>📋 Pasaport</Text>
-                  </Pressable>
-                  <Pressable style={styles.trackingBtn} onPress={() => setTrackingStudent(item)}>
-                    <Text style={styles.trackingBtnText}>🌟 Günlük</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </Pressable>
-          )}
+              </Pressable>
+            );
+          }}
         />
       )}
 
@@ -190,9 +230,19 @@ export function StudentsScreen(): React.ReactElement {
 
       <DailyReportModal
         student={trackingStudent}
-        date={new Date().toISOString().slice(0, 10)}
+        date={todayStr}
         visible={trackingStudent !== null}
         onClose={() => setTrackingStudent(null)}
+      />
+
+      <AttendanceCheckModal
+        student={attendanceStudent}
+        date={todayStr}
+        visible={attendanceStudent !== null}
+        onClose={() => setAttendanceStudent(null)}
+        onAttendanceUpdated={(att) => {
+          setAttendanceMap((prev) => ({ ...prev, [att.studentId]: att }));
+        }}
       />
     </View>
   );
@@ -384,6 +434,13 @@ const styles = StyleSheet.create({
   rowMeta: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
   rowNotes: { fontSize: 12, color: colors.textSecondary, marginTop: 4 },
   rightCol: { alignItems: 'flex-end', gap: 4 },
+  badgeRow: { flexDirection: 'row', gap: 4, alignItems: 'center' },
+  attBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  attBadgeText: { fontSize: 10, fontWeight: '700' },
   badge: {
     paddingHorizontal: spacing.sm,
     paddingVertical: 2,
@@ -391,6 +448,15 @@ const styles = StyleSheet.create({
   },
   badgeText: { fontSize: 11, fontWeight: '600' },
   actionBtnRow: { flexDirection: 'row', gap: 4 },
+  attendanceBtn: {
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 2,
+    backgroundColor: '#ECFDF5',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+  },
+  attendanceBtnText: { fontSize: 11, color: '#047857', fontWeight: '600' },
   passportBtn: {
     paddingHorizontal: spacing.xs,
     paddingVertical: 2,
