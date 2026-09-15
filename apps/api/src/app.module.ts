@@ -8,6 +8,7 @@ import { TenantGuard } from './common/guards/tenant.guard';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { AttendanceModule } from './modules/attendance/attendance.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { DailyMenusModule } from './modules/daily-menus/daily-menus.module';
 import { DailyReportsModule } from './modules/daily-reports/daily-reports.module';
 import { StudentsModule } from './modules/students/students.module';
 
@@ -22,6 +23,7 @@ import { StudentsModule } from './modules/students/students.module';
     StudentsModule,
     DailyReportsModule,
     AttendanceModule,
+    DailyMenusModule,
   ],
   providers: [Reflector, { provide: APP_GUARD, useClass: TenantGuard }],
 })

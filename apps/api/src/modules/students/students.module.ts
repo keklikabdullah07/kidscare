@@ -5,6 +5,11 @@ import { StudentsRepository } from './repositories/students.repository';
 
 @Module({
   controllers: [StudentsController],
-  providers: [StudentsService, { provide: 'IStudentsRepository', useClass: StudentsRepository }],
+  providers: [
+    StudentsService,
+    StudentsRepository,
+    { provide: 'IStudentsRepository', useClass: StudentsRepository },
+  ],
+  exports: [StudentsService, StudentsRepository, 'IStudentsRepository'],
 })
 export class StudentsModule {}
