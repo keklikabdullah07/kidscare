@@ -26,6 +26,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>;
  *
  */
 export type Student = $Result.DefaultSelection<Prisma.$StudentPayload>;
+/**
+ * Model DailyReport
+ *
+ */
+export type DailyReport = $Result.DefaultSelection<Prisma.$DailyReportPayload>;
 
 /**
  * Enums
@@ -229,6 +234,16 @@ export class PrismaClient<
    * ```
    */
   get student(): Prisma.StudentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.dailyReport`: Exposes CRUD operations for the **DailyReport** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more DailyReports
+   * const dailyReports = await prisma.dailyReport.findMany()
+   * ```
+   */
+  get dailyReport(): Prisma.DailyReportDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -666,6 +681,7 @@ export namespace Prisma {
     Tenant: 'Tenant';
     User: 'User';
     Student: 'Student';
+    DailyReport: 'DailyReport';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -686,7 +702,7 @@ export namespace Prisma {
     ClientOptions = {},
   > = {
     meta: {
-      modelProps: 'tenant' | 'user' | 'student';
+      modelProps: 'tenant' | 'user' | 'student' | 'dailyReport';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -900,6 +916,76 @@ export namespace Prisma {
           };
         };
       };
+      DailyReport: {
+        payload: Prisma.$DailyReportPayload<ExtArgs>;
+        fields: Prisma.DailyReportFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.DailyReportFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.DailyReportFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload>;
+          };
+          findFirst: {
+            args: Prisma.DailyReportFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.DailyReportFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload>;
+          };
+          findMany: {
+            args: Prisma.DailyReportFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload>[];
+          };
+          create: {
+            args: Prisma.DailyReportCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload>;
+          };
+          createMany: {
+            args: Prisma.DailyReportCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.DailyReportCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload>[];
+          };
+          delete: {
+            args: Prisma.DailyReportDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload>;
+          };
+          update: {
+            args: Prisma.DailyReportUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload>;
+          };
+          deleteMany: {
+            args: Prisma.DailyReportDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.DailyReportUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.DailyReportUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyReportPayload>;
+          };
+          aggregate: {
+            args: Prisma.DailyReportAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateDailyReport>;
+          };
+          groupBy: {
+            args: Prisma.DailyReportGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<DailyReportGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.DailyReportCountArgs<ExtArgs>;
+            result: $Utils.Optional<DailyReportCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -1069,6 +1155,7 @@ export namespace Prisma {
   export type TenantCountOutputType = {
     users: number;
     students: number;
+    dailyReports: number;
   };
 
   export type TenantCountOutputTypeSelect<
@@ -1076,6 +1163,7 @@ export namespace Prisma {
   > = {
     users?: boolean | TenantCountOutputTypeCountUsersArgs;
     students?: boolean | TenantCountOutputTypeCountStudentsArgs;
+    dailyReports?: boolean | TenantCountOutputTypeCountDailyReportsArgs;
   };
 
   // Custom InputTypes
@@ -1107,6 +1195,51 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: StudentWhereInput;
+  };
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountDailyReportsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: DailyReportWhereInput;
+  };
+
+  /**
+   * Count Type StudentCountOutputType
+   */
+
+  export type StudentCountOutputType = {
+    dailyReports: number;
+  };
+
+  export type StudentCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    dailyReports?: boolean | StudentCountOutputTypeCountDailyReportsArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentCountOutputType
+     */
+    select?: StudentCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountDailyReportsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: DailyReportWhereInput;
   };
 
   /**
@@ -1287,6 +1420,7 @@ export namespace Prisma {
         updatedAt?: boolean;
         users?: boolean | Tenant$usersArgs<ExtArgs>;
         students?: boolean | Tenant$studentsArgs<ExtArgs>;
+        dailyReports?: boolean | Tenant$dailyReportsArgs<ExtArgs>;
         _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['tenant']
@@ -1318,6 +1452,7 @@ export namespace Prisma {
   export type TenantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Tenant$usersArgs<ExtArgs>;
     students?: boolean | Tenant$studentsArgs<ExtArgs>;
+    dailyReports?: boolean | Tenant$dailyReportsArgs<ExtArgs>;
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TenantIncludeCreateManyAndReturn<
@@ -1329,6 +1464,7 @@ export namespace Prisma {
     objects: {
       users: Prisma.$UserPayload<ExtArgs>[];
       students: Prisma.$StudentPayload<ExtArgs>[];
+      dailyReports: Prisma.$DailyReportPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -1776,6 +1912,11 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, 'findMany'> | Null
     >;
+    dailyReports<T extends Tenant$dailyReportsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$dailyReportsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2188,6 +2329,28 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: StudentScalarFieldEnum | StudentScalarFieldEnum[];
+  };
+
+  /**
+   * Tenant.dailyReports
+   */
+  export type Tenant$dailyReportsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    where?: DailyReportWhereInput;
+    orderBy?: DailyReportOrderByWithRelationInput | DailyReportOrderByWithRelationInput[];
+    cursor?: DailyReportWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: DailyReportScalarFieldEnum | DailyReportScalarFieldEnum[];
   };
 
   /**
@@ -3505,6 +3668,8 @@ export namespace Prisma {
         updatedAt?: boolean;
         deletedAt?: boolean;
         tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+        dailyReports?: boolean | Student$dailyReportsArgs<ExtArgs>;
+        _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['student']
     >;
@@ -3547,6 +3712,8 @@ export namespace Prisma {
 
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    dailyReports?: boolean | Student$dailyReportsArgs<ExtArgs>;
+    _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type StudentIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
@@ -3559,6 +3726,7 @@ export namespace Prisma {
       name: 'Student';
       objects: {
         tenant: Prisma.$TenantPayload<ExtArgs>;
+        dailyReports: Prisma.$DailyReportPayload<ExtArgs>[];
       };
       scalars: $Extensions.GetPayloadResult<
         {
@@ -4011,6 +4179,11 @@ export namespace Prisma {
       Null,
       ExtArgs
     >;
+    dailyReports<T extends Student$dailyReportsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Student$dailyReportsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4397,6 +4570,28 @@ export namespace Prisma {
   };
 
   /**
+   * Student.dailyReports
+   */
+  export type Student$dailyReportsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    where?: DailyReportWhereInput;
+    orderBy?: DailyReportOrderByWithRelationInput | DailyReportOrderByWithRelationInput[];
+    cursor?: DailyReportWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: DailyReportScalarFieldEnum | DailyReportScalarFieldEnum[];
+  };
+
+  /**
    * Student without action
    */
   export type StudentDefaultArgs<
@@ -4410,6 +4605,1143 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: StudentInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model DailyReport
+   */
+
+  export type AggregateDailyReport = {
+    _count: DailyReportCountAggregateOutputType | null;
+    _min: DailyReportMinAggregateOutputType | null;
+    _max: DailyReportMaxAggregateOutputType | null;
+  };
+
+  export type DailyReportMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    studentId: string | null;
+    date: Date | null;
+    mood: string | null;
+    teacherNote: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type DailyReportMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    studentId: string | null;
+    date: Date | null;
+    mood: string | null;
+    teacherNote: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type DailyReportCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    studentId: number;
+    date: number;
+    mood: number;
+    meals: number;
+    naps: number;
+    potty: number;
+    activities: number;
+    medications: number;
+    teacherNote: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type DailyReportMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    date?: true;
+    mood?: true;
+    teacherNote?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type DailyReportMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    date?: true;
+    mood?: true;
+    teacherNote?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type DailyReportCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    date?: true;
+    mood?: true;
+    meals?: true;
+    naps?: true;
+    potty?: true;
+    activities?: true;
+    medications?: true;
+    teacherNote?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type DailyReportAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which DailyReport to aggregate.
+     */
+    where?: DailyReportWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of DailyReports to fetch.
+     */
+    orderBy?: DailyReportOrderByWithRelationInput | DailyReportOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: DailyReportWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` DailyReports from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` DailyReports.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned DailyReports
+     **/
+    _count?: true | DailyReportCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: DailyReportMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: DailyReportMaxAggregateInputType;
+  };
+
+  export type GetDailyReportAggregateType<T extends DailyReportAggregateArgs> = {
+    [P in keyof T & keyof AggregateDailyReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDailyReport[P]>
+      : GetScalarType<T[P], AggregateDailyReport[P]>;
+  };
+
+  export type DailyReportGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: DailyReportWhereInput;
+    orderBy?: DailyReportOrderByWithAggregationInput | DailyReportOrderByWithAggregationInput[];
+    by: DailyReportScalarFieldEnum[] | DailyReportScalarFieldEnum;
+    having?: DailyReportScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: DailyReportCountAggregateInputType | true;
+    _min?: DailyReportMinAggregateInputType;
+    _max?: DailyReportMaxAggregateInputType;
+  };
+
+  export type DailyReportGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    studentId: string;
+    date: Date;
+    mood: string | null;
+    meals: JsonValue | null;
+    naps: JsonValue | null;
+    potty: JsonValue | null;
+    activities: JsonValue | null;
+    medications: JsonValue | null;
+    teacherNote: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: DailyReportCountAggregateOutputType | null;
+    _min: DailyReportMinAggregateOutputType | null;
+    _max: DailyReportMaxAggregateOutputType | null;
+  };
+
+  type GetDailyReportGroupByPayload<T extends DailyReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DailyReportGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof DailyReportGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], DailyReportGroupByOutputType[P]>
+          : GetScalarType<T[P], DailyReportGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type DailyReportSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      studentId?: boolean;
+      date?: boolean;
+      mood?: boolean;
+      meals?: boolean;
+      naps?: boolean;
+      potty?: boolean;
+      activities?: boolean;
+      medications?: boolean;
+      teacherNote?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['dailyReport']
+  >;
+
+  export type DailyReportSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      studentId?: boolean;
+      date?: boolean;
+      mood?: boolean;
+      meals?: boolean;
+      naps?: boolean;
+      potty?: boolean;
+      activities?: boolean;
+      medications?: boolean;
+      teacherNote?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['dailyReport']
+  >;
+
+  export type DailyReportSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    studentId?: boolean;
+    date?: boolean;
+    mood?: boolean;
+    meals?: boolean;
+    naps?: boolean;
+    potty?: boolean;
+    activities?: boolean;
+    medications?: boolean;
+    teacherNote?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type DailyReportInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+  };
+  export type DailyReportIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+  };
+
+  export type $DailyReportPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'DailyReport';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      student: Prisma.$StudentPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        studentId: string;
+        date: Date;
+        mood: string | null;
+        meals: Prisma.JsonValue | null;
+        naps: Prisma.JsonValue | null;
+        potty: Prisma.JsonValue | null;
+        activities: Prisma.JsonValue | null;
+        medications: Prisma.JsonValue | null;
+        teacherNote: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['dailyReport']
+    >;
+    composites: {};
+  };
+
+  type DailyReportGetPayload<S extends boolean | null | undefined | DailyReportDefaultArgs> =
+    $Result.GetResult<Prisma.$DailyReportPayload, S>;
+
+  type DailyReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DailyReportFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DailyReportCountAggregateInputType | true;
+    };
+
+  export interface DailyReportDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['DailyReport'];
+      meta: { name: 'DailyReport' };
+    };
+    /**
+     * Find zero or one DailyReport that matches the filter.
+     * @param {DailyReportFindUniqueArgs} args - Arguments to find a DailyReport
+     * @example
+     * // Get one DailyReport
+     * const dailyReport = await prisma.dailyReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DailyReportFindUniqueArgs>(
+      args: SelectSubset<T, DailyReportFindUniqueArgs<ExtArgs>>,
+    ): Prisma__DailyReportClient<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one DailyReport that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DailyReportFindUniqueOrThrowArgs} args - Arguments to find a DailyReport
+     * @example
+     * // Get one DailyReport
+     * const dailyReport = await prisma.dailyReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DailyReportFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, DailyReportFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__DailyReportClient<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first DailyReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyReportFindFirstArgs} args - Arguments to find a DailyReport
+     * @example
+     * // Get one DailyReport
+     * const dailyReport = await prisma.dailyReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DailyReportFindFirstArgs>(
+      args?: SelectSubset<T, DailyReportFindFirstArgs<ExtArgs>>,
+    ): Prisma__DailyReportClient<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first DailyReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyReportFindFirstOrThrowArgs} args - Arguments to find a DailyReport
+     * @example
+     * // Get one DailyReport
+     * const dailyReport = await prisma.dailyReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DailyReportFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, DailyReportFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__DailyReportClient<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more DailyReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DailyReports
+     * const dailyReports = await prisma.dailyReport.findMany()
+     *
+     * // Get first 10 DailyReports
+     * const dailyReports = await prisma.dailyReport.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const dailyReportWithIdOnly = await prisma.dailyReport.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends DailyReportFindManyArgs>(
+      args?: SelectSubset<T, DailyReportFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'findMany'>>;
+
+    /**
+     * Create a DailyReport.
+     * @param {DailyReportCreateArgs} args - Arguments to create a DailyReport.
+     * @example
+     * // Create one DailyReport
+     * const DailyReport = await prisma.dailyReport.create({
+     *   data: {
+     *     // ... data to create a DailyReport
+     *   }
+     * })
+     *
+     */
+    create<T extends DailyReportCreateArgs>(
+      args: SelectSubset<T, DailyReportCreateArgs<ExtArgs>>,
+    ): Prisma__DailyReportClient<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many DailyReports.
+     * @param {DailyReportCreateManyArgs} args - Arguments to create many DailyReports.
+     * @example
+     * // Create many DailyReports
+     * const dailyReport = await prisma.dailyReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends DailyReportCreateManyArgs>(
+      args?: SelectSubset<T, DailyReportCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many DailyReports and returns the data saved in the database.
+     * @param {DailyReportCreateManyAndReturnArgs} args - Arguments to create many DailyReports.
+     * @example
+     * // Create many DailyReports
+     * const dailyReport = await prisma.dailyReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many DailyReports and only return the `id`
+     * const dailyReportWithIdOnly = await prisma.dailyReport.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends DailyReportCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, DailyReportCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a DailyReport.
+     * @param {DailyReportDeleteArgs} args - Arguments to delete one DailyReport.
+     * @example
+     * // Delete one DailyReport
+     * const DailyReport = await prisma.dailyReport.delete({
+     *   where: {
+     *     // ... filter to delete one DailyReport
+     *   }
+     * })
+     *
+     */
+    delete<T extends DailyReportDeleteArgs>(
+      args: SelectSubset<T, DailyReportDeleteArgs<ExtArgs>>,
+    ): Prisma__DailyReportClient<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one DailyReport.
+     * @param {DailyReportUpdateArgs} args - Arguments to update one DailyReport.
+     * @example
+     * // Update one DailyReport
+     * const dailyReport = await prisma.dailyReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends DailyReportUpdateArgs>(
+      args: SelectSubset<T, DailyReportUpdateArgs<ExtArgs>>,
+    ): Prisma__DailyReportClient<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more DailyReports.
+     * @param {DailyReportDeleteManyArgs} args - Arguments to filter DailyReports to delete.
+     * @example
+     * // Delete a few DailyReports
+     * const { count } = await prisma.dailyReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends DailyReportDeleteManyArgs>(
+      args?: SelectSubset<T, DailyReportDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more DailyReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DailyReports
+     * const dailyReport = await prisma.dailyReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends DailyReportUpdateManyArgs>(
+      args: SelectSubset<T, DailyReportUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one DailyReport.
+     * @param {DailyReportUpsertArgs} args - Arguments to update or create a DailyReport.
+     * @example
+     * // Update or create a DailyReport
+     * const dailyReport = await prisma.dailyReport.upsert({
+     *   create: {
+     *     // ... data to create a DailyReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DailyReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DailyReportUpsertArgs>(
+      args: SelectSubset<T, DailyReportUpsertArgs<ExtArgs>>,
+    ): Prisma__DailyReportClient<
+      $Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of DailyReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyReportCountArgs} args - Arguments to filter DailyReports to count.
+     * @example
+     * // Count the number of DailyReports
+     * const count = await prisma.dailyReport.count({
+     *   where: {
+     *     // ... the filter for the DailyReports we want to count
+     *   }
+     * })
+     **/
+    count<T extends DailyReportCountArgs>(
+      args?: Subset<T, DailyReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DailyReportCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a DailyReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends DailyReportAggregateArgs>(
+      args: Subset<T, DailyReportAggregateArgs>,
+    ): Prisma.PrismaPromise<GetDailyReportAggregateType<T>>;
+
+    /**
+     * Group by DailyReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends DailyReportGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: DailyReportGroupByArgs['orderBy'] }
+        : { orderBy?: DailyReportGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, DailyReportGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors ? GetDailyReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the DailyReport model
+     */
+    readonly fields: DailyReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DailyReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DailyReportClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, StudentDefaultArgs<ExtArgs>>,
+    ): Prisma__StudentClient<
+      $Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the DailyReport model
+   */
+  interface DailyReportFieldRefs {
+    readonly id: FieldRef<'DailyReport', 'String'>;
+    readonly tenantId: FieldRef<'DailyReport', 'String'>;
+    readonly studentId: FieldRef<'DailyReport', 'String'>;
+    readonly date: FieldRef<'DailyReport', 'DateTime'>;
+    readonly mood: FieldRef<'DailyReport', 'String'>;
+    readonly meals: FieldRef<'DailyReport', 'Json'>;
+    readonly naps: FieldRef<'DailyReport', 'Json'>;
+    readonly potty: FieldRef<'DailyReport', 'Json'>;
+    readonly activities: FieldRef<'DailyReport', 'Json'>;
+    readonly medications: FieldRef<'DailyReport', 'Json'>;
+    readonly teacherNote: FieldRef<'DailyReport', 'String'>;
+    readonly createdAt: FieldRef<'DailyReport', 'DateTime'>;
+    readonly updatedAt: FieldRef<'DailyReport', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * DailyReport findUnique
+   */
+  export type DailyReportFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyReport to fetch.
+     */
+    where: DailyReportWhereUniqueInput;
+  };
+
+  /**
+   * DailyReport findUniqueOrThrow
+   */
+  export type DailyReportFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyReport to fetch.
+     */
+    where: DailyReportWhereUniqueInput;
+  };
+
+  /**
+   * DailyReport findFirst
+   */
+  export type DailyReportFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyReport to fetch.
+     */
+    where?: DailyReportWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of DailyReports to fetch.
+     */
+    orderBy?: DailyReportOrderByWithRelationInput | DailyReportOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for DailyReports.
+     */
+    cursor?: DailyReportWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` DailyReports from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` DailyReports.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of DailyReports.
+     */
+    distinct?: DailyReportScalarFieldEnum | DailyReportScalarFieldEnum[];
+  };
+
+  /**
+   * DailyReport findFirstOrThrow
+   */
+  export type DailyReportFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyReport to fetch.
+     */
+    where?: DailyReportWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of DailyReports to fetch.
+     */
+    orderBy?: DailyReportOrderByWithRelationInput | DailyReportOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for DailyReports.
+     */
+    cursor?: DailyReportWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` DailyReports from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` DailyReports.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of DailyReports.
+     */
+    distinct?: DailyReportScalarFieldEnum | DailyReportScalarFieldEnum[];
+  };
+
+  /**
+   * DailyReport findMany
+   */
+  export type DailyReportFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyReports to fetch.
+     */
+    where?: DailyReportWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of DailyReports to fetch.
+     */
+    orderBy?: DailyReportOrderByWithRelationInput | DailyReportOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing DailyReports.
+     */
+    cursor?: DailyReportWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` DailyReports from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` DailyReports.
+     */
+    skip?: number;
+    distinct?: DailyReportScalarFieldEnum | DailyReportScalarFieldEnum[];
+  };
+
+  /**
+   * DailyReport create
+   */
+  export type DailyReportCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a DailyReport.
+     */
+    data: XOR<DailyReportCreateInput, DailyReportUncheckedCreateInput>;
+  };
+
+  /**
+   * DailyReport createMany
+   */
+  export type DailyReportCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many DailyReports.
+     */
+    data: DailyReportCreateManyInput | DailyReportCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * DailyReport createManyAndReturn
+   */
+  export type DailyReportCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many DailyReports.
+     */
+    data: DailyReportCreateManyInput | DailyReportCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * DailyReport update
+   */
+  export type DailyReportUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a DailyReport.
+     */
+    data: XOR<DailyReportUpdateInput, DailyReportUncheckedUpdateInput>;
+    /**
+     * Choose, which DailyReport to update.
+     */
+    where: DailyReportWhereUniqueInput;
+  };
+
+  /**
+   * DailyReport updateMany
+   */
+  export type DailyReportUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update DailyReports.
+     */
+    data: XOR<DailyReportUpdateManyMutationInput, DailyReportUncheckedUpdateManyInput>;
+    /**
+     * Filter which DailyReports to update
+     */
+    where?: DailyReportWhereInput;
+  };
+
+  /**
+   * DailyReport upsert
+   */
+  export type DailyReportUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the DailyReport to update in case it exists.
+     */
+    where: DailyReportWhereUniqueInput;
+    /**
+     * In case the DailyReport found by the `where` argument doesn't exist, create a new DailyReport with this data.
+     */
+    create: XOR<DailyReportCreateInput, DailyReportUncheckedCreateInput>;
+    /**
+     * In case the DailyReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DailyReportUpdateInput, DailyReportUncheckedUpdateInput>;
+  };
+
+  /**
+   * DailyReport delete
+   */
+  export type DailyReportDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
+    /**
+     * Filter which DailyReport to delete.
+     */
+    where: DailyReportWhereUniqueInput;
+  };
+
+  /**
+   * DailyReport deleteMany
+   */
+  export type DailyReportDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which DailyReports to delete
+     */
+    where?: DailyReportWhereInput;
+  };
+
+  /**
+   * DailyReport without action
+   */
+  export type DailyReportDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyReport
+     */
+    select?: DailyReportSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyReportInclude<ExtArgs> | null;
   };
 
   /**
@@ -4469,6 +5801,25 @@ export namespace Prisma {
 
   export type StudentScalarFieldEnum =
     (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum];
+
+  export const DailyReportScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    studentId: 'studentId';
+    date: 'date';
+    mood: 'mood';
+    meals: 'meals';
+    naps: 'naps';
+    potty: 'potty';
+    activities: 'activities';
+    medications: 'medications';
+    teacherNote: 'teacherNote';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type DailyReportScalarFieldEnum =
+    (typeof DailyReportScalarFieldEnum)[keyof typeof DailyReportScalarFieldEnum];
 
   export const SortOrder: {
     asc: 'asc';
@@ -4599,6 +5950,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'Tenant'> | Date | string;
     users?: UserListRelationFilter;
     students?: StudentListRelationFilter;
+    dailyReports?: DailyReportListRelationFilter;
   };
 
   export type TenantOrderByWithRelationInput = {
@@ -4610,6 +5962,7 @@ export namespace Prisma {
     updatedAt?: SortOrder;
     users?: UserOrderByRelationAggregateInput;
     students?: StudentOrderByRelationAggregateInput;
+    dailyReports?: DailyReportOrderByRelationAggregateInput;
   };
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<
@@ -4625,6 +5978,7 @@ export namespace Prisma {
       updatedAt?: DateTimeFilter<'Tenant'> | Date | string;
       users?: UserListRelationFilter;
       students?: StudentListRelationFilter;
+      dailyReports?: DailyReportListRelationFilter;
     },
     'id' | 'slug'
   >;
@@ -4749,6 +6103,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'Student'> | Date | string;
     deletedAt?: DateTimeNullableFilter<'Student'> | Date | string | null;
     tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    dailyReports?: DailyReportListRelationFilter;
   };
 
   export type StudentOrderByWithRelationInput = {
@@ -4765,6 +6120,7 @@ export namespace Prisma {
     updatedAt?: SortOrder;
     deletedAt?: SortOrderInput | SortOrder;
     tenant?: TenantOrderByWithRelationInput;
+    dailyReports?: DailyReportOrderByRelationAggregateInput;
   };
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<
@@ -4785,6 +6141,7 @@ export namespace Prisma {
       updatedAt?: DateTimeFilter<'Student'> | Date | string;
       deletedAt?: DateTimeNullableFilter<'Student'> | Date | string | null;
       tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      dailyReports?: DailyReportListRelationFilter;
     },
     'id'
   >;
@@ -4825,6 +6182,108 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<'Student'> | Date | string | null;
   };
 
+  export type DailyReportWhereInput = {
+    AND?: DailyReportWhereInput | DailyReportWhereInput[];
+    OR?: DailyReportWhereInput[];
+    NOT?: DailyReportWhereInput | DailyReportWhereInput[];
+    id?: StringFilter<'DailyReport'> | string;
+    tenantId?: StringFilter<'DailyReport'> | string;
+    studentId?: StringFilter<'DailyReport'> | string;
+    date?: DateTimeFilter<'DailyReport'> | Date | string;
+    mood?: StringNullableFilter<'DailyReport'> | string | null;
+    meals?: JsonNullableFilter<'DailyReport'>;
+    naps?: JsonNullableFilter<'DailyReport'>;
+    potty?: JsonNullableFilter<'DailyReport'>;
+    activities?: JsonNullableFilter<'DailyReport'>;
+    medications?: JsonNullableFilter<'DailyReport'>;
+    teacherNote?: StringNullableFilter<'DailyReport'> | string | null;
+    createdAt?: DateTimeFilter<'DailyReport'> | Date | string;
+    updatedAt?: DateTimeFilter<'DailyReport'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    student?: XOR<StudentRelationFilter, StudentWhereInput>;
+  };
+
+  export type DailyReportOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    mood?: SortOrderInput | SortOrder;
+    meals?: SortOrderInput | SortOrder;
+    naps?: SortOrderInput | SortOrder;
+    potty?: SortOrderInput | SortOrder;
+    activities?: SortOrderInput | SortOrder;
+    medications?: SortOrderInput | SortOrder;
+    teacherNote?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    student?: StudentOrderByWithRelationInput;
+  };
+
+  export type DailyReportWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      tenantId_studentId_date?: DailyReportTenantIdStudentIdDateCompoundUniqueInput;
+      AND?: DailyReportWhereInput | DailyReportWhereInput[];
+      OR?: DailyReportWhereInput[];
+      NOT?: DailyReportWhereInput | DailyReportWhereInput[];
+      tenantId?: StringFilter<'DailyReport'> | string;
+      studentId?: StringFilter<'DailyReport'> | string;
+      date?: DateTimeFilter<'DailyReport'> | Date | string;
+      mood?: StringNullableFilter<'DailyReport'> | string | null;
+      meals?: JsonNullableFilter<'DailyReport'>;
+      naps?: JsonNullableFilter<'DailyReport'>;
+      potty?: JsonNullableFilter<'DailyReport'>;
+      activities?: JsonNullableFilter<'DailyReport'>;
+      medications?: JsonNullableFilter<'DailyReport'>;
+      teacherNote?: StringNullableFilter<'DailyReport'> | string | null;
+      createdAt?: DateTimeFilter<'DailyReport'> | Date | string;
+      updatedAt?: DateTimeFilter<'DailyReport'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      student?: XOR<StudentRelationFilter, StudentWhereInput>;
+    },
+    'id' | 'tenantId_studentId_date'
+  >;
+
+  export type DailyReportOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    mood?: SortOrderInput | SortOrder;
+    meals?: SortOrderInput | SortOrder;
+    naps?: SortOrderInput | SortOrder;
+    potty?: SortOrderInput | SortOrder;
+    activities?: SortOrderInput | SortOrder;
+    medications?: SortOrderInput | SortOrder;
+    teacherNote?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: DailyReportCountOrderByAggregateInput;
+    _max?: DailyReportMaxOrderByAggregateInput;
+    _min?: DailyReportMinOrderByAggregateInput;
+  };
+
+  export type DailyReportScalarWhereWithAggregatesInput = {
+    AND?: DailyReportScalarWhereWithAggregatesInput | DailyReportScalarWhereWithAggregatesInput[];
+    OR?: DailyReportScalarWhereWithAggregatesInput[];
+    NOT?: DailyReportScalarWhereWithAggregatesInput | DailyReportScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'DailyReport'> | string;
+    tenantId?: StringWithAggregatesFilter<'DailyReport'> | string;
+    studentId?: StringWithAggregatesFilter<'DailyReport'> | string;
+    date?: DateTimeWithAggregatesFilter<'DailyReport'> | Date | string;
+    mood?: StringNullableWithAggregatesFilter<'DailyReport'> | string | null;
+    meals?: JsonNullableWithAggregatesFilter<'DailyReport'>;
+    naps?: JsonNullableWithAggregatesFilter<'DailyReport'>;
+    potty?: JsonNullableWithAggregatesFilter<'DailyReport'>;
+    activities?: JsonNullableWithAggregatesFilter<'DailyReport'>;
+    medications?: JsonNullableWithAggregatesFilter<'DailyReport'>;
+    teacherNote?: StringNullableWithAggregatesFilter<'DailyReport'> | string | null;
+    createdAt?: DateTimeWithAggregatesFilter<'DailyReport'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'DailyReport'> | Date | string;
+  };
+
   export type TenantCreateInput = {
     id?: string;
     slug: string;
@@ -4834,6 +6293,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     users?: UserCreateNestedManyWithoutTenantInput;
     students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateInput = {
@@ -4845,6 +6305,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     users?: UserUncheckedCreateNestedManyWithoutTenantInput;
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUpdateInput = {
@@ -4856,6 +6317,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     users?: UserUpdateManyWithoutTenantNestedInput;
     students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateInput = {
@@ -4867,6 +6329,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateManyInput = {
@@ -4992,6 +6455,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
     tenant: TenantCreateNestedOneWithoutStudentsInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateInput = {
@@ -5007,6 +6471,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUpdateInput = {
@@ -5022,6 +6487,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateInput = {
@@ -5037,6 +6503,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentCreateManyInput = {
@@ -5081,6 +6548,116 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type DailyReportCreateInput = {
+    id?: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutDailyReportsInput;
+    student: StudentCreateNestedOneWithoutDailyReportsInput;
+  };
+
+  export type DailyReportUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyReportUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutDailyReportsNestedInput;
+    student?: StudentUpdateOneRequiredWithoutDailyReportsNestedInput;
+  };
+
+  export type DailyReportUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyReportCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyReportUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyReportUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type StringFilter<$PrismaModel = never> = {
@@ -5128,11 +6705,21 @@ export namespace Prisma {
     none?: StudentWhereInput;
   };
 
+  export type DailyReportListRelationFilter = {
+    every?: DailyReportWhereInput;
+    some?: DailyReportWhereInput;
+    none?: DailyReportWhereInput;
+  };
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
   export type StudentOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type DailyReportOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -5440,6 +7027,55 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>;
   };
 
+  export type StudentRelationFilter = {
+    is?: StudentWhereInput;
+    isNot?: StudentWhereInput;
+  };
+
+  export type DailyReportTenantIdStudentIdDateCompoundUniqueInput = {
+    tenantId: string;
+    studentId: string;
+    date: Date | string;
+  };
+
+  export type DailyReportCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    mood?: SortOrder;
+    meals?: SortOrder;
+    naps?: SortOrder;
+    potty?: SortOrder;
+    activities?: SortOrder;
+    medications?: SortOrder;
+    teacherNote?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type DailyReportMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    mood?: SortOrder;
+    teacherNote?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type DailyReportMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    mood?: SortOrder;
+    teacherNote?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
   export type UserCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -5462,6 +7098,17 @@ export namespace Prisma {
     connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
   };
 
+  export type DailyReportCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<DailyReportCreateWithoutTenantInput, DailyReportUncheckedCreateWithoutTenantInput>
+      | DailyReportCreateWithoutTenantInput[]
+      | DailyReportUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      DailyReportCreateOrConnectWithoutTenantInput | DailyReportCreateOrConnectWithoutTenantInput[];
+    createMany?: DailyReportCreateManyTenantInputEnvelope;
+    connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+  };
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -5482,6 +7129,17 @@ export namespace Prisma {
       StudentCreateOrConnectWithoutTenantInput | StudentCreateOrConnectWithoutTenantInput[];
     createMany?: StudentCreateManyTenantInputEnvelope;
     connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[];
+  };
+
+  export type DailyReportUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<DailyReportCreateWithoutTenantInput, DailyReportUncheckedCreateWithoutTenantInput>
+      | DailyReportCreateWithoutTenantInput[]
+      | DailyReportUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      DailyReportCreateOrConnectWithoutTenantInput | DailyReportCreateOrConnectWithoutTenantInput[];
+    createMany?: DailyReportCreateManyTenantInputEnvelope;
+    connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -5540,6 +7198,30 @@ export namespace Prisma {
     deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[];
   };
 
+  export type DailyReportUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<DailyReportCreateWithoutTenantInput, DailyReportUncheckedCreateWithoutTenantInput>
+      | DailyReportCreateWithoutTenantInput[]
+      | DailyReportUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      DailyReportCreateOrConnectWithoutTenantInput | DailyReportCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | DailyReportUpsertWithWhereUniqueWithoutTenantInput
+      | DailyReportUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: DailyReportCreateManyTenantInputEnvelope;
+    set?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    disconnect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    delete?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    update?:
+      | DailyReportUpdateWithWhereUniqueWithoutTenantInput
+      | DailyReportUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | DailyReportUpdateManyWithWhereWithoutTenantInput
+      | DailyReportUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: DailyReportScalarWhereInput | DailyReportScalarWhereInput[];
+  };
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -5584,6 +7266,30 @@ export namespace Prisma {
     deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[];
   };
 
+  export type DailyReportUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<DailyReportCreateWithoutTenantInput, DailyReportUncheckedCreateWithoutTenantInput>
+      | DailyReportCreateWithoutTenantInput[]
+      | DailyReportUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      DailyReportCreateOrConnectWithoutTenantInput | DailyReportCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | DailyReportUpsertWithWhereUniqueWithoutTenantInput
+      | DailyReportUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: DailyReportCreateManyTenantInputEnvelope;
+    set?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    disconnect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    delete?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    update?:
+      | DailyReportUpdateWithWhereUniqueWithoutTenantInput
+      | DailyReportUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | DailyReportUpdateManyWithWhereWithoutTenantInput
+      | DailyReportUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: DailyReportScalarWhereInput | DailyReportScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutUsersInput = {
     create?: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutUsersInput;
@@ -5619,6 +7325,30 @@ export namespace Prisma {
     connect?: TenantWhereUniqueInput;
   };
 
+  export type DailyReportCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<DailyReportCreateWithoutStudentInput, DailyReportUncheckedCreateWithoutStudentInput>
+      | DailyReportCreateWithoutStudentInput[]
+      | DailyReportUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | DailyReportCreateOrConnectWithoutStudentInput
+      | DailyReportCreateOrConnectWithoutStudentInput[];
+    createMany?: DailyReportCreateManyStudentInputEnvelope;
+    connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+  };
+
+  export type DailyReportUncheckedCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<DailyReportCreateWithoutStudentInput, DailyReportUncheckedCreateWithoutStudentInput>
+      | DailyReportCreateWithoutStudentInput[]
+      | DailyReportUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | DailyReportCreateOrConnectWithoutStudentInput
+      | DailyReportCreateOrConnectWithoutStudentInput[];
+    createMany?: DailyReportCreateManyStudentInputEnvelope;
+    connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+  };
+
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null;
   };
@@ -5631,6 +7361,105 @@ export namespace Prisma {
     update?: XOR<
       XOR<TenantUpdateToOneWithWhereWithoutStudentsInput, TenantUpdateWithoutStudentsInput>,
       TenantUncheckedUpdateWithoutStudentsInput
+    >;
+  };
+
+  export type DailyReportUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<DailyReportCreateWithoutStudentInput, DailyReportUncheckedCreateWithoutStudentInput>
+      | DailyReportCreateWithoutStudentInput[]
+      | DailyReportUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | DailyReportCreateOrConnectWithoutStudentInput
+      | DailyReportCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | DailyReportUpsertWithWhereUniqueWithoutStudentInput
+      | DailyReportUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: DailyReportCreateManyStudentInputEnvelope;
+    set?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    disconnect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    delete?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    update?:
+      | DailyReportUpdateWithWhereUniqueWithoutStudentInput
+      | DailyReportUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | DailyReportUpdateManyWithWhereWithoutStudentInput
+      | DailyReportUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: DailyReportScalarWhereInput | DailyReportScalarWhereInput[];
+  };
+
+  export type DailyReportUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<DailyReportCreateWithoutStudentInput, DailyReportUncheckedCreateWithoutStudentInput>
+      | DailyReportCreateWithoutStudentInput[]
+      | DailyReportUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | DailyReportCreateOrConnectWithoutStudentInput
+      | DailyReportCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | DailyReportUpsertWithWhereUniqueWithoutStudentInput
+      | DailyReportUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: DailyReportCreateManyStudentInputEnvelope;
+    set?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    disconnect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    delete?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[];
+    update?:
+      | DailyReportUpdateWithWhereUniqueWithoutStudentInput
+      | DailyReportUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | DailyReportUpdateManyWithWhereWithoutStudentInput
+      | DailyReportUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: DailyReportScalarWhereInput | DailyReportScalarWhereInput[];
+  };
+
+  export type TenantCreateNestedOneWithoutDailyReportsInput = {
+    create?: XOR<
+      TenantCreateWithoutDailyReportsInput,
+      TenantUncheckedCreateWithoutDailyReportsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutDailyReportsInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type StudentCreateNestedOneWithoutDailyReportsInput = {
+    create?: XOR<
+      StudentCreateWithoutDailyReportsInput,
+      StudentUncheckedCreateWithoutDailyReportsInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutDailyReportsInput;
+    connect?: StudentWhereUniqueInput;
+  };
+
+  export type TenantUpdateOneRequiredWithoutDailyReportsNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutDailyReportsInput,
+      TenantUncheckedCreateWithoutDailyReportsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutDailyReportsInput;
+    upsert?: TenantUpsertWithoutDailyReportsInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<TenantUpdateToOneWithWhereWithoutDailyReportsInput, TenantUpdateWithoutDailyReportsInput>,
+      TenantUncheckedUpdateWithoutDailyReportsInput
+    >;
+  };
+
+  export type StudentUpdateOneRequiredWithoutDailyReportsNestedInput = {
+    create?: XOR<
+      StudentCreateWithoutDailyReportsInput,
+      StudentUncheckedCreateWithoutDailyReportsInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutDailyReportsInput;
+    upsert?: StudentUpsertWithoutDailyReportsInput;
+    connect?: StudentWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        StudentUpdateToOneWithWhereWithoutDailyReportsInput,
+        StudentUpdateWithoutDailyReportsInput
+      >,
+      StudentUncheckedUpdateWithoutDailyReportsInput
     >;
   };
 
@@ -5884,6 +7713,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
+    dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutTenantInput = {
@@ -5898,6 +7728,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutTenantInput = {
@@ -5907,6 +7738,46 @@ export namespace Prisma {
 
   export type StudentCreateManyTenantInputEnvelope = {
     data: StudentCreateManyTenantInput | StudentCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type DailyReportCreateWithoutTenantInput = {
+    id?: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    student: StudentCreateNestedOneWithoutDailyReportsInput;
+  };
+
+  export type DailyReportUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    studentId: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyReportCreateOrConnectWithoutTenantInput = {
+    where: DailyReportWhereUniqueInput;
+    create: XOR<DailyReportCreateWithoutTenantInput, DailyReportUncheckedCreateWithoutTenantInput>;
+  };
+
+  export type DailyReportCreateManyTenantInputEnvelope = {
+    data: DailyReportCreateManyTenantInput | DailyReportCreateManyTenantInput[];
     skipDuplicates?: boolean;
   };
 
@@ -5975,6 +7846,41 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<'Student'> | Date | string | null;
   };
 
+  export type DailyReportUpsertWithWhereUniqueWithoutTenantInput = {
+    where: DailyReportWhereUniqueInput;
+    update: XOR<DailyReportUpdateWithoutTenantInput, DailyReportUncheckedUpdateWithoutTenantInput>;
+    create: XOR<DailyReportCreateWithoutTenantInput, DailyReportUncheckedCreateWithoutTenantInput>;
+  };
+
+  export type DailyReportUpdateWithWhereUniqueWithoutTenantInput = {
+    where: DailyReportWhereUniqueInput;
+    data: XOR<DailyReportUpdateWithoutTenantInput, DailyReportUncheckedUpdateWithoutTenantInput>;
+  };
+
+  export type DailyReportUpdateManyWithWhereWithoutTenantInput = {
+    where: DailyReportScalarWhereInput;
+    data: XOR<DailyReportUpdateManyMutationInput, DailyReportUncheckedUpdateManyWithoutTenantInput>;
+  };
+
+  export type DailyReportScalarWhereInput = {
+    AND?: DailyReportScalarWhereInput | DailyReportScalarWhereInput[];
+    OR?: DailyReportScalarWhereInput[];
+    NOT?: DailyReportScalarWhereInput | DailyReportScalarWhereInput[];
+    id?: StringFilter<'DailyReport'> | string;
+    tenantId?: StringFilter<'DailyReport'> | string;
+    studentId?: StringFilter<'DailyReport'> | string;
+    date?: DateTimeFilter<'DailyReport'> | Date | string;
+    mood?: StringNullableFilter<'DailyReport'> | string | null;
+    meals?: JsonNullableFilter<'DailyReport'>;
+    naps?: JsonNullableFilter<'DailyReport'>;
+    potty?: JsonNullableFilter<'DailyReport'>;
+    activities?: JsonNullableFilter<'DailyReport'>;
+    medications?: JsonNullableFilter<'DailyReport'>;
+    teacherNote?: StringNullableFilter<'DailyReport'> | string | null;
+    createdAt?: DateTimeFilter<'DailyReport'> | Date | string;
+    updatedAt?: DateTimeFilter<'DailyReport'> | Date | string;
+  };
+
   export type TenantCreateWithoutUsersInput = {
     id?: string;
     slug: string;
@@ -5983,6 +7889,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -5993,6 +7900,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -6019,6 +7927,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -6029,6 +7938,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutStudentsInput = {
@@ -6039,6 +7949,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     users?: UserCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -6049,11 +7960,55 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutStudentsInput = {
     where: TenantWhereUniqueInput;
     create: XOR<TenantCreateWithoutStudentsInput, TenantUncheckedCreateWithoutStudentsInput>;
+  };
+
+  export type DailyReportCreateWithoutStudentInput = {
+    id?: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutDailyReportsInput;
+  };
+
+  export type DailyReportUncheckedCreateWithoutStudentInput = {
+    id?: string;
+    tenantId: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyReportCreateOrConnectWithoutStudentInput = {
+    where: DailyReportWhereUniqueInput;
+    create: XOR<
+      DailyReportCreateWithoutStudentInput,
+      DailyReportUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type DailyReportCreateManyStudentInputEnvelope = {
+    data: DailyReportCreateManyStudentInput | DailyReportCreateManyStudentInput[];
+    skipDuplicates?: boolean;
   };
 
   export type TenantUpsertWithoutStudentsInput = {
@@ -6075,6 +8030,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     users?: UserUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -6085,6 +8041,189 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type DailyReportUpsertWithWhereUniqueWithoutStudentInput = {
+    where: DailyReportWhereUniqueInput;
+    update: XOR<
+      DailyReportUpdateWithoutStudentInput,
+      DailyReportUncheckedUpdateWithoutStudentInput
+    >;
+    create: XOR<
+      DailyReportCreateWithoutStudentInput,
+      DailyReportUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type DailyReportUpdateWithWhereUniqueWithoutStudentInput = {
+    where: DailyReportWhereUniqueInput;
+    data: XOR<DailyReportUpdateWithoutStudentInput, DailyReportUncheckedUpdateWithoutStudentInput>;
+  };
+
+  export type DailyReportUpdateManyWithWhereWithoutStudentInput = {
+    where: DailyReportScalarWhereInput;
+    data: XOR<
+      DailyReportUpdateManyMutationInput,
+      DailyReportUncheckedUpdateManyWithoutStudentInput
+    >;
+  };
+
+  export type TenantCreateWithoutDailyReportsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutDailyReportsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutDailyReportsInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutDailyReportsInput,
+      TenantUncheckedCreateWithoutDailyReportsInput
+    >;
+  };
+
+  export type StudentCreateWithoutDailyReportsInput = {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    tenant: TenantCreateNestedOneWithoutStudentsInput;
+  };
+
+  export type StudentUncheckedCreateWithoutDailyReportsInput = {
+    id?: string;
+    tenantId: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+  };
+
+  export type StudentCreateOrConnectWithoutDailyReportsInput = {
+    where: StudentWhereUniqueInput;
+    create: XOR<
+      StudentCreateWithoutDailyReportsInput,
+      StudentUncheckedCreateWithoutDailyReportsInput
+    >;
+  };
+
+  export type TenantUpsertWithoutDailyReportsInput = {
+    update: XOR<
+      TenantUpdateWithoutDailyReportsInput,
+      TenantUncheckedUpdateWithoutDailyReportsInput
+    >;
+    create: XOR<
+      TenantCreateWithoutDailyReportsInput,
+      TenantUncheckedCreateWithoutDailyReportsInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutDailyReportsInput = {
+    where?: TenantWhereInput;
+    data: XOR<TenantUpdateWithoutDailyReportsInput, TenantUncheckedUpdateWithoutDailyReportsInput>;
+  };
+
+  export type TenantUpdateWithoutDailyReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutDailyReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type StudentUpsertWithoutDailyReportsInput = {
+    update: XOR<
+      StudentUpdateWithoutDailyReportsInput,
+      StudentUncheckedUpdateWithoutDailyReportsInput
+    >;
+    create: XOR<
+      StudentCreateWithoutDailyReportsInput,
+      StudentUncheckedCreateWithoutDailyReportsInput
+    >;
+    where?: StudentWhereInput;
+  };
+
+  export type StudentUpdateToOneWithWhereWithoutDailyReportsInput = {
+    where?: StudentWhereInput;
+    data: XOR<
+      StudentUpdateWithoutDailyReportsInput,
+      StudentUncheckedUpdateWithoutDailyReportsInput
+    >;
+  };
+
+  export type StudentUpdateWithoutDailyReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+  };
+
+  export type StudentUncheckedUpdateWithoutDailyReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   };
 
   export type UserCreateManyTenantInput = {
@@ -6110,6 +8249,21 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     deletedAt?: Date | string | null;
+  };
+
+  export type DailyReportCreateManyTenantInput = {
+    id?: string;
+    studentId: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
   };
 
   export type UserUpdateWithoutTenantInput = {
@@ -6157,6 +8311,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutTenantInput = {
@@ -6171,6 +8326,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateManyWithoutTenantInput = {
@@ -6187,6 +8343,111 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   };
 
+  export type DailyReportUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    student?: StudentUpdateOneRequiredWithoutDailyReportsNestedInput;
+  };
+
+  export type DailyReportUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyReportUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyReportCreateManyStudentInput = {
+    id?: string;
+    tenantId: string;
+    date: Date | string;
+    mood?: string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyReportUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutDailyReportsNestedInput;
+  };
+
+  export type DailyReportUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyReportUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mood?: NullableStringFieldUpdateOperationsInput | string | null;
+    meals?: NullableJsonNullValueInput | InputJsonValue;
+    naps?: NullableJsonNullValueInput | InputJsonValue;
+    potty?: NullableJsonNullValueInput | InputJsonValue;
+    activities?: NullableJsonNullValueInput | InputJsonValue;
+    medications?: NullableJsonNullValueInput | InputJsonValue;
+    teacherNote?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   /**
    * Aliases for legacy arg types
    */
@@ -6196,6 +8457,12 @@ export namespace Prisma {
   export type TenantCountOutputTypeArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = TenantCountOutputTypeDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use StudentCountOutputTypeDefaultArgs instead
+   */
+  export type StudentCountOutputTypeArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = StudentCountOutputTypeDefaultArgs<ExtArgs>;
   /**
    * @deprecated Use TenantDefaultArgs instead
    */
@@ -6211,6 +8478,11 @@ export namespace Prisma {
    */
   export type StudentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     StudentDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use DailyReportDefaultArgs instead
+   */
+  export type DailyReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    DailyReportDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

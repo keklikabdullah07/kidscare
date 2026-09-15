@@ -154,6 +154,22 @@ exports.Prisma.StudentScalarFieldEnum = {
   deletedAt: 'deletedAt',
 };
 
+exports.Prisma.DailyReportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  date: 'date',
+  mood: 'mood',
+  meals: 'meals',
+  naps: 'naps',
+  potty: 'potty',
+  activities: 'activities',
+  medications: 'medications',
+  teacherNote: 'teacherNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -195,6 +211,7 @@ exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
   Student: 'Student',
+  DailyReport: 'DailyReport',
 };
 
 /**

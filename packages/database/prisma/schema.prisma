@@ -30,6 +30,7 @@ model Tenant {
 
   users User[]
   students Student[]
+  dailyReports DailyReport[]
 
   @@map("tenants")
 }
@@ -67,8 +68,33 @@ model Student {
   deletedAt   DateTime?
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dailyReports DailyReport[]
 
   @@index([tenantId])
   @@index([tenantId, deletedAt])
   @@map("students")
+}
+
+model DailyReport {
+  id          String   @id @default(cuid())
+  tenantId    String
+  studentId   String
+  date        DateTime @db.Date
+  mood        String?
+  meals       Json?    @default("{}")
+  naps        Json?    @default("{}")
+  potty       Json?    @default("[]")
+  activities  Json?    @default("[]")
+  medications Json?    @default("[]")
+  teacherNote String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, studentId, date])
+  @@index([tenantId, date])
+  @@index([tenantId, studentId])
+  @@map("daily_reports")
 }
