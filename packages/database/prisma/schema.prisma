@@ -31,6 +31,7 @@ model Tenant {
   users User[]
   students Student[]
   dailyReports DailyReport[]
+  attendances Attendance[]
 
   @@map("tenants")
 }
@@ -69,6 +70,7 @@ model Student {
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   dailyReports DailyReport[]
+  attendances Attendance[]
 
   @@index([tenantId])
   @@index([tenantId, deletedAt])
@@ -97,4 +99,29 @@ model DailyReport {
   @@index([tenantId, date])
   @@index([tenantId, studentId])
   @@map("daily_reports")
+}
+
+model Attendance {
+  id              String   @id @default(cuid())
+  tenantId        String
+  studentId       String
+  date            DateTime @db.Date
+  status          String   @default("ABSENT") // PRESENT, ABSENT, EXCUSED, LEFT
+  checkInTime     String?  // HH:mm
+  checkInBy       String?
+  checkOutTime    String?  // HH:mm
+  checkOutBy      String?
+  pickupContactId String?
+  pickupNote      String?
+  note            String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, studentId, date])
+  @@index([tenantId, date])
+  @@index([tenantId, studentId])
+  @@map("attendances")
 }

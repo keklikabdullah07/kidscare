@@ -170,6 +170,23 @@ exports.Prisma.DailyReportScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.AttendanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  date: 'date',
+  status: 'status',
+  checkInTime: 'checkInTime',
+  checkInBy: 'checkInBy',
+  checkOutTime: 'checkOutTime',
+  checkOutBy: 'checkOutBy',
+  pickupContactId: 'pickupContactId',
+  pickupNote: 'pickupNote',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -212,6 +229,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   Student: 'Student',
   DailyReport: 'DailyReport',
+  Attendance: 'Attendance',
 };
 
 /**

@@ -9,6 +9,7 @@ export type {
   User,
   Student,
   DailyReport,
+  Attendance,
   TenantStatus,
   UserRole,
 } from './generated/client';
