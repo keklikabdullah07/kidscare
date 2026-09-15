@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Inject,
   Param,
   Put,
   Query,
@@ -19,7 +20,7 @@ import { DailyReportsService } from '../services/daily-reports.service';
 @Controller()
 @UseGuards(TenantGuard)
 export class DailyReportsController {
-  constructor(private readonly service: DailyReportsService) {}
+  constructor(@Inject(DailyReportsService) private readonly service: DailyReportsService) {}
 
   @Get('daily-reports')
   async findByDate(

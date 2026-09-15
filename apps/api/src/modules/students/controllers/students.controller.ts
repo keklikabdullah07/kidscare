@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Inject,
   Param,
   Patch,
   Post,
@@ -26,7 +27,7 @@ import { StudentsService } from '../services/students.service';
 @Controller('students')
 @UseGuards(TenantGuard)
 export class StudentsController {
-  constructor(private readonly studentsService: StudentsService) {}
+  constructor(@Inject(StudentsService) private readonly studentsService: StudentsService) {}
 
   @Get()
   async findAll(@CurrentTenantId() tenantId: string): Promise<StudentResponse[]> {

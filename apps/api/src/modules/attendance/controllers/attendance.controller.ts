@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Inject,
   Param,
   Post,
   Put,
@@ -24,7 +25,7 @@ import { AttendanceService } from '../services/attendance.service';
 @Controller()
 @UseGuards(TenantGuard)
 export class AttendanceController {
-  constructor(private readonly service: AttendanceService) {}
+  constructor(@Inject(AttendanceService) private readonly service: AttendanceService) {}
 
   @Get('attendance')
   async findByDate(

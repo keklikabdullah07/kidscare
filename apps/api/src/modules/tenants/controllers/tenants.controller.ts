@@ -1,4 +1,12 @@
-import { BadRequestException, Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
 import { TenantResponse } from '../dto/tenant-response.dto';
@@ -9,7 +17,7 @@ import { Tenant } from '../entities/tenant.entity';
 @Controller('tenants')
 @UseGuards(TenantGuard)
 export class TenantsController {
-  constructor(private readonly tenantsService: TenantsService) {}
+  constructor(@Inject(TenantsService) private readonly tenantsService: TenantsService) {}
 
   @Get('me')
   async getMe(@CurrentTenantId() tenantId: string): Promise<TenantResponse> {
