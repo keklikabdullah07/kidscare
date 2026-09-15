@@ -18,7 +18,7 @@ export async function getCustomBaseUrl(): Promise<string | null> {
     return stored;
   }
   await AsyncStorage.removeItem(CUSTOM_URL_KEY);
-  runtimeBaseUrl = 'http://192.168.1.133:3000';
+  runtimeBaseUrl = 'https://kidscare-api.onrender.com';
   return runtimeBaseUrl;
 }
 
@@ -33,7 +33,7 @@ export function resolveBaseUrl(): string {
   const envUrl = process.env.EXPO_PUBLIC_API_URL;
   if (envUrl) return envUrl;
 
-  return 'http://192.168.1.133:3000';
+  return 'https://kidscare-api.onrender.com';
 }
 
 export class ApiError extends Error {

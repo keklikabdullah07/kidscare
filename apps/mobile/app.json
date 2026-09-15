@@ -6,7 +6,17 @@
     "sdkVersion": "57.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "ios": { "supportsTablet": true, "bundleIdentifier": "com.kidscare.app" },
-    "android": { "package": "com.kidscare.app" }
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kidscare.app"
+    },
+    "android": {
+      "package": "com.kidscare.app"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "eb3a5651-d4f5-4fc9-ba89-a00a1cf1691b"
+      }
+    }
   }
 }
