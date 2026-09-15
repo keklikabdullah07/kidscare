@@ -9,3 +9,5 @@ apps/mobile/.expo/
 apps/mobile/node_modules/
 coverage/
 .next/
+.playwright-mcp/
+*.png

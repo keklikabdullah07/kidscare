@@ -5,7 +5,6 @@
     "version": "0.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "newArchEnabled": false,
     "ios": { "supportsTablet": true, "bundleIdentifier": "com.kidscare.app" },
     "android": { "package": "com.kidscare.app" }
   }

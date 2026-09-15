@@ -18,6 +18,7 @@ export default [
       '**/package.json',
       'packages/**/src/generated/**',
       'packages/**/prisma/migrations/**',
+      'scripts/**',
     ],
   },
   js.configs.recommended,
@@ -35,7 +36,18 @@ export default [
   },
   {
     files: ['**/*.spec.ts', '**/*.test.ts', '**/*.test.tsx'],
-    rules: { '@typescript-eslint/no-explicit-any': 'warn' },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // `expect(repo.method).toHaveBeenCalledWith(...)` references a jest
+      // mock method; the unbound-method rule fires on the property access
+      // even though jest.fn() never uses `this`. Off for all spec files.
+      '@typescript-eslint/unbound-method': 'off',
+      // Mocks carry `any` from the library callback types; the unsafe-*
+      // family fires pervasively in unit tests with no real risk.
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+    },
   },
   prettier,
 ];
