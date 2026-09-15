@@ -60,7 +60,9 @@ export function ParentHomeScreen(): React.ReactElement {
     void loadData();
   };
 
-  const activeChild = childrenData.find((c) => c.student.id === selectedChildId) || childrenData[0];
+  const activeChild = Array.isArray(childrenData)
+    ? childrenData.find((c) => c?.student?.id === selectedChildId) || childrenData[0]
+    : undefined;
 
   const getMoodLabel = (mood?: string | null) => {
     switch (mood) {

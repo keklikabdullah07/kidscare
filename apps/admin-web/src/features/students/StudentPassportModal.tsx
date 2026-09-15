@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactElement } from 'react';
 import type { BloodType, EmergencyContact, Student, StudentPassport } from '@kidscare/shared-types';
 import { getStudentPassport, updateStudentPassport } from '../../api/students';
 
@@ -23,7 +23,7 @@ export function StudentPassportModal({
   student: Student;
   onClose: () => void;
   onSaved: (passport: StudentPassport) => void;
-}): JSX.Element {
+}): ReactElement {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);

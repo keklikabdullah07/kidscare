@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type { ParentChildOverview, UserRole } from '@kidscare/shared-types';
 import { AttendanceRepository } from '../../attendance/repositories/attendance.repository';
 import { DailyReportsRepository } from '../../daily-reports/repositories/daily-reports.repository';
@@ -10,9 +10,9 @@ import { DailyReport } from '../../daily-reports/entities/daily-report.entity';
 @Injectable()
 export class ParentService {
   constructor(
-    private readonly studentsRepository: StudentsRepository,
-    private readonly attendanceRepository: AttendanceRepository,
-    private readonly dailyReportsRepository: DailyReportsRepository,
+    @Inject(StudentsRepository) private readonly studentsRepository: StudentsRepository,
+    @Inject(AttendanceRepository) private readonly attendanceRepository: AttendanceRepository,
+    @Inject(DailyReportsRepository) private readonly dailyReportsRepository: DailyReportsRepository,
   ) {}
 
   private parseDate(dateStr: string): Date {

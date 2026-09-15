@@ -1,27 +1,40 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
 
 const TOKEN_KEY = 'kidscare.token';
+const CUSTOM_URL_KEY = 'kidscare.custom_api_url';
+let runtimeBaseUrl: string | null = null;
 
-/**
- * API base URL. Android emulator routes 10.0.2.2 → host machine's
- * localhost. iOS simulator can reach localhost directly. Real devices
- * need the LAN IP of the dev machine — set EXPO_PUBLIC_API_URL via
- * `expo start --env EXPO_PUBLIC_API_URL=http://192.168.x.x:3000`.
- */
 declare const process: { env: Record<string, string | undefined> };
 
-function resolveBaseUrl(): string {
-  // React Native doesn't ship @types/node, so declare `process` locally
-  // with the narrow shape we need. EXPO_PUBLIC_* vars are inlined at
-  // bundle time by Metro.
-  const envUrl = process.env.EXPO_PUBLIC_API_URL;
-  if (envUrl) return envUrl;
-  if (Platform.OS === 'android') return 'http://10.0.2.2:3000';
-  return 'http://localhost:3000';
+export async function getCustomBaseUrl(): Promise<string | null> {
+  const stored = await AsyncStorage.getItem(CUSTOM_URL_KEY);
+  if (
+    stored &&
+    !stored.includes('loca.lt') &&
+    !stored.includes('192.168.1.154') &&
+    !stored.includes('192.168.68.')
+  ) {
+    runtimeBaseUrl = stored;
+    return stored;
+  }
+  await AsyncStorage.removeItem(CUSTOM_URL_KEY);
+  runtimeBaseUrl = 'http://192.168.1.133:3000';
+  return runtimeBaseUrl;
 }
 
-const BASE_URL = resolveBaseUrl();
+export async function setCustomBaseUrl(url: string | null): Promise<void> {
+  runtimeBaseUrl = url?.trim() || null;
+  if (runtimeBaseUrl) await AsyncStorage.setItem(CUSTOM_URL_KEY, runtimeBaseUrl);
+  else await AsyncStorage.removeItem(CUSTOM_URL_KEY);
+}
+
+export function resolveBaseUrl(): string {
+  if (runtimeBaseUrl) return runtimeBaseUrl;
+  const envUrl = process.env.EXPO_PUBLIC_API_URL;
+  if (envUrl) return envUrl;
+
+  return 'http://192.168.1.133:3000';
+}
 
 export class ApiError extends Error {
   constructor(
@@ -44,23 +57,63 @@ export async function setStoredToken(token: string | null): Promise<void> {
 }
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
+  if (!runtimeBaseUrl) {
+    const custom = await getCustomBaseUrl();
+    if (custom) runtimeBaseUrl = custom;
+  }
+  const baseUrl = resolveBaseUrl();
   const headers = new Headers(init.headers);
+  headers.set('Bypass-Tunnel-Reminder', 'true');
   const token = await getStoredToken();
   if (token) headers.set('Authorization', `Bearer ${token}`);
   if (init.body && !headers.has('content-type')) {
     headers.set('content-type', 'application/json');
   }
 
-  const res = await fetch(`${BASE_URL}${path}`, { ...init, headers });
+  const method = init.method || 'GET';
+  console.log(`📡 [MOBILE -> API] ${method} ${baseUrl}${path}`);
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+  let res: Response;
+  try {
+    res = await fetch(`${baseUrl}${path}`, {
+      ...init,
+      headers,
+      signal: controller.signal,
+    });
+  } catch (err: unknown) {
+    const errorMsg =
+      err instanceof Error && err.name === 'AbortError'
+        ? `Sunucuya (${baseUrl}) bağlanırken 8sn zaman aşımı oluştu.`
+        : `Sunucuya (${baseUrl}) bağlanılamadı: ${err instanceof Error ? err.message : String(err)}`;
+    console.error(`❌ [MOBILE NETWORK ERROR] ${method} ${baseUrl}${path}:`, errorMsg);
+    throw new Error(errorMsg, { cause: err });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
   const text = await res.text();
-  const body: unknown = text.length > 0 ? JSON.parse(text) : null;
+  let body: unknown;
+  try {
+    body = text.length > 0 ? JSON.parse(text) : null;
+  } catch {
+    body = text;
+  }
 
   if (!res.ok) {
-    throw new ApiError(res.status, body, `API ${res.status} on ${path}`);
+    const errorMsg =
+      body && typeof body === 'object' && 'message' in body
+        ? String(body.message)
+        : `API ${res.status} on ${path}`;
+    console.error(`❌ [MOBILE API ERROR ${res.status}] ${method} ${baseUrl}${path}:`, body);
+    throw new ApiError(res.status, body, errorMsg);
   }
+  console.log(`✅ [MOBILE API SUCCESS] ${method} ${baseUrl}${path} (${res.status})`);
   return body as T;
 }
 
 export function getBaseUrl(): string {
-  return BASE_URL;
+  return resolveBaseUrl();
 }

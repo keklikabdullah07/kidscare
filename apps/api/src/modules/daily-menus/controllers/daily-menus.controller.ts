@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Inject,
   Param,
   Post,
   Put,
@@ -21,7 +22,7 @@ import { DailyMenusService } from '../services/daily-menus.service';
 @Controller('daily-menus')
 @UseGuards(TenantGuard)
 export class DailyMenusController {
-  constructor(private readonly service: DailyMenusService) {}
+  constructor(@Inject(DailyMenusService) private readonly service: DailyMenusService) {}
 
   @Get()
   async getByDate(

@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { runWithTenant, type TenantContextValue } from '@kidscare/tenant-context';
 import type { Request, Response, NextFunction } from 'express';
 import { JwtService } from '../../modules/auth/services/jwt.service';
@@ -14,7 +14,7 @@ import { JwtService } from '../../modules/auth/services/jwt.service';
  */
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly jwt: JwtService) {}
+  constructor(@Inject(JwtService) private readonly jwt: JwtService) {}
 
   use(req: Request, _res: Response, next: NextFunction): void {
     const auth = req.headers.authorization;

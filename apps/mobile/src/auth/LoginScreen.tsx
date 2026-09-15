@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useAuth } from './AuthContext';
 import { colors, spacing } from '../theme';
+import { getCustomBaseUrl, resolveBaseUrl, setCustomBaseUrl } from '../api/client';
 
 export function LoginScreen({
   onSwitchToSignup,
@@ -21,16 +22,29 @@ export function LoginScreen({
   const [slug, setSlug] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [serverUrl, setServerUrl] = useState(resolveBaseUrl());
+  const [showServerConfig, setShowServerConfig] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const error = state.status === 'unauthenticated' ? state.error : null;
+
+  useEffect(() => {
+    void getCustomBaseUrl().then((url) => {
+      if (url) setServerUrl(url);
+    });
+  }, []);
 
   async function handleSubmit(): Promise<void> {
     if (submitting) return;
     setSubmitting(true);
+    console.log(`👉 [LOGIN ATTEMPT] slug: "${slug}", email: "${email}", serverUrl: "${serverUrl}"`);
     try {
+      if (serverUrl) {
+        await setCustomBaseUrl(serverUrl);
+      }
       await login(slug, email, password);
-    } catch {
-      // error already on state
+      console.log(`🎉 [LOGIN SUCCESS] Logged in as: "${email}"`);
+    } catch (err) {
+      console.error(`❌ [LOGIN ERROR]:`, err);
     } finally {
       setSubmitting(false);
     }
@@ -85,6 +99,40 @@ export function LoginScreen({
           </TouchableOpacity>
 
           {error && <Text style={styles.error}>{error}</Text>}
+
+          {/* Server URL Config Accordion */}
+          <TouchableOpacity
+            style={styles.serverToggle}
+            onPress={() => setShowServerConfig((prev) => !prev)}
+          >
+            <Text style={styles.serverToggleText}>
+              ⚙️ Sunucu Ayarı: {serverUrl} {showServerConfig ? '▲' : '▼'}
+            </Text>
+          </TouchableOpacity>
+
+          {showServerConfig && (
+            <View style={styles.serverConfigBox}>
+              <Text style={styles.serverConfigLabel}>API Sunucu Adresi:</Text>
+              <TextInput
+                style={styles.serverInput}
+                value={serverUrl}
+                onChangeText={setServerUrl}
+                autoCapitalize="none"
+                autoCorrect={false}
+                placeholder="http://192.168.1.133:3000"
+              />
+              <TouchableOpacity
+                style={styles.serverResetBtn}
+                onPress={() => {
+                  const defaultUrl = 'http://192.168.1.133:3000';
+                  setServerUrl(defaultUrl);
+                  void setCustomBaseUrl(defaultUrl);
+                }}
+              >
+                <Text style={styles.serverResetText}>Varsayılana Sıfırla (192.168.1.133:3000)</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         <View style={styles.footer}>
@@ -157,4 +205,44 @@ const styles = StyleSheet.create({
   },
   footerText: { color: colors.textMuted, fontSize: 13 },
   footerLink: { color: colors.primary, fontSize: 13, fontWeight: '600' },
+  serverToggle: {
+    marginTop: spacing.md,
+    paddingVertical: spacing.xs,
+    alignItems: 'center',
+  },
+  serverToggleText: {
+    fontSize: 11,
+    color: colors.textMuted,
+  },
+  serverConfigBox: {
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+    backgroundColor: '#F3F4F6',
+    borderRadius: 6,
+  },
+  serverConfigLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: colors.textSecondary,
+    marginBottom: 4,
+  },
+  serverInput: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 4,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 4,
+    fontSize: 12,
+    backgroundColor: colors.surface,
+    color: colors.textPrimary,
+  },
+  serverResetBtn: {
+    marginTop: 6,
+    alignItems: 'center',
+  },
+  serverResetText: {
+    fontSize: 10,
+    color: colors.primary,
+    fontWeight: '600',
+  },
 });

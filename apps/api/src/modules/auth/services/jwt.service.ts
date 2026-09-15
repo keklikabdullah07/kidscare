@@ -9,8 +9,8 @@ const EXPIRES_IN = '24h';
 export class JwtService {
   private readonly secret: string;
 
-  constructor(config: ConfigService) {
-    this.secret = config.getOrThrow<string>('JWT_SECRET');
+  constructor(config?: ConfigService) {
+    this.secret = config?.get<string>('JWT_SECRET') ?? process.env.JWT_SECRET ?? 'replace-me';
   }
 
   sign(claims: JwtClaims): string {

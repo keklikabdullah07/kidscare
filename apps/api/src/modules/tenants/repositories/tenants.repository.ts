@@ -9,7 +9,7 @@ export interface ITenantsRepository {
 
 @Injectable()
 export class TenantsRepository implements ITenantsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async findById(tenantId: string): Promise<PrismaTenant | null> {
     return this.prisma.withTenant((client) =>

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type { DailyMenu as PrismaDailyMenu, Prisma } from '@kidscare/database';
 import { PrismaService } from '../../../prisma/prisma.service';
 
@@ -22,7 +22,7 @@ export interface IDailyMenusRepository {
 
 @Injectable()
 export class DailyMenusRepository implements IDailyMenusRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async findByDate(tenantId: string, date: Date): Promise<PrismaDailyMenu | null> {
     return this.prisma.withTenant((client) =>

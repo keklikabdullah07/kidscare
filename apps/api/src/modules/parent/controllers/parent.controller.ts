@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Inject, Query, UseGuards } from '@nestjs/common';
 import {
   CurrentUser,
   type CurrentUserPayload,
@@ -10,7 +10,7 @@ import { ParentService } from '../services/parent.service';
 @Controller('parent')
 @UseGuards(TenantGuard)
 export class ParentController {
-  constructor(private readonly service: ParentService) {}
+  constructor(@Inject(ParentService) private readonly service: ParentService) {}
 
   @Get('children')
   async getChildren(

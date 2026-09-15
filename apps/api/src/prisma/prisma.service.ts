@@ -5,10 +5,15 @@ import { tenantContext } from '@kidscare/tenant-context';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  constructor(config: ConfigService) {
+  constructor(config?: ConfigService) {
     super({
       datasources: {
-        db: { url: config.getOrThrow<string>('DATABASE_APP_URL') },
+        db: {
+          url:
+            config?.get<string>('DATABASE_APP_URL') ??
+            process.env.DATABASE_APP_URL ??
+            'postgresql://kidscare_app:app_pw@localhost:5433/kidscare?schema=public',
+        },
       },
     });
   }

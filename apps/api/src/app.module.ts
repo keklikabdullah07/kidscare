@@ -27,6 +27,13 @@ import { StudentsModule } from './modules/students/students.module';
     DailyMenusModule,
     ParentModule,
   ],
-  providers: [Reflector, { provide: APP_GUARD, useClass: TenantGuard }],
+  providers: [
+    Reflector,
+    {
+      provide: APP_GUARD,
+      useFactory: (reflector: Reflector) => new TenantGuard(reflector),
+      inject: [Reflector],
+    },
+  ],
 })
 export class AppModule {}

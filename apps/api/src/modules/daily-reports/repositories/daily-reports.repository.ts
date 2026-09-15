@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type { DailyReport as PrismaDailyReport, Prisma } from '@kidscare/database';
 import { PrismaService } from '../../../prisma/prisma.service';
 
@@ -19,7 +19,7 @@ export interface IDailyReportsRepository {
 
 @Injectable()
 export class DailyReportsRepository implements IDailyReportsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async findByStudentAndDate(
     tenantId: string,

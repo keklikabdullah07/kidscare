@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { runWithTenant } from '@kidscare/tenant-context';
 import type { AuthResponse, JwtClaims, UserRole } from '@kidscare/shared-types';
@@ -26,10 +26,10 @@ function cuid(): string {
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly lookupRepo: AuthLookupRepository,
-    private readonly password: PasswordService,
-    private readonly jwt: JwtService,
-    private readonly prisma: PrismaService,
+    @Inject(AuthLookupRepository) private readonly lookupRepo: AuthLookupRepository,
+    @Inject(PasswordService) private readonly password: PasswordService,
+    @Inject(JwtService) private readonly jwt: JwtService,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
   ) {}
 
   async signup(input: SignupInput): Promise<AuthResponse> {

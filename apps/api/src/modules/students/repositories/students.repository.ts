@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type { Prisma, Student as PrismaStudent } from '@kidscare/database';
 import { PrismaService } from '../../../prisma/prisma.service';
 
@@ -9,14 +9,17 @@ export interface IStudentsRepository {
     id: string,
     options?: { includeDeleted?: boolean },
   ): Promise<PrismaStudent | null>;
-  insert(tenantId: string, data: Prisma.StudentCreateWithoutTenantInput): Promise<PrismaStudent>;
+  insert(
+    tenantId: string,
+    data: Omit<Prisma.StudentUncheckedCreateInput, 'tenantId'>,
+  ): Promise<PrismaStudent>;
   update(tenantId: string, id: string, data: Prisma.StudentUpdateInput): Promise<PrismaStudent>;
   softDelete(tenantId: string, id: string): Promise<PrismaStudent>;
 }
 
 @Injectable()
 export class StudentsRepository implements IStudentsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async findMany(
     tenantId: string,
@@ -51,11 +54,9 @@ export class StudentsRepository implements IStudentsRepository {
 
   async insert(
     tenantId: string,
-    data: Prisma.StudentCreateWithoutTenantInput,
+    data: Omit<Prisma.StudentUncheckedCreateInput, 'tenantId'>,
   ): Promise<PrismaStudent> {
     return this.prisma.withTenant((client) =>
-      // tenantId comes from the explicit arg (matches the RLS session
-      // variable set by withTenantContext); the relation field needs it.
       client.student.create({
         data: {
           ...data,

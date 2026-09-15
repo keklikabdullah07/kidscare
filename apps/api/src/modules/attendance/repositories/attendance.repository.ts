@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type { Attendance as PrismaAttendance, Prisma } from '@kidscare/database';
 import { PrismaService } from '../../../prisma/prisma.service';
 
@@ -19,7 +19,7 @@ export interface IAttendanceRepository {
 
 @Injectable()
 export class AttendanceRepository implements IAttendanceRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async findByDate(tenantId: string, date: Date): Promise<PrismaAttendance[]> {
     return this.prisma.withTenant((client) =>

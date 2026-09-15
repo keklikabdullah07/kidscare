@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type {
   AllergenWarningSummary,
   DailyMenuCreateInput,
@@ -16,8 +16,8 @@ export interface DailyMenuWithWarnings {
 @Injectable()
 export class DailyMenusService {
   constructor(
-    private readonly repository: DailyMenusRepository,
-    private readonly studentsRepository: StudentsRepository,
+    @Inject(DailyMenusRepository) private readonly repository: DailyMenusRepository,
+    @Inject(StudentsRepository) private readonly studentsRepository: StudentsRepository,
   ) {}
 
   private parseDate(dateStr: string): Date {

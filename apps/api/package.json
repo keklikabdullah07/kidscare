@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start:dev": "nest start --watch",
-    "start": "node -r tsx/cjs dist/apps/api/src/main.js",
+    "build": "pnpm --filter @kidscare/database prisma generate",
+    "start": "tsx src/main.ts",
+    "start:dev": "tsx watch src/main.ts",
     "test": "jest",
     "test:integration": "jest --config jest.config.integration.ts --runInBand"
   },

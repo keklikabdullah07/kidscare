@@ -18,8 +18,11 @@ import {
 export class AuthLookupRepository implements OnModuleDestroy {
   private readonly client: PrismaClient;
 
-  constructor(config: ConfigService) {
-    const url = config.getOrThrow<string>('DATABASE_AUTH_LOOKUP_URL');
+  constructor(config?: ConfigService) {
+    const url =
+      config?.get<string>('DATABASE_AUTH_LOOKUP_URL') ??
+      process.env.DATABASE_AUTH_LOOKUP_URL ??
+      'postgresql://kidscare_auth_lookup:auth_pw@localhost:5433/kidscare?schema=public';
     this.client = createAuthLookupClient(url);
   }
 
