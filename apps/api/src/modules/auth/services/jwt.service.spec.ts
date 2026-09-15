@@ -6,7 +6,7 @@ describe('JwtService', () => {
   const SECRET = 'test-secret-very-long-and-random-12345678';
 
   beforeEach(() => {
-    const config = { getOrThrow: () => SECRET } as unknown as ConfigService;
+    const config = { get: () => SECRET, getOrThrow: () => SECRET } as unknown as ConfigService;
     service = new JwtService(config);
   });
 
@@ -28,6 +28,7 @@ describe('JwtService', () => {
 
     it('throws on wrong secret', () => {
       const other = new JwtService({
+        get: () => 'different-secret-very-long-random-1234',
         getOrThrow: () => 'different-secret-very-long-random-1234',
       } as unknown as ConfigService);
       const token = service.sign({ sub: 'u-1', tenantId: 't-1', role: 'ADMIN' });

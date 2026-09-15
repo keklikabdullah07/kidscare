@@ -15,6 +15,7 @@ import { fetchParentChildrenOverview } from '../api/parent';
 import { getDailyMenu } from '../api/daily-menus';
 import { useAuth } from '../auth/AuthContext';
 import { DailyMenuModal } from '../daily-menus/DailyMenuModal';
+import { ActivityGalleryModal } from '../activities/ActivityGalleryModal';
 import { colors, spacing } from '../theme';
 
 export function ParentHomeScreen(): React.ReactElement {
@@ -27,6 +28,7 @@ export function ParentHomeScreen(): React.ReactElement {
   const [selectedDate] = useState<string>(new Date().toISOString().split('T')[0] ?? '');
   const [menuModalVisible, setMenuModalVisible] = useState(false);
   const [passportModalVisible, setPassportModalVisible] = useState(false);
+  const [galleryModalVisible, setGalleryModalVisible] = useState(false);
 
   const loadData = async () => {
     try {
@@ -259,11 +261,19 @@ export function ParentHomeScreen(): React.ReactElement {
               </Pressable>
 
               <Pressable
+                onPress={() => setGalleryModalVisible(true)}
+                style={[styles.actionButton, styles.actionButtonAccent]}
+              >
+                <Text style={styles.actionButtonIcon}>📸</Text>
+                <Text style={styles.actionButtonText}>Foto Galeri</Text>
+              </Pressable>
+
+              <Pressable
                 onPress={() => setPassportModalVisible(true)}
                 style={[styles.actionButton, styles.actionButtonSecondary]}
               >
                 <Text style={styles.actionButtonIcon}>🛡️</Text>
-                <Text style={styles.actionButtonText}>Gelişim Pasaportu</Text>
+                <Text style={styles.actionButtonText}>Pasaport</Text>
               </Pressable>
             </View>
 
@@ -508,6 +518,12 @@ export function ParentHomeScreen(): React.ReactElement {
           </View>
         </View>
       </Modal>
+
+      <ActivityGalleryModal
+        visible={galleryModalVisible}
+        onClose={() => setGalleryModalVisible(false)}
+        userRole={authState.status === 'authenticated' ? authState.user.role : undefined}
+      />
     </SafeAreaView>
   );
 }
@@ -727,6 +743,10 @@ const styles = StyleSheet.create({
   actionButtonSecondary: {
     backgroundColor: '#EFF6FF',
     borderColor: '#BFDBFE',
+  },
+  actionButtonAccent: {
+    backgroundColor: '#EEF2FF',
+    borderColor: '#C7D2FE',
   },
   actionButtonIcon: {
     fontSize: 16,

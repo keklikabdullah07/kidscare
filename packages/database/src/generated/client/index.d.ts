@@ -41,6 +41,11 @@ export type Attendance = $Result.DefaultSelection<Prisma.$AttendancePayload>;
  *
  */
 export type DailyMenu = $Result.DefaultSelection<Prisma.$DailyMenuPayload>;
+/**
+ * Model ActivityPost
+ *
+ */
+export type ActivityPost = $Result.DefaultSelection<Prisma.$ActivityPostPayload>;
 
 /**
  * Enums
@@ -275,6 +280,16 @@ export class PrismaClient<
    * ```
    */
   get dailyMenu(): Prisma.DailyMenuDelegate<ExtArgs>;
+
+  /**
+   * `prisma.activityPost`: Exposes CRUD operations for the **ActivityPost** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more ActivityPosts
+   * const activityPosts = await prisma.activityPost.findMany()
+   * ```
+   */
+  get activityPost(): Prisma.ActivityPostDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -715,6 +730,7 @@ export namespace Prisma {
     DailyReport: 'DailyReport';
     Attendance: 'Attendance';
     DailyMenu: 'DailyMenu';
+    ActivityPost: 'ActivityPost';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -735,7 +751,8 @@ export namespace Prisma {
     ClientOptions = {},
   > = {
     meta: {
-      modelProps: 'tenant' | 'user' | 'student' | 'dailyReport' | 'attendance' | 'dailyMenu';
+      modelProps:
+        'tenant' | 'user' | 'student' | 'dailyReport' | 'attendance' | 'dailyMenu' | 'activityPost';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -1159,6 +1176,76 @@ export namespace Prisma {
           };
         };
       };
+      ActivityPost: {
+        payload: Prisma.$ActivityPostPayload<ExtArgs>;
+        fields: Prisma.ActivityPostFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.ActivityPostFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.ActivityPostFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload>;
+          };
+          findFirst: {
+            args: Prisma.ActivityPostFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.ActivityPostFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload>;
+          };
+          findMany: {
+            args: Prisma.ActivityPostFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload>[];
+          };
+          create: {
+            args: Prisma.ActivityPostCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload>;
+          };
+          createMany: {
+            args: Prisma.ActivityPostCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.ActivityPostCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload>[];
+          };
+          delete: {
+            args: Prisma.ActivityPostDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload>;
+          };
+          update: {
+            args: Prisma.ActivityPostUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload>;
+          };
+          deleteMany: {
+            args: Prisma.ActivityPostDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.ActivityPostUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.ActivityPostUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActivityPostPayload>;
+          };
+          aggregate: {
+            args: Prisma.ActivityPostAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateActivityPost>;
+          };
+          groupBy: {
+            args: Prisma.ActivityPostGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<ActivityPostGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.ActivityPostCountArgs<ExtArgs>;
+            result: $Utils.Optional<ActivityPostCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -1331,6 +1418,7 @@ export namespace Prisma {
     dailyReports: number;
     attendances: number;
     dailyMenus: number;
+    activityPosts: number;
   };
 
   export type TenantCountOutputTypeSelect<
@@ -1341,6 +1429,7 @@ export namespace Prisma {
     dailyReports?: boolean | TenantCountOutputTypeCountDailyReportsArgs;
     attendances?: boolean | TenantCountOutputTypeCountAttendancesArgs;
     dailyMenus?: boolean | TenantCountOutputTypeCountDailyMenusArgs;
+    activityPosts?: boolean | TenantCountOutputTypeCountActivityPostsArgs;
   };
 
   // Custom InputTypes
@@ -1399,6 +1488,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: DailyMenuWhereInput;
+  };
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountActivityPostsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ActivityPostWhereInput;
   };
 
   /**
@@ -1665,6 +1763,7 @@ export namespace Prisma {
         dailyReports?: boolean | Tenant$dailyReportsArgs<ExtArgs>;
         attendances?: boolean | Tenant$attendancesArgs<ExtArgs>;
         dailyMenus?: boolean | Tenant$dailyMenusArgs<ExtArgs>;
+        activityPosts?: boolean | Tenant$activityPostsArgs<ExtArgs>;
         _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['tenant']
@@ -1699,6 +1798,7 @@ export namespace Prisma {
     dailyReports?: boolean | Tenant$dailyReportsArgs<ExtArgs>;
     attendances?: boolean | Tenant$attendancesArgs<ExtArgs>;
     dailyMenus?: boolean | Tenant$dailyMenusArgs<ExtArgs>;
+    activityPosts?: boolean | Tenant$activityPostsArgs<ExtArgs>;
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TenantIncludeCreateManyAndReturn<
@@ -1713,6 +1813,7 @@ export namespace Prisma {
       dailyReports: Prisma.$DailyReportPayload<ExtArgs>[];
       attendances: Prisma.$AttendancePayload<ExtArgs>[];
       dailyMenus: Prisma.$DailyMenuPayload<ExtArgs>[];
+      activityPosts: Prisma.$ActivityPostPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -2174,6 +2275,11 @@ export namespace Prisma {
       args?: Subset<T, Tenant$dailyMenusArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    activityPosts<T extends Tenant$activityPostsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$activityPostsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2653,6 +2759,28 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: DailyMenuScalarFieldEnum | DailyMenuScalarFieldEnum[];
+  };
+
+  /**
+   * Tenant.activityPosts
+   */
+  export type Tenant$activityPostsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    where?: ActivityPostWhereInput;
+    orderBy?: ActivityPostOrderByWithRelationInput | ActivityPostOrderByWithRelationInput[];
+    cursor?: ActivityPostWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: ActivityPostScalarFieldEnum | ActivityPostScalarFieldEnum[];
   };
 
   /**
@@ -8455,6 +8583,1141 @@ export namespace Prisma {
   };
 
   /**
+   * Model ActivityPost
+   */
+
+  export type AggregateActivityPost = {
+    _count: ActivityPostCountAggregateOutputType | null;
+    _min: ActivityPostMinAggregateOutputType | null;
+    _max: ActivityPostMaxAggregateOutputType | null;
+  };
+
+  export type ActivityPostMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    authorId: string | null;
+    title: string | null;
+    description: string | null;
+    classroom: string | null;
+    activityDate: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    deletedAt: Date | null;
+  };
+
+  export type ActivityPostMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    authorId: string | null;
+    title: string | null;
+    description: string | null;
+    classroom: string | null;
+    activityDate: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    deletedAt: Date | null;
+  };
+
+  export type ActivityPostCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    authorId: number;
+    title: number;
+    description: number;
+    classroom: number;
+    activityDate: number;
+    tags: number;
+    mediaUrls: number;
+    taggedStudentIds: number;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt: number;
+    _all: number;
+  };
+
+  export type ActivityPostMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    authorId?: true;
+    title?: true;
+    description?: true;
+    classroom?: true;
+    activityDate?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    deletedAt?: true;
+  };
+
+  export type ActivityPostMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    authorId?: true;
+    title?: true;
+    description?: true;
+    classroom?: true;
+    activityDate?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    deletedAt?: true;
+  };
+
+  export type ActivityPostCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    authorId?: true;
+    title?: true;
+    description?: true;
+    classroom?: true;
+    activityDate?: true;
+    tags?: true;
+    mediaUrls?: true;
+    taggedStudentIds?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    deletedAt?: true;
+    _all?: true;
+  };
+
+  export type ActivityPostAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ActivityPost to aggregate.
+     */
+    where?: ActivityPostWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ActivityPosts to fetch.
+     */
+    orderBy?: ActivityPostOrderByWithRelationInput | ActivityPostOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: ActivityPostWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ActivityPosts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ActivityPosts.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ActivityPosts
+     **/
+    _count?: true | ActivityPostCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: ActivityPostMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: ActivityPostMaxAggregateInputType;
+  };
+
+  export type GetActivityPostAggregateType<T extends ActivityPostAggregateArgs> = {
+    [P in keyof T & keyof AggregateActivityPost]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateActivityPost[P]>
+      : GetScalarType<T[P], AggregateActivityPost[P]>;
+  };
+
+  export type ActivityPostGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ActivityPostWhereInput;
+    orderBy?: ActivityPostOrderByWithAggregationInput | ActivityPostOrderByWithAggregationInput[];
+    by: ActivityPostScalarFieldEnum[] | ActivityPostScalarFieldEnum;
+    having?: ActivityPostScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: ActivityPostCountAggregateInputType | true;
+    _min?: ActivityPostMinAggregateInputType;
+    _max?: ActivityPostMaxAggregateInputType;
+  };
+
+  export type ActivityPostGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    authorId: string;
+    title: string;
+    description: string | null;
+    classroom: string | null;
+    activityDate: Date;
+    tags: JsonValue;
+    mediaUrls: JsonValue;
+    taggedStudentIds: JsonValue;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+    _count: ActivityPostCountAggregateOutputType | null;
+    _min: ActivityPostMinAggregateOutputType | null;
+    _max: ActivityPostMaxAggregateOutputType | null;
+  };
+
+  type GetActivityPostGroupByPayload<T extends ActivityPostGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ActivityPostGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof ActivityPostGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], ActivityPostGroupByOutputType[P]>
+          : GetScalarType<T[P], ActivityPostGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type ActivityPostSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      authorId?: boolean;
+      title?: boolean;
+      description?: boolean;
+      classroom?: boolean;
+      activityDate?: boolean;
+      tags?: boolean;
+      mediaUrls?: boolean;
+      taggedStudentIds?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      deletedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['activityPost']
+  >;
+
+  export type ActivityPostSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      authorId?: boolean;
+      title?: boolean;
+      description?: boolean;
+      classroom?: boolean;
+      activityDate?: boolean;
+      tags?: boolean;
+      mediaUrls?: boolean;
+      taggedStudentIds?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      deletedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['activityPost']
+  >;
+
+  export type ActivityPostSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    authorId?: boolean;
+    title?: boolean;
+    description?: boolean;
+    classroom?: boolean;
+    activityDate?: boolean;
+    tags?: boolean;
+    mediaUrls?: boolean;
+    taggedStudentIds?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    deletedAt?: boolean;
+  };
+
+  export type ActivityPostInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+  };
+  export type ActivityPostIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+  };
+
+  export type $ActivityPostPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'ActivityPost';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        authorId: string;
+        title: string;
+        description: string | null;
+        classroom: string | null;
+        activityDate: Date;
+        tags: Prisma.JsonValue;
+        mediaUrls: Prisma.JsonValue;
+        taggedStudentIds: Prisma.JsonValue;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt: Date | null;
+      },
+      ExtArgs['result']['activityPost']
+    >;
+    composites: {};
+  };
+
+  type ActivityPostGetPayload<S extends boolean | null | undefined | ActivityPostDefaultArgs> =
+    $Result.GetResult<Prisma.$ActivityPostPayload, S>;
+
+  type ActivityPostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ActivityPostFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ActivityPostCountAggregateInputType | true;
+    };
+
+  export interface ActivityPostDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['ActivityPost'];
+      meta: { name: 'ActivityPost' };
+    };
+    /**
+     * Find zero or one ActivityPost that matches the filter.
+     * @param {ActivityPostFindUniqueArgs} args - Arguments to find a ActivityPost
+     * @example
+     * // Get one ActivityPost
+     * const activityPost = await prisma.activityPost.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ActivityPostFindUniqueArgs>(
+      args: SelectSubset<T, ActivityPostFindUniqueArgs<ExtArgs>>,
+    ): Prisma__ActivityPostClient<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one ActivityPost that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ActivityPostFindUniqueOrThrowArgs} args - Arguments to find a ActivityPost
+     * @example
+     * // Get one ActivityPost
+     * const activityPost = await prisma.activityPost.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ActivityPostFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, ActivityPostFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__ActivityPostClient<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first ActivityPost that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityPostFindFirstArgs} args - Arguments to find a ActivityPost
+     * @example
+     * // Get one ActivityPost
+     * const activityPost = await prisma.activityPost.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ActivityPostFindFirstArgs>(
+      args?: SelectSubset<T, ActivityPostFindFirstArgs<ExtArgs>>,
+    ): Prisma__ActivityPostClient<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first ActivityPost that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityPostFindFirstOrThrowArgs} args - Arguments to find a ActivityPost
+     * @example
+     * // Get one ActivityPost
+     * const activityPost = await prisma.activityPost.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ActivityPostFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ActivityPostFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__ActivityPostClient<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more ActivityPosts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityPostFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ActivityPosts
+     * const activityPosts = await prisma.activityPost.findMany()
+     *
+     * // Get first 10 ActivityPosts
+     * const activityPosts = await prisma.activityPost.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const activityPostWithIdOnly = await prisma.activityPost.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ActivityPostFindManyArgs>(
+      args?: SelectSubset<T, ActivityPostFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'findMany'>>;
+
+    /**
+     * Create a ActivityPost.
+     * @param {ActivityPostCreateArgs} args - Arguments to create a ActivityPost.
+     * @example
+     * // Create one ActivityPost
+     * const ActivityPost = await prisma.activityPost.create({
+     *   data: {
+     *     // ... data to create a ActivityPost
+     *   }
+     * })
+     *
+     */
+    create<T extends ActivityPostCreateArgs>(
+      args: SelectSubset<T, ActivityPostCreateArgs<ExtArgs>>,
+    ): Prisma__ActivityPostClient<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many ActivityPosts.
+     * @param {ActivityPostCreateManyArgs} args - Arguments to create many ActivityPosts.
+     * @example
+     * // Create many ActivityPosts
+     * const activityPost = await prisma.activityPost.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ActivityPostCreateManyArgs>(
+      args?: SelectSubset<T, ActivityPostCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many ActivityPosts and returns the data saved in the database.
+     * @param {ActivityPostCreateManyAndReturnArgs} args - Arguments to create many ActivityPosts.
+     * @example
+     * // Create many ActivityPosts
+     * const activityPost = await prisma.activityPost.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ActivityPosts and only return the `id`
+     * const activityPostWithIdOnly = await prisma.activityPost.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ActivityPostCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, ActivityPostCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a ActivityPost.
+     * @param {ActivityPostDeleteArgs} args - Arguments to delete one ActivityPost.
+     * @example
+     * // Delete one ActivityPost
+     * const ActivityPost = await prisma.activityPost.delete({
+     *   where: {
+     *     // ... filter to delete one ActivityPost
+     *   }
+     * })
+     *
+     */
+    delete<T extends ActivityPostDeleteArgs>(
+      args: SelectSubset<T, ActivityPostDeleteArgs<ExtArgs>>,
+    ): Prisma__ActivityPostClient<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one ActivityPost.
+     * @param {ActivityPostUpdateArgs} args - Arguments to update one ActivityPost.
+     * @example
+     * // Update one ActivityPost
+     * const activityPost = await prisma.activityPost.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ActivityPostUpdateArgs>(
+      args: SelectSubset<T, ActivityPostUpdateArgs<ExtArgs>>,
+    ): Prisma__ActivityPostClient<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more ActivityPosts.
+     * @param {ActivityPostDeleteManyArgs} args - Arguments to filter ActivityPosts to delete.
+     * @example
+     * // Delete a few ActivityPosts
+     * const { count } = await prisma.activityPost.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ActivityPostDeleteManyArgs>(
+      args?: SelectSubset<T, ActivityPostDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more ActivityPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityPostUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ActivityPosts
+     * const activityPost = await prisma.activityPost.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ActivityPostUpdateManyArgs>(
+      args: SelectSubset<T, ActivityPostUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one ActivityPost.
+     * @param {ActivityPostUpsertArgs} args - Arguments to update or create a ActivityPost.
+     * @example
+     * // Update or create a ActivityPost
+     * const activityPost = await prisma.activityPost.upsert({
+     *   create: {
+     *     // ... data to create a ActivityPost
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ActivityPost we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ActivityPostUpsertArgs>(
+      args: SelectSubset<T, ActivityPostUpsertArgs<ExtArgs>>,
+    ): Prisma__ActivityPostClient<
+      $Result.GetResult<Prisma.$ActivityPostPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of ActivityPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityPostCountArgs} args - Arguments to filter ActivityPosts to count.
+     * @example
+     * // Count the number of ActivityPosts
+     * const count = await prisma.activityPost.count({
+     *   where: {
+     *     // ... the filter for the ActivityPosts we want to count
+     *   }
+     * })
+     **/
+    count<T extends ActivityPostCountArgs>(
+      args?: Subset<T, ActivityPostCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ActivityPostCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a ActivityPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityPostAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends ActivityPostAggregateArgs>(
+      args: Subset<T, ActivityPostAggregateArgs>,
+    ): Prisma.PrismaPromise<GetActivityPostAggregateType<T>>;
+
+    /**
+     * Group by ActivityPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityPostGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends ActivityPostGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: ActivityPostGroupByArgs['orderBy'] }
+        : { orderBy?: ActivityPostGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, ActivityPostGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetActivityPostGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the ActivityPost model
+     */
+    readonly fields: ActivityPostFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ActivityPost.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ActivityPostClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the ActivityPost model
+   */
+  interface ActivityPostFieldRefs {
+    readonly id: FieldRef<'ActivityPost', 'String'>;
+    readonly tenantId: FieldRef<'ActivityPost', 'String'>;
+    readonly authorId: FieldRef<'ActivityPost', 'String'>;
+    readonly title: FieldRef<'ActivityPost', 'String'>;
+    readonly description: FieldRef<'ActivityPost', 'String'>;
+    readonly classroom: FieldRef<'ActivityPost', 'String'>;
+    readonly activityDate: FieldRef<'ActivityPost', 'DateTime'>;
+    readonly tags: FieldRef<'ActivityPost', 'Json'>;
+    readonly mediaUrls: FieldRef<'ActivityPost', 'Json'>;
+    readonly taggedStudentIds: FieldRef<'ActivityPost', 'Json'>;
+    readonly createdAt: FieldRef<'ActivityPost', 'DateTime'>;
+    readonly updatedAt: FieldRef<'ActivityPost', 'DateTime'>;
+    readonly deletedAt: FieldRef<'ActivityPost', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * ActivityPost findUnique
+   */
+  export type ActivityPostFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActivityPost to fetch.
+     */
+    where: ActivityPostWhereUniqueInput;
+  };
+
+  /**
+   * ActivityPost findUniqueOrThrow
+   */
+  export type ActivityPostFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActivityPost to fetch.
+     */
+    where: ActivityPostWhereUniqueInput;
+  };
+
+  /**
+   * ActivityPost findFirst
+   */
+  export type ActivityPostFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActivityPost to fetch.
+     */
+    where?: ActivityPostWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ActivityPosts to fetch.
+     */
+    orderBy?: ActivityPostOrderByWithRelationInput | ActivityPostOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ActivityPosts.
+     */
+    cursor?: ActivityPostWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ActivityPosts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ActivityPosts.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ActivityPosts.
+     */
+    distinct?: ActivityPostScalarFieldEnum | ActivityPostScalarFieldEnum[];
+  };
+
+  /**
+   * ActivityPost findFirstOrThrow
+   */
+  export type ActivityPostFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActivityPost to fetch.
+     */
+    where?: ActivityPostWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ActivityPosts to fetch.
+     */
+    orderBy?: ActivityPostOrderByWithRelationInput | ActivityPostOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ActivityPosts.
+     */
+    cursor?: ActivityPostWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ActivityPosts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ActivityPosts.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ActivityPosts.
+     */
+    distinct?: ActivityPostScalarFieldEnum | ActivityPostScalarFieldEnum[];
+  };
+
+  /**
+   * ActivityPost findMany
+   */
+  export type ActivityPostFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActivityPosts to fetch.
+     */
+    where?: ActivityPostWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ActivityPosts to fetch.
+     */
+    orderBy?: ActivityPostOrderByWithRelationInput | ActivityPostOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ActivityPosts.
+     */
+    cursor?: ActivityPostWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ActivityPosts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ActivityPosts.
+     */
+    skip?: number;
+    distinct?: ActivityPostScalarFieldEnum | ActivityPostScalarFieldEnum[];
+  };
+
+  /**
+   * ActivityPost create
+   */
+  export type ActivityPostCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a ActivityPost.
+     */
+    data: XOR<ActivityPostCreateInput, ActivityPostUncheckedCreateInput>;
+  };
+
+  /**
+   * ActivityPost createMany
+   */
+  export type ActivityPostCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many ActivityPosts.
+     */
+    data: ActivityPostCreateManyInput | ActivityPostCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * ActivityPost createManyAndReturn
+   */
+  export type ActivityPostCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many ActivityPosts.
+     */
+    data: ActivityPostCreateManyInput | ActivityPostCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * ActivityPost update
+   */
+  export type ActivityPostUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a ActivityPost.
+     */
+    data: XOR<ActivityPostUpdateInput, ActivityPostUncheckedUpdateInput>;
+    /**
+     * Choose, which ActivityPost to update.
+     */
+    where: ActivityPostWhereUniqueInput;
+  };
+
+  /**
+   * ActivityPost updateMany
+   */
+  export type ActivityPostUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update ActivityPosts.
+     */
+    data: XOR<ActivityPostUpdateManyMutationInput, ActivityPostUncheckedUpdateManyInput>;
+    /**
+     * Filter which ActivityPosts to update
+     */
+    where?: ActivityPostWhereInput;
+  };
+
+  /**
+   * ActivityPost upsert
+   */
+  export type ActivityPostUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the ActivityPost to update in case it exists.
+     */
+    where: ActivityPostWhereUniqueInput;
+    /**
+     * In case the ActivityPost found by the `where` argument doesn't exist, create a new ActivityPost with this data.
+     */
+    create: XOR<ActivityPostCreateInput, ActivityPostUncheckedCreateInput>;
+    /**
+     * In case the ActivityPost was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ActivityPostUpdateInput, ActivityPostUncheckedUpdateInput>;
+  };
+
+  /**
+   * ActivityPost delete
+   */
+  export type ActivityPostDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+    /**
+     * Filter which ActivityPost to delete.
+     */
+    where: ActivityPostWhereUniqueInput;
+  };
+
+  /**
+   * ActivityPost deleteMany
+   */
+  export type ActivityPostDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ActivityPosts to delete
+     */
+    where?: ActivityPostWhereInput;
+  };
+
+  /**
+   * ActivityPost without action
+   */
+  export type ActivityPostDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActivityPost
+     */
+    select?: ActivityPostSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityPostInclude<ExtArgs> | null;
+  };
+
+  /**
    * Enums
    */
 
@@ -8568,6 +9831,25 @@ export namespace Prisma {
 
   export type DailyMenuScalarFieldEnum =
     (typeof DailyMenuScalarFieldEnum)[keyof typeof DailyMenuScalarFieldEnum];
+
+  export const ActivityPostScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    authorId: 'authorId';
+    title: 'title';
+    description: 'description';
+    classroom: 'classroom';
+    activityDate: 'activityDate';
+    tags: 'tags';
+    mediaUrls: 'mediaUrls';
+    taggedStudentIds: 'taggedStudentIds';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+    deletedAt: 'deletedAt';
+  };
+
+  export type ActivityPostScalarFieldEnum =
+    (typeof ActivityPostScalarFieldEnum)[keyof typeof ActivityPostScalarFieldEnum];
 
   export const SortOrder: {
     asc: 'asc';
@@ -8717,6 +9999,7 @@ export namespace Prisma {
     dailyReports?: DailyReportListRelationFilter;
     attendances?: AttendanceListRelationFilter;
     dailyMenus?: DailyMenuListRelationFilter;
+    activityPosts?: ActivityPostListRelationFilter;
   };
 
   export type TenantOrderByWithRelationInput = {
@@ -8731,6 +10014,7 @@ export namespace Prisma {
     dailyReports?: DailyReportOrderByRelationAggregateInput;
     attendances?: AttendanceOrderByRelationAggregateInput;
     dailyMenus?: DailyMenuOrderByRelationAggregateInput;
+    activityPosts?: ActivityPostOrderByRelationAggregateInput;
   };
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<
@@ -8749,6 +10033,7 @@ export namespace Prisma {
       dailyReports?: DailyReportListRelationFilter;
       attendances?: AttendanceListRelationFilter;
       dailyMenus?: DailyMenuListRelationFilter;
+      activityPosts?: ActivityPostListRelationFilter;
     },
     'id' | 'slug'
   >;
@@ -9266,6 +10551,104 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<'DailyMenu'> | Date | string;
   };
 
+  export type ActivityPostWhereInput = {
+    AND?: ActivityPostWhereInput | ActivityPostWhereInput[];
+    OR?: ActivityPostWhereInput[];
+    NOT?: ActivityPostWhereInput | ActivityPostWhereInput[];
+    id?: StringFilter<'ActivityPost'> | string;
+    tenantId?: StringFilter<'ActivityPost'> | string;
+    authorId?: StringFilter<'ActivityPost'> | string;
+    title?: StringFilter<'ActivityPost'> | string;
+    description?: StringNullableFilter<'ActivityPost'> | string | null;
+    classroom?: StringNullableFilter<'ActivityPost'> | string | null;
+    activityDate?: DateTimeFilter<'ActivityPost'> | Date | string;
+    tags?: JsonFilter<'ActivityPost'>;
+    mediaUrls?: JsonFilter<'ActivityPost'>;
+    taggedStudentIds?: JsonFilter<'ActivityPost'>;
+    createdAt?: DateTimeFilter<'ActivityPost'> | Date | string;
+    updatedAt?: DateTimeFilter<'ActivityPost'> | Date | string;
+    deletedAt?: DateTimeNullableFilter<'ActivityPost'> | Date | string | null;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+  };
+
+  export type ActivityPostOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    authorId?: SortOrder;
+    title?: SortOrder;
+    description?: SortOrderInput | SortOrder;
+    classroom?: SortOrderInput | SortOrder;
+    activityDate?: SortOrder;
+    tags?: SortOrder;
+    mediaUrls?: SortOrder;
+    taggedStudentIds?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    deletedAt?: SortOrderInput | SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+  };
+
+  export type ActivityPostWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: ActivityPostWhereInput | ActivityPostWhereInput[];
+      OR?: ActivityPostWhereInput[];
+      NOT?: ActivityPostWhereInput | ActivityPostWhereInput[];
+      tenantId?: StringFilter<'ActivityPost'> | string;
+      authorId?: StringFilter<'ActivityPost'> | string;
+      title?: StringFilter<'ActivityPost'> | string;
+      description?: StringNullableFilter<'ActivityPost'> | string | null;
+      classroom?: StringNullableFilter<'ActivityPost'> | string | null;
+      activityDate?: DateTimeFilter<'ActivityPost'> | Date | string;
+      tags?: JsonFilter<'ActivityPost'>;
+      mediaUrls?: JsonFilter<'ActivityPost'>;
+      taggedStudentIds?: JsonFilter<'ActivityPost'>;
+      createdAt?: DateTimeFilter<'ActivityPost'> | Date | string;
+      updatedAt?: DateTimeFilter<'ActivityPost'> | Date | string;
+      deletedAt?: DateTimeNullableFilter<'ActivityPost'> | Date | string | null;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    },
+    'id'
+  >;
+
+  export type ActivityPostOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    authorId?: SortOrder;
+    title?: SortOrder;
+    description?: SortOrderInput | SortOrder;
+    classroom?: SortOrderInput | SortOrder;
+    activityDate?: SortOrder;
+    tags?: SortOrder;
+    mediaUrls?: SortOrder;
+    taggedStudentIds?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    deletedAt?: SortOrderInput | SortOrder;
+    _count?: ActivityPostCountOrderByAggregateInput;
+    _max?: ActivityPostMaxOrderByAggregateInput;
+    _min?: ActivityPostMinOrderByAggregateInput;
+  };
+
+  export type ActivityPostScalarWhereWithAggregatesInput = {
+    AND?: ActivityPostScalarWhereWithAggregatesInput | ActivityPostScalarWhereWithAggregatesInput[];
+    OR?: ActivityPostScalarWhereWithAggregatesInput[];
+    NOT?: ActivityPostScalarWhereWithAggregatesInput | ActivityPostScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'ActivityPost'> | string;
+    tenantId?: StringWithAggregatesFilter<'ActivityPost'> | string;
+    authorId?: StringWithAggregatesFilter<'ActivityPost'> | string;
+    title?: StringWithAggregatesFilter<'ActivityPost'> | string;
+    description?: StringNullableWithAggregatesFilter<'ActivityPost'> | string | null;
+    classroom?: StringNullableWithAggregatesFilter<'ActivityPost'> | string | null;
+    activityDate?: DateTimeWithAggregatesFilter<'ActivityPost'> | Date | string;
+    tags?: JsonWithAggregatesFilter<'ActivityPost'>;
+    mediaUrls?: JsonWithAggregatesFilter<'ActivityPost'>;
+    taggedStudentIds?: JsonWithAggregatesFilter<'ActivityPost'>;
+    createdAt?: DateTimeWithAggregatesFilter<'ActivityPost'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'ActivityPost'> | Date | string;
+    deletedAt?: DateTimeNullableWithAggregatesFilter<'ActivityPost'> | Date | string | null;
+  };
+
   export type TenantCreateInput = {
     id?: string;
     slug: string;
@@ -9278,6 +10661,7 @@ export namespace Prisma {
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateInput = {
@@ -9292,6 +10676,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUpdateInput = {
@@ -9306,6 +10691,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateInput = {
@@ -9320,6 +10706,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateManyInput = {
@@ -9878,6 +11265,117 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type ActivityPostCreateInput = {
+    id?: string;
+    authorId: string;
+    title: string;
+    description?: string | null;
+    classroom?: string | null;
+    activityDate?: Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    tenant: TenantCreateNestedOneWithoutActivityPostsInput;
+  };
+
+  export type ActivityPostUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    authorId: string;
+    title: string;
+    description?: string | null;
+    classroom?: string | null;
+    activityDate?: Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+  };
+
+  export type ActivityPostUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    authorId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroom?: NullableStringFieldUpdateOperationsInput | string | null;
+    activityDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    tenant?: TenantUpdateOneRequiredWithoutActivityPostsNestedInput;
+  };
+
+  export type ActivityPostUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    authorId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroom?: NullableStringFieldUpdateOperationsInput | string | null;
+    activityDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type ActivityPostCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    authorId: string;
+    title: string;
+    description?: string | null;
+    classroom?: string | null;
+    activityDate?: Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+  };
+
+  export type ActivityPostUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    authorId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroom?: NullableStringFieldUpdateOperationsInput | string | null;
+    activityDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type ActivityPostUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    authorId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroom?: NullableStringFieldUpdateOperationsInput | string | null;
+    activityDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -9941,6 +11439,12 @@ export namespace Prisma {
     none?: DailyMenuWhereInput;
   };
 
+  export type ActivityPostListRelationFilter = {
+    every?: ActivityPostWhereInput;
+    some?: ActivityPostWhereInput;
+    none?: ActivityPostWhereInput;
+  };
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -9958,6 +11462,10 @@ export namespace Prisma {
   };
 
   export type DailyMenuOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type ActivityPostOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -10506,6 +12014,48 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>;
   };
 
+  export type ActivityPostCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    authorId?: SortOrder;
+    title?: SortOrder;
+    description?: SortOrder;
+    classroom?: SortOrder;
+    activityDate?: SortOrder;
+    tags?: SortOrder;
+    mediaUrls?: SortOrder;
+    taggedStudentIds?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    deletedAt?: SortOrder;
+  };
+
+  export type ActivityPostMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    authorId?: SortOrder;
+    title?: SortOrder;
+    description?: SortOrder;
+    classroom?: SortOrder;
+    activityDate?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    deletedAt?: SortOrder;
+  };
+
+  export type ActivityPostMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    authorId?: SortOrder;
+    title?: SortOrder;
+    description?: SortOrder;
+    classroom?: SortOrder;
+    activityDate?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    deletedAt?: SortOrder;
+  };
+
   export type UserCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -10561,6 +12111,18 @@ export namespace Prisma {
     connect?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
   };
 
+  export type ActivityPostCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<ActivityPostCreateWithoutTenantInput, ActivityPostUncheckedCreateWithoutTenantInput>
+      | ActivityPostCreateWithoutTenantInput[]
+      | ActivityPostUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | ActivityPostCreateOrConnectWithoutTenantInput
+      | ActivityPostCreateOrConnectWithoutTenantInput[];
+    createMany?: ActivityPostCreateManyTenantInputEnvelope;
+    connect?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+  };
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -10614,6 +12176,18 @@ export namespace Prisma {
       DailyMenuCreateOrConnectWithoutTenantInput | DailyMenuCreateOrConnectWithoutTenantInput[];
     createMany?: DailyMenuCreateManyTenantInputEnvelope;
     connect?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+  };
+
+  export type ActivityPostUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<ActivityPostCreateWithoutTenantInput, ActivityPostUncheckedCreateWithoutTenantInput>
+      | ActivityPostCreateWithoutTenantInput[]
+      | ActivityPostUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | ActivityPostCreateOrConnectWithoutTenantInput
+      | ActivityPostCreateOrConnectWithoutTenantInput[];
+    createMany?: ActivityPostCreateManyTenantInputEnvelope;
+    connect?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -10744,6 +12318,31 @@ export namespace Prisma {
     deleteMany?: DailyMenuScalarWhereInput | DailyMenuScalarWhereInput[];
   };
 
+  export type ActivityPostUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<ActivityPostCreateWithoutTenantInput, ActivityPostUncheckedCreateWithoutTenantInput>
+      | ActivityPostCreateWithoutTenantInput[]
+      | ActivityPostUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | ActivityPostCreateOrConnectWithoutTenantInput
+      | ActivityPostCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | ActivityPostUpsertWithWhereUniqueWithoutTenantInput
+      | ActivityPostUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: ActivityPostCreateManyTenantInputEnvelope;
+    set?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+    disconnect?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+    delete?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+    connect?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+    update?:
+      | ActivityPostUpdateWithWhereUniqueWithoutTenantInput
+      | ActivityPostUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | ActivityPostUpdateManyWithWhereWithoutTenantInput
+      | ActivityPostUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: ActivityPostScalarWhereInput | ActivityPostScalarWhereInput[];
+  };
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -10858,6 +12457,31 @@ export namespace Prisma {
       | DailyMenuUpdateManyWithWhereWithoutTenantInput
       | DailyMenuUpdateManyWithWhereWithoutTenantInput[];
     deleteMany?: DailyMenuScalarWhereInput | DailyMenuScalarWhereInput[];
+  };
+
+  export type ActivityPostUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<ActivityPostCreateWithoutTenantInput, ActivityPostUncheckedCreateWithoutTenantInput>
+      | ActivityPostCreateWithoutTenantInput[]
+      | ActivityPostUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | ActivityPostCreateOrConnectWithoutTenantInput
+      | ActivityPostCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | ActivityPostUpsertWithWhereUniqueWithoutTenantInput
+      | ActivityPostUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: ActivityPostCreateManyTenantInputEnvelope;
+    set?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+    disconnect?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+    delete?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+    connect?: ActivityPostWhereUniqueInput | ActivityPostWhereUniqueInput[];
+    update?:
+      | ActivityPostUpdateWithWhereUniqueWithoutTenantInput
+      | ActivityPostUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | ActivityPostUpdateManyWithWhereWithoutTenantInput
+      | ActivityPostUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: ActivityPostScalarWhereInput | ActivityPostScalarWhereInput[];
   };
 
   export type TenantCreateNestedOneWithoutUsersInput = {
@@ -11252,6 +12876,32 @@ export namespace Prisma {
     update?: XOR<
       XOR<TenantUpdateToOneWithWhereWithoutDailyMenusInput, TenantUpdateWithoutDailyMenusInput>,
       TenantUncheckedUpdateWithoutDailyMenusInput
+    >;
+  };
+
+  export type TenantCreateNestedOneWithoutActivityPostsInput = {
+    create?: XOR<
+      TenantCreateWithoutActivityPostsInput,
+      TenantUncheckedCreateWithoutActivityPostsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutActivityPostsInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type TenantUpdateOneRequiredWithoutActivityPostsNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutActivityPostsInput,
+      TenantUncheckedCreateWithoutActivityPostsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutActivityPostsInput;
+    upsert?: TenantUpsertWithoutActivityPostsInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TenantUpdateToOneWithWhereWithoutActivityPostsInput,
+        TenantUpdateWithoutActivityPostsInput
+      >,
+      TenantUncheckedUpdateWithoutActivityPostsInput
     >;
   };
 
@@ -11709,6 +13359,49 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type ActivityPostCreateWithoutTenantInput = {
+    id?: string;
+    authorId: string;
+    title: string;
+    description?: string | null;
+    classroom?: string | null;
+    activityDate?: Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+  };
+
+  export type ActivityPostUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    authorId: string;
+    title: string;
+    description?: string | null;
+    classroom?: string | null;
+    activityDate?: Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+  };
+
+  export type ActivityPostCreateOrConnectWithoutTenantInput = {
+    where: ActivityPostWhereUniqueInput;
+    create: XOR<
+      ActivityPostCreateWithoutTenantInput,
+      ActivityPostUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type ActivityPostCreateManyTenantInputEnvelope = {
+    data: ActivityPostCreateManyTenantInput | ActivityPostCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type UserUpsertWithWhereUniqueWithoutTenantInput = {
     where: UserWhereUniqueInput;
     update: XOR<UserUpdateWithoutTenantInput, UserUncheckedUpdateWithoutTenantInput>;
@@ -11879,6 +13572,50 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'DailyMenu'> | Date | string;
   };
 
+  export type ActivityPostUpsertWithWhereUniqueWithoutTenantInput = {
+    where: ActivityPostWhereUniqueInput;
+    update: XOR<
+      ActivityPostUpdateWithoutTenantInput,
+      ActivityPostUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      ActivityPostCreateWithoutTenantInput,
+      ActivityPostUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type ActivityPostUpdateWithWhereUniqueWithoutTenantInput = {
+    where: ActivityPostWhereUniqueInput;
+    data: XOR<ActivityPostUpdateWithoutTenantInput, ActivityPostUncheckedUpdateWithoutTenantInput>;
+  };
+
+  export type ActivityPostUpdateManyWithWhereWithoutTenantInput = {
+    where: ActivityPostScalarWhereInput;
+    data: XOR<
+      ActivityPostUpdateManyMutationInput,
+      ActivityPostUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type ActivityPostScalarWhereInput = {
+    AND?: ActivityPostScalarWhereInput | ActivityPostScalarWhereInput[];
+    OR?: ActivityPostScalarWhereInput[];
+    NOT?: ActivityPostScalarWhereInput | ActivityPostScalarWhereInput[];
+    id?: StringFilter<'ActivityPost'> | string;
+    tenantId?: StringFilter<'ActivityPost'> | string;
+    authorId?: StringFilter<'ActivityPost'> | string;
+    title?: StringFilter<'ActivityPost'> | string;
+    description?: StringNullableFilter<'ActivityPost'> | string | null;
+    classroom?: StringNullableFilter<'ActivityPost'> | string | null;
+    activityDate?: DateTimeFilter<'ActivityPost'> | Date | string;
+    tags?: JsonFilter<'ActivityPost'>;
+    mediaUrls?: JsonFilter<'ActivityPost'>;
+    taggedStudentIds?: JsonFilter<'ActivityPost'>;
+    createdAt?: DateTimeFilter<'ActivityPost'> | Date | string;
+    updatedAt?: DateTimeFilter<'ActivityPost'> | Date | string;
+    deletedAt?: DateTimeNullableFilter<'ActivityPost'> | Date | string | null;
+  };
+
   export type TenantCreateWithoutUsersInput = {
     id?: string;
     slug: string;
@@ -11890,6 +13627,7 @@ export namespace Prisma {
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -11903,6 +13641,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -11976,6 +13715,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -11989,6 +13729,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutParentInput = {
@@ -12018,6 +13759,7 @@ export namespace Prisma {
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -12031,6 +13773,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -12174,6 +13917,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -12187,6 +13931,7 @@ export namespace Prisma {
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutChildrenInput = {
@@ -12276,6 +14021,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyReportsInput = {
@@ -12289,6 +14035,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyReportsInput = {
@@ -12369,6 +14116,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyReportsInput = {
@@ -12382,6 +14130,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDailyReportsInput = {
@@ -12449,6 +14198,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendancesInput = {
@@ -12462,6 +14212,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
     dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendancesInput = {
@@ -12533,6 +14284,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendancesInput = {
@@ -12546,6 +14298,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
     dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendancesInput = {
@@ -12610,6 +14363,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyMenusInput = {
@@ -12623,6 +14377,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyMenusInput = {
@@ -12652,6 +14407,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyMenusInput = {
@@ -12665,6 +14421,91 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantCreateWithoutActivityPostsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutActivityPostsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutActivityPostsInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutActivityPostsInput,
+      TenantUncheckedCreateWithoutActivityPostsInput
+    >;
+  };
+
+  export type TenantUpsertWithoutActivityPostsInput = {
+    update: XOR<
+      TenantUpdateWithoutActivityPostsInput,
+      TenantUncheckedUpdateWithoutActivityPostsInput
+    >;
+    create: XOR<
+      TenantCreateWithoutActivityPostsInput,
+      TenantUncheckedCreateWithoutActivityPostsInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutActivityPostsInput = {
+    where?: TenantWhereInput;
+    data: XOR<
+      TenantUpdateWithoutActivityPostsInput,
+      TenantUncheckedUpdateWithoutActivityPostsInput
+    >;
+  };
+
+  export type TenantUpdateWithoutActivityPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutActivityPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserCreateManyTenantInput = {
@@ -12735,6 +14576,21 @@ export namespace Prisma {
     notes?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+  };
+
+  export type ActivityPostCreateManyTenantInput = {
+    id?: string;
+    authorId: string;
+    title: string;
+    description?: string | null;
+    classroom?: string | null;
+    activityDate?: Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
   };
 
   export type UserUpdateWithoutTenantInput = {
@@ -12951,6 +14807,51 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ActivityPostUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    authorId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroom?: NullableStringFieldUpdateOperationsInput | string | null;
+    activityDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type ActivityPostUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    authorId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroom?: NullableStringFieldUpdateOperationsInput | string | null;
+    activityDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type ActivityPostUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    authorId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroom?: NullableStringFieldUpdateOperationsInput | string | null;
+    activityDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tags?: JsonNullValueInput | InputJsonValue;
+    mediaUrls?: JsonNullValueInput | InputJsonValue;
+    taggedStudentIds?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   };
 
   export type StudentCreateManyParentInput = {
@@ -13192,6 +15093,11 @@ export namespace Prisma {
    */
   export type DailyMenuArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     DailyMenuDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use ActivityPostDefaultArgs instead
+   */
+  export type ActivityPostArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    ActivityPostDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

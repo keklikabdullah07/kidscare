@@ -29,11 +29,12 @@ model Tenant {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
-  users        User[]
-  students     Student[]
-  dailyReports DailyReport[]
-  attendances  Attendance[]
-  dailyMenus   DailyMenu[]
+  users         User[]
+  students      Student[]
+  dailyReports  DailyReport[]
+  attendances   Attendance[]
+  dailyMenus    DailyMenu[]
+  activityPosts ActivityPost[]
 
   @@map("tenants")
 }
@@ -151,4 +152,26 @@ model DailyMenu {
   @@unique([tenantId, date])
   @@index([tenantId, date])
   @@map("daily_menus")
+}
+
+model ActivityPost {
+  id               String    @id @default(cuid())
+  tenantId         String
+  authorId         String
+  title            String
+  description      String?
+  classroom        String?
+  activityDate     DateTime  @default(now())
+  tags             Json      @default("[]")
+  mediaUrls        Json      @default("[]")
+  taggedStudentIds Json      @default("[]")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, activityDate])
+  @@index([tenantId, classroom])
+  @@map("activity_posts")
 }

@@ -15,6 +15,7 @@ import type { Attendance, AttendanceStatus, Student } from '@kidscare/shared-typ
 import { getAttendanceByDate } from '../api/attendance';
 import { ApiError } from '../api/client';
 import { createStudent, deleteStudent, listStudents } from '../api/students';
+import { ActivityGalleryModal } from '../activities/ActivityGalleryModal';
 import { AttendanceCheckModal } from '../attendance/AttendanceCheckModal';
 import { useAuth } from '../auth/AuthContext';
 import { DailyMenuModal } from '../daily-menus/DailyMenuModal';
@@ -46,6 +47,7 @@ export function StudentsScreen(): React.ReactElement {
   const [trackingStudent, setTrackingStudent] = useState<Student | null>(null);
   const [attendanceStudent, setAttendanceStudent] = useState<Student | null>(null);
   const [menuModalOpen, setMenuModalOpen] = useState(false);
+  const [galleryModalOpen, setGalleryModalOpen] = useState(false);
 
   const todayStr = new Date().toISOString().slice(0, 10);
 
@@ -104,6 +106,9 @@ export function StudentsScreen(): React.ReactElement {
       <View style={styles.toolbar}>
         <Text style={styles.title}>Öğrenciler ({students.length})</Text>
         <View style={styles.toolbarActions}>
+          <Pressable style={styles.galleryButton} onPress={() => setGalleryModalOpen(true)}>
+            <Text style={styles.galleryButtonText}>📸 Galeri</Text>
+          </Pressable>
           <Pressable style={styles.menuButton} onPress={() => setMenuModalOpen(true)}>
             <Text style={styles.menuButtonText}>🍲 Menü</Text>
           </Pressable>
@@ -257,6 +262,12 @@ export function StudentsScreen(): React.ReactElement {
         visible={menuModalOpen}
         onClose={() => setMenuModalOpen(false)}
       />
+
+      <ActivityGalleryModal
+        visible={galleryModalOpen}
+        onClose={() => setGalleryModalOpen(false)}
+        userRole={state.status === 'authenticated' ? state.user.role : undefined}
+      />
     </View>
   );
 }
@@ -404,6 +415,15 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 18, fontWeight: '600', color: colors.textPrimary },
   toolbarActions: { flexDirection: 'row', gap: spacing.xs, alignItems: 'center' },
+  galleryButton: {
+    backgroundColor: '#EEF2FF',
+    borderWidth: 1,
+    borderColor: '#C7D2FE',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: 6,
+  },
+  galleryButtonText: { color: '#4338CA', fontWeight: '700', fontSize: 13 },
   menuButton: {
     backgroundColor: '#FEF3C7',
     borderWidth: 1,

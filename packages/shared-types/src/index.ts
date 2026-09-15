@@ -5,3 +5,4 @@ export * from './daily-report';
 export * from './student';
 export * from './tenant';
 export * from './user';
+export * from './activity-post';

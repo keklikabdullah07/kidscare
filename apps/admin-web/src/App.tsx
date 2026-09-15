@@ -9,9 +9,16 @@ import { AttendancePage } from './features/attendance/AttendancePage';
 import { DailyMenuPage } from './features/daily-menus/DailyMenuPage';
 import { DailyTrackingPage } from './features/daily-reports/DailyTrackingPage';
 import { ParentDashboardPage } from './features/parent/ParentDashboardPage';
+import { ActivityGalleryPage } from './features/activities/ActivityGalleryPage';
 
 type View =
-  'parent-portal' | 'students' | 'daily-tracking' | 'attendance' | 'daily-menus' | 'settings';
+  | 'parent-portal'
+  | 'students'
+  | 'daily-tracking'
+  | 'attendance'
+  | 'daily-menus'
+  | 'activities'
+  | 'settings';
 
 function AppContent(): JSX.Element {
   const { state, logout } = useAuth();
@@ -110,6 +117,18 @@ function AppContent(): JSX.Element {
               🍲 Yemek Listesi
             </button>
 
+            <button
+              type="button"
+              onClick={() => setPage('activities')}
+              className={
+                page === 'activities'
+                  ? 'text-blue-600 font-semibold'
+                  : 'text-gray-600 hover:text-gray-900'
+              }
+            >
+              📸 Galeri
+            </button>
+
             {!isParent && (
               <button
                 type="button"
@@ -152,6 +171,8 @@ function AppContent(): JSX.Element {
           <AttendancePage />
         ) : page === 'daily-menus' ? (
           <DailyMenuPage />
+        ) : page === 'activities' ? (
+          <ActivityGalleryPage />
         ) : (
           <TenantSettings />
         )}

@@ -5,3 +5,4 @@ export * from './daily-report.schema';
 export * from './student.schema';
 export * from './tenant.schema';
 export * from './user.schema';
+export * from './activity-post.schema';

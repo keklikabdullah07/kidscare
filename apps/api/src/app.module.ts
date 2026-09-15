@@ -12,6 +12,7 @@ import { DailyMenusModule } from './modules/daily-menus/daily-menus.module';
 import { DailyReportsModule } from './modules/daily-reports/daily-reports.module';
 import { ParentModule } from './modules/parent/parent.module';
 import { StudentsModule } from './modules/students/students.module';
+import { ActivitiesModule } from './modules/activities/activities.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { StudentsModule } from './modules/students/students.module';
     AttendanceModule,
     DailyMenusModule,
     ParentModule,
+    ActivitiesModule,
   ],
   providers: [
     Reflector,

@@ -11,6 +11,7 @@ export type {
   DailyReport,
   Attendance,
   DailyMenu,
+  ActivityPost,
   TenantStatus,
   UserRole,
 } from './generated/client';
