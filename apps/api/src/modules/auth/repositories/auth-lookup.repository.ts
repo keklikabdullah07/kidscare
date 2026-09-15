@@ -22,6 +22,8 @@ export class AuthLookupRepository implements OnModuleDestroy {
     const url =
       config?.get<string>('DATABASE_AUTH_LOOKUP_URL') ??
       process.env.DATABASE_AUTH_LOOKUP_URL ??
+      config?.get<string>('DATABASE_URL') ??
+      process.env.DATABASE_URL ??
       'postgresql://kidscare_auth_lookup:auth_pw@localhost:5433/kidscare?schema=public';
     this.client = createAuthLookupClient(url);
   }

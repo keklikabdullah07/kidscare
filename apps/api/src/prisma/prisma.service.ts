@@ -12,6 +12,8 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
           url:
             config?.get<string>('DATABASE_APP_URL') ??
             process.env.DATABASE_APP_URL ??
+            config?.get<string>('DATABASE_URL') ??
+            process.env.DATABASE_URL ??
             'postgresql://kidscare_app:app_pw@localhost:5433/kidscare?schema=public',
         },
       },
