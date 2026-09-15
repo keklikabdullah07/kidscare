@@ -17,6 +17,7 @@ import { ApiError } from '../api/client';
 import { createStudent, deleteStudent, listStudents } from '../api/students';
 import { AttendanceCheckModal } from '../attendance/AttendanceCheckModal';
 import { useAuth } from '../auth/AuthContext';
+import { DailyMenuModal } from '../daily-menus/DailyMenuModal';
 import { DailyReportModal } from '../daily-reports/DailyReportModal';
 import { colors, spacing } from '../theme';
 import { StudentPassportModal } from './StudentPassportModal';
@@ -44,6 +45,7 @@ export function StudentsScreen(): React.ReactElement {
   const [passportStudent, setPassportStudent] = useState<Student | null>(null);
   const [trackingStudent, setTrackingStudent] = useState<Student | null>(null);
   const [attendanceStudent, setAttendanceStudent] = useState<Student | null>(null);
+  const [menuModalOpen, setMenuModalOpen] = useState(false);
 
   const todayStr = new Date().toISOString().slice(0, 10);
 
@@ -101,9 +103,14 @@ export function StudentsScreen(): React.ReactElement {
 
       <View style={styles.toolbar}>
         <Text style={styles.title}>Öğrenciler ({students.length})</Text>
-        <Pressable style={styles.addButton} onPress={() => setModalOpen(true)}>
-          <Text style={styles.addButtonText}>+ Ekle</Text>
-        </Pressable>
+        <View style={styles.toolbarActions}>
+          <Pressable style={styles.menuButton} onPress={() => setMenuModalOpen(true)}>
+            <Text style={styles.menuButtonText}>🍲 Menü</Text>
+          </Pressable>
+          <Pressable style={styles.addButton} onPress={() => setModalOpen(true)}>
+            <Text style={styles.addButtonText}>+ Ekle</Text>
+          </Pressable>
+        </View>
       </View>
 
       {errorMsg && (
@@ -243,6 +250,12 @@ export function StudentsScreen(): React.ReactElement {
         onAttendanceUpdated={(att) => {
           setAttendanceMap((prev) => ({ ...prev, [att.studentId]: att }));
         }}
+      />
+
+      <DailyMenuModal
+        date={todayStr}
+        visible={menuModalOpen}
+        onClose={() => setMenuModalOpen(false)}
       />
     </View>
   );
@@ -390,6 +403,16 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   title: { fontSize: 18, fontWeight: '600', color: colors.textPrimary },
+  toolbarActions: { flexDirection: 'row', gap: spacing.xs, alignItems: 'center' },
+  menuButton: {
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: 6,
+  },
+  menuButtonText: { color: '#92400E', fontWeight: '700', fontSize: 13 },
   addButton: {
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.md,
