@@ -36,6 +36,11 @@ export type DailyReport = $Result.DefaultSelection<Prisma.$DailyReportPayload>;
  *
  */
 export type Attendance = $Result.DefaultSelection<Prisma.$AttendancePayload>;
+/**
+ * Model DailyMenu
+ *
+ */
+export type DailyMenu = $Result.DefaultSelection<Prisma.$DailyMenuPayload>;
 
 /**
  * Enums
@@ -259,6 +264,16 @@ export class PrismaClient<
    * ```
    */
   get attendance(): Prisma.AttendanceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.dailyMenu`: Exposes CRUD operations for the **DailyMenu** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more DailyMenus
+   * const dailyMenus = await prisma.dailyMenu.findMany()
+   * ```
+   */
+  get dailyMenu(): Prisma.DailyMenuDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -698,6 +713,7 @@ export namespace Prisma {
     Student: 'Student';
     DailyReport: 'DailyReport';
     Attendance: 'Attendance';
+    DailyMenu: 'DailyMenu';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -718,7 +734,7 @@ export namespace Prisma {
     ClientOptions = {},
   > = {
     meta: {
-      modelProps: 'tenant' | 'user' | 'student' | 'dailyReport' | 'attendance';
+      modelProps: 'tenant' | 'user' | 'student' | 'dailyReport' | 'attendance' | 'dailyMenu';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -1072,6 +1088,76 @@ export namespace Prisma {
           };
         };
       };
+      DailyMenu: {
+        payload: Prisma.$DailyMenuPayload<ExtArgs>;
+        fields: Prisma.DailyMenuFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.DailyMenuFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.DailyMenuFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload>;
+          };
+          findFirst: {
+            args: Prisma.DailyMenuFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.DailyMenuFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload>;
+          };
+          findMany: {
+            args: Prisma.DailyMenuFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload>[];
+          };
+          create: {
+            args: Prisma.DailyMenuCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload>;
+          };
+          createMany: {
+            args: Prisma.DailyMenuCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.DailyMenuCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload>[];
+          };
+          delete: {
+            args: Prisma.DailyMenuDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload>;
+          };
+          update: {
+            args: Prisma.DailyMenuUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload>;
+          };
+          deleteMany: {
+            args: Prisma.DailyMenuDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.DailyMenuUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.DailyMenuUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$DailyMenuPayload>;
+          };
+          aggregate: {
+            args: Prisma.DailyMenuAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateDailyMenu>;
+          };
+          groupBy: {
+            args: Prisma.DailyMenuGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<DailyMenuGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.DailyMenuCountArgs<ExtArgs>;
+            result: $Utils.Optional<DailyMenuCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -1243,6 +1329,7 @@ export namespace Prisma {
     students: number;
     dailyReports: number;
     attendances: number;
+    dailyMenus: number;
   };
 
   export type TenantCountOutputTypeSelect<
@@ -1252,6 +1339,7 @@ export namespace Prisma {
     students?: boolean | TenantCountOutputTypeCountStudentsArgs;
     dailyReports?: boolean | TenantCountOutputTypeCountDailyReportsArgs;
     attendances?: boolean | TenantCountOutputTypeCountAttendancesArgs;
+    dailyMenus?: boolean | TenantCountOutputTypeCountDailyMenusArgs;
   };
 
   // Custom InputTypes
@@ -1301,6 +1389,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: AttendanceWhereInput;
+  };
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountDailyMenusArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: DailyMenuWhereInput;
   };
 
   /**
@@ -1530,6 +1627,7 @@ export namespace Prisma {
         students?: boolean | Tenant$studentsArgs<ExtArgs>;
         dailyReports?: boolean | Tenant$dailyReportsArgs<ExtArgs>;
         attendances?: boolean | Tenant$attendancesArgs<ExtArgs>;
+        dailyMenus?: boolean | Tenant$dailyMenusArgs<ExtArgs>;
         _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['tenant']
@@ -1563,6 +1661,7 @@ export namespace Prisma {
     students?: boolean | Tenant$studentsArgs<ExtArgs>;
     dailyReports?: boolean | Tenant$dailyReportsArgs<ExtArgs>;
     attendances?: boolean | Tenant$attendancesArgs<ExtArgs>;
+    dailyMenus?: boolean | Tenant$dailyMenusArgs<ExtArgs>;
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TenantIncludeCreateManyAndReturn<
@@ -1576,6 +1675,7 @@ export namespace Prisma {
       students: Prisma.$StudentPayload<ExtArgs>[];
       dailyReports: Prisma.$DailyReportPayload<ExtArgs>[];
       attendances: Prisma.$AttendancePayload<ExtArgs>[];
+      dailyMenus: Prisma.$DailyMenuPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -2033,6 +2133,11 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, 'findMany'> | Null
     >;
+    dailyMenus<T extends Tenant$dailyMenusArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$dailyMenusArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2489,6 +2594,28 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[];
+  };
+
+  /**
+   * Tenant.dailyMenus
+   */
+  export type Tenant$dailyMenusArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    where?: DailyMenuWhereInput;
+    orderBy?: DailyMenuOrderByWithRelationInput | DailyMenuOrderByWithRelationInput[];
+    cursor?: DailyMenuWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: DailyMenuScalarFieldEnum | DailyMenuScalarFieldEnum[];
   };
 
   /**
@@ -7081,6 +7208,1143 @@ export namespace Prisma {
   };
 
   /**
+   * Model DailyMenu
+   */
+
+  export type AggregateDailyMenu = {
+    _count: DailyMenuCountAggregateOutputType | null;
+    _avg: DailyMenuAvgAggregateOutputType | null;
+    _sum: DailyMenuSumAggregateOutputType | null;
+    _min: DailyMenuMinAggregateOutputType | null;
+    _max: DailyMenuMaxAggregateOutputType | null;
+  };
+
+  export type DailyMenuAvgAggregateOutputType = {
+    calories: number | null;
+  };
+
+  export type DailyMenuSumAggregateOutputType = {
+    calories: number | null;
+  };
+
+  export type DailyMenuMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    date: Date | null;
+    calories: number | null;
+    notes: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type DailyMenuMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    date: Date | null;
+    calories: number | null;
+    notes: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type DailyMenuCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    date: number;
+    breakfast: number;
+    lunch: number;
+    snack: number;
+    allergens: number;
+    calories: number;
+    notes: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type DailyMenuAvgAggregateInputType = {
+    calories?: true;
+  };
+
+  export type DailyMenuSumAggregateInputType = {
+    calories?: true;
+  };
+
+  export type DailyMenuMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    date?: true;
+    calories?: true;
+    notes?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type DailyMenuMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    date?: true;
+    calories?: true;
+    notes?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type DailyMenuCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    date?: true;
+    breakfast?: true;
+    lunch?: true;
+    snack?: true;
+    allergens?: true;
+    calories?: true;
+    notes?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type DailyMenuAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which DailyMenu to aggregate.
+     */
+    where?: DailyMenuWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of DailyMenus to fetch.
+     */
+    orderBy?: DailyMenuOrderByWithRelationInput | DailyMenuOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: DailyMenuWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` DailyMenus from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` DailyMenus.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned DailyMenus
+     **/
+    _count?: true | DailyMenuCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: DailyMenuAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: DailyMenuSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: DailyMenuMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: DailyMenuMaxAggregateInputType;
+  };
+
+  export type GetDailyMenuAggregateType<T extends DailyMenuAggregateArgs> = {
+    [P in keyof T & keyof AggregateDailyMenu]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDailyMenu[P]>
+      : GetScalarType<T[P], AggregateDailyMenu[P]>;
+  };
+
+  export type DailyMenuGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: DailyMenuWhereInput;
+    orderBy?: DailyMenuOrderByWithAggregationInput | DailyMenuOrderByWithAggregationInput[];
+    by: DailyMenuScalarFieldEnum[] | DailyMenuScalarFieldEnum;
+    having?: DailyMenuScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: DailyMenuCountAggregateInputType | true;
+    _avg?: DailyMenuAvgAggregateInputType;
+    _sum?: DailyMenuSumAggregateInputType;
+    _min?: DailyMenuMinAggregateInputType;
+    _max?: DailyMenuMaxAggregateInputType;
+  };
+
+  export type DailyMenuGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    date: Date;
+    breakfast: JsonValue;
+    lunch: JsonValue;
+    snack: JsonValue;
+    allergens: JsonValue;
+    calories: number | null;
+    notes: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: DailyMenuCountAggregateOutputType | null;
+    _avg: DailyMenuAvgAggregateOutputType | null;
+    _sum: DailyMenuSumAggregateOutputType | null;
+    _min: DailyMenuMinAggregateOutputType | null;
+    _max: DailyMenuMaxAggregateOutputType | null;
+  };
+
+  type GetDailyMenuGroupByPayload<T extends DailyMenuGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DailyMenuGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof DailyMenuGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], DailyMenuGroupByOutputType[P]>
+          : GetScalarType<T[P], DailyMenuGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type DailyMenuSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetSelect<
+      {
+        id?: boolean;
+        tenantId?: boolean;
+        date?: boolean;
+        breakfast?: boolean;
+        lunch?: boolean;
+        snack?: boolean;
+        allergens?: boolean;
+        calories?: boolean;
+        notes?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
+        tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      },
+      ExtArgs['result']['dailyMenu']
+    >;
+
+  export type DailyMenuSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      date?: boolean;
+      breakfast?: boolean;
+      lunch?: boolean;
+      snack?: boolean;
+      allergens?: boolean;
+      calories?: boolean;
+      notes?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['dailyMenu']
+  >;
+
+  export type DailyMenuSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    date?: boolean;
+    breakfast?: boolean;
+    lunch?: boolean;
+    snack?: boolean;
+    allergens?: boolean;
+    calories?: boolean;
+    notes?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type DailyMenuInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    };
+  export type DailyMenuIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+  };
+
+  export type $DailyMenuPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'DailyMenu';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        date: Date;
+        breakfast: Prisma.JsonValue;
+        lunch: Prisma.JsonValue;
+        snack: Prisma.JsonValue;
+        allergens: Prisma.JsonValue;
+        calories: number | null;
+        notes: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['dailyMenu']
+    >;
+    composites: {};
+  };
+
+  type DailyMenuGetPayload<S extends boolean | null | undefined | DailyMenuDefaultArgs> =
+    $Result.GetResult<Prisma.$DailyMenuPayload, S>;
+
+  type DailyMenuCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DailyMenuFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DailyMenuCountAggregateInputType | true;
+    };
+
+  export interface DailyMenuDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['DailyMenu'];
+      meta: { name: 'DailyMenu' };
+    };
+    /**
+     * Find zero or one DailyMenu that matches the filter.
+     * @param {DailyMenuFindUniqueArgs} args - Arguments to find a DailyMenu
+     * @example
+     * // Get one DailyMenu
+     * const dailyMenu = await prisma.dailyMenu.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DailyMenuFindUniqueArgs>(
+      args: SelectSubset<T, DailyMenuFindUniqueArgs<ExtArgs>>,
+    ): Prisma__DailyMenuClient<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one DailyMenu that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DailyMenuFindUniqueOrThrowArgs} args - Arguments to find a DailyMenu
+     * @example
+     * // Get one DailyMenu
+     * const dailyMenu = await prisma.dailyMenu.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DailyMenuFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, DailyMenuFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__DailyMenuClient<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first DailyMenu that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyMenuFindFirstArgs} args - Arguments to find a DailyMenu
+     * @example
+     * // Get one DailyMenu
+     * const dailyMenu = await prisma.dailyMenu.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DailyMenuFindFirstArgs>(
+      args?: SelectSubset<T, DailyMenuFindFirstArgs<ExtArgs>>,
+    ): Prisma__DailyMenuClient<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first DailyMenu that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyMenuFindFirstOrThrowArgs} args - Arguments to find a DailyMenu
+     * @example
+     * // Get one DailyMenu
+     * const dailyMenu = await prisma.dailyMenu.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DailyMenuFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, DailyMenuFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__DailyMenuClient<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more DailyMenus that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyMenuFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DailyMenus
+     * const dailyMenus = await prisma.dailyMenu.findMany()
+     *
+     * // Get first 10 DailyMenus
+     * const dailyMenus = await prisma.dailyMenu.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const dailyMenuWithIdOnly = await prisma.dailyMenu.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends DailyMenuFindManyArgs>(
+      args?: SelectSubset<T, DailyMenuFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'findMany'>>;
+
+    /**
+     * Create a DailyMenu.
+     * @param {DailyMenuCreateArgs} args - Arguments to create a DailyMenu.
+     * @example
+     * // Create one DailyMenu
+     * const DailyMenu = await prisma.dailyMenu.create({
+     *   data: {
+     *     // ... data to create a DailyMenu
+     *   }
+     * })
+     *
+     */
+    create<T extends DailyMenuCreateArgs>(
+      args: SelectSubset<T, DailyMenuCreateArgs<ExtArgs>>,
+    ): Prisma__DailyMenuClient<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many DailyMenus.
+     * @param {DailyMenuCreateManyArgs} args - Arguments to create many DailyMenus.
+     * @example
+     * // Create many DailyMenus
+     * const dailyMenu = await prisma.dailyMenu.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends DailyMenuCreateManyArgs>(
+      args?: SelectSubset<T, DailyMenuCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many DailyMenus and returns the data saved in the database.
+     * @param {DailyMenuCreateManyAndReturnArgs} args - Arguments to create many DailyMenus.
+     * @example
+     * // Create many DailyMenus
+     * const dailyMenu = await prisma.dailyMenu.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many DailyMenus and only return the `id`
+     * const dailyMenuWithIdOnly = await prisma.dailyMenu.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends DailyMenuCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, DailyMenuCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a DailyMenu.
+     * @param {DailyMenuDeleteArgs} args - Arguments to delete one DailyMenu.
+     * @example
+     * // Delete one DailyMenu
+     * const DailyMenu = await prisma.dailyMenu.delete({
+     *   where: {
+     *     // ... filter to delete one DailyMenu
+     *   }
+     * })
+     *
+     */
+    delete<T extends DailyMenuDeleteArgs>(
+      args: SelectSubset<T, DailyMenuDeleteArgs<ExtArgs>>,
+    ): Prisma__DailyMenuClient<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one DailyMenu.
+     * @param {DailyMenuUpdateArgs} args - Arguments to update one DailyMenu.
+     * @example
+     * // Update one DailyMenu
+     * const dailyMenu = await prisma.dailyMenu.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends DailyMenuUpdateArgs>(
+      args: SelectSubset<T, DailyMenuUpdateArgs<ExtArgs>>,
+    ): Prisma__DailyMenuClient<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more DailyMenus.
+     * @param {DailyMenuDeleteManyArgs} args - Arguments to filter DailyMenus to delete.
+     * @example
+     * // Delete a few DailyMenus
+     * const { count } = await prisma.dailyMenu.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends DailyMenuDeleteManyArgs>(
+      args?: SelectSubset<T, DailyMenuDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more DailyMenus.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyMenuUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DailyMenus
+     * const dailyMenu = await prisma.dailyMenu.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends DailyMenuUpdateManyArgs>(
+      args: SelectSubset<T, DailyMenuUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one DailyMenu.
+     * @param {DailyMenuUpsertArgs} args - Arguments to update or create a DailyMenu.
+     * @example
+     * // Update or create a DailyMenu
+     * const dailyMenu = await prisma.dailyMenu.upsert({
+     *   create: {
+     *     // ... data to create a DailyMenu
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DailyMenu we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DailyMenuUpsertArgs>(
+      args: SelectSubset<T, DailyMenuUpsertArgs<ExtArgs>>,
+    ): Prisma__DailyMenuClient<
+      $Result.GetResult<Prisma.$DailyMenuPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of DailyMenus.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyMenuCountArgs} args - Arguments to filter DailyMenus to count.
+     * @example
+     * // Count the number of DailyMenus
+     * const count = await prisma.dailyMenu.count({
+     *   where: {
+     *     // ... the filter for the DailyMenus we want to count
+     *   }
+     * })
+     **/
+    count<T extends DailyMenuCountArgs>(
+      args?: Subset<T, DailyMenuCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DailyMenuCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a DailyMenu.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyMenuAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends DailyMenuAggregateArgs>(
+      args: Subset<T, DailyMenuAggregateArgs>,
+    ): Prisma.PrismaPromise<GetDailyMenuAggregateType<T>>;
+
+    /**
+     * Group by DailyMenu.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyMenuGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends DailyMenuGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: DailyMenuGroupByArgs['orderBy'] }
+        : { orderBy?: DailyMenuGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, DailyMenuGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors ? GetDailyMenuGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the DailyMenu model
+     */
+    readonly fields: DailyMenuFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DailyMenu.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DailyMenuClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the DailyMenu model
+   */
+  interface DailyMenuFieldRefs {
+    readonly id: FieldRef<'DailyMenu', 'String'>;
+    readonly tenantId: FieldRef<'DailyMenu', 'String'>;
+    readonly date: FieldRef<'DailyMenu', 'DateTime'>;
+    readonly breakfast: FieldRef<'DailyMenu', 'Json'>;
+    readonly lunch: FieldRef<'DailyMenu', 'Json'>;
+    readonly snack: FieldRef<'DailyMenu', 'Json'>;
+    readonly allergens: FieldRef<'DailyMenu', 'Json'>;
+    readonly calories: FieldRef<'DailyMenu', 'Int'>;
+    readonly notes: FieldRef<'DailyMenu', 'String'>;
+    readonly createdAt: FieldRef<'DailyMenu', 'DateTime'>;
+    readonly updatedAt: FieldRef<'DailyMenu', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * DailyMenu findUnique
+   */
+  export type DailyMenuFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyMenu to fetch.
+     */
+    where: DailyMenuWhereUniqueInput;
+  };
+
+  /**
+   * DailyMenu findUniqueOrThrow
+   */
+  export type DailyMenuFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyMenu to fetch.
+     */
+    where: DailyMenuWhereUniqueInput;
+  };
+
+  /**
+   * DailyMenu findFirst
+   */
+  export type DailyMenuFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyMenu to fetch.
+     */
+    where?: DailyMenuWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of DailyMenus to fetch.
+     */
+    orderBy?: DailyMenuOrderByWithRelationInput | DailyMenuOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for DailyMenus.
+     */
+    cursor?: DailyMenuWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` DailyMenus from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` DailyMenus.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of DailyMenus.
+     */
+    distinct?: DailyMenuScalarFieldEnum | DailyMenuScalarFieldEnum[];
+  };
+
+  /**
+   * DailyMenu findFirstOrThrow
+   */
+  export type DailyMenuFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyMenu to fetch.
+     */
+    where?: DailyMenuWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of DailyMenus to fetch.
+     */
+    orderBy?: DailyMenuOrderByWithRelationInput | DailyMenuOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for DailyMenus.
+     */
+    cursor?: DailyMenuWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` DailyMenus from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` DailyMenus.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of DailyMenus.
+     */
+    distinct?: DailyMenuScalarFieldEnum | DailyMenuScalarFieldEnum[];
+  };
+
+  /**
+   * DailyMenu findMany
+   */
+  export type DailyMenuFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * Filter, which DailyMenus to fetch.
+     */
+    where?: DailyMenuWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of DailyMenus to fetch.
+     */
+    orderBy?: DailyMenuOrderByWithRelationInput | DailyMenuOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing DailyMenus.
+     */
+    cursor?: DailyMenuWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` DailyMenus from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` DailyMenus.
+     */
+    skip?: number;
+    distinct?: DailyMenuScalarFieldEnum | DailyMenuScalarFieldEnum[];
+  };
+
+  /**
+   * DailyMenu create
+   */
+  export type DailyMenuCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a DailyMenu.
+     */
+    data: XOR<DailyMenuCreateInput, DailyMenuUncheckedCreateInput>;
+  };
+
+  /**
+   * DailyMenu createMany
+   */
+  export type DailyMenuCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many DailyMenus.
+     */
+    data: DailyMenuCreateManyInput | DailyMenuCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * DailyMenu createManyAndReturn
+   */
+  export type DailyMenuCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many DailyMenus.
+     */
+    data: DailyMenuCreateManyInput | DailyMenuCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * DailyMenu update
+   */
+  export type DailyMenuUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a DailyMenu.
+     */
+    data: XOR<DailyMenuUpdateInput, DailyMenuUncheckedUpdateInput>;
+    /**
+     * Choose, which DailyMenu to update.
+     */
+    where: DailyMenuWhereUniqueInput;
+  };
+
+  /**
+   * DailyMenu updateMany
+   */
+  export type DailyMenuUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update DailyMenus.
+     */
+    data: XOR<DailyMenuUpdateManyMutationInput, DailyMenuUncheckedUpdateManyInput>;
+    /**
+     * Filter which DailyMenus to update
+     */
+    where?: DailyMenuWhereInput;
+  };
+
+  /**
+   * DailyMenu upsert
+   */
+  export type DailyMenuUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the DailyMenu to update in case it exists.
+     */
+    where: DailyMenuWhereUniqueInput;
+    /**
+     * In case the DailyMenu found by the `where` argument doesn't exist, create a new DailyMenu with this data.
+     */
+    create: XOR<DailyMenuCreateInput, DailyMenuUncheckedCreateInput>;
+    /**
+     * In case the DailyMenu was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DailyMenuUpdateInput, DailyMenuUncheckedUpdateInput>;
+  };
+
+  /**
+   * DailyMenu delete
+   */
+  export type DailyMenuDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+    /**
+     * Filter which DailyMenu to delete.
+     */
+    where: DailyMenuWhereUniqueInput;
+  };
+
+  /**
+   * DailyMenu deleteMany
+   */
+  export type DailyMenuDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which DailyMenus to delete
+     */
+    where?: DailyMenuWhereInput;
+  };
+
+  /**
+   * DailyMenu without action
+   */
+  export type DailyMenuDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the DailyMenu
+     */
+    select?: DailyMenuSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyMenuInclude<ExtArgs> | null;
+  };
+
+  /**
    * Enums
    */
 
@@ -7177,6 +8441,23 @@ export namespace Prisma {
   export type AttendanceScalarFieldEnum =
     (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum];
 
+  export const DailyMenuScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    date: 'date';
+    breakfast: 'breakfast';
+    lunch: 'lunch';
+    snack: 'snack';
+    allergens: 'allergens';
+    calories: 'calories';
+    notes: 'notes';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type DailyMenuScalarFieldEnum =
+    (typeof DailyMenuScalarFieldEnum)[keyof typeof DailyMenuScalarFieldEnum];
+
   export const SortOrder: {
     asc: 'asc';
     desc: 'desc';
@@ -7191,6 +8472,12 @@ export namespace Prisma {
 
   export type NullableJsonNullValueInput =
     (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput];
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull;
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput];
 
   export const QueryMode: {
     default: 'default';
@@ -7291,6 +8578,16 @@ export namespace Prisma {
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>;
 
   /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>;
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>;
+
+  /**
    * Deep Input Types
    */
 
@@ -7308,6 +8605,7 @@ export namespace Prisma {
     students?: StudentListRelationFilter;
     dailyReports?: DailyReportListRelationFilter;
     attendances?: AttendanceListRelationFilter;
+    dailyMenus?: DailyMenuListRelationFilter;
   };
 
   export type TenantOrderByWithRelationInput = {
@@ -7321,6 +8619,7 @@ export namespace Prisma {
     students?: StudentOrderByRelationAggregateInput;
     dailyReports?: DailyReportOrderByRelationAggregateInput;
     attendances?: AttendanceOrderByRelationAggregateInput;
+    dailyMenus?: DailyMenuOrderByRelationAggregateInput;
   };
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<
@@ -7338,6 +8637,7 @@ export namespace Prisma {
       students?: StudentListRelationFilter;
       dailyReports?: DailyReportListRelationFilter;
       attendances?: AttendanceListRelationFilter;
+      dailyMenus?: DailyMenuListRelationFilter;
     },
     'id' | 'slug'
   >;
@@ -7753,6 +9053,97 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<'Attendance'> | Date | string;
   };
 
+  export type DailyMenuWhereInput = {
+    AND?: DailyMenuWhereInput | DailyMenuWhereInput[];
+    OR?: DailyMenuWhereInput[];
+    NOT?: DailyMenuWhereInput | DailyMenuWhereInput[];
+    id?: StringFilter<'DailyMenu'> | string;
+    tenantId?: StringFilter<'DailyMenu'> | string;
+    date?: DateTimeFilter<'DailyMenu'> | Date | string;
+    breakfast?: JsonFilter<'DailyMenu'>;
+    lunch?: JsonFilter<'DailyMenu'>;
+    snack?: JsonFilter<'DailyMenu'>;
+    allergens?: JsonFilter<'DailyMenu'>;
+    calories?: IntNullableFilter<'DailyMenu'> | number | null;
+    notes?: StringNullableFilter<'DailyMenu'> | string | null;
+    createdAt?: DateTimeFilter<'DailyMenu'> | Date | string;
+    updatedAt?: DateTimeFilter<'DailyMenu'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+  };
+
+  export type DailyMenuOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    date?: SortOrder;
+    breakfast?: SortOrder;
+    lunch?: SortOrder;
+    snack?: SortOrder;
+    allergens?: SortOrder;
+    calories?: SortOrderInput | SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+  };
+
+  export type DailyMenuWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      tenantId_date?: DailyMenuTenantIdDateCompoundUniqueInput;
+      AND?: DailyMenuWhereInput | DailyMenuWhereInput[];
+      OR?: DailyMenuWhereInput[];
+      NOT?: DailyMenuWhereInput | DailyMenuWhereInput[];
+      tenantId?: StringFilter<'DailyMenu'> | string;
+      date?: DateTimeFilter<'DailyMenu'> | Date | string;
+      breakfast?: JsonFilter<'DailyMenu'>;
+      lunch?: JsonFilter<'DailyMenu'>;
+      snack?: JsonFilter<'DailyMenu'>;
+      allergens?: JsonFilter<'DailyMenu'>;
+      calories?: IntNullableFilter<'DailyMenu'> | number | null;
+      notes?: StringNullableFilter<'DailyMenu'> | string | null;
+      createdAt?: DateTimeFilter<'DailyMenu'> | Date | string;
+      updatedAt?: DateTimeFilter<'DailyMenu'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    },
+    'id' | 'tenantId_date'
+  >;
+
+  export type DailyMenuOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    date?: SortOrder;
+    breakfast?: SortOrder;
+    lunch?: SortOrder;
+    snack?: SortOrder;
+    allergens?: SortOrder;
+    calories?: SortOrderInput | SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: DailyMenuCountOrderByAggregateInput;
+    _avg?: DailyMenuAvgOrderByAggregateInput;
+    _max?: DailyMenuMaxOrderByAggregateInput;
+    _min?: DailyMenuMinOrderByAggregateInput;
+    _sum?: DailyMenuSumOrderByAggregateInput;
+  };
+
+  export type DailyMenuScalarWhereWithAggregatesInput = {
+    AND?: DailyMenuScalarWhereWithAggregatesInput | DailyMenuScalarWhereWithAggregatesInput[];
+    OR?: DailyMenuScalarWhereWithAggregatesInput[];
+    NOT?: DailyMenuScalarWhereWithAggregatesInput | DailyMenuScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'DailyMenu'> | string;
+    tenantId?: StringWithAggregatesFilter<'DailyMenu'> | string;
+    date?: DateTimeWithAggregatesFilter<'DailyMenu'> | Date | string;
+    breakfast?: JsonWithAggregatesFilter<'DailyMenu'>;
+    lunch?: JsonWithAggregatesFilter<'DailyMenu'>;
+    snack?: JsonWithAggregatesFilter<'DailyMenu'>;
+    allergens?: JsonWithAggregatesFilter<'DailyMenu'>;
+    calories?: IntNullableWithAggregatesFilter<'DailyMenu'> | number | null;
+    notes?: StringNullableWithAggregatesFilter<'DailyMenu'> | string | null;
+    createdAt?: DateTimeWithAggregatesFilter<'DailyMenu'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'DailyMenu'> | Date | string;
+  };
+
   export type TenantCreateInput = {
     id?: string;
     slug: string;
@@ -7764,6 +9155,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateInput = {
@@ -7777,6 +9169,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUpdateInput = {
@@ -7790,6 +9183,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateInput = {
@@ -7803,6 +9197,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateManyInput = {
@@ -8254,6 +9649,103 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type DailyMenuCreateInput = {
+    id?: string;
+    date: Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: number | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutDailyMenusInput;
+  };
+
+  export type DailyMenuUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    date: Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: number | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyMenuUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: NullableIntFieldUpdateOperationsInput | number | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutDailyMenusNestedInput;
+  };
+
+  export type DailyMenuUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: NullableIntFieldUpdateOperationsInput | number | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyMenuCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    date: Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: number | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyMenuUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: NullableIntFieldUpdateOperationsInput | number | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyMenuUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: NullableIntFieldUpdateOperationsInput | number | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -8311,6 +9803,12 @@ export namespace Prisma {
     none?: AttendanceWhereInput;
   };
 
+  export type DailyMenuListRelationFilter = {
+    every?: DailyMenuWhereInput;
+    some?: DailyMenuWhereInput;
+    none?: DailyMenuWhereInput;
+  };
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -8324,6 +9822,10 @@ export namespace Prisma {
   };
 
   export type AttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type DailyMenuOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -8736,6 +10238,133 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
   };
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<JsonFilterBase<$PrismaModel>>,
+          Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>
+        >,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>;
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+    path?: string[];
+    string_contains?: string | StringFieldRefInput<$PrismaModel>;
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>;
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>;
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+  };
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null;
+  };
+
+  export type DailyMenuTenantIdDateCompoundUniqueInput = {
+    tenantId: string;
+    date: Date | string;
+  };
+
+  export type DailyMenuCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    date?: SortOrder;
+    breakfast?: SortOrder;
+    lunch?: SortOrder;
+    snack?: SortOrder;
+    allergens?: SortOrder;
+    calories?: SortOrder;
+    notes?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type DailyMenuAvgOrderByAggregateInput = {
+    calories?: SortOrder;
+  };
+
+  export type DailyMenuMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    date?: SortOrder;
+    calories?: SortOrder;
+    notes?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type DailyMenuMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    date?: SortOrder;
+    calories?: SortOrder;
+    notes?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type DailyMenuSumOrderByAggregateInput = {
+    calories?: SortOrder;
+  };
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<JsonWithAggregatesFilterBase<$PrismaModel>>,
+          Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>
+        >,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>;
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+    path?: string[];
+    string_contains?: string | StringFieldRefInput<$PrismaModel>;
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>;
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>;
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedJsonFilter<$PrismaModel>;
+    _max?: NestedJsonFilter<$PrismaModel>;
+  };
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedFloatNullableFilter<$PrismaModel>;
+    _sum?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedIntNullableFilter<$PrismaModel>;
+    _max?: NestedIntNullableFilter<$PrismaModel>;
+  };
 
   export type UserCreateNestedManyWithoutTenantInput = {
     create?:
@@ -8781,6 +10410,17 @@ export namespace Prisma {
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[];
   };
 
+  export type DailyMenuCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<DailyMenuCreateWithoutTenantInput, DailyMenuUncheckedCreateWithoutTenantInput>
+      | DailyMenuCreateWithoutTenantInput[]
+      | DailyMenuUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      DailyMenuCreateOrConnectWithoutTenantInput | DailyMenuCreateOrConnectWithoutTenantInput[];
+    createMany?: DailyMenuCreateManyTenantInputEnvelope;
+    connect?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+  };
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -8823,6 +10463,17 @@ export namespace Prisma {
       AttendanceCreateOrConnectWithoutTenantInput | AttendanceCreateOrConnectWithoutTenantInput[];
     createMany?: AttendanceCreateManyTenantInputEnvelope;
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[];
+  };
+
+  export type DailyMenuUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<DailyMenuCreateWithoutTenantInput, DailyMenuUncheckedCreateWithoutTenantInput>
+      | DailyMenuCreateWithoutTenantInput[]
+      | DailyMenuUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      DailyMenuCreateOrConnectWithoutTenantInput | DailyMenuCreateOrConnectWithoutTenantInput[];
+    createMany?: DailyMenuCreateManyTenantInputEnvelope;
+    connect?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -8929,6 +10580,30 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[];
   };
 
+  export type DailyMenuUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<DailyMenuCreateWithoutTenantInput, DailyMenuUncheckedCreateWithoutTenantInput>
+      | DailyMenuCreateWithoutTenantInput[]
+      | DailyMenuUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      DailyMenuCreateOrConnectWithoutTenantInput | DailyMenuCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | DailyMenuUpsertWithWhereUniqueWithoutTenantInput
+      | DailyMenuUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: DailyMenuCreateManyTenantInputEnvelope;
+    set?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+    disconnect?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+    delete?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+    connect?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+    update?:
+      | DailyMenuUpdateWithWhereUniqueWithoutTenantInput
+      | DailyMenuUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | DailyMenuUpdateManyWithWhereWithoutTenantInput
+      | DailyMenuUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: DailyMenuScalarWhereInput | DailyMenuScalarWhereInput[];
+  };
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -9019,6 +10694,30 @@ export namespace Prisma {
       | AttendanceUpdateManyWithWhereWithoutTenantInput
       | AttendanceUpdateManyWithWhereWithoutTenantInput[];
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[];
+  };
+
+  export type DailyMenuUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<DailyMenuCreateWithoutTenantInput, DailyMenuUncheckedCreateWithoutTenantInput>
+      | DailyMenuCreateWithoutTenantInput[]
+      | DailyMenuUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      DailyMenuCreateOrConnectWithoutTenantInput | DailyMenuCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | DailyMenuUpsertWithWhereUniqueWithoutTenantInput
+      | DailyMenuUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: DailyMenuCreateManyTenantInputEnvelope;
+    set?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+    disconnect?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+    delete?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+    connect?: DailyMenuWhereUniqueInput | DailyMenuWhereUniqueInput[];
+    update?:
+      | DailyMenuUpdateWithWhereUniqueWithoutTenantInput
+      | DailyMenuUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | DailyMenuUpdateManyWithWhereWithoutTenantInput
+      | DailyMenuUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: DailyMenuScalarWhereInput | DailyMenuScalarWhereInput[];
   };
 
   export type TenantCreateNestedOneWithoutUsersInput = {
@@ -9304,6 +11003,31 @@ export namespace Prisma {
     >;
   };
 
+  export type TenantCreateNestedOneWithoutDailyMenusInput = {
+    create?: XOR<TenantCreateWithoutDailyMenusInput, TenantUncheckedCreateWithoutDailyMenusInput>;
+    connectOrCreate?: TenantCreateOrConnectWithoutDailyMenusInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null;
+    increment?: number;
+    decrement?: number;
+    multiply?: number;
+    divide?: number;
+  };
+
+  export type TenantUpdateOneRequiredWithoutDailyMenusNestedInput = {
+    create?: XOR<TenantCreateWithoutDailyMenusInput, TenantUncheckedCreateWithoutDailyMenusInput>;
+    connectOrCreate?: TenantCreateOrConnectWithoutDailyMenusInput;
+    upsert?: TenantUpsertWithoutDailyMenusInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<TenantUpdateToOneWithWhereWithoutDailyMenusInput, TenantUpdateWithoutDailyMenusInput>,
+      TenantUncheckedUpdateWithoutDailyMenusInput
+    >;
+  };
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -9509,6 +11233,58 @@ export namespace Prisma {
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
   };
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<NestedJsonFilterBase<$PrismaModel>>,
+          Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>
+        >,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>;
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+    path?: string[];
+    string_contains?: string | StringFieldRefInput<$PrismaModel>;
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>;
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>;
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null;
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>;
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter;
+  };
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedFloatNullableFilter<$PrismaModel>;
+    _sum?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedIntNullableFilter<$PrismaModel>;
+    _max?: NestedIntNullableFilter<$PrismaModel>;
+  };
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null;
+    lt?: number | FloatFieldRefInput<$PrismaModel>;
+    lte?: number | FloatFieldRefInput<$PrismaModel>;
+    gt?: number | FloatFieldRefInput<$PrismaModel>;
+    gte?: number | FloatFieldRefInput<$PrismaModel>;
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null;
+  };
 
   export type UserCreateWithoutTenantInput = {
     id?: string;
@@ -9666,6 +11442,42 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type DailyMenuCreateWithoutTenantInput = {
+    id?: string;
+    date: Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: number | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyMenuUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    date: Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: number | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyMenuCreateOrConnectWithoutTenantInput = {
+    where: DailyMenuWhereUniqueInput;
+    create: XOR<DailyMenuCreateWithoutTenantInput, DailyMenuUncheckedCreateWithoutTenantInput>;
+  };
+
+  export type DailyMenuCreateManyTenantInputEnvelope = {
+    data: DailyMenuCreateManyTenantInput | DailyMenuCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type UserUpsertWithWhereUniqueWithoutTenantInput = {
     where: UserWhereUniqueInput;
     update: XOR<UserUpdateWithoutTenantInput, UserUncheckedUpdateWithoutTenantInput>;
@@ -9802,6 +11614,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'Attendance'> | Date | string;
   };
 
+  export type DailyMenuUpsertWithWhereUniqueWithoutTenantInput = {
+    where: DailyMenuWhereUniqueInput;
+    update: XOR<DailyMenuUpdateWithoutTenantInput, DailyMenuUncheckedUpdateWithoutTenantInput>;
+    create: XOR<DailyMenuCreateWithoutTenantInput, DailyMenuUncheckedCreateWithoutTenantInput>;
+  };
+
+  export type DailyMenuUpdateWithWhereUniqueWithoutTenantInput = {
+    where: DailyMenuWhereUniqueInput;
+    data: XOR<DailyMenuUpdateWithoutTenantInput, DailyMenuUncheckedUpdateWithoutTenantInput>;
+  };
+
+  export type DailyMenuUpdateManyWithWhereWithoutTenantInput = {
+    where: DailyMenuScalarWhereInput;
+    data: XOR<DailyMenuUpdateManyMutationInput, DailyMenuUncheckedUpdateManyWithoutTenantInput>;
+  };
+
+  export type DailyMenuScalarWhereInput = {
+    AND?: DailyMenuScalarWhereInput | DailyMenuScalarWhereInput[];
+    OR?: DailyMenuScalarWhereInput[];
+    NOT?: DailyMenuScalarWhereInput | DailyMenuScalarWhereInput[];
+    id?: StringFilter<'DailyMenu'> | string;
+    tenantId?: StringFilter<'DailyMenu'> | string;
+    date?: DateTimeFilter<'DailyMenu'> | Date | string;
+    breakfast?: JsonFilter<'DailyMenu'>;
+    lunch?: JsonFilter<'DailyMenu'>;
+    snack?: JsonFilter<'DailyMenu'>;
+    allergens?: JsonFilter<'DailyMenu'>;
+    calories?: IntNullableFilter<'DailyMenu'> | number | null;
+    notes?: StringNullableFilter<'DailyMenu'> | string | null;
+    createdAt?: DateTimeFilter<'DailyMenu'> | Date | string;
+    updatedAt?: DateTimeFilter<'DailyMenu'> | Date | string;
+  };
+
   export type TenantCreateWithoutUsersInput = {
     id?: string;
     slug: string;
@@ -9812,6 +11657,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -9824,6 +11670,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -9852,6 +11699,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -9864,6 +11712,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutStudentsInput = {
@@ -9876,6 +11725,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -9888,6 +11738,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -10001,6 +11852,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -10013,6 +11865,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type DailyReportUpsertWithWhereUniqueWithoutStudentInput = {
@@ -10066,6 +11919,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutTenantInput;
     students?: StudentCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyReportsInput = {
@@ -10078,6 +11932,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutTenantInput;
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
     attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyReportsInput = {
@@ -10155,6 +12010,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutTenantNestedInput;
     students?: StudentUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyReportsInput = {
@@ -10167,6 +12023,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
     attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDailyReportsInput = {
@@ -10231,6 +12088,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutTenantInput;
     students?: StudentCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendancesInput = {
@@ -10243,6 +12101,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutTenantInput;
     students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendancesInput = {
@@ -10311,6 +12170,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutTenantNestedInput;
     students?: StudentUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendancesInput = {
@@ -10323,6 +12183,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
     students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
     dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendancesInput = {
@@ -10372,6 +12233,74 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type TenantCreateWithoutDailyMenusInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutDailyMenusInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutDailyMenusInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<TenantCreateWithoutDailyMenusInput, TenantUncheckedCreateWithoutDailyMenusInput>;
+  };
+
+  export type TenantUpsertWithoutDailyMenusInput = {
+    update: XOR<TenantUpdateWithoutDailyMenusInput, TenantUncheckedUpdateWithoutDailyMenusInput>;
+    create: XOR<TenantCreateWithoutDailyMenusInput, TenantUncheckedCreateWithoutDailyMenusInput>;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutDailyMenusInput = {
+    where?: TenantWhereInput;
+    data: XOR<TenantUpdateWithoutDailyMenusInput, TenantUncheckedUpdateWithoutDailyMenusInput>;
+  };
+
+  export type TenantUpdateWithoutDailyMenusInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutDailyMenusInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserCreateManyTenantInput = {
@@ -10426,6 +12355,19 @@ export namespace Prisma {
     pickupContactId?: string | null;
     pickupNote?: string | null;
     note?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type DailyMenuCreateManyTenantInput = {
+    id?: string;
+    date: Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: number | null;
+    notes?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -10602,6 +12544,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type DailyMenuUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: NullableIntFieldUpdateOperationsInput | number | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyMenuUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: NullableIntFieldUpdateOperationsInput | number | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type DailyMenuUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    breakfast?: JsonNullValueInput | InputJsonValue;
+    lunch?: JsonNullValueInput | InputJsonValue;
+    snack?: JsonNullValueInput | InputJsonValue;
+    allergens?: JsonNullValueInput | InputJsonValue;
+    calories?: NullableIntFieldUpdateOperationsInput | number | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type DailyReportCreateManyStudentInput = {
     id?: string;
     tenantId: string;
@@ -10766,6 +12747,11 @@ export namespace Prisma {
    */
   export type AttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     AttendanceDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use DailyMenuDefaultArgs instead
+   */
+  export type DailyMenuArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    DailyMenuDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

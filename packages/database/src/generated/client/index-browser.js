@@ -187,6 +187,20 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.DailyMenuScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  date: 'date',
+  breakfast: 'breakfast',
+  lunch: 'lunch',
+  snack: 'snack',
+  allergens: 'allergens',
+  calories: 'calories',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -194,6 +208,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull,
 };
 
@@ -230,6 +248,7 @@ exports.Prisma.ModelName = {
   Student: 'Student',
   DailyReport: 'DailyReport',
   Attendance: 'Attendance',
+  DailyMenu: 'DailyMenu',
 };
 
 /**

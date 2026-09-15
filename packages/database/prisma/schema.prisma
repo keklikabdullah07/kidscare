@@ -32,6 +32,7 @@ model Tenant {
   students Student[]
   dailyReports DailyReport[]
   attendances Attendance[]
+  dailyMenus DailyMenu[]
 
   @@map("tenants")
 }
@@ -125,3 +126,24 @@ model Attendance {
   @@index([tenantId, studentId])
   @@map("attendances")
 }
+
+model DailyMenu {
+  id        String   @id @default(cuid())
+  tenantId  String
+  date      DateTime @db.Date
+  breakfast Json     @default("[]")
+  lunch     Json     @default("[]")
+  snack     Json     @default("[]")
+  allergens Json     @default("[]")
+  calories  Int?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, date])
+  @@index([tenantId, date])
+  @@map("daily_menus")
+}
+
