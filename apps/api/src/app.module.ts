@@ -5,6 +5,9 @@ import { HealthModule } from './health/health.module';
 import { TenantContextModule } from './common/context/tenant-context.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TenantGuard } from './common/guards/tenant.guard';
+import { TenantsModule } from './modules/tenants/tenants.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { StudentsModule } from './modules/students/students.module';
 
 @Module({
   imports: [
@@ -12,6 +15,9 @@ import { TenantGuard } from './common/guards/tenant.guard';
     TenantContextModule,
     PrismaModule,
     HealthModule,
+    AuthModule,
+    TenantsModule,
+    StudentsModule,
   ],
   providers: [Reflector, { provide: APP_GUARD, useClass: TenantGuard }],
 })
