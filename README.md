@@ -2,6 +2,22 @@
 
 Çoklu kreşe satılabilir multi-tenant SaaS. Mimari kararlar: `kres-uygulamasi-teknoloji-karar-raporu.md`. Proje kuralları: `CLAUDE.md`. Sub-project #1 (altyapı) tasarımı: `docs/superpowers/specs/2026-09-13-infrastructure-layer-design.md`.
 
+## Canlı Ortamlar & Dağıtım (Cloud)
+
+Detaylı dağıtım, ortam değişkenleri ve APK derleme rehberi için: **[DEPLOYMENT.md](./DEPLOYMENT.md)**
+
+- **Canlı API (Render):** [https://kidscare-api.onrender.com](https://kidscare-api.onrender.com)
+- **API Sağlık Kontrolü:** [https://kidscare-api.onrender.com/health](https://kidscare-api.onrender.com/health)
+- **Android APK İndir (EAS Build):** [En Son APK'yı İndir (v2 - Foto Galeri Dahil)](https://expo.dev/accounts/partridgex/projects/kidscare/builds/311cd53e-f687-4e3e-8a09-344f3f5bc485)
+- **EAS Proje Paneli:** [https://expo.dev/accounts/partridgex/projects/kidscare](https://expo.dev/accounts/partridgex/projects/kidscare)
+
+### Varsayılan Demo Giriş Bilgileri
+
+- **Kreş Kodu (Slug):** `demo`
+- **Müdür (Admin):** `admin@demo.test` / `demo1234`
+- **Öğretmen:** `teacher@demo.test` / `demo1234`
+- **Veli:** `parent@demo.test` / `demo1234` (Öğrenci: Ada Yılmaz)
+
 ## Gereksinimler
 
 - Node 20 LTS
