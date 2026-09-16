@@ -1,13 +1,19 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';
 import { SignupPage } from './SignupPage';
 
-function renderSignup(onSwitch = vi.fn()): ReturnType<typeof render> {
+function renderSignup(initialPath = '/signup'): ReturnType<typeof render> {
   return render(
-    <AuthProvider>
-      <SignupPage onSwitchToLogin={onSwitch} />
-    </AuthProvider>,
+    <MemoryRouter initialEntries={[initialPath]}>
+      <AuthProvider>
+        <Routes>
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<div>Login page</div>} />
+        </Routes>
+      </AuthProvider>
+    </MemoryRouter>,
   );
 }
 
@@ -97,5 +103,16 @@ describe('SignupPage', () => {
     await user.click(screen.getByRole('button', { name: /kayıt ol/i }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/slug/i);
+  });
+
+  it('navigates to /login when the login link is clicked', async () => {
+    mockFetchByUrl({
+      '/auth/me': () => new Response(JSON.stringify({ message: 'no token' }), { status: 401 }),
+    });
+    const user = userEvent.setup();
+    renderSignup();
+
+    await user.click(screen.getByRole('link', { name: /giriş yap/i }));
+    expect(await screen.findByText(/login page/i)).toBeInTheDocument();
   });
 });

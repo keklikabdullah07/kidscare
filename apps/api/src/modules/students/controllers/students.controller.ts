@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -18,7 +17,11 @@ import {
   studentCreateSchema,
   studentPassportSchema,
   studentUpdateSchema,
+  type StudentCreate,
+  type StudentPassportInput,
+  type StudentUpdate,
 } from '@kidscare/shared-schemas';
+import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import type { StudentPassport } from '@kidscare/shared-types';
 import { StudentResponse } from '../dto/student-response.dto';
 import { Student } from '../entities/student.entity';
@@ -57,32 +60,18 @@ export class StudentsController {
   async updatePassport(
     @CurrentTenantId() tenantId: string,
     @Param('id') id: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(studentPassportSchema)) body: StudentPassportInput,
   ): Promise<StudentPassport> {
-    const parsed = studentPassportSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid passport payload',
-        issues: parsed.error.issues,
-      });
-    }
-    return this.studentsService.updatePassport(tenantId, id, parsed.data);
+    return this.studentsService.updatePassport(tenantId, id, body);
   }
 
   @Post()
   @HttpCode(201)
   async create(
     @CurrentTenantId() tenantId: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(studentCreateSchema)) body: StudentCreate,
   ): Promise<StudentResponse> {
-    const parsed = studentCreateSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid student payload',
-        issues: parsed.error.issues,
-      });
-    }
-    const created = await this.studentsService.create(tenantId, parsed.data);
+    const created = await this.studentsService.create(tenantId, body);
     return this.toResponse(created);
   }
 
@@ -90,19 +79,12 @@ export class StudentsController {
   async update(
     @CurrentTenantId() tenantId: string,
     @Param('id') id: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(studentUpdateSchema)) body: StudentUpdate,
   ): Promise<StudentResponse> {
-    const parsed = studentUpdateSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid update payload',
-        issues: parsed.error.issues,
-      });
-    }
     // Strip undefined keys — Prisma's StudentUpdateInput (with
     // exactOptionalPropertyTypes) rejects explicit `undefined`.
     const data = Object.fromEntries(
-      Object.entries(parsed.data).filter(([, v]) => v !== undefined),
+      Object.entries(body).filter(([, v]) => v !== undefined),
     ) as Parameters<StudentsService['update']>[2];
     const updated = await this.studentsService.update(tenantId, id, data);
     return this.toResponse(updated);

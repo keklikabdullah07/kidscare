@@ -119,17 +119,17 @@ export function LoginScreen({
                 onChangeText={setServerUrl}
                 autoCapitalize="none"
                 autoCorrect={false}
-                placeholder="http://192.168.1.133:3000"
+                placeholder="https://kidscare-api.onrender.com"
               />
               <TouchableOpacity
                 style={styles.serverResetBtn}
                 onPress={() => {
-                  const defaultUrl = 'http://192.168.1.133:3000';
+                  const defaultUrl = 'https://kidscare-api.onrender.com';
                   setServerUrl(defaultUrl);
                   void setCustomBaseUrl(defaultUrl);
                 }}
               >
-                <Text style={styles.serverResetText}>Varsayılana Sıfırla (192.168.1.133:3000)</Text>
+                <Text style={styles.serverResetText}>Varsayılana Sıfırla (Render)</Text>
               </TouchableOpacity>
             </View>
           )}

@@ -72,8 +72,11 @@ function mockFetchByUrl(handlers: Record<string, (init?: RequestInit) => Respons
     const [input, init] = args as [string | URL | Request, RequestInit | undefined];
     const url = input instanceof globalThis.Request ? input.url : String(input);
     const path = new URL(url, 'http://localhost').pathname;
-    const handler = handlers[path];
-    if (handler) return Promise.resolve(handler(init));
+    // First try exact path, then any pattern handler (key starts with '*')
+    const exact = handlers[path];
+    if (exact) return Promise.resolve(exact(init));
+    const patternKey = Object.keys(handlers).find((k) => k.startsWith('*') && path.includes(k.slice(1)));
+    if (patternKey) return Promise.resolve(handlers[patternKey]!(init));
     return Promise.resolve(new Response(JSON.stringify({ message: 'unhandled' }), { status: 500 }));
   });
 }
@@ -124,7 +127,9 @@ describe('AttendancePage', () => {
     mockFetchByUrl({
       '/students': () => new Response(JSON.stringify([fakeStudents[1]]), { status: 200 }),
       '/attendance': () => new Response(JSON.stringify([]), { status: 200 }),
-      '/students/s-2/attendance/2026-09-15/check-in': (init) => {
+      // The page uses `new Date().toISOString().slice(0,10)` for the URL,
+      // which changes every calendar day. Match any YYYY-MM-DD segment.
+      '*students/s-2/attendance/': (init) => {
         if (init?.method === 'POST') {
           checkInCalled = true;
           return new Response(

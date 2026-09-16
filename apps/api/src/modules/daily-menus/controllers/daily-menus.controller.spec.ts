@@ -1,7 +1,6 @@
 import { DailyMenusController } from './daily-menus.controller';
 import type { DailyMenusService } from '../services/daily-menus.service';
 import { DailyMenu } from '../entities/daily-menu.entity';
-import { BadRequestException } from '@nestjs/common';
 
 describe('DailyMenusController', () => {
   let controller: DailyMenusController;
@@ -47,7 +46,7 @@ describe('DailyMenusController', () => {
   });
 
   describe('create', () => {
-    it('validates payload and creates menu', async () => {
+    it('forwards the parsed payload to the service', async () => {
       service.createOrUpdate.mockResolvedValue({
         menu: mockMenuEntity,
         allergenWarnings: [],
@@ -56,18 +55,13 @@ describe('DailyMenusController', () => {
       const res = await controller.create('t-1', {
         date: '2026-09-15',
         breakfast: ['Yumurta'],
+        lunch: ['Köfte'],
+        snack: ['Muz'],
+        allergens: ['Yumurta'],
       });
 
       expect(res.menu?.id).toBe('menu-1');
       expect(service.createOrUpdate).toHaveBeenCalledWith('t-1', expect.anything());
-    });
-
-    it('throws BadRequestException on invalid date format', async () => {
-      await expect(
-        controller.create('t-1', {
-          date: 'invalid-date',
-        }),
-      ).rejects.toThrow(BadRequestException);
     });
   });
 

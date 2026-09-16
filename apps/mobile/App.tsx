@@ -11,6 +11,7 @@ import { LoginScreen } from './src/auth/LoginScreen';
 import { SignupScreen } from './src/auth/SignupScreen';
 import { StudentsScreen } from './src/students/StudentsScreen';
 import { ParentHomeScreen } from './src/parent/ParentHomeScreen';
+import { ErrorBoundary } from './src/components/ErrorBoundary';
 
 type AuthStackParams = {
   Login: undefined;
@@ -75,12 +76,14 @@ function AppNavigator(): React.ReactElement {
 export default function App(): React.ReactElement {
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <NavigationContainer>
-          <AppNavigator />
-        </NavigationContainer>
-        <StatusBar style="dark" />
-      </AuthProvider>
+      <ErrorBoundary>
+        <AuthProvider>
+          <NavigationContainer>
+            <AppNavigator />
+          </NavigationContainer>
+          <StatusBar style="dark" />
+        </AuthProvider>
+      </ErrorBoundary>
     </SafeAreaProvider>
   );
 }

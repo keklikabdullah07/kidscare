@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import type { JSX } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
-export function SignupPage({ onSwitchToLogin }: { onSwitchToLogin: () => void }): JSX.Element {
+export function SignupPage(): JSX.Element {
+  const navigate = useNavigate();
   const { signup, state } = useAuth();
   const [slug, setSlug] = useState('');
   const [name, setName] = useState('');
@@ -17,6 +19,7 @@ export function SignupPage({ onSwitchToLogin }: { onSwitchToLogin: () => void })
     setSubmitting(true);
     try {
       await signup(slug, name, email, password);
+      navigate('/', { replace: true });
     } catch {
       // error already on state
     } finally {
@@ -113,9 +116,9 @@ export function SignupPage({ onSwitchToLogin }: { onSwitchToLogin: () => void })
         </form>
         <p className="text-center text-sm text-gray-600 mt-4">
           Zaten kreşiniz var mı?{' '}
-          <button type="button" onClick={onSwitchToLogin} className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-blue-600 hover:underline">
             Giriş yap
-          </button>
+          </Link>
         </p>
       </div>
     </div>

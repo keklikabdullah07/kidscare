@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { TenantsController } from './tenants.controller';
 import type { TenantsService } from '../services/tenants.service';
 
@@ -55,15 +54,7 @@ describe('TenantsController', () => {
       expect(result.name).toBe('Renamed');
     });
 
-    it('throws BadRequestException for invalid payload', async () => {
-      await expect(controller.updateMe('t-1', { name: 'X' })).rejects.toThrow(BadRequestException);
-      expect(service.update).not.toHaveBeenCalled();
-    });
-
-    it('throws BadRequestException for unknown fields (strict schema)', async () => {
-      await expect(
-        controller.updateMe('t-1', { slug: 'renamed', name: 'Renamed' }),
-      ).rejects.toThrow(BadRequestException);
-    });
+    // Validation moved to ZodValidationPipe at the HTTP boundary.
+    // Strict/unknown-field cases are covered by integration tests.
   });
 });

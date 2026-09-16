@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -17,7 +16,11 @@ import {
   attendanceUpdateInputSchema,
   checkInInputSchema,
   checkOutInputSchema,
+  type AttendanceUpdateInput,
+  type CheckInInput,
+  type CheckOutInput,
 } from '@kidscare/shared-schemas';
+import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import type { Attendance } from '../entities/attendance.entity';
 import { AttendanceResponseDto } from '../dto/attendance-response.dto';
 import { AttendanceService } from '../services/attendance.service';
@@ -54,16 +57,9 @@ export class AttendanceController {
     @CurrentTenantId() tenantId: string,
     @Param('studentId') studentId: string,
     @Param('date') date: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(checkInInputSchema)) body: CheckInInput,
   ): Promise<AttendanceResponseDto> {
-    const parsed = checkInInputSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid check-in payload',
-        issues: parsed.error.issues,
-      });
-    }
-    const saved = await this.service.checkIn(tenantId, studentId, date, parsed.data);
+    const saved = await this.service.checkIn(tenantId, studentId, date, body);
     return this.toResponse(saved);
   }
 
@@ -73,16 +69,9 @@ export class AttendanceController {
     @CurrentTenantId() tenantId: string,
     @Param('studentId') studentId: string,
     @Param('date') date: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(checkOutInputSchema)) body: CheckOutInput,
   ): Promise<AttendanceResponseDto> {
-    const parsed = checkOutInputSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid check-out payload',
-        issues: parsed.error.issues,
-      });
-    }
-    const saved = await this.service.checkOut(tenantId, studentId, date, parsed.data);
+    const saved = await this.service.checkOut(tenantId, studentId, date, body);
     return this.toResponse(saved);
   }
 
@@ -92,16 +81,9 @@ export class AttendanceController {
     @CurrentTenantId() tenantId: string,
     @Param('studentId') studentId: string,
     @Param('date') date: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(attendanceUpdateInputSchema)) body: AttendanceUpdateInput,
   ): Promise<AttendanceResponseDto> {
-    const parsed = attendanceUpdateInputSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid attendance update payload',
-        issues: parsed.error.issues,
-      });
-    }
-    const saved = await this.service.update(tenantId, studentId, date, parsed.data);
+    const saved = await this.service.update(tenantId, studentId, date, body);
     return this.toResponse(saved);
   }
 

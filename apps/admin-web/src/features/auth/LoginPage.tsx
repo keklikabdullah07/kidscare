@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import type { JSX } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
-export function LoginPage({ onSwitchToSignup }: { onSwitchToSignup: () => void }): JSX.Element {
+export function LoginPage(): JSX.Element {
+  const navigate = useNavigate();
   const { login, state } = useAuth();
   const [slug, setSlug] = useState('');
   const [email, setEmail] = useState('');
@@ -16,6 +18,9 @@ export function LoginPage({ onSwitchToSignup }: { onSwitchToSignup: () => void }
     setSubmitting(true);
     try {
       await login(slug, email, password);
+      // Navigate after auth state flips to authenticated. HomeRedirect
+      // picks the correct landing page based on role.
+      navigate('/', { replace: true });
     } catch {
       // error already on state
     } finally {
@@ -86,13 +91,9 @@ export function LoginPage({ onSwitchToSignup }: { onSwitchToSignup: () => void }
         </form>
         <p className="text-center text-sm text-gray-600 mt-4">
           Kreşiniz yok mu?{' '}
-          <button
-            type="button"
-            onClick={onSwitchToSignup}
-            className="text-blue-600 hover:underline"
-          >
+          <Link to="/signup" className="text-blue-600 hover:underline">
             Kayıt ol
-          </button>
+          </Link>
         </p>
       </div>
     </div>

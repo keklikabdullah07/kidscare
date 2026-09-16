@@ -10,7 +10,7 @@ import {
 } from 'react';
 import type { AuthResponse, AuthenticatedUser } from '@kidscare/shared-types';
 import * as authApi from '../../api/auth';
-import { ApiError, setStoredToken } from '../../api/client';
+import { ApiError, onUnauthorized, setStoredToken } from '../../api/client';
 
 type AuthState =
   | { status: 'loading' }
@@ -123,6 +123,13 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const logout = useCallback((): void => {
     setStoredToken(null);
     setState({ status: 'unauthenticated', error: null });
+  }, []);
+
+  // Auto-logout when the api layer broadcasts a 401 from any fetch.
+  useEffect(() => {
+    return onUnauthorized(() => {
+      setState({ status: 'unauthenticated', error: 'Oturum sona erdi' });
+    });
   }, []);
 
   const value = useMemo<AuthContextValue>(
