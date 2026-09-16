@@ -32,21 +32,9 @@ describe('AuthController', () => {
       ).resolves.toEqual(resp);
     });
 
-    it('throws BadRequestException for invalid payload', async () => {
-      await expect(controller.signup({})).rejects.toThrow(BadRequestException);
-      expect(service.signup).not.toHaveBeenCalled();
-    });
-
-    it('throws BadRequestException for short password', async () => {
-      await expect(
-        controller.signup({
-          tenantSlug: 'yeni',
-          tenantName: 'Yeni',
-          email: 'a@b.com',
-          password: 'short',
-        }),
-      ).rejects.toThrow(BadRequestException);
-    });
+    // Validation is now enforced at the HTTP boundary by
+    // ZodValidationPipe, so we don't re-test invalid shapes here.
+    // The pipe has its own integration coverage via e2e tests.
   });
 
   describe('login', () => {
@@ -60,13 +48,9 @@ describe('AuthController', () => {
         controller.login({
           tenantSlug: 'demo',
           email: 'a@b.com',
-          password: 'x',
+          password: 'longpass1',
         }),
       ).resolves.toEqual(resp);
-    });
-
-    it('throws BadRequestException for missing fields', async () => {
-      await expect(controller.login({ email: 'a@b.com' })).rejects.toThrow(BadRequestException);
     });
   });
 

@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -12,13 +11,19 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import type { ActivityPost } from '@kidscare/shared-types';
-import { createActivityPostSchema, activityFilterQuerySchema } from '@kidscare/shared-schemas';
+import {
+  createActivityPostSchema,
+  activityFilterQuerySchema,
+  type ActivityFilterQueryInput,
+  type CreateActivityPostInput,
+} from '@kidscare/shared-schemas';
 import {
   CurrentUser,
   type CurrentUserPayload,
 } from '../../../common/decorators/current-user.decorator';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
+import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import { ActivitiesService } from '../services/activities.service';
 
 @Controller('activities')
@@ -29,16 +34,9 @@ export class ActivitiesController {
   @Get()
   async list(
     @CurrentTenantId() tenantId: string,
-    @Query() query: Record<string, unknown>,
+    @Query(new ZodValidationPipe(activityFilterQuerySchema)) query: ActivityFilterQueryInput,
   ): Promise<ActivityPost[]> {
-    const parsed = activityFilterQuerySchema.safeParse(query);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid query parameters',
-        issues: parsed.error.issues,
-      });
-    }
-    return this.activitiesService.list(tenantId, parsed.data);
+    return this.activitiesService.list(tenantId, query);
   }
 
   @Get(':id')
@@ -52,7 +50,7 @@ export class ActivitiesController {
   @Post()
   async create(
     @CurrentUser() user: CurrentUserPayload,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(createActivityPostSchema)) body: CreateActivityPostInput,
   ): Promise<ActivityPost> {
     if (
       user.role !== 'ADMIN' &&
@@ -61,14 +59,7 @@ export class ActivitiesController {
     ) {
       throw new ForbiddenException('Only teachers and admins can post activities');
     }
-    const parsed = createActivityPostSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid activity payload',
-        issues: parsed.error.issues,
-      });
-    }
-    return this.activitiesService.create(user.tenantId, user.userId, parsed.data);
+    return this.activitiesService.create(user.tenantId, user.userId, body);
   }
 
   @Delete(':id')

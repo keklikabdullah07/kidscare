@@ -12,12 +12,20 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import type { z } from 'zod';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
-import { dailyMenuCreateInputSchema, dailyMenuUpdateInputSchema } from '@kidscare/shared-schemas';
+import {
+  dailyMenuCreateInputSchema,
+  dailyMenuUpdateInputSchema,
+} from '@kidscare/shared-schemas';
+import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import type { DailyMenu } from '../entities/daily-menu.entity';
 import { DailyMenuResponseDto } from '../dto/daily-menu-response.dto';
 import { DailyMenusService } from '../services/daily-menus.service';
+
+type DailyMenuCreateInput = z.infer<typeof dailyMenuCreateInputSchema>;
+type DailyMenuUpdateInput = z.infer<typeof dailyMenuUpdateInputSchema>;
 
 @Controller('daily-menus')
 @UseGuards(TenantGuard)
@@ -55,16 +63,9 @@ export class DailyMenusController {
   @HttpCode(201)
   async create(
     @CurrentTenantId() tenantId: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(dailyMenuCreateInputSchema)) body: DailyMenuCreateInput,
   ): Promise<DailyMenuResponseDto> {
-    const parsed = dailyMenuCreateInputSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Geçersiz menü verisi',
-        issues: parsed.error.issues,
-      });
-    }
-    const result = await this.service.createOrUpdate(tenantId, parsed.data);
+    const result = await this.service.createOrUpdate(tenantId, body);
     return new DailyMenuResponseDto(
       result.menu ? this.toResponse(result.menu) : null,
       result.allergenWarnings,
@@ -76,16 +77,9 @@ export class DailyMenusController {
   async update(
     @CurrentTenantId() tenantId: string,
     @Param('date') date: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(dailyMenuUpdateInputSchema)) body: DailyMenuUpdateInput,
   ): Promise<DailyMenuResponseDto> {
-    const parsed = dailyMenuUpdateInputSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Geçersiz menü güncelleme verisi',
-        issues: parsed.error.issues,
-      });
-    }
-    const result = await this.service.update(tenantId, date, parsed.data);
+    const result = await this.service.update(tenantId, date, body);
     return new DailyMenuResponseDto(
       result.menu ? this.toResponse(result.menu) : null,
       result.allergenWarnings,

@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD, Reflector } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, Reflector } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './health/health.module';
 import { TenantContextModule } from './common/context/tenant-context.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TenantGuard } from './common/guards/tenant.guard';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { AttendanceModule } from './modules/attendance/attendance.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -17,6 +19,10 @@ import { ActivitiesModule } from './modules/activities/activities.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ThrottlerModule.forRoot([
+      { name: 'short', ttl: 1_000, limit: 10 },
+      { name: 'long', ttl: 60_000, limit: 200 },
+    ]),
     TenantContextModule,
     PrismaModule,
     HealthModule,
@@ -35,6 +41,14 @@ import { ActivitiesModule } from './modules/activities/activities.module';
       provide: APP_GUARD,
       useFactory: (reflector: Reflector) => new TenantGuard(reflector),
       inject: [Reflector],
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
 })

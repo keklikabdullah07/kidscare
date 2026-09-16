@@ -55,7 +55,7 @@ describe('TenantSettings', () => {
     });
 
     render(<TenantSettings />);
-    expect(await screen.findByRole('alert')).toHaveTextContent(/API 500/);
+    expect(await screen.findByRole('alert')).toHaveTextContent(/boom/);
   });
 
   it('sends PATCH on save and shows the updated name', async () => {

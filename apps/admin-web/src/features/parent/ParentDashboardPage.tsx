@@ -24,13 +24,16 @@ export function ParentDashboardPage(): JSX.Element {
           getDailyMenu(selectedDate).catch(() => ({ menu: null, allergenWarnings: [] })),
         ]);
         if (isMounted) {
-          setChildrenData(data);
+          // Defensive: the API may return undefined if the user lacks
+          // permission. Treat as an empty array rather than crashing.
+          setChildrenData(Array.isArray(data) ? data : []);
           setDailyMenu(menuRes.menu);
+          const safe = Array.isArray(data) ? data : [];
           if (
-            data.length > 0 &&
-            (!selectedChildId || !data.some((c) => c.student.id === selectedChildId))
+            safe.length > 0 &&
+            (!selectedChildId || !safe.some((c) => c.student.id === selectedChildId))
           ) {
-            setSelectedChildId(data[0]?.student.id ?? null);
+            setSelectedChildId(safe[0]?.student.id ?? null);
           }
         }
       } catch (err: unknown) {
@@ -48,7 +51,9 @@ export function ParentDashboardPage(): JSX.Element {
   }, [selectedDate]);
 
   const activeChildOverview =
-    childrenData.find((c) => c.student.id === selectedChildId) || childrenData[0];
+    Array.isArray(childrenData)
+      ? childrenData.find((c) => c.student.id === selectedChildId) || childrenData[0]
+      : undefined;
 
   const getMoodEmoji = (mood?: string | null) => {
     switch (mood) {

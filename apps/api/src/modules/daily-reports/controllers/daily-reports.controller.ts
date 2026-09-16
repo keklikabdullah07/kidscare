@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -12,7 +11,8 @@ import {
 } from '@nestjs/common';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
-import { dailyReportInputSchema } from '@kidscare/shared-schemas';
+import { dailyReportInputSchema, type DailyReportInput } from '@kidscare/shared-schemas';
+import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import type { DailyReport } from '../entities/daily-report.entity';
 import { DailyReportResponseDto } from '../dto/daily-report-response.dto';
 import { DailyReportsService } from '../services/daily-reports.service';
@@ -49,17 +49,9 @@ export class DailyReportsController {
     @CurrentTenantId() tenantId: string,
     @Param('studentId') studentId: string,
     @Param('date') date: string,
-    @Body() body: unknown,
+    @Body(new ZodValidationPipe(dailyReportInputSchema)) body: DailyReportInput,
   ): Promise<DailyReportResponseDto> {
-    const parsed = dailyReportInputSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new BadRequestException({
-        message: 'Invalid daily report payload',
-        issues: parsed.error.issues,
-      });
-    }
-
-    const saved = await this.service.saveReport(tenantId, studentId, date, parsed.data);
+    const saved = await this.service.saveReport(tenantId, studentId, date, body);
     return this.toResponse(saved);
   }
 

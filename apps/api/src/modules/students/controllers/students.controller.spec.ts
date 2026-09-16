@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { StudentsController } from './students.controller';
 import type { StudentsService } from '../services/students.service';
 import { Student } from '../entities/student.entity';
@@ -94,14 +93,6 @@ describe('StudentsController', () => {
       const result = await controller.updatePassport('t-1', 's-1', payload);
       expect(result.bloodType).toBe('0+');
     });
-
-    it('throws BadRequestException for invalid passport payload', async () => {
-      await expect(
-        controller.updatePassport('t-1', 's-1', {
-          bloodType: 'INVALID_TYPE',
-        }),
-      ).rejects.toThrow(BadRequestException);
-    });
   });
 
   describe('create', () => {
@@ -116,21 +107,7 @@ describe('StudentsController', () => {
       ).resolves.toMatchObject({ id: 's-1' });
     });
 
-    it('throws BadRequestException for invalid date', async () => {
-      await expect(
-        controller.create('t-1', {
-          firstName: 'Ada',
-          lastName: 'Yılmaz',
-          dateOfBirth: '12-05-2020', // wrong format
-        }),
-      ).rejects.toThrow(BadRequestException);
-    });
-
-    it('throws BadRequestException for missing fields', async () => {
-      await expect(controller.create('t-1', { firstName: 'Ada' })).rejects.toThrow(
-        BadRequestException,
-      );
-    });
+    // Validation moved to ZodValidationPipe at the HTTP boundary.
   });
 
   describe('update', () => {
@@ -157,12 +134,6 @@ describe('StudentsController', () => {
       await expect(controller.update('t-1', 's-1', { firstName: 'Yeni' })).resolves.toMatchObject({
         firstName: 'Yeni',
       });
-    });
-
-    it('throws BadRequestException for unknown fields (strict)', async () => {
-      await expect(controller.update('t-1', 's-1', { tenantId: 'hack' })).rejects.toThrow(
-        BadRequestException,
-      );
     });
   });
 
