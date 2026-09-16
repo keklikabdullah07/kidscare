@@ -1,5 +1,8 @@
 # KidsCare
 
+> 📖 **Ana Proje Rehberi & Bilgi Bankası:** [PROJECT_INFO.md](./PROJECT_INFO.md)  
+> _(Tüm canlı linkler, veritabanı adresleri, test hesapları, mimari kurallar ve APK bağlantıları burada toplanmıştır)._
+
 Çoklu kreşe satılabilir multi-tenant SaaS. Mimari kararlar: `kres-uygulamasi-teknoloji-karar-raporu.md`. Proje kuralları: `CLAUDE.md`. Sub-project #1 (altyapı) tasarımı: `docs/superpowers/specs/2026-09-13-infrastructure-layer-design.md`.
 
 ## Canlı Ortamlar & Dağıtım (Cloud)
