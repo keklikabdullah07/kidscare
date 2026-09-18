@@ -95,10 +95,7 @@ For external integrations (payment gateway, file storage, push notifications), t
 // students.module.ts
 @Module({
   controllers: [StudentsController],
-  providers: [
-    StudentsService,
-    { provide: 'IStudentsRepository', useClass: StudentsRepository },
-  ],
+  providers: [StudentsService, { provide: 'IStudentsRepository', useClass: StudentsRepository }],
 })
 export class StudentsModule {}
 ```
@@ -107,9 +104,7 @@ export class StudentsModule {}
 // students.service.ts
 @Injectable()
 export class StudentsService {
-  constructor(
-    @Inject('IStudentsRepository') private readonly repo: IStudentsRepository,
-  ) {}
+  constructor(@Inject('IStudentsRepository') private readonly repo: IStudentsRepository) {}
 
   async findOne(tenantId: string, id: string): Promise<Student> {
     const student = await this.repo.findById(tenantId, id);

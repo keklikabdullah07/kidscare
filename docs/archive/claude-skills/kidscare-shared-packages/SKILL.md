@@ -34,7 +34,7 @@ export type Tenant = {
   slug: string;
   name: string;
   status: 'ACTIVE' | 'SUSPENDED' | 'DELETED';
-  createdAt: string;  // ISO 8601, always
+  createdAt: string; // ISO 8601, always
   updatedAt: string;
 };
 
@@ -53,7 +53,11 @@ import { z } from 'zod';
 
 export const tenantSchema = z.object({
   id: z.string().cuid(),
-  slug: z.string().min(2).max(64).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .min(2)
+    .max(64)
+    .regex(/^[a-z0-9-]+$/),
   name: z.string().min(2).max(128),
   status: z.enum(['ACTIVE', 'SUSPENDED', 'DELETED']),
 });

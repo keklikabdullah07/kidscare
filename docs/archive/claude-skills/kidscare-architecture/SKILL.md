@@ -41,18 +41,18 @@ Reverse edges are not allowed. If you find yourself wanting `apps/api` to import
 
 ## Where Each Concern Lives
 
-| Concern | Lives in |
-|---|---|
-| HTTP endpoints, request/response shape | `apps/api/src/modules/<domain>/controllers/` |
-| Domain logic | `apps/api/src/modules/<domain>/services/` |
-| Persistence (SQL/Prisma) | `apps/api/src/modules/<domain>/repositories/` |
-| Validation rules shared with frontend | `packages/shared-schemas/` |
-| TypeScript types shared across stack | `packages/shared-types/` |
-| Database schema, migrations, seed | `packages/database/prisma/` |
-| Tenant context propagation | `packages/tenant-context/` |
-| React Native screens | `apps/mobile/app/` |
-| Admin SPA screens | `apps/admin-web/src/routes/` |
-| Marketing pages | `apps/marketing/app/` |
+| Concern                                | Lives in                                      |
+| -------------------------------------- | --------------------------------------------- |
+| HTTP endpoints, request/response shape | `apps/api/src/modules/<domain>/controllers/`  |
+| Domain logic                           | `apps/api/src/modules/<domain>/services/`     |
+| Persistence (SQL/Prisma)               | `apps/api/src/modules/<domain>/repositories/` |
+| Validation rules shared with frontend  | `packages/shared-schemas/`                    |
+| TypeScript types shared across stack   | `packages/shared-types/`                      |
+| Database schema, migrations, seed      | `packages/database/prisma/`                   |
+| Tenant context propagation             | `packages/tenant-context/`                    |
+| React Native screens                   | `apps/mobile/app/`                            |
+| Admin SPA screens                      | `apps/admin-web/src/routes/`                  |
+| Marketing pages                        | `apps/marketing/app/`                         |
 
 If a concern does not have a clear home in this table, stop and ask the user before creating a new location.
 

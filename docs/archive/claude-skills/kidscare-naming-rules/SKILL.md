@@ -9,15 +9,15 @@ description: Use when naming a new file, class, variable, DTO, interface, or enu
 
 All TypeScript files: `kebab-case.ts`. The segment before `.ts` carries enough context that the directory is optional to read.
 
-| Construct | Pattern | Example |
-|---|---|---|
-| Module file | `<domain>.module.ts` | `students.module.ts` |
-| Controller | `<domain>.controller.ts` | `students.controller.ts` |
-| Service | `<domain>.service.ts` | `students.service.ts` |
-| Repository | `<domain>.repository.ts` | `students.repository.ts` |
-| DTO | `<verb>-<entity>.dto.ts` or `<entity>-response.dto.ts` | `create-student.dto.ts`, `student-response.dto.ts` |
-| Entity | `<entity>.entity.ts` | `student.entity.ts` |
-| Spec | colocated with subject + `.spec.ts` | `students.service.spec.ts`, `students.controller.spec.ts` |
+| Construct   | Pattern                                                | Example                                                   |
+| ----------- | ------------------------------------------------------ | --------------------------------------------------------- |
+| Module file | `<domain>.module.ts`                                   | `students.module.ts`                                      |
+| Controller  | `<domain>.controller.ts`                               | `students.controller.ts`                                  |
+| Service     | `<domain>.service.ts`                                  | `students.service.ts`                                     |
+| Repository  | `<domain>.repository.ts`                               | `students.repository.ts`                                  |
+| DTO         | `<verb>-<entity>.dto.ts` or `<entity>-response.dto.ts` | `create-student.dto.ts`, `student-response.dto.ts`        |
+| Entity      | `<entity>.entity.ts`                                   | `student.entity.ts`                                       |
+| Spec        | colocated with subject + `.spec.ts`                    | `students.service.spec.ts`, `students.controller.spec.ts` |
 
 React Native screens: `<ScreenName>Screen.tsx` (PascalCase file, PascalCase component) — Expo convention overrides the kebab-case rule for screens only.
 
@@ -25,20 +25,20 @@ React Native screens: `<ScreenName>Screen.tsx` (PascalCase file, PascalCase comp
 
 PascalCase. The name says what the thing is, not what it does.
 
-| Construct | Pattern | Example |
-|---|---|---|
-| Service | `<Domain>Service` | `StudentsService` |
-| Controller | `<Domain>Controller` | `StudentsController` |
-| Repository | `<Domain>Repository` | `StudentsRepository` |
-| Interface for repository | `I<Domain>Repository` | `IStudentsRepository` |
-| Interface for service (when cross-module) | `I<Domain>Service` | `IStudentsService` |
-| DTO | `<Verb><Entity>Dto` or `<Entity>ResponseDto` | `CreateStudentDto`, `StudentResponseDto` |
-| Entity | `<Entity>` | `Student` |
-| Enum | `<PascalCase>` | `UserRole`, `TenantStatus` |
-| Guard | `<Purpose>Guard` | `TenantGuard`, `RoleGuard` |
-| Middleware | `<Purpose>Middleware` | `TenantContextMiddleware` |
-| Interceptor | `<Purpose>Interceptor` | `LoggingInterceptor` |
-| Decorator | `<Purpose>` (no suffix) | `Public`, `CurrentUser` |
+| Construct                                 | Pattern                                      | Example                                  |
+| ----------------------------------------- | -------------------------------------------- | ---------------------------------------- |
+| Service                                   | `<Domain>Service`                            | `StudentsService`                        |
+| Controller                                | `<Domain>Controller`                         | `StudentsController`                     |
+| Repository                                | `<Domain>Repository`                         | `StudentsRepository`                     |
+| Interface for repository                  | `I<Domain>Repository`                        | `IStudentsRepository`                    |
+| Interface for service (when cross-module) | `I<Domain>Service`                           | `IStudentsService`                       |
+| DTO                                       | `<Verb><Entity>Dto` or `<Entity>ResponseDto` | `CreateStudentDto`, `StudentResponseDto` |
+| Entity                                    | `<Entity>`                                   | `Student`                                |
+| Enum                                      | `<PascalCase>`                               | `UserRole`, `TenantStatus`               |
+| Guard                                     | `<Purpose>Guard`                             | `TenantGuard`, `RoleGuard`               |
+| Middleware                                | `<Purpose>Middleware`                        | `TenantContextMiddleware`                |
+| Interceptor                               | `<Purpose>Interceptor`                       | `LoggingInterceptor`                     |
+| Decorator                                 | `<Purpose>` (no suffix)                      | `Public`, `CurrentUser`                  |
 
 DTO and entity names are nouns, not verbs. `CreateStudentDto`, not `MakeStudentDto` or `StudentCreationDto`. A name with a verb suggests the action belongs on a service method, not in a class name.
 
