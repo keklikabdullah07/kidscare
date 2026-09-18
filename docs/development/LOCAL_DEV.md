@@ -103,13 +103,13 @@ pnpm db:down
 
 ## 🆘 Sorun giderme
 
-| Belirti | Çözüm |
-|---------|-------|
-| `pnpm db:up` → port 5433 meşgul | `docker ps`, eski container'ı `docker stop` |
-| API başlamıyor: `EADDRINUSE :3000` | Başka process port'u tutuyor. `netstat -ano \| findstr :3000` → PID bul → Task Manager'dan öldür |
-| Login sonsuz dönüyor | Network tab'da `/auth/login` method'u kontrol et (POST olmalı, GET değil). Vite proxy config (`apps/admin-web/vite.config.ts`) çalışıyor mu bak |
-| `prisma migrate dev` → DB drift uyarısı | Lokalde `y` ile reset güvenli. Prod'da ASLA |
-| Vite hot-reload bozdu | Tarayıcıda `Ctrl+Shift+R` (hard refresh) |
+| Belirti                                 | Çözüm                                                                                                                                           |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm db:up` → port 5433 meşgul         | `docker ps`, eski container'ı `docker stop`                                                                                                     |
+| API başlamıyor: `EADDRINUSE :3000`      | Başka process port'u tutuyor. `netstat -ano \| findstr :3000` → PID bul → Task Manager'dan öldür                                                |
+| Login sonsuz dönüyor                    | Network tab'da `/auth/login` method'u kontrol et (POST olmalı, GET değil). Vite proxy config (`apps/admin-web/vite.config.ts`) çalışıyor mu bak |
+| `prisma migrate dev` → DB drift uyarısı | Lokalde `y` ile reset güvenli. Prod'da ASLA                                                                                                     |
+| Vite hot-reload bozdu                   | Tarayıcıda `Ctrl+Shift+R` (hard refresh)                                                                                                        |
 
 ---
 

@@ -1,13 +1,19 @@
 # KidsCare
 
-> 📖 **Ana Proje Rehberi & Bilgi Bankası:** [PROJECT_INFO.md](./PROJECT_INFO.md)  
+> 📖 **Ana Proje Rehberi & Bilgi Bankası:** [docs/architecture/initial-project-info.md](./docs/architecture/initial-project-info.md)  
 > _(Tüm canlı linkler, veritabanı adresleri, test hesapları, mimari kurallar ve APK bağlantıları burada toplanmıştır)._
 
-Çoklu kreşe satılabilir multi-tenant SaaS. Mimari kararlar: `kres-uygulamasi-teknoloji-karar-raporu.md`. Proje kuralları: `CLAUDE.md`. Sub-project #1 (altyapı) tasarımı: `docs/superpowers/specs/2026-09-13-infrastructure-layer-design.md`.
+Çoklu kreşe satılabilir multi-tenant SaaS.
+
+- **Proje Anayasası & Kural Dosyası:** [AGENTS.md](./AGENTS.md)
+- **Mimari Kararlar Raporu:** [docs/architecture/tech-decision-report.md](./docs/architecture/tech-decision-report.md)
+- **Yerel Geliştirme Rehberi:** [docs/development/LOCAL_DEV.md](./docs/development/LOCAL_DEV.md)
+- **Dağıtım & Cloud Rehberi:** [docs/deployment/DEPLOYMENT.md](./docs/deployment/DEPLOYMENT.md)
+- **Altyapı Tasarımı:** [docs/superpowers/specs/2026-09-13-infrastructure-layer-design.md](./docs/superpowers/specs/2026-09-13-infrastructure-layer-design.md)
 
 ## Canlı Ortamlar & Dağıtım (Cloud)
 
-Detaylı dağıtım, ortam değişkenleri ve APK derleme rehberi için: **[DEPLOYMENT.md](./DEPLOYMENT.md)**
+Detaylı dağıtım, ortam değişkenleri ve APK derleme rehberi için: **[docs/deployment/DEPLOYMENT.md](./docs/deployment/DEPLOYMENT.md)**
 
 - **Canlı API (Render):** [https://kidscare-api.onrender.com](https://kidscare-api.onrender.com)
 - **API Sağlık Kontrolü:** [https://kidscare-api.onrender.com/health](https://kidscare-api.onrender.com/health)
