@@ -9,7 +9,7 @@
 - **Mimari Kararlar Raporu:** [docs/architecture/tech-decision-report.md](./docs/architecture/tech-decision-report.md)
 - **Yerel Geliştirme Rehberi:** [docs/development/LOCAL_DEV.md](./docs/development/LOCAL_DEV.md)
 - **Dağıtım & Cloud Rehberi:** [docs/deployment/DEPLOYMENT.md](./docs/deployment/DEPLOYMENT.md)
-- **Altyapı Tasarımı:** [docs/superpowers/specs/2026-09-13-infrastructure-layer-design.md](./docs/superpowers/specs/2026-09-13-infrastructure-layer-design.md)
+- **V1 Master Yol Haritası & Durum:** [docs/superpowers/plans/v1-master-roadmap.md](./docs/superpowers/plans/v1-master-roadmap.md)
 
 ## Canlı Ortamlar & Dağıtım (Cloud)
 
