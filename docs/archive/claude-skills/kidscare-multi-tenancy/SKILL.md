@@ -23,11 +23,11 @@ Tables that are not tenant-scoped (none in MVP, but reserved for future global c
 
 Each role has the minimum privilege required for its purpose. No role is granted `BYPASSRLS`.
 
-| Role | Purpose | Connects via | Privileges |
-|---|---|---|---|
-| `kidscare_migrator` | Schema owner, runs `prisma migrate` and `prisma db push` | `DATABASE_URL` | DDL, full CRUD on all tables |
-| `kidscare_app` | Normal application runtime | `DATABASE_APP_URL` | `SELECT/INSERT/UPDATE/DELETE` on all tenant-scoped tables; subject to FORCE RLS |
-| `kidscare_auth_lookup` | Login lookup only | `DATABASE_AUTH_LOOKUP_URL` | `SELECT` on specific columns of `users` and `tenants` only; subject to FORCE RLS |
+| Role                   | Purpose                                                  | Connects via               | Privileges                                                                       |
+| ---------------------- | -------------------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------- |
+| `kidscare_migrator`    | Schema owner, runs `prisma migrate` and `prisma db push` | `DATABASE_URL`             | DDL, full CRUD on all tables                                                     |
+| `kidscare_app`         | Normal application runtime                               | `DATABASE_APP_URL`         | `SELECT/INSERT/UPDATE/DELETE` on all tenant-scoped tables; subject to FORCE RLS  |
+| `kidscare_auth_lookup` | Login lookup only                                        | `DATABASE_AUTH_LOOKUP_URL` | `SELECT` on specific columns of `users` and `tenants` only; subject to FORCE RLS |
 
 Roles are created in `docker-compose.yml`'s init script (`init/01-roles.sql`) on first container start. Passwords come from a Compose-managed secret file, not from `.env`.
 

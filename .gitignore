@@ -1,14 +1,46 @@
+# Dependencies
 node_modules/
+apps/mobile/node_modules/
+.pnpm-store/
+
+# Build outputs & caches
 dist/
+build/
 .nx/
 .turbo/
-*.log
+.next/
+apps/marketing/.next/
+apps/admin-web/dist/
+apps/api/dist/
+apps/mobile/.expo/
+.cache/
+*.tsbuildinfo
+
+# Environment & local configs
 .env
 .env.local
-apps/mobile/.expo/
-apps/mobile/node_modules/
-coverage/
-.next/
-.playwright-mcp/
-*.png
+.env.*.local
+
+# Logs & temp files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 *.tmp*
+.tmp/
+
+# Testing & coverage
+coverage/
+.nyc_output/
+.playwright-mcp/
+
+# Superpowers & agent artifacts
+.superpowers/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Root screenshots / loose image dumps
+/*.png

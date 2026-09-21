@@ -1,0 +1,16 @@
+# Ignore files for Antigravity & Gemini agents
+node_modules/
+dist/
+build/
+.nx/
+.turbo/
+.next/
+.cache/
+coverage/
+.superpowers/
+docs/archive/
+docs/superpowers/plans/
+docs/superpowers/specs/2026-09-13*
+*.log
+*.tmp*
+.tmp/
