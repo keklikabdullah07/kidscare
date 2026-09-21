@@ -20,7 +20,7 @@ export class AuthController {
   constructor(@Inject(AuthService) private readonly authService: AuthService) {}
 
   @Public()
-  @Throttle({ short: { limit: 5, ttl: 60_000 }, long: { limit: 30, ttl: 600_000 } })
+  @Throttle({ short: { limit: 30, ttl: 60_000 }, long: { limit: 120, ttl: 600_000 } })
   @Post('signup')
   @HttpCode(201)
   async signup(
@@ -30,12 +30,10 @@ export class AuthController {
   }
 
   @Public()
-  @Throttle({ short: { limit: 5, ttl: 60_000 }, long: { limit: 30, ttl: 600_000 } })
+  @Throttle({ short: { limit: 30, ttl: 60_000 }, long: { limit: 120, ttl: 600_000 } })
   @Post('login')
   @HttpCode(200)
-  async login(
-    @Body(new ZodValidationPipe(loginSchema)) body: LoginInput,
-  ): Promise<AuthResponse> {
+  async login(@Body(new ZodValidationPipe(loginSchema)) body: LoginInput): Promise<AuthResponse> {
     return this.authService.login(body);
   }
 
