@@ -5,6 +5,7 @@ import { AuthGuard } from './features/auth/AuthGuard';
 import { LoginPage } from './features/auth/LoginPage';
 import { SignupPage } from './features/auth/SignupPage';
 import { Layout } from './components/Layout';
+import { ToastProvider } from './components/Toast';
 import { StudentsPage } from './features/students/StudentsPage';
 import { AttendancePage } from './features/attendance/AttendancePage';
 import { DailyMenuPage } from './features/daily-menus/DailyMenuPage';
@@ -23,7 +24,7 @@ function UnauthorizedRedirect(): null {
   const navigate = useNavigate();
   useEffect(() => {
     return onUnauthorized(() => {
-      navigate('/login', { replace: true });
+      void navigate('/login', { replace: true });
     });
   }, [navigate]);
   return null;
@@ -46,24 +47,26 @@ export function App(): JSX.Element {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <UnauthorizedRedirect />
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route element={<AuthGuard />}>
-            <Route element={<Layout />}>
-              <Route path="/portal" element={<ParentDashboardPage />} />
-              <Route path="/students" element={<StudentsPage />} />
-              <Route path="/tracking" element={<DailyTrackingPage />} />
-              <Route path="/attendance" element={<AttendancePage />} />
-              <Route path="/menus" element={<DailyMenuPage />} />
-              <Route path="/gallery" element={<ActivityGalleryPage />} />
-              <Route path="/settings" element={<TenantSettings />} />
+        <ToastProvider>
+          <UnauthorizedRedirect />
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route element={<AuthGuard />}>
+              <Route element={<Layout />}>
+                <Route path="/portal" element={<ParentDashboardPage />} />
+                <Route path="/students" element={<StudentsPage />} />
+                <Route path="/tracking" element={<DailyTrackingPage />} />
+                <Route path="/attendance" element={<AttendancePage />} />
+                <Route path="/menus" element={<DailyMenuPage />} />
+                <Route path="/gallery" element={<ActivityGalleryPage />} />
+                <Route path="/settings" element={<TenantSettings />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="/" element={<HomeRedirect />} />
-          <Route path="*" element={<HomeRedirect />} />
-        </Routes>
+            <Route path="/" element={<HomeRedirect />} />
+            <Route path="*" element={<HomeRedirect />} />
+          </Routes>
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   );
