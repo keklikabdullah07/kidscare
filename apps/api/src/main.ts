@@ -9,13 +9,36 @@ const DEFAULT_PROD_ORIGINS = [
   'https://kidscare-api.onrender.com',
 ];
 
-function resolveAllowedOrigins(): string[] | true {
+function resolveAllowedOrigins():
+  | ((origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => void)
+  | string[]
+  | true {
   const env = process.env.CORS_ALLOWED_ORIGINS;
   if (env && env.trim().length > 0) {
-    return env.split(',').map((o) => o.trim()).filter((o) => o.length > 0);
+    if (env.trim() === '*') return true;
+    return env
+      .split(',')
+      .map((o) => o.trim())
+      .filter((o) => o.length > 0);
   }
   if (process.env.NODE_ENV === 'production') {
-    return DEFAULT_PROD_ORIGINS;
+    return (origin, callback) => {
+      if (!origin) return callback(null, true);
+      try {
+        const url = new URL(origin);
+        if (
+          DEFAULT_PROD_ORIGINS.includes(origin) ||
+          url.hostname.endsWith('.vercel.app') ||
+          url.hostname === 'localhost' ||
+          url.hostname === '127.0.0.1'
+        ) {
+          return callback(null, true);
+        }
+      } catch {
+        // invalid url, reject
+      }
+      return callback(null, false);
+    };
   }
   return true;
 }
