@@ -14,6 +14,7 @@ import {
   Calendar,
   Sparkles,
   School,
+  LayoutDashboard,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 
@@ -26,6 +27,12 @@ type NavItem = {
 
 const allNavItems: NavItem[] = [
   { to: '/portal', label: 'Veli Portalı', icon: Home, description: 'Öğrenci genel durumu' },
+  {
+    to: '/dashboard',
+    label: 'Ana Panel',
+    icon: LayoutDashboard,
+    description: 'Günün özeti ve durum',
+  },
   { to: '/students', label: 'Öğrenciler', icon: Users, description: 'Sınıf ve öğrenci listesi' },
   { to: '/attendance', label: 'Yoklama', icon: CheckCircle2, description: 'Günlük katılım takibi' },
   {

@@ -1,6 +1,17 @@
 import { useState, useEffect, type JSX } from 'react';
 import type { ActivityPost } from '@kidscare/shared-types';
+import {
+  Camera,
+  Plus,
+  Trash2,
+  Calendar,
+  X,
+  Sparkles,
+  School,
+  Image as ImageIcon,
+} from 'lucide-react';
 import { getActivities, createActivity, deleteActivity } from '../../api/activities';
+import { useToast } from '../../components/Toast';
 
 const PRESET_PHOTOS = [
   {
@@ -48,6 +59,8 @@ export function ActivityGalleryPage(): JSX.Element {
   const [selectedTags, setSelectedTags] = useState<string[]>(['Sanat', 'Etkinlik']);
   const [submitting, setSubmitting] = useState(false);
 
+  const { showToast } = useToast();
+
   function loadPosts(): void {
     setLoading(true);
     setError(null);
@@ -71,7 +84,7 @@ export function ActivityGalleryPage(): JSX.Element {
       if (selectedUrls.length > 1) {
         setSelectedUrls(selectedUrls.filter((u) => u !== url));
       } else {
-        alert('En az 1 fotoğraf seçmelisiniz.');
+        showToast('En az 1 fotoğraf seçmelisiniz.', 'info');
       }
     } else {
       setSelectedUrls([...selectedUrls, url]);
@@ -97,11 +110,11 @@ export function ActivityGalleryPage(): JSX.Element {
   async function handleCreate(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     if (!title.trim()) {
-      alert('Lütfen bir başlık girin.');
+      showToast('Lütfen bir başlık girin.', 'error');
       return;
     }
     if (selectedUrls.length === 0) {
-      alert('Lütfen en az bir fotoğraf seçin.');
+      showToast('Lütfen en az bir fotoğraf seçin.', 'error');
       return;
     }
 
@@ -119,8 +132,10 @@ export function ActivityGalleryPage(): JSX.Element {
       setTitle('');
       setDescription('');
       setSelectedUrls([PRESET_PHOTOS[0]?.url || '']);
+      showToast('Yeni etkinlik ve fotoğraflar paylaşıldı! 📸', 'success');
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : 'Paylaşılamadı');
+      const msg = err instanceof Error ? err.message : 'Paylaşılamadı';
+      showToast(msg, 'error');
     } finally {
       setSubmitting(false);
     }
@@ -133,8 +148,10 @@ export function ActivityGalleryPage(): JSX.Element {
     try {
       await deleteActivity(id);
       setPosts(posts.filter((p) => p.id !== id));
+      showToast('Etkinlik silindi.', 'info');
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : 'Silinemedi');
+      const msg = err instanceof Error ? err.message : 'Silinemedi';
+      showToast(msg, 'error');
     }
   }
 
@@ -142,26 +159,33 @@ export function ActivityGalleryPage(): JSX.Element {
     <div className="space-y-6">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <span>📸</span> Fotoğraf & Etkinlik Galerisi
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Kreşte gerçekleşen günlük etkinlik ve aktiviteleri fotoğraflarla velilerle paylaşın.
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-500 text-white flex items-center justify-center font-bold shadow-xs">
+            <Camera className="w-5 h-5" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+              Fotoğraf & Etkinlik Galerisi
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Kreşte gerçekleşen günlük etkinlik ve aktiviteleri fotoğraflarla velilerle paylaşın.
+            </p>
+          </div>
         </div>
+
         <button
           type="button"
           onClick={() => setIsCreateOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition"
         >
-          <span>✨</span> Yeni Etkinlik Paylaş
+          <Plus className="w-4 h-4" />
+          <span>Yeni Etkinlik Paylaş</span>
         </button>
       </div>
 
       {/* Filter Tags */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2">
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider mr-1">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1">
           Filtre:
         </span>
         {FILTER_TAGS.map((tag) => {
@@ -171,13 +195,13 @@ export function ActivityGalleryPage(): JSX.Element {
               key={tag}
               type="button"
               onClick={() => setSelectedTag(tag)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
                 active
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                  ? 'bg-slate-900 text-white shadow-xs'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
               }`}
             >
-              {tag === 'Hepsi' ? '🌟 Hepsi' : `#${tag}`}
+              {tag === 'Hepsi' ? 'Hepsi' : `#${tag}`}
             </button>
           );
         })}
@@ -185,31 +209,41 @@ export function ActivityGalleryPage(): JSX.Element {
 
       {/* Error state */}
       {error && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-          {error}
+        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center justify-between">
+          <span>{error}</span>
+          <button
+            type="button"
+            onClick={() => setError(null)}
+            className="text-rose-500 hover:text-rose-700"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
 
       {/* Loading state */}
       {loading ? (
-        <div className="py-20 text-center text-gray-400">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-2"></div>
-          <p>Etkinlikler yükleniyor...</p>
+        <div className="py-20 text-center bg-white rounded-2xl border border-slate-200/80">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-3 border-rose-500 border-t-transparent mb-2"></div>
+          <p className="text-xs text-slate-500 font-medium">Etkinlikler yükleniyor...</p>
         </div>
       ) : posts.length === 0 ? (
-        <div className="py-16 text-center bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-          <div className="text-5xl mb-3">🎨</div>
-          <h3 className="text-lg font-bold text-gray-800">Henüz Paylaşılan Etkinlik Yok</h3>
-          <p className="text-sm text-gray-500 max-w-md mx-auto mt-1 mb-5">
+        <div className="py-16 text-center bg-white rounded-2xl border border-dashed border-slate-300 p-8">
+          <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-3">
+            <ImageIcon className="w-6 h-6" />
+          </div>
+          <h3 className="text-base font-bold text-slate-800">Henüz Paylaşılan Etkinlik Yok</h3>
+          <p className="text-xs text-slate-500 max-w-md mx-auto mt-1 mb-5">
             Öğrencilerin sınıf içi ve bahçe aktivitelerinden fotoğraflar yükleyerek velilere görsel
             güncellemeler sunun.
           </p>
           <button
             type="button"
             onClick={() => setIsCreateOpen(true)}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm"
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition"
           >
-            İlk Etkinliği Paylaş
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>İlk Etkinliği Paylaş</span>
           </button>
         </div>
       ) : (
@@ -224,18 +258,24 @@ export function ActivityGalleryPage(): JSX.Element {
             return (
               <div
                 key={post.id}
-                className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition"
+                className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex flex-col hover:shadow-md transition group"
               >
                 {/* Card Header */}
-                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                <div className="p-4 border-b border-slate-100 flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-50 text-blue-700">
+                      <span className="px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+                        <School className="w-3 h-3" />
                         {post.classroom || 'Tüm Kreş'}
                       </span>
-                      <span className="text-xs text-gray-400">{formattedDate}</span>
+                      <span className="text-xs text-slate-400 flex items-center gap-1">
+                        <Calendar className="w-3 h-3 text-slate-300" />
+                        {formattedDate}
+                      </span>
                     </div>
-                    <h2 className="text-base font-bold text-gray-900 mt-1">{post.title}</h2>
+                    <h2 className="text-base font-bold text-slate-900 mt-1.5 group-hover:text-blue-600 transition-colors">
+                      {post.title}
+                    </h2>
                   </div>
                   <button
                     type="button"
@@ -243,14 +283,14 @@ export function ActivityGalleryPage(): JSX.Element {
                       void handleDelete(post.id);
                     }}
                     title="Etkinliği Sil"
-                    className="text-gray-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition"
+                    className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition"
                   >
-                    🗑️
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
                 {/* Photo Grid */}
-                <div className="grid grid-cols-2 gap-1 bg-gray-100 aspect-video relative overflow-hidden">
+                <div className="grid grid-cols-2 gap-1 bg-slate-100 aspect-video relative overflow-hidden">
                   {post.mediaUrls.slice(0, 4).map((url, idx) => {
                     const isLast = idx === 3 && post.mediaUrls.length > 4;
                     const remaining = post.mediaUrls.length - 4;
@@ -260,17 +300,17 @@ export function ActivityGalleryPage(): JSX.Element {
                       <div
                         key={idx}
                         onClick={() => setActiveLightboxImg(url)}
-                        className={`relative cursor-pointer group overflow-hidden ${
+                        className={`relative cursor-pointer group/img overflow-hidden ${
                           isSingle ? 'col-span-2 row-span-2' : ''
                         }`}
                       >
                         <img
                           src={url}
                           alt={`${post.title} Fotoğraf ${idx + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
                         />
                         {isLast && (
-                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xl font-bold">
+                          <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center text-white text-lg font-bold">
                             +{remaining}
                           </div>
                         )}
@@ -282,17 +322,17 @@ export function ActivityGalleryPage(): JSX.Element {
                 {/* Description and Tags */}
                 <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                   {post.description && (
-                    <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">
+                    <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                       {post.description}
                     </p>
                   )}
 
                   {post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 pt-2">
+                    <div className="flex flex-wrap gap-1.5 pt-1">
                       {post.tags.map((t, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600"
+                          className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-600"
                         >
                           #{t}
                         </span>
@@ -309,19 +349,19 @@ export function ActivityGalleryPage(): JSX.Element {
       {/* Lightbox Modal */}
       {activeLightboxImg && (
         <div
-          className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
           onClick={() => setActiveLightboxImg(null)}
         >
           <div className="relative max-w-4xl max-h-full">
             <img
               src={activeLightboxImg}
               alt="Büyük Fotoğraf"
-              className="max-h-[85vh] max-w-full rounded-lg shadow-2xl object-contain"
+              className="max-h-[85vh] max-w-full rounded-2xl shadow-2xl object-contain"
             />
             <button
               type="button"
               onClick={() => setActiveLightboxImg(null)}
-              className="absolute -top-10 right-0 text-white text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full font-medium"
+              className="absolute -top-10 right-0 text-white text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full font-medium transition"
             >
               ✕ Kapat
             </button>
@@ -331,18 +371,19 @@ export function ActivityGalleryPage(): JSX.Element {
 
       {/* Create Activity Modal */}
       {isCreateOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden">
-            <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <span>📸</span> Yeni Etkinlik Paylaş
+        <div className="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-100">
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Camera className="w-4 h-4 text-rose-500" />
+                <span>Yeni Etkinlik Paylaş</span>
               </h2>
               <button
                 type="button"
                 onClick={() => setIsCreateOpen(false)}
-                className="text-gray-400 hover:text-gray-600 font-bold text-lg"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 
@@ -350,11 +391,11 @@ export function ActivityGalleryPage(): JSX.Element {
               onSubmit={(e) => {
                 void handleCreate(e);
               }}
-              className="p-5 overflow-y-auto space-y-4 flex-1"
+              className="p-6 overflow-y-auto space-y-4 flex-1"
             >
               {/* Title */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Etkinlik Başlığı *
                 </label>
                 <input
@@ -363,19 +404,19 @@ export function ActivityGalleryPage(): JSX.Element {
                   placeholder="Örn: Sulu Boya ile Hayvanlar Alemi"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
 
               {/* Classroom */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Sınıf / Grup
                 </label>
                 <select
                   value={classroom}
                   onChange={(e) => setClassroom(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white"
                 >
                   <option value="Papatyalar Sınıfı">🌼 Papatyalar Sınıfı (3-4 Yaş)</option>
                   <option value="Yıldızlar Sınıfı">⭐ Yıldızlar Sınıfı (4-5 Yaş)</option>
@@ -386,7 +427,7 @@ export function ActivityGalleryPage(): JSX.Element {
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Açıklama / Notlar
                 </label>
                 <textarea
@@ -394,13 +435,13 @@ export function ActivityGalleryPage(): JSX.Element {
                   placeholder="Bugün çocuklarla birlikte renkleri karıştırdık, ince motor becerilerini geliştirdik..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
 
               {/* Preset Photos Selection */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-2">
+                <label className="block text-xs font-semibold text-slate-700 mb-2">
                   Hazır Etkinlik Fotoğrafları Seçin ({selectedUrls.length} seçildi)
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -410,16 +451,18 @@ export function ActivityGalleryPage(): JSX.Element {
                       <div
                         key={item.url}
                         onClick={() => togglePreset(item.url)}
-                        className={`relative rounded-lg overflow-hidden border-2 cursor-pointer group ${
-                          isSelected ? 'border-blue-600 ring-2 ring-blue-100' : 'border-gray-200'
+                        className={`relative rounded-xl overflow-hidden border-2 cursor-pointer transition ${
+                          isSelected
+                            ? 'border-blue-600 ring-2 ring-blue-100'
+                            : 'border-slate-200 hover:border-slate-300'
                         }`}
                       >
                         <img src={item.url} alt={item.name} className="h-20 w-full object-cover" />
-                        <div className="p-1 bg-white/95 text-[11px] font-semibold text-gray-700 truncate text-center">
+                        <div className="p-1 bg-white text-[10px] font-semibold text-slate-700 truncate text-center">
                           {item.name}
                         </div>
                         {isSelected && (
-                          <div className="absolute top-1 right-1 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                          <div className="absolute top-1 right-1 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold">
                             ✓
                           </div>
                         )}
@@ -431,7 +474,7 @@ export function ActivityGalleryPage(): JSX.Element {
 
               {/* Custom Photo URL */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Veya Özel Fotoğraf URL'si Ekle
                 </label>
                 <div className="flex gap-2">
@@ -440,12 +483,12 @@ export function ActivityGalleryPage(): JSX.Element {
                     placeholder="https://images.unsplash.com/..."
                     value={customUrl}
                     onChange={(e) => setCustomUrl(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="flex-1 px-3 py-1.5 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   />
                   <button
                     type="button"
                     onClick={addCustomUrl}
-                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg"
+                    className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition"
                   >
                     Ekle
                   </button>
@@ -454,10 +497,8 @@ export function ActivityGalleryPage(): JSX.Element {
 
               {/* Tags */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-2">
-                  Etiketler
-                </label>
-                <div className="flex flex-wrap gap-2">
+                <label className="block text-xs font-semibold text-slate-700 mb-2">Etiketler</label>
+                <div className="flex flex-wrap gap-1.5">
                   {['Oyun', 'Sanat', 'Resim', 'Müzik', 'Bahçe', 'Gelişim', 'Masal'].map((t) => {
                     const isSelected = selectedTags.includes(t);
                     return (
@@ -465,10 +506,10 @@ export function ActivityGalleryPage(): JSX.Element {
                         key={t}
                         type="button"
                         onClick={() => toggleTag(t)}
-                        className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
+                        className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
                           isSelected
-                            ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                            : 'bg-gray-100 text-gray-600 border border-transparent hover:bg-gray-200'
+                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                       >
                         {isSelected ? `✓ #${t}` : `#${t}`}
@@ -479,20 +520,21 @@ export function ActivityGalleryPage(): JSX.Element {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsCreateOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 rounded-xl transition"
                 >
                   İptal
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm disabled:opacity-50"
+                  className="px-5 py-2 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-xs transition disabled:opacity-50 flex items-center gap-1.5"
                 >
-                  {submitting ? 'Paylaşılıyor...' : '🚀 Etkinliği Paylaş'}
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>{submitting ? 'Paylaşılıyor...' : 'Etkinliği Paylaş'}</span>
                 </button>
               </div>
             </form>
