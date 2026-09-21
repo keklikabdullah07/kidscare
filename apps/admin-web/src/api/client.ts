@@ -11,7 +11,7 @@ export class ApiError extends Error {
 }
 
 const TOKEN_KEY = 'kidscare.token';
-const DEFAULT_TIMEOUT_MS = 10_000;
+const DEFAULT_TIMEOUT_MS = 35_000;
 const UNAUTHORIZED_EVENT = 'kidscare:unauthorized';
 
 export function getStoredToken(): string | null {
@@ -83,7 +83,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
       if (method === 'GET' && attempt < attempts) continue;
       const msg =
         err instanceof Error && err.name === 'AbortError'
-          ? `İstek zaman aşımına uğradı (${DEFAULT_TIMEOUT_MS / 1000}s)`
+          ? 'Sunucu yanıt vermedi (zaman aşımı). Sunucu uyanıyor olabilir, lütfen tekrar deneyin.'
           : err instanceof Error
             ? err.message
             : 'Ağ hatası';
