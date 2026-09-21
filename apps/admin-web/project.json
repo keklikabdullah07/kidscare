@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "dev": { "executor": "@nx/vite:dev-server", "options": { "buildTarget": "build" } },
-    "build": { "executor": "@nx/vite:build", "options": { "outputPath": "dist/apps/admin-web" } },
+    "build": { "executor": "@nx/vite:build", "options": { "outputPath": "apps/admin-web/dist" } },
     "lint": { "executor": "@nx/eslint:lint" },
     "test": { "executor": "@nx/vite:test" }
   },
