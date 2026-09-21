@@ -1,6 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import type { AllergenWarningSummary, DailyMenu } from '@kidscare/shared-types';
+import {
+  Utensils,
+  AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
+  Save,
+  Trash2,
+  Coffee,
+  Soup,
+  Cookie,
+  Flame,
+  FileText,
+  X,
+} from 'lucide-react';
 import { deleteDailyMenu, getDailyMenu, saveDailyMenu } from '../../api/daily-menus';
+import { useToast } from '../../components/Toast';
 
 const COMMON_ALLERGENS = [
   '🥛 Süt / Laktoz',
@@ -13,7 +28,7 @@ const COMMON_ALLERGENS = [
   '🍯 Bal',
 ];
 
-export function DailyMenuPage(): React.ReactElement {
+export function DailyMenuPage(): JSX.Element {
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [menu, setMenu] = useState<DailyMenu | null>(null);
   const [warnings, setWarnings] = useState<AllergenWarningSummary[]>([]);
@@ -30,6 +45,8 @@ export function DailyMenuPage(): React.ReactElement {
   const [customAllergen, setCustomAllergen] = useState('');
   const [calories, setCalories] = useState<string>('');
   const [notes, setNotes] = useState('');
+
+  const { showToast } = useToast();
 
   function loadMenu(): void {
     setLoading(true);
@@ -75,7 +92,6 @@ export function DailyMenuPage(): React.ReactElement {
   const isToday = selectedDate === todayStr;
 
   function toggleAllergen(allergen: string): void {
-    // extract clean name without emoji
     const clean = allergen.replace(/^[^\w\sğüşıöçĞÜŞİÖÇ]+/, '').trim();
     const tag = clean || allergen;
 
@@ -125,8 +141,11 @@ export function DailyMenuPage(): React.ReactElement {
       setMenu(res.menu);
       setWarnings(res.allergenWarnings);
       setSuccessMsg('Günün menüsü başarıyla kaydedildi!');
+      showToast('Günün yemek menüsü başarıyla kaydedildi!', 'success');
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Menü kaydedilemedi');
+      const msg = err instanceof Error ? err.message : 'Menü kaydedilemedi';
+      setError(msg);
+      showToast(msg, 'error');
     } finally {
       setSaving(false);
     }
@@ -147,8 +166,11 @@ export function DailyMenuPage(): React.ReactElement {
       setCalories('');
       setNotes('');
       setSuccessMsg('Menü silindi.');
+      showToast('Menü başarıyla silindi.', 'info');
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Menü silinemedi');
+      const msg = err instanceof Error ? err.message : 'Menü silinemedi';
+      setError(msg);
+      showToast(msg, 'error');
     } finally {
       setSaving(false);
     }
@@ -157,46 +179,53 @@ export function DailyMenuPage(): React.ReactElement {
   return (
     <div className="space-y-6">
       {/* Header & Date Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <span>🍲</span> Yemek Listesi & Beslenme Yönetimi
-          </h1>
-          <p className="text-xs text-gray-500 mt-1">
-            Günün kahvaltı, öğle ve ikindi menülerini planlayın; öğrenci pasaportlarındaki
-            alerjenlerle otomatik eşleştirin.
-          </p>
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+              <Utensils className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+                Yemek Listesi & Beslenme Yönetimi
+              </h1>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Günün kahvaltı, öğle ve ikindi menülerini planlayın; öğrenci pasaportlarındaki
+                alerjenlerle otomatik eşleştirin.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Date Selector */}
-        <div className="flex items-center gap-2 bg-white border border-gray-200 p-1.5 rounded-lg shadow-2xs">
+        <div className="flex items-center gap-2 bg-white border border-slate-200 p-1 rounded-xl shadow-xs">
           <button
             type="button"
             onClick={() => changeDay(-1)}
-            className="p-1.5 rounded-md text-gray-600 hover:bg-gray-100"
+            className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition"
             title="Önceki Gün"
           >
-            ◀
+            <ChevronLeft className="w-4 h-4" />
           </button>
           <input
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="text-xs font-semibold text-gray-800 bg-transparent px-2 py-1 outline-hidden"
+            className="text-xs font-semibold text-slate-800 bg-transparent px-2 py-1 outline-none cursor-pointer"
           />
           <button
             type="button"
             onClick={() => changeDay(1)}
-            className="p-1.5 rounded-md text-gray-600 hover:bg-gray-100"
+            className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition"
             title="Sonraki Gün"
           >
-            ▶
+            <ChevronRight className="w-4 h-4" />
           </button>
           {!isToday && (
             <button
               type="button"
               onClick={() => setSelectedDate(todayStr)}
-              className="text-[11px] font-medium text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded-md ml-1"
+              className="text-[11px] font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded-lg ml-1 transition"
             >
               Bugün
             </button>
@@ -205,39 +234,58 @@ export function DailyMenuPage(): React.ReactElement {
       </div>
 
       {error && (
-        <div className="rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200">
-          {error}
+        <div className="rounded-xl bg-rose-50 p-4 text-sm text-rose-700 border border-rose-200 flex items-center justify-between">
+          <span>{error}</span>
+          <button
+            type="button"
+            onClick={() => setError(null)}
+            className="text-rose-500 hover:text-rose-700"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
 
       {successMsg && (
-        <div className="rounded-lg bg-green-50 p-4 text-sm text-green-700 border border-green-200">
-          {successMsg}
+        <div className="rounded-xl bg-emerald-50 p-4 text-sm text-emerald-800 border border-emerald-200 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span>✓</span>
+            <span>{successMsg}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSuccessMsg(null)}
+            className="text-emerald-600 hover:text-emerald-800"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
 
       {/* Allergen Warning Banner */}
       {warnings.length > 0 && (
-        <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 shadow-2xs">
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">⚠️</span>
+        <div className="rounded-2xl border border-amber-300 bg-amber-50/90 p-5 shadow-xs">
+          <div className="flex items-start gap-3.5">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-5 h-5" />
+            </div>
             <div className="flex-1">
-              <h3 className="text-sm font-bold text-amber-900">
+              <h3 className="text-sm font-bold text-amber-950">
                 Alerjen Riski Uyarısı — {warnings.length} Öğrenci Etkileniyor!
               </h3>
               <p className="text-xs text-amber-800 mt-1">
                 Günün menüsündeki içerikler, aşağıdaki öğrencilerin sağlık pasaportundaki kayıtlı
                 alerjileri ile çakışmaktadır:
               </p>
-              <div className="mt-2.5 flex flex-wrap gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {warnings.map((w) => (
                   <div
                     key={w.studentId}
-                    className="inline-flex items-center gap-1.5 bg-white border border-amber-300 rounded-lg px-2.5 py-1 text-xs shadow-2xs"
+                    className="inline-flex items-center gap-2 bg-white border border-amber-300/80 rounded-xl px-3 py-1.5 text-xs shadow-xs"
                   >
-                    <span className="font-bold text-gray-900">{w.studentName}:</span>
-                    <span className="text-red-700 font-semibold">
-                      {w.matchedAllergens.join(', ')}
+                    <span className="font-bold text-slate-900">{w.studentName}:</span>
+                    <span className="text-rose-600 font-semibold flex items-center gap-1">
+                      <span>⚠️</span> {w.matchedAllergens.join(', ')}
                     </span>
                   </div>
                 ))}
@@ -248,75 +296,90 @@ export function DailyMenuPage(): React.ReactElement {
       )}
 
       {loading ? (
-        <div className="text-center py-12 text-sm text-gray-500">Günün menüsü yükleniyor…</div>
+        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200/80">
+          <div className="inline-block w-8 h-8 border-3 border-amber-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+          <p className="text-slate-500 text-sm font-medium">Günün menüsü yükleniyor…</p>
+        </div>
       ) : (
         <form onSubmit={(e) => void handleSave(e)} className="space-y-6">
           {/* Meal Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Breakfast */}
-            <div className="rounded-xl border border-amber-200 bg-amber-50/30 p-4 shadow-2xs">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xl">🌅</span>
-                <div>
-                  <h3 className="text-sm font-bold text-gray-900">Sabah Kahvaltısı</h3>
-                  <p className="text-[11px] text-gray-500">Her satıra bir çeşit yazın</p>
+            <div className="rounded-2xl border border-amber-200/90 bg-amber-50/40 p-5 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
+                    <Coffee className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">Sabah Kahvaltısı</h3>
+                    <p className="text-[11px] text-slate-500">Her satıra bir çeşit yazın</p>
+                  </div>
                 </div>
+                <textarea
+                  value={breakfastInput}
+                  onChange={(e) => setBreakfastInput(e.target.value)}
+                  placeholder="Örn:&#10;Haşlanmış Yumurta&#10;Beyaz Peynir&#10;Zeytin&#10;Ihlamur"
+                  rows={6}
+                  className="w-full rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-800 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 leading-relaxed transition"
+                />
               </div>
-              <textarea
-                value={breakfastInput}
-                onChange={(e) => setBreakfastInput(e.target.value)}
-                placeholder="Örn:&#10;Haşlanmış Yumurta&#10;Beyaz Peynir&#10;Zeytin&#10;Ihlamur"
-                rows={5}
-                className="w-full rounded-lg border border-gray-300 bg-white p-2.5 text-xs text-gray-800 placeholder-gray-400 focus:border-amber-500 focus:outline-hidden"
-              />
             </div>
 
             {/* Lunch */}
-            <div className="rounded-xl border border-blue-200 bg-blue-50/30 p-4 shadow-2xs">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xl">🍲</span>
-                <div>
-                  <h3 className="text-sm font-bold text-gray-900">Öğle Yemeği</h3>
-                  <p className="text-[11px] text-gray-500">Her satıra bir çeşit yazın</p>
+            <div className="rounded-2xl border border-blue-200/90 bg-blue-50/40 p-5 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center">
+                    <Soup className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">Öğle Yemeği</h3>
+                    <p className="text-[11px] text-slate-500">Her satıra bir çeşit yazın</p>
+                  </div>
                 </div>
+                <textarea
+                  value={lunchInput}
+                  onChange={(e) => setLunchInput(e.target.value)}
+                  placeholder="Örn:&#10;Mercimek Çorbası&#10;Kıymalı Bezelye&#10;Pirinç Pilavı&#10;Ayran"
+                  rows={6}
+                  className="w-full rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 leading-relaxed transition"
+                />
               </div>
-              <textarea
-                value={lunchInput}
-                onChange={(e) => setLunchInput(e.target.value)}
-                placeholder="Örn:&#10;Mercimek Çorbası&#10;Kıymalı Bezelye&#10;Pirinç Pilavı&#10;Ayran"
-                rows={5}
-                className="w-full rounded-lg border border-gray-300 bg-white p-2.5 text-xs text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:outline-hidden"
-              />
             </div>
 
             {/* Snack */}
-            <div className="rounded-xl border border-orange-200 bg-orange-50/30 p-4 shadow-2xs">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xl">🥪</span>
-                <div>
-                  <h3 className="text-sm font-bold text-gray-900">İkindi Ara Öğünü</h3>
-                  <p className="text-[11px] text-gray-500">Her satıra bir çeşit yazın</p>
+            <div className="rounded-2xl border border-orange-200/90 bg-orange-50/40 p-5 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-800 flex items-center justify-center">
+                    <Cookie className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">İkindi Ara Öğünü</h3>
+                    <p className="text-[11px] text-slate-500">Her satıra bir çeşit yazın</p>
+                  </div>
                 </div>
+                <textarea
+                  value={snackInput}
+                  onChange={(e) => setSnackInput(e.target.value)}
+                  placeholder="Örn:&#10;Mevsim Meyvesi (Muz)&#10;Fındıklı Ev Keki"
+                  rows={6}
+                  className="w-full rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-800 placeholder-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 leading-relaxed transition"
+                />
               </div>
-              <textarea
-                value={snackInput}
-                onChange={(e) => setSnackInput(e.target.value)}
-                placeholder="Örn:&#10;Mevsim Meyvesi (Muz)&#10;Fındıklı Ev Keki"
-                rows={5}
-                className="w-full rounded-lg border border-gray-300 bg-white p-2.5 text-xs text-gray-800 placeholder-gray-400 focus:border-orange-500 focus:outline-hidden"
-              />
             </div>
           </div>
 
           {/* Allergens & Nutrition Information */}
-          <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-2xs space-y-4">
-            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
-              <span>🏷️</span> İçerdiği Alerjenler & Beslenme Bilgisi
+          <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <span className="text-amber-500">🏷️</span> İçerdiği Alerjenler & Beslenme Bilgisi
             </h3>
 
             {/* Preset Allergen Chips */}
             <div>
-              <p className="text-xs text-gray-500 mb-2">Menüde yer alan alerjenleri seçin:</p>
+              <p className="text-xs text-slate-500 mb-2">Menüde yer alan alerjenleri seçin:</p>
               <div className="flex flex-wrap gap-2">
                 {COMMON_ALLERGENS.map((all) => {
                   const clean = all.replace(/^[^\w\sğüşıöçĞÜŞİÖÇ]+/, '').trim();
@@ -326,10 +389,10 @@ export function DailyMenuPage(): React.ReactElement {
                       key={all}
                       type="button"
                       onClick={() => toggleAllergen(all)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                         isSel
-                          ? 'bg-red-100 border-red-300 text-red-800 shadow-2xs'
-                          : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                          ? 'bg-rose-50 border-rose-300 text-rose-800 shadow-2xs ring-1 ring-rose-300'
+                          : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                       }`}
                     >
                       {all} {isSel ? '✓' : '+'}
@@ -352,41 +415,43 @@ export function DailyMenuPage(): React.ReactElement {
                   }
                 }}
                 placeholder="Başka alerjen ekle (Örn: Kivi, Susam)"
-                className="flex-1 rounded-md border border-gray-300 px-3 py-1.5 text-xs text-gray-800"
+                className="flex-1 rounded-xl border border-slate-200 px-3 py-1.5 text-xs text-slate-800 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
               />
               <button
                 type="button"
                 onClick={addCustomAllergen}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-md text-xs font-medium"
+                className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition"
               >
                 Ekle
               </button>
             </div>
 
             {/* Calories & Notes */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Tahmini Kalori (kcal)
+                <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1">
+                  <Flame className="w-3.5 h-3.5 text-orange-500" />
+                  <span>Tahmini Kalori (kcal)</span>
                 </label>
                 <input
                   type="number"
                   value={calories}
                   onChange={(e) => setCalories(e.target.value)}
                   placeholder="Örn: 950"
-                  className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-xs text-gray-800"
+                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Aşçı / Beslenme Notu
+                <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1">
+                  <FileText className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Aşçı / Beslenme Notu</span>
                 </label>
                 <input
                   type="text"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Örn: Sebzeler taze olarak temin edilmiştir."
-                  className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-xs text-gray-800"
+                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 />
               </div>
             </div>
@@ -400,9 +465,10 @@ export function DailyMenuPage(): React.ReactElement {
                   type="button"
                   onClick={() => void handleDelete()}
                   disabled={saving}
-                  className="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold text-red-700 hover:bg-red-100"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-100 transition"
                 >
-                  🗑️ Menüyü Sil
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Menüyü Sil</span>
                 </button>
               )}
             </div>
@@ -411,9 +477,9 @@ export function DailyMenuPage(): React.ReactElement {
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-xs disabled:opacity-50 flex items-center gap-2"
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-sm disabled:opacity-50"
               >
-                <span>💾</span>
+                <Save className="w-4 h-4" />
                 <span>{saving ? 'Kaydediliyor…' : 'Günün Menüsünü Kaydet'}</span>
               </button>
             </div>

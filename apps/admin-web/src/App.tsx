@@ -6,6 +6,7 @@ import { LoginPage } from './features/auth/LoginPage';
 import { SignupPage } from './features/auth/SignupPage';
 import { Layout } from './components/Layout';
 import { ToastProvider } from './components/Toast';
+import { DashboardPage } from './features/dashboard/DashboardPage';
 import { StudentsPage } from './features/students/StudentsPage';
 import { AttendancePage } from './features/attendance/AttendancePage';
 import { DailyMenuPage } from './features/daily-menus/DailyMenuPage';
@@ -32,13 +33,12 @@ function UnauthorizedRedirect(): null {
 
 /**
  * After login/signup success, send users to a sensible landing page:
- * PARENT → /portal, everyone else → /students (or /portal if they
- * already had it bookmarked).
+ * PARENT → /portal, everyone else → /dashboard
  */
 function HomeRedirect(): JSX.Element {
   const { state } = useAuth();
   if (state.status === 'authenticated') {
-    return <Navigate to={state.user.role === 'PARENT' ? '/portal' : '/students'} replace />;
+    return <Navigate to={state.user.role === 'PARENT' ? '/portal' : '/dashboard'} replace />;
   }
   return <Navigate to="/login" replace />;
 }
@@ -55,6 +55,7 @@ export function App(): JSX.Element {
             <Route element={<AuthGuard />}>
               <Route element={<Layout />}>
                 <Route path="/portal" element={<ParentDashboardPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/students" element={<StudentsPage />} />
                 <Route path="/tracking" element={<DailyTrackingPage />} />
                 <Route path="/attendance" element={<AttendancePage />} />
