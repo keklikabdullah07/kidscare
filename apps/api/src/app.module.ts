@@ -20,8 +20,8 @@ import { ActivitiesModule } from './modules/activities/activities.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ThrottlerModule.forRoot([
-      { name: 'short', ttl: 1_000, limit: 10 },
-      { name: 'long', ttl: 60_000, limit: 200 },
+      { name: 'short', ttl: 1_000, limit: 30 },
+      { name: 'long', ttl: 60_000, limit: 500 },
     ]),
     TenantContextModule,
     PrismaModule,
