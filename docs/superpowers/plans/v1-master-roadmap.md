@@ -62,6 +62,17 @@ Projenin teknik omurgası sağlam; ancak bir kullanıcının _"Bu ürün bitmiş
 - [x] Hazır alerjen seçim etiketleri ve özel alerjen ekleme.
 - [x] Kalori ve aşçı notu alanları.
 
+### 📌 Adım 6: Veli Portalı & Etkinlik Galerisi (✅ Tamamlandı)
+
+- [x] **Veli Portalı (`/portal`):** Çocuk başlık kartı, bugünün yoklama rozeti, gün sonu karnesi, günün menüsü, alerjen uyarısı ve sağlık pasaportu özeti.
+- [x] **Etkinlik Galerisi (`/gallery`):** Etkinlik/fotoğraf paylaşma modalı, kategori etiketleri (`#Sanat`, `#Oyun`, `#Müzik`), tam ekran lightbox görüntüleyici.
+
+### 📌 Adım 7: Kreş & Kurum Ayarları (✅ Tamamlandı)
+
+- [x] **Kurum Profili (`/settings`):** Kurumsal isim düzenleme, sistem slug göstergesi, yerleşke ve iletişim alanları.
+- [x] **Kapasite & Lisans Paneli:** Aktif lisans rozeti, öğrenci kontenjan çubuğu (% doluluk), kuruluş tarihi ve tenant RLS güvenlik durumu.
+- [x] **Operasyonel Tercihler:** Akıllı alerjen çapraz tarama, güvenli veli teslimat kontrolü ve gün sonu karne bildirim switch'leri.
+
 ---
 
 ## 🎯 V1 Bitiş Kriteri (Definition of Done)
