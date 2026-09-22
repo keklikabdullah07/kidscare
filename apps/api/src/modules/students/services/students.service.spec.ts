@@ -7,6 +7,7 @@ const mockStudent: PrismaStudent = {
   id: 's-1',
   tenantId: 't-1',
   parentId: null,
+  classroomId: null,
   firstName: 'Ada',
   lastName: 'Yılmaz',
   dateOfBirth: new Date('2020-05-12'),
@@ -38,7 +39,10 @@ describe('StudentsService', () => {
       update: jest.fn(),
       softDelete: jest.fn(),
     };
-    service = new StudentsService(repo);
+    const usersService = {
+      assertParentUser: jest.fn().mockResolvedValue(undefined),
+    };
+    service = new StudentsService(repo, usersService as never);
   });
 
   describe('findAll', () => {
@@ -118,6 +122,7 @@ describe('StudentsService', () => {
         gender: null,
         notes: null,
         passport: {},
+        parentId: null,
       });
     });
   });

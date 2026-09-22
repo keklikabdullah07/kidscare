@@ -58,7 +58,11 @@ describe('StudentsController', () => {
   describe('findOne', () => {
     it('returns serialized student', async () => {
       service.findOne.mockResolvedValue(entity);
-      const result = await controller.findOne('t-1', 's-1');
+      const result = await controller.findOne('t-1', 's-1', {
+        tenantId: 't-1',
+        userId: 'u-1',
+        role: 'ADMIN',
+      });
       expect(result.id).toBe('s-1');
     });
   });
@@ -73,7 +77,11 @@ describe('StudentsController', () => {
         regularMedications: [],
         emergencyContacts: [],
       });
-      const result = await controller.getPassport('t-1', 's-1');
+      const result = await controller.getPassport('t-1', 's-1', {
+        tenantId: 't-1',
+        userId: 'u-1',
+        role: 'ADMIN',
+      });
       expect(result.bloodType).toBe('A+');
       expect(result.allergies).toContain('Fıstık');
     });

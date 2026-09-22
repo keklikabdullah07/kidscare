@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   Inject,
   Param,
@@ -23,6 +22,7 @@ import {
 } from '../../../common/decorators/current-user.decorator';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import { ActivitiesService } from '../services/activities.service';
 
@@ -32,6 +32,7 @@ export class ActivitiesController {
   constructor(@Inject(ActivitiesService) private readonly activitiesService: ActivitiesService) {}
 
   @Get()
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async list(
     @CurrentTenantId() tenantId: string,
     @Query(new ZodValidationPipe(activityFilterQuerySchema)) query: ActivityFilterQueryInput,
@@ -40,6 +41,7 @@ export class ActivitiesController {
   }
 
   @Get(':id')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async getById(
     @CurrentTenantId() tenantId: string,
     @Param('id') id: string,
@@ -48,33 +50,20 @@ export class ActivitiesController {
   }
 
   @Post()
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async create(
     @CurrentUser() user: CurrentUserPayload,
     @Body(new ZodValidationPipe(createActivityPostSchema)) body: CreateActivityPostInput,
   ): Promise<ActivityPost> {
-    if (
-      user.role !== 'ADMIN' &&
-      user.role !== 'TEACHER' &&
-      (user.role as string) !== 'SUPER_ADMIN'
-    ) {
-      throw new ForbiddenException('Only teachers and admins can post activities');
-    }
     return this.activitiesService.create(user.tenantId, user.userId, body);
   }
 
   @Delete(':id')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async delete(
-    @CurrentUser() user: CurrentUserPayload,
     @CurrentTenantId() tenantId: string,
     @Param('id') id: string,
   ): Promise<{ success: boolean }> {
-    if (
-      user.role !== 'ADMIN' &&
-      user.role !== 'TEACHER' &&
-      (user.role as string) !== 'SUPER_ADMIN'
-    ) {
-      throw new ForbiddenException('Only teachers and admins can delete activities');
-    }
     return this.activitiesService.delete(tenantId, id);
   }
 }

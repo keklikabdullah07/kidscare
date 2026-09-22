@@ -147,6 +147,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   parentId: 'parentId',
+  classroomId: 'classroomId',
   firstName: 'firstName',
   lastName: 'lastName',
   dateOfBirth: 'dateOfBirth',
@@ -157,6 +158,25 @@ exports.Prisma.StudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ClassroomScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  ageGroup: 'ageGroup',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClassroomTeacherScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  classroomId: 'classroomId',
+  teacherId: 'teacherId',
+  assignedAt: 'assignedAt',
+  removedAt: 'removedAt'
 };
 
 exports.Prisma.DailyReportScalarFieldEnum = {
@@ -222,6 +242,141 @@ exports.Prisma.ActivityPostScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.PickupContactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  fullName: 'fullName',
+  relation: 'relation',
+  phone: 'phone',
+  identityNote: 'identityNote',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PickupAuthorizationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  pickupContactId: 'pickupContactId',
+  requestedById: 'requestedById',
+  reviewedById: 'reviewedById',
+  status: 'status',
+  validFrom: 'validFrom',
+  validUntil: 'validUntil',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PickupEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  pickupContactId: 'pickupContactId',
+  authorizationId: 'authorizationId',
+  pickupPersonName: 'pickupPersonName',
+  pickupPersonPhone: 'pickupPersonPhone',
+  verificationMethod: 'verificationMethod',
+  verifiedByUserId: 'verifiedByUserId',
+  occurredAt: 'occurredAt',
+  note: 'note'
+};
+
+exports.Prisma.MedicationRecordScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  medicationName: 'medicationName',
+  dosage: 'dosage',
+  instructions: 'instructions',
+  scheduledAt: 'scheduledAt',
+  givenAt: 'givenAt',
+  status: 'status',
+  requestedById: 'requestedById',
+  approvedById: 'approvedById',
+  administeredById: 'administeredById',
+  parentApprovalNote: 'parentApprovalNote',
+  rejectionReason: 'rejectionReason',
+  skipReason: 'skipReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ConversationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  subject: 'subject',
+  category: 'category',
+  status: 'status',
+  isCritical: 'isCritical',
+  studentId: 'studentId',
+  createdById: 'createdById',
+  lastMessageAt: 'lastMessageAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ConversationParticipantScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  conversationId: 'conversationId',
+  userId: 'userId',
+  joinedAt: 'joinedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  content: 'content',
+  isCritical: 'isCritical',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageReadReceiptScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  messageId: 'messageId',
+  userId: 'userId',
+  readAt: 'readAt'
+};
+
+exports.Prisma.ParentRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  parentId: 'parentId',
+  studentId: 'studentId',
+  type: 'type',
+  subject: 'subject',
+  description: 'description',
+  status: 'status',
+  resolvedById: 'resolvedById',
+  resolvedAt: 'resolvedAt',
+  resolutionNote: 'resolutionNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.IncidentRecordScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  category: 'category',
+  occurredAt: 'occurredAt',
+  description: 'description',
+  actionTaken: 'actionTaken',
+  parentNotified: 'parentNotified',
+  parentNotifiedAt: 'parentNotifiedAt',
+  parentNotifiedById: 'parentNotifiedById',
+  reportedById: 'reportedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -264,14 +419,90 @@ exports.UserRole = exports.$Enums.UserRole = {
   PARENT: 'PARENT'
 };
 
+exports.PickupAuthorizationStatus = exports.$Enums.PickupAuthorizationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED'
+};
+
+exports.PickupVerificationMethod = exports.$Enums.PickupVerificationMethod = {
+  ID_CHECK: 'ID_CHECK',
+  PHONE_CONFIRM: 'PHONE_CONFIRM',
+  PASSWORD: 'PASSWORD',
+  KNOWN_FACE: 'KNOWN_FACE',
+  OTHER: 'OTHER'
+};
+
+exports.MedicationStatus = exports.$Enums.MedicationStatus = {
+  REQUESTED: 'REQUESTED',
+  APPROVED: 'APPROVED',
+  SCHEDULED: 'SCHEDULED',
+  GIVEN: 'GIVEN',
+  SKIPPED: 'SKIPPED',
+  REJECTED: 'REJECTED'
+};
+
+exports.ConversationCategory = exports.$Enums.ConversationCategory = {
+  ACIL: 'ACIL',
+  SAGLIK: 'SAGLIK',
+  IZIN: 'IZIN',
+  TESLIM: 'TESLIM',
+  GUNLUK_BILGI: 'GUNLUK_BILGI',
+  DUYURU: 'DUYURU',
+  ODEME: 'ODEME',
+  RANDEVU: 'RANDEVU'
+};
+
+exports.ConversationStatus = exports.$Enums.ConversationStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.ParentRequestType = exports.$Enums.ParentRequestType = {
+  IZIN: 'IZIN',
+  BILGI_TALEP: 'BILGI_TALEP',
+  DEGISIKLIK: 'DEGISIKLIK',
+  DIGER: 'DIGER'
+};
+
+exports.ParentRequestStatus = exports.$Enums.ParentRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.IncidentCategory = exports.$Enums.IncidentCategory = {
+  DUSME: 'DUSME',
+  YARALANMA: 'YARALANMA',
+  HASTALIK: 'HASTALIK',
+  DAVRANIS: 'DAVRANIS',
+  KAZA: 'KAZA',
+  DIGER: 'DIGER'
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
   Student: 'Student',
+  Classroom: 'Classroom',
+  ClassroomTeacher: 'ClassroomTeacher',
   DailyReport: 'DailyReport',
   Attendance: 'Attendance',
   DailyMenu: 'DailyMenu',
-  ActivityPost: 'ActivityPost'
+  ActivityPost: 'ActivityPost',
+  PickupContact: 'PickupContact',
+  PickupAuthorization: 'PickupAuthorization',
+  PickupEvent: 'PickupEvent',
+  MedicationRecord: 'MedicationRecord',
+  Conversation: 'Conversation',
+  ConversationParticipant: 'ConversationParticipant',
+  Message: 'Message',
+  MessageReadReceipt: 'MessageReadReceipt',
+  ParentRequest: 'ParentRequest',
+  IncidentRecord: 'IncidentRecord'
 };
 
 /**

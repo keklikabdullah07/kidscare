@@ -8,6 +8,7 @@ import type {
   PottyType,
   Student,
   StudentMood,
+  MedicationEntry,
 } from '@kidscare/shared-types';
 import { getStudentDailyReport, saveStudentDailyReport } from '../../api/daily-reports';
 
@@ -107,6 +108,14 @@ export function DailyReportEditorModal({
   const [activities, setActivities] = useState<string[]>([]);
   const [teacherNote, setTeacherNote] = useState('');
 
+  // Medication & Health state
+  const [medications, setMedications] = useState<MedicationEntry[]>([]);
+  const [medName, setMedName] = useState('');
+  const [medTime, setMedTime] = useState('13:00');
+  const [medDosage, setMedDosage] = useState('');
+  const [medTemperature, setMedTemperature] = useState('');
+  const [medNotes, setMedNotes] = useState('');
+
   useEffect(() => {
     if (!student) return;
     let cancelled = false;
@@ -131,6 +140,7 @@ export function DailyReportEditorModal({
           setPottyEntries(report.potty ?? []);
           setActivities(report.activities ?? []);
           setTeacherNote(report.teacherNote ?? '');
+          setMedications(report.medications ?? []);
         } else {
           // Reset for new
           setMood(undefined);
@@ -145,6 +155,12 @@ export function DailyReportEditorModal({
           setPottyEntries([]);
           setActivities([]);
           setTeacherNote('');
+          setMedications([]);
+          setMedName('');
+          setMedTime('13:00');
+          setMedDosage('');
+          setMedTemperature('');
+          setMedNotes('');
         }
         setLoading(false);
       })
@@ -178,6 +194,46 @@ export function DailyReportEditorModal({
     setPottyEntries((prev) => prev.filter((p) => p.id !== id));
   }
 
+  function addMedication(): void {
+    if (!medName.trim()) return;
+    const tempNum = medTemperature ? parseFloat(medTemperature) : undefined;
+    const newMed: MedicationEntry = {
+      id: `med-${Date.now()}`,
+      name: medName.trim(),
+      time: medTime.trim() || '13:00',
+      givenBy: 'Öğretmen',
+      dosage: medDosage.trim() || undefined,
+      status: 'SCHEDULED',
+      requestedBy: 'Veli',
+      temperature: tempNum && !isNaN(tempNum) ? tempNum : undefined,
+      notes: medNotes.trim() || undefined,
+    };
+    setMedications((prev) => [...prev, newMed]);
+    setMedName('');
+    setMedDosage('');
+    setMedTemperature('');
+    setMedNotes('');
+  }
+
+  function toggleMedicationStatus(id: string): void {
+    const nowStr = new Date().toTimeString().slice(0, 5);
+    setMedications((prev) =>
+      prev.map((m) => {
+        if (m.id !== id) return m;
+        const newStatus = m.status === 'GIVEN' ? 'SCHEDULED' : 'GIVEN';
+        return {
+          ...m,
+          status: newStatus,
+          givenAt: newStatus === 'GIVEN' ? nowStr : undefined,
+        };
+      }),
+    );
+  }
+
+  function removeMedication(id: string): void {
+    setMedications((prev) => prev.filter((m) => m.id !== id));
+  }
+
   async function handleSave(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     if (!student || saving) return;
@@ -202,6 +258,7 @@ export function DailyReportEditorModal({
         potty: pottyEntries,
         activities,
         teacherNote: teacherNote.trim() || undefined,
+        medications: medications.length > 0 ? medications : undefined,
       };
 
       const saved = await saveStudentDailyReport(student.id, date, payload);
@@ -500,6 +557,126 @@ export function DailyReportEditorModal({
                   );
                 })}
               </div>
+            </div>
+
+            {/* Medication & Health Section */}
+            <div className="rounded-lg border border-rose-100 p-4 bg-rose-50/30 space-y-3">
+              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+                <span>💊</span> İlaç Takip & Sağlık
+              </h3>
+
+              {/* Add medication form */}
+              <div className="bg-white rounded-md border border-rose-100 p-3 space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <input
+                    type="text"
+                    value={medName}
+                    onChange={(e) => setMedName(e.target.value)}
+                    placeholder="İlaç adı (ör: Nurofen)"
+                    className="col-span-1 sm:col-span-2 rounded-md border border-gray-300 px-2.5 py-1.5 text-xs text-gray-800 focus:border-rose-400 focus:outline-hidden"
+                  />
+                  <input
+                    type="time"
+                    value={medTime}
+                    onChange={(e) => setMedTime(e.target.value)}
+                    className="rounded-md border border-gray-300 px-2.5 py-1.5 text-xs"
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <input
+                    type="text"
+                    value={medDosage}
+                    onChange={(e) => setMedDosage(e.target.value)}
+                    placeholder="Doz (ör: 5 ml)"
+                    className="rounded-md border border-gray-300 px-2.5 py-1.5 text-xs text-gray-800 focus:border-rose-400 focus:outline-hidden"
+                  />
+                  <input
+                    type="number"
+                    value={medTemperature}
+                    onChange={(e) => setMedTemperature(e.target.value)}
+                    placeholder="Ateş (°C)"
+                    step="0.1"
+                    min="35"
+                    max="42"
+                    className="rounded-md border border-gray-300 px-2.5 py-1.5 text-xs text-gray-800 focus:border-rose-400 focus:outline-hidden"
+                  />
+                  <input
+                    type="text"
+                    value={medNotes}
+                    onChange={(e) => setMedNotes(e.target.value)}
+                    placeholder="Not (ör: veli istedi)"
+                    className="rounded-md border border-gray-300 px-2.5 py-1.5 text-xs text-gray-800 focus:border-rose-400 focus:outline-hidden"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={addMedication}
+                  disabled={!medName.trim()}
+                  className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-xs font-semibold disabled:opacity-40 transition-colors"
+                >
+                  + İlaç Kaydı Ekle
+                </button>
+              </div>
+
+              {/* Medication list */}
+              {medications.length > 0 && (
+                <div className="space-y-1.5">
+                  {medications.map((med) => {
+                    const isGiven = med.status === 'GIVEN';
+                    return (
+                      <div
+                        key={med.id}
+                        className={`flex items-center gap-2 p-2.5 rounded-md border text-xs transition-colors ${
+                          isGiven
+                            ? 'bg-green-50 border-green-200'
+                            : 'bg-white border-gray-200'
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => toggleMedicationStatus(med.id)}
+                          title={isGiven ? 'Verildi olarak işaretlendi' : 'Verildi olarak işaretle'}
+                          className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                            isGiven
+                              ? 'bg-green-500 border-green-500 text-white'
+                              : 'border-gray-300 hover:border-green-400'
+                          }`}
+                        >
+                          {isGiven && <span className="text-[10px] leading-none">✓</span>}
+                        </button>
+                        <div className="flex-1 min-w-0">
+                          <span className={`font-semibold ${ isGiven ? 'text-green-800' : 'text-gray-800' }`}>
+                            {med.name}
+                          </span>
+                          <span className="text-gray-400 mx-1">·</span>
+                          <span className="text-gray-500">{med.time}</span>
+                          {med.dosage && (
+                            <span className="ml-1 text-gray-500">({med.dosage})</span>
+                          )}
+                          {med.temperature !== undefined && (
+                            <span className={`ml-1.5 font-medium ${ med.temperature >= 38 ? 'text-red-600' : 'text-gray-600' }`}>
+                              🌡️ {med.temperature.toFixed(1)}°C
+                            </span>
+                          )}
+                          {isGiven && med.givenAt && (
+                            <span className="ml-1.5 text-green-600">✓ {med.givenAt}'de verildi</span>
+                          )}
+                          {med.notes && (
+                            <span className="ml-1 text-gray-400 italic">— {med.notes}</span>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeMedication(med.id)}
+                          className="flex-shrink-0 text-red-400 hover:text-red-600 font-bold text-base leading-none px-1"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Teacher Note */}

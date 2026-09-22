@@ -18,6 +18,12 @@ export default defineConfig({
       '/daily-menus': { target: API_TARGET, changeOrigin: true },
       '/parent': { target: API_TARGET, changeOrigin: true },
       '/activities': { target: API_TARGET, changeOrigin: true },
+      '/users': { target: API_TARGET, changeOrigin: true },
+      '/classrooms': { target: API_TARGET, changeOrigin: true },
+      '/pickup': { target: API_TARGET, changeOrigin: true },
+      '/medication': { target: API_TARGET, changeOrigin: true },
+      '/messaging': { target: API_TARGET, changeOrigin: true },
+      '/incidents': { target: API_TARGET, changeOrigin: true },
     },
   },
   // Workspace deps expose TS source as `main`. Exclude them from the

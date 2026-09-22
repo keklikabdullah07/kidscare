@@ -10,6 +10,6 @@ import { AuthLookupRepository } from './repositories/auth-lookup.repository';
   providers: [AuthService, JwtService, PasswordService, AuthLookupRepository],
   // JwtService is consumed by AuthMiddleware (wired in TenantContextModule)
   // and by AuthController (via AuthService). Export so both can inject it.
-  exports: [JwtService],
+  exports: [JwtService, PasswordService],
 })
 export class AuthModule {}

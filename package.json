@@ -6,12 +6,6 @@
   "engines": {
     "node": ">=20"
   },
-  "pnpm": {
-    "overrides": {
-      "react": "^19.3.0",
-      "react-dom": "^19.3.0"
-    }
-  },
   "scripts": {
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",

@@ -20,7 +20,7 @@ import { listStudents } from '../../api/students';
 import { getAttendanceByDate } from '../../api/attendance';
 import { getDailyReportsByDate } from '../../api/daily-reports';
 import { getDailyMenu, type DailyMenuResponse } from '../../api/daily-menus';
-import type { Attendance, DailyReport, Student } from '@kidscare/shared-types';
+import type { Attendance, DailyReport, Student, StudentPassport } from '@kidscare/shared-types';
 
 export function DashboardPage(): JSX.Element {
   const { state } = useAuth();
@@ -74,10 +74,9 @@ export function DashboardPage(): JSX.Element {
 
   // Alerjisi veya sağlık notu olan öğrenciler
   const studentsWithAllergies = students.filter((s) => {
-    const passport = s.passport as { allergies?: string[]; medicalNotes?: string } | undefined;
+    const passport: StudentPassport | null | undefined = s.passport;
     return (
       (passport?.allergies && passport.allergies.length > 0) ||
-      (passport?.medicalNotes && passport.medicalNotes.trim().length > 0) ||
       (s.notes && s.notes.trim().length > 0)
     );
   });
@@ -372,8 +371,7 @@ export function DashboardPage(): JSX.Element {
             {studentsWithAllergies.length > 0 ? (
               <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
                 {studentsWithAllergies.map((s) => {
-                  const passport = s.passport as
-                    { allergies?: string[]; medicalNotes?: string } | undefined;
+                  const passport: StudentPassport | null | undefined = s.passport;
                   const allergies = passport?.allergies ?? [];
                   return (
                     <div
@@ -392,9 +390,9 @@ export function DashboardPage(): JSX.Element {
                       {allergies.length > 0 && (
                         <p className="text-rose-900 font-semibold">⚠️ {allergies.join(', ')}</p>
                       )}
-                      {(passport?.medicalNotes || s.notes) && (
+                      {(passport?.specialNotes || s.notes) && (
                         <p className="text-slate-600 text-[11px]">
-                          {passport?.medicalNotes || s.notes}
+                          {passport?.specialNotes || s.notes}
                         </p>
                       )}
                     </div>

@@ -39,12 +39,19 @@ export const pottyEntrySchema = z
   })
   .strict();
 
+export const medicationStatusSchema = z.enum(['SCHEDULED', 'GIVEN', 'SKIPPED']);
+
 export const medicationEntrySchema = z
   .object({
     id: z.string().min(1),
     name: z.string().min(1).max(100),
     time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
     givenBy: z.string().min(1).max(100),
+    dosage: z.string().max(100).optional(),
+    status: medicationStatusSchema.optional(),
+    requestedBy: z.string().max(100).optional(),
+    givenAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).optional(),
+    temperature: z.number().min(30).max(45).optional(),
     notes: z.string().max(500).optional(),
   })
   .strict();
@@ -60,6 +67,16 @@ export const dailyReportInputSchema = z
     activities: z.array(z.string().min(1).max(100)).optional(),
     medications: z.array(medicationEntrySchema).optional(),
     teacherNote: z.string().max(1000).optional(),
+  })
+  .strict();
+
+export const bulkDailyReportItemSchema = dailyReportInputSchema.extend({
+  studentId: z.string().min(1),
+});
+
+export const bulkDailyReportsInputSchema = z
+  .object({
+    items: z.array(bulkDailyReportItemSchema).min(1).max(100),
   })
   .strict();
 
@@ -85,7 +102,10 @@ export type NapQuality = z.infer<typeof napQualitySchema>;
 export type NapData = z.infer<typeof napSchema>;
 export type PottyType = z.infer<typeof pottyTypeSchema>;
 export type PottyEntry = z.infer<typeof pottyEntrySchema>;
+export type MedicationStatus = z.infer<typeof medicationStatusSchema>;
 export type MedicationEntry = z.infer<typeof medicationEntrySchema>;
 export type StudentMood = z.infer<typeof studentMoodSchema>;
 export type DailyReportInput = z.infer<typeof dailyReportInputSchema>;
+export type BulkDailyReportItem = z.infer<typeof bulkDailyReportItemSchema>;
+export type BulkDailyReportsInput = z.infer<typeof bulkDailyReportsInputSchema>;
 export type DailyReport = z.infer<typeof dailyReportSchema>;

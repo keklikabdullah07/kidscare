@@ -29,6 +29,7 @@ export function createStudent(payload: {
   dateOfBirth: string;
   gender?: string;
   notes?: string;
+  parentId?: string | null;
   passport?: StudentPassport;
 }): Promise<Student> {
   return apiFetch<Student>('/students', {
@@ -47,6 +48,7 @@ export function updateStudent(
     notes: string | null;
     passport: StudentPassport | null;
     isActive: boolean;
+    parentId: string | null;
   }>,
 ): Promise<Student> {
   return apiFetch<Student>(`/students/${id}`, {

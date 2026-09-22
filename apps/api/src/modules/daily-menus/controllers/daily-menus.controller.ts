@@ -15,6 +15,7 @@ import {
 import type { z } from 'zod';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import {
   dailyMenuCreateInputSchema,
   dailyMenuUpdateInputSchema,
@@ -33,6 +34,7 @@ export class DailyMenusController {
   constructor(@Inject(DailyMenusService) private readonly service: DailyMenusService) {}
 
   @Get()
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async getByDate(
     @CurrentTenantId() tenantId: string,
     @Query('date') dateQuery?: string,
@@ -47,6 +49,7 @@ export class DailyMenusController {
   }
 
   @Get('range')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async getByRange(
     @CurrentTenantId() tenantId: string,
     @Query('from') from: string,
@@ -60,6 +63,7 @@ export class DailyMenusController {
   }
 
   @Post()
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   @HttpCode(201)
   async create(
     @CurrentTenantId() tenantId: string,
@@ -73,6 +77,7 @@ export class DailyMenusController {
   }
 
   @Put(':date')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   @HttpCode(200)
   async update(
     @CurrentTenantId() tenantId: string,
@@ -87,6 +92,7 @@ export class DailyMenusController {
   }
 
   @Delete(':date')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   @HttpCode(204)
   async delete(@CurrentTenantId() tenantId: string, @Param('date') date: string): Promise<void> {
     await this.service.delete(tenantId, date);

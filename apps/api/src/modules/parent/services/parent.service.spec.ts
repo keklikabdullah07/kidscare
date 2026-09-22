@@ -12,6 +12,7 @@ const mockStudent: PrismaStudent = {
   id: 's-1',
   tenantId: 't-1',
   parentId: 'parent-1',
+  classroomId: null,
   firstName: 'Ada',
   lastName: 'Yılmaz',
   dateOfBirth: new Date('2020-05-12'),
@@ -99,5 +100,15 @@ describe('ParentService', () => {
     expect(result[0]?.todayAttendance?.checkInTime).toBe('08:30');
     expect(result[0]?.todayDailyReport?.mood).toBe('HAPPY');
     expect(result[0]?.todayDailyReport?.teacherNote).toBe('Harika bir gündü!');
+  });
+
+  it('does not expose other students when the parent has no linked child', async () => {
+    studentsRepo.findMany.mockResolvedValue([mockStudent]);
+
+    const result = await service.getChildrenOverview('t-1', 'unlinked-parent', 'PARENT', '2026-09-15');
+
+    expect(result).toEqual([]);
+    expect(attendanceRepo.findByStudentAndDate).not.toHaveBeenCalled();
+    expect(dailyReportsRepo.findByStudentAndDate).not.toHaveBeenCalled();
   });
 });

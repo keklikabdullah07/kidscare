@@ -11,7 +11,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
+import {
+  CurrentUser,
+  type CurrentUserPayload,
+} from '../../../common/decorators/current-user.decorator';
+import { assertStudentVisibleToUser } from '../../../common/utils/student-access';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import {
   attendanceUpdateInputSchema,
   checkInInputSchema,
@@ -24,11 +30,16 @@ import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import type { Attendance } from '../entities/attendance.entity';
 import { AttendanceResponseDto } from '../dto/attendance-response.dto';
 import { AttendanceService } from '../services/attendance.service';
+import { StudentsService } from '../../students/services/students.service';
 
 @Controller()
 @UseGuards(TenantGuard)
+@Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
 export class AttendanceController {
-  constructor(@Inject(AttendanceService) private readonly service: AttendanceService) {}
+  constructor(
+    @Inject(AttendanceService) private readonly service: AttendanceService,
+    @Inject(StudentsService) private readonly studentsService: StudentsService,
+  ) {}
 
   @Get('attendance')
   async findByDate(
@@ -42,11 +53,15 @@ export class AttendanceController {
   }
 
   @Get('students/:studentId/attendance/:date')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async findByStudentAndDate(
     @CurrentTenantId() tenantId: string,
     @Param('studentId') studentId: string,
     @Param('date') date: string,
+    @CurrentUser() user: CurrentUserPayload,
   ): Promise<AttendanceResponseDto | null> {
+    const student = await this.studentsService.findOne(tenantId, studentId);
+    assertStudentVisibleToUser(student, user.role, user.userId);
     const item = await this.service.findByStudentAndDate(tenantId, studentId, date);
     return item ? this.toResponse(item) : null;
   }

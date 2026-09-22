@@ -419,6 +419,72 @@ export function ParentDashboardPage(): JSX.Element {
                       </p>
                     </div>
                   )}
+
+                  {/* Medications & Health */}
+                  {activeChildOverview.todayDailyReport.medications &&
+                    activeChildOverview.todayDailyReport.medications.length > 0 && (
+                      <div className="space-y-2">
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                          💊 İlaç Takip & Sağlık
+                        </span>
+                        <div className="space-y-1.5">
+                          {activeChildOverview.todayDailyReport.medications.map((med, i) => {
+                            const isGiven = med.status === 'GIVEN';
+                            return (
+                              <div
+                                key={med.id ?? i}
+                                className={`p-3 rounded-xl border text-xs flex items-start gap-2.5 ${
+                                  isGiven
+                                    ? 'bg-emerald-50/60 border-emerald-200'
+                                    : 'bg-slate-50 border-slate-200'
+                                }`}
+                              >
+                                <span
+                                  className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                    isGiven
+                                      ? 'bg-emerald-500 border-emerald-500 text-white'
+                                      : 'border-slate-300'
+                                  }`}
+                                >
+                                  {isGiven && <span className="text-[10px] leading-none">✓</span>}
+                                </span>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-1.5 flex-wrap">
+                                    <span className={`font-bold ${isGiven ? 'text-emerald-800' : 'text-slate-800'}`}>
+                                      {med.name}
+                                    </span>
+                                    <span className="text-slate-400">·</span>
+                                    <span className="text-slate-600">{med.time}</span>
+                                    {med.dosage && (
+                                      <span className="text-slate-500">({med.dosage})</span>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                    {med.temperature !== undefined && med.temperature !== null && (
+                                      <span className={`font-semibold ${med.temperature >= 38 ? 'text-rose-600' : 'text-slate-600'}`}>
+                                        🌡️ {med.temperature.toFixed(1)}°C
+                                      </span>
+                                    )}
+                                    {isGiven ? (
+                                      <span className="text-emerald-700 font-medium">
+                                        ✓ Verildi{med.givenAt ? ` (${med.givenAt})` : ''}
+                                      </span>
+                                    ) : (
+                                      <span className="text-amber-600 font-medium">
+                                        ⏳ Planlandı
+                                      </span>
+                                    )}
+                                    {med.notes && (
+                                      <span className="text-slate-400 italic">— {med.notes}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                 </div>
               ) : (
                 <div className="py-12 text-center text-slate-400">
