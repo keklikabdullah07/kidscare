@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { getActivities, createActivity, deleteActivity } from '../../api/activities';
 import { useToast } from '../../components/Toast';
+import { useAuth } from '../auth/AuthContext';
 
 const PRESET_PHOTOS = [
   {
@@ -43,12 +44,15 @@ const PRESET_PHOTOS = [
 const FILTER_TAGS = ['Hepsi', 'Sanat', 'Oyun', 'Bahçe', 'Müzik', 'Resim', 'Gelişim'];
 
 export function ActivityGalleryPage(): JSX.Element {
+  const { state: authState } = useAuth();
   const [posts, setPosts] = useState<ActivityPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState('Hepsi');
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [activeLightboxImg, setActiveLightboxImg] = useState<string | null>(null);
+
+  const canEdit = authState.status === 'authenticated' && authState.user.role !== 'PARENT';
 
   // Form states
   const [title, setTitle] = useState('');
@@ -173,14 +177,16 @@ export function ActivityGalleryPage(): JSX.Element {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsCreateOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Yeni Etkinlik Paylaş</span>
-        </button>
+        {canEdit && (
+          <button
+            type="button"
+            onClick={() => setIsCreateOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Yeni Etkinlik Paylaş</span>
+          </button>
+        )}
       </div>
 
       {/* Filter Tags */}
@@ -237,14 +243,16 @@ export function ActivityGalleryPage(): JSX.Element {
             Öğrencilerin sınıf içi ve bahçe aktivitelerinden fotoğraflar yükleyerek velilere görsel
             güncellemeler sunun.
           </p>
-          <button
-            type="button"
-            onClick={() => setIsCreateOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>İlk Etkinliği Paylaş</span>
-          </button>
+          {canEdit && (
+            <button
+              type="button"
+              onClick={() => setIsCreateOpen(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>İlk Etkinliği Paylaş</span>
+            </button>
+          )}
         </div>
       ) : (
         /* Activity Grid */
@@ -277,16 +285,18 @@ export function ActivityGalleryPage(): JSX.Element {
                       {post.title}
                     </h2>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      void handleDelete(post.id);
-                    }}
-                    title="Etkinliği Sil"
-                    className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {canEdit && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        void handleDelete(post.id);
+                      }}
+                      title="Etkinliği Sil"
+                      className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
 
                 {/* Photo Grid */}

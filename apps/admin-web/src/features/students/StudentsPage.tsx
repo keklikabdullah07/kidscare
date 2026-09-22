@@ -16,7 +16,10 @@ import {
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { createStudent, deleteStudent, listStudents, updateStudent } from '../../api/students';
+import { listUsers } from '../../api/users';
+import type { User } from '@kidscare/shared-types';
 import { StudentPassportModal } from './StudentPassportModal';
+import { PickupContactsModal } from './PickupContactsModal';
 import { useToast } from '../../components/Toast';
 
 type Status = 'loading' | 'ready' | 'error';
@@ -30,6 +33,7 @@ export function StudentsPage(): JSX.Element {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [passportStudent, setPassportStudent] = useState<Student | null>(null);
+  const [pickupContactsStudent, setPickupContactsStudent] = useState<Student | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -322,6 +326,7 @@ export function StudentsPage(): JSX.Element {
                   key={s.id}
                   student={s}
                   onOpenPassport={() => setPassportStudent(s)}
+                  onOpenPickupContacts={() => setPickupContactsStudent(s)}
                   onEdit={() => setEditingStudent(s)}
                   onDelete={() => void handleDelete(s.id, `${s.firstName} ${s.lastName}`)}
                 />
@@ -489,6 +494,14 @@ export function StudentsPage(): JSX.Element {
           onSaved={(updated) => handlePassportSaved(passportStudent.id, updated)}
         />
       )}
+
+      {/* Pickup Contacts Modal */}
+      {pickupContactsStudent && (
+        <PickupContactsModal
+          student={pickupContactsStudent}
+          onClose={() => setPickupContactsStudent(null)}
+        />
+      )}
     </div>
   );
 }
@@ -497,11 +510,13 @@ export function StudentsPage(): JSX.Element {
 function StudentCard({
   student,
   onOpenPassport,
+  onOpenPickupContacts,
   onEdit,
   onDelete,
 }: {
   student: Student;
   onOpenPassport: () => void;
+  onOpenPickupContacts: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }): JSX.Element {
@@ -639,6 +654,14 @@ function StudentCard({
           <FileText className="w-3.5 h-3.5" />
           <span>Pasaport & Sağlık</span>
         </button>
+        <button
+          type="button"
+          onClick={onOpenPickupContacts}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-semibold text-xs transition"
+        >
+          <Users className="w-3.5 h-3.5" />
+          <span>Teslim Kişileri</span>
+        </button>
 
         <div className="flex items-center gap-1">
           <button
@@ -681,8 +704,16 @@ function StudentFormModal({
   const [gender, setGender] = useState(initialStudent?.gender || '');
   const [notes, setNotes] = useState(initialStudent?.notes || '');
   const [isActive, setIsActive] = useState(initialStudent?.isActive ?? true);
+  const [parentId, setParentId] = useState(initialStudent?.parentId ?? '');
+  const [parents, setParents] = useState<User[]>([]);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  useEffect(() => {
+    listUsers('PARENT')
+      .then(setParents)
+      .catch(() => setParents([]));
+  }, []);
 
   async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
@@ -700,6 +731,7 @@ function StudentFormModal({
           gender: gender || null,
           notes: notes.trim() || null,
           isActive,
+          parentId: parentId || null,
         });
         onSaved(updated);
       } else {
@@ -711,6 +743,7 @@ function StudentFormModal({
         };
         if (gender) payload.gender = gender;
         if (notes.trim()) payload.notes = notes.trim();
+        if (parentId) payload.parentId = parentId;
         const created = await createStudent(payload);
         onSaved(created);
       }
@@ -809,6 +842,25 @@ function StudentFormModal({
               placeholder="Öğrenciye dair özel notlar, alışkanlıklar..."
               className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
+          </label>
+
+          <label className="block">
+            <span className="block text-xs font-semibold text-slate-700 mb-1">Veli hesabı</span>
+            <select
+              value={parentId}
+              onChange={(e) => setParentId(e.target.value)}
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white"
+            >
+              <option value="">Veli atanmadı</option>
+              {parents.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.email}
+                </option>
+              ))}
+            </select>
+            <p className="text-[11px] text-slate-500 mt-1">
+              Veli hesabı yoksa önce Ekip & Veliler sayfasından oluşturun.
+            </p>
           </label>
 
           {initialStudent && (

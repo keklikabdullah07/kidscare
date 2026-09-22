@@ -85,4 +85,58 @@ describe('DailyReportsRepository', () => {
       update: { mood: 'HAPPY' },
     });
   });
+
+  it('bulkUpsert calls prisma upsert once per item and returns rows in order', async () => {
+    const upsert = jest
+      .fn()
+      .mockImplementation(
+        async ({
+          where,
+        }: {
+          where: { tenantId_studentId_date: { studentId: string } };
+        }) => ({
+          ...mockPrismaReport,
+          studentId: where.tenantId_studentId_date.studentId,
+        }),
+      );
+    withTenant.mockImplementation((fn: (c: unknown) => unknown) => fn({ dailyReport: { upsert } }));
+    const date = new Date('2026-09-15');
+    const res = await repo.bulkUpsert('t-1', date, [
+      { studentId: 's-1', data: { mood: 'HAPPY' } },
+      { studentId: 's-2', data: { meals: { breakfast: 'ALL' } } },
+    ]);
+    expect(res).toHaveLength(2);
+    expect(res[0]?.studentId).toBe('s-1');
+    expect(res[1]?.studentId).toBe('s-2');
+    expect(upsert).toHaveBeenCalledTimes(2);
+    expect(upsert).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        where: expect.objectContaining({
+          tenantId_studentId_date: expect.objectContaining({ studentId: 's-1' }),
+        }),
+        create: expect.objectContaining({ studentId: 's-1' }),
+        update: { mood: 'HAPPY' },
+      }),
+    );
+    expect(upsert).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        where: expect.objectContaining({
+          tenantId_studentId_date: expect.objectContaining({ studentId: 's-2' }),
+        }),
+        create: expect.objectContaining({ studentId: 's-2' }),
+        update: { meals: { breakfast: 'ALL' } },
+      }),
+    );
+  });
+
+  it('bulkUpsert returns empty array when no items', async () => {
+    const upsert = jest.fn();
+    withTenant.mockImplementation((fn: (c: unknown) => unknown) => fn({ dailyReport: { upsert } }));
+    const date = new Date('2026-09-15');
+    const res = await repo.bulkUpsert('t-1', date, []);
+    expect(res).toHaveLength(0);
+    expect(upsert).not.toHaveBeenCalled();
+  });
 });

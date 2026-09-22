@@ -4,6 +4,7 @@ import {
   type CurrentUserPayload,
 } from '../../../common/decorators/current-user.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import type { ParentChildOverview } from '@kidscare/shared-types';
 import { ParentService } from '../services/parent.service';
 
@@ -13,6 +14,7 @@ export class ParentController {
   constructor(@Inject(ParentService) private readonly service: ParentService) {}
 
   @Get('children')
+  @Roles('PARENT')
   async getChildren(
     @CurrentUser() user: CurrentUserPayload,
     @Query('date') dateQuery?: string,

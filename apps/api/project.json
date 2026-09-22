@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "serve": { "executor": "@nx/js:node", "options": { "buildTarget": "build" } },
-    "build": { "executor": "nx:run-commands", "options": { "command": "nest build" } },
+    "build": { "executor": "nx:run-commands", "options": { "command": "nest build --config apps/api/nest-cli.json" } },
     "lint": { "executor": "@nx/eslint:lint" },
     "test": { "executor": "@nx/jest:jest", "options": { "jestConfig": "apps/api/jest.config.ts" } }
   },

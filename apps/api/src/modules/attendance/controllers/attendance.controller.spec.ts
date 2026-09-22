@@ -1,5 +1,7 @@
 import { AttendanceController } from './attendance.controller';
 import type { AttendanceService } from '../services/attendance.service';
+import type { StudentsService } from '../../students/services/students.service';
+import { Student } from '../../students/entities/student.entity';
 import { Attendance } from '../entities/attendance.entity';
 
 const mockEntity = new Attendance(
@@ -22,6 +24,23 @@ const mockEntity = new Attendance(
 describe('AttendanceController', () => {
   let controller: AttendanceController;
   let service: jest.Mocked<AttendanceService>;
+  let studentsService: jest.Mocked<StudentsService>;
+
+  const studentEntity = new Student(
+    's-1',
+    't-1',
+    null,
+    'Ada',
+    'Yılmaz',
+    new Date('2020-05-12'),
+    null,
+    null,
+    null,
+    true,
+    new Date(),
+    new Date(),
+    null,
+  );
 
   beforeEach(() => {
     service = {
@@ -31,7 +50,10 @@ describe('AttendanceController', () => {
       checkOut: jest.fn(),
       update: jest.fn(),
     } as unknown as jest.Mocked<AttendanceService>;
-    controller = new AttendanceController(service);
+    studentsService = {
+      findOne: jest.fn().mockResolvedValue(studentEntity),
+    } as unknown as jest.Mocked<StudentsService>;
+    controller = new AttendanceController(service, studentsService);
   });
 
   describe('findByDate', () => {
@@ -46,7 +68,11 @@ describe('AttendanceController', () => {
   describe('findByStudentAndDate', () => {
     it('returns single attendance DTO', async () => {
       service.findByStudentAndDate.mockResolvedValue(mockEntity);
-      const res = await controller.findByStudentAndDate('t-1', 's-1', '2026-09-15');
+      const res = await controller.findByStudentAndDate('t-1', 's-1', '2026-09-15', {
+        tenantId: 't-1',
+        userId: 'u-1',
+        role: 'ADMIN',
+      });
       expect(res?.studentId).toBe('s-1');
     });
   });

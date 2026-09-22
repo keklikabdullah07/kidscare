@@ -27,6 +27,7 @@ describe('DailyReportsService', () => {
       findByDate: jest.fn(),
       findByStudentAndDate: jest.fn(),
       upsert: jest.fn(),
+      bulkUpsert: jest.fn(),
     };
     service = new DailyReportsService(repo);
   });
@@ -69,6 +70,25 @@ describe('DailyReportsService', () => {
         's-1',
         expect.any(Date),
         expect.objectContaining({ mood: 'HAPPY' }),
+      );
+    });
+  });
+
+  describe('bulkSaveReports', () => {
+    it('maps items to bulkUpsert and returns mapped entities', async () => {
+      repo.bulkUpsert.mockResolvedValue([mockReport, { ...mockReport, id: 'dr-2', studentId: 's-2' }]);
+      const res = await service.bulkSaveReports('t-1', '2026-09-15', [
+        { studentId: 's-1', mood: 'HAPPY' },
+        { studentId: 's-2', meals: { breakfast: 'ALL' } },
+      ]);
+      expect(res).toHaveLength(2);
+      expect(repo.bulkUpsert).toHaveBeenCalledWith(
+        't-1',
+        expect.any(Date),
+        [
+          { studentId: 's-1', data: expect.objectContaining({ mood: 'HAPPY' }) },
+          { studentId: 's-2', data: expect.objectContaining({ meals: { breakfast: 'ALL' } }) },
+        ],
       );
     });
   });

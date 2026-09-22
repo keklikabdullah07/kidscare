@@ -29,12 +29,24 @@ model Tenant {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
-  users         User[]
-  students      Student[]
-  dailyReports  DailyReport[]
-  attendances   Attendance[]
-  dailyMenus    DailyMenu[]
-  activityPosts ActivityPost[]
+  users                    User[]
+  students                 Student[]
+  dailyReports             DailyReport[]
+  attendances              Attendance[]
+  dailyMenus               DailyMenu[]
+  activityPosts            ActivityPost[]
+  classrooms               Classroom[]
+  classroomTeachers        ClassroomTeacher[]
+  pickupContacts           PickupContact[]
+  pickupAuthorizations     PickupAuthorization[]
+  pickupEvents             PickupEvent[]
+  medicationRecords        MedicationRecord[]
+  conversations            Conversation[]
+  conversationParticipants ConversationParticipant[]
+  messages                 Message[]
+  messageReceipts          MessageReadReceipt[]
+  parentRequests           ParentRequest[]
+  incidentRecords          IncidentRecord[]
 
   @@map("tenants")
 }
@@ -50,8 +62,23 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  children Student[] @relation("ParentStudents")
+  tenant                     Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  children                   Student[]                 @relation("ParentStudents")
+  classroomTeachers          ClassroomTeacher[]
+  pickupAuthRequested        PickupAuthorization[]     @relation("PickupAuthRequester")
+  pickupAuthReviewed         PickupAuthorization[]     @relation("PickupAuthReviewer")
+  pickupEventsVerified       PickupEvent[]
+  medicationsRequested       MedicationRecord[]        @relation("MedRequester")
+  medicationsApproved        MedicationRecord[]        @relation("MedApprover")
+  medicationsAdministered    MedicationRecord[]        @relation("MedAdmin")
+  conversationsCreated       Conversation[]            @relation("ConversationCreator")
+  conversationParticipations ConversationParticipant[]
+  messagesSent               Message[]                 @relation("MessageSender")
+  messageReceipts            MessageReadReceipt[]      @relation("ReceiptUser")
+  parentRequestsRaised       ParentRequest[]           @relation("ParentRequester")
+  parentRequestsResolved     ParentRequest[]           @relation("ParentRequestResolver")
+  incidentsReported          IncidentRecord[]          @relation("IncidentReporter")
+  incidentsNotified          IncidentRecord[]          @relation("IncidentNotifier")
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -62,6 +89,7 @@ model Student {
   id          String    @id @default(cuid())
   tenantId    String
   parentId    String?
+  classroomId String?
   firstName   String
   lastName    String
   dateOfBirth DateTime
@@ -73,16 +101,61 @@ model Student {
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  parent User?  @relation("ParentStudents", fields: [parentId], references: [id], onDelete: SetNull)
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent    User?      @relation("ParentStudents", fields: [parentId], references: [id], onDelete: SetNull)
+  classroom Classroom? @relation(fields: [classroomId], references: [id], onDelete: SetNull)
 
-  dailyReports DailyReport[]
-  attendances  Attendance[]
+  dailyReports         DailyReport[]
+  attendances          Attendance[]
+  pickupContacts       PickupContact[]
+  pickupAuthorizations PickupAuthorization[]
+  pickupEvents         PickupEvent[]
+  medicationRecords    MedicationRecord[]
+  conversations        Conversation[]
+  parentRequests       ParentRequest[]
+  incidentRecords      IncidentRecord[]
 
   @@index([tenantId])
   @@index([tenantId, parentId])
+  @@index([tenantId, classroomId])
   @@index([tenantId, deletedAt])
   @@map("students")
+}
+
+model Classroom {
+  id        String   @id @default(cuid())
+  tenantId  String
+  name      String
+  ageGroup  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant             Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  students           Student[]
+  teacherAssignments ClassroomTeacher[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId, isActive])
+  @@map("classrooms")
+}
+
+model ClassroomTeacher {
+  id          String    @id @default(cuid())
+  tenantId    String
+  classroomId String
+  teacherId   String
+  assignedAt  DateTime  @default(now())
+  removedAt   DateTime?
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  classroom Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  teacher   User      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, classroomId, teacherId])
+  @@index([tenantId, teacherId, removedAt])
+  @@index([tenantId, classroomId, removedAt])
+  @@map("classroom_teachers")
 }
 
 model DailyReport {
@@ -174,4 +247,298 @@ model ActivityPost {
   @@index([tenantId, activityDate])
   @@index([tenantId, classroom])
   @@map("activity_posts")
+}
+
+model PickupContact {
+  id           String   @id @default(cuid())
+  tenantId     String
+  studentId    String
+  fullName     String
+  relation     String
+  phone        String
+  identityNote String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant         Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student        Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  authorizations PickupAuthorization[]
+  pickupEvents   PickupEvent[]
+
+  @@index([tenantId, studentId])
+  @@index([tenantId, isActive])
+  @@map("pickup_contacts")
+}
+
+enum PickupAuthorizationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+  REVOKED
+}
+
+model PickupAuthorization {
+  id              String                    @id @default(cuid())
+  tenantId        String
+  studentId       String
+  pickupContactId String?
+  requestedById   String
+  reviewedById    String?
+  status          PickupAuthorizationStatus @default(PENDING)
+  validFrom       DateTime?
+  validUntil      DateTime?
+  note            String?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student       Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  pickupContact PickupContact? @relation(fields: [pickupContactId], references: [id], onDelete: SetNull)
+  requestedBy   User           @relation("PickupAuthRequester", fields: [requestedById], references: [id], onDelete: Cascade)
+  reviewedBy    User?          @relation("PickupAuthReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  pickupEvents  PickupEvent[]
+
+  @@index([tenantId, studentId, status])
+  @@index([tenantId, status])
+  @@index([tenantId, validUntil])
+  @@map("pickup_authorizations")
+}
+
+enum PickupVerificationMethod {
+  ID_CHECK
+  PHONE_CONFIRM
+  PASSWORD
+  KNOWN_FACE
+  OTHER
+}
+
+model PickupEvent {
+  id                 String                   @id @default(cuid())
+  tenantId           String
+  studentId          String
+  pickupContactId    String?
+  authorizationId    String?
+  pickupPersonName   String
+  pickupPersonPhone  String?
+  verificationMethod PickupVerificationMethod
+  verifiedByUserId   String
+  occurredAt         DateTime                 @default(now())
+  note               String?
+
+  tenant        Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student       Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  pickupContact PickupContact?       @relation(fields: [pickupContactId], references: [id], onDelete: SetNull)
+  authorization PickupAuthorization? @relation(fields: [authorizationId], references: [id], onDelete: SetNull)
+  verifiedBy    User                 @relation(fields: [verifiedByUserId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, studentId, occurredAt])
+  @@index([tenantId, occurredAt])
+  @@map("pickup_events")
+}
+
+enum MedicationStatus {
+  REQUESTED
+  APPROVED
+  SCHEDULED
+  GIVEN
+  SKIPPED
+  REJECTED
+}
+
+model MedicationRecord {
+  id                 String           @id @default(cuid())
+  tenantId           String
+  studentId          String
+  medicationName     String
+  dosage             String
+  instructions       String?
+  scheduledAt        DateTime?
+  givenAt            DateTime?
+  status             MedicationStatus @default(REQUESTED)
+  requestedById      String
+  approvedById       String?
+  administeredById   String?
+  parentApprovalNote String?
+  rejectionReason    String?
+  skipReason         String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  tenant         Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student        Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  requestedBy    User    @relation("MedRequester", fields: [requestedById], references: [id], onDelete: Cascade)
+  approvedBy     User?   @relation("MedApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  administeredBy User?   @relation("MedAdmin", fields: [administeredById], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, studentId, scheduledAt])
+  @@index([tenantId, status])
+  @@index([tenantId, scheduledAt])
+  @@map("medication_records")
+}
+
+enum ConversationStatus {
+  OPEN
+  CLOSED
+  ARCHIVED
+}
+
+enum ConversationCategory {
+  ACIL
+  SAGLIK
+  IZIN
+  TESLIM
+  GUNLUK_BILGI
+  DUYURU
+  ODEME
+  RANDEVU
+}
+
+model Conversation {
+  id            String               @id @default(cuid())
+  tenantId      String
+  subject       String
+  category      ConversationCategory
+  status        ConversationStatus   @default(OPEN)
+  isCritical    Boolean              @default(false)
+  studentId     String?
+  createdById   String
+  lastMessageAt DateTime?
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  tenant       Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student      Student?                  @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  createdBy    User                      @relation("ConversationCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@index([tenantId, status])
+  @@index([tenantId, category])
+  @@index([tenantId, lastMessageAt])
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String   @id @default(cuid())
+  tenantId       String
+  conversationId String
+  userId         String
+  joinedAt       DateTime @default(now())
+
+  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@index([tenantId, userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  tenantId       String
+  conversationId String
+  senderId       String
+  content        String
+  isCritical     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  tenant       Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversation Conversation         @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User                 @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receipts     MessageReadReceipt[]
+
+  @@index([tenantId, conversationId, createdAt])
+  @@map("messages")
+}
+
+model MessageReadReceipt {
+  id        String   @id @default(cuid())
+  tenantId  String
+  messageId String
+  userId    String
+  readAt    DateTime @default(now())
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation("ReceiptUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+  @@index([tenantId, userId])
+  @@map("message_read_receipts")
+}
+
+enum ParentRequestType {
+  IZIN
+  BILGI_TALEP
+  DEGISIKLIK
+  DIGER
+}
+
+enum ParentRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model ParentRequest {
+  id             String              @id @default(cuid())
+  tenantId       String
+  parentId       String
+  studentId      String?
+  type           ParentRequestType
+  subject        String
+  description    String
+  status         ParentRequestStatus @default(PENDING)
+  resolvedById   String?
+  resolvedAt     DateTime?
+  resolutionNote String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent     User     @relation("ParentRequester", fields: [parentId], references: [id], onDelete: Cascade)
+  student    Student? @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  resolvedBy User?    @relation("ParentRequestResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, status])
+  @@index([tenantId, parentId])
+  @@map("parent_requests")
+}
+
+enum IncidentCategory {
+  DUSME
+  YARALANMA
+  HASTALIK
+  DAVRANIS
+  KAZA
+  DIGER
+}
+
+model IncidentRecord {
+  id                 String           @id @default(cuid())
+  tenantId           String
+  studentId          String
+  category           IncidentCategory
+  occurredAt         DateTime
+  description        String
+  actionTaken        String?
+  parentNotified     Boolean          @default(false)
+  parentNotifiedAt   DateTime?
+  parentNotifiedById String?
+  reportedById       String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  tenant           Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student          Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  reportedBy       User    @relation("IncidentReporter", fields: [reportedById], references: [id], onDelete: Cascade)
+  parentNotifiedBy User?   @relation("IncidentNotifier", fields: [parentNotifiedById], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, studentId, occurredAt])
+  @@index([tenantId, occurredAt])
+  @@map("incident_records")
 }

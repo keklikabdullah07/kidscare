@@ -6,3 +6,8 @@ export * from './student.schema';
 export * from './tenant.schema';
 export * from './user.schema';
 export * from './activity-post.schema';
+export * from './classroom.schema';
+export * from './pickup.schema';
+export * from './medication.schema';
+export * from './messaging.schema';
+export * from './incident.schema';

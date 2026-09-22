@@ -32,13 +32,10 @@ export class ParentService {
     const date = this.parseDate(dateStr);
     const allStudents = await this.studentsRepository.findMany(tenantId);
 
-    // If PARENT, filter by parentId, or fallback to all active if none explicitly assigned yet
+    // Parents may only see students explicitly linked to their own account.
     let targetStudents = allStudents.filter((s) => s.isActive);
     if (userRole === 'PARENT') {
-      const linked = targetStudents.filter((s) => s.parentId === parentUserId);
-      if (linked.length > 0) {
-        targetStudents = linked;
-      }
+      targetStudents = targetStudents.filter((s) => s.parentId === parentUserId);
     }
 
     const overviews: ParentChildOverview[] = [];

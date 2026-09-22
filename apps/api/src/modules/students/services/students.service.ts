@@ -2,12 +2,16 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type { Prisma } from '@kidscare/database';
 import type { StudentCreate, StudentPassportInput, StudentUpdate } from '@kidscare/shared-schemas';
 import type { StudentPassport } from '@kidscare/shared-types';
+import { UsersService } from '../../users/services/users.service';
 import { Student } from '../entities/student.entity';
 import type { IStudentsRepository } from '../repositories/students.repository';
 
 @Injectable()
 export class StudentsService {
-  constructor(@Inject('IStudentsRepository') private readonly repo: IStudentsRepository) {}
+  constructor(
+    @Inject('IStudentsRepository') private readonly repo: IStudentsRepository,
+    @Inject(UsersService) private readonly usersService: UsersService,
+  ) {}
 
   async findAll(tenantId: string): Promise<Student[]> {
     const rows = await this.repo.findMany(tenantId);
@@ -21,15 +25,19 @@ export class StudentsService {
   }
 
   async create(tenantId: string, input: StudentCreate): Promise<Student> {
-    const data: Prisma.StudentCreateWithoutTenantInput = {
+    if (input.parentId) {
+      await this.usersService.assertParentUser(tenantId, input.parentId);
+    }
+
+    const created = await this.repo.insert(tenantId, {
       firstName: input.firstName,
       lastName: input.lastName,
       dateOfBirth: new Date(input.dateOfBirth),
       gender: input.gender ?? null,
       notes: input.notes ?? null,
       passport: (input.passport as unknown as Prisma.InputJsonValue) ?? {},
-    };
-    const created = await this.repo.insert(tenantId, data);
+      parentId: input.parentId ?? null,
+    });
     return Student.fromPrisma(created);
   }
 
@@ -47,6 +55,14 @@ export class StudentsService {
     if (input.passport !== undefined)
       data.passport = input.passport as unknown as Prisma.InputJsonValue;
     if (input.isActive !== undefined) data.isActive = input.isActive;
+    if (input.parentId !== undefined) {
+      if (input.parentId) {
+        await this.usersService.assertParentUser(tenantId, input.parentId);
+        data.parent = { connect: { id: input.parentId } };
+      } else {
+        data.parent = { disconnect: true };
+      }
+    }
 
     const updated = await this.repo.update(tenantId, id, data);
     return Student.fromPrisma(updated);

@@ -6,6 +6,7 @@ import { HealthModule } from './health/health.module';
 import { TenantContextModule } from './common/context/tenant-context.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TenantGuard } from './common/guards/tenant.guard';
+import { RolesGuard } from './common/guards/roles.guard';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { AttendanceModule } from './modules/attendance/attendance.module';
@@ -15,6 +16,12 @@ import { DailyReportsModule } from './modules/daily-reports/daily-reports.module
 import { ParentModule } from './modules/parent/parent.module';
 import { StudentsModule } from './modules/students/students.module';
 import { ActivitiesModule } from './modules/activities/activities.module';
+import { UsersModule } from './modules/users/users.module';
+import { ClassroomsModule } from './modules/classrooms/classrooms.module';
+import { PickupModule } from './modules/pickup/pickup.module';
+import { MedicationModule } from './modules/medication/medication.module';
+import { MessagingModule } from './modules/messaging/messaging.module';
+import { IncidentsModule } from './modules/incidents/incidents.module';
 
 @Module({
   imports: [
@@ -34,12 +41,23 @@ import { ActivitiesModule } from './modules/activities/activities.module';
     DailyMenusModule,
     ParentModule,
     ActivitiesModule,
+    UsersModule,
+    ClassroomsModule,
+    PickupModule,
+    MedicationModule,
+    MessagingModule,
+    IncidentsModule,
   ],
   providers: [
     Reflector,
     {
       provide: APP_GUARD,
       useFactory: (reflector: Reflector) => new TenantGuard(reflector),
+      inject: [Reflector],
+    },
+    {
+      provide: APP_GUARD,
+      useFactory: (reflector: Reflector) => new RolesGuard(reflector),
       inject: [Reflector],
     },
     {

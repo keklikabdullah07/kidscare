@@ -15,8 +15,17 @@ import {
   Sparkles,
   School,
   LayoutDashboard,
+  Moon,
+  Sun,
+  UserCog,
+  ShieldCheck,
+  Pill,
+  MessageSquare,
+  ClipboardList,
+  AlertTriangle,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
+import { useTheme } from './ThemeContext';
 
 type NavItem = {
   to: string;
@@ -48,6 +57,12 @@ const allNavItems: NavItem[] = [
     icon: Camera,
     description: 'Fotoğraf ve duyurular',
   },
+  { to: '/team', label: 'Ekip & Veliler', icon: UserCog, description: 'Öğretmen ve veli hesapları' },
+  { to: '/pickup', label: 'Teslim Yetkileri', icon: ShieldCheck, description: 'Veli talepleri ve olaylar' },
+  { to: '/medication', label: 'İlaç Takibi', icon: Pill, description: 'İlaç talepleri ve uygulama' },
+  { to: '/messages', label: 'Mesajlar', icon: MessageSquare, description: 'Veli-personel iletişim' },
+  { to: '/requests', label: 'Veli Talepleri', icon: ClipboardList, description: 'İzin ve bilgi talepleri' },
+  { to: '/incidents', label: 'Olay Kayıtları', icon: AlertTriangle, description: 'Güvenlik olayları' },
   { to: '/settings', label: 'Kreş Ayarları', icon: Settings, description: 'Genel yapılandırma' },
 ];
 
@@ -62,7 +77,7 @@ function getTodayFormatted(): string {
 
 function getRoleBadge(role: string): { label: string; color: string } {
   switch (role) {
-    case 'SUPERADMIN':
+    case 'SUPER_ADMIN':
       return { label: 'Süper Admin', color: 'bg-purple-100 text-purple-700 border-purple-200' };
     case 'ADMIN':
       return {
@@ -80,12 +95,18 @@ function getRoleBadge(role: string): { label: string; color: string } {
 
 export function Layout(): JSX.Element {
   const { state, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const isParent = state.status === 'authenticated' && state.user.role === 'PARENT';
+  const isTeacher = state.status === 'authenticated' && state.user.role === 'TEACHER';
 
   const items = isParent
     ? allNavItems.filter((n) => n.to === '/portal' || n.to === '/menus' || n.to === '/gallery')
-    : allNavItems.filter((n) => n.to !== '/portal');
+    : isTeacher
+      ? allNavItems.filter(
+          (n) => n.to !== '/portal' && n.to !== '/settings' && n.to !== '/team',
+        )
+      : allNavItems.filter((n) => n.to !== '/portal');
 
   const userRole = state.status === 'authenticated' ? state.user.role : '';
   const userEmail = state.status === 'authenticated' ? state.user.email || state.user.id : '';
@@ -220,6 +241,14 @@ export function Layout(): JSX.Element {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              title={isDark ? 'Aydınlık Mod' : 'Karanlık Mod'}
+              className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             <div className="hidden sm:flex items-center gap-2 text-xs text-slate-500 font-medium">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Sistem Aktif

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Inject, Patch, UseGuards } from '@nestjs/common';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import { TenantResponse } from '../dto/tenant-response.dto';
 import { tenantUpdateSchema, type TenantUpdate } from '../dto/update-tenant.dto';
@@ -13,12 +14,14 @@ export class TenantsController {
   constructor(@Inject(TenantsService) private readonly tenantsService: TenantsService) {}
 
   @Get('me')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async getMe(@CurrentTenantId() tenantId: string): Promise<TenantResponse> {
     const tenant = await this.tenantsService.findOne(tenantId);
     return this.toResponse(tenant);
   }
 
   @Patch('me')
+  @Roles('SUPER_ADMIN', 'ADMIN')
   async updateMe(
     @CurrentTenantId() tenantId: string,
     @Body(new ZodValidationPipe(tenantUpdateSchema)) body: TenantUpdate,

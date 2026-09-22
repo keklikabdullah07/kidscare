@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactElement } from 'react';
+import { useState, useEffect, type FormEvent, type ReactElement } from 'react';
 import type { BloodType, EmergencyContact, Student, StudentPassport } from '@kidscare/shared-types';
 import { getStudentPassport, updateStudentPassport } from '../../api/students';
 
@@ -130,7 +130,7 @@ export function StudentPassportModal({
     setEmergencyContacts((prev) => prev.filter((c) => c.id !== id));
   }
 
-  async function handleSave(e: React.FormEvent) {
+  async function handleSave(e: FormEvent) {
     e.preventDefault();
     setSaving(true);
     setError(null);

@@ -3,8 +3,8 @@ import { withTenantContext } from './tenant.middleware';
 
 const prisma = new PrismaClient();
 const DEMO_TENANT_ID = 'demo-tenant-seed-001';
-const TENANT_A_ID = 'mw-tenant-a';
-const TENANT_B_ID = 'mw-tenant-b';
+const TENANT_A_ID = 'test-tenant-a-unique';
+const TENANT_B_ID = 'test-tenant-b-unique';
 
 /**
  * Under FORCE ROW LEVEL SECURITY every tenant-scoped write must run inside a
@@ -85,6 +85,15 @@ describe('withTenantContext', () => {
   });
 
   afterAll(async () => {
+    // Clean up test data
+    await withTenantSession(TENANT_A_ID, async (tx) => {
+      await tx.user.deleteMany();
+      await tx.tenant.deleteMany();
+    });
+    await withTenantSession(TENANT_B_ID, async (tx) => {
+      await tx.user.deleteMany();
+      await tx.tenant.deleteMany();
+    });
     await prisma.$disconnect();
   });
 
@@ -102,7 +111,7 @@ describe('withTenantContext', () => {
 
   it('returns empty when context tenantId does not match any row', async () => {
     const extended = prisma.$extends(
-      withTenantContext({ tenantId: 'does-not-exist', userId: 'u', role: 'ADMIN' }),
+      withTenantContext({ tenantId: 'does-not-exist-test', userId: 'u', role: 'ADMIN' }),
     );
     const rows = await extended.user.findMany();
     expect(rows).toEqual([]);

@@ -25,11 +25,18 @@ export type PottyEntry = {
   notes?: string | undefined;
 };
 
+export type MedicationStatus = 'SCHEDULED' | 'GIVEN' | 'SKIPPED';
+
 export type MedicationEntry = {
   id: string;
   name: string;
   time: string; // HH:mm
   givenBy: string;
+  dosage?: string | undefined;
+  status?: MedicationStatus | undefined;
+  requestedBy?: string | undefined;
+  givenAt?: string | undefined;
+  temperature?: number | undefined;
   notes?: string | undefined;
 };
 
@@ -59,4 +66,12 @@ export type DailyReportInput = {
   activities?: string[] | undefined;
   medications?: MedicationEntry[] | undefined;
   teacherNote?: string | undefined;
+};
+
+export type BulkDailyReportItem = DailyReportInput & {
+  studentId: string;
+};
+
+export type BulkDailyReportsInput = {
+  items: BulkDailyReportItem[];
 };

@@ -12,7 +12,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
+import {
+  CurrentUser,
+  type CurrentUserPayload,
+} from '../../../common/decorators/current-user.decorator';
+import { assertStudentVisibleToUser } from '../../../common/utils/student-access';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import {
   studentCreateSchema,
   studentPassportSchema,
@@ -29,6 +35,7 @@ import { StudentsService } from '../services/students.service';
 
 @Controller('students')
 @UseGuards(TenantGuard)
+@Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
 export class StudentsController {
   constructor(@Inject(StudentsService) private readonly studentsService: StudentsService) {}
 
@@ -39,19 +46,26 @@ export class StudentsController {
   }
 
   @Get(':id')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async findOne(
     @CurrentTenantId() tenantId: string,
     @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
   ): Promise<StudentResponse> {
     const row = await this.studentsService.findOne(tenantId, id);
+    assertStudentVisibleToUser(row, user.role, user.userId);
     return this.toResponse(row);
   }
 
   @Get(':id/passport')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async getPassport(
     @CurrentTenantId() tenantId: string,
     @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
   ): Promise<StudentPassport> {
+    const row = await this.studentsService.findOne(tenantId, id);
+    assertStudentVisibleToUser(row, user.role, user.userId);
     return this.studentsService.getPassport(tenantId, id);
   }
 
