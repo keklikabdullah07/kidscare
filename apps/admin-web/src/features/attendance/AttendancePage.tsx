@@ -14,6 +14,7 @@ import { checkInStudent, getAttendanceByDate, updateStudentAttendance } from '..
 import { listStudents } from '../../api/students';
 import { CheckOutModal } from './CheckOutModal';
 import { useToast } from '../../components/Toast';
+import { ConfirmModal } from '../../components/ui/PromptModal';
 
 const STATUS_CONFIG: Record<
   AttendanceStatus,
@@ -130,26 +131,31 @@ export function AttendancePage(): JSX.Element {
     }
   }
 
+  const [showBulkPresentConfirm, setShowBulkPresentConfirm] = useState(false);
+
   // Bulk Check-in (Mark All Present)
-  async function handleMarkAllPresent(): Promise<void> {
+  function handleMarkAllPresent(): void {
+    const absentCount = students.filter((s) => {
+      const att = attendanceMap[s.id];
+      const st = att?.status ?? 'ABSENT';
+      return st === 'ABSENT';
+    }).length;
+
+    if (absentCount === 0) {
+      showToast('Sınıftaki tüm öğrenciler zaten mevcut veya işlem görmüş.', 'info');
+      return;
+    }
+
+    setShowBulkPresentConfirm(true);
+  }
+
+  async function executeBulkMarkPresent(): Promise<void> {
+    setShowBulkPresentConfirm(false);
     const absentStudents = students.filter((s) => {
       const att = attendanceMap[s.id];
       const st = att?.status ?? 'ABSENT';
       return st === 'ABSENT';
     });
-
-    if (absentStudents.length === 0) {
-      showToast('Sınıftaki tüm öğrenciler zaten mevcut veya işlem görmüş.', 'info');
-      return;
-    }
-
-    if (
-      !confirm(
-        `${absentStudents.length} öğrencinin tümü "Giriş Yaptı (Mevcut)" olarak işaretlensin mi?`,
-      )
-    ) {
-      return;
-    }
 
     setBulkLoading(true);
     try {
@@ -738,6 +744,19 @@ export function AttendancePage(): JSX.Element {
           showToast('Güvenli teslimat başarıyla kaydedildi.', 'success');
         }}
       />
+
+      {showBulkPresentConfirm && (
+        <ConfirmModal
+          isOpen={true}
+          title="Toplu Sınıf Girişi"
+          description="Sınıftaki tüm gelmemiş öğrencilerin durumu 'Giriş Yaptı (Mevcut)' olarak güncellenecek. Onaylıyor musunuz?"
+          confirmText="Evet, Tümünü Mevcut Yap"
+          cancelText="Vazgeç"
+          variant="success"
+          onConfirm={() => void executeBulkMarkPresent()}
+          onCancel={() => setShowBulkPresentConfirm(false)}
+        />
+      )}
     </div>
   );
 }

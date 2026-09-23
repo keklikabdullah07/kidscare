@@ -24,6 +24,7 @@ export default defineConfig({
       '/medication': { target: API_TARGET, changeOrigin: true },
       '/messaging': { target: API_TARGET, changeOrigin: true },
       '/incidents': { target: API_TARGET, changeOrigin: true },
+      '/development': { target: API_TARGET, changeOrigin: true },
     },
   },
   // Workspace deps expose TS source as `main`. Exclude them from the

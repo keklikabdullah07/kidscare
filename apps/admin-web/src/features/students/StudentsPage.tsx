@@ -21,6 +21,7 @@ import type { User } from '@kidscare/shared-types';
 import { StudentPassportModal } from './StudentPassportModal';
 import { PickupContactsModal } from './PickupContactsModal';
 import { useToast } from '../../components/Toast';
+import { ConfirmModal } from '../../components/ui/PromptModal';
 
 type Status = 'loading' | 'ready' | 'error';
 type ViewMode = 'grid' | 'table';
@@ -53,10 +54,18 @@ export function StudentsPage(): JSX.Element {
       });
   }
 
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
+
   useEffect(reload, []);
 
-  async function handleDelete(id: string, name: string): Promise<void> {
-    if (!confirm(`${name} adlı öğrenciyi silmek istediğinize emin misiniz?`)) return;
+  function handleDelete(id: string, name: string): void {
+    setDeleteTarget({ id, name });
+  }
+
+  async function confirmDelete(): Promise<void> {
+    if (!deleteTarget) return;
+    const { id, name } = deleteTarget;
+    setDeleteTarget(null);
     try {
       await deleteStudent(id);
       setStudents((prev) => prev.filter((s) => s.id !== id));
@@ -500,6 +509,20 @@ export function StudentsPage(): JSX.Element {
         <PickupContactsModal
           student={pickupContactsStudent}
           onClose={() => setPickupContactsStudent(null)}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <ConfirmModal
+          isOpen={true}
+          title="Öğrenciyi Sil"
+          description={`"${deleteTarget.name}" adlı öğrenciyi sistemden silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`}
+          confirmText="Evet, Sil"
+          cancelText="Vazgeç"
+          variant="danger"
+          onConfirm={() => void confirmDelete()}
+          onCancel={() => setDeleteTarget(null)}
         />
       )}
     </div>

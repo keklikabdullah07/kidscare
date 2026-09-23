@@ -1,25 +1,12 @@
 import { useEffect, useState, type FormEvent, type JSX } from 'react';
-import {
-  ClipboardList,
-  Plus,
-  CheckCircle2,
-  XCircle,
-  RotateCw,
-} from 'lucide-react';
-import type {
-  ParentRequest,
-  ParentRequestStatus,
-  ParentRequestType,
-} from '@kidscare/shared-types';
-import {
-  createParentRequest,
-  listParentRequests,
-  resolveParentRequest,
-} from '../../api/messaging';
+import { ClipboardList, Plus, CheckCircle2, XCircle, RotateCw } from 'lucide-react';
+import type { ParentRequest, ParentRequestStatus, ParentRequestType } from '@kidscare/shared-types';
+import { createParentRequest, listParentRequests, resolveParentRequest } from '../../api/messaging';
 import { listStudents } from '../../api/students';
 import type { Student } from '@kidscare/shared-types';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
+import { PromptModal } from '../../components/ui/PromptModal';
 
 const TYPE_LABEL: Record<ParentRequestType, string> = {
   IZIN: 'İzin Talebi',
@@ -49,6 +36,11 @@ export function ParentRequestsPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [resolveDialog, setResolveDialog] = useState<{
+    isOpen: boolean;
+    requestId: string;
+    status: 'APPROVED' | 'REJECTED';
+  } | null>(null);
   const { showToast } = useToast();
 
   // form
@@ -72,7 +64,6 @@ export function ParentRequestsPage(): JSX.Element {
 
   useEffect(() => {
     void refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function submitCreate(e: FormEvent): Promise<void> {
@@ -99,16 +90,21 @@ export function ParentRequestsPage(): JSX.Element {
     }
   }
 
-  async function resolve(id: string, status: 'APPROVED' | 'REJECTED'): Promise<void> {
-    const note = window.prompt(status === 'APPROVED' ? 'Onay notu:' : 'Red sebebi:');
-    if (note === null) return;
-    setBusyId(id);
+  function resolve(id: string, status: 'APPROVED' | 'REJECTED'): void {
+    setResolveDialog({ isOpen: true, requestId: id, status });
+  }
+
+  async function handleResolveConfirm(note: string): Promise<void> {
+    if (!resolveDialog) return;
+    const { requestId, status } = resolveDialog;
+    setResolveDialog(null);
+    setBusyId(requestId);
     try {
-      await resolveParentRequest(id, {
+      await resolveParentRequest(requestId, {
         status,
         ...(note.trim() ? { resolutionNote: note.trim() } : {}),
       });
-      showToast(status === 'APPROVED' ? 'Onaylandı.' : 'Reddedildi.', 'success');
+      showToast(status === 'APPROVED' ? 'Talep onaylandı.' : 'Talep reddedildi.', 'success');
       await refresh();
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'İşlem başarısız', 'error');
@@ -159,7 +155,9 @@ export function ParentRequestsPage(): JSX.Element {
 
       {showForm && (
         <form
-          onSubmit={submitCreate}
+          onSubmit={(e) => {
+            void submitCreate(e);
+          }}
           className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -271,9 +269,7 @@ export function ParentRequestsPage(): JSX.Element {
                 {r.description}
               </p>
               {r.resolutionNote && (
-                <p className="text-[11px] text-slate-600 italic">
-                  Not: {r.resolutionNote}
-                </p>
+                <p className="text-[11px] text-slate-600 italic">Not: {r.resolutionNote}</p>
               )}
               {(role === 'ADMIN' || role === 'SUPER_ADMIN') && r.status === 'PENDING' && (
                 <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
@@ -298,6 +294,31 @@ export function ParentRequestsPage(): JSX.Element {
             </div>
           ))}
         </div>
+      )}
+
+      {resolveDialog && (
+        <PromptModal
+          isOpen={resolveDialog.isOpen}
+          title={resolveDialog.status === 'APPROVED' ? 'Talebi Onayla' : 'Talebi Reddet'}
+          description={
+            resolveDialog.status === 'APPROVED'
+              ? 'Veliye iletilecek bilgilendirme veya onay notunu girebilirsiniz (isteğe bağlı).'
+              : 'Lütfen veliye iletilecek ret gerekçesini belirtin.'
+          }
+          inputLabel={resolveDialog.status === 'APPROVED' ? 'Onay Notu' : 'Ret Gerekçesi'}
+          placeholder={
+            resolveDialog.status === 'APPROVED'
+              ? 'Örn: Talebiniz uygun görülmüş ve onaylanmıştır...'
+              : 'Örn: İlgili tarihte sınıf kontenjanı dolu olduğundan dolayı...'
+          }
+          confirmText={resolveDialog.status === 'APPROVED' ? 'Onayla' : 'Reddet'}
+          cancelText="Vazgeç"
+          requireInput={resolveDialog.status === 'REJECTED'}
+          isTextarea={true}
+          variant={resolveDialog.status === 'APPROVED' ? 'success' : 'danger'}
+          onConfirm={(val) => void handleResolveConfirm(val)}
+          onCancel={() => setResolveDialog(null)}
+        />
       )}
     </div>
   );

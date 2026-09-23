@@ -1,12 +1,5 @@
 import { useEffect, useState, type JSX, type FormEvent } from 'react';
-import {
-  Pill,
-  Plus,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  RotateCw,
-} from 'lucide-react';
+import { Pill, Plus, CheckCircle2, XCircle, Clock, RotateCw } from 'lucide-react';
 import type { MedicationRecord, StandaloneMedicationStatus } from '@kidscare/shared-types';
 import {
   listMedicationRecords,
@@ -20,6 +13,7 @@ import { listStudents } from '../../api/students';
 import type { Student } from '@kidscare/shared-types';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
+import { PromptModal } from '../../components/ui/PromptModal';
 
 const STATUS_LABEL: Record<StandaloneMedicationStatus, string> = {
   REQUESTED: 'Onay Bekliyor',
@@ -57,14 +51,16 @@ export function MedicationPage(): JSX.Element {
   const [formInstructions, setFormInstructions] = useState('');
   const [formScheduledAt, setFormScheduledAt] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [promptDialog, setPromptDialog] = useState<{
+    isOpen: boolean;
+    type: 'reject' | 'skip';
+    recordId: string;
+  } | null>(null);
 
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes] = await Promise.all([
-        listMedicationRecords(),
-        listStudents(),
-      ]);
+      const [list, studentsRes] = await Promise.all([listMedicationRecords(), listStudents()]);
       setRecords(list);
       setStudents(studentsRes);
     } catch (err: unknown) {
@@ -76,7 +72,6 @@ export function MedicationPage(): JSX.Element {
 
   useEffect(() => {
     void refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function approve(id: string): Promise<void> {
@@ -92,19 +87,8 @@ export function MedicationPage(): JSX.Element {
     }
   }
 
-  async function reject(id: string): Promise<void> {
-    const reason = window.prompt('Red sebebi:');
-    if (!reason || !reason.trim()) return;
-    setBusyId(id);
-    try {
-      await rejectMedicationRecord(id, { reason: reason.trim() });
-      showToast('İlaç kaydı reddedildi.', 'success');
-      await refresh();
-    } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : 'Reddetme başarısız', 'error');
-    } finally {
-      setBusyId(null);
-    }
+  function reject(id: string): void {
+    setPromptDialog({ isOpen: true, type: 'reject', recordId: id });
   }
 
   async function markGiven(id: string): Promise<void> {
@@ -120,16 +104,26 @@ export function MedicationPage(): JSX.Element {
     }
   }
 
-  async function markSkipped(id: string): Promise<void> {
-    const reason = window.prompt('Atlama sebebi:');
-    if (!reason || !reason.trim()) return;
-    setBusyId(id);
+  function markSkipped(id: string): void {
+    setPromptDialog({ isOpen: true, type: 'skip', recordId: id });
+  }
+
+  async function handlePromptConfirm(reason: string): Promise<void> {
+    if (!promptDialog) return;
+    const { type, recordId } = promptDialog;
+    setPromptDialog(null);
+    setBusyId(recordId);
     try {
-      await markMedicationSkipped(id, { reason: reason.trim() });
-      showToast('İlaç atlandı.', 'success');
+      if (type === 'reject') {
+        await rejectMedicationRecord(recordId, { reason });
+        showToast('İlaç kaydı reddedildi.', 'success');
+      } else {
+        await markMedicationSkipped(recordId, { reason });
+        showToast('İlaç atlandı.', 'success');
+      }
       await refresh();
     } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : 'İşaretleme başarısız', 'error');
+      showToast(err instanceof Error ? err.message : 'İşlem başarısız', 'error');
     } finally {
       setBusyId(null);
     }
@@ -205,7 +199,9 @@ export function MedicationPage(): JSX.Element {
 
       {createOpen && (
         <form
-          onSubmit={submitCreate}
+          onSubmit={(e) => {
+            void submitCreate(e);
+          }}
           className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -311,9 +307,7 @@ export function MedicationPage(): JSX.Element {
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="text-sm font-bold text-slate-900 truncate">
-                    {r.medicationName}
-                  </p>
+                  <p className="text-sm font-bold text-slate-900 truncate">{r.medicationName}</p>
                   <p className="text-xs text-slate-500">
                     {studentName(r.studentId)} · {r.dosage}
                   </p>
@@ -340,14 +334,10 @@ export function MedicationPage(): JSX.Element {
                 </p>
               )}
               {r.rejectionReason && (
-                <p className="text-[11px] text-rose-700 font-medium">
-                  ✕ {r.rejectionReason}
-                </p>
+                <p className="text-[11px] text-rose-700 font-medium">✕ {r.rejectionReason}</p>
               )}
               {r.skipReason && (
-                <p className="text-[11px] text-slate-600 font-medium">
-                  ⏸ {r.skipReason}
-                </p>
+                <p className="text-[11px] text-slate-600 font-medium">⏸ {r.skipReason}</p>
               )}
               <div className="flex items-center gap-1.5 flex-wrap pt-2 border-t border-slate-100">
                 {(role === 'ADMIN' || role === 'SUPER_ADMIN') && r.status === 'REQUESTED' && (
@@ -395,6 +385,31 @@ export function MedicationPage(): JSX.Element {
             </div>
           ))}
         </div>
+      )}
+
+      {promptDialog && (
+        <PromptModal
+          isOpen={promptDialog.isOpen}
+          title={promptDialog.type === 'reject' ? 'İlaç Talebini Reddet' : 'İlaç Dozunu Atla'}
+          description={
+            promptDialog.type === 'reject'
+              ? 'Lütfen veliye iletilecek ret gerekçesini belirtin.'
+              : 'İlacın bu dozunun neden verilmediğini kayıt altına alın.'
+          }
+          inputLabel={promptDialog.type === 'reject' ? 'Ret Gerekçesi' : 'Atlama Sebebi'}
+          placeholder={
+            promptDialog.type === 'reject'
+              ? 'Örn: İlaç tarihi geçmiş veya dozaj talimatı yetersiz...'
+              : 'Örn: Öğrenci uyuyordu, veli isteğiyle ertelendi...'
+          }
+          confirmText={promptDialog.type === 'reject' ? 'Reddet' : 'Atlandı Olarak İşaretle'}
+          cancelText="Vazgeç"
+          requireInput={true}
+          isTextarea={true}
+          variant={promptDialog.type === 'reject' ? 'danger' : 'warning'}
+          onConfirm={(val) => void handlePromptConfirm(val)}
+          onCancel={() => setPromptDialog(null)}
+        />
       )}
     </div>
   );

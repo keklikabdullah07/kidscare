@@ -8,6 +8,7 @@ import {
   updatePickupContact,
 } from '../../api/pickup';
 import { useToast } from '../../components/Toast';
+import { ConfirmModal } from '../../components/ui/PromptModal';
 
 export function PickupContactsModal({
   student,
@@ -20,6 +21,7 @@ export function PickupContactsModal({
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [contactToDelete, setContactToDelete] = useState<PickupContact | null>(null);
   const { showToast } = useToast();
 
   // Form
@@ -43,7 +45,6 @@ export function PickupContactsModal({
 
   useEffect(() => {
     void refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [student.id]);
 
   async function submitAdd(e: FormEvent): Promise<void> {
@@ -75,12 +76,18 @@ export function PickupContactsModal({
     }
   }
 
-  async function remove(id: string): Promise<void> {
-    if (!window.confirm('Bu kişiyi silmek istediğine emin misin?')) return;
+  function remove(contact: PickupContact): void {
+    setContactToDelete(contact);
+  }
+
+  async function confirmRemove(): Promise<void> {
+    if (!contactToDelete) return;
+    const { id, fullName: name } = contactToDelete;
+    setContactToDelete(null);
     setBusyId(id);
     try {
       await deletePickupContact(id);
-      showToast('Kişi silindi.', 'success');
+      showToast(`${name} silindi.`, 'success');
       await refresh();
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Silinemedi', 'error');
@@ -127,9 +134,7 @@ export function PickupContactsModal({
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-gray-900">
-              {items.length} kişi kayıtlı
-            </h3>
+            <h3 className="text-sm font-bold text-gray-900">{items.length} kişi kayıtlı</h3>
             <button
               type="button"
               onClick={() => setShowForm((v) => !v)}
@@ -142,7 +147,9 @@ export function PickupContactsModal({
 
           {showForm && (
             <form
-              onSubmit={submitAdd}
+              onSubmit={(e) => {
+                void submitAdd(e);
+              }}
               className="rounded-lg border border-gray-200 bg-gray-50/50 p-4 space-y-3"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -238,17 +245,13 @@ export function PickupContactsModal({
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-gray-900 truncate">
                         {c.fullName}{' '}
-                        <span className="text-xs font-normal text-gray-500">
-                          ({c.relation})
-                        </span>
+                        <span className="text-xs font-normal text-gray-500">({c.relation})</span>
                       </p>
                       <p className="text-xs text-gray-500 flex items-center gap-1">
                         <Phone className="w-3 h-3" /> {c.phone}
                       </p>
                       {c.identityNote && (
-                        <p className="text-[11px] text-gray-400 italic mt-0.5">
-                          {c.identityNote}
-                        </p>
+                        <p className="text-[11px] text-gray-400 italic mt-0.5">{c.identityNote}</p>
                       )}
                     </div>
                   </div>
@@ -268,9 +271,9 @@ export function PickupContactsModal({
                     </button>
                     <button
                       type="button"
-                      onClick={() => void remove(c.id)}
+                      onClick={() => remove(c)}
                       disabled={busyId === c.id}
-                      className="p-1.5 rounded-md text-rose-500 hover:bg-rose-50 transition"
+                      className="p-1.5 rounded-md text-rose-500 hover:bg-rose-50 transition cursor-pointer"
                       title="Sil"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -282,6 +285,19 @@ export function PickupContactsModal({
           )}
         </div>
       </div>
+
+      {contactToDelete && (
+        <ConfirmModal
+          isOpen={true}
+          title="Teslimat Yetkilisini Sil"
+          description={`"${contactToDelete.fullName}" adlı kişiyi teslimat yetkilileri listesinden silmek istediğinize emin misiniz?`}
+          confirmText="Evet, Sil"
+          cancelText="Vazgeç"
+          variant="danger"
+          onConfirm={() => void confirmRemove()}
+          onCancel={() => setContactToDelete(null)}
+        />
+      )}
     </div>
   );
 }

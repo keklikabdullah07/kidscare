@@ -13,6 +13,7 @@ import {
 import { getActivities, createActivity, deleteActivity } from '../../api/activities';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
+import { ConfirmModal } from '../../components/ui/PromptModal';
 
 const PRESET_PHOTOS = [
   {
@@ -145,10 +146,16 @@ export function ActivityGalleryPage(): JSX.Element {
     }
   }
 
-  async function handleDelete(id: string): Promise<void> {
-    if (!window.confirm('Bu etkinliği ve fotoğraflarını silmek istediğinize emin misiniz?')) {
-      return;
-    }
+  const [activityToDelete, setActivityToDelete] = useState<string | null>(null);
+
+  function handleDelete(id: string): void {
+    setActivityToDelete(id);
+  }
+
+  async function confirmDeleteActivity(): Promise<void> {
+    if (!activityToDelete) return;
+    const id = activityToDelete;
+    setActivityToDelete(null);
     try {
       await deleteActivity(id);
       setPosts(posts.filter((p) => p.id !== id));
@@ -550,6 +557,19 @@ export function ActivityGalleryPage(): JSX.Element {
             </form>
           </div>
         </div>
+      )}
+
+      {activityToDelete && (
+        <ConfirmModal
+          isOpen={true}
+          title="Etkinliği Sil"
+          description="Bu etkinliği ve paylaşılan fotoğraflarını kalıcı olarak silmek istediğinize emin misiniz?"
+          confirmText="Evet, Etkinliği Sil"
+          cancelText="Vazgeç"
+          variant="danger"
+          onConfirm={() => void confirmDeleteActivity()}
+          onCancel={() => setActivityToDelete(null)}
+        />
       )}
     </div>
   );
