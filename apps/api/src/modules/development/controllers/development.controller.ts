@@ -1,10 +1,20 @@
-import { Body, Controller, Get, HttpCode, Inject, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Inject,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import type { DevelopmentDomain } from '@kidscare/database';
 import {
   createDevelopmentObservationSchema,
   createPortfolioItemSchema,
   createHomeActivitySuggestionSchema,
-} from '@kidscare/shared-schemas';
+} from '../dto/development.dto';
 import type {
   CreateDevelopmentObservationDto,
   CreateHomeActivitySuggestionDto,
@@ -20,7 +30,6 @@ import {
 } from '../../../common/decorators/current-user.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
-import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import { DevelopmentService } from '../services/development.service';
 
 @Controller('development')
@@ -52,10 +61,20 @@ export class DevelopmentController {
   async createObservation(
     @CurrentTenantId() tenantId: string,
     @CurrentUser() user: CurrentUserPayload,
-    @Body(new ZodValidationPipe(createDevelopmentObservationSchema))
-    body: CreateDevelopmentObservationDto,
+    @Body() body: CreateDevelopmentObservationDto,
   ): Promise<DevelopmentObservationDto> {
-    return this.service.createObservation(tenantId, user.userId, body);
+    const parsed = createDevelopmentObservationSchema.safeParse(body);
+    if (!parsed.success) {
+      throw new BadRequestException({
+        message: 'Invalid request payload',
+        issues: parsed.error.issues,
+      });
+    }
+    return this.service.createObservation(
+      tenantId,
+      user.userId,
+      parsed.data as CreateDevelopmentObservationDto,
+    );
   }
 
   @Get('portfolio')
@@ -78,10 +97,16 @@ export class DevelopmentController {
   @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async createPortfolio(
     @CurrentTenantId() tenantId: string,
-    @Body(new ZodValidationPipe(createPortfolioItemSchema))
-    body: CreatePortfolioItemDto,
+    @Body() body: CreatePortfolioItemDto,
   ): Promise<PortfolioItemDto> {
-    return this.service.createPortfolioItem(tenantId, body);
+    const parsed = createPortfolioItemSchema.safeParse(body);
+    if (!parsed.success) {
+      throw new BadRequestException({
+        message: 'Invalid request payload',
+        issues: parsed.error.issues,
+      });
+    }
+    return this.service.createPortfolioItem(tenantId, parsed.data as CreatePortfolioItemDto);
   }
 
   @Get('activities')
@@ -98,9 +123,18 @@ export class DevelopmentController {
   @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async createActivity(
     @CurrentTenantId() tenantId: string,
-    @Body(new ZodValidationPipe(createHomeActivitySuggestionSchema))
-    body: CreateHomeActivitySuggestionDto,
+    @Body() body: CreateHomeActivitySuggestionDto,
   ): Promise<HomeActivitySuggestionDto> {
-    return this.service.createHomeActivity(tenantId, body);
+    const parsed = createHomeActivitySuggestionSchema.safeParse(body);
+    if (!parsed.success) {
+      throw new BadRequestException({
+        message: 'Invalid request payload',
+        issues: parsed.error.issues,
+      });
+    }
+    return this.service.createHomeActivity(
+      tenantId,
+      parsed.data as CreateHomeActivitySuggestionDto,
+    );
   }
 }
