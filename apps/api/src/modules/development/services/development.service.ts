@@ -24,6 +24,11 @@ export class DevelopmentService {
       observedAt: r.observedAt.toISOString(),
       createdAt: r.createdAt.toISOString(),
       updatedAt: r.updatedAt.toISOString(),
+      portfolioItems: r.portfolioItems?.map((p) => ({
+        ...p,
+        createdAt: p.createdAt.toISOString(),
+        updatedAt: p.updatedAt.toISOString(),
+      })),
     }));
   }
 
@@ -73,7 +78,6 @@ export class DevelopmentService {
     return rows.map((r) => ({
       ...r,
       createdAt: r.createdAt.toISOString(),
-      updatedAt: r.updatedAt.toISOString(),
     }));
   }
 
@@ -85,7 +89,6 @@ export class DevelopmentService {
     return {
       ...r,
       createdAt: r.createdAt.toISOString(),
-      updatedAt: r.updatedAt.toISOString(),
     };
   }
 }

@@ -188,9 +188,9 @@ export class DevelopmentRepository implements IDevelopmentRepository {
         data: {
           tenantId,
           studentId: data.studentId,
-          observationId: data.observationId,
+          observationId: data.observationId ?? null,
           title: data.title,
-          description: data.description,
+          description: data.description ?? null,
           mediaUrl: data.mediaUrl,
           isParentVisible: data.isParentVisible ?? true,
         },
@@ -232,7 +232,7 @@ export class DevelopmentRepository implements IDevelopmentRepository {
         data: {
           tenantId,
           domain: data.domain,
-          ageGroup: data.ageGroup,
+          ageGroup: data.ageGroup ?? null,
           title: data.title,
           description: data.description,
         },
