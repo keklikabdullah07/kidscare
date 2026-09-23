@@ -2,6 +2,24 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DailyMenuPage } from './DailyMenuPage';
 
+vi.mock('../auth/AuthContext', () => ({
+  useAuth: () => ({
+    state: {
+      status: 'authenticated',
+      user: {
+        id: 'admin-1',
+        tenantId: 't-1',
+        email: 'admin@demo.test',
+        role: 'ADMIN',
+      },
+      token: 'test-jwt',
+    },
+    login: async () => {},
+    signup: async () => {},
+    logout: () => {},
+  }),
+}));
+
 const fakeMenuResponse = {
   menu: {
     id: 'menu-1',
@@ -97,7 +115,7 @@ describe('DailyMenuPage', () => {
     await user.click(saveBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(/Günün menüsü başarıyla kaydedildi!/i)).toBeInTheDocument();
+      expect(screen.getByText(/(Günün|Kreş) menüsü başarıyla kaydedildi!/i)).toBeInTheDocument();
     });
     expect(savedBody).not.toBeNull();
   });

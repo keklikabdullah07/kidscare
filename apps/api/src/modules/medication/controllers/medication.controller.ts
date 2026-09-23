@@ -47,12 +47,12 @@ export class MedicationController {
     @Query('from') from?: string,
     @Query('to') to?: string,
   ): Promise<MedicationRecord[]> {
-    return this.service.list(tenantId, {
-      studentId,
-      status,
-      from: from ? new Date(from) : undefined,
-      to: to ? new Date(to) : undefined,
-    });
+    const filters: { studentId?: string; status?: MedicationStatus; from?: Date; to?: Date } = {};
+    if (studentId) filters.studentId = studentId;
+    if (status) filters.status = status;
+    if (from) filters.from = new Date(from);
+    if (to) filters.to = new Date(to);
+    return this.service.list(tenantId, filters);
   }
 
   @Post('records')

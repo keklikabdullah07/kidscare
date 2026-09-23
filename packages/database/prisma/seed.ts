@@ -341,7 +341,7 @@ async function main() {
         scheduledAt: new Date(todayUtc.getTime() + 13 * 60 * 60 * 1000),
         status: 'APPROVED',
         requestedById: parentUser.id,
-        approvedById: teacherUser?.id,
+        approvedById: teacherUser?.id ?? null,
         parentApprovalNote: 'Veli onayladı, ateşi çıkarsa verilsin.',
       },
     });
@@ -450,7 +450,8 @@ async function main() {
           studentId: student.id,
           category: 'DUSME',
           occurredAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
-          description: 'Bahçede koşarken ayağı kaydı ve düştü. Sağ dizinde hafif kızarıklık oluştu.',
+          description:
+            'Bahçede koşarken ayağı kaydı ve düştü. Sağ dizinde hafif kızarıklık oluştu.',
           actionTaken: 'Yara temizlendi, buz konuldu. Çocuk sakinleştirildi.',
           parentNotified: false,
           reportedById: teacherUser.id,
@@ -678,7 +679,11 @@ async function main() {
       day.setUTCDate(day.getUTCDate() - daysAgo);
       await tx.dailyReport.upsert({
         where: {
-          tenantId_studentId_date: { tenantId: tenant.id, studentId: 'demo-student-001', date: day },
+          tenantId_studentId_date: {
+            tenantId: tenant.id,
+            studentId: 'demo-student-001',
+            date: day,
+          },
         },
         update: {},
         create: {
@@ -815,7 +820,7 @@ async function main() {
         subject: 'Geçen hafta menü içeriği',
         description: 'Geçen hafta menüsündeki çorba isimlerini öğrenebilir miyim?',
         status: 'APPROVED',
-        resolvedById: adminUser?.id,
+        resolvedById: adminUser?.id ?? null,
         resolvedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
         resolutionNote: 'Geçen hafta Pazartesi: şehriye, Salı: domates... detay menüde.',
       },
@@ -874,7 +879,9 @@ async function main() {
       },
     });
 
-    console.log(`Seeded demo tenant with users (superadmin, admin, 2 teachers, 2 parents) and 4 students!`);
+    console.log(
+      `Seeded demo tenant with users (superadmin, admin, 2 teachers, 2 parents) and 4 students!`,
+    );
   });
 }
 

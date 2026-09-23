@@ -194,8 +194,8 @@ export function DailyMenuPage(): JSX.Element {
                 Kreş Yemek Menüsü & Beslenme Yönetimi
               </h1>
               <p className="text-xs text-slate-500 mt-0.5">
-                Kreş genelinde geçerli kahvaltı, öğle ve ikindi menülerini planlayın; öğrenci pasaportlarındaki
-                alerjenlerle otomatik eşleştirin.
+                Kreş genelinde geçerli kahvaltı, öğle ve ikindi menülerini planlayın; öğrenci
+                pasaportlarındaki alerjenlerle otomatik eşleştirin.
               </p>
             </div>
           </div>
@@ -307,7 +307,8 @@ export function DailyMenuPage(): JSX.Element {
       ) : !canEdit ? (
         /* View-only mode for parents */
         <div className="space-y-6">
-          {!menu || (menu.breakfast.length === 0 && menu.lunch.length === 0 && menu.snack.length === 0) ? (
+          {!menu ||
+          (menu.breakfast.length === 0 && menu.lunch.length === 0 && menu.snack.length === 0) ? (
             <div className="bg-white p-12 text-center rounded-2xl border border-slate-200/80">
               <div className="text-4xl mb-3">🍽️</div>
               <p className="text-slate-500 text-sm font-medium">Bu gün için menü girilmemiştir.</p>
@@ -326,8 +327,8 @@ export function DailyMenuPage(): JSX.Element {
                         Alerjen Riski Uyarısı — {warnings.length} Öğrenci Etkileniyor!
                       </h3>
                       <p className="text-xs text-amber-800 mt-1">
-                        Günün menüsündeki içerikler, aşağıdaki öğrencilerin sağlık pasaportundaki kayıtlı
-                        alerjileri ile çakışmaktadır:
+                        Günün menüsündeki içerikler, aşağıdaki öğrencilerin sağlık pasaportundaki
+                        kayıtlı alerjileri ile çakışmaktadır:
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2">
                         {warnings.map((w) => (
@@ -359,7 +360,9 @@ export function DailyMenuPage(): JSX.Element {
                     </div>
                     <div className="space-y-1">
                       {menu.breakfast.map((item, idx) => (
-                        <div key={idx} className="text-xs text-slate-700">• {item}</div>
+                        <div key={idx} className="text-xs text-slate-700">
+                          • {item}
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -375,7 +378,9 @@ export function DailyMenuPage(): JSX.Element {
                     </div>
                     <div className="space-y-1">
                       {menu.lunch.map((item, idx) => (
-                        <div key={idx} className="text-xs text-slate-700">• {item}</div>
+                        <div key={idx} className="text-xs text-slate-700">
+                          • {item}
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -391,7 +396,9 @@ export function DailyMenuPage(): JSX.Element {
                     </div>
                     <div className="space-y-1">
                       {menu.snack.map((item, idx) => (
-                        <div key={idx} className="text-xs text-slate-700">• {item}</div>
+                        <div key={idx} className="text-xs text-slate-700">
+                          • {item}
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -402,7 +409,8 @@ export function DailyMenuPage(): JSX.Element {
               {(menu.allergens.length > 0 || menu.calories || menu.notes) && (
                 <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs space-y-4">
                   <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <span className="text-amber-500">🏷️</span> İçerdiği Alerjenler & Beslenme Bilgisi
+                    <span className="text-amber-500">🏷️</span> İçerdiği Alerjenler & Beslenme
+                    Bilgisi
                   </h3>
 
                   {menu.allergens.length > 0 && (
@@ -618,7 +626,7 @@ export function DailyMenuPage(): JSX.Element {
                   className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-sm disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
-                  <span>{saving ? 'Kaydediliyor…' : 'Kreş Menüsünü Kaydet'}</span>
+                  <span>{saving ? 'Kaydediliyor…' : 'Günün Menüsünü Kaydet'}</span>
                 </button>
               </div>
             </div>

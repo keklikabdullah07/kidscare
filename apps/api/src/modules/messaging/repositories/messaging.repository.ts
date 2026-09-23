@@ -100,7 +100,7 @@ export interface IMessagingRepository {
   findConversation(tenantId: string, id: string): Promise<ConversationRow | null>;
   createConversation(
     tenantId: string,
-    data: Prisma.ConversationUncheckedCreateInput,
+    data: Omit<Prisma.ConversationUncheckedCreateInput, 'tenantId'>,
     participantIds: string[],
   ): Promise<ConversationRow>;
   updateConversationStatus(
@@ -112,7 +112,7 @@ export interface IMessagingRepository {
   listMessages(tenantId: string, conversationId: string): Promise<MessageRow[]>;
   createMessage(
     tenantId: string,
-    data: Prisma.MessageUncheckedCreateInput,
+    data: Omit<Prisma.MessageUncheckedCreateInput, 'tenantId'>,
   ): Promise<MessageRow>;
   markMessageRead(tenantId: string, messageId: string, userId: string): Promise<void>;
   unreadCount(tenantId: string, conversationId: string, userId: string): Promise<number>;
@@ -123,7 +123,7 @@ export interface IMessagingRepository {
   ): Promise<ParentRequestRow[]>;
   createParentRequest(
     tenantId: string,
-    data: Prisma.ParentRequestUncheckedCreateInput,
+    data: Omit<Prisma.ParentRequestUncheckedCreateInput, 'tenantId'>,
   ): Promise<ParentRequestRow>;
   updateParentRequest(
     tenantId: string,
@@ -162,7 +162,7 @@ export class MessagingRepository implements IMessagingRepository {
 
   async createConversation(
     tenantId: string,
-    data: Prisma.ConversationUncheckedCreateInput,
+    data: Omit<Prisma.ConversationUncheckedCreateInput, 'tenantId'>,
     participantIds: string[],
   ): Promise<ConversationRow> {
     return this.prisma.withTenant((client) =>
@@ -192,7 +192,7 @@ export class MessagingRepository implements IMessagingRepository {
       if (!existing) throw new Error('Conversation not found');
       return client.conversation.update({
         where: { id: existing.id },
-        data: { status },
+        data: status !== undefined ? { status } : {},
         select: CONVERSATION_SELECT,
       });
     });
@@ -224,7 +224,7 @@ export class MessagingRepository implements IMessagingRepository {
 
   async createMessage(
     tenantId: string,
-    data: Prisma.MessageUncheckedCreateInput,
+    data: Omit<Prisma.MessageUncheckedCreateInput, 'tenantId'>,
   ): Promise<MessageRow> {
     return this.prisma.withTenant((client) =>
       client.message.create({ data: { ...data, tenantId }, select: MESSAGE_SELECT }),
@@ -273,7 +273,7 @@ export class MessagingRepository implements IMessagingRepository {
 
   async createParentRequest(
     tenantId: string,
-    data: Prisma.ParentRequestUncheckedCreateInput,
+    data: Omit<Prisma.ParentRequestUncheckedCreateInput, 'tenantId'>,
   ): Promise<ParentRequestRow> {
     return this.prisma.withTenant((client) =>
       client.parentRequest.create({ data: { ...data, tenantId }, select: PARENT_REQUEST_SELECT }),

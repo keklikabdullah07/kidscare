@@ -77,10 +77,7 @@ export class PickupController {
   @Delete('contacts/:id')
   @Roles('SUPER_ADMIN', 'ADMIN', 'PARENT')
   @HttpCode(204)
-  async deleteContact(
-    @CurrentTenantId() tenantId: string,
-    @Param('id') id: string,
-  ): Promise<void> {
+  async deleteContact(@CurrentTenantId() tenantId: string, @Param('id') id: string): Promise<void> {
     await this.service.deleteContact(tenantId, id);
   }
 
@@ -92,7 +89,10 @@ export class PickupController {
     @Query('studentId') studentId?: string,
     @Query('status') status?: PickupAuthorizationStatus,
   ): Promise<PickupAuthorization[]> {
-    return this.service.listAuthorizations(tenantId, { studentId, status });
+    const filters: { studentId?: string; status?: PickupAuthorizationStatus } = {};
+    if (studentId) filters.studentId = studentId;
+    if (status) filters.status = status;
+    return this.service.listAuthorizations(tenantId, filters);
   }
 
   @Post('authorizations')
@@ -126,11 +126,11 @@ export class PickupController {
     @Query('from') from?: string,
     @Query('to') to?: string,
   ): Promise<PickupEvent[]> {
-    return this.service.listEvents(tenantId, {
-      studentId,
-      from: from ? new Date(from) : undefined,
-      to: to ? new Date(to) : undefined,
-    });
+    const filters: { studentId?: string; from?: Date; to?: Date } = {};
+    if (studentId) filters.studentId = studentId;
+    if (from) filters.from = new Date(from);
+    if (to) filters.to = new Date(to);
+    return this.service.listEvents(tenantId, filters);
   }
 
   @Post('events')

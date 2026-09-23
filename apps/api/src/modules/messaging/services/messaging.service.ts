@@ -1,9 +1,4 @@
-import {
-  ForbiddenException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type {
   ConversationCreate,
   ConversationStatusUpdate,
@@ -177,10 +172,7 @@ export class MessagingService {
     return this.parentRequestToResponse(row);
   }
 
-  private async conversationToResponse(
-    row: ConversationRow,
-    unreadCount: number,
-  ): Promise<Conversation> {
+  private conversationToResponse(row: ConversationRow, unreadCount: number): Conversation {
     return {
       id: row.id,
       tenantId: row.tenantId,
