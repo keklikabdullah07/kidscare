@@ -51,7 +51,6 @@ export class MessagingService {
     const row = await this.repo.createConversation(
       tenantId,
       {
-        tenantId,
         subject: input.subject,
         category: input.category,
         studentId: input.studentId ?? null,
@@ -63,7 +62,6 @@ export class MessagingService {
       participantIds,
     );
     await this.repo.createMessage(tenantId, {
-      tenantId,
       conversationId: row.id,
       senderId: createdById,
       content: input.initialMessage,
@@ -109,7 +107,6 @@ export class MessagingService {
       throw new ForbiddenException('Kapalı sohbete mesaj gönderilemez');
     }
     const row = await this.repo.createMessage(tenantId, {
-      tenantId,
       conversationId,
       senderId: userId,
       content: input.content,
@@ -145,7 +142,6 @@ export class MessagingService {
     input: ParentRequestCreate,
   ): Promise<ParentRequest> {
     const row = await this.repo.createParentRequest(tenantId, {
-      tenantId,
       parentId,
       studentId: input.studentId ?? null,
       type: input.type,

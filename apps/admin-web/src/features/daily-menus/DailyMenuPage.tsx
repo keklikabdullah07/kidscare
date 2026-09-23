@@ -633,7 +633,7 @@ export function DailyMenuPage(): JSX.Element {
                   className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-sm disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
-                  <span>{saving ? 'Kaydediliyor…' : 'Kreş Menüsünü Kaydet'}</span>
+                  <span>{saving ? 'Kaydediliyor…' : 'Günün Menüsünü Kaydet'}</span>
                 </button>
               </div>
             </div>

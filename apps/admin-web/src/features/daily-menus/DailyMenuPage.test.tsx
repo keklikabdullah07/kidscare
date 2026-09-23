@@ -6,8 +6,13 @@ vi.mock('../auth/AuthContext', () => ({
   useAuth: () => ({
     state: {
       status: 'authenticated',
-      user: { id: 'admin-1', tenantId: 't-1', email: 'admin@demo.test', role: 'ADMIN' },
-      token: 'jwt-123',
+      user: {
+        id: 'admin-1',
+        tenantId: 't-1',
+        email: 'admin@demo.test',
+        role: 'ADMIN',
+      },
+      token: 'test-jwt',
     },
     login: async () => {},
     signup: async () => {},
@@ -110,11 +115,13 @@ describe('DailyMenuPage', () => {
       expect(screen.getByText(/Sabah Kahvaltısı/i)).toBeInTheDocument();
     });
 
-    const saveBtn = await screen.findByRole('button', { name: /Kreş Menüsünü Kaydet/i });
+    const saveBtn = await screen.findByRole('button', {
+      name: /(Kreş|Günün) Menüsünü Kaydet/i,
+    });
     await user.click(saveBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(/Kreş menüsü başarıyla kaydedildi!/i)).toBeInTheDocument();
+      expect(screen.getByText(/(Günün|Kreş) menüsü başarıyla kaydedildi!/i)).toBeInTheDocument();
     });
     expect(savedBody).not.toBeNull();
   });
