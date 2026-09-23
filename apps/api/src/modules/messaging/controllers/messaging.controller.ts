@@ -112,10 +112,10 @@ export class MessagingController {
     @CurrentUser() user: CurrentUserPayload,
     @Query('status') status?: ParentRequestStatus,
   ): Promise<ParentRequest[]> {
-    if (user.role === 'PARENT') {
-      return this.service.listParentRequests(tenantId, { parentId: user.userId, status });
-    }
-    return this.service.listParentRequests(tenantId, { status });
+    const filters: { parentId?: string; status?: ParentRequestStatus } = {};
+    if (user.role === 'PARENT') filters.parentId = user.userId;
+    if (status) filters.status = status;
+    return this.service.listParentRequests(tenantId, filters);
   }
 
   @Post('parent-requests')

@@ -20,6 +20,12 @@ export class TenantsController {
     return this.toResponse(tenant);
   }
 
+  @Get('me/operational-alerts')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
+  async getOperationalAlerts(@CurrentTenantId() tenantId: string) {
+    return this.tenantsService.getOperationalAlerts(tenantId);
+  }
+
   @Patch('me')
   @Roles('SUPER_ADMIN', 'ADMIN')
   async updateMe(

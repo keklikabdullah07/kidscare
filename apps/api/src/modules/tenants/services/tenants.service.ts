@@ -21,4 +21,8 @@ export class TenantsService {
     const updated = await this.repo.update(tenantId, data);
     return Tenant.fromPrisma(updated);
   }
+
+  async getOperationalAlerts(tenantId: string) {
+    return this.repo.getOperationalAlerts(tenantId);
+  }
 }

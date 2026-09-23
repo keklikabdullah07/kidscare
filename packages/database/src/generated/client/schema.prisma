@@ -47,6 +47,9 @@ model Tenant {
   messageReceipts          MessageReadReceipt[]
   parentRequests           ParentRequest[]
   incidentRecords          IncidentRecord[]
+  developmentObservations  DevelopmentObservation[]
+  portfolioItems           PortfolioItem[]
+  homeActivitySuggestions  HomeActivitySuggestion[]
 
   @@map("tenants")
 }
@@ -62,23 +65,24 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  tenant                     Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  children                   Student[]                 @relation("ParentStudents")
-  classroomTeachers          ClassroomTeacher[]
-  pickupAuthRequested        PickupAuthorization[]     @relation("PickupAuthRequester")
-  pickupAuthReviewed         PickupAuthorization[]     @relation("PickupAuthReviewer")
-  pickupEventsVerified       PickupEvent[]
-  medicationsRequested       MedicationRecord[]        @relation("MedRequester")
-  medicationsApproved        MedicationRecord[]        @relation("MedApprover")
-  medicationsAdministered    MedicationRecord[]        @relation("MedAdmin")
-  conversationsCreated       Conversation[]            @relation("ConversationCreator")
-  conversationParticipations ConversationParticipant[]
-  messagesSent               Message[]                 @relation("MessageSender")
-  messageReceipts            MessageReadReceipt[]      @relation("ReceiptUser")
-  parentRequestsRaised       ParentRequest[]           @relation("ParentRequester")
-  parentRequestsResolved     ParentRequest[]           @relation("ParentRequestResolver")
-  incidentsReported          IncidentRecord[]          @relation("IncidentReporter")
-  incidentsNotified          IncidentRecord[]          @relation("IncidentNotifier")
+  tenant                          Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  children                        Student[]                 @relation("ParentStudents")
+  classroomTeachers               ClassroomTeacher[]
+  pickupAuthRequested             PickupAuthorization[]     @relation("PickupAuthRequester")
+  pickupAuthReviewed              PickupAuthorization[]     @relation("PickupAuthReviewer")
+  pickupEventsVerified            PickupEvent[]
+  medicationsRequested            MedicationRecord[]        @relation("MedRequester")
+  medicationsApproved             MedicationRecord[]        @relation("MedApprover")
+  medicationsAdministered         MedicationRecord[]        @relation("MedAdmin")
+  conversationsCreated            Conversation[]            @relation("ConversationCreator")
+  conversationParticipations      ConversationParticipant[]
+  messagesSent                    Message[]                 @relation("MessageSender")
+  messageReceipts                 MessageReadReceipt[]      @relation("ReceiptUser")
+  parentRequestsRaised            ParentRequest[]           @relation("ParentRequester")
+  parentRequestsResolved          ParentRequest[]           @relation("ParentRequestResolver")
+  incidentsReported               IncidentRecord[]          @relation("IncidentReporter")
+  incidentsNotified               IncidentRecord[]          @relation("IncidentNotifier")
+  developmentObservationsAuthored DevelopmentObservation[]  @relation("ObservationTeacher")
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -105,15 +109,17 @@ model Student {
   parent    User?      @relation("ParentStudents", fields: [parentId], references: [id], onDelete: SetNull)
   classroom Classroom? @relation(fields: [classroomId], references: [id], onDelete: SetNull)
 
-  dailyReports         DailyReport[]
-  attendances          Attendance[]
-  pickupContacts       PickupContact[]
-  pickupAuthorizations PickupAuthorization[]
-  pickupEvents         PickupEvent[]
-  medicationRecords    MedicationRecord[]
-  conversations        Conversation[]
-  parentRequests       ParentRequest[]
-  incidentRecords      IncidentRecord[]
+  dailyReports            DailyReport[]
+  attendances             Attendance[]
+  pickupContacts          PickupContact[]
+  pickupAuthorizations    PickupAuthorization[]
+  pickupEvents            PickupEvent[]
+  medicationRecords       MedicationRecord[]
+  conversations           Conversation[]
+  parentRequests          ParentRequest[]
+  incidentRecords         IncidentRecord[]
+  developmentObservations DevelopmentObservation[]
+  portfolioItems          PortfolioItem[]
 
   @@index([tenantId])
   @@index([tenantId, parentId])
@@ -541,4 +547,72 @@ model IncidentRecord {
   @@index([tenantId, studentId, occurredAt])
   @@index([tenantId, occurredAt])
   @@map("incident_records")
+}
+
+enum DevelopmentDomain {
+  DIL
+  MOTOR
+  SOSYAL_DUYGUSAL
+  BILISSEL
+  OZ_BAKIM
+  SANAT
+}
+
+model DevelopmentObservation {
+  id              String            @id @default(cuid())
+  tenantId        String
+  studentId       String
+  teacherId       String
+  domain          DevelopmentDomain
+  skillName       String
+  observation     String
+  observedAt      DateTime          @default(now())
+  isParentVisible Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  tenant         Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student        Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacher        User            @relation("ObservationTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  portfolioItems PortfolioItem[]
+
+  @@index([tenantId, studentId, observedAt])
+  @@index([tenantId, domain])
+  @@map("development_observations")
+}
+
+model PortfolioItem {
+  id              String   @id @default(cuid())
+  tenantId        String
+  studentId       String
+  observationId   String?
+  title           String
+  description     String?
+  mediaUrl        String
+  isParentVisible Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant      Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student     Student                 @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  observation DevelopmentObservation? @relation(fields: [observationId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, studentId])
+  @@map("portfolio_items")
+}
+
+model HomeActivitySuggestion {
+  id          String            @id @default(cuid())
+  tenantId    String
+  domain      DevelopmentDomain
+  ageGroup    String?
+  title       String
+  description String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, domain])
+  @@map("home_activity_suggestions")
 }

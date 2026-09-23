@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { Prisma } from '@kidscare/database';
+import type { ConversationStatus } from '@kidscare/shared-types';
 import { PrismaService } from '../../../prisma/prisma.service';
 
 export type ConversationRow = Prisma.ConversationGetPayload<{
@@ -110,10 +111,7 @@ export interface IMessagingRepository {
   ): Promise<ConversationRow>;
   touchConversation(tenantId: string, id: string, at: Date): Promise<void>;
   listMessages(tenantId: string, conversationId: string): Promise<MessageRow[]>;
-  createMessage(
-    tenantId: string,
-    data: Prisma.MessageUncheckedCreateInput,
-  ): Promise<MessageRow>;
+  createMessage(tenantId: string, data: Prisma.MessageUncheckedCreateInput): Promise<MessageRow>;
   markMessageRead(tenantId: string, messageId: string, userId: string): Promise<void>;
   unreadCount(tenantId: string, conversationId: string, userId: string): Promise<number>;
 
@@ -182,7 +180,7 @@ export class MessagingRepository implements IMessagingRepository {
   async updateConversationStatus(
     tenantId: string,
     id: string,
-    status: Prisma.ConversationUpdateInput['status'],
+    status: ConversationStatus,
   ): Promise<ConversationRow> {
     return this.prisma.withTenant(async (client) => {
       const existing = await client.conversation.findFirst({

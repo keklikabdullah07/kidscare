@@ -10,10 +10,18 @@ import {
   Coffee,
   Soup,
   Cookie,
+  Award,
+  Sparkles,
 } from 'lucide-react';
 import { getParentChildrenOverview } from '../../api/parent';
 import { getDailyMenu } from '../../api/daily-menus';
-import type { DailyMenu, ParentChildOverview } from '@kidscare/shared-types';
+import { listObservations, listPortfolio } from '../../api/development';
+import type {
+  DailyMenu,
+  DevelopmentObservationDto,
+  ParentChildOverview,
+  PortfolioItemDto,
+} from '@kidscare/shared-types';
 
 export function ParentDashboardPage(): JSX.Element {
   const [childrenData, setChildrenData] = useState<ParentChildOverview[]>([]);
@@ -22,6 +30,8 @@ export function ParentDashboardPage(): JSX.Element {
     new Date().toISOString().split('T')[0] ?? '',
   );
   const [dailyMenu, setDailyMenu] = useState<DailyMenu | null>(null);
+  const [devObservations, setDevObservations] = useState<DevelopmentObservationDto[]>([]);
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItemDto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,14 +41,18 @@ export function ParentDashboardPage(): JSX.Element {
       setLoading(true);
       setError(null);
       try {
-        const [data, menuRes] = await Promise.all([
+        const [data, menuRes, obsRes, portRes] = await Promise.all([
           getParentChildrenOverview(selectedDate),
           getDailyMenu(selectedDate).catch(() => ({ menu: null, allergenWarnings: [] })),
+          listObservations(selectedChildId || undefined).catch(() => []),
+          listPortfolio(selectedChildId || undefined).catch(() => []),
         ]);
         if (isMounted) {
           const safe = Array.isArray(data) ? data : [];
           setChildrenData(safe);
           setDailyMenu(menuRes.menu);
+          setDevObservations(Array.isArray(obsRes) ? obsRes : []);
+          setPortfolioItems(Array.isArray(portRes) ? portRes : []);
           if (
             safe.length > 0 &&
             (!selectedChildId || !safe.some((c) => c.student.id === selectedChildId))
@@ -450,7 +464,9 @@ export function ParentDashboardPage(): JSX.Element {
                                 </span>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-1.5 flex-wrap">
-                                    <span className={`font-bold ${isGiven ? 'text-emerald-800' : 'text-slate-800'}`}>
+                                    <span
+                                      className={`font-bold ${isGiven ? 'text-emerald-800' : 'text-slate-800'}`}
+                                    >
                                       {med.name}
                                     </span>
                                     <span className="text-slate-400">·</span>
@@ -461,7 +477,9 @@ export function ParentDashboardPage(): JSX.Element {
                                   </div>
                                   <div className="flex items-center gap-2 mt-1 flex-wrap">
                                     {med.temperature !== undefined && med.temperature !== null && (
-                                      <span className={`font-semibold ${med.temperature >= 38 ? 'text-rose-600' : 'text-slate-600'}`}>
+                                      <span
+                                        className={`font-semibold ${med.temperature >= 38 ? 'text-rose-600' : 'text-slate-600'}`}
+                                      >
                                         🌡️ {med.temperature.toFixed(1)}°C
                                       </span>
                                     )}
@@ -637,6 +655,72 @@ export function ParentDashboardPage(): JSX.Element {
                       </div>
                     )}
                 </div>
+              </div>
+
+              {/* Development & Portfolio Section */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Award className="w-5 h-5 text-amber-500" /> Gelişim Gözlemleri & Karnesi
+                  </h3>
+                  <span className="text-xs text-slate-400">
+                    {devObservations.length} Gözlem Kaydı
+                  </span>
+                </div>
+
+                {devObservations.length === 0 ? (
+                  <p className="text-xs text-slate-400 py-3 text-center">
+                    Henüz paylaşılan gelişim gözlemi bulunmuyor.
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {devObservations.slice(0, 3).map((obs) => (
+                      <div
+                        key={obs.id}
+                        className="bg-amber-50/50 p-3.5 rounded-xl border border-amber-100/60 text-xs space-y-1.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-amber-900">{obs.skillName}</span>
+                          <span className="text-[10px] text-slate-400">
+                            {new Date(obs.observedAt).toLocaleDateString('tr-TR')}
+                          </span>
+                        </div>
+                        <p className="text-slate-600 leading-relaxed">{obs.observation}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Portfolio Showcase */}
+                {portfolioItems.length > 0 && (
+                  <div className="pt-2 border-t border-slate-100">
+                    <span className="text-xs font-bold text-slate-700 block mb-2 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-500" /> Dijital Portfolyo
+                    </span>
+                    <div className="grid grid-cols-2 gap-2">
+                      {portfolioItems.slice(0, 2).map((item) => (
+                        <div
+                          key={item.id}
+                          className="rounded-xl border border-slate-200 overflow-hidden bg-slate-50"
+                        >
+                          <img
+                            src={item.mediaUrl}
+                            alt={item.title}
+                            className="w-full h-24 object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                          <div className="p-2">
+                            <p className="font-semibold text-slate-800 text-[11px] truncate">
+                              {item.title}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

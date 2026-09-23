@@ -1,4 +1,4 @@
-import type { Tenant } from '@kidscare/shared-types';
+import type { OperationalAlertsResponse, Tenant } from '@kidscare/shared-types';
 import { apiFetch } from './client';
 
 export function getTenantMe(): Promise<Tenant> {
@@ -10,4 +10,8 @@ export function updateTenantMe(name: string): Promise<Tenant> {
     method: 'PATCH',
     body: JSON.stringify({ name }),
   });
+}
+
+export function getOperationalAlerts(): Promise<OperationalAlertsResponse> {
+  return apiFetch<OperationalAlertsResponse>('/tenants/me/operational-alerts');
 }

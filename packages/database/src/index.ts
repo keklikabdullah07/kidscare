@@ -14,4 +14,8 @@ export type {
   ActivityPost,
   TenantStatus,
   UserRole,
+  DevelopmentDomain,
+  DevelopmentObservation,
+  PortfolioItem,
+  HomeActivitySuggestion,
 } from './generated/client';

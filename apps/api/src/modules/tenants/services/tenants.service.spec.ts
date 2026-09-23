@@ -20,6 +20,7 @@ describe('TenantsService', () => {
     repo = {
       findById: jest.fn(),
       update: jest.fn(),
+      getOperationalAlerts: jest.fn(),
     };
     service = new TenantsService(repo);
   });

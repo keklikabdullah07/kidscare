@@ -22,6 +22,7 @@ import { PickupModule } from './modules/pickup/pickup.module';
 import { MedicationModule } from './modules/medication/medication.module';
 import { MessagingModule } from './modules/messaging/messaging.module';
 import { IncidentsModule } from './modules/incidents/incidents.module';
+import { DevelopmentModule } from './modules/development/development.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { IncidentsModule } from './modules/incidents/incidents.module';
     MedicationModule,
     MessagingModule,
     IncidentsModule,
+    DevelopmentModule,
   ],
   providers: [
     Reflector,

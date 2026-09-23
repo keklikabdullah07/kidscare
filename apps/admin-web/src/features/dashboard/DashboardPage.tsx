@@ -14,13 +14,23 @@ import {
   Cookie,
   UserCheck,
   Sparkles,
+  ShieldAlert,
+  Pill,
+  FileText,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { listStudents } from '../../api/students';
 import { getAttendanceByDate } from '../../api/attendance';
 import { getDailyReportsByDate } from '../../api/daily-reports';
 import { getDailyMenu, type DailyMenuResponse } from '../../api/daily-menus';
-import type { Attendance, DailyReport, Student, StudentPassport } from '@kidscare/shared-types';
+import { getOperationalAlerts } from '../../api/tenants';
+import type {
+  Attendance,
+  DailyReport,
+  OperationalAlertsResponse,
+  Student,
+  StudentPassport,
+} from '@kidscare/shared-types';
 
 export function DashboardPage(): JSX.Element {
   const { state } = useAuth();
@@ -29,6 +39,7 @@ export function DashboardPage(): JSX.Element {
   const [attendances, setAttendances] = useState<Attendance[]>([]);
   const [reports, setReports] = useState<DailyReport[]>([]);
   const [menuData, setMenuData] = useState<DailyMenuResponse | null>(null);
+  const [alerts, setAlerts] = useState<OperationalAlertsResponse | null>(null);
 
   const today = new Date().toISOString().slice(0, 10);
   const todayFormatted = new Date().toLocaleDateString('tr-TR', {
@@ -47,13 +58,15 @@ export function DashboardPage(): JSX.Element {
       getAttendanceByDate(today),
       getDailyReportsByDate(today),
       getDailyMenu(today),
-    ]).then(([studentsRes, attRes, repRes, menuRes]) => {
+      getOperationalAlerts(),
+    ]).then(([studentsRes, attRes, repRes, menuRes, alertsRes]) => {
       if (cancelled) return;
 
       if (studentsRes.status === 'fulfilled') setStudents(studentsRes.value);
       if (attRes.status === 'fulfilled') setAttendances(attRes.value);
       if (repRes.status === 'fulfilled') setReports(repRes.value);
       if (menuRes.status === 'fulfilled') setMenuData(menuRes.value);
+      if (alertsRes.status === 'fulfilled') setAlerts(alertsRes.value);
 
       setLoading(false);
     });
@@ -268,6 +281,127 @@ export function DashboardPage(): JSX.Element {
             <p className="text-xs text-slate-500">Sınıf aktiviteleri</p>
           </div>
         </Link>
+      </div>
+
+      {/* Erken Uyarı & Eylem Merkezi (Action Board - Faz 4) */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
+              <ShieldAlert className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                Erken Uyarı & Operasyonel Eylem Merkezi
+                {alerts &&
+                  alerts.immediateActions.pendingMedicationsCount +
+                    alerts.immediateActions.openIncidentsCount +
+                    alerts.immediateActions.pendingPickupAuthorizationsCount +
+                    alerts.immediateActions.pendingParentRequestsCount >
+                    0 && (
+                    <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-rose-100 text-rose-800 animate-pulse">
+                      {alerts.immediateActions.pendingMedicationsCount +
+                        alerts.immediateActions.openIncidentsCount +
+                        alerts.immediateActions.pendingPickupAuthorizationsCount +
+                        alerts.immediateActions.pendingParentRequestsCount}{' '}
+                      Aksiyon Bekliyor
+                    </span>
+                  )}
+              </h3>
+              <p className="text-xs text-slate-500">
+                Kritik sağlık, güvenlik, teslimat ve çözüm bekleyen veli talepleri
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs">
+            <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-slate-200 font-medium">
+              💊 {alerts?.immediateActions.pendingMedicationsCount ?? 0} İlaç
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-slate-200 font-medium">
+              🚨 {alerts?.immediateActions.openIncidentsCount ?? 0} Olay
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-slate-200 font-medium">
+              🔐 {alerts?.immediateActions.pendingPickupAuthorizationsCount ?? 0} Teslimat
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-slate-200 font-medium">
+              📩 {alerts?.immediateActions.pendingParentRequestsCount ?? 0} Veli Talebi
+            </span>
+          </div>
+        </div>
+
+        {/* Action Items List */}
+        {alerts && alerts.immediateActions.items.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+            {alerts.immediateActions.items.map((item) => (
+              <div
+                key={item.id}
+                className={`p-4 rounded-xl border flex items-start justify-between gap-3 transition-all hover:shadow-xs ${
+                  item.urgency === 'HIGH'
+                    ? 'bg-rose-50/40 border-rose-200/80'
+                    : 'bg-amber-50/40 border-amber-200/80'
+                }`}
+              >
+                <div className="flex items-start gap-3 min-w-0">
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
+                      item.type === 'MEDICATION'
+                        ? 'bg-purple-100 text-purple-700'
+                        : item.type === 'INCIDENT'
+                          ? 'bg-rose-100 text-rose-700'
+                          : item.type === 'PICKUP'
+                            ? 'bg-blue-100 text-blue-700'
+                            : 'bg-amber-100 text-amber-700'
+                    }`}
+                  >
+                    {item.type === 'MEDICATION' && <Pill className="w-4 h-4" />}
+                    {item.type === 'INCIDENT' && <AlertTriangle className="w-4 h-4" />}
+                    {item.type === 'PICKUP' && <ShieldAlert className="w-4 h-4" />}
+                    {item.type === 'PARENT_REQUEST' && <FileText className="w-4 h-4" />}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h4 className="text-xs font-bold text-slate-900 truncate">{item.title}</h4>
+                      {item.studentName && (
+                        <span className="text-[11px] font-semibold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
+                          {item.studentName}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-600 mt-1 line-clamp-2">{item.description}</p>
+                  </div>
+                </div>
+
+                <Link
+                  to={item.actionUrl}
+                  className="shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition shadow-2xs flex items-center gap-1"
+                >
+                  İncele <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-6 px-4 rounded-xl bg-emerald-50/60 border border-emerald-200/80 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-emerald-900">
+                  Operasyonel Durum Sakin & Güvenli
+                </h4>
+                <p className="text-xs text-emerald-800">
+                  Bekleyen kritik ilaç onayı, açık kaza/olay tutanağı veya bekleyen teslimat izni
+                  bulunmuyor.
+                </p>
+              </div>
+            </div>
+            <span className="text-xs font-semibold text-emerald-700 bg-white px-3 py-1.5 rounded-lg border border-emerald-200 shadow-2xs shrink-0">
+              Tüm Kontroller Tamam
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 4. İki Kolonlu Detay Grid */}

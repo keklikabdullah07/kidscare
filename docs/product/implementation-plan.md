@@ -381,16 +381,16 @@ Bu faz, temel akışlar gerçek kullanıcılarla doğrulandıktan sonra başlaya
 
 ### P2 — Gelişim
 
-- [ ] Gelişim alanları
-- [ ] Gözlem kayıtları
-- [ ] Portfolyo
-- [ ] Veli gelişim görünümü
-- [ ] Ev etkinliği önerileri
+- [x] Gelişim alanları
+- [x] Gözlem kayıtları
+- [x] Portfolyo
+- [x] Veli gelişim görünümü
+- [x] Ev etkinliği önerileri
 
 ### P3 — Yönetim zekâsı
 
-- [ ] Erken uyarı kuralları
-- [ ] Admin görev listesi
+- [x] Erken uyarı kuralları
+- [x] Admin görev listesi (Eylem Merkezi)
 - [ ] Personel yük görünümü
 - [ ] Trend raporları
 - [ ] Veli geri bildirim analizi

@@ -2,6 +2,19 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DailyMenuPage } from './DailyMenuPage';
 
+vi.mock('../auth/AuthContext', () => ({
+  useAuth: () => ({
+    state: {
+      status: 'authenticated',
+      user: { id: 'admin-1', tenantId: 't-1', email: 'admin@demo.test', role: 'ADMIN' },
+      token: 'jwt-123',
+    },
+    login: async () => {},
+    signup: async () => {},
+    logout: () => {},
+  }),
+}));
+
 const fakeMenuResponse = {
   menu: {
     id: 'menu-1',
@@ -68,6 +81,10 @@ describe('DailyMenuPage', () => {
     let savedBody: unknown = null;
 
     mockFetchByUrl({
+      '/auth/me': () =>
+        new Response(JSON.stringify({ userId: 'u-1', tenantId: 't-1', role: 'ADMIN' }), {
+          status: 200,
+        }),
       '/daily-menus': (init) => {
         if (init?.method === 'POST') {
           savedBody = JSON.parse(init.body as string);
@@ -93,11 +110,11 @@ describe('DailyMenuPage', () => {
       expect(screen.getByText(/Sabah Kahvaltısı/i)).toBeInTheDocument();
     });
 
-    const saveBtn = screen.getByRole('button', { name: /Günün Menüsünü Kaydet/i });
+    const saveBtn = await screen.findByRole('button', { name: /Kreş Menüsünü Kaydet/i });
     await user.click(saveBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(/Günün menüsü başarıyla kaydedildi!/i)).toBeInTheDocument();
+      expect(screen.getByText(/Kreş menüsü başarıyla kaydedildi!/i)).toBeInTheDocument();
     });
     expect(savedBody).not.toBeNull();
   });

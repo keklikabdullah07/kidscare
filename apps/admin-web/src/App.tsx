@@ -22,6 +22,7 @@ import { MedicationPage } from './features/medication/MedicationPage';
 import { MessagesPage } from './features/messages/MessagesPage';
 import { ParentRequestsPage } from './features/messages/ParentRequestsPage';
 import { IncidentsPage } from './features/incidents/IncidentsPage';
+import { DevelopmentPage } from './features/development/DevelopmentPage';
 import { onUnauthorized } from './api/client';
 
 /**
@@ -69,24 +70,130 @@ export function App(): JSX.Element {
               <Route element={<AuthGuard />}>
                 <Route element={<Layout />}>
                   {/* Parent-only portal */}
-                  <Route path="/portal" element={<RoleGuard allowed={['PARENT']}><ParentDashboardPage /></RoleGuard>} />
+                  <Route
+                    path="/portal"
+                    element={
+                      <RoleGuard allowed={['PARENT']}>
+                        <ParentDashboardPage />
+                      </RoleGuard>
+                    }
+                  />
 
                   {/* Staff-only pages (PARENT cannot access) */}
-                  <Route path="/dashboard" element={<RoleGuard allowed={[...STAFF_ROLES]}><DashboardPage /></RoleGuard>} />
-                  <Route path="/students" element={<RoleGuard allowed={[...STAFF_ROLES]}><StudentsPage /></RoleGuard>} />
-                  <Route path="/tracking" element={<RoleGuard allowed={[...STAFF_ROLES]}><DailyTrackingPage /></RoleGuard>} />
-                  <Route path="/attendance" element={<RoleGuard allowed={[...STAFF_ROLES]}><AttendancePage /></RoleGuard>} />
-                  <Route path="/team" element={<RoleGuard allowed={['SUPER_ADMIN', 'ADMIN']}><TeamPage /></RoleGuard>} />
-                  <Route path="/settings" element={<RoleGuard allowed={['SUPER_ADMIN', 'ADMIN']}><TenantSettings /></RoleGuard>} />
-                  <Route path="/pickup" element={<RoleGuard allowed={[...ALL_ROLES]}><PickupPage /></RoleGuard>} />
-                  <Route path="/medication" element={<RoleGuard allowed={[...ALL_ROLES]}><MedicationPage /></RoleGuard>} />
-                  <Route path="/messages" element={<RoleGuard allowed={[...ALL_ROLES]}><MessagesPage /></RoleGuard>} />
-                  <Route path="/requests" element={<RoleGuard allowed={[...ALL_ROLES]}><ParentRequestsPage /></RoleGuard>} />
-                  <Route path="/incidents" element={<RoleGuard allowed={[...STAFF_ROLES]}><IncidentsPage /></RoleGuard>} />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <RoleGuard allowed={[...STAFF_ROLES]}>
+                        <DashboardPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/students"
+                    element={
+                      <RoleGuard allowed={[...STAFF_ROLES]}>
+                        <StudentsPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/tracking"
+                    element={
+                      <RoleGuard allowed={[...STAFF_ROLES]}>
+                        <DailyTrackingPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/attendance"
+                    element={
+                      <RoleGuard allowed={[...STAFF_ROLES]}>
+                        <AttendancePage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/team"
+                    element={
+                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN']}>
+                        <TeamPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN']}>
+                        <TenantSettings />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/pickup"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <PickupPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/medication"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <MedicationPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/messages"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <MessagesPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/requests"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <ParentRequestsPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/incidents"
+                    element={
+                      <RoleGuard allowed={[...STAFF_ROLES]}>
+                        <IncidentsPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/development"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <DevelopmentPage />
+                      </RoleGuard>
+                    }
+                  />
 
                   {/* Shared pages (all roles can view) */}
-                  <Route path="/menus" element={<RoleGuard allowed={[...ALL_ROLES]}><DailyMenuPage /></RoleGuard>} />
-                  <Route path="/gallery" element={<RoleGuard allowed={[...ALL_ROLES]}><ActivityGalleryPage /></RoleGuard>} />
+                  <Route
+                    path="/menus"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <DailyMenuPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/gallery"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <ActivityGalleryPage />
+                      </RoleGuard>
+                    }
+                  />
                 </Route>
               </Route>
               <Route path="/" element={<HomeRedirect />} />

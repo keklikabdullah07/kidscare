@@ -23,6 +23,7 @@ import {
   MessageSquare,
   ClipboardList,
   AlertTriangle,
+  Award,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
@@ -57,12 +58,48 @@ const allNavItems: NavItem[] = [
     icon: Camera,
     description: 'Fotoğraf ve duyurular',
   },
-  { to: '/team', label: 'Ekip & Veliler', icon: UserCog, description: 'Öğretmen ve veli hesapları' },
-  { to: '/pickup', label: 'Teslim Yetkileri', icon: ShieldCheck, description: 'Veli talepleri ve olaylar' },
-  { to: '/medication', label: 'İlaç Takibi', icon: Pill, description: 'İlaç talepleri ve uygulama' },
-  { to: '/messages', label: 'Mesajlar', icon: MessageSquare, description: 'Veli-personel iletişim' },
-  { to: '/requests', label: 'Veli Talepleri', icon: ClipboardList, description: 'İzin ve bilgi talepleri' },
-  { to: '/incidents', label: 'Olay Kayıtları', icon: AlertTriangle, description: 'Güvenlik olayları' },
+  {
+    to: '/team',
+    label: 'Ekip & Veliler',
+    icon: UserCog,
+    description: 'Öğretmen ve veli hesapları',
+  },
+  {
+    to: '/pickup',
+    label: 'Teslim Yetkileri',
+    icon: ShieldCheck,
+    description: 'Veli talepleri ve olaylar',
+  },
+  {
+    to: '/medication',
+    label: 'İlaç Takibi',
+    icon: Pill,
+    description: 'İlaç talepleri ve uygulama',
+  },
+  {
+    to: '/messages',
+    label: 'Mesajlar',
+    icon: MessageSquare,
+    description: 'Veli-personel iletişim',
+  },
+  {
+    to: '/requests',
+    label: 'Veli Talepleri',
+    icon: ClipboardList,
+    description: 'İzin ve bilgi talepleri',
+  },
+  {
+    to: '/incidents',
+    label: 'Olay Kayıtları',
+    icon: AlertTriangle,
+    description: 'Güvenlik olayları',
+  },
+  {
+    to: '/development',
+    label: 'Gelişim & Portfolyo',
+    icon: Award,
+    description: 'Gözlem, ürünler ve ev ödevi',
+  },
   { to: '/settings', label: 'Kreş Ayarları', icon: Settings, description: 'Genel yapılandırma' },
 ];
 
@@ -101,11 +138,19 @@ export function Layout(): JSX.Element {
   const isTeacher = state.status === 'authenticated' && state.user.role === 'TEACHER';
 
   const items = isParent
-    ? allNavItems.filter((n) => n.to === '/portal' || n.to === '/menus' || n.to === '/gallery')
+    ? allNavItems.filter(
+        (n) =>
+          n.to === '/portal' ||
+          n.to === '/menus' ||
+          n.to === '/gallery' ||
+          n.to === '/development' ||
+          n.to === '/pickup' ||
+          n.to === '/medication' ||
+          n.to === '/messages' ||
+          n.to === '/requests',
+      )
     : isTeacher
-      ? allNavItems.filter(
-          (n) => n.to !== '/portal' && n.to !== '/settings' && n.to !== '/team',
-        )
+      ? allNavItems.filter((n) => n.to !== '/portal' && n.to !== '/settings' && n.to !== '/team')
       : allNavItems.filter((n) => n.to !== '/portal');
 
   const userRole = state.status === 'authenticated' ? state.user.role : '';
