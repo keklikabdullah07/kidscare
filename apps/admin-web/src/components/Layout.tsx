@@ -269,9 +269,24 @@ export function Layout(): JSX.Element {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const userRole = state.status === 'authenticated' ? state.user.role : '';
-  const userEmail = state.status === 'authenticated' ? state.user.email || state.user.id : '';
+  const userEmail = state.status === 'authenticated' ? state.user.email : '';
   const roleBadge = getRoleBadge(userRole);
-  const userInitial = userEmail ? userEmail.charAt(0).toUpperCase() : 'K';
+
+  const displayName = (() => {
+    if (userEmail && userEmail.includes('@')) {
+      const prefix = userEmail.split('@')[0];
+      return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+    }
+    const roleLabels: Record<string, string> = {
+      SUPERADMIN: 'Süper Admin',
+      ADMIN: 'Kreş Müdürü',
+      TEACHER: 'Öğretmen',
+      PARENT: 'Veli',
+    };
+    return roleLabels[userRole] || 'Kullanıcı';
+  })();
+
+  const userInitial = displayName.charAt(0).toUpperCase();
   const navGroups = getNavGroupsForRole(userRole);
 
   return (
@@ -371,9 +386,9 @@ export function Layout(): JSX.Element {
               <div className="overflow-hidden">
                 <p
                   className="text-xs font-semibold text-slate-900 dark:text-slate-100 truncate"
-                  title={userEmail}
+                  title={userEmail || displayName}
                 >
-                  {userEmail}
+                  {displayName}
                 </p>
                 <span
                   className={`inline-block text-[10px] font-medium px-1.5 py-0.5 rounded border mt-0.5 ${roleBadge.color}`}

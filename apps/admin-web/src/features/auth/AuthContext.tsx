@@ -28,6 +28,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 function persistAndSet(resp: AuthResponse): AuthenticatedUser {
   setStoredToken(resp.token);
+  if (typeof window !== 'undefined' && resp.user.email) {
+    localStorage.setItem('kidscare_user_email', resp.user.email);
+  }
   return resp.user;
 }
 
@@ -42,12 +45,14 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
       .me()
       .then((ctx) => {
         if (cancelled) return;
+        const cachedEmail =
+          typeof window !== 'undefined' ? localStorage.getItem('kidscare_user_email') || '' : '';
         setState({
           status: 'authenticated',
           user: {
             id: ctx.userId,
             tenantId: ctx.tenantId,
-            email: '',
+            email: cachedEmail,
             role: ctx.role as AuthenticatedUser['role'],
           },
           token: '',
@@ -57,6 +62,9 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         if (cancelled) return;
         if (err instanceof ApiError && err.status === 401) {
           setStoredToken(null);
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('kidscare_user_email');
+          }
         }
         setState({ status: 'unauthenticated', error: null });
       });
@@ -122,6 +130,9 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 
   const logout = useCallback((): void => {
     setStoredToken(null);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('kidscare_user_email');
+    }
     setState({ status: 'unauthenticated', error: null });
   }, []);
 
