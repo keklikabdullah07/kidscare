@@ -357,9 +357,9 @@ export function DailyReportEditorModal({
                         key={mp.key}
                         type="button"
                         onClick={() => setBreakfast(mp.key)}
-                        className={`px-2 py-1 text-xs rounded-md border font-medium ${
+                        className={`px-2 py-1 text-xs rounded-md border font-medium transition ${
                           breakfast === mp.key
-                            ? 'bg-blue-600 border-blue-600 text-white'
+                            ? 'bg-emerald-600 border-emerald-600 text-white'
                             : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
                         }`}
                       >
@@ -378,9 +378,9 @@ export function DailyReportEditorModal({
                         key={mp.key}
                         type="button"
                         onClick={() => setLunch(mp.key)}
-                        className={`px-2 py-1 text-xs rounded-md border font-medium ${
+                        className={`px-2 py-1 text-xs rounded-md border font-medium transition ${
                           lunch === mp.key
-                            ? 'bg-blue-600 border-blue-600 text-white'
+                            ? 'bg-emerald-600 border-emerald-600 text-white'
                             : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
                         }`}
                       >
@@ -399,9 +399,9 @@ export function DailyReportEditorModal({
                         key={mp.key}
                         type="button"
                         onClick={() => setSnack(mp.key)}
-                        className={`px-2 py-1 text-xs rounded-md border font-medium ${
+                        className={`px-2 py-1 text-xs rounded-md border font-medium transition ${
                           snack === mp.key
-                            ? 'bg-blue-600 border-blue-600 text-white'
+                            ? 'bg-emerald-600 border-emerald-600 text-white'
                             : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
                         }`}
                       >
@@ -627,9 +627,7 @@ export function DailyReportEditorModal({
                       <div
                         key={med.id}
                         className={`flex items-center gap-2 p-2.5 rounded-md border text-xs transition-colors ${
-                          isGiven
-                            ? 'bg-green-50 border-green-200'
-                            : 'bg-white border-gray-200'
+                          isGiven ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'
                         }`}
                       >
                         <button
@@ -645,21 +643,25 @@ export function DailyReportEditorModal({
                           {isGiven && <span className="text-[10px] leading-none">✓</span>}
                         </button>
                         <div className="flex-1 min-w-0">
-                          <span className={`font-semibold ${ isGiven ? 'text-green-800' : 'text-gray-800' }`}>
+                          <span
+                            className={`font-semibold ${isGiven ? 'text-green-800' : 'text-gray-800'}`}
+                          >
                             {med.name}
                           </span>
                           <span className="text-gray-400 mx-1">·</span>
                           <span className="text-gray-500">{med.time}</span>
-                          {med.dosage && (
-                            <span className="ml-1 text-gray-500">({med.dosage})</span>
-                          )}
+                          {med.dosage && <span className="ml-1 text-gray-500">({med.dosage})</span>}
                           {med.temperature !== undefined && (
-                            <span className={`ml-1.5 font-medium ${ med.temperature >= 38 ? 'text-red-600' : 'text-gray-600' }`}>
+                            <span
+                              className={`ml-1.5 font-medium ${med.temperature >= 38 ? 'text-red-600' : 'text-gray-600'}`}
+                            >
                               🌡️ {med.temperature.toFixed(1)}°C
                             </span>
                           )}
                           {isGiven && med.givenAt && (
-                            <span className="ml-1.5 text-green-600">✓ {med.givenAt}'de verildi</span>
+                            <span className="ml-1.5 text-green-600">
+                              ✓ {med.givenAt}'de verildi
+                            </span>
                           )}
                           {med.notes && (
                             <span className="ml-1 text-gray-400 italic">— {med.notes}</span>
@@ -706,7 +708,7 @@ export function DailyReportEditorModal({
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-700 shadow-xs disabled:opacity-50"
+                className="rounded-lg bg-teal-700 px-5 py-2 text-sm font-semibold text-white hover:bg-teal-800 shadow-xs disabled:opacity-50 transition"
               >
                 {saving ? 'Kaydediliyor…' : 'Raporu Kaydet'}
               </button>

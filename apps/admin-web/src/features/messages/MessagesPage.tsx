@@ -153,8 +153,10 @@ export function MessagesPage(): JSX.Element {
             <MessageSquare className="w-5 h-5 text-teal-100" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Mesajlar</h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              Mesajlar
+            </h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Veli, öğretmen ve admin arası güvenli iletişim.
             </p>
           </div>
@@ -163,14 +165,14 @@ export function MessagesPage(): JSX.Element {
           <button
             type="button"
             onClick={() => void refreshList()}
-            className="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5"
+            className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition"
           >
             <RotateCw className="w-3.5 h-3.5" /> Yenile
           </button>
           <button
             type="button"
             onClick={() => setShowCompose((v) => !v)}
-            className="text-xs font-semibold text-white bg-teal-700 hover:bg-teal-800 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition-colors"
+            className="text-xs font-semibold text-white bg-teal-700 hover:bg-teal-800 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition-colors shadow-xs"
           >
             <Plus className="w-3.5 h-3.5" /> Yeni Sohbet
           </button>
@@ -180,28 +182,28 @@ export function MessagesPage(): JSX.Element {
       {showCompose && (
         <form
           onSubmit={(e) => void submitCompose(e)}
-          className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3"
+          className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
                 Konu
               </label>
               <input
                 type="text"
                 value={cSubject}
                 onChange={(e) => setCSubject(e.target.value)}
-                className="w-full text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
                 Kategori
               </label>
               <select
                 value={cCategory}
                 onChange={(e) => setCCategory(e.target.value as ConversationCategory)}
-                className="w-full text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
               >
                 {Object.entries(CATEGORY_LABEL).map(([k, v]) => (
                   <option key={k} value={k}>
@@ -211,13 +213,13 @@ export function MessagesPage(): JSX.Element {
               </select>
             </div>
             <div className="sm:col-span-2">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
                 Öğrenci (opsiyonel)
               </label>
               <select
                 value={cStudentId}
                 onChange={(e) => setCStudentId(e.target.value)}
-                className="w-full text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
               >
                 <option value="">—</option>
                 {students.map((s) => (
@@ -229,27 +231,27 @@ export function MessagesPage(): JSX.Element {
             </div>
           </div>
           <div>
-            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
               İlk mesaj
             </label>
             <textarea
               value={cBody}
               onChange={(e) => setCBody(e.target.value)}
               rows={3}
-              className="w-full text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white"
+              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setShowCompose(false)}
-              className="text-xs font-semibold text-slate-600 px-3 py-1.5"
+              className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 px-3 py-1.5"
             >
               İptal
             </button>
             <button
               type="submit"
-              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 px-3.5 py-1.5 rounded-lg transition-colors"
+              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 px-3.5 py-1.5 rounded-lg transition-colors shadow-xs"
             >
               Aç
             </button>
@@ -259,29 +261,35 @@ export function MessagesPage(): JSX.Element {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Conversation List */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs lg:col-span-1 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs lg:col-span-1 overflow-hidden">
           {loading ? (
-            <div className="p-8 text-center text-slate-400 text-sm">Yükleniyor…</div>
+            <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
+              Yükleniyor…
+            </div>
           ) : conversations.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-sm">
+            <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
               Henüz sohbet yok. "Yeni Sohbet" ile başla.
             </div>
           ) : (
-            <ul className="divide-y divide-slate-100 max-h-[60vh] overflow-y-auto">
+            <ul className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[60vh] overflow-y-auto">
               {conversations.map((c) => (
                 <li key={c.id}>
                   <button
                     type="button"
                     onClick={() => setActiveId(c.id)}
-                    className={`w-full text-left p-3.5 hover:bg-slate-50 transition ${
-                      activeId === c.id ? 'bg-teal-50/80 text-teal-900' : ''
+                    className={`w-full text-left p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition ${
+                      activeId === c.id
+                        ? 'bg-teal-50/80 dark:bg-teal-950/40 text-teal-900 dark:text-teal-200'
+                        : ''
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
                         <p
                           className={`text-sm font-semibold truncate ${
-                            c.unreadCount > 0 ? 'text-slate-900' : 'text-slate-700'
+                            c.unreadCount > 0
+                              ? 'text-slate-900 dark:text-slate-100'
+                              : 'text-slate-700 dark:text-slate-300'
                           }`}
                         >
                           {c.isCritical && (
@@ -289,7 +297,7 @@ export function MessagesPage(): JSX.Element {
                           )}
                           {c.subject}
                         </p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                           {CATEGORY_LABEL[c.category]}
                         </p>
                       </div>
@@ -307,22 +315,22 @@ export function MessagesPage(): JSX.Element {
         </div>
 
         {/* Thread */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs lg:col-span-2 flex flex-col min-h-[60vh]">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs lg:col-span-2 flex flex-col min-h-[60vh]">
           {!active ? (
-            <div className="flex-1 flex items-center justify-center text-slate-400 text-sm p-8">
+            <div className="flex-1 flex items-center justify-center text-slate-400 dark:text-slate-500 text-sm p-8">
               Bir sohbet seçin veya yeni oluşturun.
             </div>
           ) : (
             <>
-              <div className="border-b border-slate-100 p-4 flex items-center justify-between gap-2">
+              <div className="border-b border-slate-100 dark:border-slate-800 p-4 flex items-center justify-between gap-2">
                 <div className="min-w-0">
-                  <h2 className="font-bold text-slate-900 truncate">
+                  <h2 className="font-bold text-slate-900 dark:text-slate-100 truncate">
                     {active.isCritical && (
                       <AlertCircle className="w-4 h-4 inline mr-1 text-rose-600" />
                     )}
                     {active.subject}
                   </h2>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     {CATEGORY_LABEL[active.category]} · {STATUS_LABEL[active.status]}
                   </p>
                 </div>
@@ -330,7 +338,7 @@ export function MessagesPage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => void closeConversation()}
-                    className="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg"
+                    className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg transition"
                   >
                     Kapat
                   </button>
@@ -338,7 +346,9 @@ export function MessagesPage(): JSX.Element {
               </div>
               <div className="flex-1 overflow-y-auto p-4 space-y-2 max-h-[50vh]">
                 {messages.length === 0 ? (
-                  <div className="text-center text-slate-400 text-xs py-8">Henüz mesaj yok.</div>
+                  <div className="text-center text-slate-400 dark:text-slate-500 text-xs py-8">
+                    Henüz mesaj yok.
+                  </div>
                 ) : (
                   messages.map((m) => {
                     const isMine = m.senderId === meId;
@@ -349,13 +359,15 @@ export function MessagesPage(): JSX.Element {
                       >
                         <div
                           className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-xs ${
-                            isMine ? 'bg-teal-700 text-white' : 'bg-slate-100 text-slate-900'
+                            isMine
+                              ? 'bg-teal-700 text-white'
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100'
                           }`}
                         >
                           <p className="whitespace-pre-wrap">{m.content}</p>
                           <p
                             className={`text-[10px] mt-1 ${
-                              isMine ? 'text-teal-100' : 'text-slate-500'
+                              isMine ? 'text-teal-200' : 'text-slate-400 dark:text-slate-400'
                             }`}
                           >
                             {new Date(m.createdAt).toLocaleTimeString('tr-TR', {
@@ -372,19 +384,19 @@ export function MessagesPage(): JSX.Element {
               {active.status === 'OPEN' && (
                 <form
                   onSubmit={(e) => void sendDraft(e)}
-                  className="border-t border-slate-100 p-3 flex items-center gap-2"
+                  className="border-t border-slate-100 dark:border-slate-800 p-3 flex items-center gap-2"
                 >
                   <input
                     type="text"
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     placeholder="Mesaj yaz…"
-                    className="flex-1 text-xs border border-slate-200 rounded-xl px-3 py-2 bg-white"
+                    className="flex-1 text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
                   />
                   <button
                     type="submit"
                     disabled={sending || !draft.trim()}
-                    className="px-3.5 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-semibold inline-flex items-center gap-1 disabled:opacity-50 transition-colors"
+                    className="px-3.5 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-semibold inline-flex items-center gap-1 disabled:opacity-50 transition-colors shadow-xs"
                   >
                     <Send className="w-3.5 h-3.5" />
                     {sending ? '…' : 'Gönder'}

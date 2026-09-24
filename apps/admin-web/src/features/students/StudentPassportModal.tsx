@@ -390,7 +390,7 @@ export function StudentPassportModal({
                     <button
                       type="button"
                       onClick={addChronic}
-                      className="px-2.5 py-1 bg-blue-600 text-white rounded-md text-xs font-medium"
+                      className="px-2.5 py-1 bg-teal-700 hover:bg-teal-800 text-white rounded-md text-xs font-medium transition"
                     >
                       Ekle
                     </button>
@@ -400,7 +400,7 @@ export function StudentPassportModal({
                       {chronicConditions.map((c) => (
                         <span
                           key={c}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-800"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-teal-50 text-teal-800 border border-teal-200/60"
                         >
                           {c}
                           <button
@@ -425,7 +425,7 @@ export function StudentPassportModal({
                     <button
                       type="button"
                       onClick={addMed}
-                      className="px-2.5 py-1 bg-blue-600 text-white rounded-md text-xs font-medium"
+                      className="px-2.5 py-1 bg-teal-700 hover:bg-teal-800 text-white rounded-md text-xs font-medium transition"
                     >
                       Ekle
                     </button>
@@ -470,7 +470,7 @@ export function StudentPassportModal({
                       <div>
                         <span className="font-semibold text-gray-900 mr-2">{c.name}</span>
                         <span className="text-gray-500 mr-2">({c.relationship})</span>
-                        <span className="text-blue-600 font-mono">{c.phone}</span>
+                        <span className="text-teal-700 font-mono">{c.phone}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         {c.isAuthorizedPickup && (
@@ -522,7 +522,7 @@ export function StudentPassportModal({
                       type="checkbox"
                       checked={cPickup}
                       onChange={(e) => setCPickup(e.target.checked)}
-                      className="rounded text-blue-600"
+                      className="rounded text-teal-600 focus:ring-teal-500"
                     />
                     Teslim alabilir
                   </label>
@@ -547,7 +547,7 @@ export function StudentPassportModal({
                 onChange={(e) => setSpecialNotes(e.target.value)}
                 rows={2}
                 placeholder="Örn: Uyku öncesi masal dinlemeyi sever, yüksek sesten tedirgin olur..."
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-xs text-gray-800 focus:border-blue-500 focus:outline-hidden"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-xs text-gray-800 focus:border-teal-600 focus:outline-hidden"
               />
             </div>
 
@@ -564,7 +564,7 @@ export function StudentPassportModal({
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-700 shadow-xs disabled:opacity-50"
+                className="rounded-lg bg-teal-700 px-5 py-2 text-sm font-semibold text-white hover:bg-teal-800 shadow-xs disabled:opacity-50 transition"
               >
                 {saving ? 'Kaydediliyor…' : 'Pasaportu Kaydet'}
               </button>

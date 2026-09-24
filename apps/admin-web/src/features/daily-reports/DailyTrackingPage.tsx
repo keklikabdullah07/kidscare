@@ -354,7 +354,7 @@ export function DailyTrackingPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setSelectedDate(todayStr)}
-              className="text-[11px] font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded-lg ml-1 transition"
+              className="text-[11px] font-semibold text-teal-700 dark:text-teal-300 hover:text-teal-800 bg-teal-50 dark:bg-teal-950/40 px-2 py-1 rounded-lg ml-1 transition border border-teal-200/60 dark:border-teal-800/60"
             >
               Bugün
             </button>
@@ -872,14 +872,14 @@ export function DailyTrackingPage(): JSX.Element {
                 </div>
 
                 {/* Footer Action */}
-                <div className="border-t border-slate-100 pt-3 mt-1">
+                <div className="border-t border-slate-100 dark:border-slate-800 pt-3 mt-1">
                   <button
                     type="button"
                     onClick={() => setActiveStudent(student)}
                     className={`w-full rounded-xl py-2.5 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs ${
                       report
-                        ? 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-200/60 dark:border-emerald-800/60'
+                        : 'bg-teal-700 hover:bg-teal-800 text-white'
                     }`}
                   >
                     <Edit3 className="w-3.5 h-3.5" />
