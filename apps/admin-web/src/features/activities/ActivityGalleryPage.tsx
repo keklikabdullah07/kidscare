@@ -299,7 +299,7 @@ export function ActivityGalleryPage(): JSX.Element {
                         void handleDelete(post.id);
                       }}
                       title="Etkinliği Sil"
-                      className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition"
+                      className="text-slate-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-100/70 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

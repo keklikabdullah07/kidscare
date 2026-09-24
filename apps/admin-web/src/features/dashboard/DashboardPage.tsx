@@ -8,15 +8,14 @@ import {
   ArrowRight,
   AlertTriangle,
   Heart,
-  Camera,
   Coffee,
   Sun,
   Cookie,
-  UserCheck,
-  Sparkles,
   ShieldAlert,
   Pill,
   FileText,
+  Clock,
+  Calendar,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { listStudents } from '../../api/students';
@@ -76,7 +75,6 @@ export function DashboardPage(): JSX.Element {
     };
   }, [today]);
 
-  // Hesaplamalar
   const totalStudents = students.length;
   const presentCount = attendances.filter(
     (a) => a.status === 'PRESENT' || a.status === 'LEFT',
@@ -84,8 +82,11 @@ export function DashboardPage(): JSX.Element {
   const absentCount = attendances.filter((a) => a.status === 'ABSENT').length;
   const excusedCount = attendances.filter((a) => a.status === 'EXCUSED').length;
   const filledReportsCount = reports.length;
+  const targetReportCount = presentCount > 0 ? presentCount : totalStudents;
+  const attendanceRate = totalStudents > 0 ? Math.round((presentCount / totalStudents) * 100) : 0;
+  const reportRate =
+    targetReportCount > 0 ? Math.round((filledReportsCount / targetReportCount) * 100) : 0;
 
-  // Alerjisi veya sağlık notu olan öğrenciler
   const studentsWithAllergies = students.filter((s) => {
     const passport: StudentPassport | null | undefined = s.passport;
     return (
@@ -103,278 +104,283 @@ export function DashboardPage(): JSX.Element {
   const breakfast = Array.isArray(menu?.breakfast) ? menu.breakfast : [];
   const lunch = Array.isArray(menu?.lunch) ? menu.lunch : [];
   const snack = Array.isArray(menu?.snack) ? menu.snack : [];
+  const allergenWarnings = menuData?.allergenWarnings ?? [];
 
   if (loading) {
     return (
-      <div className="space-y-6 animate-pulse">
-        <div className="h-20 bg-white rounded-2xl border border-slate-200/80 p-6"></div>
+      <div className="space-y-6">
+        <div className="h-32 bg-slate-100 dark:bg-slate-900 rounded-2xl animate-pulse"></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-28 bg-white rounded-2xl border border-slate-200/80"></div>
+            <div
+              key={i}
+              className="h-28 bg-slate-100 dark:bg-slate-900 rounded-2xl animate-pulse"
+            ></div>
           ))}
         </div>
       </div>
     );
   }
 
+  const pendingMedications = alerts?.immediateActions.pendingMedicationsCount ?? 0;
+  const openIncidents = alerts?.immediateActions.openIncidentsCount ?? 0;
+  const pendingPickups = alerts?.immediateActions.pendingPickupAuthorizationsCount ?? 0;
+  const pendingRequests = alerts?.immediateActions.pendingParentRequestsCount ?? 0;
+  const totalActionCount = pendingMedications + openIncidents + pendingPickups + pendingRequests;
+
   return (
-    <div className="space-y-6">
-      {/* 1. Üst Karşılama Kartı */}
-      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-orange-500/10 relative overflow-hidden">
-        <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold tracking-wide flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                Günün Nabzı
-              </span>
-              <span className="text-white/80 text-xs font-medium">{todayFormatted}</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              İyi günler, {userName} 👋
+    <div className="space-y-8">
+      {/* 1. Grounded Hero Header (No generic gradient, no banned kickers) */}
+      <section className="bg-teal-900 dark:bg-slate-900 text-white rounded-2xl p-6 sm:p-8 border border-teal-800/80 dark:border-slate-800 shadow-xs relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+              İyi günler, {userName}
             </h1>
-            <p className="text-white/90 text-sm mt-1 max-w-xl">
-              Kreşinizin bugünkü genel durumu, yoklama katılımı ve menü bilgileri hazır.
+            <p className="text-teal-100/90 dark:text-slate-300 text-sm max-w-2xl leading-relaxed">
+              Bugün kreşinizde{' '}
+              <strong className="text-white font-semibold">
+                {totalStudents} kayıtlı öğrenciden {presentCount} tanesi
+              </strong>{' '}
+              katılım sağladı.
+              {targetReportCount - filledReportsCount > 0 ? (
+                <span>
+                  {' '}
+                  Tamamlanmayı bekleyen {targetReportCount - filledReportsCount} öğrenci bülteni
+                  bulunuyor.
+                </span>
+              ) : (
+                <span> Günün tüm karne ve bülten kayıtları eksiksiz tamamlandı.</span>
+              )}
             </p>
+            <div className="flex items-center gap-3 pt-1 text-xs text-teal-200 dark:text-slate-400">
+              <span className="flex items-center gap-1.5 bg-teal-800/80 dark:bg-slate-800 px-3 py-1 rounded-full border border-teal-700/60 dark:border-slate-700">
+                <Calendar className="w-3.5 h-3.5 text-teal-300" />
+                {todayFormatted}
+              </span>
+              <span className="flex items-center gap-1.5 bg-teal-800/80 dark:bg-slate-800 px-3 py-1 rounded-full border border-teal-700/60 dark:border-slate-700">
+                <Clock className="w-3.5 h-3.5 text-teal-300" />
+                Ders & Aktivite Akışı Aktif
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3 shrink-0">
             <Link
               to="/attendance"
-              className="bg-white text-orange-600 font-bold px-4 py-2.5 rounded-xl text-sm shadow-md hover:bg-orange-50 transition-all active:scale-95 flex items-center gap-1.5"
+              className="bg-white text-teal-900 hover:bg-teal-50 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-98 shadow-xs flex items-center gap-2"
             >
-              <CheckCircle2 className="w-4 h-4" />
+              <CheckCircle2 className="w-4 h-4 text-teal-700" />
               Yoklama Al
+            </Link>
+            <Link
+              to="/tracking"
+              className="bg-teal-800 hover:bg-teal-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-98 border border-teal-700/80 flex items-center gap-2"
+            >
+              <BookOpenCheck className="w-4 h-4 text-teal-200" />
+              Günlük Takip
             </Link>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 2. 4 Adet İstatistik Kartı (KPIs) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Toplam Öğrenci */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
-          <div>
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Kayıtlı Öğrenci
+      {/* 2. Structured Operational KPIs */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Katılım Oranı & Yoklama */}
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Katılım Oranı
             </span>
-            <div className="text-2xl font-bold text-slate-900 mt-1">{totalStudents}</div>
-            <p className="text-xs text-slate-500 mt-0.5">Sınıflar aktif</p>
-          </div>
-          <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-            <Users className="w-6 h-6" />
-          </div>
-        </div>
-
-        {/* Bugün Yoklama */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
-          <div>
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Gelen Öğrenci
-            </span>
-            <div className="text-2xl font-bold text-emerald-600 mt-1">
-              {presentCount}{' '}
-              <span className="text-sm font-normal text-slate-400">/ {totalStudents}</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
-              <span>{absentCount} Gelmedi</span>
-              {excusedCount > 0 && <span>• {excusedCount} İzinli</span>}
+            <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 flex items-center justify-center">
+              <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <UserCheck className="w-6 h-6" />
-          </div>
-        </div>
-
-        {/* Günlük Karneler */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
-          <div>
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Doldurulan Karne
-            </span>
-            <div className="text-2xl font-bold text-amber-600 mt-1">
-              {filledReportsCount}{' '}
-              <span className="text-sm font-normal text-slate-400">
-                / {presentCount || totalStudents}
+          <div className="mt-3">
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">
+                %{attendanceRate}
+              </span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                ({presentCount}/{totalStudents} Mevcut)
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              {Math.max(0, (presentCount || totalStudents) - filledReportsCount)} veli bülteni
-              bekliyor
-            </p>
-          </div>
-          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-            <BookOpenCheck className="w-6 h-6" />
-          </div>
-        </div>
-
-        {/* Yemek Menüsü Durumu */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
-          <div>
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Günün Menüsü
-            </span>
-            <div className="text-lg font-bold text-slate-900 mt-1 truncate max-w-[140px]">
-              {lunch.length > 0 ? lunch[0] : 'Menü Girilmedi'}
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+              <div
+                className="bg-teal-600 h-full rounded-full transition-all"
+                style={{ width: `${Math.min(100, attendanceRate)}%` }}
+              ></div>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              {lunch.length > 0 ? `${lunch.length} çeşit öğle yemeği` : 'Girmek için tıklayın'}
-            </p>
-          </div>
-          <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center">
-            <Utensils className="w-6 h-6" />
+            <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 mt-2">
+              <span>{absentCount} Gelmedi</span>
+              <span>{excusedCount} İzinli</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 3. Hızlı Aksiyonlar Barı */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Link
-          to="/attendance"
-          className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:border-amber-400 hover:shadow-md transition-all flex items-center gap-3 group"
-        >
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-            <CheckCircle2 className="w-5 h-5" />
+        {/* Günlük Bülten / Karne */}
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Günlük Bülten
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 flex items-center justify-center">
+              <BookOpenCheck className="w-4 h-4" />
+            </div>
           </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-900">Yoklama Al</h4>
-            <p className="text-xs text-slate-500">Geldileri işaretle</p>
+          <div className="mt-3">
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">
+                {filledReportsCount}
+              </span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                / {targetReportCount} Tamamlandı
+              </span>
+            </div>
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+              <div
+                className="bg-amber-600 h-full rounded-full transition-all"
+                style={{ width: `${Math.min(100, reportRate)}%` }}
+              ></div>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">
+              {Math.max(0, targetReportCount - filledReportsCount)} öğrenci raporu bekleniyor
+            </p>
           </div>
-        </Link>
+        </div>
 
-        <Link
-          to="/tracking"
-          className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:border-amber-400 hover:shadow-md transition-all flex items-center gap-3 group"
-        >
-          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-            <BookOpenCheck className="w-5 h-5" />
+        {/* Kayıtlı Öğrenci */}
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Kayıtlı Öğrenci
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center">
+              <Users className="w-4 h-4" />
+            </div>
           </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-900">Karne Doldur</h4>
-            <p className="text-xs text-slate-500">Yemek & Uyku bülteni</p>
+          <div className="mt-3">
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">
+              {totalStudents}
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+              Tüm sınıflar aktif kayıt altında
+            </div>
           </div>
-        </Link>
+        </div>
 
-        <Link
-          to="/menus"
-          className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:border-amber-400 hover:shadow-md transition-all flex items-center gap-3 group"
-        >
-          <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-            <Utensils className="w-5 h-5" />
+        {/* Günün Öğle Menüsü */}
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Günün Öğle Menüsü
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 flex items-center justify-center">
+              <Utensils className="w-4 h-4" />
+            </div>
           </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-900">Yemek Menüsü</h4>
-            <p className="text-xs text-slate-500">Günün öğünleri</p>
+          <div className="mt-3">
+            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
+              {lunch.length > 0 ? lunch.slice(0, 2).join(', ') : 'Menü Girilmedi'}
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              {lunch.length > 0
+                ? `${lunch.length} çeşit öğle yemeği`
+                : 'Menü eklemek için tıklayın'}
+            </p>
           </div>
-        </Link>
+        </div>
+      </section>
 
-        <Link
-          to="/gallery"
-          className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:border-amber-400 hover:shadow-md transition-all flex items-center gap-3 group"
-        >
-          <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-            <Camera className="w-5 h-5" />
-          </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-900">Fotoğraf Yükle</h4>
-            <p className="text-xs text-slate-500">Sınıf aktiviteleri</p>
-          </div>
-        </Link>
-      </div>
-
-      {/* Erken Uyarı & Eylem Merkezi (Action Board - Faz 4) */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
-              <ShieldAlert className="w-5 h-5" />
+      {/* 3. Operasyonel Eylem & Erken Uyarı Merkezi */}
+      <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                Erken Uyarı & Operasyonel Eylem Merkezi
-                {alerts &&
-                  alerts.immediateActions.pendingMedicationsCount +
-                    alerts.immediateActions.openIncidentsCount +
-                    alerts.immediateActions.pendingPickupAuthorizationsCount +
-                    alerts.immediateActions.pendingParentRequestsCount >
-                    0 && (
-                    <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-rose-100 text-rose-800 animate-pulse">
-                      {alerts.immediateActions.pendingMedicationsCount +
-                        alerts.immediateActions.openIncidentsCount +
-                        alerts.immediateActions.pendingPickupAuthorizationsCount +
-                        alerts.immediateActions.pendingParentRequestsCount}{' '}
-                      Aksiyon Bekliyor
-                    </span>
-                  )}
-              </h3>
-              <p className="text-xs text-slate-500">
-                Kritik sağlık, güvenlik, teslimat ve çözüm bekleyen veli talepleri
+              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                Operasyonel Eylem ve Güvenlik Merkezi
+                {totalActionCount > 0 && (
+                  <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                    {totalActionCount} Görev
+                  </span>
+                )}
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Sağlık, ilaç onayı, teslimat yetkileri ve veli izin talepleri
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs">
-            <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-slate-200 font-medium">
-              💊 {alerts?.immediateActions.pendingMedicationsCount ?? 0} İlaç
+          <div className="flex items-center gap-2 text-xs flex-wrap">
+            <span className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 font-medium flex items-center gap-1.5">
+              <Pill className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+              {pendingMedications} İlaç
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-slate-200 font-medium">
-              🚨 {alerts?.immediateActions.openIncidentsCount ?? 0} Olay
+            <span className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 font-medium flex items-center gap-1.5">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+              {openIncidents} Olay
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-slate-200 font-medium">
-              🔐 {alerts?.immediateActions.pendingPickupAuthorizationsCount ?? 0} Teslimat
+            <span className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 font-medium flex items-center gap-1.5">
+              <ShieldAlert className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+              {pendingPickups} Teslimat
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-slate-200 font-medium">
-              📩 {alerts?.immediateActions.pendingParentRequestsCount ?? 0} Veli Talebi
+            <span className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 font-medium flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
+              {pendingRequests} Veli Talebi
             </span>
           </div>
         </div>
 
-        {/* Action Items List */}
         {alerts && alerts.immediateActions.items.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
             {alerts.immediateActions.items.map((item) => (
               <div
                 key={item.id}
-                className={`p-4 rounded-xl border flex items-start justify-between gap-3 transition-all hover:shadow-xs ${
+                className={`p-4 rounded-xl border flex items-start justify-between gap-3 transition-colors ${
                   item.urgency === 'HIGH'
-                    ? 'bg-rose-50/40 border-rose-200/80'
-                    : 'bg-amber-50/40 border-amber-200/80'
+                    ? 'bg-rose-50/50 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900/40'
+                    : 'bg-amber-50/50 border-amber-200 dark:bg-amber-950/20 dark:border-amber-900/40'
                 }`}
               >
                 <div className="flex items-start gap-3 min-w-0">
-                  <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
-                      item.type === 'MEDICATION'
-                        ? 'bg-purple-100 text-purple-700'
-                        : item.type === 'INCIDENT'
-                          ? 'bg-rose-100 text-rose-700'
-                          : item.type === 'PICKUP'
-                            ? 'bg-blue-100 text-blue-700'
-                            : 'bg-amber-100 text-amber-700'
-                    }`}
-                  >
-                    {item.type === 'MEDICATION' && <Pill className="w-4 h-4" />}
-                    {item.type === 'INCIDENT' && <AlertTriangle className="w-4 h-4" />}
-                    {item.type === 'PICKUP' && <ShieldAlert className="w-4 h-4" />}
-                    {item.type === 'PARENT_REQUEST' && <FileText className="w-4 h-4" />}
+                  <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 mt-0.5 text-slate-700 dark:text-slate-300">
+                    {item.type === 'MEDICATION' && (
+                      <Pill className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+                    )}
+                    {item.type === 'INCIDENT' && (
+                      <AlertTriangle className="w-4 h-4 text-rose-600" />
+                    )}
+                    {item.type === 'PICKUP' && (
+                      <ShieldAlert className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+                    )}
+                    {item.type === 'PARENT_REQUEST' && (
+                      <FileText className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                    )}
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className="text-xs font-bold text-slate-900 truncate">{item.title}</h4>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
+                        {item.title}
+                      </h4>
                       {item.studentName && (
-                        <span className="text-[11px] font-semibold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
+                        <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                           {item.studentName}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-600 mt-1 line-clamp-2">{item.description}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
 
                 <Link
                   to={item.actionUrl}
-                  className="shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition shadow-2xs flex items-center gap-1"
+                  className="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-teal-700 dark:hover:text-teal-300 transition-colors flex items-center gap-1"
                 >
                   İncele <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -382,62 +388,66 @@ export function DashboardPage(): JSX.Element {
             ))}
           </div>
         ) : (
-          <div className="py-6 px-4 rounded-xl bg-emerald-50/60 border border-emerald-200/80 flex items-center justify-between gap-4">
+          <div className="py-4 px-4 rounded-xl bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200/80 dark:border-teal-900/40 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
-                <CheckCircle2 className="w-5 h-5" />
+              <div className="w-8 h-8 rounded-lg bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-300 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-emerald-900">
+                <h3 className="text-xs font-bold text-teal-900 dark:text-teal-200">
                   Operasyonel Durum Sakin & Güvenli
-                </h4>
-                <p className="text-xs text-emerald-800">
-                  Bekleyen kritik ilaç onayı, açık kaza/olay tutanağı veya bekleyen teslimat izni
+                </h3>
+                <p className="text-xs text-teal-800/90 dark:text-teal-300/80">
+                  Bekleyen kritik ilaç onayı, açık olay tutanağı veya bekleyen teslimat izni
                   bulunmuyor.
                 </p>
               </div>
             </div>
-            <span className="text-xs font-semibold text-emerald-700 bg-white px-3 py-1.5 rounded-lg border border-emerald-200 shadow-2xs shrink-0">
+            <span className="text-xs font-semibold text-teal-800 dark:text-teal-300 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-teal-200 dark:border-teal-800 shrink-0">
               Tüm Kontroller Tamam
             </span>
           </div>
         )}
-      </div>
+      </section>
 
-      {/* 4. İki Kolonlu Detay Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Sol Kolon (2 Birim): Günün Yemek Menüsü */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs">
-          <div className="flex items-center justify-between mb-5">
+      {/* 4. İki Kolonlu Detay Alanı: Yemek Menüsü & Sağlık Notları */}
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Yemek Menüsü (2 Birim) */}
+        <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center">
                 <Utensils className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Bugünün Yemek Listesi</h3>
-                <p className="text-xs text-slate-500">Çocukların bugünkü beslenme planı</p>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  Bugünün Yemek Listesi
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Çocukların günlük dengeli beslenme takvimi
+                </p>
               </div>
             </div>
             <Link
               to="/menus"
-              className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+              className="text-xs font-semibold text-teal-700 dark:text-teal-400 hover:text-teal-800 flex items-center gap-1"
             >
-              Menüyü Düzenle <ArrowRight className="w-3.5 h-3.5" />
+              Menü Detayı <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Kahvaltı */}
-            <div className="p-4 rounded-xl bg-amber-50/50 border border-amber-100">
-              <div className="flex items-center gap-2 text-amber-800 font-bold text-xs mb-2">
-                <Coffee className="w-4 h-4 text-amber-600" />
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+              <div className="flex items-center gap-1.5 text-slate-900 dark:text-slate-100 font-semibold text-xs mb-2">
+                <Coffee className="w-3.5 h-3.5 text-amber-600" />
                 Sabah Kahvaltısı
               </div>
               {breakfast.length > 0 ? (
-                <ul className="text-xs text-slate-700 space-y-1.5 font-medium">
+                <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                   {breakfast.map((item, idx) => (
                     <li key={idx} className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                      <span className="w-1 h-1 rounded-full bg-slate-400"></span>
                       {item}
                     </li>
                   ))}
@@ -448,16 +458,16 @@ export function DashboardPage(): JSX.Element {
             </div>
 
             {/* Öğle Yemeği */}
-            <div className="p-4 rounded-xl bg-orange-50/50 border border-orange-100">
-              <div className="flex items-center gap-2 text-orange-800 font-bold text-xs mb-2">
-                <Sun className="w-4 h-4 text-orange-600" />
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+              <div className="flex items-center gap-1.5 text-slate-900 dark:text-slate-100 font-semibold text-xs mb-2">
+                <Sun className="w-3.5 h-3.5 text-teal-600" />
                 Öğle Yemeği
               </div>
               {lunch.length > 0 ? (
-                <ul className="text-xs text-slate-700 space-y-1.5 font-medium">
+                <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                   {lunch.map((item, idx) => (
                     <li key={idx} className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                      <span className="w-1 h-1 rounded-full bg-teal-500"></span>
                       {item}
                     </li>
                   ))}
@@ -468,16 +478,16 @@ export function DashboardPage(): JSX.Element {
             </div>
 
             {/* İkindi */}
-            <div className="p-4 rounded-xl bg-rose-50/50 border border-rose-100">
-              <div className="flex items-center gap-2 text-rose-800 font-bold text-xs mb-2">
-                <Cookie className="w-4 h-4 text-rose-600" />
-                İkindi Kahvaltısı
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+              <div className="flex items-center gap-1.5 text-slate-900 dark:text-slate-100 font-semibold text-xs mb-2">
+                <Cookie className="w-3.5 h-3.5 text-amber-600" />
+                İkindi Ara Öğün
               </div>
               {snack.length > 0 ? (
-                <ul className="text-xs text-slate-700 space-y-1.5 font-medium">
+                <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                   {snack.map((item, idx) => (
                     <li key={idx} className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                      <span className="w-1 h-1 rounded-full bg-amber-400"></span>
                       {item}
                     </li>
                   ))}
@@ -487,45 +497,72 @@ export function DashboardPage(): JSX.Element {
               )}
             </div>
           </div>
+
+          {allergenWarnings.length > 0 && (
+            <div className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 text-xs">
+              <div className="font-semibold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                Günün Menüsünde Alerjen Çapraz Eşleşmesi ({allergenWarnings.length} Öğrenci)
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {allergenWarnings.map((w) => (
+                  <span
+                    key={w.studentId}
+                    className="bg-white dark:bg-slate-800 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-800/60 text-[11px] text-amber-900 dark:text-amber-300 font-medium"
+                  >
+                    {w.studentName}: {w.matchedAllergens.join(', ')}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Sağ Kolon (1 Birim): Kritik Alerji & Sağlık Notları */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+        {/* Sağlık & Alerji Listesi (1 Birim) */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4">
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center">
                 <Heart className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Alerji & Sağlık Notları</h3>
-                <p className="text-xs text-slate-500">Öğretmen güvenlik uyarısı</p>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  Öğrenci Sağlık Notları
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Kayıtlı alerji ve bakım uyarıları
+                </p>
               </div>
             </div>
 
             {studentsWithAllergies.length > 0 ? (
-              <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                 {studentsWithAllergies.map((s) => {
                   const passport: StudentPassport | null | undefined = s.passport;
                   const allergies = passport?.allergies ?? [];
                   return (
                     <div
                       key={s.id}
-                      className="p-3 rounded-xl bg-rose-50/60 border border-rose-200/80 text-xs space-y-1"
+                      className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 text-xs space-y-1"
                     >
-                      <div className="font-bold text-slate-900 flex items-center justify-between">
+                      <div className="font-semibold text-slate-900 dark:text-slate-100 flex items-center justify-between">
                         <span>
                           {s.firstName} {s.lastName}
                         </span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-rose-200 text-rose-800 font-bold flex items-center gap-1">
-                          <AlertTriangle className="w-3 h-3" />
-                          Alerji
-                        </span>
+                        {allergies.length > 0 && (
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 font-semibold flex items-center gap-1">
+                            <AlertTriangle className="w-3 h-3 text-rose-600" />
+                            Alerjen
+                          </span>
+                        )}
                       </div>
                       {allergies.length > 0 && (
-                        <p className="text-rose-900 font-semibold">⚠️ {allergies.join(', ')}</p>
+                        <p className="text-rose-700 dark:text-rose-400 font-medium">
+                          Alerjiler: {allergies.join(', ')}
+                        </p>
                       )}
                       {(passport?.specialNotes || s.notes) && (
-                        <p className="text-slate-600 text-[11px]">
+                        <p className="text-slate-500 dark:text-slate-400 text-[11px]">
                           {passport?.specialNotes || s.notes}
                         </p>
                       )}
@@ -534,22 +571,20 @@ export function DashboardPage(): JSX.Element {
                 })}
               </div>
             ) : (
-              <div className="p-6 text-center text-xs text-slate-400 rounded-xl bg-slate-50 border border-dashed border-slate-200">
+              <div className="p-6 text-center text-xs text-slate-500 dark:text-slate-400 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-dashed border-slate-200 dark:border-slate-700">
                 Kayıtlı alerji uyarısı bulunmuyor.
               </div>
             )}
           </div>
 
-          <div className="mt-4 pt-4 border-t border-slate-100">
-            <Link
-              to="/students"
-              className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors"
-            >
-              Tüm Öğrenci Dosyaları <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+          <Link
+            to="/students"
+            className="w-full py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+          >
+            Tüm Öğrenci Dosyaları <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

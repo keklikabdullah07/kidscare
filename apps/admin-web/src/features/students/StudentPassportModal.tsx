@@ -1,4 +1,5 @@
 import { useState, useEffect, type FormEvent, type ReactElement } from 'react';
+import { AlertTriangle, Utensils } from 'lucide-react';
 import type { BloodType, EmergencyContact, Student, StudentPassport } from '@kidscare/shared-types';
 import { getStudentPassport, updateStudentPassport } from '../../api/students';
 
@@ -246,10 +247,10 @@ export function StudentPassportModal({
             {/* Section: Alerjiler */}
             <div className="rounded-lg border border-red-200 bg-red-50/30 p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-red-900 flex items-center gap-1.5">
-                  <span>⚠️</span> Alerjiler ({allergies.length})
+                <h3 className="text-sm font-semibold text-rose-900 flex items-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4 text-rose-600" /> Alerjiler ({allergies.length})
                 </h3>
-                <span className="text-xs text-red-600 font-medium">
+                <span className="text-xs text-rose-700 font-medium">
                   Öğretmenler için kritik uyarı
                 </span>
               </div>
@@ -265,8 +266,8 @@ export function StudentPassportModal({
                       onClick={() => toggleAllergy(item)}
                       className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
                         selected
-                          ? 'bg-red-600 text-white shadow-xs'
-                          : 'bg-white text-gray-700 border border-gray-200 hover:border-red-300 hover:bg-red-50'
+                          ? 'bg-rose-700 text-white shadow-xs'
+                          : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900'
                       }`}
                     >
                       {selected ? `✓ ${item}` : `+ ${item}`}
@@ -288,12 +289,12 @@ export function StudentPassportModal({
                     }
                   }}
                   placeholder="Başka alerji ekle (örn: Arı sokması)..."
-                  className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs shadow-xs focus:border-red-500 focus:outline-hidden"
+                  className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs shadow-xs focus:border-rose-500 focus:outline-hidden"
                 />
                 <button
                   type="button"
                   onClick={addCustomAllergy}
-                  className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-md text-xs font-medium"
+                  className="px-3 py-1.5 bg-rose-700 hover:bg-rose-800 text-white rounded-md text-xs font-medium"
                 >
                   Ekle
                 </button>
@@ -306,13 +307,13 @@ export function StudentPassportModal({
                     .map((item) => (
                       <span
                         key={item}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-100 text-rose-900 border border-rose-200"
                       >
                         {item}
                         <button
                           type="button"
                           onClick={() => toggleAllergy(item)}
-                          className="text-red-600 hover:text-red-900 font-bold ml-1"
+                          className="text-rose-700 hover:text-rose-950 font-bold ml-1"
                         >
                           ×
                         </button>
@@ -325,9 +326,9 @@ export function StudentPassportModal({
             {/* Section: Beslenme & İlaçlar */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Beslenme */}
-              <div className="rounded-lg border border-amber-200 bg-amber-50/30 p-4 space-y-2.5">
+              <div className="rounded-lg border border-amber-200 bg-amber-50/40 p-4 space-y-2.5">
                 <h3 className="text-sm font-semibold text-amber-900 flex items-center gap-1.5">
-                  <span>🥗</span> Beslenme Kısıtlamaları
+                  <Utensils className="w-4 h-4 text-amber-700" /> Beslenme Kısıtlamaları
                 </h3>
                 <div className="flex flex-wrap gap-1.5">
                   {COMMON_DIET.map((item) => {
@@ -339,8 +340,8 @@ export function StudentPassportModal({
                         onClick={() => toggleDiet(item)}
                         className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
                           selected
-                            ? 'bg-amber-600 text-white'
-                            : 'bg-white text-gray-700 border border-gray-200 hover:bg-amber-50'
+                            ? 'bg-amber-700 text-white'
+                            : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900'
                         }`}
                       >
                         {selected ? `✓ ${item}` : `+ ${item}`}

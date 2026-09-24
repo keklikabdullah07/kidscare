@@ -1,12 +1,5 @@
 import { useEffect, useState, type FormEvent, type JSX } from 'react';
-import {
-  MessageSquare,
-  Send,
-  Plus,
-  AlertCircle,
-  RotateCw,
-  CheckCheck,
-} from 'lucide-react';
+import { MessageSquare, Send, Plus, AlertCircle, RotateCw } from 'lucide-react';
 import type {
   Conversation,
   ConversationCategory,
@@ -88,7 +81,6 @@ export function MessagesPage(): JSX.Element {
 
   useEffect(() => {
     void refreshList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -97,7 +89,6 @@ export function MessagesPage(): JSX.Element {
     } else {
       setMessages([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeId]);
 
   async function sendDraft(e: FormEvent): Promise<void> {
@@ -158,8 +149,8 @@ export function MessagesPage(): JSX.Element {
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-xs">
-            <MessageSquare className="w-5 h-5" />
+          <div className="w-11 h-11 rounded-2xl bg-teal-800 flex items-center justify-center text-white shadow-xs">
+            <MessageSquare className="w-5 h-5 text-teal-100" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900 tracking-tight">Mesajlar</h1>
@@ -179,7 +170,7 @@ export function MessagesPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setShowCompose((v) => !v)}
-            className="text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5"
+            className="text-xs font-semibold text-white bg-teal-700 hover:bg-teal-800 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition-colors"
           >
             <Plus className="w-3.5 h-3.5" /> Yeni Sohbet
           </button>
@@ -188,7 +179,7 @@ export function MessagesPage(): JSX.Element {
 
       {showCompose && (
         <form
-          onSubmit={submitCompose}
+          onSubmit={(e) => void submitCompose(e)}
           className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -258,7 +249,7 @@ export function MessagesPage(): JSX.Element {
             </button>
             <button
               type="submit"
-              className="text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-lg"
+              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 px-3.5 py-1.5 rounded-lg transition-colors"
             >
               Aç
             </button>
@@ -283,7 +274,7 @@ export function MessagesPage(): JSX.Element {
                     type="button"
                     onClick={() => setActiveId(c.id)}
                     className={`w-full text-left p-3.5 hover:bg-slate-50 transition ${
-                      activeId === c.id ? 'bg-indigo-50/50' : ''
+                      activeId === c.id ? 'bg-teal-50/80 text-teal-900' : ''
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -293,7 +284,9 @@ export function MessagesPage(): JSX.Element {
                             c.unreadCount > 0 ? 'text-slate-900' : 'text-slate-700'
                           }`}
                         >
-                          {c.isCritical && <AlertCircle className="w-3.5 h-3.5 inline mr-1 text-rose-600" />}
+                          {c.isCritical && (
+                            <AlertCircle className="w-3.5 h-3.5 inline mr-1 text-rose-600" />
+                          )}
                           {c.subject}
                         </p>
                         <p className="text-[11px] text-slate-500 mt-0.5">
@@ -301,7 +294,7 @@ export function MessagesPage(): JSX.Element {
                         </p>
                       </div>
                       {c.unreadCount > 0 && (
-                        <span className="text-[10px] font-bold bg-indigo-600 text-white px-1.5 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold bg-teal-700 text-white px-1.5 py-0.5 rounded-full">
                           {c.unreadCount}
                         </span>
                       )}
@@ -345,9 +338,7 @@ export function MessagesPage(): JSX.Element {
               </div>
               <div className="flex-1 overflow-y-auto p-4 space-y-2 max-h-[50vh]">
                 {messages.length === 0 ? (
-                  <div className="text-center text-slate-400 text-xs py-8">
-                    Henüz mesaj yok.
-                  </div>
+                  <div className="text-center text-slate-400 text-xs py-8">Henüz mesaj yok.</div>
                 ) : (
                   messages.map((m) => {
                     const isMine = m.senderId === meId;
@@ -357,16 +348,14 @@ export function MessagesPage(): JSX.Element {
                         className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}
                       >
                         <div
-                          className={`max-w-[75%] rounded-2xl px-3 py-2 text-xs ${
-                            isMine
-                              ? 'bg-indigo-600 text-white'
-                              : 'bg-slate-100 text-slate-900'
+                          className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-xs ${
+                            isMine ? 'bg-teal-700 text-white' : 'bg-slate-100 text-slate-900'
                           }`}
                         >
                           <p className="whitespace-pre-wrap">{m.content}</p>
                           <p
                             className={`text-[10px] mt-1 ${
-                              isMine ? 'text-indigo-100' : 'text-slate-400'
+                              isMine ? 'text-teal-100' : 'text-slate-500'
                             }`}
                           >
                             {new Date(m.createdAt).toLocaleTimeString('tr-TR', {
@@ -382,7 +371,7 @@ export function MessagesPage(): JSX.Element {
               </div>
               {active.status === 'OPEN' && (
                 <form
-                  onSubmit={sendDraft}
+                  onSubmit={(e) => void sendDraft(e)}
                   className="border-t border-slate-100 p-3 flex items-center gap-2"
                 >
                   <input
@@ -395,7 +384,7 @@ export function MessagesPage(): JSX.Element {
                   <button
                     type="submit"
                     disabled={sending || !draft.trim()}
-                    className="px-3 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold inline-flex items-center gap-1 disabled:opacity-50"
+                    className="px-3.5 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-semibold inline-flex items-center gap-1 disabled:opacity-50 transition-colors"
                   >
                     <Send className="w-3.5 h-3.5" />
                     {sending ? '…' : 'Gönder'}

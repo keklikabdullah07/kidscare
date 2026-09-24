@@ -72,7 +72,11 @@ type BulkNapQuality = 'GOOD' | 'INTERRUPTED' | 'NONE';
 interface BulkDraft {
   mood: StudentMood | null;
   meals: Partial<Record<BulkMealSlot, 'ALL' | 'HALF' | 'LITTLE' | 'NONE'>>;
-  naps: { startTime?: string | undefined; endTime?: string | undefined; quality?: BulkNapQuality | undefined };
+  naps: {
+    startTime?: string | undefined;
+    endTime?: string | undefined;
+    quality?: BulkNapQuality | undefined;
+  };
   activities: string[];
 }
 
@@ -103,11 +107,11 @@ function buildBulkItems(targets: Student[], draft: BulkDraft): BulkDailyReportIt
     if (draft.mood) item.mood = draft.mood;
     const mealsClean = stripEmpty(draft.meals);
     if (Object.keys(mealsClean).length > 0) {
-      item.meals = mealsClean as BulkDailyReportItem['meals'];
+      item.meals = mealsClean;
     }
     const napsClean = stripEmpty(draft.naps);
     if (Object.keys(napsClean).length > 0) {
-      item.naps = napsClean as BulkDailyReportItem['naps'];
+      item.naps = napsClean;
     }
     if (draft.activities.length > 0) item.activities = [...draft.activities];
     items.push(item);
@@ -153,7 +157,7 @@ export function DailyTrackingPage(): JSX.Element {
         setSelectedClassroomId((current) =>
           current && classroomList.some((classroom) => classroom.id === current)
             ? current
-            : classroomList[0]?.id ?? '',
+            : (classroomList[0]?.id ?? ''),
         );
       })
       .catch((err: unknown) => {
@@ -452,15 +456,15 @@ export function DailyTrackingPage(): JSX.Element {
           onClick={() => setFilterType(filterType === 'filled' ? 'all' : 'filled')}
           className={`p-4 rounded-2xl border text-left transition shadow-xs flex items-center justify-between ${
             filterType === 'filled'
-              ? 'border-purple-600 bg-purple-50/60 ring-2 ring-purple-600'
+              ? 'border-teal-700 bg-teal-50/70 ring-2 ring-teal-700'
               : 'border-slate-200/80 bg-white hover:border-slate-300'
           }`}
         >
           <div>
-            <p className="text-xs font-semibold text-purple-700">Karnesi Girilenler</p>
-            <p className="text-2xl font-bold text-purple-900 mt-1 tracking-tight">{filledCount}</p>
+            <p className="text-xs font-semibold text-teal-800">Karnesi Girilenler</p>
+            <p className="text-2xl font-bold text-teal-950 mt-1 tracking-tight">{filledCount}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold">
             <CheckCircle2 className="w-5 h-5" />
           </div>
         </button>
@@ -516,22 +520,11 @@ export function DailyTrackingPage(): JSX.Element {
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Mod
                 </label>
                 <div className="flex flex-wrap gap-1.5">
-                  {(
-                    [
-                      'HAPPY',
-                      'CALM',
-                      'ENERGETIC',
-                      'TIRED',
-                      'CRANKY',
-                      'SAD',
-                    ] as const
-                  ).map((m) => (
+                  {(['HAPPY', 'CALM', 'ENERGETIC', 'TIRED', 'CRANKY', 'SAD'] as const).map((m) => (
                     <button
                       key={m}
                       type="button"
-                      onClick={() =>
-                        setBulkDraft((p) => ({ ...p, mood: p.mood === m ? null : m }))
-                      }
+                      onClick={() => setBulkDraft((p) => ({ ...p, mood: p.mood === m ? null : m }))}
                       className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition ${
                         bulkDraft.mood === m
                           ? 'bg-amber-100 text-amber-900 border-amber-300'
@@ -558,9 +551,7 @@ export function DailyTrackingPage(): JSX.Element {
                     ] as const
                   ).map(([key, label]) => (
                     <div key={key} className="flex flex-col gap-1">
-                      <span className="text-[11px] font-semibold text-slate-600">
-                        {label}
-                      </span>
+                      <span className="text-[11px] font-semibold text-slate-600">{label}</span>
                       <select
                         value={bulkDraft.meals[key] ?? ''}
                         onChange={(e) =>
@@ -624,9 +615,7 @@ export function DailyTrackingPage(): JSX.Element {
                         ...p,
                         naps: {
                           ...p.naps,
-                          quality: e.target.value
-                            ? (e.target.value as BulkNapQuality)
-                            : undefined,
+                          quality: e.target.value ? (e.target.value as BulkNapQuality) : undefined,
                         },
                       }))
                     }
@@ -680,7 +669,7 @@ export function DailyTrackingPage(): JSX.Element {
                 <div className="flex items-center gap-2 flex-wrap">
                   <button
                     type="button"
-                    onClick={applyBulkToPending}
+                    onClick={() => void applyBulkToPending()}
                     disabled={bulkSaving || !bulkHasContent || pendingCount === 0}
                     className="px-3 py-2 rounded-xl bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200 hover:bg-amber-100 transition disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
                   >
@@ -689,9 +678,9 @@ export function DailyTrackingPage(): JSX.Element {
                   </button>
                   <button
                     type="button"
-                    onClick={applyBulkToAll}
+                    onClick={() => void applyBulkToAll()}
                     disabled={bulkSaving || !bulkHasContent}
-                    className="px-3 py-2 rounded-xl bg-purple-600 text-white text-xs font-bold hover:bg-purple-700 transition shadow-xs disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
+                    className="px-3 py-2 rounded-xl bg-teal-700 text-white text-xs font-bold hover:bg-teal-800 transition shadow-xs disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
                   >
                     <Save className="w-3.5 h-3.5" />
                     {bulkSaving
@@ -764,7 +753,9 @@ export function DailyTrackingPage(): JSX.Element {
         <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300">
           <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-600 text-sm font-semibold">
-            {classrooms.length === 0 ? 'Atanmış sınıf bulunamadı.' : 'Bu sınıfta öğrenci bulunamadı.'}
+            {classrooms.length === 0
+              ? 'Atanmış sınıf bulunamadı.'
+              : 'Bu sınıfta öğrenci bulunamadı.'}
           </p>
           <p className="text-slate-400 text-xs mt-1">
             {classrooms.length === 0
@@ -791,12 +782,12 @@ export function DailyTrackingPage(): JSX.Element {
                   {/* Student Title & Mood */}
                   <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-3.5">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white font-bold text-sm flex items-center justify-center shadow-xs">
+                      <div className="w-10 h-10 rounded-xl bg-teal-800 text-white font-bold text-sm flex items-center justify-center shadow-xs">
                         {student.firstName.charAt(0)}
                         {student.lastName.charAt(0)}
                       </div>
                       <div>
-                        <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-purple-600 transition-colors">
+                        <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-teal-800 transition-colors">
                           {student.firstName} {student.lastName}
                         </h3>
                         <p className="text-xs text-slate-400 mt-0.5">
