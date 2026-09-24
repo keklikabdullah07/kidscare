@@ -1,6 +1,7 @@
 import { useState, useEffect, type JSX } from 'react';
 import { Award, BookOpen, Image, Lightbulb, Plus, Calendar, CheckCircle } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
+import { useToast } from '../../components/Toast';
 import { listStudents } from '../../api/students';
 import {
   listObservations,
@@ -49,6 +50,7 @@ const DOMAIN_LABELS: Record<DevelopmentDomain, { label: string; color: string; i
 
 export function DevelopmentPage(): JSX.Element {
   const { state } = useAuth();
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<'observations' | 'portfolio' | 'activities'>(
     'observations',
   );
@@ -155,8 +157,9 @@ export function DevelopmentPage(): JSX.Element {
         (selectedDomain as DevelopmentDomain) || undefined,
       );
       setObservations(res);
+      showToast('Gözlem kaydı başarıyla eklendi.', 'success');
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Gözlem kaydedilemedi');
+      showToast(err instanceof Error ? err.message : 'Gözlem kaydedilemedi', 'error');
     }
   }
 
@@ -174,8 +177,9 @@ export function DevelopmentPage(): JSX.Element {
       });
       const res = await listPortfolio(selectedStudentId || undefined);
       setPortfolioItems(res);
+      showToast('Portfolyo çalışması başarıyla eklendi.', 'success');
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Portfolyo çalışması kaydedilemedi');
+      showToast(err instanceof Error ? err.message : 'Portfolyo çalışması kaydedilemedi', 'error');
     }
   }
 
@@ -192,8 +196,9 @@ export function DevelopmentPage(): JSX.Element {
       });
       const res = await listHomeActivities((selectedDomain as DevelopmentDomain) || undefined);
       setActivities(res);
+      showToast('Ev aktivitesi önerisi başarıyla eklendi.', 'success');
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Aktivite kaydedilemedi');
+      showToast(err instanceof Error ? err.message : 'Aktivite kaydedilemedi', 'error');
     }
   }
 

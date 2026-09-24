@@ -52,7 +52,7 @@ export class ClassroomsService {
     dateString: string,
     user: ClassroomUser,
   ): Promise<ClassroomDailyFlow> {
-    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(dateString)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
       throw new BadRequestException('Date must use YYYY-MM-DD format');
     }
 
@@ -161,11 +161,6 @@ export class ClassroomsService {
   }
 
   private isUniqueConstraintError(error: unknown): boolean {
-    return (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      error.code === 'P2002'
-    );
+    return typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002';
   }
 }

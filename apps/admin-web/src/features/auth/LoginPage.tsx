@@ -10,28 +10,63 @@ export function LoginPage(): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const error = state.status === 'unauthenticated' ? state.error : null;
+  const [isWarmingUp, setIsWarmingUp] = useState(false);
+  const [clientError, setClientError] = useState<string | null>(null);
+  const error = clientError || (state.status === 'unauthenticated' ? state.error : null);
 
   async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
+    setClientError(null);
+    if (!slug.trim()) {
+      setClientError('Lütfen kreş slug alanını girin (Örn: demo)');
+      return;
+    }
     if (submitting) return;
     setSubmitting(true);
+    setIsWarmingUp(false);
+
+    // If server takes longer than 2.5s (e.g. Render cold-start), warn user
+    const timer = setTimeout(() => setIsWarmingUp(true), 2500);
+
     try {
-      await login(slug, email, password);
-      // Navigate after auth state flips to authenticated. HomeRedirect
-      // picks the correct landing page based on role.
-      navigate('/', { replace: true });
+      await login(slug.trim(), email.trim(), password);
+      void navigate('/', { replace: true });
     } catch {
       // error already on state
     } finally {
+      clearTimeout(timer);
+      setIsWarmingUp(false);
       setSubmitting(false);
     }
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-6 text-center">KidsCare — Giriş</h1>
+      <div className="w-full max-w-sm space-y-4">
+        <h1 className="text-2xl font-semibold text-gray-900 text-center">KidsCare — Giriş</h1>
+
+        {/* Quick Demo Credentials Helper */}
+        <div className="bg-blue-50/80 border border-blue-100 rounded-xl p-3 text-xs text-blue-800 flex items-center justify-between shadow-xs">
+          <div>
+            <span className="font-semibold">Demo Kreş:</span> slug{' '}
+            <code className="bg-white px-1.5 py-0.5 rounded border border-blue-200 font-mono text-[11px]">
+              demo
+            </code>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setSlug('demo');
+              setEmail('admin@demo.test');
+              setPassword('demo1234');
+              setClientError(null);
+            }}
+            className="text-blue-700 hover:text-blue-900 font-bold underline text-xs"
+          >
+            Bilgileri Doldur
+          </button>
+        </div>
+
         <form
           onSubmit={(e) => void handleSubmit(e)}
           className="bg-white rounded-lg shadow-md p-6 space-y-4"
@@ -49,7 +84,7 @@ export function LoginPage(): JSX.Element {
               autoComplete="off"
               disabled={submitting}
               className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100"
-              placeholder="demo-kres"
+              placeholder="demo"
             />
           </label>
           <label className="block">
@@ -83,6 +118,11 @@ export function LoginPage(): JSX.Element {
           >
             {submitting ? 'Giriş yapılıyor…' : 'Giriş yap'}
           </button>
+          {isWarmingUp && (
+            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-center animate-pulse">
+              ⏳ Bulut sunucusu (Render) uyanıyor, lütfen birkaç saniye bekleyin…
+            </p>
+          )}
           {error && (
             <p role="alert" className="text-sm text-red-600">
               {error}

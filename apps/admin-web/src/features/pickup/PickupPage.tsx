@@ -1,12 +1,10 @@
 import { useEffect, useState, type JSX } from 'react';
 import { ShieldCheck, Clock, CheckCircle2, XCircle, RotateCw } from 'lucide-react';
 import type { PickupAuthorization, PickupAuthorizationStatus } from '@kidscare/shared-types';
-import {
-  listPickupAuthorizations,
-  reviewPickupAuthorization,
-} from '../../api/pickup';
+import { listPickupAuthorizations, reviewPickupAuthorization } from '../../api/pickup';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
+import { ConfirmModal } from '../../components/ui/PromptModal';
 
 const STATUS_LABEL: Record<PickupAuthorizationStatus, string> = {
   PENDING: 'Bekliyor',
@@ -26,22 +24,21 @@ const STATUS_STYLE: Record<PickupAuthorizationStatus, string> = {
 
 export function PickupPage(): JSX.Element {
   const { state } = useAuth();
-  const isAdmin = state.status === 'authenticated' &&
+  const isAdmin =
+    state.status === 'authenticated' &&
     (state.user.role === 'SUPER_ADMIN' || state.user.role === 'ADMIN');
 
   const [items, setItems] = useState<PickupAuthorization[]>([]);
   const [filter, setFilter] = useState<PickupAuthorizationStatus | 'ALL'>('PENDING');
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [rejectTargetId, setRejectTargetId] = useState<string | null>(null);
   const { showToast } = useToast();
 
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const list = await listPickupAuthorizations(
-        undefined,
-        filter === 'ALL' ? undefined : filter,
-      );
+      const list = await listPickupAuthorizations(undefined, filter === 'ALL' ? undefined : filter);
       setItems(list);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Liste yüklenemedi', 'error');
@@ -52,17 +49,13 @@ export function PickupPage(): JSX.Element {
 
   useEffect(() => {
     void refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   async function review(id: string, status: 'APPROVED' | 'REJECTED'): Promise<void> {
     setBusyId(id);
     try {
       await reviewPickupAuthorization(id, { status });
-      showToast(
-        status === 'APPROVED' ? 'Yetki onaylandı.' : 'Yetki reddedildi.',
-        'success',
-      );
+      showToast(status === 'APPROVED' ? 'Yetki onaylandı.' : 'Yetki reddedildi.', 'success');
       await refresh();
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'İşlem başarısız', 'error');
@@ -79,9 +72,7 @@ export function PickupPage(): JSX.Element {
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
-              Teslim Yetkileri
-            </h1>
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Teslim Yetkileri</h1>
             <p className="text-xs text-slate-500 mt-0.5">
               Veli taleplerini onayla veya reddet, geçmiş kayıtları görüntüle.
             </p>
@@ -153,8 +144,7 @@ export function PickupPage(): JSX.Element {
               {(item.validFrom || item.validUntil) && (
                 <p className="text-[11px] text-slate-500">
                   Geçerlilik:{' '}
-                  {item.validFrom ? new Date(item.validFrom).toLocaleDateString('tr-TR') : '—'}{' '}
-                  →{' '}
+                  {item.validFrom ? new Date(item.validFrom).toLocaleDateString('tr-TR') : '—'} →{' '}
                   {item.validUntil ? new Date(item.validUntil).toLocaleDateString('tr-TR') : '—'}
                 </p>
               )}
@@ -170,7 +160,7 @@ export function PickupPage(): JSX.Element {
                   </button>
                   <button
                     type="button"
-                    onClick={() => void review(item.id, 'REJECTED')}
+                    onClick={() => setRejectTargetId(item.id)}
                     disabled={busyId === item.id}
                     className="flex-1 px-3 py-2 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200 hover:bg-rose-100 transition inline-flex items-center justify-center gap-1.5 disabled:opacity-50"
                   >
@@ -181,6 +171,23 @@ export function PickupPage(): JSX.Element {
             </div>
           ))}
         </div>
+      )}
+
+      {rejectTargetId && (
+        <ConfirmModal
+          isOpen={true}
+          title="Teslim Yetkisini Reddet"
+          description="Bu teslimat yetkisi talebini reddetmek istediğinize emin misiniz?"
+          confirmText="Evet, Reddet"
+          cancelText="Vazgeç"
+          variant="danger"
+          onConfirm={() => {
+            const id = rejectTargetId;
+            setRejectTargetId(null);
+            if (id) void review(id, 'REJECTED');
+          }}
+          onCancel={() => setRejectTargetId(null)}
+        />
       )}
     </div>
   );
