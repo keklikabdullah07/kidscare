@@ -9,18 +9,21 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('theme');
-    // Default to Light Mode for a fresh, welcoming, cheerful kindergarten experience
+    // Clear legacy theme that may have auto-saved dark mode
+    if (localStorage.getItem('theme') === 'dark') {
+      localStorage.removeItem('theme');
+    }
+    const saved = localStorage.getItem('kidscare_theme_v2');
     return saved === 'dark';
   });
 
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      localStorage.setItem('kidscare_theme_v2', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      localStorage.setItem('kidscare_theme_v2', 'light');
     }
   }, [isDark]);
 
