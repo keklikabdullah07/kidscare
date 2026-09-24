@@ -1,5 +1,5 @@
 import { useEffect, useState, type JSX } from 'react';
-import { ShieldCheck, Clock, CheckCircle2, XCircle, RotateCw } from 'lucide-react';
+import { ShieldCheck, Clock, CheckCircle2, XCircle, RotateCw, Calendar } from 'lucide-react';
 import type { PickupAuthorization, PickupAuthorizationStatus } from '@kidscare/shared-types';
 import { listPickupAuthorizations, reviewPickupAuthorization } from '../../api/pickup';
 import { listStudents } from '../../api/students';
@@ -17,11 +17,16 @@ const STATUS_LABEL: Record<PickupAuthorizationStatus, string> = {
 };
 
 const STATUS_STYLE: Record<PickupAuthorizationStatus, string> = {
-  PENDING: 'bg-amber-50 text-amber-800 border-amber-200',
-  APPROVED: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-  REJECTED: 'bg-rose-50 text-rose-800 border-rose-200',
-  EXPIRED: 'bg-slate-100 text-slate-600 border-slate-200',
-  REVOKED: 'bg-slate-100 text-slate-600 border-slate-200',
+  PENDING:
+    'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+  APPROVED:
+    'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+  REJECTED:
+    'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-900',
+  EXPIRED:
+    'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
+  REVOKED:
+    'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
 };
 
 export function PickupPage(): JSX.Element {
@@ -73,14 +78,16 @@ export function PickupPage(): JSX.Element {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-xs">
+          <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Teslim Yetkileri</h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              Teslim Yetkileri
+            </h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Veli taleplerini onayla veya reddet, geçmiş kayıtları görüntüle.
             </p>
           </div>
@@ -88,22 +95,22 @@ export function PickupPage(): JSX.Element {
         <button
           type="button"
           onClick={() => void refresh()}
-          className="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5"
+          className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition"
         >
           <RotateCw className="w-3.5 h-3.5" /> Yenile
         </button>
       </div>
 
-      <div className="flex items-center gap-1.5 overflow-x-auto">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
         {(['PENDING', 'APPROVED', 'REJECTED', 'ALL'] as const).map((s) => (
           <button
             key={s}
             type="button"
             onClick={() => setFilter(s)}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold border transition ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${
               filter === s
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 border-slate-900 dark:border-slate-100'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
             }`}
           >
             {s === 'ALL' ? 'Tümü' : STATUS_LABEL[s]}
@@ -112,58 +119,76 @@ export function PickupPage(): JSX.Element {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 bg-white rounded-2xl border border-slate-200">
-          <div className="inline-block w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mb-3" />
-          <p className="text-slate-500 text-sm font-medium">Yükleniyor…</p>
+        <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <div className="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin mb-3" />
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+            Yetkiler yükleniyor…
+          </p>
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300">
-          <Clock className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-600 text-sm font-semibold">Bu kategoride kayıt yok.</p>
+        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+          <Clock className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+          <p className="text-slate-700 dark:text-slate-300 text-sm font-semibold">
+            Bu kategoride kayıt yok.
+          </p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            Öğrenci teslimat talepleri ve onayları burada listelenir.
+          </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {items.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-2.5"
+              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
             >
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-slate-900 truncate">
-                    {students.find((s) => s.id === item.studentId)
-                      ? `${students.find((s) => s.id === item.studentId)!.firstName} ${students.find((s) => s.id === item.studentId)!.lastName}`
-                      : `Öğrenci #${item.studentId.slice(0, 8)}`}
-                  </p>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Talep: {new Date(item.createdAt).toLocaleString('tr-TR')}
-                  </p>
+              <div className="space-y-2.5">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
+                      {students.find((s) => s.id === item.studentId)
+                        ? `${students.find((s) => s.id === item.studentId)!.firstName} ${students.find((s) => s.id === item.studentId)!.lastName}`
+                        : `Öğrenci #${item.studentId.slice(0, 8)}`}
+                    </p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      Talep: {new Date(item.createdAt).toLocaleString('tr-TR')}
+                    </p>
+                  </div>
+                  <span
+                    className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${STATUS_STYLE[item.status]}`}
+                  >
+                    {STATUS_LABEL[item.status]}
+                  </span>
                 </div>
-                <span
-                  className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${STATUS_STYLE[item.status]}`}
-                >
-                  {STATUS_LABEL[item.status]}
-                </span>
+                {item.note && (
+                  <p className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700/60 leading-relaxed italic">
+                    "{item.note}"
+                  </p>
+                )}
+                {(item.validFrom || item.validUntil) && (
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Geçerlilik:</span>
+                    <strong className="text-slate-700 dark:text-slate-300">
+                      {item.validFrom ? new Date(item.validFrom).toLocaleDateString('tr-TR') : '—'}
+                    </strong>
+                    <span>→</span>
+                    <strong className="text-slate-700 dark:text-slate-300">
+                      {item.validUntil
+                        ? new Date(item.validUntil).toLocaleDateString('tr-TR')
+                        : '—'}
+                    </strong>
+                  </p>
+                )}
               </div>
-              {item.note && (
-                <p className="text-xs text-slate-600 italic bg-slate-50 p-2 rounded-lg border border-slate-100">
-                  "{item.note}"
-                </p>
-              )}
-              {(item.validFrom || item.validUntil) && (
-                <p className="text-[11px] text-slate-500">
-                  Geçerlilik:{' '}
-                  {item.validFrom ? new Date(item.validFrom).toLocaleDateString('tr-TR') : '—'} →{' '}
-                  {item.validUntil ? new Date(item.validUntil).toLocaleDateString('tr-TR') : '—'}
-                </p>
-              )}
+
               {isAdmin && item.status === 'PENDING' && (
-                <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                <div className="flex items-center gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={() => void review(item.id, 'APPROVED')}
                     disabled={busyId === item.id}
-                    className="flex-1 px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition inline-flex items-center justify-center gap-1.5 disabled:opacity-50"
+                    className="flex-1 px-3 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold transition active:scale-98 shadow-xs inline-flex items-center justify-center gap-1.5 disabled:opacity-50"
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" /> Onayla
                   </button>
@@ -171,7 +196,7 @@ export function PickupPage(): JSX.Element {
                     type="button"
                     onClick={() => setRejectTargetId(item.id)}
                     disabled={busyId === item.id}
-                    className="flex-1 px-3 py-2 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200 hover:bg-rose-100 transition inline-flex items-center justify-center gap-1.5 disabled:opacity-50"
+                    className="flex-1 px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 text-xs font-semibold border border-rose-200 dark:border-rose-900/60 hover:bg-rose-100 transition inline-flex items-center justify-center gap-1.5 disabled:opacity-50"
                   >
                     <XCircle className="w-3.5 h-3.5" /> Reddet
                   </button>
