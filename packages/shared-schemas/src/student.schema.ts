@@ -34,6 +34,7 @@ export const studentPassportSchema = z.object({
 
 export const studentCreateSchema = z.object({
   parentId: z.string().nullable().optional(),
+  classroomId: z.string().nullable().optional(),
   firstName: z.string().min(1).max(64),
   lastName: z.string().min(1).max(64),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-AA-GG formatında olmalı'),
@@ -45,6 +46,7 @@ export const studentCreateSchema = z.object({
 export const studentUpdateSchema = z
   .object({
     parentId: z.string().nullable().optional(),
+    classroomId: z.string().nullable().optional(),
     firstName: z.string().min(1).max(64).optional(),
     lastName: z.string().min(1).max(64).optional(),
     dateOfBirth: z

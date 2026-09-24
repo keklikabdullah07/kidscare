@@ -132,6 +132,11 @@ export interface IMessagingRepository {
     data: Prisma.ParentRequestUpdateInput,
   ): Promise<ParentRequestRow>;
   findParentRequest(tenantId: string, id: string): Promise<ParentRequestRow | null>;
+  resolveDefaultParticipants(
+    tenantId: string,
+    createdById: string,
+    studentId?: string | null,
+  ): Promise<string[]>;
 }
 
 @Injectable()
@@ -304,5 +309,53 @@ export class MessagingRepository implements IMessagingRepository {
     return this.prisma.withTenant((client) =>
       client.parentRequest.findFirst({ where: { tenantId, id }, select: PARENT_REQUEST_SELECT }),
     );
+  }
+
+  async resolveDefaultParticipants(
+    tenantId: string,
+    createdById: string,
+    studentId?: string | null,
+  ): Promise<string[]> {
+    return this.prisma.withTenant(async (client) => {
+      const recipientIds = new Set<string>();
+
+      // Always include active admins
+      const admins = await client.user.findMany({
+        where: { tenantId, role: { in: ['ADMIN', 'SUPER_ADMIN'] }, isActive: true },
+        select: { id: true },
+      });
+      for (const a of admins) {
+        if (a.id !== createdById) recipientIds.add(a.id);
+      }
+
+      if (studentId) {
+        const student = await client.student.findFirst({
+          where: { tenantId, id: studentId },
+          select: { parentId: true, classroomId: true },
+        });
+
+        if (student) {
+          if (student.parentId && student.parentId !== createdById) {
+            recipientIds.add(student.parentId);
+          }
+
+          if (student.classroomId) {
+            const teachers = await client.classroomTeacher.findMany({
+              where: {
+                tenantId,
+                classroomId: student.classroomId,
+                removedAt: null,
+              },
+              select: { teacherId: true },
+            });
+            for (const t of teachers) {
+              if (t.teacherId !== createdById) recipientIds.add(t.teacherId);
+            }
+          }
+        }
+      }
+
+      return Array.from(recipientIds);
+    });
   }
 }

@@ -2,6 +2,8 @@ import { useEffect, useState, type JSX } from 'react';
 import { ShieldCheck, Clock, CheckCircle2, XCircle, RotateCw } from 'lucide-react';
 import type { PickupAuthorization, PickupAuthorizationStatus } from '@kidscare/shared-types';
 import { listPickupAuthorizations, reviewPickupAuthorization } from '../../api/pickup';
+import { listStudents } from '../../api/students';
+import type { Student } from '@kidscare/shared-types';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
@@ -29,6 +31,7 @@ export function PickupPage(): JSX.Element {
     (state.user.role === 'SUPER_ADMIN' || state.user.role === 'ADMIN');
 
   const [items, setItems] = useState<PickupAuthorization[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [filter, setFilter] = useState<PickupAuthorizationStatus | 'ALL'>('PENDING');
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -38,8 +41,12 @@ export function PickupPage(): JSX.Element {
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const list = await listPickupAuthorizations(undefined, filter === 'ALL' ? undefined : filter);
+      const [list, studentsList] = await Promise.all([
+        listPickupAuthorizations(undefined, filter === 'ALL' ? undefined : filter),
+        listStudents().catch(() => []),
+      ]);
       setItems(list);
+      setStudents(studentsList);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Liste yüklenemedi', 'error');
     } finally {
@@ -124,7 +131,9 @@ export function PickupPage(): JSX.Element {
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-slate-900 truncate">
-                    Öğrenci #{item.studentId.slice(0, 8)}
+                    {students.find((s) => s.id === item.studentId)
+                      ? `${students.find((s) => s.id === item.studentId)!.firstName} ${students.find((s) => s.id === item.studentId)!.lastName}`
+                      : `Öğrenci #${item.studentId.slice(0, 8)}`}
                   </p>
                   <p className="text-xs text-slate-500 mt-0.5">
                     Talep: {new Date(item.createdAt).toLocaleString('tr-TR')}

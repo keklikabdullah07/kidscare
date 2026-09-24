@@ -47,7 +47,14 @@ export class MessagingService {
     createdById: string,
     input: ConversationCreate,
   ): Promise<Conversation> {
-    const participantIds = Array.from(new Set([createdById, ...input.participantIds]));
+    const defaultParticipants = await this.repo.resolveDefaultParticipants(
+      tenantId,
+      createdById,
+      input.studentId,
+    );
+    const participantIds = Array.from(
+      new Set([createdById, ...defaultParticipants, ...input.participantIds]),
+    );
     const row = await this.repo.createConversation(
       tenantId,
       {

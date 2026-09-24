@@ -130,7 +130,7 @@ export class MessagingController {
   }
 
   @Patch('parent-requests/:id/resolve')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async resolveParentRequest(
     @CurrentTenantId() tenantId: string,
     @CurrentUser() user: CurrentUserPayload,

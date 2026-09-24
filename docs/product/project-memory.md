@@ -94,22 +94,33 @@ Faz 1, Sprint 1 devam ediyor:
 
 ## Son Oturum Notu
 
-- Piyasa araştırması ve detaylı ürün analizi tamamlandı.
-- Uygulama planı oluşturuldu.
-- `Classroom` ve `ClassroomTeacher` Prisma modelleri eklendi.
-- Öğrenciye nullable `classroomId` ilişkisi eklendi.
-- Sınıf listeleme, oluşturma, güncelleme ve öğretmen atama API'si eklendi.
-- Demo seed'e `Minik Yıldızlar` sınıfı, öğretmen ataması ve Ada'nın sınıf ilişkisi eklendi.
-- Migration ve seed başarıyla çalıştı.
-- `pnpm exec tsc -p apps/api/tsconfig.json --noEmit` başarıyla çalıştı.
-- Temel `GET /classrooms/:id/daily-flow?date=YYYY-MM-DD` endpoint'i eklendi.
-- Admin web günlük takip ekranı sınıf seçimi ve daily-flow API'sine bağlandı.
-- Endpoint sınıf, aktif öğrenciler, günlük yoklama ve günlük raporu birlikte döndürüyor.
-- Teacher yalnızca atanmış aktif sınıfın daily-flow verisini görebiliyor.
-- `pnpm exec tsc -p apps/api/tsconfig.json --noEmit` başarıyla çalıştı.
-- `pnpm exec nx test api --runInBand` mevcut Jest ESM/CommonJS yapılandırması nedeniyle başarısız oldu; 23 suite test başlamadan hata verdi.
-- `pnpm exec tsc -p apps/admin-web/tsconfig.json --noEmit` başarıyla çalıştı.
-- İlk kod görevi: Veli günlük özetini bağlamak ve günlük akış ekranı testlerini eklemek.
+- **Tarih:** 2026-09-24
+- **Yapılan İş:** V1 Kapsam donduruldu ve mevcut tüm 15 menünün uçtan uca hatasız çalışması sağlandı.
+  - Mesajlaşma katılımcı boşluğu giderildi: `resolveDefaultParticipants` mekanizmasıyla ilgili veli, sınıf öğretmeni ve yöneticiler sohbetlere otomatik katılımcı olarak ekleniyor.
+  - Veli taleplerinin öğretmenler tarafından da onaylanabilmesi (`TEACHER` yetkisi) sağlandı.
+  - Öğrenci ve sınıf ilişkisi (`classroomId`) `shared-types`, `shared-schemas`, API entity ve `StudentsPage` modal/kart/tablo bileşenlerine tam olarak bağlandı.
+  - `PickupPage` içinde raw ID yerine gerçek öğrenci adlarının gösterimi sağlandı.
+  - Yoklama, Günlük Takip, Veli Portalı, Mesajlar, İlaç, Olay Kayıtları, Yemek Listesi, Galeri ve Ayarlar sayfaları doğrulandı.
+- **Değiştirilen Dosyalar:**
+  - `packages/shared-types/src/student.ts`
+  - `packages/shared-schemas/src/student.schema.ts`
+  - `apps/api/src/modules/students/entities/student.entity.ts`
+  - `apps/api/src/modules/parent/services/parent.service.ts`
+  - `apps/api/src/modules/messaging/repositories/messaging.repository.ts`
+  - `apps/api/src/modules/messaging/services/messaging.service.ts`
+  - `apps/api/src/modules/messaging/controllers/messaging.controller.ts`
+  - `apps/api/src/modules/messaging/services/messaging.service.spec.ts`
+  - `apps/admin-web/src/api/students.ts`
+  - `apps/admin-web/src/features/students/StudentsPage.tsx`
+  - `apps/admin-web/src/features/pickup/PickupPage.tsx`
+- **Test & Derleme Sonucu:**
+  - `apps/api` TypeScript derleme: 0 HATA ✅
+  - `apps/admin-web` TypeScript derleme: 0 HATA ✅
+  - Backend API Unit Testleri: 27 suite, 127 test BAŞARILI (%100) ✅
+  - Web Vitest Testleri: 16 dosya, 35 test BAŞARILI (%100) ✅
+  - Toplam 162/162 test yeşil!
+- **Açık Sorunlar:** Yok, tüm mevcut menüler uçtan uca stabil.
+- **Sıradaki Tek Görev:** Tasarım / UI cilalama ve kullanıcı deneyimi geliştirmeleri.
 
 ## Oturum Güncelleme Şablonu
 

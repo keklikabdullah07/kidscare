@@ -21,6 +21,7 @@ export class Student {
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
     public readonly deletedAt: Date | null,
+    public readonly classroomId: string | null = null,
   ) {}
 
   static fromPrisma(p: PrismaStudent): Student {
@@ -38,6 +39,7 @@ export class Student {
       p.createdAt,
       p.updatedAt,
       p.deletedAt,
+      p.classroomId ?? null,
     );
   }
 

@@ -56,6 +56,7 @@ export class ParentService {
           id: studentEntity.id,
           tenantId: studentEntity.tenantId,
           parentId: studentEntity.parentId,
+          classroomId: studentEntity.classroomId,
           firstName: studentEntity.firstName,
           lastName: studentEntity.lastName,
           dateOfBirth: studentEntity.dateOfBirth.toISOString().slice(0, 10),

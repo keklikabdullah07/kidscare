@@ -27,6 +27,7 @@ export type Student = {
   id: string;
   tenantId: string;
   parentId?: string | null | undefined;
+  classroomId?: string | null | undefined;
   firstName: string;
   lastName: string;
   dateOfBirth: string; // ISO 8601

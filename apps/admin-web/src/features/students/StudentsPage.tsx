@@ -16,8 +16,9 @@ import {
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { createStudent, deleteStudent, listStudents, updateStudent } from '../../api/students';
+import { listClassrooms } from '../../api/classrooms';
 import { listUsers } from '../../api/users';
-import type { User } from '@kidscare/shared-types';
+import type { Classroom, User } from '@kidscare/shared-types';
 import { StudentPassportModal } from './StudentPassportModal';
 import { PickupContactsModal } from './PickupContactsModal';
 import { useToast } from '../../components/Toast';
@@ -30,6 +31,7 @@ type FilterType = 'all' | 'active' | 'allergy' | 'blood';
 export function StudentsPage(): JSX.Element {
   const [status, setStatus] = useState<Status>('loading');
   const [students, setStudents] = useState<Student[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -43,9 +45,10 @@ export function StudentsPage(): JSX.Element {
 
   function reload(): void {
     setStatus('loading');
-    listStudents()
-      .then((rows) => {
+    Promise.all([listStudents(), listClassrooms().catch(() => [])])
+      .then(([rows, classList]) => {
         setStudents(rows);
+        setClassrooms(classList);
         setStatus('ready');
       })
       .catch((err: unknown) => {
@@ -334,6 +337,7 @@ export function StudentsPage(): JSX.Element {
                 <StudentCard
                   key={s.id}
                   student={s}
+                  classroomName={classrooms.find((c) => c.id === s.classroomId)?.name}
                   onOpenPassport={() => setPassportStudent(s)}
                   onOpenPickupContacts={() => setPickupContactsStudent(s)}
                   onEdit={() => setEditingStudent(s)}
@@ -362,6 +366,7 @@ export function StudentsPage(): JSX.Element {
                       const hasAllergy = p?.allergies && p.allergies.length > 0;
                       const blood = p?.bloodType && p.bloodType !== 'UNKNOWN' ? p.bloodType : null;
                       const primaryContact = p?.emergencyContacts?.[0];
+                      const cName = classrooms.find((c) => c.id === s.classroomId)?.name;
 
                       return (
                         <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
@@ -372,9 +377,16 @@ export function StudentsPage(): JSX.Element {
                                 {s.lastName.charAt(0)}
                               </div>
                               <div>
-                                <span className="block font-semibold text-slate-900">
-                                  {s.firstName} {s.lastName}
-                                </span>
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-semibold text-slate-900">
+                                    {s.firstName} {s.lastName}
+                                  </span>
+                                  {cName && (
+                                    <span className="inline-block text-[10px] font-semibold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200">
+                                      🏫 {cName}
+                                    </span>
+                                  )}
+                                </div>
                                 {s.notes && (
                                   <span className="text-[11px] text-slate-400 line-clamp-1">
                                     {s.notes}
@@ -472,6 +484,7 @@ export function StudentsPage(): JSX.Element {
       {showAddModal && (
         <StudentFormModal
           title="Yeni Öğrenci Ekle"
+          classrooms={classrooms}
           onClose={() => setShowAddModal(false)}
           onSaved={(created) => {
             setStudents((prev) => [...prev, created].sort(byLastName));
@@ -486,6 +499,7 @@ export function StudentsPage(): JSX.Element {
         <StudentFormModal
           title={`Öğrenciyi Düzenle: ${editingStudent.firstName} ${editingStudent.lastName}`}
           initialStudent={editingStudent}
+          classrooms={classrooms}
           onClose={() => setEditingStudent(null)}
           onSaved={(updated) => {
             setStudents((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
@@ -532,12 +546,14 @@ export function StudentsPage(): JSX.Element {
 // Student Card Component for Grid View
 function StudentCard({
   student,
+  classroomName,
   onOpenPassport,
   onOpenPickupContacts,
   onEdit,
   onDelete,
 }: {
   student: Student;
+  classroomName?: string | undefined;
   onOpenPassport: () => void;
   onOpenPickupContacts: () => void;
   onEdit: () => void;
@@ -568,7 +584,7 @@ function StudentCard({
               <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-blue-600 transition-colors">
                 {student.firstName} {student.lastName}
               </h3>
-              <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+              <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5 flex-wrap">
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5 text-slate-400" />
                   <span>{student.dateOfBirth}</span>
@@ -580,6 +596,14 @@ function StudentCard({
                   <>
                     <span className="text-slate-300">•</span>
                     <span className="capitalize">{student.gender}</span>
+                  </>
+                )}
+                {classroomName && (
+                  <>
+                    <span className="text-slate-300">•</span>
+                    <span className="inline-flex items-center text-[10px] font-semibold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200">
+                      🏫 {classroomName}
+                    </span>
                   </>
                 )}
               </div>
@@ -713,11 +737,13 @@ function StudentCard({
 function StudentFormModal({
   title,
   initialStudent,
+  classrooms,
   onClose,
   onSaved,
 }: {
   title: string;
   initialStudent?: Student;
+  classrooms: Classroom[];
   onClose: () => void;
   onSaved: (student: Student) => void;
 }): JSX.Element {
@@ -728,6 +754,7 @@ function StudentFormModal({
   const [notes, setNotes] = useState(initialStudent?.notes || '');
   const [isActive, setIsActive] = useState(initialStudent?.isActive ?? true);
   const [parentId, setParentId] = useState(initialStudent?.parentId ?? '');
+  const [classroomId, setClassroomId] = useState(initialStudent?.classroomId ?? '');
   const [parents, setParents] = useState<User[]>([]);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -755,6 +782,7 @@ function StudentFormModal({
           notes: notes.trim() || null,
           isActive,
           parentId: parentId || null,
+          classroomId: classroomId || null,
         });
         onSaved(updated);
       } else {
@@ -767,6 +795,7 @@ function StudentFormModal({
         if (gender) payload.gender = gender;
         if (notes.trim()) payload.notes = notes.trim();
         if (parentId) payload.parentId = parentId;
+        if (classroomId) payload.classroomId = classroomId;
         const created = await createStudent(payload);
         onSaved(created);
       }
@@ -865,6 +894,22 @@ function StudentFormModal({
               placeholder="Öğrenciye dair özel notlar, alışkanlıklar..."
               className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
+          </label>
+
+          <label className="block">
+            <span className="block text-xs font-semibold text-slate-700 mb-1">Sınıf</span>
+            <select
+              value={classroomId}
+              onChange={(e) => setClassroomId(e.target.value)}
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white"
+            >
+              <option value="">Sınıf atanmadı</option>
+              {classrooms.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name} {c.ageGroup ? `(${c.ageGroup})` : ''}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="block">

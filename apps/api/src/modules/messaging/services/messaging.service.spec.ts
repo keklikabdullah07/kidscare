@@ -1,7 +1,4 @@
-import {
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type {
   ConversationRow,
   MessageRow,
@@ -71,6 +68,7 @@ describe('MessagingService', () => {
       createParentRequest: jest.fn(),
       updateParentRequest: jest.fn(),
       findParentRequest: jest.fn(),
+      resolveDefaultParticipants: jest.fn().mockResolvedValue([]),
     };
     service = new MessagingService(repo);
   });
