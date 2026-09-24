@@ -142,15 +142,15 @@ export function DashboardPage(): JSX.Element {
   return (
     <div className="space-y-8">
       {/* 1. Grounded Warm Hero Header */}
-      <section className="bg-gradient-to-br from-teal-900 via-teal-950 to-emerald-950 text-white rounded-2xl p-6 sm:p-8 border border-teal-800/80 dark:border-teal-900/60 shadow-xs relative overflow-hidden">
+      <section className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white rounded-3xl p-6 sm:p-8 border border-emerald-500/40 shadow-md shadow-emerald-600/10 relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white drop-shadow-2xs">
               İyi günler, {userName}
             </h1>
-            <p className="text-teal-100/90 text-sm max-w-2xl leading-relaxed">
+            <p className="text-emerald-50 text-sm max-w-2xl leading-relaxed">
               Bugün kreşinizde{' '}
-              <strong className="text-white font-semibold">
+              <strong className="text-white font-bold">
                 {totalStudents} kayıtlı öğrenciden {presentCount} tanesi
               </strong>{' '}
               katılım sağladı.
@@ -164,13 +164,13 @@ export function DashboardPage(): JSX.Element {
                 <span> Günün tüm karne ve bülten kayıtları eksiksiz tamamlandı.</span>
               )}
             </p>
-            <div className="flex items-center gap-3 pt-1 text-xs text-teal-200">
-              <span className="flex items-center gap-1.5 bg-teal-800/80 px-3 py-1 rounded-full border border-teal-700/60">
-                <Calendar className="w-3.5 h-3.5 text-teal-300" />
+            <div className="flex items-center gap-3 pt-1 text-xs text-emerald-100 font-medium">
+              <span className="flex items-center gap-1.5 bg-white/20 backdrop-blur-xs px-3 py-1 rounded-full text-white">
+                <Calendar className="w-3.5 h-3.5" />
                 {todayFormatted}
               </span>
-              <span className="flex items-center gap-1.5 bg-teal-800/80 px-3 py-1 rounded-full border border-teal-700/60">
-                <Clock className="w-3.5 h-3.5 text-teal-300" />
+              <span className="flex items-center gap-1.5 bg-white/20 backdrop-blur-xs px-3 py-1 rounded-full text-white">
+                <Clock className="w-3.5 h-3.5" />
                 Ders & Aktivite Akışı Aktif
               </span>
             </div>
@@ -179,16 +179,16 @@ export function DashboardPage(): JSX.Element {
           <div className="flex items-center gap-3 shrink-0">
             <Link
               to="/attendance"
-              className="bg-white text-teal-950 hover:bg-teal-50 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-98 shadow-xs flex items-center gap-2"
+              className="bg-white text-emerald-950 hover:bg-emerald-50 px-4 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-98 shadow-sm flex items-center gap-2"
             >
-              <CheckCircle2 className="w-4 h-4 text-teal-700" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               Yoklama Al
             </Link>
             <Link
               to="/tracking"
-              className="bg-teal-800/90 hover:bg-teal-800 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-98 border border-teal-700/80 flex items-center gap-2"
+              className="bg-emerald-800/80 hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-98 border border-white/25 flex items-center gap-2 shadow-xs"
             >
-              <BookOpenCheck className="w-4 h-4 text-teal-200" />
+              <BookOpenCheck className="w-4 h-4 text-emerald-200" />
               Günlük Takip
             </Link>
           </div>

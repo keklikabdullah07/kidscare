@@ -290,37 +290,37 @@ export function Layout(): JSX.Element {
   const navGroups = getNavGroupsForRole(userRole);
 
   return (
-    <div className="min-h-screen flex bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans">
+    <div className="min-h-screen flex bg-[#f6faf8] text-slate-900 dark:bg-[#0b0f19] dark:text-slate-100 font-sans">
       {/* Mobile Drawer Backdrop */}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 md:hidden transition-opacity"
         />
       )}
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200/80 dark:border-slate-800 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-white dark:bg-[#131b2e] border-r border-emerald-100/70 dark:border-slate-800 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="overflow-y-auto flex-1">
           {/* Brand Header */}
-          <div className="h-16 px-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs z-10">
+          <div className="h-16 px-5 flex items-center justify-between border-b border-emerald-100/50 dark:border-slate-800 sticky top-0 bg-white/95 dark:bg-[#131b2e]/95 backdrop-blur-xs z-10">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-teal-700 text-white flex items-center justify-center shadow-xs">
-                <Sparkles className="w-5 h-5 text-teal-100" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-xs shadow-emerald-500/20">
+                <Sparkles className="w-5 h-5" />
               </div>
               <div>
                 <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
                   KidsCare
-                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 font-semibold border border-teal-200/80 dark:border-teal-800/80">
+                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-200/80 dark:border-emerald-800/80">
                     V1
                   </span>
                 </span>
                 <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                  <School className="w-3 h-3 text-teal-600 dark:text-teal-400" />
+                  <School className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                   Demo Kreş
                 </p>
               </div>
@@ -338,7 +338,7 @@ export function Layout(): JSX.Element {
           <div className="p-3 space-y-5">
             {navGroups.map((group) => (
               <div key={group.title} className="space-y-1">
-                <div className="px-3 py-1 text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                <div className="px-3 py-1 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   {group.title}
                 </div>
                 {group.items.map((item) => {
@@ -351,8 +351,8 @@ export function Layout(): JSX.Element {
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all group ${
                           isActive
-                            ? 'bg-teal-50 text-teal-900 font-semibold ring-1 ring-teal-200/80 shadow-xs dark:bg-teal-950/50 dark:text-teal-200 dark:ring-teal-800/70'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/60'
+                            ? 'bg-emerald-50/90 text-emerald-950 font-bold border-l-4 border-emerald-600 shadow-xs dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-500'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-emerald-50/50 dark:hover:bg-slate-800/60'
                         }`
                       }
                     >
@@ -361,8 +361,8 @@ export function Layout(): JSX.Element {
                           <Icon
                             className={`w-4 h-4 shrink-0 transition-colors ${
                               isActive
-                                ? 'text-teal-700 dark:text-teal-300'
-                                : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300'
+                                ? 'text-emerald-700 dark:text-emerald-400'
+                                : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-slate-300'
                             }`}
                           />
                           <span className="truncate">{item.label}</span>
@@ -377,15 +377,15 @@ export function Layout(): JSX.Element {
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-3 border-t border-slate-100 dark:border-slate-800 shrink-0 bg-white dark:bg-slate-900">
+        <div className="p-3 border-t border-emerald-100/50 dark:border-slate-800 shrink-0 bg-white dark:bg-[#131b2e]">
           <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="w-8 h-8 rounded-lg bg-teal-700 text-white font-bold flex items-center justify-center text-xs shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-600 to-teal-600 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
                 {userInitial}
               </div>
               <div className="overflow-hidden">
                 <p
-                  className="text-xs font-semibold text-slate-900 dark:text-slate-100 truncate"
+                  className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate"
                   title={userEmail || displayName}
                 >
                   {displayName}
@@ -412,7 +412,7 @@ export function Layout(): JSX.Element {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 md:pl-64">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-30 h-16 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between">
+        <header className="sticky top-0 z-30 h-16 bg-white/90 dark:bg-[#131b2e]/90 backdrop-blur-md border-b border-emerald-100/70 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -421,15 +421,15 @@ export function Layout(): JSX.Element {
             >
               <Menu className="w-5 h-5" />
             </button>
-            <div className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100/90 dark:bg-slate-800/90 px-3 py-1.5 rounded-full border border-slate-200/60 dark:border-slate-700/60">
-              <Calendar className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800/90 px-3.5 py-1.5 rounded-full border border-emerald-100 dark:border-slate-700/60 shadow-2xs">
+              <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>{getTodayFormatted()}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 text-xs text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 border border-teal-200/70 dark:border-teal-800/60 px-3 py-1.5 rounded-full font-medium">
-              <span className="w-2 h-2 rounded-full bg-teal-600 dark:bg-teal-400 animate-pulse"></span>
+            <div className="hidden sm:flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 rounded-full font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
               Sistem Aktif & Güvenli
             </div>
             <button
@@ -438,7 +438,11 @@ export function Layout(): JSX.Element {
               title={isDark ? 'Aydınlık Mod' : 'Karanlık Mod'}
               className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
             >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {isDark ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-slate-600" />
+              )}
             </button>
           </div>
         </header>
