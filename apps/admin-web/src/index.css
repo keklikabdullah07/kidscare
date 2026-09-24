@@ -1,14 +1,21 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --color-slate-50: #f8fafc;
   --color-slate-900: #0f172a;
   --color-slate-950: #020617;
+  --color-sage-50: #f2f7f4;
+  --color-sage-100: #e2ede7;
+  --color-sage-500: #2d6a4f;
+  --color-sage-600: #1b4332;
+  --color-sage-700: #081c15;
 }
 
 @layer base {
   html {
     color-scheme: light;
+    scroll-behavior: smooth;
   }
 
   html.dark {
@@ -16,28 +23,82 @@
   }
 
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: #0f172a;
     background-color: #f8fafc;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  /* Impeccable craft floor: Themed text selection */
+  ::selection {
+    background-color: #ccfbf1;
+    color: #0f766e;
+  }
+
+  html.dark ::selection {
+    background-color: #134e4a;
+    color: #5eead4;
+  }
+
+  /* Themed caret & focus rings */
+  input, textarea, select {
+    caret-color: #0f766e;
+  }
+
+  /* Tabular numbers for clean data alignment */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Custom subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  html.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+  }
+
+  html.dark ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
+
+  /* Dark mode surface mappings */
   html.dark body {
     color: #f1f5f9;
-    background-color: #0f172a;
+    background-color: #0b1120;
   }
 
   html.dark .bg-white {
-    background-color: #1e293b;
+    background-color: #111827;
   }
 
   html.dark .bg-slate-50 {
-    background-color: #0f172a;
+    background-color: #0b1120;
   }
 
   html.dark .text-slate-900 {
-    color: #f1f5f9;
+    color: #f8fafc;
+  }
+
+  html.dark .text-slate-700 {
+    color: #cbd5e1;
   }
 
   html.dark .text-slate-600 {
@@ -53,22 +114,22 @@
   }
 
   html.dark .border-slate-200 {
-    border-color: #334155;
+    border-color: #1f2937;
   }
 
   html.dark .border-slate-100 {
-    border-color: #1e293b;
+    border-color: #1f2937;
   }
 
   html.dark .bg-slate-100 {
-    background-color: #1e293b;
+    background-color: #1f2937;
   }
 
   html.dark .hover\:bg-slate-100:hover {
-    background-color: #334155;
+    background-color: #374151;
   }
 
   html.dark .bg-slate-50\/80 {
-    background-color: rgba(15, 23, 42, 0.8);
+    background-color: rgba(17, 24, 39, 0.8);
   }
 }

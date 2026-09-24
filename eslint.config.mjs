@@ -19,6 +19,7 @@ export default [
       'packages/**/src/generated/**',
       'packages/**/prisma/**',
       'scripts/**',
+      '**/.agents/**',
     ],
   },
   js.configs.recommended,
