@@ -119,7 +119,11 @@ Faz 1, Sprint 1 devam ediyor:
   - Backend API Unit Testleri: 27 suite, 127 test BAŞARILI (%100) ✅
   - Web Vitest Testleri: 16 dosya, 35 test BAŞARILI (%100) ✅
   - Toplam 162/162 test yeşil!
-- **Açık Sorunlar:** Yok, tüm mevcut menüler uçtan uca stabil.
+- **Canlı Ortam (Render) Düzeltmesi:**
+  - Canlı bulut PostgreSQL veritabanında eksik olan son 4 migration (`classrooms`, `pickup/medication`, `grants/RLS`, `messaging/incidents`) uygulandı.
+  - Migration sıralama bağımlılığı düzeltildi (`conversations` RLS yetkileri tablo oluşturma sonrasına taşındı).
+  - Canlıdaki `500 Internal server error` hatası tamamen giderildi; tüm canlı uç noktalar 200 OK ile doğrulanmıştır.
+- **Açık Sorunlar:** Yok, canlı ortam ve yerel ortam %100 senkron ve çalışır durumda.
 - **Sıradaki Tek Görev:** Tasarım / UI cilalama ve kullanıcı deneyimi geliştirmeleri.
 
 ## Oturum Güncelleme Şablonu
