@@ -48,18 +48,18 @@ Ayrıntılı plan: `docs/product/implementation-plan.md`
 
 Piyasa ve ürün analizi: `docs/product/market-research-and-differentiation.md`
 
-## Sıradaki İş
+## Sıradaki İş (Handoff Noktası)
 
-Faz 1, Sprint 1 devam ediyor:
+- **Faz 1: V1 Fonksiyonel Stabilizasyon & Sıfır Hata Turu** ➡️ **%100 TAMAMLANDI**
+  - Tüm menüler (Dashboard, Öğrenciler, Sınıflar, Ekip, Günlük Akış, Yoklama, Günlük Rapor, Veli Portalı, Mesajlar, Talepler, Teslimat, İlaç, Olay Kayıtları, Yemek Menüsü, Galeri, Ayarlar) uçtan uca çalışır durumda.
+  - Canlı bulut veritabanı (Render PostgreSQL) güncellendi, tüm migration'lar ve seed verileri yüklendi (200 OK).
+  - Testler: 162/162 (%100) yeşil, TypeScript derleme 0 hata.
+  - Git: `developer` ve `main` dalları tam senkronize.
 
-1. Mevcut `Student`, `Attendance` ve `DailyReport` akışını doğrulamak — tamamlandı
-2. Sınıf ve öğretmen ilişkisi için veri modeli kararı vermek — tamamlandı
-3. Öğrenci-sınıf ilişkisini tasarlamak — tamamlandı
-4. Shared type ve Zod şemalarını tanımlamak — tamamlandı
-5. Öğretmen günlük akışı API'sini oluşturmak — temel classroom daily-flow endpoint'i tamamlandı
-6. Öğretmen “Bugün” ekranını oluşturmak — sınıf seçimi ve daily-flow bağlantısı tamamlandı
-7. Veli günlük özetini bağlamak
-8. Rol ve tenant izolasyon testlerini yazmak
+- **Faz 2: Tasarım & UI/UX Yenileme (Başlama Noktası)** ➡️ **YENİ OTURUMDA BAŞLAYACAK**
+  - Kullanıcı yeni oturumda kendi hazırladığı **Tasarım Planı**'nı paylaşacaktır.
+  - Yeni oturumda bu plan doğrultusunda web paneli (`apps/admin-web`) arayüzü modern, premium ve kullanıcı dostu bir tasarıma kavuşturulacaktır.
+  - Yeni oturum başladığında ilk olarak kullanıcının tasarım planı dinlenmeli ve `brainstorming` kuralı uygulanmalıdır.
 
 ## Mimari Kurallar
 
@@ -119,12 +119,14 @@ Faz 1, Sprint 1 devam ediyor:
   - Backend API Unit Testleri: 27 suite, 127 test BAŞARILI (%100) ✅
   - Web Vitest Testleri: 16 dosya, 35 test BAŞARILI (%100) ✅
   - Toplam 162/162 test yeşil!
-- **Canlı Ortam (Render) Düzeltmesi:**
+- **Canlı Ortam (Render & Vercel) Doğrulaması:**
   - Canlı bulut PostgreSQL veritabanında eksik olan son 4 migration (`classrooms`, `pickup/medication`, `grants/RLS`, `messaging/incidents`) uygulandı.
   - Migration sıralama bağımlılığı düzeltildi (`conversations` RLS yetkileri tablo oluşturma sonrasına taşındı).
-  - Canlıdaki `500 Internal server error` hatası tamamen giderildi; tüm canlı uç noktalar 200 OK ile doğrulanmıştır.
-- **Açık Sorunlar:** Yok, canlı ortam ve yerel ortam %100 senkron ve çalışır durumda.
-- **Sıradaki Tek Görev:** Tasarım / UI cilalama ve kullanıcı deneyimi geliştirmeleri.
+  - Canlıdaki `500 Internal server error` hatası tamamen giderildi; tüm canlı uç noktalar 200 OK ile doğrulandı.
+  - Canlı veritabanına `pnpm db:seed` başarıyla uygulandı (6 öğrenci, 2 sınıf, günün yemek menüsü, 8 teslimatçı ve kayıtlar canlıya yüklendi).
+  - Git: `developer` ve `main` dalları merge edilip tam senkronize olarak GitHub'a push edildi.
+- **Açık Sorunlar:** Yok, sistem %100 sıfır hata ve çalışır durumda.
+- **Sıradaki Tek Görev:** Kullanıcının yeni oturumda getireceği Tasarım Planı doğrultusunda web arayüzünü (UI/UX) yenilemek.
 
 ## Oturum Güncelleme Şablonu
 
