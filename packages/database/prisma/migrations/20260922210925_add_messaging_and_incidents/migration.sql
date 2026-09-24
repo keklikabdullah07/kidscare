@@ -199,3 +199,45 @@ ALTER TABLE "incident_records" ADD CONSTRAINT "incident_records_reportedById_fke
 
 -- AddForeignKey
 ALTER TABLE "incident_records" ADD CONSTRAINT "incident_records_parentNotifiedById_fkey" FOREIGN KEY ("parentNotifiedById") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- ===== conversations =====
+GRANT SELECT, INSERT, UPDATE, DELETE ON "conversations" TO kidscare_app;
+ALTER TABLE "conversations" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON "conversations"
+  USING ("tenantId" = current_setting('app.tenant_id', true))
+  WITH CHECK ("tenantId" = current_setting('app.tenant_id', true));
+
+-- ===== conversation_participants =====
+GRANT SELECT, INSERT, UPDATE, DELETE ON "conversation_participants" TO kidscare_app;
+ALTER TABLE "conversation_participants" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON "conversation_participants"
+  USING ("tenantId" = current_setting('app.tenant_id', true))
+  WITH CHECK ("tenantId" = current_setting('app.tenant_id', true));
+
+-- ===== messages =====
+GRANT SELECT, INSERT, UPDATE, DELETE ON "messages" TO kidscare_app;
+ALTER TABLE "messages" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON "messages"
+  USING ("tenantId" = current_setting('app.tenant_id', true))
+  WITH CHECK ("tenantId" = current_setting('app.tenant_id', true));
+
+-- ===== message_read_receipts =====
+GRANT SELECT, INSERT, UPDATE, DELETE ON "message_read_receipts" TO kidscare_app;
+ALTER TABLE "message_read_receipts" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON "message_read_receipts"
+  USING ("tenantId" = current_setting('app.tenant_id', true))
+  WITH CHECK ("tenantId" = current_setting('app.tenant_id', true));
+
+-- ===== parent_requests =====
+GRANT SELECT, INSERT, UPDATE, DELETE ON "parent_requests" TO kidscare_app;
+ALTER TABLE "parent_requests" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON "parent_requests"
+  USING ("tenantId" = current_setting('app.tenant_id', true))
+  WITH CHECK ("tenantId" = current_setting('app.tenant_id', true));
+
+-- ===== incident_records =====
+GRANT SELECT, INSERT, UPDATE, DELETE ON "incident_records" TO kidscare_app;
+ALTER TABLE "incident_records" ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON "incident_records"
+  USING ("tenantId" = current_setting('app.tenant_id', true))
+  WITH CHECK ("tenantId" = current_setting('app.tenant_id', true));
