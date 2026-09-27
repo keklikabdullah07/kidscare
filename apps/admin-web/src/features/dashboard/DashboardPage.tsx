@@ -14,7 +14,6 @@ import {
   ShieldAlert,
   Pill,
   FileText,
-  Clock,
   Calendar,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
@@ -111,6 +110,19 @@ export function DashboardPage(): JSX.Element {
     return roleLabels[state.user.role] || 'Kreş Müdürü';
   })();
 
+  const timeGreeting = (() => {
+    const hour = new Date().getHours();
+    if (hour < 11)
+      return { text: 'Günaydın', emoji: '☀️', note: 'Güne enerjik bir başlangıç yapıyoruz!' };
+    if (hour < 18)
+      return { text: 'İyi günler', emoji: '🌤️', note: 'Öğrenme ve oyun dolu bir gün akışı.' };
+    return {
+      text: 'İyi akşamlar',
+      emoji: '🌙',
+      note: 'Günün tüm raporları ve teslimatları güvende.',
+    };
+  })();
+
   const menu = menuData?.menu;
   const breakfast = Array.isArray(menu?.breakfast) ? menu.breakfast : [];
   const lunch = Array.isArray(menu?.lunch) ? menu.lunch : [];
@@ -141,14 +153,21 @@ export function DashboardPage(): JSX.Element {
 
   return (
     <div className="space-y-8">
-      {/* 1. Grounded Warm Hero Header */}
-      <section className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white rounded-3xl p-6 sm:p-8 border border-emerald-500/40 shadow-md shadow-emerald-600/10 relative overflow-hidden">
+      {/* 1. Grounded Warm Childcare Hero Header */}
+      <section className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+        {/* Soft Warm Ambient Accents */}
+        <div className="absolute -top-10 -right-10 w-64 h-64 bg-amber-400/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute -bottom-10 left-1/3 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl pointer-events-none"></div>
+
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white drop-shadow-2xs">
-              İyi günler, {userName}
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
+              {timeGreeting.text}, {userName}{' '}
+              <span className="text-amber-300 transform transition-transform hover:scale-125 hover:rotate-12 inline-block cursor-default">
+                {timeGreeting.emoji}
+              </span>
             </h1>
-            <p className="text-emerald-50 text-sm max-w-2xl leading-relaxed">
+            <p className="text-blue-100/90 text-sm max-w-2xl leading-relaxed">
               Bugün kreşinizde{' '}
               <strong className="text-white font-bold">
                 {totalStudents} kayıtlı öğrenciden {presentCount} tanesi
@@ -164,31 +183,34 @@ export function DashboardPage(): JSX.Element {
                 <span> Günün tüm karne ve bülten kayıtları eksiksiz tamamlandı.</span>
               )}
             </p>
-            <div className="flex items-center gap-3 pt-1 text-xs text-emerald-100 font-medium">
-              <span className="flex items-center gap-1.5 bg-white/20 backdrop-blur-xs px-3 py-1 rounded-full text-white">
-                <Calendar className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-3 pt-1 text-xs text-blue-100 font-medium flex-wrap">
+              <span className="flex items-center gap-1.5 bg-white/15 backdrop-blur-xs px-3 py-1 rounded-full text-white">
+                <Calendar className="w-3.5 h-3.5 text-amber-300" />
                 {todayFormatted}
               </span>
-              <span className="flex items-center gap-1.5 bg-white/20 backdrop-blur-xs px-3 py-1 rounded-full text-white">
-                <Clock className="w-3.5 h-3.5" />
-                Ders & Aktivite Akışı Aktif
+              <span className="flex items-center gap-1.5 bg-white/15 backdrop-blur-xs px-3 py-1 rounded-full text-white">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                </span>
+                {timeGreeting.note}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <Link
               to="/attendance"
-              className="bg-white text-emerald-950 hover:bg-emerald-50 px-4 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-98 shadow-sm flex items-center gap-2"
+              className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 hover:shadow-md shadow-xs flex items-center gap-2"
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <CheckCircle2 className="w-4 h-4 text-white" />
               Yoklama Al
             </Link>
             <Link
               to="/tracking"
-              className="bg-emerald-800/80 hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-98 border border-white/25 flex items-center gap-2 shadow-xs"
+              className="bg-white/15 hover:bg-white/25 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 border border-white/20 flex items-center gap-2 shadow-xs hover:shadow-sm"
             >
-              <BookOpenCheck className="w-4 h-4 text-emerald-200" />
+              <BookOpenCheck className="w-4 h-4 text-blue-200" />
               Günlük Takip
             </Link>
           </div>
@@ -198,12 +220,12 @@ export function DashboardPage(): JSX.Element {
       {/* 2. Structured Operational KPIs with warm kindergarten accents */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Katılım Oranı & Yoklama */}
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-emerald-500/40 dark:hover:border-emerald-500/40 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between">
+        <div className="bg-white dark:bg-[#131E3A] p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 hover:border-blue-500/40 dark:hover:border-blue-500/40 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-default flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors">
               Katılım Oranı
             </span>
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
@@ -218,7 +240,7 @@ export function DashboardPage(): JSX.Element {
             </div>
             <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
               <div
-                className="bg-emerald-600 h-full rounded-full transition-all"
+                className="bg-blue-600 h-full rounded-full transition-all"
                 style={{ width: `${Math.min(100, attendanceRate)}%` }}
               ></div>
             </div>
@@ -230,12 +252,12 @@ export function DashboardPage(): JSX.Element {
         </div>
 
         {/* Günlük Bülten / Karne */}
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-amber-500/40 dark:hover:border-amber-500/40 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between">
+        <div className="bg-white dark:bg-[#131E3A] p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 hover:border-amber-500/40 dark:hover:border-amber-500/40 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-default flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors">
               Günlük Bülten
             </span>
-            <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
               <BookOpenCheck className="w-4 h-4" />
             </div>
           </div>
@@ -263,13 +285,13 @@ export function DashboardPage(): JSX.Element {
         {/* Kayıtlı Öğrenci */}
         <Link
           to="/students"
-          className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-teal-500/40 dark:hover:border-teal-500/40 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between group"
+          className="bg-white dark:bg-[#131E3A] p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 hover:border-indigo-500/40 dark:hover:border-indigo-500/40 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">
               Kayıtlı Öğrenci
             </span>
-            <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
               <Users className="w-4 h-4" />
             </div>
           </div>
@@ -285,7 +307,7 @@ export function DashboardPage(): JSX.Element {
               )}
             </div>
             <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
               Öğrenci listesi ve pasaportları →
             </div>
           </div>
@@ -294,18 +316,18 @@ export function DashboardPage(): JSX.Element {
         {/* Günün Öğle Menüsü */}
         <Link
           to="/menus"
-          className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-orange-500/40 dark:hover:border-orange-500/40 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between group"
+          className="bg-white dark:bg-[#131E3A] p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 hover:border-amber-500/40 dark:hover:border-amber-500/40 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
               Günün Öğle Menüsü
             </span>
-            <div className="w-9 h-9 rounded-xl bg-orange-50 dark:bg-orange-950/60 text-orange-700 dark:text-orange-300 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
               <Utensils className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate group-hover:text-orange-800 dark:group-hover:text-orange-300 transition-colors">
+            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
               {lunch.length > 0 ? lunch.slice(0, 2).join(', ') : 'Menü Planlanmadı'}
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
@@ -318,10 +340,10 @@ export function DashboardPage(): JSX.Element {
       </section>
 
       {/* 3. Operasyonel Eylem & Erken Uyarı Merkezi */}
-      <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-4">
+      <section className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 flex items-center justify-center shrink-0">
               <ShieldAlert className="w-4 h-4" />
             </div>
             <div>
@@ -340,16 +362,16 @@ export function DashboardPage(): JSX.Element {
           </div>
 
           <div className="flex items-center gap-2 text-xs flex-wrap">
-            <span className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 font-medium flex items-center gap-1.5">
-              <Pill className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+            <span className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200/70 dark:border-blue-800/60 font-medium flex items-center gap-1.5">
+              <Pill className="w-3.5 h-3.5 text-blue-700 dark:text-blue-400" />
               {pendingMedications} İlaç
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 font-medium flex items-center gap-1.5">
+            <span className="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/60 font-medium flex items-center gap-1.5">
               <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
               {openIncidents} Olay
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 font-medium flex items-center gap-1.5">
-              <ShieldAlert className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+            <span className="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800/60 font-medium flex items-center gap-1.5">
+              <ShieldAlert className="w-3.5 h-3.5 text-indigo-700 dark:text-indigo-400" />
               {pendingPickups} Teslimat
             </span>
             <span className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 font-medium flex items-center gap-1.5">
@@ -373,13 +395,13 @@ export function DashboardPage(): JSX.Element {
                 <div className="flex items-start gap-3 min-w-0">
                   <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 mt-0.5 text-slate-700 dark:text-slate-300">
                     {item.type === 'MEDICATION' && (
-                      <Pill className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+                      <Pill className="w-4 h-4 text-blue-700 dark:text-blue-400" />
                     )}
                     {item.type === 'INCIDENT' && (
                       <AlertTriangle className="w-4 h-4 text-rose-600" />
                     )}
                     {item.type === 'PICKUP' && (
-                      <ShieldAlert className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+                      <ShieldAlert className="w-4 h-4 text-indigo-700 dark:text-indigo-400" />
                     )}
                     {item.type === 'PARENT_REQUEST' && (
                       <FileText className="w-4 h-4 text-slate-600 dark:text-slate-400" />
@@ -404,7 +426,7 @@ export function DashboardPage(): JSX.Element {
 
                 <Link
                   to={item.actionUrl}
-                  className="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-teal-700 dark:hover:text-teal-300 transition-colors flex items-center gap-1"
+                  className="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex items-center gap-1"
                 >
                   İncele <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -412,22 +434,22 @@ export function DashboardPage(): JSX.Element {
             ))}
           </div>
         ) : (
-          <div className="py-4 px-4 rounded-xl bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200/80 dark:border-teal-900/40 flex items-center justify-between gap-4">
+          <div className="py-4 px-4 rounded-xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200/80 dark:border-blue-900/40 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-300 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-300 flex items-center justify-center shrink-0">
                 <CheckCircle2 className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-xs font-bold text-teal-900 dark:text-teal-200">
+                <h3 className="text-xs font-bold text-blue-900 dark:text-blue-200">
                   Operasyonel Durum Sakin & Güvenli
                 </h3>
-                <p className="text-xs text-teal-800/90 dark:text-teal-300/80">
+                <p className="text-xs text-blue-800/90 dark:text-blue-300/80">
                   Bekleyen kritik ilaç onayı, açık olay tutanağı veya bekleyen teslimat izni
                   bulunmuyor.
                 </p>
               </div>
             </div>
-            <span className="text-xs font-semibold text-teal-800 dark:text-teal-300 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-teal-200 dark:border-teal-800 shrink-0">
+            <span className="text-xs font-semibold text-blue-800 dark:text-blue-300 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-800 shrink-0">
               Tüm Kontroller Tamam
             </span>
           </div>
@@ -437,10 +459,10 @@ export function DashboardPage(): JSX.Element {
       {/* 4. İki Kolonlu Detay Alanı: Yemek Menüsü & Sağlık Notları */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Yemek Menüsü (2 Birim) */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="lg:col-span-2 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-5 sm:p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 flex items-center justify-center">
                 <Utensils className="w-4 h-4" />
               </div>
               <div>
@@ -454,7 +476,7 @@ export function DashboardPage(): JSX.Element {
             </div>
             <Link
               to="/menus"
-              className="text-xs font-semibold text-teal-700 dark:text-teal-400 hover:text-teal-800 flex items-center gap-1"
+              className="text-xs font-semibold text-amber-800 dark:text-amber-400 hover:text-amber-900 flex items-center gap-1"
             >
               Menü Detayı <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -484,14 +506,14 @@ export function DashboardPage(): JSX.Element {
             {/* Öğle Yemeği */}
             <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
               <div className="flex items-center gap-1.5 text-slate-900 dark:text-slate-100 font-semibold text-xs mb-2">
-                <Sun className="w-3.5 h-3.5 text-teal-600" />
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
                 Öğle Yemeği
               </div>
               {lunch.length > 0 ? (
                 <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
                   {lunch.map((item, idx) => (
                     <li key={idx} className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-teal-500"></span>
+                      <span className="w-1 h-1 rounded-full bg-amber-500"></span>
                       {item}
                     </li>
                   ))}
@@ -543,7 +565,7 @@ export function DashboardPage(): JSX.Element {
         </div>
 
         {/* Sağlık & Alerji Listesi (1 Birim) */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4">
+        <div className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
               <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center">

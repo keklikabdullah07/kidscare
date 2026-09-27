@@ -35,10 +35,17 @@ export function PromptModal({
   const [value, setValue] = useState(defaultValue);
 
   useEffect(() => {
-    if (isOpen) {
-      setValue(defaultValue);
-    }
-  }, [isOpen, defaultValue]);
+    if (!isOpen) return;
+    setValue(defaultValue);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCancel();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, defaultValue, onCancel]);
 
   if (!isOpen) return null;
 
@@ -70,8 +77,8 @@ export function PromptModal({
         };
       default:
         return {
-          btn: 'bg-orange-600 hover:bg-orange-700 text-white shadow-xs focus:ring-orange-500',
-          iconBg: 'bg-orange-100 text-orange-600 dark:bg-orange-950/50 dark:text-orange-400',
+          btn: 'bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black shadow-xs focus:ring-blue-500 dark:focus:ring-amber-500 font-semibold',
+          iconBg: 'bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
           icon: <HelpCircle className="w-5 h-5" />,
         };
     }
@@ -83,11 +90,14 @@ export function PromptModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onCancel();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
     >
-      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transform transition-all">
+      <div className="relative w-full max-w-md bg-white dark:bg-[#131E3A] rounded-2xl shadow-2xl border border-slate-200/80 dark:border-slate-700/60 overflow-hidden transform transition-all">
         {/* Header */}
-        <div className="flex items-start justify-between p-5 pb-4 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-start justify-between p-5 pb-4 border-b border-slate-100 dark:border-slate-700/60">
           <div className="flex items-center gap-3">
             <div className={`p-2.5 rounded-xl ${styles.iconBg}`}>{styles.icon}</div>
             <div>
@@ -125,7 +135,7 @@ export function PromptModal({
                   onChange={(e) => setValue(e.target.value)}
                   placeholder={placeholder}
                   required={requireInput}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all resize-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-[#0B1120] px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 dark:focus:ring-amber-500/30 dark:focus:border-amber-500 transition-all resize-none"
                 />
               ) : (
                 <input
@@ -135,7 +145,7 @@ export function PromptModal({
                   onChange={(e) => setValue(e.target.value)}
                   placeholder={placeholder}
                   required={requireInput}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-[#0B1120] px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 dark:focus:ring-amber-500/30 dark:focus:border-amber-500 transition-all"
                 />
               )}
             </div>

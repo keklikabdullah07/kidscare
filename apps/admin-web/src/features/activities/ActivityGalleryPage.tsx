@@ -268,7 +268,7 @@ export function ActivityGalleryPage(): JSX.Element {
         </div>
       ) : (
         /* Activity Grid */
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {posts.map((post) => {
             const formattedDate = new Date(post.activityDate).toLocaleDateString('tr-TR', {
               day: 'numeric',
@@ -293,7 +293,7 @@ export function ActivityGalleryPage(): JSX.Element {
                         {formattedDate}
                       </span>
                     </div>
-                    <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 mt-1.5 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
+                    <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 mt-1.5 group-hover:text-blue-900 dark:group-hover:text-amber-400 transition-colors">
                       {post.title}
                     </h2>
                   </div>
@@ -304,7 +304,7 @@ export function ActivityGalleryPage(): JSX.Element {
                         void handleDelete(post.id);
                       }}
                       title="Etkinliği Sil"
-                      className="text-slate-400 hover:text-rose-700 dark:hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                      className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -322,13 +322,17 @@ export function ActivityGalleryPage(): JSX.Element {
                       <div
                         key={idx}
                         onClick={() => setActiveLightboxImg(url)}
-                        className={`relative cursor-pointer group/img overflow-hidden ${
+                        className={`relative cursor-pointer group/img overflow-hidden bg-slate-200 dark:bg-slate-700 ${
                           isSingle ? 'col-span-2 row-span-2' : ''
                         }`}
                       >
                         <img
                           src={url}
                           alt={`${post.title} Fotoğraf ${idx + 1}`}
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80';
+                          }}
                           className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
                         />
                         {isLast && (
@@ -479,7 +483,15 @@ export function ActivityGalleryPage(): JSX.Element {
                             : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                         }`}
                       >
-                        <img src={item.url} alt={item.name} className="h-20 w-full object-cover" />
+                        <img
+                          src={item.url}
+                          alt={item.name}
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                          }}
+                          className="h-20 w-full object-cover"
+                        />
                         <div className="p-1 bg-white dark:bg-slate-800 text-[10px] font-semibold text-slate-700 dark:text-slate-300 truncate text-center">
                           {item.name}
                         </div>

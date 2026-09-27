@@ -4,16 +4,26 @@
 
 @theme {
   --font-sans: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --color-warm-50: #fbfaf6;
-  --color-warm-100: #f5f3ec;
-  --color-warm-200: #ece8dc;
-  --color-warm-800: #292524;
-  --color-warm-900: #1c1917;
-  --color-sage-50: #f2f7f4;
-  --color-sage-100: #e2ede7;
-  --color-sage-500: #2d6a4f;
-  --color-sage-600: #1b4332;
-  --color-sage-700: #081c15;
+  --color-brand-navy: #1e3a8a;
+  --color-brand-blue: #1d4ed8;
+  --color-brand-amber: #f59e0b;
+  --color-brand-honey: #d97706;
+  --color-brand-card-dark: #131e3a;
+  --color-brand-bg-dark: #0b1120;
+}
+
+@utility surface-card {
+  background-color: #ffffff;
+  border-color: rgba(226, 232, 240, 0.8);
+  border-width: 1px;
+  border-style: solid;
+}
+
+@utility surface-card-dark {
+  background-color: #131e3a;
+  border-color: rgba(51, 65, 85, 0.6);
+  border-width: 1px;
+  border-style: solid;
 }
 
 @layer base {
@@ -28,27 +38,36 @@
 
   body {
     font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: #1e293b;
-    background-color: #f6faf8;
+    color: #0f172a;
+    background-color: #f8fafc;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  html.dark body {
+    color: #f8fafc;
+    background-color: #0b1120;
+  }
+
   /* Themed text selection */
   ::selection {
-    background-color: #d1fae5;
-    color: #065f46;
+    background-color: #dbeafe;
+    color: #1e3a8a;
   }
 
   html.dark ::selection {
-    background-color: #047857;
-    color: #a7f3d0;
+    background-color: rgba(245, 158, 11, 0.3);
+    color: #fef3c7;
   }
 
   /* Themed caret & focus rings */
   input, textarea, select {
-    caret-color: #059669;
+    caret-color: #1d4ed8;
+  }
+
+  html.dark input, html.dark textarea, html.dark select {
+    caret-color: #f59e0b;
   }
 
   /* Tabular numbers for clean data alignment */
@@ -81,75 +100,5 @@
 
   html.dark ::-webkit-scrollbar-thumb:hover {
     background: #475569;
-  }
-
-  /* Crisp Midnight Dark Mode (Legible, crisp slate contrast instead of muddy green) */
-  html.dark body {
-    color: #f8fafc;
-    background-color: #0b0f19;
-  }
-
-  html.dark .bg-white {
-    background-color: #131b2e;
-  }
-
-  html.dark .bg-slate-50 {
-    background-color: #0b0f19;
-  }
-
-  html.dark .bg-slate-900 {
-    background-color: #131b2e;
-  }
-
-  html.dark .bg-slate-950 {
-    background-color: #070a12;
-  }
-
-  html.dark .text-slate-900 {
-    color: #f8fafc;
-  }
-
-  html.dark .text-slate-700 {
-    color: #cbd5e1;
-  }
-
-  html.dark .text-slate-600 {
-    color: #94a3b8;
-  }
-
-  html.dark .text-slate-500 {
-    color: #64748b;
-  }
-
-  html.dark .text-slate-400 {
-    color: #94a3b8;
-  }
-
-  html.dark .border-slate-200 {
-    border-color: #1e293b;
-  }
-
-  html.dark .border-slate-100 {
-    border-color: #172033;
-  }
-
-  html.dark .border-slate-800 {
-    border-color: #1e293b;
-  }
-
-  html.dark .bg-slate-100 {
-    background-color: #172033;
-  }
-
-  html.dark .bg-slate-800 {
-    background-color: #1e293b;
-  }
-
-  html.dark .hover\:bg-slate-100:hover {
-    background-color: #1e293b;
-  }
-
-  html.dark .bg-slate-50\/80 {
-    background-color: rgba(19, 27, 46, 0.8);
   }
 }

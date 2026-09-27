@@ -168,7 +168,7 @@ export function StudentsPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 bg-teal-700 text-white rounded-xl px-4 py-2 text-sm font-semibold hover:bg-teal-800 transition active:scale-98 shadow-xs"
+            className="inline-flex items-center gap-2 bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black rounded-xl px-4 py-2 text-sm font-bold transition active:scale-98 shadow-xs"
           >
             <UserPlus className="w-4 h-4" />
             <span>+ Yeni Öğrenci</span>
@@ -177,7 +177,7 @@ export function StudentsPage(): JSX.Element {
       </div>
 
       {/* Search & Filter Toolbar */}
-      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white dark:bg-[#131E3A] p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Search Box */}
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -186,7 +186,7 @@ export function StudentsPage(): JSX.Element {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Öğrenci adı, veli telefonu veya alerji ara..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50/70 hover:bg-slate-50 focus:bg-white dark:bg-slate-800/60 dark:hover:bg-slate-800 dark:focus:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50/70 hover:bg-slate-50 focus:bg-white dark:bg-slate-800/60 dark:hover:bg-slate-800 dark:focus:bg-[#0B1120] border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 transition"
           />
           {searchQuery && (
             <button
@@ -207,7 +207,7 @@ export function StudentsPage(): JSX.Element {
               onClick={() => setFilterType('all')}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                 filterType === 'all'
-                  ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                  ? 'bg-blue-900 text-white dark:bg-amber-500 dark:text-black font-semibold'
                   : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
@@ -244,7 +244,7 @@ export function StudentsPage(): JSX.Element {
               onClick={() => setViewMode('grid')}
               className={`p-1.5 rounded-md transition ${
                 viewMode === 'grid'
-                  ? 'bg-white dark:bg-slate-900 shadow-xs text-teal-700 dark:text-teal-400'
+                  ? 'bg-white dark:bg-[#131E3A] shadow-xs text-blue-900 dark:text-amber-400'
                   : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
               title="Kart Görünümü"
@@ -256,7 +256,7 @@ export function StudentsPage(): JSX.Element {
               onClick={() => setViewMode('table')}
               className={`p-1.5 rounded-md transition ${
                 viewMode === 'table'
-                  ? 'bg-white dark:bg-slate-900 shadow-xs text-teal-700 dark:text-teal-400'
+                  ? 'bg-white dark:bg-[#131E3A] shadow-xs text-blue-900 dark:text-amber-400'
                   : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
               title="Tablo Görünümü"
@@ -283,8 +283,8 @@ export function StudentsPage(): JSX.Element {
 
       {/* Loading & Empty States */}
       {status === 'loading' && (
-        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800">
-          <div className="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
+          <div className="inline-block w-8 h-8 border-3 border-blue-900 dark:border-amber-400 border-t-transparent rounded-full animate-spin mb-3"></div>
           <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
             Öğrenciler yükleniyor…
           </p>
@@ -292,7 +292,7 @@ export function StudentsPage(): JSX.Element {
       )}
 
       {status === 'error' && (
-        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
           <p className="text-rose-600 dark:text-rose-400 text-sm font-medium">
             Öğrenciler yüklenemedi.
           </p>
@@ -307,7 +307,7 @@ export function StudentsPage(): JSX.Element {
       )}
 
       {status === 'ready' && students.length === 0 && (
-        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
           <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
           <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
             Henüz öğrenci yok.
@@ -318,7 +318,7 @@ export function StudentsPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setShowAddModal(true)}
-            className="mt-4 inline-flex items-center gap-2 bg-teal-700 text-white rounded-xl px-4 py-2 text-xs font-semibold hover:bg-teal-800 transition shadow-xs"
+            className="mt-4 inline-flex items-center gap-2 bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black rounded-xl px-4 py-2 text-xs font-bold transition shadow-xs"
           >
             <UserPlus className="w-4 h-4" /> + Yeni Öğrenci
           </button>
@@ -326,7 +326,7 @@ export function StudentsPage(): JSX.Element {
       )}
 
       {status === 'ready' && students.length > 0 && filteredStudents.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+        <div className="text-center py-12 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
           <p className="text-slate-500 dark:text-slate-400 text-sm">
             Arama kriterlerine uygun öğrenci bulunamadı.
           </p>
@@ -336,7 +336,7 @@ export function StudentsPage(): JSX.Element {
               setSearchQuery('');
               setFilterType('all');
             }}
-            className="mt-2 text-xs text-teal-700 dark:text-teal-400 font-semibold hover:underline"
+            className="mt-2 text-xs text-blue-900 dark:text-amber-400 font-semibold hover:underline"
           >
             Filtreleri Temizle
           </button>
@@ -361,10 +361,10 @@ export function StudentsPage(): JSX.Element {
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="text-left text-slate-500 dark:text-slate-400 bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-xs uppercase tracking-wider font-semibold">
+                  <thead className="text-left text-slate-500 dark:text-slate-400 bg-slate-50/80 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-700/60 text-xs uppercase tracking-wider font-semibold">
                     <tr>
                       <th className="py-3.5 px-4">Ad Soyad</th>
                       <th className="py-3.5 px-4">Doğum</th>
@@ -375,7 +375,7 @@ export function StudentsPage(): JSX.Element {
                       <th className="py-3.5 px-4 text-right">İşlemler</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
                     {filteredStudents.map((s) => {
                       const p = s.passport;
                       const hasAllergy = p?.allergies && p.allergies.length > 0;
@@ -390,23 +390,26 @@ export function StudentsPage(): JSX.Element {
                         >
                           <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-slate-100">
                             <div className="flex items-center gap-2.5">
-                              <div className="w-8 h-8 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-200 font-bold text-xs flex items-center justify-center shrink-0 border border-teal-200/50 dark:border-teal-800/50">
+                              <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200 font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200/50 dark:border-blue-800/50">
                                 {s.firstName.charAt(0)}
                                 {s.lastName.charAt(0)}
                               </div>
-                              <div>
+                              <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="font-semibold text-slate-900 dark:text-slate-100">
+                                  <span
+                                    className="font-semibold text-slate-900 dark:text-slate-100 truncate max-w-[220px] block"
+                                    title={`${s.firstName} ${s.lastName}`}
+                                  >
                                     {s.firstName} {s.lastName}
                                   </span>
                                   {cName && (
-                                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 px-1.5 py-0.5 rounded border border-purple-200 dark:border-purple-800/60">
+                                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-800/60 shrink-0">
                                       <School className="w-2.5 h-2.5" /> {cName}
                                     </span>
                                   )}
                                 </div>
                                 {s.notes && (
-                                  <span className="text-[11px] text-slate-400 line-clamp-1">
+                                  <span className="text-[11px] text-slate-400 line-clamp-1 truncate max-w-[220px] block">
                                     {s.notes}
                                   </span>
                                 )}
@@ -442,7 +445,7 @@ export function StudentsPage(): JSX.Element {
                               <div className="flex items-center gap-1.5">
                                 <a
                                   href={`tel:${primaryContact.phone}`}
-                                  className="text-teal-700 dark:text-teal-400 font-medium hover:underline flex items-center gap-1"
+                                  className="text-blue-900 dark:text-amber-400 font-medium hover:underline flex items-center gap-1"
                                 >
                                   <Phone className="w-3 h-3 text-slate-400" />
                                   {primaryContact.name} ({primaryContact.relationship})
@@ -467,7 +470,7 @@ export function StudentsPage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => setPassportStudent(s)}
-                              className="inline-flex items-center gap-1 rounded-lg bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 text-xs font-semibold text-teal-800 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900 transition"
+                              className="inline-flex items-center gap-1 rounded-lg bg-blue-50 dark:bg-blue-950/60 px-2.5 py-1 text-xs font-semibold text-blue-900 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition"
                             >
                               <FileText className="w-3 h-3" /> Pasaport
                             </button>
@@ -592,21 +595,24 @@ function StudentCard({
   const estimatedAge = birthYear ? currentYear - birthYear : null;
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-teal-500/50 dark:hover:border-teal-500/50 shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group">
+    <div className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 hover:border-blue-500/50 dark:hover:border-amber-500/50 shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group">
       {/* Top Banner & Info */}
       <div className="p-5 space-y-4">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-900 dark:bg-teal-950 dark:text-teal-200 font-bold text-base flex items-center justify-center border border-teal-200/70 dark:border-teal-800/70 shadow-xs shrink-0">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200 font-bold text-base flex items-center justify-center border border-blue-200/70 dark:border-blue-800/70 shadow-xs shrink-0">
               {student.firstName.charAt(0)}
               {student.lastName.charAt(0)}
             </div>
-            <div>
-              <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base leading-snug group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
+            <div className="min-w-0 flex-1">
+              <h3
+                className="font-bold text-slate-900 dark:text-slate-100 text-base leading-snug group-hover:text-blue-900 dark:group-hover:text-amber-400 transition-colors truncate"
+                title={`${student.firstName} ${student.lastName}`}
+              >
                 {student.firstName} {student.lastName}
               </h3>
               <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex-wrap">
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1 shrink-0">
                   <Calendar className="w-3.5 h-3.5 text-slate-400" />
                   <span>{student.dateOfBirth}</span>
                   {estimatedAge !== null && (
@@ -622,9 +628,9 @@ function StudentCard({
                 {classroomName && (
                   <>
                     <span className="text-slate-300 dark:text-slate-700">•</span>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 px-1.5 py-0.5 rounded border border-purple-200 dark:border-purple-800/60">
-                      <School className="w-2.5 h-2.5" />
-                      <span>{classroomName}</span>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-800/60 truncate max-w-[120px]">
+                      <School className="w-2.5 h-2.5 shrink-0" />
+                      <span className="truncate">{classroomName}</span>
                     </span>
                   </>
                 )}
@@ -644,7 +650,7 @@ function StudentCard({
         </div>
 
         {/* Health & Passport Highlights */}
-        <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+        <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800/80">
           <div className="flex items-center gap-1.5 flex-wrap">
             {blood && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60">
@@ -689,7 +695,7 @@ function StudentCard({
         {primaryContact && (
           <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-2.5 flex items-center justify-between text-xs border border-slate-200/60 dark:border-slate-700/60">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-teal-100/70 dark:bg-teal-950/70 text-teal-800 dark:text-teal-300 flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-blue-100/70 dark:bg-blue-950/70 text-blue-900 dark:text-blue-300 flex items-center justify-center shrink-0">
                 <Phone className="w-3.5 h-3.5" />
               </div>
               <div>
@@ -701,7 +707,7 @@ function StudentCard({
                 </p>
                 <a
                   href={`tel:${primaryContact.phone}`}
-                  className="text-teal-700 dark:text-teal-400 hover:underline font-mono text-[11px]"
+                  className="text-blue-900 dark:text-amber-400 hover:underline font-mono text-[11px]"
                 >
                   {primaryContact.phone}
                 </a>
@@ -722,7 +728,7 @@ function StudentCard({
         <button
           type="button"
           onClick={onOpenPassport}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900/60 font-semibold text-xs transition"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 font-semibold text-xs transition"
         >
           <FileText className="w-3.5 h-3.5" />
           <span>Pasaport & Sağlık</span>
@@ -834,11 +840,11 @@ function StudentFormModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/60 px-6 py-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#131E3A] shadow-2xl border border-slate-200 dark:border-slate-700/60 overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/60 bg-slate-50/80 dark:bg-slate-800/40 px-6 py-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-300 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-300 flex items-center justify-center">
               <UserPlus className="w-4 h-4" />
             </div>
             <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{title}</h2>
@@ -870,7 +876,7 @@ function StudentFormModal({
                 onChange={(e) => setFirstName(e.target.value)}
                 required
                 placeholder="Örn: Ada"
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
               />
             </label>
 
@@ -884,7 +890,7 @@ function StudentFormModal({
                 onChange={(e) => setLastName(e.target.value)}
                 required
                 placeholder="Örn: Yılmaz"
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
               />
             </label>
           </div>
@@ -899,7 +905,7 @@ function StudentFormModal({
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
                 required
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
               />
             </label>
 
@@ -910,7 +916,7 @@ function StudentFormModal({
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20 bg-white"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
               >
                 <option value="">Belirtilmedi</option>
                 <option value="female">Kız (female)</option>
@@ -928,7 +934,7 @@ function StudentFormModal({
               onChange={(e) => setNotes(e.target.value)}
               rows={2}
               placeholder="Öğrenciye dair özel notlar, alışkanlıklar..."
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
             />
           </label>
 
@@ -939,7 +945,7 @@ function StudentFormModal({
             <select
               value={classroomId}
               onChange={(e) => setClassroomId(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20 bg-white"
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
             >
               <option value="">Sınıf atanmadı</option>
               {classrooms.map((c) => (
@@ -957,7 +963,7 @@ function StudentFormModal({
             <select
               value={parentId}
               onChange={(e) => setParentId(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20 bg-white"
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 dark:text-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
             >
               <option value="">Veli atanmadı</option>
               {parents.map((p) => (
@@ -977,7 +983,7 @@ function StudentFormModal({
                 type="checkbox"
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
-                className="rounded border-slate-300 dark:border-slate-700 text-teal-700 focus:ring-teal-600"
+                className="rounded border-slate-300 dark:border-slate-700 text-blue-900 dark:text-amber-500 focus:ring-blue-600 dark:focus:ring-amber-400"
               />
               <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Öğrenci aktif durumda
@@ -985,7 +991,7 @@ function StudentFormModal({
             </label>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200/80 dark:border-slate-700/60">
             <button
               type="button"
               onClick={onClose}
@@ -996,7 +1002,7 @@ function StudentFormModal({
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-teal-700 px-5 py-2 text-xs font-semibold text-white hover:bg-teal-800 transition shadow-xs disabled:opacity-50 active:scale-98"
+              className="rounded-xl bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-5 py-2 text-xs font-bold transition shadow-xs disabled:opacity-50 active:scale-98"
             >
               {saving ? 'Kaydediliyor…' : initialStudent ? 'Güncelle' : 'Ekle'}
             </button>

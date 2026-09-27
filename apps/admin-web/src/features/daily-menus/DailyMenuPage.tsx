@@ -203,18 +203,18 @@ export function DailyMenuPage(): JSX.Element {
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               Kreş Yemek Menüsü & Beslenme Yönetimi
             </h1>
-            <p className="text-xs text-slate-500 dark:text-stone-400 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Kahvaltı, öğle ve ikindi menüleri ile otomatik öğrenci alerjen denetimi
             </p>
           </div>
         </div>
 
         {/* Date Selector */}
-        <div className="flex items-center gap-2 bg-white dark:bg-[#151e1b] border border-slate-200 dark:border-[#23312c] p-1.5 rounded-xl shadow-xs">
+        <div className="flex items-center gap-2 bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 p-1.5 rounded-xl shadow-xs">
           <button
             type="button"
             onClick={() => changeDay(-1)}
-            className="p-1.5 rounded-lg text-slate-600 dark:text-stone-300 hover:bg-slate-100 dark:hover:bg-[#1c2824] transition"
+            className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             title="Önceki Gün"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -228,7 +228,7 @@ export function DailyMenuPage(): JSX.Element {
           <button
             type="button"
             onClick={() => changeDay(1)}
-            className="p-1.5 rounded-lg text-slate-600 dark:text-stone-300 hover:bg-slate-100 dark:hover:bg-[#1c2824] transition"
+            className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             title="Sonraki Gün"
           >
             <ChevronRight className="w-4 h-4" />
@@ -237,7 +237,7 @@ export function DailyMenuPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setSelectedDate(todayStr)}
-              className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100/60 dark:hover:bg-emerald-950/60 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg ml-1 transition"
+              className="text-[11px] font-bold text-blue-900 dark:text-amber-400 hover:bg-blue-100/60 dark:hover:bg-amber-950/40 bg-blue-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-lg ml-1 transition"
             >
               Bugün
             </button>
@@ -293,7 +293,7 @@ export function DailyMenuPage(): JSX.Element {
                 {warnings.map((w) => (
                   <div
                     key={w.studentId}
-                    className="inline-flex items-center gap-2 bg-white dark:bg-[#151e1b] border border-amber-300/80 dark:border-amber-700/60 rounded-xl px-3 py-1.5 text-xs shadow-xs"
+                    className="inline-flex items-center gap-2 bg-white dark:bg-[#131E3A] border border-amber-300/80 dark:border-amber-700/60 rounded-xl px-3 py-1.5 text-xs shadow-xs"
                   >
                     <span className="font-bold text-slate-900 dark:text-slate-100">
                       {w.studentName}:
@@ -311,9 +311,9 @@ export function DailyMenuPage(): JSX.Element {
       )}
 
       {loading ? (
-        <div className="text-center py-16 bg-white dark:bg-[#151e1b] rounded-2xl border border-slate-200 dark:border-[#23312c]">
+        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
           <div className="inline-block w-8 h-8 border-3 border-amber-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-          <p className="text-slate-500 dark:text-stone-400 text-sm font-medium">
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
             Günün menüsü yükleniyor…
           </p>
         </div>
@@ -322,14 +322,14 @@ export function DailyMenuPage(): JSX.Element {
         <div className="space-y-6">
           {!menu ||
           (menu.breakfast.length === 0 && menu.lunch.length === 0 && menu.snack.length === 0) ? (
-            <div className="bg-white dark:bg-[#151e1b] p-12 text-center rounded-2xl border border-dashed border-slate-200 dark:border-[#283832]">
+            <div className="bg-white dark:bg-[#131E3A] p-12 text-center rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
               <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
                 <Utensils className="w-6 h-6" />
               </div>
               <p className="text-slate-700 dark:text-slate-200 text-sm font-bold">
                 Bu gün için menü girilmemiştir.
               </p>
-              <p className="text-xs text-slate-500 dark:text-stone-400 mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 İlgili güne ait yemek planı henüz oluşturulmadı.
               </p>
             </div>
@@ -338,7 +338,7 @@ export function DailyMenuPage(): JSX.Element {
               {/* Meal Cards - View Only */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {menu.breakfast.length > 0 && (
-                  <div className="rounded-2xl border border-amber-200/90 dark:border-amber-900/40 bg-amber-50/40 dark:bg-[#151e1b] p-5 shadow-xs">
+                  <div className="rounded-2xl border border-amber-200/90 dark:border-amber-900/40 bg-amber-50/40 dark:bg-[#131E3A] p-5 shadow-xs">
                     <div className="flex items-center gap-2.5 mb-3">
                       <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 flex items-center justify-center">
                         <Coffee className="w-4 h-4" />
@@ -362,7 +362,7 @@ export function DailyMenuPage(): JSX.Element {
                 )}
 
                 {menu.lunch.length > 0 && (
-                  <div className="rounded-2xl border border-emerald-200/90 dark:border-emerald-900/40 bg-emerald-50/40 dark:bg-[#151e1b] p-5 shadow-xs">
+                  <div className="rounded-2xl border border-emerald-200/90 dark:border-emerald-900/40 bg-emerald-50/40 dark:bg-[#131E3A] p-5 shadow-xs">
                     <div className="flex items-center gap-2.5 mb-3">
                       <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center">
                         <Soup className="w-4 h-4" />
@@ -386,7 +386,7 @@ export function DailyMenuPage(): JSX.Element {
                 )}
 
                 {menu.snack.length > 0 && (
-                  <div className="rounded-2xl border border-orange-200/90 dark:border-orange-900/40 bg-orange-50/40 dark:bg-[#151e1b] p-5 shadow-xs">
+                  <div className="rounded-2xl border border-orange-200/90 dark:border-orange-900/40 bg-orange-50/40 dark:bg-[#131E3A] p-5 shadow-xs">
                     <div className="flex items-center gap-2.5 mb-3">
                       <div className="w-8 h-8 rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 flex items-center justify-center">
                         <Cookie className="w-4 h-4" />
@@ -412,7 +412,7 @@ export function DailyMenuPage(): JSX.Element {
 
               {/* Nutrition Info - View Only */}
               {(menu.allergens.length > 0 || menu.calories || menu.notes) && (
-                <div className="rounded-2xl border border-slate-200/80 dark:border-[#23312c] bg-white dark:bg-[#151e1b] p-5 shadow-xs space-y-4">
+                <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] p-5 shadow-xs space-y-4">
                   <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
                     <Tag className="w-4 h-4 text-amber-500" />
                     İçerdiği Alerjenler & Beslenme Bilgisi
@@ -420,7 +420,7 @@ export function DailyMenuPage(): JSX.Element {
 
                   {menu.allergens.length > 0 && (
                     <div>
-                      <p className="text-xs text-slate-500 dark:text-stone-400 mb-2">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
                         İçerdiği Alerjenler:
                       </p>
                       <div className="flex flex-wrap gap-2">
@@ -461,7 +461,7 @@ export function DailyMenuPage(): JSX.Element {
           {/* Meal Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Breakfast */}
-            <div className="rounded-2xl border border-amber-200/90 dark:border-amber-900/40 bg-amber-50/40 dark:bg-[#151e1b] p-5 shadow-xs flex flex-col justify-between">
+            <div className="rounded-2xl border border-amber-200/90 dark:border-amber-900/40 bg-amber-50/40 dark:bg-[#131E3A] p-5 shadow-xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
                   <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 flex items-center justify-center">
@@ -471,7 +471,7 @@ export function DailyMenuPage(): JSX.Element {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                       Sabah Kahvaltısı
                     </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-stone-400">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       Her satıra bir çeşit yazın
                     </p>
                   </div>
@@ -481,13 +481,13 @@ export function DailyMenuPage(): JSX.Element {
                   onChange={(e) => setBreakfastInput(e.target.value)}
                   placeholder="Örn:&#10;Haşlanmış Yumurta&#10;Beyaz Peynir&#10;Zeytin&#10;Ihlamur"
                   rows={6}
-                  className="w-full rounded-xl border border-slate-200 dark:border-[#283832] bg-white dark:bg-[#1c2824] p-3 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-stone-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 leading-relaxed transition"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 p-3 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 leading-relaxed transition"
                 />
               </div>
             </div>
 
             {/* Lunch */}
-            <div className="rounded-2xl border border-emerald-200/90 dark:border-emerald-900/40 bg-emerald-50/40 dark:bg-[#151e1b] p-5 shadow-xs flex flex-col justify-between">
+            <div className="rounded-2xl border border-emerald-200/90 dark:border-emerald-900/40 bg-emerald-50/40 dark:bg-[#131E3A] p-5 shadow-xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
                   <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center">
@@ -497,7 +497,7 @@ export function DailyMenuPage(): JSX.Element {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                       Öğle Yemeği
                     </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-stone-400">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       Her satıra bir çeşit yazın
                     </p>
                   </div>
@@ -507,13 +507,13 @@ export function DailyMenuPage(): JSX.Element {
                   onChange={(e) => setLunchInput(e.target.value)}
                   placeholder="Örn:&#10;Mercimek Çorbası&#10;Kıymalı Bezelye&#10;Pirinç Pilavı&#10;Ayran"
                   rows={6}
-                  className="w-full rounded-xl border border-slate-200 dark:border-[#283832] bg-white dark:bg-[#1c2824] p-3 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-stone-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 leading-relaxed transition"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 p-3 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 leading-relaxed transition"
                 />
               </div>
             </div>
 
             {/* Snack */}
-            <div className="rounded-2xl border border-orange-200/90 dark:border-orange-900/40 bg-orange-50/40 dark:bg-[#151e1b] p-5 shadow-xs flex flex-col justify-between">
+            <div className="rounded-2xl border border-orange-200/90 dark:border-orange-900/40 bg-orange-50/40 dark:bg-[#131E3A] p-5 shadow-xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
                   <div className="w-8 h-8 rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 flex items-center justify-center">
@@ -523,7 +523,7 @@ export function DailyMenuPage(): JSX.Element {
                     <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                       İkindi Ara Öğünü
                     </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-stone-400">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       Her satıra bir çeşit yazın
                     </p>
                   </div>
@@ -533,14 +533,14 @@ export function DailyMenuPage(): JSX.Element {
                   onChange={(e) => setSnackInput(e.target.value)}
                   placeholder="Örn:&#10;Mevsim Meyvesi (Muz)&#10;Fındıklı Ev Keki"
                   rows={6}
-                  className="w-full rounded-xl border border-slate-200 dark:border-[#283832] bg-white dark:bg-[#1c2824] p-3 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-stone-500 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 leading-relaxed transition"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 p-3 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 leading-relaxed transition"
                 />
               </div>
             </div>
           </div>
 
           {/* Allergens & Nutrition Information */}
-          <div className="rounded-2xl border border-slate-200/80 dark:border-[#23312c] bg-white dark:bg-[#151e1b] p-5 shadow-xs space-y-4">
+          <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] p-5 shadow-xs space-y-4">
             <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
               <Tag className="w-4 h-4 text-amber-500" />
               İçerdiği Alerjenler & Beslenme Bilgisi
@@ -548,7 +548,7 @@ export function DailyMenuPage(): JSX.Element {
 
             {/* Preset Allergen Chips */}
             <div>
-              <p className="text-xs text-slate-500 dark:text-stone-400 mb-2">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
                 Menüde yer alan alerjenleri seçin:
               </p>
               <div className="flex flex-wrap gap-2">
@@ -563,7 +563,7 @@ export function DailyMenuPage(): JSX.Element {
                       className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                         isSel
                           ? 'bg-rose-50 border-rose-300 text-rose-800 dark:bg-rose-950/60 dark:border-rose-800 dark:text-rose-300 shadow-2xs ring-1 ring-rose-300'
-                          : 'bg-slate-50 dark:bg-[#1c2824] border-slate-200 dark:border-[#283832] text-slate-700 dark:text-stone-300 hover:bg-slate-100 dark:hover:bg-[#23312c]'
+                          : 'bg-slate-50 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/80'
                       }`}
                     >
                       <span>{all}</span>
@@ -591,21 +591,21 @@ export function DailyMenuPage(): JSX.Element {
                   }
                 }}
                 placeholder="Başka alerjen ekle (Örn: Kivi, Susam)"
-                className="flex-1 rounded-xl border border-slate-200 dark:border-[#283832] bg-white dark:bg-[#1c2824] px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-stone-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
               />
               <button
                 type="button"
                 onClick={addCustomAllergen}
-                className="bg-slate-100 dark:bg-[#1c2824] hover:bg-slate-200 dark:hover:bg-[#23312c] text-slate-700 dark:text-stone-300 px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-[#283832] transition"
+                className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 transition"
               >
                 Ekle
               </button>
             </div>
 
             {/* Calories & Notes */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-[#23312c]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-slate-800">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-stone-300 mb-1 flex items-center gap-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
                   <Flame className="w-3.5 h-3.5 text-orange-500" />
                   <span>Tahmini Kalori (kcal)</span>
                 </label>
@@ -614,11 +614,11 @@ export function DailyMenuPage(): JSX.Element {
                   value={calories}
                   onChange={(e) => setCalories(e.target.value)}
                   placeholder="Örn: 950"
-                  className="w-full rounded-xl border border-slate-200 dark:border-[#283832] bg-white dark:bg-[#1c2824] px-3 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-stone-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 px-3 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-stone-300 mb-1 flex items-center gap-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
                   <FileText className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Aşçı / Beslenme Notu</span>
                 </label>
@@ -627,7 +627,7 @@ export function DailyMenuPage(): JSX.Element {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Örn: Sebzeler taze olarak temin edilmiştir."
-                  className="w-full rounded-xl border border-slate-200 dark:border-[#283832] bg-white dark:bg-[#1c2824] px-3 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-stone-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 px-3 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 />
               </div>
             </div>
@@ -654,7 +654,7 @@ export function DailyMenuPage(): JSX.Element {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 px-6 py-2.5 text-sm font-semibold text-white transition shadow-sm disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-6 py-2.5 text-sm font-bold transition shadow-xs disabled:opacity-50 active:scale-98"
                 >
                   <Save className="w-4 h-4" />
                   <span>{saving ? 'Kaydediliyor…' : 'Günün Menüsünü Kaydet'}</span>

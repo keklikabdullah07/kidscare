@@ -65,6 +65,7 @@ constructor(private readonly prisma: PrismaService) {}
 > **ZORUNLU KURAL:** Bu proje **sadece web paneli** (`apps/admin-web`) odaklıdır. Mobil uygulama (`apps/mobile`) ile ilgili **hiçbir şekilde** çalışma yapılmayacaktır.
 
 **Geliştirme Kapsamı:**
+
 - ✅ Backend API geliştirme ve test
 - ✅ Web paneli geliştirme (tam feature + UI + test)
 - ❌ Mobil uygulama geliştirme (kesinlikle YASAK)
@@ -72,6 +73,7 @@ constructor(private readonly prisma: PrismaService) {}
 - ❌ Mobil uygulama kod değişiklikleri (kesinlikle YASAK)
 
 **Neden Web-Only?**
+
 - Bu proje web yönetim paneli odaklıdır
 - Mobil uygulama farklı bir proje olarak ele alınmalı
 - Web paneli tamamlanmadan mobil'e geçilmeyecek
@@ -97,3 +99,36 @@ Varsayılan Seed Kullanıcıları:
 - ❌ Asla aynı DTO veya tipi `shared-types` dışına kopyalayıp mükerrer tanımlamayın.
 - ❌ Asla Controller içinde doğrudan Prisma sorgusu yazmayın (Repository üzerinden geçilmelidir).
 - ❌ Asla mobil uygulama (`apps/mobile`) üzerinde çalışmayın (Web-Only kuralı).
+
+---
+
+## 7. Tasarım Sistemi ve UI Standartları (KidsCare Impeccable Design System)
+
+KidsCare Web Yönetim Paneli, dünya standartlarında ödüllü bir kreş/okul öncesi yönetim deneyimi sunmak üzere tasarlanmıştır. Gelecekte eklenecek tüm yeni ekranlar, özellikler ve bileşenler bu tasarım kurallarına uymak **zorundadır**:
+
+### Renk Paleti ve Marka Kimliği
+
+- **Birincil Marka Rengi:** Derin Gece Mavisi (`text-blue-900`, `bg-blue-900`, koyu modda `dark:text-blue-300`, `dark:bg-blue-950/60`).
+- **Kreş Sıcaklığı & Vurgu Rengi:** Bal Sarısı / Amber (`bg-amber-500`, `text-amber-800`, koyu modda `dark:text-amber-300`, `dark:bg-amber-500/20`).
+- **Koyu Mod Yüzeyleri:** Ana arka plan `#0B1120`, kart yüzeyleri `#131E3A`, sınırlar `border-slate-700/60`.
+- **Açık Mod Yüzeyleri:** Ana arka plan `#F8FAFC`, kart yüzeyleri `#FFFFFF`, sınırlar `border-slate-200/80`.
+- **YASAK:** Çiğ jenerik renkler (saf kırmızı, çiğ yeşil, donuk kurumsal gri). Daima HSL uyumlu ve Tailwind token'ları kullanılmalıdır.
+
+### Kart ve Konteyner Mimarisi
+
+- Tüm kartlar ve paneller: `rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] p-5 shadow-xs hover:shadow-md transition-all`.
+- Sayfa boşlukları: Ana içerik konteynerinde `space-y-6` veya `space-y-8`. Izgara aralıkları `gap-4` veya `gap-5`.
+- Sayfa Başlıkları: `<PageHeader>` veya sol tarafta 11x11 rounded-2xl ikon rozeti (`bg-blue-900 text-white dark:bg-amber-500 dark:text-black`), sağ tarafta aksiyon butonları.
+
+### Savunmacı ve Dayanıklı UI (Hardening)
+
+- **Uzun İsimler & Taşmalar:** Esnek alanlardaki tüm öğrenci ve veli isimlerinde `min-w-0 flex-1 truncate` ve native `title="..."` ipucu zorunludur.
+- **Kırık Görseller:** Tüm `<img>` etiketlerinde `onError` koruması ve yedek görsel mekanizması zorunludur.
+- **Boş Durumlar (Empty States):** Asla soğuk "Veri yok" yazılmamalıdır. Daima temalı simge rozeti (`w-12 h-12 rounded-2xl bg-amber-50/bg-blue-50`), kalın başlık ve veliyi/öğretmeni yönlendiren açıklayıcı alt metin bulunmalıdır (`<EmptyState>` bileşeni kullanılmalıdır).
+- **Erişilebilirlik & Dokunma:** Buton ve interaktif kontrollerde minimum 40-44px dokunma hedefi ve açıklayıcı `aria-label` / `title` bulunmalıdır.
+
+### Mikro-Etkileşimler (Delight & Polish)
+
+- Tıklanabilir butonlarda `active:scale-95` veya `active:scale-98` mikro basma hissi ve `transition-all duration-200`.
+- Kartlarda `hover:-translate-y-1 hover:shadow-md` mikro yükselme.
+- Tüm modal ve diyaloglarda <kbd>Escape</kbd> tuşu ve dış arka plana (backdrop) tıklamayla kapanma desteği zorunludur.

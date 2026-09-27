@@ -273,25 +273,26 @@ export function DailyReportEditorModal({
   if (!student) return <></>;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-xl bg-white shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-2xl bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/80 shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/80 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 px-6 py-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl">🌟</span>
-              <h2 className="text-lg font-bold text-gray-900">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                 Günlük Takip — {student.firstName} {student.lastName}
               </h2>
             </div>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Tarih: <span className="font-semibold text-gray-700">{date}</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Tarih:{' '}
+              <span className="font-semibold text-slate-700 dark:text-slate-300">{date}</span>
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-700"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition"
           >
             ✕
           </button>
@@ -299,7 +300,7 @@ export function DailyReportEditorModal({
 
         {/* Content */}
         {loading ? (
-          <div className="flex flex-1 items-center justify-center p-12 text-sm text-gray-500">
+          <div className="flex flex-1 items-center justify-center p-12 text-sm text-slate-500 dark:text-slate-400">
             Günlük rapor yükleniyor…
           </div>
         ) : (
@@ -310,14 +311,14 @@ export function DailyReportEditorModal({
             className="flex-1 overflow-y-auto p-6 space-y-6"
           >
             {error && (
-              <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 border border-red-200">
+              <div className="rounded-xl bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800/60">
                 {error}
               </div>
             )}
 
             {/* Mood Selector */}
             <div className="space-y-2">
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">
                 😊 Günün Ruh Hali (Mod)
               </label>
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -328,10 +329,10 @@ export function DailyReportEditorModal({
                       key={m.key}
                       type="button"
                       onClick={() => setMood(m.key)}
-                      className={`flex flex-col items-center justify-center p-2 rounded-lg border text-center transition-all ${
+                      className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition-all ${
                         isSelected
-                          ? `${m.color} ring-2 ring-blue-500 font-bold scale-102`
-                          : 'border-gray-200 bg-white hover:bg-gray-50 text-gray-600'
+                          ? `${m.color} ring-2 ring-blue-500 dark:ring-amber-400 font-bold scale-102`
+                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/60 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300'
                       }`}
                     >
                       <span className="text-2xl">{m.emoji}</span>
@@ -343,24 +344,26 @@ export function DailyReportEditorModal({
             </div>
 
             {/* Meals Section */}
-            <div className="rounded-lg border border-gray-200 p-4 bg-gray-50/40 space-y-3">
-              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/40 space-y-3">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>🍽️</span> Beslenme & Yemek Takibi
               </h3>
               <div className="space-y-2">
                 {/* Breakfast */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 bg-white rounded-md border border-gray-200">
-                  <span className="text-xs font-medium text-gray-800 w-24">Sabah Kahvaltısı</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/80">
+                  <span className="text-xs font-medium text-slate-800 dark:text-slate-200 w-28">
+                    Sabah Kahvaltısı
+                  </span>
                   <div className="flex flex-wrap gap-1">
                     {MEAL_PORTIONS.map((mp) => (
                       <button
                         key={mp.key}
                         type="button"
                         onClick={() => setBreakfast(mp.key)}
-                        className={`px-2 py-1 text-xs rounded-md border font-medium transition ${
+                        className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition ${
                           breakfast === mp.key
-                            ? 'bg-emerald-600 border-emerald-600 text-white'
-                            : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                            ? 'bg-blue-900 dark:bg-amber-500 border-blue-900 dark:border-amber-500 text-white dark:text-black font-bold'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
                         }`}
                       >
                         {mp.label}
@@ -370,18 +373,20 @@ export function DailyReportEditorModal({
                 </div>
 
                 {/* Lunch */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 bg-white rounded-md border border-gray-200">
-                  <span className="text-xs font-medium text-gray-800 w-24">Öğle Yemeği</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/80">
+                  <span className="text-xs font-medium text-slate-800 dark:text-slate-200 w-28">
+                    Öğle Yemeği
+                  </span>
                   <div className="flex flex-wrap gap-1">
                     {MEAL_PORTIONS.map((mp) => (
                       <button
                         key={mp.key}
                         type="button"
                         onClick={() => setLunch(mp.key)}
-                        className={`px-2 py-1 text-xs rounded-md border font-medium transition ${
+                        className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition ${
                           lunch === mp.key
-                            ? 'bg-emerald-600 border-emerald-600 text-white'
-                            : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                            ? 'bg-blue-900 dark:bg-amber-500 border-blue-900 dark:border-amber-500 text-white dark:text-black font-bold'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
                         }`}
                       >
                         {mp.label}
@@ -391,18 +396,20 @@ export function DailyReportEditorModal({
                 </div>
 
                 {/* Snack */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 bg-white rounded-md border border-gray-200">
-                  <span className="text-xs font-medium text-gray-800 w-24">İkindi Ara Öğün</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/80">
+                  <span className="text-xs font-medium text-slate-800 dark:text-slate-200 w-28">
+                    İkindi Ara Öğün
+                  </span>
                   <div className="flex flex-wrap gap-1">
                     {MEAL_PORTIONS.map((mp) => (
                       <button
                         key={mp.key}
                         type="button"
                         onClick={() => setSnack(mp.key)}
-                        className={`px-2 py-1 text-xs rounded-md border font-medium transition ${
+                        className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition ${
                           snack === mp.key
-                            ? 'bg-emerald-600 border-emerald-600 text-white'
-                            : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                            ? 'bg-blue-900 dark:bg-amber-500 border-blue-900 dark:border-amber-500 text-white dark:text-black font-bold'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
                         }`}
                       >
                         {mp.label}
@@ -416,46 +423,46 @@ export function DailyReportEditorModal({
                 value={mealNotes}
                 onChange={(e) => setMealNotes(e.target.value)}
                 placeholder="Yemek hakkında özel not (ör: çorbayı çok sevdi, ekmek yemedi)..."
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-800 focus:border-blue-500 focus:outline-hidden"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
               />
             </div>
 
             {/* Nap Section */}
-            <div className="rounded-lg border border-gray-200 p-4 bg-gray-50/40 space-y-3">
-              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/40 space-y-3">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>😴</span> Uyku & Dinlenme Takibi
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                     Uyuma Saati
                   </label>
                   <input
                     type="time"
                     value={napStart}
                     onChange={(e) => setNapStart(e.target.value)}
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 px-3 py-1.5 text-xs font-medium"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                     Uyanma Saati
                   </label>
                   <input
                     type="time"
                     value={napEnd}
                     onChange={(e) => setNapEnd(e.target.value)}
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 px-3 py-1.5 text-xs font-medium"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                     Uyku Kalitesi
                   </label>
                   <select
                     value={napQuality ?? ''}
                     onChange={(e) => setNapQuality(e.target.value as NapQuality)}
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 px-3 py-1.5 text-xs font-medium"
                   >
                     <option value="">Seçiniz</option>
                     {NAP_QUALITIES.map((nq) => (
@@ -471,26 +478,26 @@ export function DailyReportEditorModal({
                 value={napNotes}
                 onChange={(e) => setNapNotes(e.target.value)}
                 placeholder="Uyku notu (ör: masalla 10 dakikada uyudu)..."
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-800 focus:border-blue-500 focus:outline-hidden"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
               />
             </div>
 
             {/* Potty / Diaper Section */}
-            <div className="rounded-lg border border-gray-200 p-4 bg-gray-50/40 space-y-3">
-              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/40 space-y-3">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>🚻</span> Tuvalet & Bez Değişimi
               </h3>
-              <div className="flex flex-wrap items-center gap-2 bg-white p-3 rounded-md border border-gray-200">
+              <div className="flex flex-wrap items-center gap-2 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700/80">
                 <input
                   type="time"
                   value={pottyTime}
                   onChange={(e) => setPottyTime(e.target.value)}
-                  className="rounded-md border border-gray-300 px-2 py-1 text-xs"
+                  className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-1 text-xs"
                 />
                 <select
                   value={pottyType}
                   onChange={(e) => setPottyType(e.target.value as PottyType)}
-                  className="rounded-md border border-gray-300 px-2 py-1 text-xs"
+                  className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-1 text-xs"
                 >
                   {POTTY_TYPES.map((pt) => (
                     <option key={pt.key} value={pt.key}>
@@ -501,7 +508,7 @@ export function DailyReportEditorModal({
                 <button
                   type="button"
                   onClick={addPotty}
-                  className="px-3 py-1 bg-gray-800 hover:bg-black text-white rounded-md text-xs font-medium"
+                  className="px-3 py-1 bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black font-bold rounded-lg text-xs"
                 >
                   + Kayıt Ekle
                 </button>
@@ -514,11 +521,11 @@ export function DailyReportEditorModal({
                     return (
                       <span
                         key={p.id}
-                        className="inline-flex items-center gap-1.5 bg-white border border-gray-200 px-2.5 py-1 rounded-full text-xs font-medium text-gray-800 shadow-2xs"
+                        className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-full text-xs font-medium text-slate-800 dark:text-slate-200 shadow-2xs"
                       >
                         <span>{info?.emoji}</span>
                         <span>{p.time}</span>
-                        <span className="text-gray-500">({info?.label})</span>
+                        <span className="text-slate-500 dark:text-slate-400">({info?.label})</span>
                         <button
                           type="button"
                           onClick={() => removePotty(p.id)}
@@ -535,7 +542,7 @@ export function DailyReportEditorModal({
 
             {/* Activities Section */}
             <div className="space-y-2">
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">
                 🎨 Günün Etkinlikleri
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -546,10 +553,10 @@ export function DailyReportEditorModal({
                       key={act}
                       type="button"
                       onClick={() => toggleActivity(act)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-colors ${
                         isSelected
-                          ? 'bg-purple-600 border-purple-600 text-white shadow-2xs'
-                          : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                          ? 'bg-amber-500/20 border-amber-500/50 text-amber-900 dark:text-amber-300 font-bold shadow-2xs'
+                          : 'bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                     >
                       {isSelected ? `✓ ${act}` : `+ ${act}`}
@@ -560,26 +567,26 @@ export function DailyReportEditorModal({
             </div>
 
             {/* Medication & Health Section */}
-            <div className="rounded-lg border border-rose-100 p-4 bg-rose-50/30 space-y-3">
-              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+            <div className="rounded-xl border border-rose-200 dark:border-rose-900/40 p-4 bg-rose-50/30 dark:bg-rose-950/20 space-y-3">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>💊</span> İlaç Takip & Sağlık
               </h3>
 
               {/* Add medication form */}
-              <div className="bg-white rounded-md border border-rose-100 p-3 space-y-2">
+              <div className="bg-white dark:bg-slate-900 rounded-xl border border-rose-100 dark:border-rose-900/40 p-3 space-y-2">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <input
                     type="text"
                     value={medName}
                     onChange={(e) => setMedName(e.target.value)}
                     placeholder="İlaç adı (ör: Nurofen)"
-                    className="col-span-1 sm:col-span-2 rounded-md border border-gray-300 px-2.5 py-1.5 text-xs text-gray-800 focus:border-rose-400 focus:outline-hidden"
+                    className="col-span-1 sm:col-span-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:outline-hidden"
                   />
                   <input
                     type="time"
                     value={medTime}
                     onChange={(e) => setMedTime(e.target.value)}
-                    className="rounded-md border border-gray-300 px-2.5 py-1.5 text-xs"
+                    className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2.5 py-1.5 text-xs"
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -588,7 +595,7 @@ export function DailyReportEditorModal({
                     value={medDosage}
                     onChange={(e) => setMedDosage(e.target.value)}
                     placeholder="Doz (ör: 5 ml)"
-                    className="rounded-md border border-gray-300 px-2.5 py-1.5 text-xs text-gray-800 focus:border-rose-400 focus:outline-hidden"
+                    className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:outline-hidden"
                   />
                   <input
                     type="number"
@@ -598,21 +605,21 @@ export function DailyReportEditorModal({
                     step="0.1"
                     min="35"
                     max="42"
-                    className="rounded-md border border-gray-300 px-2.5 py-1.5 text-xs text-gray-800 focus:border-rose-400 focus:outline-hidden"
+                    className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:outline-hidden"
                   />
                   <input
                     type="text"
                     value={medNotes}
                     onChange={(e) => setMedNotes(e.target.value)}
                     placeholder="Not (ör: veli istedi)"
-                    className="rounded-md border border-gray-300 px-2.5 py-1.5 text-xs text-gray-800 focus:border-rose-400 focus:outline-hidden"
+                    className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:outline-hidden"
                   />
                 </div>
                 <button
                   type="button"
                   onClick={addMedication}
                   disabled={!medName.trim()}
-                  className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-xs font-semibold disabled:opacity-40 transition-colors"
+                  className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold disabled:opacity-40 transition-colors"
                 >
                   + İlaç Kaydı Ekle
                 </button>
@@ -626,8 +633,10 @@ export function DailyReportEditorModal({
                     return (
                       <div
                         key={med.id}
-                        className={`flex items-center gap-2 p-2.5 rounded-md border text-xs transition-colors ${
-                          isGiven ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'
+                        className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs transition-colors ${
+                          isGiven
+                            ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800'
+                            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700'
                         }`}
                       >
                         <button
@@ -636,35 +645,39 @@ export function DailyReportEditorModal({
                           title={isGiven ? 'Verildi olarak işaretlendi' : 'Verildi olarak işaretle'}
                           className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                             isGiven
-                              ? 'bg-green-500 border-green-500 text-white'
-                              : 'border-gray-300 hover:border-green-400'
+                              ? 'bg-emerald-500 border-emerald-500 text-white'
+                              : 'border-slate-300 dark:border-slate-600 hover:border-emerald-400'
                           }`}
                         >
                           {isGiven && <span className="text-[10px] leading-none">✓</span>}
                         </button>
                         <div className="flex-1 min-w-0">
                           <span
-                            className={`font-semibold ${isGiven ? 'text-green-800' : 'text-gray-800'}`}
+                            className={`font-semibold ${isGiven ? 'text-emerald-800 dark:text-emerald-300' : 'text-slate-800 dark:text-slate-200'}`}
                           >
                             {med.name}
                           </span>
-                          <span className="text-gray-400 mx-1">·</span>
-                          <span className="text-gray-500">{med.time}</span>
-                          {med.dosage && <span className="ml-1 text-gray-500">({med.dosage})</span>}
+                          <span className="text-slate-400 mx-1">·</span>
+                          <span className="text-slate-500 dark:text-slate-400">{med.time}</span>
+                          {med.dosage && (
+                            <span className="ml-1 text-slate-500 dark:text-slate-400">
+                              ({med.dosage})
+                            </span>
+                          )}
                           {med.temperature !== undefined && (
                             <span
-                              className={`ml-1.5 font-medium ${med.temperature >= 38 ? 'text-red-600' : 'text-gray-600'}`}
+                              className={`ml-1.5 font-medium ${med.temperature >= 38 ? 'text-red-600 dark:text-red-400' : 'text-slate-600 dark:text-slate-400'}`}
                             >
                               🌡️ {med.temperature.toFixed(1)}°C
                             </span>
                           )}
                           {isGiven && med.givenAt && (
-                            <span className="ml-1.5 text-green-600">
+                            <span className="ml-1.5 text-emerald-600 dark:text-emerald-400">
                               ✓ {med.givenAt}'de verildi
                             </span>
                           )}
                           {med.notes && (
-                            <span className="ml-1 text-gray-400 italic">— {med.notes}</span>
+                            <span className="ml-1 text-slate-400 italic">— {med.notes}</span>
                           )}
                         </div>
                         <button
@@ -683,7 +696,7 @@ export function DailyReportEditorModal({
 
             {/* Teacher Note */}
             <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide mb-1">
                 📝 Öğretmen Gün Sonu Notu & Veli Mesajı
               </label>
               <textarea
@@ -691,24 +704,24 @@ export function DailyReportEditorModal({
                 onChange={(e) => setTeacherNote(e.target.value)}
                 rows={3}
                 placeholder="Örn: Bugün arkadaşlarıyla çok uyumlu oynadı, resim etkinliğinde güneş resmi yaptı..."
-                className="w-full rounded-md border border-gray-300 p-3 text-xs text-gray-800 focus:border-blue-500 focus:outline-hidden"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
               />
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-4">
               <button
                 type="button"
                 onClick={onClose}
                 disabled={saving}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-xl border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
               >
                 İptal
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-lg bg-teal-700 px-5 py-2 text-sm font-semibold text-white hover:bg-teal-800 shadow-xs disabled:opacity-50 transition"
+                className="rounded-xl bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-5 py-2 text-sm font-bold shadow-xs disabled:opacity-50 transition"
               >
                 {saving ? 'Kaydediliyor…' : 'Raporu Kaydet'}
               </button>

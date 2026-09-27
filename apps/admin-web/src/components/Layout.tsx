@@ -12,8 +12,6 @@ import {
   Menu,
   X,
   Calendar,
-  Sparkles,
-  School,
   LayoutDashboard,
   Moon,
   Sun,
@@ -27,6 +25,8 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
+import { KidsCareLogo } from './KidsCareLogo';
+import { Badge, type BadgeVariant } from './ui/Badge';
 
 type NavItem = {
   to: string;
@@ -228,38 +228,19 @@ function getTodayFormatted(): string {
   });
 }
 
-function getRoleBadge(role: string): { label: string; color: string } {
+function getRoleBadge(role: string): { label: string; variant: BadgeVariant } {
   switch (role) {
     case 'SUPER_ADMIN':
-      return {
-        label: 'Süper Admin',
-        color:
-          'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800',
-      };
+    case 'SUPERADMIN':
+      return { label: 'Süper Admin', variant: 'brand' };
     case 'ADMIN':
-      return {
-        label: 'Yönetici / Müdür',
-        color:
-          'bg-teal-50 text-teal-800 border-teal-200 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800',
-      };
+      return { label: 'Yönetici / Müdür', variant: 'info' };
     case 'TEACHER':
-      return {
-        label: 'Öğretmen',
-        color:
-          'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
-      };
+      return { label: 'Öğretmen', variant: 'warning' };
     case 'PARENT':
-      return {
-        label: 'Veli',
-        color:
-          'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
-      };
+      return { label: 'Veli', variant: 'success' };
     default:
-      return {
-        label: role,
-        color:
-          'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
-      };
+      return { label: role, variant: 'neutral' };
   }
 }
 
@@ -290,45 +271,30 @@ export function Layout(): JSX.Element {
   const navGroups = getNavGroupsForRole(userRole);
 
   return (
-    <div className="min-h-screen flex bg-[#f6faf8] text-slate-900 dark:bg-[#0b0f19] dark:text-slate-100 font-sans">
+    <div className="min-h-screen flex bg-slate-50 text-slate-900 dark:bg-[#0B1120] dark:text-slate-100 font-sans">
       {/* Mobile Drawer Backdrop */}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 md:hidden transition-opacity"
         />
       )}
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-white dark:bg-[#131b2e] border-r border-emerald-100/70 dark:border-slate-800 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-white dark:bg-[#131E3A] border-r border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="overflow-y-auto flex-1">
-          {/* Brand Header */}
-          <div className="h-16 px-5 flex items-center justify-between border-b border-emerald-100/50 dark:border-slate-800 sticky top-0 bg-white/95 dark:bg-[#131b2e]/95 backdrop-blur-xs z-10">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-xs shadow-emerald-500/20">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-                  KidsCare
-                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-200/80 dark:border-emerald-800/80">
-                    V1
-                  </span>
-                </span>
-                <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                  <School className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                  Demo Kreş
-                </p>
-              </div>
-            </div>
+          {/* Brand Header with Authentic Logo */}
+          <div className="h-18 px-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 sticky top-0 bg-white/95 dark:bg-[#131E3A]/95 backdrop-blur-xs z-10">
+            <KidsCareLogo size="md" showText={true} />
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 md:hidden"
+              aria-label="Menüyü Kapat"
+              className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 md:hidden"
             >
               <X className="w-5 h-5" />
             </button>
@@ -349,10 +315,10 @@ export function Layout(): JSX.Element {
                       to={item.to}
                       onClick={() => setMobileOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all group ${
+                        `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${
                           isActive
-                            ? 'bg-emerald-50/90 text-emerald-950 font-bold border-l-4 border-emerald-600 shadow-xs dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-500'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-emerald-50/50 dark:hover:bg-slate-800/60'
+                            ? 'bg-blue-900 text-white font-semibold shadow-xs dark:bg-amber-500/20 dark:text-amber-300 dark:border dark:border-amber-500/30'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/60'
                         }`
                       }
                     >
@@ -361,8 +327,8 @@ export function Layout(): JSX.Element {
                           <Icon
                             className={`w-4 h-4 shrink-0 transition-colors ${
                               isActive
-                                ? 'text-emerald-700 dark:text-emerald-400'
-                                : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-slate-300'
+                                ? 'text-white dark:text-amber-300'
+                                : 'text-slate-400 dark:text-slate-500 group-hover:text-blue-900 dark:group-hover:text-amber-400'
                             }`}
                           />
                           <span className="truncate">{item.label}</span>
@@ -377,10 +343,10 @@ export function Layout(): JSX.Element {
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-3 border-t border-emerald-100/50 dark:border-slate-800 shrink-0 bg-white dark:bg-[#131b2e]">
-          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between gap-2">
+        <div className="p-3 border-t border-slate-100 dark:border-slate-800/80 shrink-0 bg-white dark:bg-[#131E3A]">
+          <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-600 to-teal-600 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-blue-900 text-white dark:bg-amber-500 dark:text-black font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
                 {userInitial}
               </div>
               <div className="overflow-hidden">
@@ -390,18 +356,16 @@ export function Layout(): JSX.Element {
                 >
                   {displayName}
                 </p>
-                <span
-                  className={`inline-block text-[10px] font-medium px-1.5 py-0.5 rounded border mt-0.5 ${roleBadge.color}`}
-                >
+                <Badge variant={roleBadge.variant} size="sm" className="mt-0.5">
                   {roleBadge.label}
-                </span>
+                </Badge>
               </div>
             </div>
             <button
               type="button"
               onClick={logout}
               title="Çıkış Yap"
-              className="p-1.5 text-slate-500 hover:text-rose-700 hover:bg-rose-100/70 dark:hover:bg-rose-950/50 dark:hover:text-rose-400 rounded-lg transition-colors shrink-0"
+              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-rose-400 rounded-lg transition-colors shrink-0"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -412,17 +376,18 @@ export function Layout(): JSX.Element {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 md:pl-64">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-30 h-16 bg-white/90 dark:bg-[#131b2e]/90 backdrop-blur-md border-b border-emerald-100/70 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between">
+        <header className="sticky top-0 z-30 h-18 bg-white/90 dark:bg-[#131E3A]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="p-2 -ml-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 md:hidden"
+              aria-label="Menüyü Aç"
+              className="p-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 md:hidden"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800/90 px-3.5 py-1.5 rounded-full border border-emerald-100 dark:border-slate-700/60 shadow-2xs">
-              <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/80 px-3.5 py-1.5 rounded-full border border-slate-200/70 dark:border-slate-700/60 shadow-2xs">
+              <Calendar className="w-3.5 h-3.5 text-blue-900 dark:text-amber-400" />
               <span>{getTodayFormatted()}</span>
             </div>
           </div>
@@ -436,12 +401,13 @@ export function Layout(): JSX.Element {
               type="button"
               onClick={toggleTheme}
               title={isDark ? 'Aydınlık Mod' : 'Karanlık Mod'}
-              className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
+              aria-label={isDark ? 'Aydınlık moda geç' : 'Karanlık moda geç'}
+              className="group p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 rounded-xl transition-all duration-200 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 active:scale-90 cursor-pointer shadow-2xs"
             >
               {isDark ? (
-                <Sun className="w-4 h-4 text-amber-400" />
+                <Sun className="w-4.5 h-4.5 text-amber-400 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-110" />
               ) : (
-                <Moon className="w-4 h-4 text-slate-600" />
+                <Moon className="w-4.5 h-4.5 text-blue-900 dark:text-blue-300 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" />
               )}
             </button>
           </div>

@@ -183,7 +183,7 @@ export function MedicationPage(): JSX.Element {
           <button
             type="button"
             onClick={() => void refresh()}
-            className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition"
+            className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition"
           >
             <RotateCw className="w-3.5 h-3.5" /> Yenile
           </button>
@@ -191,7 +191,7 @@ export function MedicationPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setCreateOpen((v) => !v)}
-              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition shadow-xs active:scale-98"
+              className="text-xs font-bold text-white dark:text-black bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition shadow-xs active:scale-98"
             >
               <Plus className="w-3.5 h-3.5" /> Yeni Talep
             </button>
@@ -204,7 +204,7 @@ export function MedicationPage(): JSX.Element {
           onSubmit={(e) => {
             void submitCreate(e);
           }}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-3"
+          className="bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-5 shadow-xs space-y-3"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -214,7 +214,7 @@ export function MedicationPage(): JSX.Element {
               <select
                 value={formStudentId}
                 onChange={(e) => setFormStudentId(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
               >
                 <option value="">Seçin…</option>
                 {students.map((s) => (
@@ -232,7 +232,7 @@ export function MedicationPage(): JSX.Element {
                 type="datetime-local"
                 value={formScheduledAt}
                 onChange={(e) => setFormScheduledAt(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
               />
             </div>
             <div>
@@ -244,7 +244,7 @@ export function MedicationPage(): JSX.Element {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 placeholder="Örn: Parol Şurup"
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
               />
             </div>
             <div>
@@ -256,7 +256,7 @@ export function MedicationPage(): JSX.Element {
                 value={formDosage}
                 onChange={(e) => setFormDosage(e.target.value)}
                 placeholder="Örn: 5 ml (1 ölçek)"
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
               />
             </div>
           </div>
@@ -269,7 +269,7 @@ export function MedicationPage(): JSX.Element {
               onChange={(e) => setFormInstructions(e.target.value)}
               rows={2}
               placeholder="Örn: Yemekten sonra tok karnına verilecek..."
-              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
             />
           </div>
           <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
@@ -283,7 +283,7 @@ export function MedicationPage(): JSX.Element {
             <button
               type="submit"
               disabled={submitting}
-              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 px-4 py-2 rounded-xl transition shadow-xs disabled:opacity-50 active:scale-98"
+              className="text-xs font-bold text-white dark:text-black bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 px-4 py-2 rounded-xl transition shadow-xs disabled:opacity-50 active:scale-98"
             >
               {submitting ? 'Kaydediliyor…' : 'Talep Oluştur'}
             </button>
@@ -292,20 +292,22 @@ export function MedicationPage(): JSX.Element {
       )}
 
       {loading ? (
-        <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-          <div className="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin mb-3" />
+        <div className="text-center py-12 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
+          <div className="inline-block w-8 h-8 border-3 border-blue-900 dark:border-amber-400 border-t-transparent rounded-full animate-spin mb-3" />
           <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
             İlaç kayıtları yükleniyor…
           </p>
         </div>
       ) : records.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
-          <Clock className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-700 dark:text-slate-300 text-sm font-semibold">
+        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-dashed border-slate-300 dark:border-slate-700/80 p-8">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-amber-500/10 text-blue-900 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
+            <Clock className="w-6 h-6" />
+          </div>
+          <p className="text-slate-800 dark:text-slate-200 text-sm font-bold">
             Aktif ilaç kaydı bulunmuyor.
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Öğrencilerin güncel ilaç talepleri burada listelenir.
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+            Öğrencilerin güncel ve onay bekleyen ilaç kullanım talepleri burada listelenir.
           </p>
         </div>
       ) : (
@@ -313,7 +315,7 @@ export function MedicationPage(): JSX.Element {
           {records.map((r) => (
             <div
               key={r.id}
-              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
+              className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-5 shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
             >
               <div className="space-y-2.5">
                 <div className="flex items-start justify-between gap-2">
@@ -322,7 +324,7 @@ export function MedicationPage(): JSX.Element {
                       {r.medicationName}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
                         {studentName(r.studentId)}
                       </span>
                       <span className="text-xs text-slate-600 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-lg">
@@ -367,13 +369,14 @@ export function MedicationPage(): JSX.Element {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 flex-wrap pt-3 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2 flex-wrap pt-3 border-t border-slate-100 dark:border-slate-700/60">
                 {(role === 'ADMIN' || role === 'SUPER_ADMIN') && r.status === 'REQUESTED' && (
                   <>
                     <button
                       type="button"
                       onClick={() => void approve(r.id)}
                       disabled={busyId === r.id}
+                      title="Öğrencinin bu ilaç kullanım talebini onaylayın"
                       className="text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition active:scale-98 disabled:opacity-50"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" /> Onayla
@@ -382,6 +385,7 @@ export function MedicationPage(): JSX.Element {
                       type="button"
                       onClick={() => void reject(r.id)}
                       disabled={busyId === r.id}
+                      title="İlaç kullanım talebini gerekçe belirterek reddedin"
                       className="text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 hover:bg-rose-100 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition active:scale-98 disabled:opacity-50"
                     >
                       <XCircle className="w-3.5 h-3.5" /> Reddet
@@ -395,6 +399,7 @@ export function MedicationPage(): JSX.Element {
                         type="button"
                         onClick={() => void markGiven(r.id)}
                         disabled={busyId === r.id}
+                        title="İlacın öğrenciye verildiğini kayıt altına alın"
                         className="text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition active:scale-98 disabled:opacity-50"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" /> Verildi
@@ -403,6 +408,7 @@ export function MedicationPage(): JSX.Element {
                         type="button"
                         onClick={() => void markSkipped(r.id)}
                         disabled={busyId === r.id}
+                        title="Bu dozun atlanma gerekçesini girerek kaydedin"
                         className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition disabled:opacity-50"
                       >
                         Atlandı

@@ -157,25 +157,25 @@ export function StudentPassportModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-xl bg-white shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-2xl bg-white dark:bg-[#131E3A] border border-slate-200 dark:border-slate-700/60 shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/80 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/60 bg-slate-50/80 dark:bg-slate-800/40 px-6 py-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl">📋</span>
-              <h2 className="text-lg font-bold text-gray-900">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Öğrenci Pasaportu — {student.firstName} {student.lastName}
               </h2>
             </div>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Acil sağlık, alerji, beslenme ve veli irtibat bilgileri
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-700"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition"
           >
             ✕
           </button>
@@ -183,7 +183,7 @@ export function StudentPassportModal({
 
         {/* Content */}
         {loading ? (
-          <div className="flex flex-1 items-center justify-center p-12 text-sm text-gray-500">
+          <div className="flex flex-1 items-center justify-center p-12 text-sm text-slate-500 dark:text-slate-400">
             Pasaport bilgileri yükleniyor…
           </div>
         ) : (
@@ -194,23 +194,25 @@ export function StudentPassportModal({
             className="flex-1 overflow-y-auto p-6 space-y-6"
           >
             {error && (
-              <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 border border-red-200">
+              <div className="rounded-xl bg-rose-50 dark:bg-rose-950/40 p-3 text-sm text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60">
                 {error}
               </div>
             )}
 
             {/* Section: Kan Grubu & Sağlık */}
-            <div className="rounded-lg border border-gray-200 p-4 bg-gray-50/40 space-y-3">
-              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+            <div className="rounded-xl border border-slate-200/80 dark:border-slate-700/60 p-4 bg-slate-50/50 dark:bg-slate-800/40 space-y-3">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                 <span>🩸</span> Temel Sağlık & Kan Grubu
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Kan Grubu</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Kan Grubu
+                  </label>
                   <select
                     value={bloodType}
                     onChange={(e) => setBloodType(e.target.value as BloodType)}
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-800 shadow-xs focus:border-blue-500 focus:outline-hidden"
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-100 px-3 py-1.5 text-sm font-medium text-slate-800 shadow-xs focus:border-blue-600 focus:outline-hidden"
                   >
                     {BLOOD_TYPES.map((bt) => (
                       <option key={bt} value={bt}>
@@ -220,17 +222,19 @@ export function StudentPassportModal({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Doktor Adı</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Doktor Adı
+                  </label>
                   <input
                     type="text"
                     value={doctorName}
                     onChange={(e) => setDoctorName(e.target.value)}
                     placeholder="Örn. Dr. Mehmet Öz"
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-800 shadow-xs focus:border-blue-500 focus:outline-hidden"
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-100 px-3 py-1.5 text-sm text-slate-800 shadow-xs focus:border-blue-600 focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                     Doktor / Klinik Tel
                   </label>
                   <input
@@ -238,7 +242,7 @@ export function StudentPassportModal({
                     value={doctorPhone}
                     onChange={(e) => setDoctorPhone(e.target.value)}
                     placeholder="+90 5XX XXX XX XX"
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-800 shadow-xs focus:border-blue-500 focus:outline-hidden"
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-100 px-3 py-1.5 text-sm text-slate-800 shadow-xs focus:border-blue-600 focus:outline-hidden"
                   />
                 </div>
               </div>
@@ -453,35 +457,41 @@ export function StudentPassportModal({
             </div>
 
             {/* Section: Acil Durum & Teslim Alıcılar */}
-            <div className="rounded-lg border border-gray-200 p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+            <div className="rounded-xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-3 bg-slate-50/50 dark:bg-slate-800/40">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                 <span>📞</span> Acil Durum İletişim & Yetkili Teslim Kişileri (
                 {emergencyContacts.length})
               </h3>
 
               {/* Existing contacts table */}
               {emergencyContacts.length > 0 ? (
-                <div className="divide-y divide-gray-100 border border-gray-100 rounded-md overflow-hidden text-xs">
+                <div className="divide-y divide-slate-100 dark:divide-slate-700/60 border border-slate-200/80 dark:border-slate-700/60 rounded-xl overflow-hidden text-xs bg-white dark:bg-[#131E3A]">
                   {emergencyContacts.map((c) => (
                     <div
                       key={c.id}
-                      className="flex items-center justify-between p-2.5 hover:bg-gray-50"
+                      className="flex items-center justify-between p-2.5 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                     >
                       <div>
-                        <span className="font-semibold text-gray-900 mr-2">{c.name}</span>
-                        <span className="text-gray-500 mr-2">({c.relationship})</span>
-                        <span className="text-teal-700 font-mono">{c.phone}</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100 mr-2">
+                          {c.name}
+                        </span>
+                        <span className="text-slate-500 dark:text-slate-400 mr-2">
+                          ({c.relationship})
+                        </span>
+                        <span className="text-blue-900 dark:text-amber-400 font-mono">
+                          {c.phone}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         {c.isAuthorizedPickup && (
-                          <span className="rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-semibold text-green-800">
+                          <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 dark:text-emerald-300">
                             ✓ Teslim Yetkili
                           </span>
                         )}
                         <button
                           type="button"
                           onClick={() => removeContact(c.id)}
-                          className="text-red-500 hover:text-red-700 font-medium"
+                          className="text-rose-500 hover:text-rose-700 font-medium"
                         >
                           Sil
                         </button>
@@ -490,7 +500,7 @@ export function StudentPassportModal({
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-gray-400 italic">Henüz acil durum kişisi eklenmedi.</p>
+                <p className="text-xs text-slate-400 italic">Henüz acil durum kişisi eklenmedi.</p>
               )}
 
               {/* Add contact row */}
@@ -500,36 +510,36 @@ export function StudentPassportModal({
                   value={cName}
                   onChange={(e) => setCName(e.target.value)}
                   placeholder="Kişi Adı Soyadı"
-                  className="rounded-md border border-gray-300 px-2.5 py-1 text-xs"
+                  className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1 text-xs text-slate-800 dark:text-slate-200"
                 />
                 <input
                   type="text"
                   value={cRel}
                   onChange={(e) => setCRel(e.target.value)}
                   placeholder="Yakınlık (Anne, Baba...)"
-                  className="rounded-md border border-gray-300 px-2.5 py-1 text-xs"
+                  className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1 text-xs text-slate-800 dark:text-slate-200"
                 />
                 <input
                   type="tel"
                   value={cPhone}
                   onChange={(e) => setCPhone(e.target.value)}
                   placeholder="Telefon"
-                  className="rounded-md border border-gray-300 px-2.5 py-1 text-xs"
+                  className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1 text-xs text-slate-800 dark:text-slate-200"
                 />
                 <div className="flex items-center gap-2">
-                  <label className="flex items-center gap-1 text-[11px] text-gray-700 cursor-pointer">
+                  <label className="flex items-center gap-1 text-[11px] text-slate-700 dark:text-slate-300 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={cPickup}
                       onChange={(e) => setCPickup(e.target.checked)}
-                      className="rounded text-teal-600 focus:ring-teal-500"
+                      className="rounded border-slate-300 text-blue-900 dark:text-amber-500 focus:ring-blue-600 dark:focus:ring-amber-400"
                     />
                     Teslim alabilir
                   </label>
                   <button
                     type="button"
                     onClick={addContact}
-                    className="ml-auto px-3 py-1 bg-gray-800 hover:bg-black text-white rounded text-xs font-medium"
+                    className="ml-auto px-3 py-1 bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black text-white rounded-xl text-xs font-bold transition"
                   >
                     + Ekle
                   </button>
@@ -539,7 +549,7 @@ export function StudentPassportModal({
 
             {/* Section: Özel / Pedagojik Notlar */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Öğretmene Özel Hatırlatma & Bireysel Notlar
               </label>
               <textarea
@@ -547,24 +557,24 @@ export function StudentPassportModal({
                 onChange={(e) => setSpecialNotes(e.target.value)}
                 rows={2}
                 placeholder="Örn: Uyku öncesi masal dinlemeyi sever, yüksek sesten tedirgin olur..."
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-xs text-gray-800 focus:border-teal-600 focus:outline-hidden"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-100 px-3 py-2 text-xs text-slate-800 focus:border-blue-600 focus:outline-hidden"
               />
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
+            <div className="flex items-center justify-end gap-3 border-t border-slate-200/80 dark:border-slate-700/60 pt-4">
               <button
                 type="button"
                 onClick={onClose}
                 disabled={saving}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
               >
                 İptal
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-lg bg-teal-700 px-5 py-2 text-sm font-semibold text-white hover:bg-teal-800 shadow-xs disabled:opacity-50 transition"
+                className="rounded-xl bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-5 py-2 text-sm font-bold shadow-xs disabled:opacity-50 transition active:scale-98"
               >
                 {saving ? 'Kaydediliyor…' : 'Pasaportu Kaydet'}
               </button>

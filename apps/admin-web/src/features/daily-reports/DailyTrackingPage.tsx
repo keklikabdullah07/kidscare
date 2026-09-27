@@ -327,11 +327,11 @@ export function DailyTrackingPage(): JSX.Element {
         </div>
 
         {/* Date Selector */}
-        <div className="flex items-center gap-2 bg-white border border-slate-200 p-1 rounded-xl shadow-xs">
+        <div className="flex items-center gap-2 bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 p-1 rounded-xl shadow-xs">
           <button
             type="button"
             onClick={() => changeDay(-1)}
-            className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition"
+            className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             title="Önceki Gün"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -340,12 +340,12 @@ export function DailyTrackingPage(): JSX.Element {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="text-xs font-semibold text-slate-800 bg-transparent px-2 py-1 outline-none cursor-pointer"
+            className="text-xs font-semibold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer"
           />
           <button
             type="button"
             onClick={() => changeDay(1)}
-            className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition"
+            className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             title="Sonraki Gün"
           >
             <ChevronRight className="w-4 h-4" />
@@ -354,7 +354,7 @@ export function DailyTrackingPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setSelectedDate(todayStr)}
-              className="text-[11px] font-semibold text-teal-700 dark:text-teal-300 hover:text-teal-800 bg-teal-50 dark:bg-teal-950/40 px-2 py-1 rounded-lg ml-1 transition border border-teal-200/60 dark:border-teal-800/60"
+              className="text-[11px] font-semibold text-blue-700 dark:text-amber-300 hover:text-blue-800 dark:hover:text-amber-200 bg-blue-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-lg ml-1 transition border border-blue-200/60 dark:border-amber-500/30"
             >
               Bugün
             </button>
@@ -390,13 +390,15 @@ export function DailyTrackingPage(): JSX.Element {
                 aria-pressed={isActive}
                 className={`text-left rounded-2xl border p-4 transition shadow-xs flex items-center gap-3 ${
                   isActive
-                    ? 'border-purple-600 bg-purple-50/70 ring-2 ring-purple-500/40'
-                    : 'border-slate-200/80 bg-white hover:border-slate-300'
+                    ? 'border-blue-600 bg-blue-50/70 ring-2 ring-blue-500/20 dark:border-amber-500/80 dark:bg-amber-950/20 dark:ring-amber-500/20'
+                    : 'border-slate-200/80 bg-white hover:border-slate-300 dark:bg-[#131E3A] dark:border-slate-700/60 dark:hover:border-slate-600'
                 }`}
               >
                 <div
                   className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0 ${
-                    isActive ? 'bg-white' : 'bg-purple-50'
+                    isActive
+                      ? 'bg-white dark:bg-slate-900 shadow-xs'
+                      : 'bg-slate-100 dark:bg-slate-800/80'
                   }`}
                 >
                   {emoji}
@@ -405,28 +407,30 @@ export function DailyTrackingPage(): JSX.Element {
                   <div className="flex items-center justify-between gap-2">
                     <h3
                       className={`font-bold truncate ${
-                        isActive ? 'text-purple-900' : 'text-slate-900'
+                        isActive
+                          ? 'text-blue-950 dark:text-amber-300'
+                          : 'text-slate-900 dark:text-slate-100'
                       }`}
                     >
                       {classroom.name}
                     </h3>
                     {isActive && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 bg-white px-1.5 py-0.5 rounded-full border border-purple-200">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-amber-300 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-full border border-blue-200 dark:border-amber-500/40">
                         Aktif
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5 truncate">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                     {classroomAgeLabel ? `${classroomAgeLabel} · ` : ''}
                     {classroom.studentCount} öğrenci
                   </p>
                   {isActive && activeClassroom && (
                     <div className="mt-2 flex items-center gap-2 text-[11px]">
-                      <span className="font-semibold text-purple-800 bg-white px-1.5 py-0.5 rounded border border-purple-200">
+                      <span className="font-semibold text-blue-900 dark:text-slate-200 bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-blue-200 dark:border-slate-700">
                         {filledCount}/{totalStudents} karne
                       </span>
                       {pendingCount > 0 && (
-                        <span className="font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                        <span className="font-semibold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-700/50">
                           {pendingCount} bekliyor
                         </span>
                       )}
@@ -441,12 +445,16 @@ export function DailyTrackingPage(): JSX.Element {
 
       {/* Progress / KPI Bar */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+        <div className="bg-white dark:bg-[#131E3A] p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs flex items-center justify-between">
           <div>
-            <p className="text-xs font-medium text-slate-500">Toplam Öğrenci</p>
-            <p className="text-2xl font-bold text-slate-900 mt-1 tracking-tight">{totalStudents}</p>
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Toplam Öğrenci
+            </p>
+            <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1 tracking-tight">
+              {totalStudents}
+            </p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold">
             <Users className="w-5 h-5" />
           </div>
         </div>
@@ -456,15 +464,19 @@ export function DailyTrackingPage(): JSX.Element {
           onClick={() => setFilterType(filterType === 'filled' ? 'all' : 'filled')}
           className={`p-4 rounded-2xl border text-left transition shadow-xs flex items-center justify-between ${
             filterType === 'filled'
-              ? 'border-teal-700 bg-teal-50/70 ring-2 ring-teal-700'
-              : 'border-slate-200/80 bg-white hover:border-slate-300'
+              ? 'border-emerald-600 bg-emerald-50/70 ring-2 ring-emerald-600/30 dark:bg-emerald-950/40 dark:border-emerald-500'
+              : 'border-slate-200/80 bg-white hover:border-slate-300 dark:bg-[#131E3A] dark:border-slate-700/60 dark:hover:border-slate-600'
           }`}
         >
           <div>
-            <p className="text-xs font-semibold text-teal-800">Karnesi Girilenler</p>
-            <p className="text-2xl font-bold text-teal-950 mt-1 tracking-tight">{filledCount}</p>
+            <p className="text-xs font-semibold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
+              Karnesi Girilenler
+            </p>
+            <p className="text-2xl font-bold text-emerald-950 dark:text-emerald-200 mt-1 tracking-tight">
+              {filledCount}
+            </p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
             <CheckCircle2 className="w-5 h-5" />
           </div>
         </button>
@@ -474,15 +486,19 @@ export function DailyTrackingPage(): JSX.Element {
           onClick={() => setFilterType(filterType === 'pending' ? 'all' : 'pending')}
           className={`p-4 rounded-2xl border text-left transition shadow-xs flex items-center justify-between ${
             filterType === 'pending'
-              ? 'border-amber-600 bg-amber-50/60 ring-2 ring-amber-600'
-              : 'border-slate-200/80 bg-white hover:border-slate-300'
+              ? 'border-amber-600 bg-amber-50/70 ring-2 ring-amber-600/30 dark:bg-amber-950/40 dark:border-amber-500'
+              : 'border-slate-200/80 bg-white hover:border-slate-300 dark:bg-[#131E3A] dark:border-slate-700/60 dark:hover:border-slate-600'
           }`}
         >
           <div>
-            <p className="text-xs font-semibold text-amber-700">Karne Bekleyenler</p>
-            <p className="text-2xl font-bold text-amber-900 mt-1 tracking-tight">{pendingCount}</p>
+            <p className="text-xs font-semibold text-amber-800 dark:text-amber-300 uppercase tracking-wider">
+              Karne Bekleyenler
+            </p>
+            <p className="text-2xl font-bold text-amber-950 dark:text-amber-200 mt-1 tracking-tight">
+              {pendingCount}
+            </p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
             <Clock className="w-5 h-5" />
           </div>
         </button>
@@ -490,15 +506,15 @@ export function DailyTrackingPage(): JSX.Element {
 
       {/* Bulk Operations Toolbar */}
       {selectedClassroomId && students.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs">
           <div className="flex items-center justify-between p-3.5 gap-3">
-            <div className="flex items-center gap-2 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-amber-950/60 text-blue-700 dark:text-amber-300 border border-blue-100 dark:border-amber-500/30 flex items-center justify-center shrink-0">
                 <CheckCheck className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-bold text-slate-900">Toplu Kayıt</h3>
-                <p className="text-[11px] text-slate-500">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Toplu Kayıt</h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
                   Aynı alanları seçili öğrencilere tek seferde uygula.
                 </p>
               </div>
@@ -506,17 +522,17 @@ export function DailyTrackingPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setBulkOpen((v) => !v)}
-              className="text-xs font-semibold text-purple-700 hover:text-purple-900 bg-purple-50 px-3 py-1.5 rounded-lg transition"
+              className="text-xs font-semibold text-blue-700 dark:text-amber-300 hover:text-blue-900 dark:hover:text-amber-200 bg-blue-50 dark:bg-amber-950/40 border border-blue-100 dark:border-amber-500/30 px-3.5 py-1.5 rounded-xl transition shadow-2xs"
             >
               {bulkOpen ? 'Paneli Kapat' : 'Paneli Aç'}
             </button>
           </div>
 
           {bulkOpen && (
-            <div className="border-t border-slate-100 p-4 space-y-4">
+            <div className="border-t border-slate-100 dark:border-slate-800 p-4 space-y-4">
               {/* Mood */}
               <div>
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Mod
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -527,8 +543,8 @@ export function DailyTrackingPage(): JSX.Element {
                       onClick={() => setBulkDraft((p) => ({ ...p, mood: p.mood === m ? null : m }))}
                       className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition ${
                         bulkDraft.mood === m
-                          ? 'bg-amber-100 text-amber-900 border-amber-300'
-                          : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                          ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-500/50'
+                          : 'bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
                       }`}
                     >
                       {MOOD_MAP[m].emoji} {MOOD_MAP[m].label}
@@ -539,7 +555,7 @@ export function DailyTrackingPage(): JSX.Element {
 
               {/* Meals */}
               <div>
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
                   <Utensils className="w-3.5 h-3.5 text-orange-500" /> Yemek
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -551,7 +567,9 @@ export function DailyTrackingPage(): JSX.Element {
                     ] as const
                   ).map(([key, label]) => (
                     <div key={key} className="flex flex-col gap-1">
-                      <span className="text-[11px] font-semibold text-slate-600">{label}</span>
+                      <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+                        {label}
+                      </span>
                       <select
                         value={bulkDraft.meals[key] ?? ''}
                         onChange={(e) =>
@@ -565,7 +583,7 @@ export function DailyTrackingPage(): JSX.Element {
                             },
                           }))
                         }
-                        className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white"
+                        className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
                       >
                         <option value="">—</option>
                         <option value="ALL">Tam</option>
@@ -580,8 +598,8 @@ export function DailyTrackingPage(): JSX.Element {
 
               {/* Naps */}
               <div>
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
-                  <Moon className="w-3.5 h-3.5 text-indigo-500" /> Uyku
+                <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                  <Moon className="w-3.5 h-3.5 text-blue-500 dark:text-amber-400" /> Uyku
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <input
@@ -593,7 +611,7 @@ export function DailyTrackingPage(): JSX.Element {
                         naps: { ...p.naps, startTime: e.target.value || undefined },
                       }))
                     }
-                    className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white"
+                    className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
                     aria-label="Uyku başlangıç"
                   />
                   <input
@@ -605,7 +623,7 @@ export function DailyTrackingPage(): JSX.Element {
                         naps: { ...p.naps, endTime: e.target.value || undefined },
                       }))
                     }
-                    className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white"
+                    className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
                     aria-label="Uyku bitiş"
                   />
                   <select
@@ -619,7 +637,7 @@ export function DailyTrackingPage(): JSX.Element {
                         },
                       }))
                     }
-                    className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white"
+                    className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200"
                   >
                     <option value="">Kalite seç</option>
                     <option value="GOOD">İyi</option>
@@ -631,8 +649,8 @@ export function DailyTrackingPage(): JSX.Element {
 
               {/* Activities */}
               <div>
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
-                  <Activity className="w-3.5 h-3.5 text-emerald-500" /> Aktiviteler
+                <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                  <Activity className="w-3.5 h-3.5 text-amber-500" /> Aktiviteler
                 </label>
                 <div className="flex flex-wrap gap-1.5">
                   {ACTIVITY_PRESETS.map((name) => {
@@ -644,8 +662,8 @@ export function DailyTrackingPage(): JSX.Element {
                         onClick={() => toggleBulkActivity(name)}
                         className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition ${
                           selected
-                            ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                            ? 'bg-amber-500/15 text-amber-900 dark:text-amber-300 border-amber-500/40 dark:bg-amber-500/20'
+                            : 'bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
                         }`}
                       >
                         {selected ? '✓ ' : ''}
@@ -657,11 +675,11 @@ export function DailyTrackingPage(): JSX.Element {
               </div>
 
               {/* Actions */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-2 border-t border-slate-100">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={resetBulkDraft}
-                  className="text-xs font-semibold text-slate-600 hover:text-slate-800 inline-flex items-center gap-1 self-start"
+                  className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 inline-flex items-center gap-1 self-start"
                   disabled={!bulkHasContent || bulkSaving}
                 >
                   <X className="w-3.5 h-3.5" /> Taslağı Temizle
@@ -671,7 +689,7 @@ export function DailyTrackingPage(): JSX.Element {
                     type="button"
                     onClick={() => void applyBulkToPending()}
                     disabled={bulkSaving || !bulkHasContent || pendingCount === 0}
-                    className="px-3 py-2 rounded-xl bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200 hover:bg-amber-100 transition disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
+                    className="px-3 py-2 rounded-xl bg-amber-50 dark:bg-amber-500/10 text-amber-800 dark:text-amber-400 text-xs font-bold border border-amber-200 dark:border-amber-500/30 hover:bg-amber-100 dark:hover:bg-amber-500/20 transition disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
                   >
                     <Clock className="w-3.5 h-3.5" />
                     Bekleyen {pendingCount} Öğrenciye
@@ -680,7 +698,7 @@ export function DailyTrackingPage(): JSX.Element {
                     type="button"
                     onClick={() => void applyBulkToAll()}
                     disabled={bulkSaving || !bulkHasContent}
-                    className="px-3 py-2 rounded-xl bg-teal-700 text-white text-xs font-bold hover:bg-teal-800 transition shadow-xs disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
+                    className="px-3.5 py-2 rounded-xl bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black text-xs font-bold transition shadow-xs disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
                   >
                     <Save className="w-3.5 h-3.5" />
                     {bulkSaving
@@ -695,15 +713,15 @@ export function DailyTrackingPage(): JSX.Element {
       )}
 
       {/* Filter & Search Toolbar */}
-      <div className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white dark:bg-[#131E3A] p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-sm">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Öğrenci adı ile filtrele..."
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition"
+            className="w-full pl-9 pr-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 transition"
           />
         </div>
 
@@ -711,10 +729,10 @@ export function DailyTrackingPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setFilterType('all')}
-            className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
               filterType === 'all'
-                ? 'bg-slate-900 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-blue-900 text-white dark:bg-amber-500 dark:text-black font-bold'
+                : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
           >
             Tümü ({students.length})
@@ -722,10 +740,10 @@ export function DailyTrackingPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setFilterType('filled')}
-            className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
               filterType === 'filled'
-                ? 'bg-purple-600 text-white'
-                : 'bg-purple-50 text-purple-700 hover:bg-purple-100'
+                ? 'bg-emerald-600 text-white dark:bg-emerald-600 dark:text-white font-bold'
+                : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'
             }`}
           >
             Girilenler ({filledCount})
@@ -733,10 +751,10 @@ export function DailyTrackingPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setFilterType('pending')}
-            className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
               filterType === 'pending'
-                ? 'bg-amber-600 text-white'
-                : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
+                ? 'bg-amber-600 text-white dark:bg-amber-500 dark:text-black font-bold'
+                : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200/50 dark:border-amber-800/40 hover:bg-amber-100 dark:hover:bg-amber-900/50'
             }`}
           >
             Bekleyenler ({pendingCount})
@@ -745,27 +763,31 @@ export function DailyTrackingPage(): JSX.Element {
       </div>
 
       {loading ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200/80">
-          <div className="inline-block w-8 h-8 border-3 border-purple-600 border-t-transparent rounded-full animate-spin mb-3"></div>
-          <p className="text-slate-500 text-sm font-medium">Öğrenci günlük raporları yükleniyor…</p>
+        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
+          <div className="inline-block w-8 h-8 border-3 border-blue-900 dark:border-amber-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+            Öğrenci günlük raporları yükleniyor…
+          </p>
         </div>
       ) : students.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300">
-          <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-600 text-sm font-semibold">
+        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+          <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+          <p className="text-slate-600 dark:text-slate-300 text-sm font-semibold">
             {classrooms.length === 0
               ? 'Atanmış sınıf bulunamadı.'
               : 'Bu sınıfta öğrenci bulunamadı.'}
           </p>
-          <p className="text-slate-400 text-xs mt-1">
+          <p className="text-slate-400 dark:text-slate-500 text-xs mt-1">
             {classrooms.length === 0
               ? 'Önce admin tarafından sınıf ve öğretmen ataması yapılmalı.'
               : 'Önce Öğrenciler sekmesinden öğrenci ekleyin.'}
           </p>
         </div>
       ) : filteredStudents.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-2xl border border-slate-200/80">
-          <p className="text-slate-500 text-sm">Filtrelere uygun öğrenci bulunamadı.</p>
+        <div className="text-center py-12 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            Filtrelere uygun öğrenci bulunamadı.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -776,21 +798,24 @@ export function DailyTrackingPage(): JSX.Element {
             return (
               <div
                 key={student.id}
-                className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs hover:shadow-md transition-all group"
+                className="flex flex-col justify-between rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] p-5 shadow-xs hover:shadow-md transition-all group"
               >
                 <div>
                   {/* Student Title & Mood */}
-                  <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-10 h-10 rounded-xl bg-teal-800 text-white font-bold text-sm flex items-center justify-center shadow-xs">
+                  <div className="flex items-start justify-between gap-2 border-b border-slate-100 dark:border-slate-800/80 pb-3.5">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                      <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-900 text-white dark:bg-amber-500/20 dark:text-amber-300 font-bold text-sm flex items-center justify-center shadow-xs border dark:border-amber-500/30">
                         {student.firstName.charAt(0)}
                         {student.lastName.charAt(0)}
                       </div>
-                      <div>
-                        <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-teal-800 transition-colors">
+                      <div className="min-w-0 flex-1">
+                        <h3
+                          className="font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-blue-800 dark:group-hover:text-amber-400 transition-colors truncate"
+                          title={`${student.firstName} ${student.lastName}`}
+                        >
                           {student.firstName} {student.lastName}
                         </h3>
-                        <p className="text-xs text-slate-400 mt-0.5">
+                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 truncate">
                           {student.dateOfBirth} · {student.gender ?? '—'}
                         </p>
                       </div>
@@ -804,7 +829,7 @@ export function DailyTrackingPage(): JSX.Element {
                         <span>{moodInfo.label}</span>
                       </span>
                     ) : (
-                      <span className="text-[11px] font-medium text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-200">
+                      <span className="text-[11px] font-medium text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-900 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-800">
                         Mod girilmedi
                       </span>
                     )}
@@ -813,11 +838,14 @@ export function DailyTrackingPage(): JSX.Element {
                   {/* Tracking Highlights */}
                   <div className="py-3.5 space-y-2.5 text-xs">
                     {/* Meals */}
-                    <div className="flex items-center justify-between text-slate-600 bg-slate-50/70 px-3 py-2 rounded-xl border border-slate-100">
-                      <span className="font-semibold flex items-center gap-1.5 text-slate-700">
+                    <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 bg-slate-50/70 dark:bg-slate-900/60 px-3 py-2 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <span className="font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
                         <span>🍽️</span> Yemek:
                       </span>
-                      <span className="text-slate-900 font-medium">
+                      <span
+                        className="text-slate-900 dark:text-slate-200 font-medium"
+                        title="K: Kahvaltı, Ö: Öğle Yemeği, İ: İkindi Ara Öğünü"
+                      >
                         {report?.meals?.breakfast ||
                         report?.meals?.lunch ||
                         report?.meals?.afternoonSnack ? (
@@ -827,44 +855,50 @@ export function DailyTrackingPage(): JSX.Element {
                             {MEAL_LABEL_MAP[report.meals.afternoonSnack ?? ''] ?? '—'}
                           </>
                         ) : (
-                          <span className="text-slate-400 font-normal">Girilmedi</span>
+                          <span className="text-slate-400 dark:text-slate-500 font-normal">
+                            Girilmedi
+                          </span>
                         )}
                       </span>
                     </div>
 
                     {/* Nap */}
-                    <div className="flex items-center justify-between text-slate-600 bg-slate-50/70 px-3 py-2 rounded-xl border border-slate-100">
-                      <span className="font-semibold flex items-center gap-1.5 text-slate-700">
+                    <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 bg-slate-50/70 dark:bg-slate-900/60 px-3 py-2 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <span className="font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
                         <span>😴</span> Uyku:
                       </span>
-                      <span className="text-slate-900 font-medium">
+                      <span className="text-slate-900 dark:text-slate-200 font-medium">
                         {report?.naps?.startTime && report?.naps?.endTime ? (
                           `${report.naps.startTime} - ${report.naps.endTime}`
                         ) : report?.naps?.quality === 'NONE' ? (
                           'Uyumadı'
                         ) : (
-                          <span className="text-slate-400 font-normal">Girilmedi</span>
+                          <span className="text-slate-400 dark:text-slate-500 font-normal">
+                            Girilmedi
+                          </span>
                         )}
                       </span>
                     </div>
 
                     {/* Potty & Activities */}
-                    <div className="flex items-center justify-between text-slate-600 bg-slate-50/70 px-3 py-2 rounded-xl border border-slate-100">
-                      <span className="font-semibold flex items-center gap-1.5 text-slate-700">
+                    <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 bg-slate-50/70 dark:bg-slate-900/60 px-3 py-2 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <span className="font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
                         <span>🚻</span> Tuvalet / Bez:
                       </span>
-                      <span className="text-slate-900 font-medium">
+                      <span className="text-slate-900 dark:text-slate-200 font-medium">
                         {report?.potty && report.potty.length > 0 ? (
                           `${report.potty.length} kayıt`
                         ) : (
-                          <span className="text-slate-400 font-normal">Kayıt yok</span>
+                          <span className="text-slate-400 dark:text-slate-500 font-normal">
+                            Kayıt yok
+                          </span>
                         )}
                       </span>
                     </div>
 
                     {/* Teacher Note preview */}
                     {report?.teacherNote && (
-                      <div className="mt-2 rounded-xl bg-amber-50/70 p-2.5 border border-amber-200/70 text-amber-950 text-xs italic">
+                      <div className="mt-2 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 p-2.5 border border-amber-200/70 dark:border-amber-800/50 text-amber-950 dark:text-amber-200 text-xs italic">
                         "{report.teacherNote}"
                       </div>
                     )}
@@ -879,7 +913,7 @@ export function DailyTrackingPage(): JSX.Element {
                     className={`w-full rounded-xl py-2.5 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs ${
                       report
                         ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-200/60 dark:border-emerald-800/60'
-                        : 'bg-teal-700 hover:bg-teal-800 text-white'
+                        : 'bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black font-bold'
                     }`}
                   >
                     <Edit3 className="w-3.5 h-3.5" />

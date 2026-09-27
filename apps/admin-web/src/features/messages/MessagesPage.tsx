@@ -149,11 +149,11 @@ export function MessagesPage(): JSX.Element {
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-teal-800 flex items-center justify-center text-white shadow-xs">
-            <MessageSquare className="w-5 h-5 text-teal-100" />
+          <div className="w-11 h-11 rounded-2xl bg-blue-900 dark:bg-amber-500 flex items-center justify-center text-white dark:text-black shadow-xs">
+            <MessageSquare className="w-5 h-5 text-amber-300 dark:text-black" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Mesajlar
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -165,14 +165,14 @@ export function MessagesPage(): JSX.Element {
           <button
             type="button"
             onClick={() => void refreshList()}
-            className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition"
+            className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition active:scale-98"
           >
             <RotateCw className="w-3.5 h-3.5" /> Yenile
           </button>
           <button
             type="button"
             onClick={() => setShowCompose((v) => !v)}
-            className="text-xs font-semibold text-white bg-teal-700 hover:bg-teal-800 px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition-colors shadow-xs"
+            className="text-xs font-bold text-white bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-xs active:scale-98"
           >
             <Plus className="w-3.5 h-3.5" /> Yeni Sohbet
           </button>
@@ -182,7 +182,7 @@ export function MessagesPage(): JSX.Element {
       {showCompose && (
         <form
           onSubmit={(e) => void submitCompose(e)}
-          className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3"
+          className="bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-4 shadow-xs space-y-3"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -193,7 +193,7 @@ export function MessagesPage(): JSX.Element {
                 type="text"
                 value={cSubject}
                 onChange={(e) => setCSubject(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
               />
             </div>
             <div>
@@ -203,7 +203,7 @@ export function MessagesPage(): JSX.Element {
               <select
                 value={cCategory}
                 onChange={(e) => setCCategory(e.target.value as ConversationCategory)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
               >
                 {Object.entries(CATEGORY_LABEL).map(([k, v]) => (
                   <option key={k} value={k}>
@@ -219,7 +219,7 @@ export function MessagesPage(): JSX.Element {
               <select
                 value={cStudentId}
                 onChange={(e) => setCStudentId(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
               >
                 <option value="">—</option>
                 {students.map((s) => (
@@ -238,20 +238,20 @@ export function MessagesPage(): JSX.Element {
               value={cBody}
               onChange={(e) => setCBody(e.target.value)}
               rows={3}
-              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+              className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/60">
             <button
               type="button"
               onClick={() => setShowCompose(false)}
-              className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 px-3 py-1.5"
+              className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-3 py-1.5"
             >
               İptal
             </button>
             <button
               type="submit"
-              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 px-3.5 py-1.5 rounded-lg transition-colors shadow-xs"
+              className="text-xs font-bold text-white bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-3.5 py-1.5 rounded-xl transition-colors shadow-xs active:scale-98"
             >
               Aç
             </button>
@@ -261,7 +261,7 @@ export function MessagesPage(): JSX.Element {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Conversation List */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs lg:col-span-1 overflow-hidden">
+        <div className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs lg:col-span-1 overflow-hidden">
           {loading ? (
             <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
               Yükleniyor…
@@ -271,15 +271,15 @@ export function MessagesPage(): JSX.Element {
               Henüz sohbet yok. "Yeni Sohbet" ile başla.
             </div>
           ) : (
-            <ul className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[60vh] overflow-y-auto">
+            <ul className="divide-y divide-slate-100 dark:divide-slate-700/60 max-h-[60vh] overflow-y-auto">
               {conversations.map((c) => (
                 <li key={c.id}>
                   <button
                     type="button"
                     onClick={() => setActiveId(c.id)}
-                    className={`w-full text-left p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition ${
+                    className={`w-full text-left p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition ${
                       activeId === c.id
-                        ? 'bg-teal-50/80 dark:bg-teal-950/40 text-teal-900 dark:text-teal-200'
+                        ? 'bg-blue-50/80 dark:bg-blue-950/40 text-blue-900 dark:text-blue-200'
                         : ''
                     }`}
                   >
@@ -288,7 +288,7 @@ export function MessagesPage(): JSX.Element {
                         <p
                           className={`text-sm font-semibold truncate ${
                             c.unreadCount > 0
-                              ? 'text-slate-900 dark:text-slate-100'
+                              ? 'text-slate-900 dark:text-white'
                               : 'text-slate-700 dark:text-slate-300'
                           }`}
                         >
@@ -302,7 +302,7 @@ export function MessagesPage(): JSX.Element {
                         </p>
                       </div>
                       {c.unreadCount > 0 && (
-                        <span className="text-[10px] font-bold bg-teal-700 text-white px-1.5 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold bg-amber-500 text-amber-950 px-2 py-0.5 rounded-full shadow-xs">
                           {c.unreadCount}
                         </span>
                       )}
@@ -315,16 +315,16 @@ export function MessagesPage(): JSX.Element {
         </div>
 
         {/* Thread */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs lg:col-span-2 flex flex-col min-h-[60vh]">
+        <div className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs lg:col-span-2 flex flex-col min-h-[60vh]">
           {!active ? (
             <div className="flex-1 flex items-center justify-center text-slate-400 dark:text-slate-500 text-sm p-8">
               Bir sohbet seçin veya yeni oluşturun.
             </div>
           ) : (
             <>
-              <div className="border-b border-slate-100 dark:border-slate-800 p-4 flex items-center justify-between gap-2">
+              <div className="border-b border-slate-100 dark:border-slate-700/60 p-4 flex items-center justify-between gap-2">
                 <div className="min-w-0">
-                  <h2 className="font-bold text-slate-900 dark:text-slate-100 truncate">
+                  <h2 className="font-bold text-slate-900 dark:text-white truncate">
                     {active.isCritical && (
                       <AlertCircle className="w-4 h-4 inline mr-1 text-rose-600" />
                     )}
@@ -338,7 +338,7 @@ export function MessagesPage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => void closeConversation()}
-                    className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg transition"
+                    className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg transition"
                   >
                     Kapat
                   </button>
@@ -360,14 +360,16 @@ export function MessagesPage(): JSX.Element {
                         <div
                           className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-xs ${
                             isMine
-                              ? 'bg-teal-700 text-white'
-                              : 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100'
+                              ? 'bg-blue-900 text-white dark:bg-amber-500 dark:text-amber-950 font-medium'
+                              : 'bg-slate-100 dark:bg-[#0B1120] text-slate-900 dark:text-white border border-transparent dark:border-slate-700/50'
                           }`}
                         >
                           <p className="whitespace-pre-wrap">{m.content}</p>
                           <p
                             className={`text-[10px] mt-1 ${
-                              isMine ? 'text-teal-200' : 'text-slate-400 dark:text-slate-400'
+                              isMine
+                                ? 'text-blue-200 dark:text-slate-800'
+                                : 'text-slate-400 dark:text-slate-400'
                             }`}
                           >
                             {new Date(m.createdAt).toLocaleTimeString('tr-TR', {
@@ -384,19 +386,19 @@ export function MessagesPage(): JSX.Element {
               {active.status === 'OPEN' && (
                 <form
                   onSubmit={(e) => void sendDraft(e)}
-                  className="border-t border-slate-100 dark:border-slate-800 p-3 flex items-center gap-2"
+                  className="border-t border-slate-100 dark:border-slate-700/60 p-3 flex items-center gap-2"
                 >
                   <input
                     type="text"
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     placeholder="Mesaj yaz…"
-                    className="flex-1 text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                    className="flex-1 text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
                   />
                   <button
                     type="submit"
                     disabled={sending || !draft.trim()}
-                    className="px-3.5 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-semibold inline-flex items-center gap-1 disabled:opacity-50 transition-colors shadow-xs"
+                    className="px-3.5 py-2 bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-black rounded-xl text-xs font-bold inline-flex items-center gap-1 disabled:opacity-50 transition-colors shadow-xs active:scale-98"
                   >
                     <Send className="w-3.5 h-3.5" />
                     {sending ? '…' : 'Gönder'}
