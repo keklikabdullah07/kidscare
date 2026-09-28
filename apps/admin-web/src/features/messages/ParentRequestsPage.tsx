@@ -124,8 +124,8 @@ export function ParentRequestsPage(): JSX.Element {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-blue-900 dark:bg-amber-500 flex items-center justify-center text-white dark:text-black shadow-xs">
-            <ClipboardList className="w-5 h-5 text-amber-300 dark:text-black" />
+          <div className="w-11 h-11 rounded-2xl bg-teal-700 dark:bg-teal-600 flex items-center justify-center text-white shadow-xs">
+            <ClipboardList className="w-5 h-5 text-amber-300 dark:text-amber-200" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
@@ -140,7 +140,7 @@ export function ParentRequestsPage(): JSX.Element {
           <button
             type="button"
             onClick={() => void refresh()}
-            className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition active:scale-98"
+            className="text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition active:scale-98"
           >
             <RotateCw className="w-3.5 h-3.5" /> Yenile
           </button>
@@ -148,7 +148,7 @@ export function ParentRequestsPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setShowForm((v) => !v)}
-              className="text-xs font-bold text-white bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-xs active:scale-98"
+              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-xs active:scale-98"
             >
               <Plus className="w-3.5 h-3.5" /> Yeni Talep
             </button>
@@ -161,17 +161,17 @@ export function ParentRequestsPage(): JSX.Element {
           onSubmit={(e) => {
             void submitCreate(e);
           }}
-          className="bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-5 shadow-xs space-y-3.5"
+          className="bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-5 shadow-xs space-y-3.5"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
                 Tür
               </label>
               <select
                 value={fType}
                 onChange={(e) => setFType(e.target.value as ParentRequestType)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               >
                 {Object.entries(TYPE_LABEL).map(([k, v]) => (
                   <option key={k} value={k}>
@@ -181,13 +181,13 @@ export function ParentRequestsPage(): JSX.Element {
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
                 Öğrenci (opsiyonel)
               </label>
               <select
                 value={fStudentId}
                 onChange={(e) => setFStudentId(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               >
                 <option value="">—</option>
                 {students.map((s) => (
@@ -199,38 +199,38 @@ export function ParentRequestsPage(): JSX.Element {
             </div>
           </div>
           <div>
-            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
               Konu
             </label>
             <input
               type="text"
               value={fSubject}
               onChange={(e) => setFSubject(e.target.value)}
-              className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
             />
           </div>
           <div>
-            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
               Açıklama
             </label>
             <textarea
               value={fDescription}
               onChange={(e) => setFDescription(e.target.value)}
               rows={3}
-              className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/60">
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/80">
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-3 py-1.5"
+              className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white px-3 py-1.5"
             >
               İptal
             </button>
             <button
               type="submit"
-              className="text-xs font-bold text-white bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-4 py-2 rounded-xl transition shadow-xs active:scale-98"
+              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-4 py-2 rounded-xl transition shadow-xs active:scale-98"
             >
               Gönder
             </button>
@@ -239,17 +239,17 @@ export function ParentRequestsPage(): JSX.Element {
       )}
 
       {loading ? (
-        <div className="text-center py-12 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
-          <div className="inline-block w-8 h-8 border-3 border-blue-900 dark:border-amber-500 border-t-transparent rounded-full animate-spin mb-3" />
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Yükleniyor…</p>
+        <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+          <div className="inline-block w-8 h-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent rounded-full animate-spin mb-3" />
+          <p className="text-slate-500 dark:text-slate-300 text-sm font-medium">Yükleniyor…</p>
         </div>
       ) : requests.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-dashed border-slate-300 dark:border-slate-700/80 p-8">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-amber-500/10 text-blue-900 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
+        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-amber-500/10 text-teal-900 dark:text-teal-300 flex items-center justify-center mx-auto mb-3">
             <ClipboardList className="w-6 h-6" />
           </div>
-          <p className="text-slate-800 dark:text-slate-200 text-sm font-bold">Talep yok.</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+          <p className="text-slate-800 dark:text-white text-sm font-bold">Talep yok.</p>
+          <p className="text-xs text-slate-500 dark:text-slate-300 mt-1 max-w-sm mx-auto">
             Velilerden iletilen izin, bilgi veya randevu başvuruları burada listelenir.
           </p>
         </div>
@@ -258,29 +258,29 @@ export function ParentRequestsPage(): JSX.Element {
           {requests.map((r) => (
             <div
               key={r.id}
-              className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 shadow-xs space-y-2.5 hover:border-slate-300 dark:hover:border-slate-600 transition"
+              className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 p-4 shadow-xs space-y-2.5 hover:border-slate-300 dark:hover:border-slate-600 transition"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
                     {r.subject}
                   </p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-300">
                     {TYPE_LABEL[r.type]} · {studentName(r.studentId)}
                   </p>
                 </div>
                 <Badge variant={STATUS_VARIANT[r.status]}>{STATUS_LABEL[r.status]}</Badge>
               </div>
-              <p className="text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-[#0B1120]/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700/60 leading-relaxed">
+              <p className="text-xs text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700/60 leading-relaxed">
                 {r.description}
               </p>
               {r.resolutionNote && (
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+                <p className="text-[11px] text-slate-500 dark:text-slate-300 italic">
                   Not: {r.resolutionNote}
                 </p>
               )}
               {(role === 'ADMIN' || role === 'SUPER_ADMIN') && r.status === 'PENDING' && (
-                <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/60">
+                <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/80">
                   <button
                     type="button"
                     onClick={() => void resolve(r.id, 'APPROVED')}

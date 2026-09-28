@@ -22,11 +22,17 @@ export function StatCard({
   footer,
 }: StatCardProps): JSX.Element {
   const variantStyles = {
+    teal: {
+      borderHover: 'hover:border-teal-500/40 dark:hover:border-teal-500/40',
+      iconBg: 'bg-teal-50 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300',
+      groupText: 'group-hover:text-teal-800 dark:group-hover:text-teal-300',
+      progressBar: 'bg-teal-600',
+    },
     blue: {
-      borderHover: 'hover:border-blue-500/40 dark:hover:border-blue-500/40',
-      iconBg: 'bg-blue-50 text-blue-900 dark:bg-blue-950/60 dark:text-blue-300',
-      groupText: 'group-hover:text-blue-900 dark:group-hover:text-blue-400',
-      progressBar: 'bg-blue-600',
+      borderHover: 'hover:border-teal-500/40 dark:hover:border-teal-500/40',
+      iconBg: 'bg-teal-50 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300',
+      groupText: 'group-hover:text-teal-800 dark:group-hover:text-teal-300',
+      progressBar: 'bg-teal-600',
     },
     amber: {
       borderHover: 'hover:border-amber-500/40 dark:hover:border-amber-500/40',
@@ -56,11 +62,11 @@ export function StatCard({
 
   return (
     <div
-      className={`bg-white dark:bg-[#131E3A] p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 ${variantStyles.borderHover} shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between group cursor-default`}
+      className={`bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 ${variantStyles.borderHover} shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between group cursor-default`}
     >
       <div className="flex items-center justify-between">
         <span
-          className={`text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider ${variantStyles.groupText} transition-colors`}
+          className={`text-xs font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wider ${variantStyles.groupText} transition-colors`}
         >
           {title}
         </span>
@@ -75,11 +81,11 @@ export function StatCard({
 
       <div className="mt-3">
         <div className="flex items-baseline gap-2 flex-wrap">
-          <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">
+          <span className="text-2xl font-bold text-slate-900 dark:text-white tabular-nums">
             {value}
           </span>
           {subtitle && (
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+            <span className="text-xs text-slate-500 dark:text-slate-300 font-medium">
               {subtitle}
             </span>
           )}
@@ -87,7 +93,7 @@ export function StatCard({
         </div>
 
         {progressPercent !== undefined && (
-          <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2.5 overflow-hidden">
+          <div className="w-full bg-slate-100 dark:bg-slate-900/80 dark:border dark:border-slate-700/40 h-1.5 rounded-full mt-2.5 overflow-hidden">
             <div
               className={`${variantStyles.progressBar} h-full rounded-full transition-all duration-300`}
               style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%` }}

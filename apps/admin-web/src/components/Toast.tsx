@@ -43,7 +43,7 @@ export function ToastProvider({ children }: { children: ReactNode }): JSX.Elemen
                 ? 'bg-white border-emerald-200 text-emerald-900 shadow-emerald-500/5'
                 : toast.type === 'error'
                   ? 'bg-white border-rose-200 text-rose-900 shadow-rose-500/5'
-                  : 'bg-white border-blue-200 text-blue-900 shadow-blue-500/5'
+                  : 'bg-white border-blue-200 text-teal-900 shadow-blue-500/5'
             }`}
           >
             <div className="flex items-center gap-2.5">

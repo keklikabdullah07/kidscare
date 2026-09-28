@@ -274,9 +274,9 @@ export function DailyReportEditorModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-2xl bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/80 shadow-2xl overflow-hidden">
+      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/80 bg-slate-50/80 dark:bg-slate-800 px-6 py-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl">🌟</span>
@@ -284,15 +284,15 @@ export function DailyReportEditorModal({
                 Günlük Takip — {student.firstName} {student.lastName}
               </h2>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
               Tarih:{' '}
-              <span className="font-semibold text-slate-700 dark:text-slate-300">{date}</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-200">{date}</span>
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 transition"
           >
             ✕
           </button>
@@ -332,7 +332,7 @@ export function DailyReportEditorModal({
                       className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition-all ${
                         isSelected
                           ? `${m.color} ring-2 ring-blue-500 dark:ring-amber-400 font-bold scale-102`
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/60 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300'
+                          : 'border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-600 dark:text-slate-300'
                       }`}
                     >
                       <span className="text-2xl">{m.emoji}</span>
@@ -344,7 +344,7 @@ export function DailyReportEditorModal({
             </div>
 
             {/* Meals Section */}
-            <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/40 space-y-3">
+            <div className="rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 bg-slate-50/50 dark:bg-slate-900/50 space-y-3">
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>🍽️</span> Beslenme & Yemek Takibi
               </h3>
@@ -362,8 +362,8 @@ export function DailyReportEditorModal({
                         onClick={() => setBreakfast(mp.key)}
                         className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition ${
                           breakfast === mp.key
-                            ? 'bg-blue-900 dark:bg-amber-500 border-blue-900 dark:border-amber-500 text-white dark:text-black font-bold'
-                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                            ? 'bg-teal-700 dark:bg-teal-600 border-teal-700 dark:border-teal-400 text-white font-bold'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60'
                         }`}
                       >
                         {mp.label}
@@ -385,8 +385,8 @@ export function DailyReportEditorModal({
                         onClick={() => setLunch(mp.key)}
                         className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition ${
                           lunch === mp.key
-                            ? 'bg-blue-900 dark:bg-amber-500 border-blue-900 dark:border-amber-500 text-white dark:text-black font-bold'
-                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                            ? 'bg-teal-700 dark:bg-teal-600 border-teal-700 dark:border-teal-400 text-white font-bold'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60'
                         }`}
                       >
                         {mp.label}
@@ -408,8 +408,8 @@ export function DailyReportEditorModal({
                         onClick={() => setSnack(mp.key)}
                         className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition ${
                           snack === mp.key
-                            ? 'bg-blue-900 dark:bg-amber-500 border-blue-900 dark:border-amber-500 text-white dark:text-black font-bold'
-                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                            ? 'bg-teal-700 dark:bg-teal-600 border-teal-700 dark:border-teal-400 text-white font-bold'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60'
                         }`}
                       >
                         {mp.label}
@@ -423,12 +423,12 @@ export function DailyReportEditorModal({
                 value={mealNotes}
                 onChange={(e) => setMealNotes(e.target.value)}
                 placeholder="Yemek hakkında özel not (ör: çorbayı çok sevdi, ekmek yemedi)..."
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
               />
             </div>
 
             {/* Nap Section */}
-            <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/40 space-y-3">
+            <div className="rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 bg-slate-50/50 dark:bg-slate-900/50 space-y-3">
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>😴</span> Uyku & Dinlenme Takibi
               </h3>
@@ -441,7 +441,7 @@ export function DailyReportEditorModal({
                     type="time"
                     value={napStart}
                     onChange={(e) => setNapStart(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 px-3 py-1.5 text-xs font-medium"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 px-3 py-1.5 text-xs font-medium"
                   />
                 </div>
                 <div>
@@ -452,7 +452,7 @@ export function DailyReportEditorModal({
                     type="time"
                     value={napEnd}
                     onChange={(e) => setNapEnd(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 px-3 py-1.5 text-xs font-medium"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 px-3 py-1.5 text-xs font-medium"
                   />
                 </div>
                 <div>
@@ -462,7 +462,7 @@ export function DailyReportEditorModal({
                   <select
                     value={napQuality ?? ''}
                     onChange={(e) => setNapQuality(e.target.value as NapQuality)}
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 px-3 py-1.5 text-xs font-medium"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 px-3 py-1.5 text-xs font-medium"
                   >
                     <option value="">Seçiniz</option>
                     {NAP_QUALITIES.map((nq) => (
@@ -478,12 +478,12 @@ export function DailyReportEditorModal({
                 value={napNotes}
                 onChange={(e) => setNapNotes(e.target.value)}
                 placeholder="Uyku notu (ör: masalla 10 dakikada uyudu)..."
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
               />
             </div>
 
             {/* Potty / Diaper Section */}
-            <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/40 space-y-3">
+            <div className="rounded-xl border border-slate-200/80 dark:border-slate-700/80 p-4 bg-slate-50/50 dark:bg-slate-900/50 space-y-3">
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>🚻</span> Tuvalet & Bez Değişimi
               </h3>
@@ -492,12 +492,12 @@ export function DailyReportEditorModal({
                   type="time"
                   value={pottyTime}
                   onChange={(e) => setPottyTime(e.target.value)}
-                  className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-1 text-xs"
+                  className="rounded-lg border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 px-2 py-1 text-xs"
                 />
                 <select
                   value={pottyType}
                   onChange={(e) => setPottyType(e.target.value as PottyType)}
-                  className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-1 text-xs"
+                  className="rounded-lg border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 px-2 py-1 text-xs"
                 >
                   {POTTY_TYPES.map((pt) => (
                     <option key={pt.key} value={pt.key}>
@@ -508,7 +508,7 @@ export function DailyReportEditorModal({
                 <button
                   type="button"
                   onClick={addPotty}
-                  className="px-3 py-1 bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black font-bold rounded-lg text-xs"
+                  className="px-3 py-1 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white font-bold rounded-lg text-xs"
                 >
                   + Kayıt Ekle
                 </button>
@@ -521,7 +521,7 @@ export function DailyReportEditorModal({
                     return (
                       <span
                         key={p.id}
-                        className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-full text-xs font-medium text-slate-800 dark:text-slate-200 shadow-2xs"
+                        className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 px-2.5 py-1 rounded-full text-xs font-medium text-slate-800 dark:text-slate-200 shadow-2xs"
                       >
                         <span>{info?.emoji}</span>
                         <span>{p.time}</span>
@@ -556,7 +556,7 @@ export function DailyReportEditorModal({
                       className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-colors ${
                         isSelected
                           ? 'bg-amber-500/20 border-amber-500/50 text-amber-900 dark:text-amber-300 font-bold shadow-2xs'
-                          : 'bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60'
                       }`}
                     >
                       {isSelected ? `✓ ${act}` : `+ ${act}`}
@@ -580,13 +580,13 @@ export function DailyReportEditorModal({
                     value={medName}
                     onChange={(e) => setMedName(e.target.value)}
                     placeholder="İlaç adı (ör: Nurofen)"
-                    className="col-span-1 sm:col-span-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:outline-hidden"
+                    className="col-span-1 sm:col-span-2 rounded-lg border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-rose-400 focus:outline-hidden"
                   />
                   <input
                     type="time"
                     value={medTime}
                     onChange={(e) => setMedTime(e.target.value)}
-                    className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2.5 py-1.5 text-xs"
+                    className="rounded-lg border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 px-2.5 py-1.5 text-xs"
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -595,7 +595,7 @@ export function DailyReportEditorModal({
                     value={medDosage}
                     onChange={(e) => setMedDosage(e.target.value)}
                     placeholder="Doz (ör: 5 ml)"
-                    className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:outline-hidden"
+                    className="rounded-lg border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-rose-400 focus:outline-hidden"
                   />
                   <input
                     type="number"
@@ -605,14 +605,14 @@ export function DailyReportEditorModal({
                     step="0.1"
                     min="35"
                     max="42"
-                    className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:outline-hidden"
+                    className="rounded-lg border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-rose-400 focus:outline-hidden"
                   />
                   <input
                     type="text"
                     value={medNotes}
                     onChange={(e) => setMedNotes(e.target.value)}
                     placeholder="Not (ör: veli istedi)"
-                    className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-rose-400 focus:outline-hidden"
+                    className="rounded-lg border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-rose-400 focus:outline-hidden"
                   />
                 </div>
                 <button
@@ -636,7 +636,7 @@ export function DailyReportEditorModal({
                         className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs transition-colors ${
                           isGiven
                             ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800'
-                            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+                            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/80'
                         }`}
                       >
                         <button
@@ -704,24 +704,24 @@ export function DailyReportEditorModal({
                 onChange={(e) => setTeacherNote(e.target.value)}
                 rows={3}
                 placeholder="Örn: Bugün arkadaşlarıyla çok uyumlu oynadı, resim etkinliğinde güneş resmi yaptı..."
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 p-3 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 focus:outline-hidden"
               />
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-4">
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-700/80 pt-4">
               <button
                 type="button"
                 onClick={onClose}
                 disabled={saving}
-                className="rounded-xl border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                className="rounded-xl border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
               >
                 İptal
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-xl bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-5 py-2 text-sm font-bold shadow-xs disabled:opacity-50 transition"
+                className="rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-5 py-2 text-sm font-bold shadow-xs disabled:opacity-50 transition"
               >
                 {saving ? 'Kaydediliyor…' : 'Raporu Kaydet'}
               </button>

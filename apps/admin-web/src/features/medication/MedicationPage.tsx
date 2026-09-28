@@ -25,12 +25,18 @@ const STATUS_LABEL: Record<StandaloneMedicationStatus, string> = {
 };
 
 const STATUS_STYLE: Record<StandaloneMedicationStatus, string> = {
-  REQUESTED: 'bg-amber-50 text-amber-800 border-amber-200',
-  APPROVED: 'bg-blue-50 text-blue-800 border-blue-200',
-  SCHEDULED: 'bg-indigo-50 text-indigo-800 border-indigo-200',
-  GIVEN: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-  SKIPPED: 'bg-slate-100 text-slate-600 border-slate-200',
-  REJECTED: 'bg-rose-50 text-rose-800 border-rose-200',
+  REQUESTED:
+    'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800/60',
+  APPROVED:
+    'bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800/60',
+  SCHEDULED:
+    'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/60',
+  GIVEN:
+    'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60',
+  SKIPPED:
+    'bg-slate-100 dark:bg-slate-700/60 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600',
+  REJECTED:
+    'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800/60',
 };
 
 export function MedicationPage(): JSX.Element {
@@ -171,7 +177,7 @@ export function MedicationPage(): JSX.Element {
             <Pill className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               İlaç Takibi
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -183,7 +189,7 @@ export function MedicationPage(): JSX.Element {
           <button
             type="button"
             onClick={() => void refresh()}
-            className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition"
+            className="text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition"
           >
             <RotateCw className="w-3.5 h-3.5" /> Yenile
           </button>
@@ -191,7 +197,7 @@ export function MedicationPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setCreateOpen((v) => !v)}
-              className="text-xs font-bold text-white dark:text-black bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition shadow-xs active:scale-98"
+              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition shadow-xs active:scale-98"
             >
               <Plus className="w-3.5 h-3.5" /> Yeni Talep
             </button>
@@ -204,17 +210,17 @@ export function MedicationPage(): JSX.Element {
           onSubmit={(e) => {
             void submitCreate(e);
           }}
-          className="bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-5 shadow-xs space-y-3"
+          className="bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-5 shadow-xs space-y-3"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
                 Öğrenci
               </label>
               <select
                 value={formStudentId}
                 onChange={(e) => setFormStudentId(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               >
                 <option value="">Seçin…</option>
                 {students.map((s) => (
@@ -225,18 +231,18 @@ export function MedicationPage(): JSX.Element {
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
                 Planlanan Saat
               </label>
               <input
                 type="datetime-local"
                 value={formScheduledAt}
                 onChange={(e) => setFormScheduledAt(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
                 İlaç Adı
               </label>
               <input
@@ -244,11 +250,11 @@ export function MedicationPage(): JSX.Element {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 placeholder="Örn: Parol Şurup"
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
                 Doz
               </label>
               <input
@@ -256,12 +262,12 @@ export function MedicationPage(): JSX.Element {
                 value={formDosage}
                 onChange={(e) => setFormDosage(e.target.value)}
                 placeholder="Örn: 5 ml (1 ölçek)"
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               />
             </div>
           </div>
           <div>
-            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
               Talimat (Opsiyonel)
             </label>
             <textarea
@@ -269,21 +275,21 @@ export function MedicationPage(): JSX.Element {
               onChange={(e) => setFormInstructions(e.target.value)}
               rows={2}
               placeholder="Örn: Yemekten sonra tok karnına verilecek..."
-              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500"
+              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/80">
             <button
               type="button"
               onClick={() => setCreateOpen(false)}
-              className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-800 px-3 py-1.5 transition"
+              className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white px-3 py-1.5 transition"
             >
               İptal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="text-xs font-bold text-white dark:text-black bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 px-4 py-2 rounded-xl transition shadow-xs disabled:opacity-50 active:scale-98"
+              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 px-4 py-2 rounded-xl transition shadow-xs disabled:opacity-50 active:scale-98"
             >
               {submitting ? 'Kaydediliyor…' : 'Talep Oluştur'}
             </button>
@@ -292,21 +298,21 @@ export function MedicationPage(): JSX.Element {
       )}
 
       {loading ? (
-        <div className="text-center py-12 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
-          <div className="inline-block w-8 h-8 border-3 border-blue-900 dark:border-amber-400 border-t-transparent rounded-full animate-spin mb-3" />
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+        <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+          <div className="inline-block w-8 h-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent rounded-full animate-spin mb-3" />
+          <p className="text-slate-500 dark:text-slate-300 text-sm font-medium">
             İlaç kayıtları yükleniyor…
           </p>
         </div>
       ) : records.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-dashed border-slate-300 dark:border-slate-700/80 p-8">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-amber-500/10 text-blue-900 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
+        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-amber-500/10 text-teal-900 dark:text-teal-300 flex items-center justify-center mx-auto mb-3">
             <Clock className="w-6 h-6" />
           </div>
-          <p className="text-slate-800 dark:text-slate-200 text-sm font-bold">
+          <p className="text-slate-800 dark:text-white text-sm font-bold">
             Aktif ilaç kaydı bulunmuyor.
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+          <p className="text-xs text-slate-500 dark:text-slate-300 mt-1 max-w-sm mx-auto">
             Öğrencilerin güncel ve onay bekleyen ilaç kullanım talepleri burada listelenir.
           </p>
         </div>
@@ -315,19 +321,19 @@ export function MedicationPage(): JSX.Element {
           {records.map((r) => (
             <div
               key={r.id}
-              className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-5 shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
+              className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 p-5 shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
             >
               <div className="space-y-2.5">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
+                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
                       {r.medicationName}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-teal-50 dark:bg-slate-700 text-teal-900 dark:text-teal-200 border border-teal-200/60 dark:border-slate-600">
                         {studentName(r.studentId)}
                       </span>
-                      <span className="text-xs text-slate-600 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-lg">
+                      <span className="text-xs text-slate-600 dark:text-slate-200 font-medium bg-slate-100 dark:bg-slate-700/60 px-2 py-0.5 rounded-lg border border-transparent dark:border-slate-700">
                         {r.dosage}
                       </span>
                     </div>
@@ -339,12 +345,12 @@ export function MedicationPage(): JSX.Element {
                   </span>
                 </div>
                 {r.instructions && (
-                  <p className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700/60 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-200 bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700/60 leading-relaxed">
                     {r.instructions}
                   </p>
                 )}
                 {r.scheduledAt && (
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-300 flex items-center gap-1">
                     <Clock className="w-3 h-3 text-slate-400" />
                     <span>Plan: {new Date(r.scheduledAt).toLocaleString('tr-TR')}</span>
                   </p>
@@ -369,7 +375,7 @@ export function MedicationPage(): JSX.Element {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 flex-wrap pt-3 border-t border-slate-100 dark:border-slate-700/60">
+              <div className="flex items-center gap-2 flex-wrap pt-3 border-t border-slate-100 dark:border-slate-700/80">
                 {(role === 'ADMIN' || role === 'SUPER_ADMIN') && r.status === 'REQUESTED' && (
                   <>
                     <button
@@ -409,7 +415,7 @@ export function MedicationPage(): JSX.Element {
                         onClick={() => void markSkipped(r.id)}
                         disabled={busyId === r.id}
                         title="Bu dozun atlanma gerekçesini girerek kaydedin"
-                        className="text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition disabled:opacity-50"
+                        className="text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700/80 hover:bg-slate-200 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition disabled:opacity-50"
                       >
                         Atlandı
                       </button>

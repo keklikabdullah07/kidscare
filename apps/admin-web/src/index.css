@@ -4,12 +4,13 @@
 
 @theme {
   --font-sans: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --color-brand-navy: #1e3a8a;
-  --color-brand-blue: #1d4ed8;
+  --color-brand-primary: #0f766e;
+  --color-brand-teal: #0f766e;
+  --color-brand-emerald: #10b981;
   --color-brand-amber: #f59e0b;
   --color-brand-honey: #d97706;
-  --color-brand-card-dark: #131e3a;
-  --color-brand-bg-dark: #0b1120;
+  --color-brand-card-dark: #1e293b;
+  --color-brand-bg-dark: #0f172a;
 }
 
 @utility surface-card {
@@ -20,8 +21,8 @@
 }
 
 @utility surface-card-dark {
-  background-color: #131e3a;
-  border-color: rgba(51, 65, 85, 0.6);
+  background-color: #1e293b;
+  border-color: #384758;
   border-width: 1px;
   border-style: solid;
 }
@@ -38,36 +39,44 @@
 
   body {
     font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: #0f172a;
-    background-color: #f8fafc;
+    color: #1e293b;
+    background-color: #faf9f6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   html.dark body {
-    color: #f8fafc;
-    background-color: #0b1120;
+    color: #f1f5f9;
+    background-color: #0f172a;
   }
+
+
 
   /* Themed text selection */
   ::selection {
-    background-color: #dbeafe;
-    color: #1e3a8a;
+    background-color: #ccfbf1;
+    color: #0f766e;
   }
 
   html.dark ::selection {
-    background-color: rgba(245, 158, 11, 0.3);
-    color: #fef3c7;
+    background-color: rgba(15, 118, 110, 0.4);
+    color: #99f6e4;
   }
 
   /* Themed caret & focus rings */
   input, textarea, select {
-    caret-color: #1d4ed8;
+    caret-color: #0f766e;
   }
 
   html.dark input, html.dark textarea, html.dark select {
-    caret-color: #f59e0b;
+    caret-color: #2dd4bf;
+  }
+
+  html.dark input::placeholder,
+  html.dark textarea::placeholder {
+    color: #94a3b8;
+    opacity: 0.85;
   }
 
   /* Tabular numbers for clean data alignment */
@@ -102,3 +111,20 @@
     background: #475569;
   }
 }
+
+/* ========================================================
+   Subtle Dark Mode Borders: Soft, natural 1px definition
+   Unlayered with !important so Tailwind utilities cannot drop it
+   ======================================================== */
+html.dark [class*="dark:border-slate-700"],
+html.dark [class*="dark:border-slate-800"],
+html.dark [class*="border-slate-700"],
+html.dark [class*="border-slate-800"] {
+  border-color: #384758 !important;
+}
+
+html.dark [class*="dark:divide-slate-700"] > :not([hidden]) ~ :not([hidden]),
+html.dark [class*="dark:divide-slate-800"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: #2b3846 !important;
+}
+

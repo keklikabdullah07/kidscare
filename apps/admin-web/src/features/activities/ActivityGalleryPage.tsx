@@ -176,7 +176,7 @@ export function ActivityGalleryPage(): JSX.Element {
             <Camera className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Fotoğraf & Etkinlik Galerisi
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -199,7 +199,7 @@ export function ActivityGalleryPage(): JSX.Element {
 
       {/* Filter Tags */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
-        <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
+        <span className="text-xs font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider mr-1">
           Filtre:
         </span>
         {FILTER_TAGS.map((tag) => {
@@ -212,7 +212,7 @@ export function ActivityGalleryPage(): JSX.Element {
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
                 active
                   ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-xs'
-                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80 hover:bg-slate-50 dark:hover:bg-slate-700/60'
               }`}
             >
               {tag === 'Hepsi' ? 'Hepsi' : `#${tag}`}
@@ -237,21 +237,21 @@ export function ActivityGalleryPage(): JSX.Element {
 
       {/* Loading state */}
       {loading ? (
-        <div className="py-20 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+        <div className="py-20 text-center bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-3 border-teal-600 border-t-transparent mb-2"></div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+          <p className="text-xs text-slate-500 dark:text-slate-300 font-medium">
             Etkinlikler yükleniyor...
           </p>
         </div>
       ) : posts.length === 0 ? (
-        <div className="py-16 text-center bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8">
+        <div className="py-16 text-center bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8">
           <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-rose-500 dark:text-rose-400 flex items-center justify-center mx-auto mb-3">
             <ImageIcon className="w-6 h-6" />
           </div>
-          <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">
+          <h3 className="text-base font-bold text-slate-800 dark:text-white">
             Henüz Paylaşılan Etkinlik Yok
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto mt-1 mb-5">
+          <p className="text-xs text-slate-500 dark:text-slate-300 max-w-md mx-auto mt-1 mb-5">
             Öğrencilerin sınıf içi ve bahçe aktivitelerinden fotoğraflar yükleyerek velilere görsel
             güncellemeler sunun.
           </p>
@@ -278,22 +278,22 @@ export function ActivityGalleryPage(): JSX.Element {
             return (
               <div
                 key={post.id}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col hover:shadow-md transition group"
+                className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs overflow-hidden flex flex-col hover:shadow-md transition group"
               >
                 {/* Card Header */}
-                <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div className="p-4 border-b border-slate-100 dark:border-slate-700/80 flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60 flex items-center gap-1">
                         <School className="w-3 h-3" />
                         {post.classroom || 'Tüm Kreş'}
                       </span>
-                      <span className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-slate-300 dark:text-slate-600" />
+                      <span className="text-xs text-slate-400 dark:text-slate-300 flex items-center gap-1">
+                        <Calendar className="w-3 h-3 text-slate-400 dark:text-slate-400" />
                         {formattedDate}
                       </span>
                     </div>
-                    <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 mt-1.5 group-hover:text-blue-900 dark:group-hover:text-amber-400 transition-colors">
+                    <h2 className="text-base font-bold text-slate-900 dark:text-white mt-1.5 group-hover:text-teal-900 dark:group-hover:text-amber-400 transition-colors">
                       {post.title}
                     </h2>
                   </div>
@@ -304,7 +304,7 @@ export function ActivityGalleryPage(): JSX.Element {
                         void handleDelete(post.id);
                       }}
                       title="Etkinliği Sil"
-                      className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                      className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700/60 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -312,7 +312,7 @@ export function ActivityGalleryPage(): JSX.Element {
                 </div>
 
                 {/* Photo Grid */}
-                <div className="grid grid-cols-2 gap-1 bg-slate-100 dark:bg-slate-800 aspect-video relative overflow-hidden">
+                <div className="grid grid-cols-2 gap-1 bg-slate-100 dark:bg-slate-900 aspect-video relative overflow-hidden">
                   {post.mediaUrls.slice(0, 4).map((url, idx) => {
                     const isLast = idx === 3 && post.mediaUrls.length > 4;
                     const remaining = post.mediaUrls.length - 4;
@@ -348,7 +348,7 @@ export function ActivityGalleryPage(): JSX.Element {
                 {/* Description and Tags */}
                 <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                   {post.description && (
-                    <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
+                    <p className="text-xs text-slate-600 dark:text-slate-200 line-clamp-3 leading-relaxed">
                       {post.description}
                     </p>
                   )}
@@ -358,7 +358,7 @@ export function ActivityGalleryPage(): JSX.Element {
                       {post.tags.map((t, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                          className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 dark:bg-slate-700/70 text-slate-600 dark:text-slate-200 border border-transparent dark:border-slate-600/60"
                         >
                           #{t}
                         </span>
@@ -397,17 +397,17 @@ export function ActivityGalleryPage(): JSX.Element {
 
       {/* Create Activity Modal */}
       {isCreateOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-100 dark:border-slate-800">
-            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/60 dark:bg-slate-800/60">
-              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-100 dark:border-slate-700/80">
+            <div className="p-5 border-b border-slate-100 dark:border-slate-700/80 flex items-center justify-between bg-slate-50/60 dark:bg-slate-800">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Camera className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                 <span>Yeni Etkinlik Paylaş</span>
               </h2>
               <button
                 type="button"
                 onClick={() => setIsCreateOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -421,7 +421,7 @@ export function ActivityGalleryPage(): JSX.Element {
             >
               {/* Title */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                   Etkinlik Başlığı *
                 </label>
                 <input
@@ -430,19 +430,19 @@ export function ActivityGalleryPage(): JSX.Element {
                   placeholder="Örn: Sulu Boya ile Hayvanlar Alemi"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
                 />
               </div>
 
               {/* Classroom */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                   Sınıf / Grup
                 </label>
                 <select
                   value={classroom}
                   onChange={(e) => setClassroom(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20 bg-white dark:bg-slate-800"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20 bg-white dark:bg-slate-900"
                 >
                   <option value="Papatyalar Sınıfı">Papatyalar Sınıfı (3-4 Yaş)</option>
                   <option value="Yıldızlar Sınıfı">Yıldızlar Sınıfı (4-5 Yaş)</option>
@@ -453,7 +453,7 @@ export function ActivityGalleryPage(): JSX.Element {
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                   Açıklama / Notlar
                 </label>
                 <textarea
@@ -461,13 +461,13 @@ export function ActivityGalleryPage(): JSX.Element {
                   placeholder="Bugün çocuklarla birlikte renkleri karıştırdık, ince motor becerilerini geliştirdik..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
                 />
               </div>
 
               {/* Preset Photos Selection */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-2">
                   Hazır Etkinlik Fotoğrafları Seçin ({selectedUrls.length} seçildi)
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -492,7 +492,7 @@ export function ActivityGalleryPage(): JSX.Element {
                           }}
                           className="h-20 w-full object-cover"
                         />
-                        <div className="p-1 bg-white dark:bg-slate-800 text-[10px] font-semibold text-slate-700 dark:text-slate-300 truncate text-center">
+                        <div className="p-1 bg-white dark:bg-slate-800 text-[10px] font-semibold text-slate-700 dark:text-slate-200 truncate text-center">
                           {item.name}
                         </div>
                         {isSelected && (
@@ -508,7 +508,7 @@ export function ActivityGalleryPage(): JSX.Element {
 
               {/* Custom Photo URL */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                   Veya Özel Fotoğraf URL'si Ekle
                 </label>
                 <div className="flex gap-2">
@@ -517,12 +517,12 @@ export function ActivityGalleryPage(): JSX.Element {
                     placeholder="https://images.unsplash.com/..."
                     value={customUrl}
                     onChange={(e) => setCustomUrl(e.target.value)}
-                    className="flex-1 px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                    className="flex-1 px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
                   />
                   <button
                     type="button"
                     onClick={addCustomUrl}
-                    className="px-3.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl transition"
+                    className="px-3.5 py-1.5 bg-slate-100 dark:bg-slate-700/80 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 text-xs font-semibold rounded-xl transition"
                   >
                     Ekle
                   </button>
@@ -557,11 +557,11 @@ export function ActivityGalleryPage(): JSX.Element {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsCreateOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition"
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition"
                 >
                   İptal
                 </button>

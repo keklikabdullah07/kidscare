@@ -108,17 +108,17 @@ KidsCare Web Yönetim Paneli, dünya standartlarında ödüllü bir kreş/okul �
 
 ### Renk Paleti ve Marka Kimliği
 
-- **Birincil Marka Rengi:** Derin Gece Mavisi (`text-blue-900`, `bg-blue-900`, koyu modda `dark:text-blue-300`, `dark:bg-blue-950/60`).
-- **Kreş Sıcaklığı & Vurgu Rengi:** Bal Sarısı / Amber (`bg-amber-500`, `text-amber-800`, koyu modda `dark:text-amber-300`, `dark:bg-amber-500/20`).
-- **Koyu Mod Yüzeyleri:** Ana arka plan `#0B1120`, kart yüzeyleri `#131E3A`, sınırlar `border-slate-700/60`.
-- **Açık Mod Yüzeyleri:** Ana arka plan `#F8FAFC`, kart yüzeyleri `#FFFFFF`, sınırlar `border-slate-200/80`.
-- **YASAK:** Çiğ jenerik renkler (saf kırmızı, çiğ yeşil, donuk kurumsal gri). Daima HSL uyumlu ve Tailwind token'ları kullanılmalıdır.
+- **Birincil Marka Rengi:** İskandinav Adaçayı / Derin Çam Yeşili (`text-teal-900`, `bg-teal-700`, koyu modda `dark:text-teal-300`, `dark:bg-slate-800`).
+- **Kreş Sıcaklığı & Vurgu Rengi:** Güneş Işığı & Bal Kehribarı (`bg-amber-500`, `text-amber-800`, koyu modda `dark:text-amber-300`, `dark:bg-amber-500/20`).
+- **Koyu Mod Yüzeyleri:** Ana arka plan derin obsidyen `#090D16`, kart yüzeyleri `#131B2E`, sınırlar `border-slate-800/80`.
+- **Açık Mod Yüzeyleri:** Ana arka plan parlamayan keten/yulaf `#FAF9F6`, kart yüzeyleri `#FFFFFF`, sınırlar `border-slate-200/80`.
+- **YASAK:** Çiğ jenerik renkler (saf kırmızı, çiğ yeşil, donuk kurumsal gri, çamurlu lacivert koyu mod). Daima HSL uyumlu ve Tailwind token'ları kullanılmalıdır.
 
 ### Kart ve Konteyner Mimarisi
 
-- Tüm kartlar ve paneller: `rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] p-5 shadow-xs hover:shadow-md transition-all`.
+- Tüm kartlar ve paneller: `rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#131B2E] p-5 shadow-xs hover:shadow-md transition-all`.
 - Sayfa boşlukları: Ana içerik konteynerinde `space-y-6` veya `space-y-8`. Izgara aralıkları `gap-4` veya `gap-5`.
-- Sayfa Başlıkları: `<PageHeader>` veya sol tarafta 11x11 rounded-2xl ikon rozeti (`bg-blue-900 text-white dark:bg-amber-500 dark:text-black`), sağ tarafta aksiyon butonları.
+- Sayfa Başlıkları: `<PageHeader>` veya sol tarafta 11x11 rounded-2xl ikon rozeti (`bg-teal-700 text-white dark:bg-slate-800 dark:text-teal-300`), sağ tarafta aksiyon butonları.
 
 ### Savunmacı ve Dayanıklı UI (Hardening)
 

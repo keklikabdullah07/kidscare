@@ -66,7 +66,7 @@ export function KidsCareLogo({
     <div className={`flex items-center gap-3 ${className}`}>
       {/* Brand Icon Mark with Authentic Logo Image */}
       <div
-        className={`${box} rounded-2xl bg-white shadow-xs border border-amber-100/90 dark:border-slate-700/80 flex items-center justify-center shrink-0 overflow-hidden relative group`}
+        className={`${box} rounded-2xl bg-white dark:bg-slate-800 shadow-xs border border-teal-100/80 dark:border-slate-700/80 flex items-center justify-center shrink-0 overflow-hidden relative group`}
       >
         <img
           src="/brand/kidscare-icon.png"
@@ -79,8 +79,8 @@ export function KidsCareLogo({
       {showText && variant !== 'icon' && (
         <div className="flex flex-col leading-none">
           <div className="flex items-center gap-1.5">
-            <span className={`${text} font-black tracking-tight text-blue-900 dark:text-white`}>
-              Kids<span className="text-blue-600 dark:text-blue-400">Care</span>
+            <span className={`${text} font-black tracking-tight text-teal-950 dark:text-white`}>
+              Kids<span className="text-teal-600 dark:text-teal-400">Care</span>
             </span>
             <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
               Kreş

@@ -17,7 +17,7 @@ export function PageHeader({
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex items-center gap-3">
         {Icon && (
-          <div className="w-11 h-11 rounded-2xl bg-blue-900 text-white dark:bg-amber-500 dark:text-black flex items-center justify-center shrink-0 shadow-xs">
+          <div className="w-11 h-11 rounded-2xl bg-teal-700 text-white dark:bg-slate-800 dark:text-teal-300 dark:border dark:border-slate-700/80 flex items-center justify-center shrink-0 shadow-xs">
             <Icon className="w-5 h-5" />
           </div>
         )}
@@ -26,7 +26,7 @@ export function PageHeader({
             {title}
           </h1>
           {description && (
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-300 mt-0.5 leading-relaxed">
               {description}
             </p>
           )}

@@ -83,14 +83,14 @@ export function TeamPage(): JSX.Element {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-blue-900 dark:bg-amber-500 text-amber-300 dark:text-black flex items-center justify-center font-bold shadow-xs">
+          <div className="w-11 h-11 rounded-2xl bg-teal-700 text-white dark:bg-slate-800 dark:text-teal-300 dark:border dark:border-slate-700 flex items-center justify-center font-bold shadow-xs">
             <Users className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Ekip & Veliler
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
               Öğretmen ve veli hesaplarını yönetin; öğrenci kayıtlarında veli eşleştirmesi yapın
             </p>
           </div>
@@ -98,7 +98,7 @@ export function TeamPage(): JSX.Element {
         <button
           type="button"
           onClick={loadUsers}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs transition active:scale-98"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/60 shadow-2xs transition active:scale-98"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           Yenile
@@ -109,15 +109,15 @@ export function TeamPage(): JSX.Element {
         {/* Create Form */}
         <form
           onSubmit={(e) => void handleInvite(e)}
-          className="lg:col-span-2 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] p-6 shadow-xs space-y-4"
+          className="lg:col-span-2 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 p-6 shadow-xs space-y-4"
         >
           <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-sm">
-            <UserPlus className="w-4 h-4 text-blue-900 dark:text-amber-400" />
+            <UserPlus className="w-4 h-4 text-teal-900 dark:text-teal-300" />
             Yeni Hesap Oluştur
           </div>
 
           <label className="block">
-            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
               E-posta
             </span>
             <input
@@ -125,13 +125,13 @@ export function TeamPage(): JSX.Element {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-[#0B1120] px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               placeholder="veli@ornek.com"
             />
           </label>
 
           <label className="block">
-            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
               Geçici Şifre
             </span>
             <input
@@ -140,19 +140,19 @@ export function TeamPage(): JSX.Element {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-[#0B1120] px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               placeholder="En az 8 karakter"
             />
           </label>
 
           <label className="block">
-            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
               Rol
             </span>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as 'TEACHER' | 'PARENT')}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700/80 px-3 py-2 text-xs bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
             >
               <option value="TEACHER">Öğretmen</option>
               <option value="PARENT">Veli</option>
@@ -162,28 +162,28 @@ export function TeamPage(): JSX.Element {
           <button
             type="submit"
             disabled={inviting}
-            className="w-full rounded-xl bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-black py-2.5 text-xs font-bold transition shadow-xs disabled:opacity-50 active:scale-98"
+            className="w-full rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white py-2.5 text-xs font-bold transition shadow-xs disabled:opacity-50 active:scale-98"
           >
             {inviting ? 'Oluşturuluyor…' : 'Hesap Oluştur'}
           </button>
         </form>
 
         {/* Users List */}
-        <div className="lg:col-span-3 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] shadow-xs overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700/60 flex items-center justify-between font-bold text-sm text-slate-900 dark:text-white">
+        <div className="lg:col-span-3 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 shadow-xs overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700/80 flex items-center justify-between font-bold text-sm text-slate-900 dark:text-white">
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-blue-900 dark:text-amber-400" />
+              <Users className="w-4 h-4 text-teal-900 dark:text-teal-300" />
               <span>Aktif Kullanıcılar</span>
             </div>
             {users.length > 0 && (
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-300">
                 {users.length} Kayıt
               </span>
             )}
           </div>
 
           {status === 'loading' && (
-            <div className="p-8 text-center text-sm text-slate-500 dark:text-slate-400 animate-pulse">
+            <div className="p-8 text-center text-sm text-slate-500 dark:text-slate-300 animate-pulse">
               Yükleniyor…
             </div>
           )}
@@ -191,10 +191,10 @@ export function TeamPage(): JSX.Element {
             <p className="p-6 text-sm text-rose-600 dark:text-rose-400">{errorMsg ?? 'Hata'}</p>
           )}
           {status === 'ready' && users.length === 0 && (
-            <p className="p-6 text-sm text-slate-500 dark:text-slate-400">Henüz kullanıcı yok.</p>
+            <p className="p-6 text-sm text-slate-500 dark:text-slate-300">Henüz kullanıcı yok.</p>
           )}
           {status === 'ready' && users.length > 0 && (
-            <ul className="divide-y divide-slate-100 dark:divide-slate-700/60">
+            <ul className="divide-y divide-slate-100 dark:divide-slate-700">
               {users.map((u) => {
                 const variant = roleVariants[u.role] ?? 'default';
                 const initial = (u.email.charAt(0) || 'U').toUpperCase();
@@ -202,10 +202,10 @@ export function TeamPage(): JSX.Element {
                 return (
                   <li
                     key={u.id}
-                    className="px-6 py-3.5 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition"
+                    className="px-6 py-3.5 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/40 transition"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-amber-400 border border-blue-200 dark:border-blue-800/60 flex items-center justify-center font-bold text-xs shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-teal-100 dark:bg-slate-700 text-teal-800 dark:text-teal-200 border border-teal-200 dark:border-slate-600 flex items-center justify-center font-bold text-xs shrink-0">
                         {initial}
                       </div>
                       <div className="min-w-0">

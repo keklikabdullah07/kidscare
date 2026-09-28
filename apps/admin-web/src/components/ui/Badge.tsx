@@ -29,18 +29,18 @@ const VARIANT_MAP: Record<BadgeVariant, { container: string; dot: string }> = {
   },
   info: {
     container:
-      'bg-blue-50 text-blue-900 border-blue-200/80 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60',
-    dot: 'bg-blue-500 dark:bg-blue-400',
+      'bg-sky-50 text-sky-900 border-sky-200/80 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800/60',
+    dot: 'bg-sky-500 dark:bg-sky-400',
   },
   neutral: {
     container:
-      'bg-slate-100 text-slate-700 border-slate-200/80 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700/60',
+      'bg-slate-100 text-slate-700 border-slate-200/80 dark:bg-slate-800/80 dark:text-slate-200 dark:border-slate-700/80',
     dot: 'bg-slate-400 dark:bg-slate-500',
   },
   brand: {
     container:
-      'bg-blue-50 text-blue-950 border-blue-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/30',
-    dot: 'bg-blue-900 dark:bg-amber-400',
+      'bg-teal-50 text-teal-900 border-teal-200/80 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800/60',
+    dot: 'bg-teal-600 dark:bg-teal-400',
   },
 };
 

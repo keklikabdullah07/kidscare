@@ -26,16 +26,18 @@ export function RoleGuard({
     const homePath = state.user.role === 'PARENT' ? '/portal' : '/dashboard';
     return (
       <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-rose-500 dark:text-rose-400 flex items-center justify-center mb-4 border border-rose-200/60 dark:border-rose-900/60">
           <ShieldAlert className="w-8 h-8" />
         </div>
-        <h2 className="text-lg font-bold text-slate-900 mb-1">Erişim Yetkisi Yok</h2>
-        <p className="text-sm text-slate-500 max-w-sm mb-4">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+          Erişim Yetkisi Yok
+        </h2>
+        <p className="text-sm text-slate-500 dark:text-slate-300 max-w-sm mb-4">
           Bu sayfayı görüntüleme yetkiniz bulunmamaktadır. Lütfen ana sayfanıza dönün.
         </p>
         <a
           href={homePath}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition"
+          className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold rounded-xl transition shadow-xs"
         >
           Ana Sayfaya Dön
         </a>

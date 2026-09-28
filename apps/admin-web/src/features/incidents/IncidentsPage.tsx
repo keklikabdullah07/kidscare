@@ -147,7 +147,7 @@ export function IncidentsPage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-blue-900 dark:bg-amber-500 text-amber-300 dark:text-black flex items-center justify-center shadow-xs">
+          <div className="w-11 h-11 rounded-2xl bg-teal-700 text-white dark:bg-slate-800 dark:text-teal-300 dark:border dark:border-slate-700 flex items-center justify-center shadow-xs">
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div>
@@ -163,14 +163,14 @@ export function IncidentsPage(): JSX.Element {
           <button
             type="button"
             onClick={() => void refresh()}
-            className="text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 shadow-2xs transition active:scale-98"
+            className="text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 shadow-2xs transition active:scale-98"
           >
             <RotateCw className="w-3.5 h-3.5" /> Yenile
           </button>
           <button
             type="button"
             onClick={() => setShowForm((v) => !v)}
-            className="text-xs font-bold text-white bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 shadow-xs transition active:scale-98"
+            className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 shadow-xs transition active:scale-98"
           >
             <Plus className="w-3.5 h-3.5" /> Yeni Olay Kaydı
           </button>
@@ -180,17 +180,17 @@ export function IncidentsPage(): JSX.Element {
       {showForm && (
         <form
           onSubmit={(e) => void submitCreate(e)}
-          className="bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-5 shadow-xs space-y-4"
+          className="bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-5 shadow-xs space-y-4"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1.5">
                 Öğrenci
               </label>
               <select
                 value={fStudentId}
                 onChange={(e) => setFStudentId(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               >
                 <option value="">Seçin…</option>
                 {students.map((s) => (
@@ -201,13 +201,13 @@ export function IncidentsPage(): JSX.Element {
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1.5">
                 Kategori
               </label>
               <select
                 value={fCategory}
                 onChange={(e) => setFCategory(e.target.value as IncidentCategory)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               >
                 {Object.entries(CATEGORY_META).map(([k, meta]) => (
                   <option key={k} value={k}>
@@ -217,14 +217,14 @@ export function IncidentsPage(): JSX.Element {
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1.5">
                 Olay Zamanı
               </label>
               <input
                 type="datetime-local"
                 value={fOccurredAt}
                 onChange={(e) => setFOccurredAt(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
               />
             </div>
             <div className="flex flex-col justify-end pb-1">
@@ -233,17 +233,17 @@ export function IncidentsPage(): JSX.Element {
                   type="checkbox"
                   checked={fParentNotified}
                   onChange={(e) => setFParentNotified(e.target.checked)}
-                  className="rounded border-slate-300 text-blue-900 dark:text-amber-500 focus:ring-blue-500"
+                  className="rounded border-slate-300 dark:border-slate-600 text-teal-700 dark:text-amber-500 focus:ring-teal-500"
                 />
                 Veliye anında bilgi verildi
               </label>
-              <span className="text-[10px] text-slate-400 dark:text-slate-500 ml-5 mt-0.5">
+              <span className="text-[10px] text-slate-500 dark:text-slate-300 ml-5 mt-0.5">
                 Veli telefonla arandıysa veya yüz yüze bildirildiyse işaretleyin
               </span>
             </div>
           </div>
           <div>
-            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
+            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1.5">
               Olay Açıklaması
             </label>
             <textarea
@@ -251,11 +251,11 @@ export function IncidentsPage(): JSX.Element {
               onChange={(e) => setFDescription(e.target.value)}
               placeholder="Olayın nerede, nasıl ve ne zaman gerçekleştiğini detaylandırın…"
               rows={2}
-              className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
             />
           </div>
           <div>
-            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
+            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1.5">
               Uygulanan İlk Yardım / Aksiyon
             </label>
             <textarea
@@ -263,20 +263,20 @@ export function IncidentsPage(): JSX.Element {
               onChange={(e) => setFActionTaken(e.target.value)}
               placeholder="Örn: Soğuk kompres uygulandı, revir hemşiresi kontrol etti…"
               rows={2}
-              className="w-full text-xs border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-[#0B1120] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-amber-500/20"
+              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/60">
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/80">
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="text-xs font-semibold text-slate-600 dark:text-slate-400 px-3.5 py-1.5 hover:text-slate-900 dark:hover:text-white"
+              className="text-xs font-semibold text-slate-600 dark:text-slate-300 px-3.5 py-1.5 hover:text-slate-900 dark:hover:text-white"
             >
               İptal
             </button>
             <button
               type="submit"
-              className="text-xs font-bold text-white bg-blue-900 hover:bg-blue-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-4 py-2 rounded-xl shadow-xs transition active:scale-98"
+              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-4 py-2 rounded-xl shadow-xs transition active:scale-98"
             >
               Olayı Kaydet
             </button>
@@ -285,21 +285,21 @@ export function IncidentsPage(): JSX.Element {
       )}
 
       {loading ? (
-        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
-          <div className="inline-block w-8 h-8 border-3 border-blue-900 dark:border-amber-500 border-t-transparent rounded-full animate-spin mb-3" />
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+          <div className="inline-block w-8 h-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent rounded-full animate-spin mb-3" />
+          <p className="text-slate-500 dark:text-slate-300 text-sm font-medium">
             Olay kayıtları yükleniyor…
           </p>
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-dashed border-slate-300 dark:border-slate-700/80 p-8">
+        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8">
           <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
             <AlertTriangle className="w-6 h-6" />
           </div>
-          <p className="text-slate-700 dark:text-slate-200 text-sm font-bold">
+          <p className="text-slate-700 dark:text-white text-sm font-bold">
             Kayıtlı Olay Bulunmuyor
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+          <p className="text-xs text-slate-500 dark:text-slate-300 mt-1 max-w-sm mx-auto">
             Kreşinizde henüz bildirilmiş bir kaza veya yaralanma kaydı yok.
           </p>
         </div>
@@ -312,7 +312,7 @@ export function IncidentsPage(): JSX.Element {
             return (
               <div
                 key={i.id}
-                className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-600 transition-all space-y-3"
+                className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 p-4.5 shadow-xs hover:border-slate-300 dark:hover:border-slate-600 transition-all space-y-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2.5">
@@ -341,14 +341,14 @@ export function IncidentsPage(): JSX.Element {
                   )}
                 </div>
 
-                <div className="bg-slate-50/80 dark:bg-[#0B1120] rounded-xl p-3 border border-slate-100 dark:border-slate-700/60">
+                <div className="bg-slate-50/80 dark:bg-slate-900/60 rounded-xl p-3 border border-slate-100 dark:border-slate-700/60">
                   <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
                     {i.description}
                   </p>
                 </div>
 
                 {i.actionTaken && (
-                  <div className="text-[11px] text-slate-600 dark:text-slate-300 bg-amber-50/50 dark:bg-amber-950/20 px-3 py-1.5 rounded-lg border border-amber-100 dark:border-amber-900/30">
+                  <div className="text-[11px] text-slate-600 dark:text-slate-300 bg-amber-50/50 dark:bg-amber-950/20 px-3 py-1.5 rounded-lg border border-amber-100 dark:border-amber-900/40">
                     <span className="font-semibold text-amber-900 dark:text-amber-300">
                       İlk Yardım / Aksiyon:{' '}
                     </span>
@@ -356,7 +356,7 @@ export function IncidentsPage(): JSX.Element {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-700/60">
+                <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-300 pt-1 border-t border-slate-100 dark:border-slate-700/80">
                   <span className="inline-flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {new Date(i.occurredAt).toLocaleString('tr-TR', {

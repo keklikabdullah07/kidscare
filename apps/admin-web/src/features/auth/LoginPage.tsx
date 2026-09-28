@@ -42,7 +42,7 @@ export function LoginPage(): JSX.Element {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0B1120] p-4 text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4 text-slate-900 dark:text-slate-100 transition-colors">
       <div className="w-full max-w-sm space-y-5">
         <div className="flex flex-col items-center justify-center gap-2">
           <KidsCareLogo size="lg" />
@@ -55,10 +55,10 @@ export function LoginPage(): JSX.Element {
         </div>
 
         {/* Quick Demo Credentials Helper */}
-        <div className="bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-2xl p-3.5 text-xs text-blue-900 dark:text-blue-200 flex items-center justify-between shadow-xs">
+        <div className="bg-teal-50/80 dark:bg-slate-800/80 border border-teal-200/80 dark:border-slate-700/80 rounded-2xl p-3.5 text-xs text-teal-900 dark:text-teal-200 flex items-center justify-between shadow-xs">
           <div>
             <span className="font-semibold">Demo Kreş:</span> slug{' '}
-            <code className="bg-white dark:bg-[#0B1120] px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-800 font-mono text-[11px] font-bold">
+            <code className="bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-teal-200 dark:border-slate-700 font-mono text-[11px] font-bold">
               demo
             </code>
           </div>
@@ -78,7 +78,7 @@ export function LoginPage(): JSX.Element {
 
         <form
           onSubmit={(e) => void handleSubmit(e)}
-          className="bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm p-6 space-y-4"
+          className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm p-6 space-y-4"
         >
           <label className="block">
             <span className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
@@ -94,7 +94,7 @@ export function LoginPage(): JSX.Element {
               pattern="[a-z0-9-]+"
               autoComplete="off"
               disabled={submitting}
-              className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#0B1120] px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-blue-900 dark:focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-blue-900 dark:focus:ring-amber-400 disabled:bg-slate-100 dark:disabled:bg-slate-800"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-teal-600 dark:focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-600 dark:focus:ring-teal-500 disabled:bg-slate-100 dark:disabled:bg-slate-800"
               placeholder="demo"
             />
           </label>
@@ -109,7 +109,7 @@ export function LoginPage(): JSX.Element {
               required
               autoComplete="username"
               disabled={submitting}
-              className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#0B1120] px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-blue-900 dark:focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-blue-900 dark:focus:ring-amber-400 disabled:bg-slate-100 dark:disabled:bg-slate-800"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-teal-600 dark:focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-600 dark:focus:ring-teal-500 disabled:bg-slate-100 dark:disabled:bg-slate-800"
               placeholder="admin@demo.test"
             />
           </label>
@@ -124,14 +124,14 @@ export function LoginPage(): JSX.Element {
               required
               autoComplete="current-password"
               disabled={submitting}
-              className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#0B1120] px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-blue-900 dark:focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-blue-900 dark:focus:ring-amber-400 disabled:bg-slate-100 dark:disabled:bg-slate-800"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-teal-600 dark:focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-600 dark:focus:ring-teal-500 disabled:bg-slate-100 dark:disabled:bg-slate-800"
               placeholder="••••••••"
             />
           </label>
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black font-bold rounded-xl py-2.5 text-sm transition-colors disabled:opacity-50 shadow-xs mt-2"
+            className="w-full bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white font-bold rounded-xl py-2.5 text-sm transition-colors disabled:opacity-50 shadow-xs mt-2"
           >
             {submitting ? 'Giriş yapılıyor…' : 'Giriş yap'}
           </button>
@@ -153,7 +153,7 @@ export function LoginPage(): JSX.Element {
           Kreşiniz yok mu?{' '}
           <Link
             to="/signup"
-            className="text-blue-900 dark:text-amber-400 font-bold hover:underline ml-1"
+            className="text-teal-900 dark:text-teal-300 font-bold hover:underline ml-1"
           >
             Kayıt ol
           </Link>

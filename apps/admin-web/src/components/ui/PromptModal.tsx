@@ -77,7 +77,7 @@ export function PromptModal({
         };
       default:
         return {
-          btn: 'bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black shadow-xs focus:ring-blue-500 dark:focus:ring-amber-500 font-semibold',
+          btn: 'bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white shadow-xs focus:ring-teal-500 dark:focus:ring-amber-500 font-semibold',
           iconBg: 'bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
           icon: <HelpCircle className="w-5 h-5" />,
         };
@@ -95,9 +95,9 @@ export function PromptModal({
       }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
     >
-      <div className="relative w-full max-w-md bg-white dark:bg-[#131E3A] rounded-2xl shadow-2xl border border-slate-200/80 dark:border-slate-700/60 overflow-hidden transform transition-all">
+      <div className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200/80 dark:border-slate-700 overflow-hidden transform transition-all">
         {/* Header */}
-        <div className="flex items-start justify-between p-5 pb-4 border-b border-slate-100 dark:border-slate-700/60">
+        <div className="flex items-start justify-between p-5 pb-4 border-b border-slate-100 dark:border-slate-700/80">
           <div className="flex items-center gap-3">
             <div className={`p-2.5 rounded-xl ${styles.iconBg}`}>{styles.icon}</div>
             <div>
@@ -105,14 +105,14 @@ export function PromptModal({
                 {title}
               </h3>
               {description && (
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{description}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">{description}</p>
               )}
             </div>
           </div>
           <button
             type="button"
             onClick={onCancel}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -123,7 +123,7 @@ export function PromptModal({
           {inputLabel !== undefined && (
             <div>
               {inputLabel && (
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
                   {inputLabel} {requireInput && <span className="text-rose-500">*</span>}
                 </label>
               )}
@@ -135,7 +135,7 @@ export function PromptModal({
                   onChange={(e) => setValue(e.target.value)}
                   placeholder={placeholder}
                   required={requireInput}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-[#0B1120] px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 dark:focus:ring-amber-500/30 dark:focus:border-amber-500 transition-all resize-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 dark:focus:ring-amber-500/30 dark:focus:border-amber-500 transition-all resize-none"
                 />
               ) : (
                 <input
@@ -145,7 +145,7 @@ export function PromptModal({
                   onChange={(e) => setValue(e.target.value)}
                   placeholder={placeholder}
                   required={requireInput}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-[#0B1120] px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 dark:focus:ring-amber-500/30 dark:focus:border-amber-500 transition-all"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 dark:focus:ring-amber-500/30 dark:focus:border-amber-500 transition-all"
                 />
               )}
             </div>
@@ -156,7 +156,7 @@ export function PromptModal({
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-colors cursor-pointer"
             >
               {cancelText}
             </button>

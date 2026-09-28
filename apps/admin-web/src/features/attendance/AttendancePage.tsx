@@ -36,34 +36,34 @@ const STATUS_CONFIG: Record<
     label: 'Giriş Yaptı (Mevcut)',
     icon: CheckCircle2,
     badgeClass:
-      'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+      'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80',
     lightBg:
-      'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-200/70 dark:border-emerald-800/50',
-    textClass: 'text-emerald-700 dark:text-emerald-400',
+      'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-200/70 dark:border-emerald-800/60',
+    textClass: 'text-emerald-700 dark:text-emerald-300',
   },
   LEFT: {
     label: 'Teslim Edildi (Ayrıldı)',
     icon: LogOut,
     badgeClass:
-      'bg-blue-50 dark:bg-blue-950/50 text-blue-900 dark:text-blue-200 border-blue-200 dark:border-blue-800',
-    lightBg: 'bg-blue-50/40 dark:bg-blue-950/30 border-blue-200/70 dark:border-blue-800/50',
+      'bg-blue-50 dark:bg-blue-950/50 text-teal-900 dark:text-teal-200 border-blue-200 dark:border-blue-800/80',
+    lightBg: 'bg-blue-50/40 dark:bg-blue-950/30 border-blue-200/70 dark:border-blue-800/60',
     textClass: 'text-blue-800 dark:text-blue-300',
   },
   EXCUSED: {
     label: 'İzinli / Raporlu',
     icon: Clock,
     badgeClass:
-      'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800',
-    lightBg: 'bg-amber-50/40 dark:bg-amber-950/20 border-amber-200/70 dark:border-amber-800/50',
-    textClass: 'text-amber-700 dark:text-amber-400',
+      'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800/80',
+    lightBg: 'bg-amber-50/40 dark:bg-amber-950/20 border-amber-200/70 dark:border-amber-800/60',
+    textClass: 'text-amber-700 dark:text-amber-300',
   },
   ABSENT: {
     label: 'Gelmedi',
     icon: MinusCircle,
     badgeClass:
-      'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700',
-    lightBg: 'bg-slate-50/80 dark:bg-[#131E3A] border-slate-200/80 dark:border-slate-700/60',
-    textClass: 'text-slate-600 dark:text-slate-400',
+      'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700',
+    lightBg: 'bg-slate-50/80 dark:bg-slate-850 border-slate-200/80 dark:border-slate-700/80',
+    textClass: 'text-slate-600 dark:text-slate-300',
   },
 };
 
@@ -242,14 +242,14 @@ export function AttendancePage(): JSX.Element {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-teal-900 dark:text-teal-300 flex items-center justify-center font-bold">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                 Giriş-Çıkış, Güvenlik & Yoklama
               </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
                 Öğrenci yoklama durumlarını kaydedin, pasaport yetkilisi doğrulamasıyla güvenli
                 teslimatı sağlayın.
               </p>
@@ -260,11 +260,11 @@ export function AttendancePage(): JSX.Element {
         {/* Date Selector & Fast Actions */}
         <div className="flex items-center gap-3 flex-wrap">
           {/* Date Picker Control */}
-          <div className="flex items-center gap-1.5 bg-white dark:bg-[#131E3A] border border-slate-200/80 dark:border-slate-700/60 p-1 rounded-xl shadow-xs">
+          <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 p-1 rounded-xl shadow-xs">
             <button
               type="button"
               onClick={() => changeDay(-1)}
-              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
               title="Önceki Gün"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -273,12 +273,12 @@ export function AttendancePage(): JSX.Element {
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="text-xs font-semibold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer"
+              className="text-xs font-semibold text-slate-800 dark:text-slate-100 bg-transparent px-2 py-1 outline-none cursor-pointer"
             />
             <button
               type="button"
               onClick={() => changeDay(1)}
-              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
               title="Sonraki Gün"
             >
               <ChevronRight className="w-4 h-4" />
@@ -287,7 +287,7 @@ export function AttendancePage(): JSX.Element {
               <button
                 type="button"
                 onClick={() => setSelectedDate(todayStr)}
-                className="text-[11px] font-semibold text-blue-900 dark:text-amber-300 hover:text-blue-800 bg-blue-50 dark:bg-amber-500/10 px-2 py-1 rounded-lg ml-1 transition"
+                className="text-[11px] font-semibold text-teal-900 dark:text-teal-300 hover:text-teal-800 bg-blue-50 dark:bg-amber-500/10 px-2 py-1 rounded-lg ml-1 transition"
               >
                 Bugün
               </button>
@@ -299,7 +299,7 @@ export function AttendancePage(): JSX.Element {
             type="button"
             disabled={bulkLoading || absentCount === 0}
             onClick={() => void handleMarkAllPresent()}
-            className="inline-flex items-center gap-2 bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black rounded-xl px-3.5 py-2 text-xs font-bold shadow-xs transition active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl px-3.5 py-2 text-xs font-bold shadow-xs transition active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
             title="Sınıftaki henüz gelmedi durumundaki tüm öğrencileri tek tıkla sınıfa al"
           >
             <CheckCheck className="w-4 h-4" />
@@ -328,12 +328,12 @@ export function AttendancePage(): JSX.Element {
           onClick={() => setStatusFilter('all')}
           className={`rounded-2xl border text-left p-4 transition-all shadow-xs ${
             statusFilter === 'all'
-              ? 'border-blue-900 bg-blue-900 text-white ring-2 ring-blue-800 dark:border-amber-500 dark:bg-amber-500 dark:text-black font-semibold'
-              : 'border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] hover:border-slate-300 dark:hover:border-slate-600 text-slate-900 dark:text-slate-100'
+              ? 'border-teal-700 bg-teal-700 text-white ring-2 ring-teal-600 dark:border-teal-600 dark:bg-teal-600 dark:text-white font-semibold'
+              : 'border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 text-slate-900 dark:text-white'
           }`}
         >
           <p
-            className={`text-xs font-medium ${statusFilter === 'all' ? 'text-blue-100 dark:text-black/80' : 'text-slate-500 dark:text-slate-400'}`}
+            className={`text-xs font-medium ${statusFilter === 'all' ? 'text-teal-100 dark:text-teal-100' : 'text-slate-500 dark:text-slate-300'}`}
           >
             Toplam Öğrenci
           </p>
@@ -350,7 +350,7 @@ export function AttendancePage(): JSX.Element {
           }`}
         >
           <p
-            className={`text-xs font-semibold flex items-center gap-1.5 ${statusFilter === 'PRESENT' ? 'text-emerald-100' : 'text-emerald-700 dark:text-emerald-400'}`}
+            className={`text-xs font-semibold flex items-center gap-1.5 ${statusFilter === 'PRESENT' ? 'text-emerald-100' : 'text-emerald-700 dark:text-emerald-300'}`}
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Mevcut (İçeride)</span>
@@ -363,12 +363,12 @@ export function AttendancePage(): JSX.Element {
           onClick={() => setStatusFilter('LEFT')}
           className={`rounded-2xl border text-left p-4 transition-all shadow-xs ${
             statusFilter === 'LEFT'
-              ? 'border-blue-800 bg-blue-900 text-white ring-2 ring-blue-700 dark:border-blue-600 dark:bg-blue-800'
-              : 'border-blue-200/80 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/30 hover:bg-blue-50 dark:hover:bg-blue-950/50 text-blue-900 dark:text-blue-200'
+              ? 'border-teal-700 bg-teal-700 text-white ring-2 ring-teal-600 dark:border-teal-600 dark:bg-teal-700'
+              : 'border-teal-200/80 dark:border-slate-700 bg-teal-50/50 dark:bg-slate-800/40 hover:bg-teal-50 dark:hover:bg-slate-800 text-teal-900 dark:text-teal-200'
           }`}
         >
           <p
-            className={`text-xs font-semibold flex items-center gap-1.5 ${statusFilter === 'LEFT' ? 'text-blue-100' : 'text-blue-800 dark:text-blue-300'}`}
+            className={`text-xs font-semibold flex items-center gap-1.5 ${statusFilter === 'LEFT' ? 'text-teal-100' : 'text-teal-800 dark:text-teal-300'}`}
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Teslim Edildi</span>
@@ -386,7 +386,7 @@ export function AttendancePage(): JSX.Element {
           }`}
         >
           <p
-            className={`text-xs font-semibold flex items-center gap-1.5 ${statusFilter === 'EXCUSED' ? 'text-amber-100' : 'text-amber-700 dark:text-amber-400'}`}
+            className={`text-xs font-semibold flex items-center gap-1.5 ${statusFilter === 'EXCUSED' ? 'text-amber-100' : 'text-amber-700 dark:text-amber-300'}`}
           >
             <Clock className="w-3.5 h-3.5" />
             <span>İzinli / Raporlu</span>
@@ -400,11 +400,11 @@ export function AttendancePage(): JSX.Element {
           className={`rounded-2xl border text-left p-4 transition-all shadow-xs ${
             statusFilter === 'ABSENT'
               ? 'border-slate-600 bg-slate-700 text-white ring-2 ring-slate-600'
-              : 'border-slate-200/80 dark:border-slate-700/60 bg-slate-50 dark:bg-[#131E3A] hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-800 dark:text-slate-200'
+              : 'border-slate-200/80 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200'
           }`}
         >
           <p
-            className={`text-xs font-semibold flex items-center gap-1.5 ${statusFilter === 'ABSENT' ? 'text-slate-200' : 'text-slate-600 dark:text-slate-400'}`}
+            className={`text-xs font-semibold flex items-center gap-1.5 ${statusFilter === 'ABSENT' ? 'text-slate-200' : 'text-slate-600 dark:text-slate-300'}`}
           >
             <MinusCircle className="w-3.5 h-3.5" />
             <span>Gelmedi</span>
@@ -414,7 +414,7 @@ export function AttendancePage(): JSX.Element {
       </div>
 
       {/* Filter & Search Toolbar */}
-      <div className="bg-white dark:bg-[#131E3A] p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white dark:bg-slate-800 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -422,27 +422,25 @@ export function AttendancePage(): JSX.Element {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Öğrenci veya veli adı ara..."
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 transition"
+            className="w-full pl-9 pr-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 transition"
           />
         </div>
 
         <div className="flex items-center justify-between sm:justify-end gap-3">
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+          <span className="text-xs text-slate-500 dark:text-slate-300 font-medium">
             Gösterilen:{' '}
-            <strong className="text-slate-800 dark:text-slate-200">
-              {filteredStudents.length}
-            </strong>{' '}
-            / {students.length}
+            <strong className="text-slate-800 dark:text-white">{filteredStudents.length}</strong> /{' '}
+            {students.length}
           </span>
 
-          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200/60 dark:border-slate-700">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-slate-200/60 dark:border-slate-700">
             <button
               type="button"
               onClick={() => setViewMode('table')}
               className={`p-1.5 rounded-md transition ${
                 viewMode === 'table'
-                  ? 'bg-white dark:bg-[#131E3A] shadow-xs text-blue-900 dark:text-amber-400'
-                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  ? 'bg-white dark:bg-slate-700 shadow-xs text-teal-900 dark:text-white'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white'
               }`}
               title="Tablo Görünümü"
             >
@@ -453,8 +451,8 @@ export function AttendancePage(): JSX.Element {
               onClick={() => setViewMode('grid')}
               className={`p-1.5 rounded-md transition ${
                 viewMode === 'grid'
-                  ? 'bg-white dark:bg-[#131E3A] shadow-xs text-blue-900 dark:text-amber-400'
-                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  ? 'bg-white dark:bg-slate-700 shadow-xs text-teal-900 dark:text-white'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white'
               }`}
               title="Kart Görünümü"
             >
@@ -466,22 +464,22 @@ export function AttendancePage(): JSX.Element {
 
       {/* Student Attendance List */}
       {loading ? (
-        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
-          <div className="inline-block w-8 h-8 border-3 border-blue-900 dark:border-amber-400 border-t-transparent rounded-full animate-spin mb-3"></div>
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+          <div className="inline-block w-8 h-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent rounded-full animate-spin mb-3"></div>
+          <p className="text-slate-500 dark:text-slate-300 text-sm font-medium">
             Yoklama listesi yükleniyor…
           </p>
         </div>
       ) : students.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
+        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
           <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+          <p className="text-slate-500 dark:text-slate-300 text-sm font-medium">
             Kayıtlı öğrenci bulunamadı.
           </p>
         </div>
       ) : filteredStudents.length === 0 ? (
-        <div className="text-center py-12 bg-white dark:bg-[#131E3A] rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
-          <p className="text-slate-500 dark:text-slate-400 text-sm">
+        <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+          <p className="text-slate-500 dark:text-slate-300 text-sm">
             Filtrelere uygun öğrenci bulunamadı.
           </p>
           <button
@@ -496,11 +494,11 @@ export function AttendancePage(): JSX.Element {
           </button>
         </div>
       ) : viewMode === 'table' ? (
-        <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#131E3A] shadow-xs overflow-hidden">
+        <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-700/60 bg-slate-50/80 dark:bg-slate-800/40 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/60 text-xs font-semibold text-slate-600 dark:text-slate-200">
                   <th className="py-3.5 px-4">Öğrenci</th>
                   <th className="py-3.5 px-4">Durum</th>
                   <th className="py-3.5 px-4">Giriş Saati</th>
@@ -508,7 +506,7 @@ export function AttendancePage(): JSX.Element {
                   <th className="py-3.5 px-4 text-right">Aksiyonlar</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-700/60 text-xs">
                 {filteredStudents.map((student) => {
                   const att = attendanceMap[student.id];
                   const status = att?.status ?? 'ABSENT';
@@ -518,24 +516,24 @@ export function AttendancePage(): JSX.Element {
                   return (
                     <tr
                       key={student.id}
-                      className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
+                      className="hover:bg-slate-50/70 dark:hover:bg-slate-700/40 transition-colors"
                     >
                       {/* Student Info */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-200 font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200/60 dark:border-blue-800/60">
+                          <div className="w-9 h-9 rounded-xl bg-teal-100 dark:bg-slate-800 text-teal-800 dark:text-teal-200 font-bold text-xs flex items-center justify-center shrink-0 border border-teal-200/60 dark:border-slate-700">
                             {student.firstName.charAt(0)}
                             {student.lastName.charAt(0)}
                           </div>
                           <div className="min-w-0 flex-1">
                             <div
-                              className="font-bold text-slate-900 dark:text-slate-100 text-sm truncate max-w-[200px]"
+                              className="font-bold text-slate-900 dark:text-white text-sm truncate max-w-[200px]"
                               title={`${student.firstName} ${student.lastName}`}
                             >
                               {student.firstName} {student.lastName}
                             </div>
                             <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                              <span className="text-slate-400 text-[11px] shrink-0">
+                              <span className="text-slate-500 dark:text-slate-300 text-[11px] shrink-0">
                                 {student.dateOfBirth}
                               </span>
                               {student.passport?.bloodType &&
@@ -571,17 +569,17 @@ export function AttendancePage(): JSX.Element {
                       <td className="py-3.5 px-4">
                         {att?.checkInTime ? (
                           <div>
-                            <span className="font-bold text-slate-900 dark:text-slate-100 tabular-nums">
+                            <span className="font-bold text-slate-900 dark:text-white tabular-nums">
                               {att.checkInTime}
                             </span>
                             {att.checkInBy && (
-                              <span className="text-slate-500 dark:text-slate-400 block text-[11px]">
+                              <span className="text-slate-500 dark:text-slate-300 block text-[11px]">
                                 Getiren: {att.checkInBy}
                               </span>
                             )}
                           </div>
                         ) : (
-                          <span className="text-slate-400">—</span>
+                          <span className="text-slate-400 dark:text-slate-300">—</span>
                         )}
                       </td>
 
@@ -589,9 +587,9 @@ export function AttendancePage(): JSX.Element {
                       <td className="py-3.5 px-4">
                         {att?.checkOutTime ? (
                           <div>
-                            <div className="font-bold text-slate-900 dark:text-slate-100">
+                            <div className="font-bold text-slate-900 dark:text-white">
                               <span className="tabular-nums">{att.checkOutTime}</span> ·{' '}
-                              <span className="text-blue-800 dark:text-blue-300">
+                              <span className="text-blue-800 dark:text-teal-300">
                                 {att.checkOutBy}
                               </span>
                             </div>
@@ -602,7 +600,7 @@ export function AttendancePage(): JSX.Element {
                             )}
                           </div>
                         ) : (
-                          <span className="text-slate-400">—</span>
+                          <span className="text-slate-400 dark:text-slate-300">—</span>
                         )}
                       </td>
 
@@ -624,7 +622,7 @@ export function AttendancePage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => setCheckoutStudent(student)}
-                              className="bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black px-3 py-1.5 rounded-lg font-bold text-xs shadow-xs flex items-center gap-1.5 transition active:scale-98"
+                              className="bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-3 py-1.5 rounded-lg font-bold text-xs shadow-xs flex items-center gap-1.5 transition active:scale-98"
                             >
                               <ShieldCheck className="w-3.5 h-3.5" />
                               <span>Teslim Et</span>
@@ -635,7 +633,7 @@ export function AttendancePage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => setCheckoutStudent(student)}
-                              className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1.5 rounded-lg font-medium text-xs transition"
+                              className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-2.5 py-1.5 rounded-lg font-medium text-xs transition"
                             >
                               Düzenle
                             </button>
@@ -657,7 +655,7 @@ export function AttendancePage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => void handleSetStatus(student, 'ABSENT')}
-                              className="bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/40 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg font-medium text-xs transition"
+                              className="bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg font-medium text-xs transition"
                               title="Gelmedi Olarak İşaretle"
                             >
                               Gelmedi
@@ -689,18 +687,18 @@ export function AttendancePage(): JSX.Element {
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                      <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-200 font-bold text-sm flex items-center justify-center shadow-xs border border-blue-200/60 dark:border-blue-800/60 shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-teal-100 dark:bg-slate-800 text-teal-800 dark:text-teal-200 font-bold text-sm flex items-center justify-center shadow-xs border border-teal-200/60 dark:border-slate-700 shrink-0">
                         {student.firstName.charAt(0)}
                         {student.lastName.charAt(0)}
                       </div>
                       <div className="min-w-0 flex-1">
                         <h4
-                          className="font-bold text-slate-900 dark:text-slate-100 text-sm truncate"
+                          className="font-bold text-slate-900 dark:text-white text-sm truncate"
                           title={`${student.firstName} ${student.lastName}`}
                         >
                           {student.firstName} {student.lastName}
                         </h4>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                        <p className="text-[11px] text-slate-500 dark:text-slate-300">
                           {student.dateOfBirth}
                         </p>
                       </div>
@@ -714,17 +712,17 @@ export function AttendancePage(): JSX.Element {
                   </div>
 
                   {/* Timing & pickup note */}
-                  <div className="mt-3 text-xs space-y-1 bg-white/80 dark:bg-[#131E3A] p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
-                    <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                  <div className="mt-3 text-xs space-y-1 bg-white/80 dark:bg-slate-900/60 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/80">
+                    <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
                       <span>Giriş:</span>
-                      <strong className="text-slate-900 dark:text-slate-100 tabular-nums">
+                      <strong className="text-slate-900 dark:text-white tabular-nums">
                         {att?.checkInTime || '—'}
                       </strong>
                     </div>
                     {att?.checkOutTime && (
-                      <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                      <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
                         <span>Çıkış:</span>
-                        <strong className="text-blue-900 dark:text-blue-300">
+                        <strong className="text-teal-900 dark:text-teal-300">
                           <span className="tabular-nums">{att.checkOutTime}</span> ({att.checkOutBy}
                           )
                         </strong>
@@ -734,7 +732,7 @@ export function AttendancePage(): JSX.Element {
                 </div>
 
                 {/* Grid Action Buttons */}
-                <div className="mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-2">
+                <div className="mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-700/80 flex items-center justify-between gap-2">
                   {status !== 'PRESENT' && status !== 'LEFT' && (
                     <button
                       type="button"
@@ -750,7 +748,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => setCheckoutStudent(student)}
-                      className="flex-1 bg-blue-900 hover:bg-blue-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-black py-1.5 rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition active:scale-98"
+                      className="flex-1 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white py-1.5 rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition active:scale-98"
                     >
                       <ShieldCheck className="w-3.5 h-3.5" />
                       <span>Teslim Et</span>
@@ -761,7 +759,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => setCheckoutStudent(student)}
-                      className="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 py-1.5 rounded-xl text-xs font-medium transition"
+                      className="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 py-1.5 rounded-xl text-xs font-medium transition"
                     >
                       Düzenle
                     </button>
@@ -770,7 +768,7 @@ export function AttendancePage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => void handleSetStatus(student, 'EXCUSED')}
-                    className="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60 text-xs font-medium transition"
+                    className="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/80 text-xs font-medium transition"
                     title="İzinli"
                   >
                     İzinli
@@ -779,7 +777,7 @@ export function AttendancePage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => void handleSetStatus(student, 'ABSENT')}
-                    className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 text-xs font-medium transition"
+                    className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-xs font-medium transition"
                     title="Gelmedi"
                   >
                     Gelmedi
