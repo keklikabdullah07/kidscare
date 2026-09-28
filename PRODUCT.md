@@ -30,7 +30,7 @@ Geleneksel, hantal ve karmaşık okul yönetim yazılımlarının aksine; KidsCa
 
 ## Capabilities and Constraints
 
-- **Web-Only İlkesi:** Platform yalnızca web paneli ve backend API üzerinden çalışır; harici mobil kod tabanına dokunulmaz.
+- **Platform Kapsamı:** Web Paneli (`apps/admin-web`), Mobil Uygulama (`apps/mobile` - Expo SDK 57) ve Backend API (`apps/api`).
 - **Multi-Tenancy:** Her kreş bağımsız `tenant_id` altında tam veri izolasyonuna sahiptir.
 - **Rol Yetkilendirmesi:** Her kullanıcı rolü (Admin, Teacher, Parent) kendine özel yetki ve arayüz hiyerarşisine sahiptir.
 - **Mevcut 15 Menü:** Dashboard, Öğrenciler, Sınıflar, Yoklama, Günlük Takip, Veli Portalı, Mesajlar, Talepler, Teslimat, İlaç, Olay Kayıtları, Yemek Listesi, Galeri, Ekip ve Ayarlar.

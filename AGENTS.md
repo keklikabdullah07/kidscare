@@ -60,24 +60,16 @@ constructor(private readonly prisma: PrismaService) {}
 
 ---
 
-## 4. Web-Only Geliştirme Kuralı
+## 4. Geliştirme Fazı: Faz 2 — Mobil Uygulama (`apps/mobile`)
 
-> **ZORUNLU KURAL:** Bu proje **sadece web paneli** (`apps/admin-web`) odaklıdır. Mobil uygulama (`apps/mobile`) ile ilgili **hiçbir şekilde** çalışma yapılmayacaktır.
+> **FAZ GÜNCELLEMESİ:** Web yönetim paneli (`apps/admin-web`) MVP aşaması başarıyla tamamlanmış ve canlıya alınmıştır. Kullanıcı kararıyla **Faz 2: Mobil Uygulama (`apps/mobile`)** geliştirme aşamasına geçilmiştir.
 
 **Geliştirme Kapsamı:**
 
-- ✅ Backend API geliştirme ve test
-- ✅ Web paneli geliştirme (tam feature + UI + test)
-- ❌ Mobil uygulama geliştirme (kesinlikle YASAK)
-- ❌ Mobil uygulama testleri (kesinlikle YASAK)
-- ❌ Mobil uygulama kod değişiklikleri (kesinlikle YASAK)
-
-**Neden Web-Only?**
-
-- Bu proje web yönetim paneli odaklıdır
-- Mobil uygulama farklı bir proje olarak ele alınmalı
-- Web paneli tamamlanmadan mobil'e geçilmeyecek
-- Mobil uygulama ihtiyacı olduğunda ayrı proje başlatılacak
+- ✅ Mobil uygulama geliştirme (`apps/mobile` — Expo SDK 57 + React Native 0.86)
+- ✅ Backend API geliştirme, entegrasyon ve mobil endpoint testleri (`apps/api`)
+- ✅ Ortak paketler (`packages/shared-types`, `packages/shared-schemas`)
+- ✅ Web paneli koruma ve bakım (`apps/admin-web`)
 
 ---
 
