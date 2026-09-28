@@ -255,8 +255,10 @@ export function Layout(): JSX.Element {
 
   const displayName = (() => {
     if (userEmail && userEmail.includes('@')) {
-      const prefix = userEmail.split('@')[0];
-      return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+      const prefix = userEmail.split('@')[0] ?? '';
+      if (prefix) {
+        return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+      }
     }
     const roleLabels: Record<string, string> = {
       SUPERADMIN: 'Süper Admin',

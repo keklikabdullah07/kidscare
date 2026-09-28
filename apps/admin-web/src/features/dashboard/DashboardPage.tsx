@@ -98,8 +98,10 @@ export function DashboardPage(): JSX.Element {
     if (state.status !== 'authenticated') return 'Öğretmen';
     const email = state.user.email;
     if (email && email.includes('@')) {
-      const prefix = email.split('@')[0];
-      return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+      const prefix = email.split('@')[0] ?? '';
+      if (prefix) {
+        return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+      }
     }
     const roleLabels: Record<string, string> = {
       SUPERADMIN: 'Süper Admin',

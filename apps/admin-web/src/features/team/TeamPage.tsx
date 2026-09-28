@@ -4,7 +4,7 @@ import { UserPlus, Users, RefreshCw, Mail, CheckCircle2 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { inviteUser, listUsers } from '../../api/users';
 import { useToast } from '../../components/Toast';
-import { Badge } from '../../components/ui/Badge';
+import { Badge, type BadgeVariant } from '../../components/ui/Badge';
 
 type Status = 'loading' | 'ready' | 'error';
 
@@ -15,9 +15,9 @@ const roleLabels: Record<string, string> = {
   PARENT: 'Öğrenci Velisi',
 };
 
-const roleVariants: Record<string, 'primary' | 'info' | 'warning' | 'default'> = {
-  SUPER_ADMIN: 'primary',
-  ADMIN: 'primary',
+const roleVariants: Record<string, BadgeVariant> = {
+  SUPER_ADMIN: 'brand',
+  ADMIN: 'brand',
   TEACHER: 'info',
   PARENT: 'warning',
 };
@@ -196,7 +196,7 @@ export function TeamPage(): JSX.Element {
           {status === 'ready' && users.length > 0 && (
             <ul className="divide-y divide-slate-100 dark:divide-slate-700">
               {users.map((u) => {
-                const variant = roleVariants[u.role] ?? 'default';
+                const variant = roleVariants[u.role] ?? 'neutral';
                 const initial = (u.email.charAt(0) || 'U').toUpperCase();
 
                 return (
