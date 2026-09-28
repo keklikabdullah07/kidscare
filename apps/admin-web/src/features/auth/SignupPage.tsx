@@ -118,12 +118,12 @@ export function SignupPage(): JSX.Element {
       </div>
 
       {/* Main Split Layout Container */}
-      <div className="w-full max-w-6xl mx-auto my-auto z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center py-6 sm:py-10">
-        {/* LEFT COLUMN: Kocaman KidsCare Logo & Brand Showcase */}
-        <div className="lg:col-span-6 xl:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 lg:pr-4">
+      <div className="w-full max-w-6xl mx-auto my-auto z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center py-4 sm:py-8 lg:py-10">
+        {/* LEFT COLUMN: Kocaman KidsCare Logo & Brand Showcase (Desktop only) */}
+        <div className="hidden lg:flex lg:col-span-6 xl:col-span-7 flex-col items-start text-left space-y-6 pr-4">
           {/* Kocaman Logo Badge with Ambient Glow */}
           <div className="relative group">
-            <div className="w-32 h-32 sm:w-44 sm:h-44 lg:w-56 lg:h-56 rounded-3xl sm:rounded-4xl bg-white dark:bg-[#131B2E] p-4 sm:p-6 lg:p-7 shadow-xl dark:shadow-2xl border border-teal-100/90 dark:border-slate-700/80 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+            <div className="w-52 h-52 xl:w-56 xl:h-56 rounded-4xl bg-white dark:bg-[#131B2E] p-6 lg:p-7 shadow-2xl border border-teal-100/90 dark:border-slate-700/80 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
               <img
                 src="/brand/kidscare-icon.png"
                 alt="KidsCare Logo"
@@ -142,8 +142,8 @@ export function SignupPage(): JSX.Element {
               <span>Dakikalar İçinde Kurulum</span>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
-              <span className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
                 Kids<span className="text-teal-700 dark:text-teal-400">Care</span>
               </span>
               <span className="text-xs uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
@@ -151,14 +151,14 @@ export function SignupPage(): JSX.Element {
               </span>
             </div>
 
-            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+            <p className="text-base text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
               Kreşinizi KidsCare bulut platformuna taşıyın. Öğrenci, veli ve öğretmen yönetimini tek
               bir modern merkezden yürütün.
             </p>
           </div>
 
           {/* Highlights */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg pt-1 text-left">
+          <div className="grid grid-cols-2 gap-3 w-full max-w-lg pt-1 text-left">
             <div className="p-3.5 rounded-2xl bg-white/80 dark:bg-[#131B2E]/80 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-400 flex items-center justify-center shrink-0">
                 <CheckCircle2 className="w-5 h-5" />
@@ -189,15 +189,37 @@ export function SignupPage(): JSX.Element {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Signup Card Form */}
+        {/* RIGHT COLUMN: Focused Signup Card */}
         <div className="lg:col-span-6 xl:col-span-5 w-full max-w-[430px] mx-auto">
+          {/* Mobile-only clean brand mark */}
+          <div className="lg:hidden flex flex-col items-center justify-center text-center mb-5">
+            <div className="w-18 h-18 rounded-2xl bg-white dark:bg-[#131B2E] p-3 shadow-md border border-teal-100/90 dark:border-slate-700/80 flex items-center justify-center mb-2.5">
+              <img
+                src="/brand/kidscare-icon.png"
+                alt="KidsCare Logo"
+                className="w-full h-full object-contain filter drop-shadow-sm"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                Kids<span className="text-teal-700 dark:text-teal-400">Care</span>
+              </span>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
+                Kayıt
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+              Yeni Kreş Portalı Kaydı
+            </p>
+          </div>
+
           <div className="rounded-3xl bg-white dark:bg-[#131B2E] border border-slate-200/90 dark:border-slate-700/80 shadow-xl dark:shadow-2xl dark:shadow-black/50 p-6 sm:p-8 space-y-5">
             {/* Card Header */}
             <div>
-              <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+              <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight text-center lg:text-left">
                 Yeni Kreş Hesabı
               </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 text-center lg:text-left">
                 Kurumunuzu KidsCare ailesine dahil edin
               </p>
             </div>
