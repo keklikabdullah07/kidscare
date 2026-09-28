@@ -19,10 +19,10 @@ export function KidsCareLogo({
 }: KidsCareLogoProps): JSX.Element {
   if (variant === 'horizontal') {
     const hSizes = {
-      sm: 'h-7',
-      md: 'h-9',
-      lg: 'h-12',
-      xl: 'h-16',
+      sm: 'h-8',
+      md: 'h-11',
+      lg: 'h-16',
+      xl: 'h-20',
     };
     return (
       <div className={`inline-flex items-center ${className}`}>
@@ -37,10 +37,10 @@ export function KidsCareLogo({
 
   if (variant === 'full') {
     const fSizes = {
-      sm: 'h-14',
-      md: 'h-20',
-      lg: 'h-28',
-      xl: 'h-36',
+      sm: 'h-16',
+      md: 'h-24',
+      lg: 'h-32',
+      xl: 'h-40',
     };
     return (
       <div className={`inline-flex flex-col items-center ${className}`}>
@@ -54,10 +54,10 @@ export function KidsCareLogo({
   }
 
   const sizeMap = {
-    sm: { box: 'w-8 h-8 p-1', text: 'text-base', sub: 'text-[10px]' },
-    md: { box: 'w-10 h-10 p-1.5', text: 'text-lg', sub: 'text-xs' },
-    lg: { box: 'w-14 h-14 p-2', text: 'text-2xl', sub: 'text-sm' },
-    xl: { box: 'w-20 h-20 p-2.5', text: 'text-3xl', sub: 'text-base' },
+    sm: { box: 'w-11 h-11 p-1', text: 'text-base', sub: 'text-[10px]' },
+    md: { box: 'w-16 h-16 p-1', text: 'text-2xl', sub: 'text-xs' },
+    lg: { box: 'w-20 h-20 p-1.5', text: 'text-3xl', sub: 'text-sm' },
+    xl: { box: 'w-28 h-28 p-2', text: 'text-4xl', sub: 'text-base' },
   };
 
   const { box, text, sub } = sizeMap[size];

@@ -284,14 +284,20 @@ export function Layout(): JSX.Element {
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200/80 dark:border-slate-700/80 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 sm:w-64 bg-white dark:bg-slate-900 border-r border-slate-200/80 dark:border-slate-700/80 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="overflow-y-auto flex-1">
           {/* Brand Header with Authentic Logo */}
-          <div className="h-18 px-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-700/80 sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs z-10">
-            <KidsCareLogo size="md" showText={true} />
+          <div className="h-20 px-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-700/80 sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs z-10">
+            <NavLink
+              to="/"
+              className="flex items-center group focus:outline-hidden"
+              title="KidsCare Ana Sayfa"
+            >
+              <KidsCareLogo size="md" showText={true} />
+            </NavLink>
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
@@ -378,7 +384,7 @@ export function Layout(): JSX.Element {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 md:pl-64">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-30 h-18 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-700/80 px-4 sm:px-6 flex items-center justify-between">
+        <header className="sticky top-0 z-30 h-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-700/80 px-4 sm:px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -388,7 +394,12 @@ export function Layout(): JSX.Element {
             >
               <Menu className="w-5 h-5" />
             </button>
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/80 px-3.5 py-1.5 rounded-full border border-slate-200/70 dark:border-slate-700/80 shadow-2xs">
+            <div className="md:hidden">
+              <NavLink to="/" className="flex items-center focus:outline-hidden">
+                <KidsCareLogo size="sm" showText={true} />
+              </NavLink>
+            </div>
+            <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/80 px-3.5 py-1.5 rounded-full border border-slate-200/70 dark:border-slate-700/80 shadow-2xs">
               <Calendar className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
               <span>{getTodayFormatted()}</span>
             </div>
