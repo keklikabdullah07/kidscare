@@ -1,5 +1,5 @@
 import { useState, type JSX } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import {
   Users,
   CheckCircle2,
@@ -22,7 +22,6 @@ import {
   ClipboardList,
   AlertTriangle,
   Award,
-  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
@@ -246,33 +245,13 @@ function getRoleBadge(role: string): { label: string; variant: BadgeVariant } {
 }
 
 export function Layout(): JSX.Element {
-  const { state, login, logout } = useAuth();
+  const { state, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
-  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isSwitchingRole, setIsSwitchingRole] = useState(false);
 
   const userRole = state.status === 'authenticated' ? state.user.role : '';
   const userEmail = state.status === 'authenticated' ? state.user.email : '';
   const roleBadge = getRoleBadge(userRole);
-
-  async function handleSwitchRole(role: 'ADMIN' | 'TEACHER' | 'PARENT') {
-    if (userRole === role || isSwitchingRole) return;
-    setIsSwitchingRole(true);
-    const creds = {
-      ADMIN: { email: 'admin@demo.test', pass: 'demo1234', to: '/dashboard' },
-      TEACHER: { email: 'teacher@demo.test', pass: 'demo1234', to: '/dashboard' },
-      PARENT: { email: 'parent@demo.test', pass: 'demo1234', to: '/portal' },
-    }[role];
-    try {
-      await login('demo', creds.email, creds.pass);
-      void navigate(creds.to, { replace: true });
-    } catch {
-      // ignore
-    } finally {
-      setIsSwitchingRole(false);
-    }
-  }
 
   const displayName = (() => {
     if (userEmail && userEmail.includes('@')) {
@@ -369,38 +348,6 @@ export function Layout(): JSX.Element {
               </div>
             ))}
           </div>
-
-          {/* Mobile Quick Role Switcher */}
-          <div className="p-3 mx-3 my-2 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/80 sm:hidden">
-            <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-amber-500" />
-              Hızlı Rol Değiştir:
-            </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(['ADMIN', 'TEACHER', 'PARENT'] as const).map((r) => {
-                const isCurrent = userRole === r;
-                const label = r === 'ADMIN' ? 'Müdür' : r === 'TEACHER' ? 'Öğretmen' : 'Veli';
-                return (
-                  <button
-                    key={r}
-                    type="button"
-                    disabled={isSwitchingRole}
-                    onClick={() => {
-                      void handleSwitchRole(r);
-                      setMobileOpen(false);
-                    }}
-                    className={`py-1.5 px-2 rounded-xl text-xs font-bold text-center transition ${
-                      isCurrent
-                        ? 'bg-teal-700 text-white shadow-2xs'
-                        : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
         </div>
 
         {/* User Card & Logout */}
@@ -458,37 +405,10 @@ export function Layout(): JSX.Element {
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
-            {/* Quick Demo Role Switcher: Müdür, Öğretmen, Veli */}
-            <div className="hidden sm:flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-              <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 px-2 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                Rol:
-              </span>
-              {(['ADMIN', 'TEACHER', 'PARENT'] as const).map((r) => {
-                const isCurrent = userRole === r;
-                const label = r === 'ADMIN' ? 'Müdür' : r === 'TEACHER' ? 'Öğretmen' : 'Veli';
-                return (
-                  <button
-                    key={r}
-                    type="button"
-                    disabled={isSwitchingRole}
-                    onClick={() => void handleSwitchRole(r)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      isCurrent
-                        ? 'bg-teal-700 text-white shadow-2xs dark:bg-teal-600'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/70 dark:hover:bg-slate-700/70'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="hidden xl:flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 rounded-full font-semibold">
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 rounded-full font-semibold">
               <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
-              Sistem Aktif
+              Sistem Aktif & Güvenli
             </div>
             <button
               type="button"
