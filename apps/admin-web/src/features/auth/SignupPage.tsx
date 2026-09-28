@@ -20,7 +20,16 @@ function useSafeTheme() {
   try {
     return useTheme();
   } catch {
-    return null;
+    return {
+      isDark:
+        typeof document !== 'undefined' && document.documentElement.classList.contains('dark'),
+      toggleTheme: () => {
+        if (typeof document !== 'undefined') {
+          const isDark = document.documentElement.classList.toggle('dark');
+          localStorage.setItem('kidscare_theme_v2', isDark ? 'dark' : 'light');
+        }
+      },
+    };
   }
 }
 
@@ -64,7 +73,30 @@ export function SignupPage(): JSX.Element {
         className="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-500/10 dark:bg-amber-500/12 rounded-full blur-3xl pointer-events-none"
       />
 
-      {/* Top Header Toolbar: Theme Toggle */}
+      {/* Floating Theme Toggle (Always visible in top right) */}
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          type="button"
+          onClick={theme.toggleTheme}
+          className="px-3.5 py-2 rounded-2xl bg-white/95 dark:bg-slate-800/95 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700/80 shadow-md backdrop-blur-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-200 active:scale-95 flex items-center gap-2 text-xs font-bold cursor-pointer"
+          title={theme.isDark ? 'Açık Moda Geç' : 'Koyu Moda Geç'}
+          aria-label={theme.isDark ? 'Açık Moda Geç' : 'Koyu Moda Geç'}
+        >
+          {theme.isDark ? (
+            <>
+              <Sun className="w-4 h-4 text-amber-400" />
+              <span>Açık Mod</span>
+            </>
+          ) : (
+            <>
+              <Moon className="w-4 h-4 text-teal-700" />
+              <span>Koyu Mod</span>
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Top Header Toolbar */}
       <div className="w-full max-w-5xl mx-auto flex items-center justify-between z-10 py-1">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-white dark:bg-slate-800 p-1.5 shadow-2xs border border-teal-100/80 dark:border-slate-700/80 flex items-center justify-center">
@@ -81,28 +113,6 @@ export function SignupPage(): JSX.Element {
             Kids<span className="text-teal-700 dark:text-teal-400">Care</span>
           </span>
         </div>
-
-        {theme && (
-          <button
-            type="button"
-            onClick={theme.toggleTheme}
-            className="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs hover:bg-slate-50 dark:hover:bg-slate-700/60 transition active:scale-95 flex items-center gap-1.5 text-xs font-semibold"
-            title={theme.isDark ? 'Açık Mod' : 'Koyu Mod'}
-            aria-label={theme.isDark ? 'Açık Moda Geç' : 'Koyu Moda Geç'}
-          >
-            {theme.isDark ? (
-              <>
-                <Sun className="w-4 h-4 text-amber-400" />
-                <span className="hidden sm:inline">Açık</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-4 h-4 text-teal-700" />
-                <span className="hidden sm:inline">Koyu</span>
-              </>
-            )}
-          </button>
-        )}
       </div>
 
       {/* Main Signup Card */}
