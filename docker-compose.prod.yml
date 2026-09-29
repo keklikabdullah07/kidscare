@@ -43,9 +43,9 @@ services:
       NODE_ENV: production
       PORT: 3000
       CORS_ALLOWED_ORIGINS: '*'
-      DATABASE_URL: ${DATABASE_URL:-postgresql://kidscare_migrator:migrator_pw@postgres:5432/kidscare?schema=public}
-      DATABASE_APP_URL: ${DATABASE_APP_URL:-postgresql://kidscare_app:app_pw@postgres:5432/kidscare?schema=public}
-      DATABASE_AUTH_LOOKUP_URL: ${DATABASE_AUTH_LOOKUP_URL:-postgresql://kidscare_auth_lookup:auth_pw@postgres:5432/kidscare?schema=public}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:kidscare_secure_pass_2026@postgres:5432/kidscare?schema=public}
+      DATABASE_APP_URL: ${DATABASE_APP_URL:-postgresql://postgres:kidscare_secure_pass_2026@postgres:5432/kidscare?schema=public}
+      DATABASE_AUTH_LOOKUP_URL: ${DATABASE_AUTH_LOOKUP_URL:-postgresql://postgres:kidscare_secure_pass_2026@postgres:5432/kidscare?schema=public}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       JWT_SECRET: ${JWT_SECRET:-kidscare_super_secret_jwt_key_2026}
     expose:

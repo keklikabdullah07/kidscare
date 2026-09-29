@@ -23,5 +23,5 @@ EXPOSE 3000
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Run migrations, optional initial seed, and start the NestJS API
-CMD ["sh", "-c", "pnpm --filter @kidscare/database prisma migrate deploy && (pnpm --filter @kidscare/database prisma db seed || true) && pnpm --filter @kidscare/api start"]
+# Ensure DB roles, run migrations, optional initial seed, and start the NestJS API
+CMD ["sh", "-c", "pnpm --filter @kidscare/database db:ensure-roles && pnpm --filter @kidscare/database prisma migrate deploy && (pnpm --filter @kidscare/database prisma db seed || true) && pnpm --filter @kidscare/api start"]
