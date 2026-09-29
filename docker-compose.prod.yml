@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kidscare-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kidscare_secure_pass_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-kidscare}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: kidscare-redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: kidscare-api
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-kidscare_secure_pass_2026}@postgres:5432/${POSTGRES_DB:-kidscare}?schema=public
+      DATABASE_APP_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-kidscare_secure_pass_2026}@postgres:5432/${POSTGRES_DB:-kidscare}?schema=public
+      DATABASE_AUTH_LOOKUP_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-kidscare_secure_pass_2026}@postgres:5432/${POSTGRES_DB:-kidscare}?schema=public
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-kidscare_super_secret_jwt_key_2026}
+    ports:
+      - '3000:3000'
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/admin-web/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-https://api.kidscare.muhammedarslan.net}
+    container_name: kidscare-web
+    restart: always
+    depends_on:
+      - api
+    ports:
+      - '8080:80'
+
+volumes:
+  postgres_data:
+  redis_data:

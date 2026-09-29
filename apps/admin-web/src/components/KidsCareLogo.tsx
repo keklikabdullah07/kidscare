@@ -26,11 +26,13 @@ export function KidsCareLogo({
     };
     return (
       <div className={`inline-flex items-center ${className}`}>
-        <img
-          src="/brand/kidscare-logo-horizontal.png"
-          alt="KidsCare"
-          className={`${hSizes[size]} w-auto object-contain dark:brightness-110`}
-        />
+        <div className="px-2.5 py-1 rounded-xl bg-transparent dark:bg-[#FAF8F5] dark:border dark:border-amber-200/30 dark:shadow-xs transition-colors">
+          <img
+            src="/brand/kidscare-logo-horizontal.png"
+            alt="KidsCare"
+            className={`${hSizes[size]} w-auto object-contain`}
+          />
+        </div>
       </div>
     );
   }
@@ -44,11 +46,13 @@ export function KidsCareLogo({
     };
     return (
       <div className={`inline-flex flex-col items-center ${className}`}>
-        <img
-          src="/brand/kidscare-logo-full.png"
-          alt="KidsCare"
-          className={`${fSizes[size]} w-auto object-contain dark:brightness-110`}
-        />
+        <div className="p-3 rounded-2xl bg-transparent dark:bg-[#FAF8F5] dark:border dark:border-amber-200/30 dark:shadow-xs transition-colors">
+          <img
+            src="/brand/kidscare-logo-full.png"
+            alt="KidsCare"
+            className={`${fSizes[size]} w-auto object-contain`}
+          />
+        </div>
       </div>
     );
   }
@@ -64,9 +68,9 @@ export function KidsCareLogo({
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      {/* Brand Icon Mark with Authentic Logo Image */}
+      {/* Brand Icon Mark with Authentic Logo Image and Soft Cream/Kırık Beyaz Contrast */}
       <div
-        className={`${box} rounded-2xl bg-white dark:bg-slate-800 shadow-xs border border-teal-100/80 dark:border-slate-700/80 flex items-center justify-center shrink-0 overflow-hidden relative group`}
+        className={`${box} rounded-2xl bg-white dark:bg-[#FAF8F5] shadow-xs border border-teal-100/80 dark:border-amber-200/40 flex items-center justify-center shrink-0 overflow-hidden relative group transition-colors`}
       >
         <img
           src="/brand/kidscare-icon.png"

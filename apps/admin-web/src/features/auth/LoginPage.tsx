@@ -152,7 +152,7 @@ export function LoginPage(): JSX.Element {
         <div className="hidden lg:flex lg:col-span-6 xl:col-span-7 flex-col items-start text-left space-y-6 pr-4">
           {/* Kocaman Logo Badge with Ambient Glow */}
           <div className="relative group">
-            <div className="w-52 h-52 xl:w-56 xl:h-56 rounded-4xl bg-white dark:bg-[#131B2E] p-6 lg:p-7 shadow-2xl border border-teal-100/90 dark:border-slate-700/80 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+            <div className="w-52 h-52 xl:w-56 xl:h-56 rounded-4xl bg-white dark:bg-[#FAF8F5] p-6 lg:p-7 shadow-2xl border border-teal-100/90 dark:border-amber-200/40 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
               <img
                 src="/brand/kidscare-icon.png"
                 alt="KidsCare Logo"
@@ -163,7 +163,7 @@ export function LoginPage(): JSX.Element {
               />
             </div>
             {/* Ambient decorative blur behind badge */}
-            <div className="absolute inset-0 bg-teal-500/20 dark:bg-teal-400/10 rounded-4xl blur-2xl -z-10 group-hover:bg-teal-500/30 transition-colors pointer-events-none" />
+            <div className="absolute inset-0 bg-teal-500/20 dark:bg-amber-400/15 rounded-4xl blur-2xl -z-10 group-hover:bg-teal-500/30 transition-colors pointer-events-none" />
           </div>
 
           <div className="space-y-3 max-w-lg">
@@ -223,7 +223,7 @@ export function LoginPage(): JSX.Element {
         <div className="lg:col-span-6 xl:col-span-5 w-full max-w-[430px] mx-auto">
           {/* Mobile-only clean brand mark */}
           <div className="lg:hidden flex flex-col items-center justify-center text-center mb-5">
-            <div className="w-18 h-18 rounded-2xl bg-white dark:bg-[#131B2E] p-3 shadow-md border border-teal-100/90 dark:border-slate-700/80 flex items-center justify-center mb-2.5">
+            <div className="w-18 h-18 rounded-2xl bg-white dark:bg-[#FAF8F5] p-3 shadow-md border border-teal-100/90 dark:border-amber-200/40 flex items-center justify-center mb-2.5">
               <img
                 src="/brand/kidscare-icon.png"
                 alt="KidsCare Logo"
