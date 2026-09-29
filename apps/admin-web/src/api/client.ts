@@ -31,7 +31,8 @@ export function setStoredToken(token: string | null): void {
 function resolveBaseUrl(): string {
   if (import.meta.env.DEV) return '';
   const envUrl = import.meta.env.VITE_API_URL as string | undefined;
-  return envUrl && envUrl.trim().length > 0 ? envUrl.trim() : 'https://kidscare-api.onrender.com';
+  if (envUrl && envUrl.trim().length > 0) return envUrl.trim().replace(/\/$/, '');
+  return '/api';
 }
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
