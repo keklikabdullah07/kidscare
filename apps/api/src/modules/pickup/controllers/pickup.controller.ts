@@ -83,7 +83,7 @@ export class PickupController {
 
   // ===== Authorizations =====
   @Get('authorizations')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async listAuthorizations(
     @CurrentTenantId() tenantId: string,
     @Query('studentId') studentId?: string,
@@ -107,7 +107,7 @@ export class PickupController {
   }
 
   @Patch('authorizations/:id/review')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async reviewAuthorization(
     @CurrentTenantId() tenantId: string,
     @CurrentUser() user: CurrentUserPayload,

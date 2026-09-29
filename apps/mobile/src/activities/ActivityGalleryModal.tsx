@@ -14,6 +14,7 @@ import type { ActivityPost } from '@kidscare/shared-types';
 import { deleteActivity, getActivities } from '../api/activities';
 import { ActivityCard } from './ActivityCard';
 import { CreateActivityModal } from './CreateActivityModal';
+import { colors } from '../theme';
 
 export interface ActivityGalleryModalProps {
   visible: boolean;
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     color: '#0F172A',
   },
   addBtn: {
-    backgroundColor: '#4F46E5',
+    backgroundColor: colors.primary,
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 16,
@@ -221,6 +222,9 @@ const styles = StyleSheet.create({
   filterScroll: {
     paddingHorizontal: 16,
     gap: 8,
+    maxWidth: 720,
+    width: '100%',
+    alignSelf: 'center',
   },
   filterChip: {
     paddingHorizontal: 14,
@@ -229,7 +233,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9',
   },
   filterChipActive: {
-    backgroundColor: '#0F172A',
+    backgroundColor: colors.primary,
   },
   filterChipText: {
     fontSize: 13,
@@ -242,6 +246,9 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
     paddingBottom: 40,
+    maxWidth: 720,
+    width: '100%',
+    alignSelf: 'center',
   },
   centerBox: {
     flex: 1,

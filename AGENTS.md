@@ -90,7 +90,7 @@ Varsayılan Seed Kullanıcıları:
 - ❌ Asla `any` tipi kullanmayın.
 - ❌ Asla aynı DTO veya tipi `shared-types` dışına kopyalayıp mükerrer tanımlamayın.
 - ❌ Asla Controller içinde doğrudan Prisma sorgusu yazmayın (Repository üzerinden geçilmelidir).
-- ❌ Asla mobil uygulama (`apps/mobile`) üzerinde çalışmayın (Web-Only kuralı).
+- ❌ Asla onaylanmamış harici kütüphaneler eklemeyin.
 
 ---
 

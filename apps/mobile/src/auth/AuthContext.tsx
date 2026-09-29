@@ -10,7 +10,7 @@ import {
 } from 'react';
 import type { AuthResponse, AuthenticatedUser } from '@kidscare/shared-types';
 import * as authApi from '../api/auth';
-import { ApiError, setStoredToken } from '../api/client';
+import { ApiError, getStoredToken, setStoredToken } from '../api/client';
 
 type AuthState =
   | { status: 'loading' }
@@ -36,9 +36,18 @@ export function AuthProvider({ children }: { children: ReactNode }): ReactElemen
 
   useEffect(() => {
     let cancelled = false;
-    authApi
-      .me()
-      .then((ctx) => {
+
+    async function checkSession() {
+      try {
+        const token = await getStoredToken();
+        if (!token) {
+          if (!cancelled) {
+            setState({ status: 'unauthenticated', error: null });
+          }
+          return;
+        }
+
+        const ctx = await authApi.me();
         if (cancelled) return;
         setState({
           status: 'authenticated',
@@ -48,16 +57,19 @@ export function AuthProvider({ children }: { children: ReactNode }): ReactElemen
             email: '',
             role: ctx.role as AuthenticatedUser['role'],
           },
-          token: '',
+          token,
         });
-      })
-      .catch(async (err: unknown) => {
+      } catch (err: unknown) {
         if (cancelled) return;
-        if (err instanceof ApiError && err.status === 401) {
+        if (err instanceof ApiError && (err.status === 401 || err.status === 403)) {
           await setStoredToken(null);
         }
         setState({ status: 'unauthenticated', error: null });
-      });
+      }
+    }
+
+    void checkSession();
+
     return () => {
       cancelled = true;
     };

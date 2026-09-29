@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import type { ActivityPost } from '@kidscare/shared-types';
 import { createActivity } from '../api/activities';
+import { colors } from '../theme';
 
 export interface CreateActivityModalProps {
   visible: boolean;
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
     color: '#0F172A',
   },
   saveBtn: {
-    backgroundColor: '#4F46E5',
+    backgroundColor: colors.primary,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
@@ -279,6 +280,9 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     paddingBottom: 40,
+    maxWidth: 640,
+    width: '100%',
+    alignSelf: 'center',
   },
   label: {
     fontSize: 14,

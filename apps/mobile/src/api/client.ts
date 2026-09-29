@@ -17,8 +17,11 @@ export async function getCustomBaseUrl(): Promise<string | null> {
     runtimeBaseUrl = stored;
     return stored;
   }
-  await AsyncStorage.removeItem(CUSTOM_URL_KEY);
-  runtimeBaseUrl = 'https://kidscare-api.onrender.com';
+  if (stored) {
+    await AsyncStorage.removeItem(CUSTOM_URL_KEY);
+  }
+  const envUrl = process.env.EXPO_PUBLIC_API_URL;
+  runtimeBaseUrl = envUrl || 'https://kidscare-api.onrender.com';
   return runtimeBaseUrl;
 }
 

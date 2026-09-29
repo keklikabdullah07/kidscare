@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -11,36 +11,65 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import type { Attendance, AttendanceStatus, Student } from '@kidscare/shared-types';
 import { getAttendanceByDate } from '../api/attendance';
 import { ApiError } from '../api/client';
 import { createStudent, deleteStudent, listStudents } from '../api/students';
 import { ActivityGalleryModal } from '../activities/ActivityGalleryModal';
 import { AttendanceCheckModal } from '../attendance/AttendanceCheckModal';
-import { useAuth } from '../auth/AuthContext';
 import { DailyMenuModal } from '../daily-menus/DailyMenuModal';
 import { DailyReportModal } from '../daily-reports/DailyReportModal';
-import { colors, spacing } from '../theme';
 import { StudentPassportModal } from './StudentPassportModal';
+import { Card } from '../components/Card';
+import { EmptyState } from '../components/EmptyState';
+import { ScreenContainer } from '../components/ScreenContainer';
+import { colors, radii, shadows, spacing, typography } from '../theme';
 
 type Status = 'loading' | 'ready' | 'error';
+type FilterStatus = 'ALL' | AttendanceStatus;
 
 const ATTENDANCE_BADGES: Record<
   AttendanceStatus,
-  { label: string; emoji: string; bg: string; text: string }
+  { label: string; icon: string; bg: string; text: string }
 > = {
-  PRESENT: { label: 'İçeride', emoji: '🟢', bg: '#D1FAE5', text: '#065F46' },
-  LEFT: { label: 'Ayrıldı', emoji: '🔵', bg: '#DBEAFE', text: '#1E40AF' },
-  EXCUSED: { label: 'İzinli', emoji: '🟡', bg: '#FEF3C7', text: '#92400E' },
-  ABSENT: { label: 'Yok', emoji: '⚪', bg: '#F3F4F6', text: '#6B7280' },
+  PRESENT: {
+    label: 'İçeride',
+    icon: 'checkmark-circle',
+    bg: colors.successBg,
+    text: colors.successText,
+  },
+  LEFT: {
+    label: 'Ayrıldı',
+    icon: 'log-out',
+    bg: colors.infoBg,
+    text: colors.infoText,
+  },
+  EXCUSED: {
+    label: 'İzinli',
+    icon: 'pause-circle',
+    bg: colors.amberLight,
+    text: colors.amberText,
+  },
+  ABSENT: {
+    label: 'Yok',
+    icon: 'close-circle',
+    bg: colors.surfaceMuted,
+    text: colors.textSecondary,
+  },
 };
 
 export function StudentsScreen(): React.ReactElement {
-  const { logout, state } = useAuth();
   const [status, setStatus] = useState<Status>('loading');
   const [students, setStudents] = useState<Student[]>([]);
   const [attendanceMap, setAttendanceMap] = useState<Record<string, Attendance>>({});
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Search & Filter
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<FilterStatus>('ALL');
+
+  // Modals
   const [modalOpen, setModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [passportStudent, setPassportStudent] = useState<Student | null>(null);
@@ -81,140 +110,330 @@ export function StudentsScreen(): React.ReactElement {
           Alert.alert('Hata', err instanceof ApiError ? `API ${err.status}` : 'Silinemedi');
         });
     }
-    Alert.alert('Öğrenciyi sil', `${s.firstName} ${s.lastName} silinecek. Emin misin?`, [
-      { text: 'İptal', style: 'cancel' },
-      { text: 'Sil', style: 'destructive', onPress: doDelete },
-    ]);
+    Alert.alert(
+      'Öğrenciyi Sil',
+      `${s.firstName} ${s.lastName} kaydı silinecektir. Devam etmek istiyor musunuz?`,
+      [
+        { text: 'Vazgeç', style: 'cancel' },
+        { text: 'Evet, Sil', style: 'destructive', onPress: doDelete },
+      ],
+    );
   }
 
+  // Filtered Students
+  const filteredStudents = useMemo(() => {
+    let result = [...students];
+
+    // Search query filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter(
+        (s) =>
+          s.firstName.toLowerCase().includes(q) ||
+          s.lastName.toLowerCase().includes(q) ||
+          `${s.firstName} ${s.lastName}`.toLowerCase().includes(q),
+      );
+    }
+
+    // Attendance status filter
+    if (activeFilter !== 'ALL') {
+      result = result.filter((s) => {
+        const att = attendanceMap[s.id];
+        const currentStatus = att?.status ?? 'ABSENT';
+        return currentStatus === activeFilter;
+      });
+    }
+
+    return result.sort(byLastName);
+  }, [students, attendanceMap, searchQuery, activeFilter]);
+
+  // Statistics
+  const totalCount = students.length;
+  const presentCount = Object.values(attendanceMap).filter((a) => a.status === 'PRESENT').length;
+  const allergicCount = students.filter(
+    (s) => s.passport?.allergies && s.passport.allergies.length > 0,
+  ).length;
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.flex1}>
-          <Text style={styles.welcome}>
-            Hoş geldin,{' '}
-            <Text style={styles.bold}>
-              {state.status === 'authenticated' ? state.user.email || state.user.id : ''}
-            </Text>
-          </Text>
+    <ScreenContainer
+      icon="people"
+      title="Öğrenci Yönetimi"
+      subtitle="Kayıtlı öğrenciler, devam durumu ve sağlık pasaportları"
+    >
+      {/* Top Action Bar */}
+      <View style={styles.topActionBar}>
+        <View style={styles.topActionLeft}>
+          <Pressable style={styles.subActionBtn} onPress={() => setGalleryModalOpen(true)}>
+            <Ionicons name="images-outline" size={16} color={colors.primary} />
+            <Text style={styles.subActionText}>Galeri</Text>
+          </Pressable>
+
+          <Pressable style={styles.subActionBtn} onPress={() => setMenuModalOpen(true)}>
+            <Ionicons name="restaurant-outline" size={16} color={colors.amberDark} />
+            <Text style={[styles.subActionText, { color: colors.amberDark }]}>Menü</Text>
+          </Pressable>
         </View>
-        <Pressable onPress={() => void logout()}>
-          <Text style={styles.logout}>Çıkış</Text>
+
+        <Pressable style={styles.primaryAddBtn} onPress={() => setModalOpen(true)}>
+          <Ionicons name="add" size={18} color={colors.textInverse} />
+          <Text style={styles.primaryAddText}>Yeni Öğrenci</Text>
         </Pressable>
       </View>
 
-      <View style={styles.toolbar}>
-        <Text style={styles.title}>Öğrenciler ({students.length})</Text>
-        <View style={styles.toolbarActions}>
-          <Pressable style={styles.galleryButton} onPress={() => setGalleryModalOpen(true)}>
-            <Text style={styles.galleryButtonText}>📸 Galeri</Text>
-          </Pressable>
-          <Pressable style={styles.menuButton} onPress={() => setMenuModalOpen(true)}>
-            <Text style={styles.menuButtonText}>🍲 Menü</Text>
-          </Pressable>
-          <Pressable style={styles.addButton} onPress={() => setModalOpen(true)}>
-            <Text style={styles.addButtonText}>+ Ekle</Text>
-          </Pressable>
+      {/* KPI Stats Bar */}
+      <View style={styles.statsRow}>
+        <View style={[styles.statBox, { backgroundColor: colors.surfaceMuted }]}>
+          <Text style={styles.statValue}>{totalCount}</Text>
+          <Text style={styles.statLabel}>Toplam Kayıt</Text>
+        </View>
+
+        <View style={[styles.statBox, { backgroundColor: colors.successBg }]}>
+          <Text style={[styles.statValue, { color: colors.successText }]}>{presentCount}</Text>
+          <Text style={[styles.statLabel, { color: colors.successText }]}>İçeride</Text>
+        </View>
+
+        <View style={[styles.statBox, { backgroundColor: colors.amberLight }]}>
+          <Text style={[styles.statValue, { color: colors.amberText }]}>{allergicCount}</Text>
+          <Text style={[styles.statLabel, { color: colors.amberText }]}>Alerjisi Olan</Text>
         </View>
       </View>
 
-      {errorMsg && (
-        <Text style={styles.error} role="alert">
-          {errorMsg}
-        </Text>
+      {/* Search Input */}
+      <View style={styles.searchBar}>
+        <Ionicons name="search-outline" size={18} color={colors.textMuted} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="İsim veya soyisim ile ara..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholderTextColor={colors.textMuted}
+        />
+        {searchQuery.length > 0 && (
+          <Pressable onPress={() => setSearchQuery('')}>
+            <Ionicons name="close-circle" size={18} color={colors.textMuted} />
+          </Pressable>
+        )}
+      </View>
+
+      {/* Filter Chips */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.filterScroll}
+        contentContainerStyle={styles.filterContainer}
+      >
+        <Pressable
+          style={[styles.filterChip, activeFilter === 'ALL' && styles.filterChipActive]}
+          onPress={() => setActiveFilter('ALL')}
+        >
+          <Text
+            style={[
+              styles.filterChipText,
+              activeFilter === 'ALL' && styles.filterChipTextActive,
+            ]}
+          >
+            Tümü ({students.length})
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.filterChip, activeFilter === 'PRESENT' && styles.filterChipActive]}
+          onPress={() => setActiveFilter('PRESENT')}
+        >
+          <Text
+            style={[
+              styles.filterChipText,
+              activeFilter === 'PRESENT' && styles.filterChipTextActive,
+            ]}
+          >
+            🟢 İçeride ({presentCount})
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.filterChip, activeFilter === 'ABSENT' && styles.filterChipActive]}
+          onPress={() => setActiveFilter('ABSENT')}
+        >
+          <Text
+            style={[
+              styles.filterChipText,
+              activeFilter === 'ABSENT' && styles.filterChipTextActive,
+            ]}
+          >
+            ⚪ Gelmedi
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.filterChip, activeFilter === 'EXCUSED' && styles.filterChipActive]}
+          onPress={() => setActiveFilter('EXCUSED')}
+        >
+          <Text
+            style={[
+              styles.filterChipText,
+              activeFilter === 'EXCUSED' && styles.filterChipTextActive,
+            ]}
+          >
+            🟡 İzinli
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.filterChip, activeFilter === 'LEFT' && styles.filterChipActive]}
+          onPress={() => setActiveFilter('LEFT')}
+        >
+          <Text
+            style={[
+              styles.filterChipText,
+              activeFilter === 'LEFT' && styles.filterChipTextActive,
+            ]}
+          >
+            🔵 Ayrıldı
+          </Text>
+        </Pressable>
+      </ScrollView>
+
+      {/* Content State */}
+      {status === 'loading' && (
+        <View style={styles.centerBox}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={styles.loadingText}>Öğrenci listesi yükleniyor...</Text>
+        </View>
       )}
 
-      {status === 'loading' && <ActivityIndicator size="large" color={colors.primary} />}
-      {status === 'error' && <Text style={styles.error}>Öğrenciler yüklenemedi.</Text>}
-      {status === 'ready' && students.length === 0 && (
-        <Text style={styles.empty}>Henüz öğrenci yok. Yukarıdan ekleyin.</Text>
+      {status === 'error' && (
+        <Card style={styles.errorCard}>
+          <Text style={styles.errorText}>
+            {errorMsg ?? 'Öğrenci verileri alınırken bir problem oluştu.'}
+          </Text>
+          <Pressable style={styles.retryBtn} onPress={reload}>
+            <Text style={styles.retryBtnText}>Tekrar Dene</Text>
+          </Pressable>
+        </Card>
       )}
-      {status === 'ready' && students.length > 0 && (
+
+      {status === 'ready' && filteredStudents.length === 0 && (
+        <Card>
+          <EmptyState
+            icon={searchQuery ? '🔍' : '👶'}
+            title={searchQuery ? 'Sonuç Bulunamadı' : 'Henüz Öğrenci Kaydı Yok'}
+            description={
+              searchQuery
+                ? `"${searchQuery}" aramasıyla eşleşen bir öğrenci bulunamadı.`
+                : 'Kreşe kayıtlı öğrenci bulunmuyor. Yeni öğrenci ekleyerek başlayabilirsiniz.'
+            }
+            actionLabel={searchQuery ? 'Aramayı Temizle' : '+ Yeni Öğrenci Ekle'}
+            onAction={searchQuery ? () => setSearchQuery('') : () => setModalOpen(true)}
+          />
+        </Card>
+      )}
+
+      {status === 'ready' && filteredStudents.length > 0 && (
         <FlatList
-          data={students}
+          data={filteredStudents}
           keyExtractor={(item) => item.id}
+          scrollEnabled={false}
           renderItem={({ item }) => {
             const att = attendanceMap[item.id];
             const attStatus: AttendanceStatus = att?.status ?? 'ABSENT';
             const attInfo = ATTENDANCE_BADGES[attStatus];
 
             return (
-              <Pressable
-                style={styles.row}
-                onLongPress={() => handleDelete(item)}
-                onPress={() => setTrackingStudent(item)}
-              >
-                <View style={styles.flex1}>
-                  <View style={styles.nameRow}>
-                    <Text style={styles.rowName}>
-                      {item.firstName} {item.lastName}
+              <Card key={item.id} style={styles.studentCard}>
+                {/* Header Row: Avatar, Names, Badges */}
+                <View style={styles.studentCardTop}>
+                  <View style={styles.avatarWrap}>
+                    <Text style={styles.avatarText}>
+                      {item.firstName.charAt(0)}
+                      {item.lastName.charAt(0)}
                     </Text>
-                    {item.passport?.bloodType && item.passport.bloodType !== 'UNKNOWN' && (
-                      <View style={styles.bloodPill}>
-                        <Text style={styles.bloodPillText}>🩸 {item.passport.bloodType}</Text>
-                      </View>
-                    )}
-                    {item.passport?.allergies && item.passport.allergies.length > 0 && (
-                      <View style={styles.allergyPill}>
-                        <Text style={styles.allergyPillText}>
-                          ⚠️ {item.passport.allergies.length} Alerji
-                        </Text>
-                      </View>
-                    )}
                   </View>
-                  <Text style={styles.rowMeta}>
-                    {item.dateOfBirth} · {item.gender ?? '—'}
+
+                  <View style={styles.studentInfo}>
+                    <View style={styles.nameRow}>
+                      <Text style={styles.studentName}>
+                        {item.firstName} {item.lastName}
+                      </Text>
+                      {item.passport?.bloodType && item.passport.bloodType !== 'UNKNOWN' && (
+                        <View style={styles.bloodBadge}>
+                          <Text style={styles.bloodBadgeText}>🩸 {item.passport.bloodType}</Text>
+                        </View>
+                      )}
+                    </View>
+
+                    <Text style={styles.studentSub}>
+                      {item.dateOfBirth
+                        ? `${new Date(item.dateOfBirth).toLocaleDateString('tr-TR')} · `
+                        : ''}
+                      {item.gender ?? 'Belirtilmedi'}
+                    </Text>
+                  </View>
+
+                  {/* Attendance Status Badge */}
+                  <View style={[styles.statusBadge, { backgroundColor: attInfo.bg }]}>
+                    <Text style={[styles.statusBadgeText, { color: attInfo.text }]}>
+                      {attInfo.label}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Allergen Warning Pill */}
+                {item.passport?.allergies && item.passport.allergies.length > 0 && (
+                  <View style={styles.allergyBanner}>
+                    <Ionicons name="warning-outline" size={14} color={colors.amberDark} />
+                    <Text style={styles.allergyText} numberOfLines={1}>
+                      Alerjiler: {item.passport.allergies.join(', ')}
+                    </Text>
+                  </View>
+                )}
+
+                {/* Notes (if any) */}
+                {item.notes && (
+                  <Text style={styles.notesText} numberOfLines={2}>
+                    {item.notes}
                   </Text>
-                  {item.notes && (
-                    <Text style={styles.rowNotes} numberOfLines={2}>
-                      {item.notes}
-                    </Text>
-                  )}
+                )}
+
+                {/* Action Buttons Row */}
+                <View style={styles.actionBtnRow}>
+                  <Pressable
+                    style={styles.actionBtn}
+                    onPress={() => setAttendanceStudent(item)}
+                  >
+                    <Ionicons name="calendar-outline" size={14} color={colors.primary} />
+                    <Text style={styles.actionBtnText}>Yoklama</Text>
+                  </Pressable>
+
+                  <Pressable
+                    style={styles.actionBtn}
+                    onPress={() => setPassportStudent(item)}
+                  >
+                    <Ionicons name="medical-outline" size={14} color={colors.primary} />
+                    <Text style={styles.actionBtnText}>Pasaport</Text>
+                  </Pressable>
+
+                  <Pressable
+                    style={styles.actionBtn}
+                    onPress={() => setTrackingStudent(item)}
+                  >
+                    <Ionicons name="document-text-outline" size={14} color={colors.primary} />
+                    <Text style={styles.actionBtnText}>Karne</Text>
+                  </Pressable>
+
+                  <Pressable
+                    style={[styles.actionBtn, styles.deleteBtn]}
+                    onPress={() => handleDelete(item)}
+                  >
+                    <Ionicons name="trash-outline" size={14} color={colors.danger} />
+                  </Pressable>
                 </View>
-                <View style={styles.rightCol}>
-                  <View style={styles.badgeRow}>
-                    <View style={[styles.attBadge, { backgroundColor: attInfo.bg }]}>
-                      <Text style={[styles.attBadgeText, { color: attInfo.text }]}>
-                        {attInfo.emoji} {attInfo.label}
-                      </Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.badge,
-                        { backgroundColor: item.isActive ? colors.successBg : '#E5E7EB' },
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.badgeText,
-                          { color: item.isActive ? colors.successText : colors.textMuted },
-                        ]}
-                      >
-                        {item.isActive ? 'Aktif' : 'Pasif'}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.actionBtnRow}>
-                    <Pressable
-                      style={styles.attendanceBtn}
-                      onPress={() => setAttendanceStudent(item)}
-                    >
-                      <Text style={styles.attendanceBtnText}>🛡️ Yoklama</Text>
-                    </Pressable>
-                    <Pressable style={styles.passportBtn} onPress={() => setPassportStudent(item)}>
-                      <Text style={styles.passportBtnText}>📋 Pasaport</Text>
-                    </Pressable>
-                    <Pressable style={styles.trackingBtn} onPress={() => setTrackingStudent(item)}>
-                      <Text style={styles.trackingBtnText}>🌟 Günlük</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              </Pressable>
+              </Card>
             );
           }}
         />
       )}
 
+      {/* New Student Modal */}
       <NewStudentModal
         visible={modalOpen}
         saving={saving}
@@ -222,11 +441,13 @@ export function StudentsScreen(): React.ReactElement {
         onSaved={(s) => {
           setStudents((prev) => [...prev, s].sort(byLastName));
           setModalOpen(false);
+          Alert.alert('Başarılı', `${s.firstName} ${s.lastName} sisteme eklendi.`);
         }}
         onError={setErrorMsg}
         onSavingChange={setSaving}
       />
 
+      {/* Student Passport Modal */}
       <StudentPassportModal
         student={passportStudent}
         visible={passportStudent !== null}
@@ -240,6 +461,7 @@ export function StudentsScreen(): React.ReactElement {
         }}
       />
 
+      {/* Daily Report Modal */}
       <DailyReportModal
         student={trackingStudent}
         date={todayStr}
@@ -247,6 +469,7 @@ export function StudentsScreen(): React.ReactElement {
         onClose={() => setTrackingStudent(null)}
       />
 
+      {/* Attendance Check Modal */}
       <AttendanceCheckModal
         student={attendanceStudent}
         date={todayStr}
@@ -257,18 +480,20 @@ export function StudentsScreen(): React.ReactElement {
         }}
       />
 
+      {/* Daily Menu Modal */}
       <DailyMenuModal
         date={todayStr}
         visible={menuModalOpen}
         onClose={() => setMenuModalOpen(false)}
       />
 
+      {/* Activity Gallery Modal */}
       <ActivityGalleryModal
         visible={galleryModalOpen}
         onClose={() => setGalleryModalOpen(false)}
-        userRole={state.status === 'authenticated' ? state.user.role : undefined}
+        userRole="TEACHER"
       />
-    </View>
+    </ScreenContainer>
   );
 }
 
@@ -299,16 +524,20 @@ function NewStudentModal({
   const [notes, setNotes] = useState('');
 
   async function handleSave(): Promise<void> {
+    if (!firstName.trim() || !lastName.trim()) {
+      Alert.alert('Eksik Bilgi', 'Öğrencinin adı ve soyadı zorunludur.');
+      return;
+    }
     if (saving) return;
     onSavingChange(true);
     try {
       const payload: Parameters<typeof createStudent>[0] = {
-        firstName,
-        lastName,
-        dateOfBirth,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        dateOfBirth: dateOfBirth.trim() || (new Date().toISOString().split('T')[0] ?? ''),
       };
-      if (gender) payload.gender = gender;
-      if (notes) payload.notes = notes;
+      if (gender.trim()) payload.gender = gender.trim();
+      if (notes.trim()) payload.notes = notes.trim();
       const created = await createStudent(payload);
       onSaved(created);
       setFirstName('');
@@ -328,32 +557,50 @@ function NewStudentModal({
       <View style={styles.modalBackdrop}>
         <View style={styles.modalSheet}>
           <ScrollView keyboardShouldPersistTaps="handled">
-            <Text style={styles.modalTitle}>Yeni öğrenci</Text>
-            <Field label="Ad" value={firstName} onChange={setFirstName} />
-            <Field label="Soyad" value={lastName} onChange={setLastName} />
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Yeni Öğrenci Ekle</Text>
+              <Pressable onPress={onClose}>
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
+              </Pressable>
+            </View>
+
+            <Field label="Öğrenci Adı *" value={firstName} onChange={setFirstName} />
+            <Field label="Öğrenci Soyadı *" value={lastName} onChange={setLastName} />
             <Field
-              label="Doğum tarihi (YYYY-AA-GG)"
+              label="Doğum Tarihi (YYYY-AA-GG)"
               value={dateOfBirth}
               onChange={setDateOfBirth}
+              placeholder="Örn: 2021-04-15"
             />
-            <Field label="Cinsiyet" value={gender} onChange={setGender} />
-            <Field label="Notlar" value={notes} onChange={setNotes} multiline />
+            <Field
+              label="Cinsiyet"
+              value={gender}
+              onChange={setGender}
+              placeholder="Kız / Erkek"
+            />
+            <Field
+              label="Özel Notlar"
+              value={notes}
+              onChange={setNotes}
+              placeholder="Özel ilgi alanı veya notlar..."
+              multiline
+            />
 
             <View style={styles.modalActions}>
-              <Pressable
-                style={[styles.modalButton, styles.modalButtonSecondary]}
-                onPress={onClose}
-              >
-                <Text style={styles.modalButtonTextSecondary}>İptal</Text>
+              <Pressable style={styles.modalCancelBtn} onPress={onClose}>
+                <Text style={styles.modalCancelText}>Vazgeç</Text>
               </Pressable>
+
               <Pressable
-                style={[styles.modalButton, styles.modalButtonPrimary]}
+                style={[styles.modalSubmitBtn, saving && { opacity: 0.6 }]}
                 onPress={() => void handleSave()}
                 disabled={saving}
               >
-                <Text style={styles.modalButtonTextPrimary}>
-                  {saving ? 'Kaydediliyor…' : 'Ekle'}
-                </Text>
+                {saving ? (
+                  <ActivityIndicator color={colors.textInverse} />
+                ) : (
+                  <Text style={styles.modalSubmitText}>Öğrenciyi Kaydet</Text>
+                )}
               </Pressable>
             </View>
           </ScrollView>
@@ -367,20 +614,24 @@ function Field({
   label,
   value,
   onChange,
+  placeholder,
   multiline = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  placeholder?: string;
   multiline?: boolean;
 }): React.ReactElement {
   return (
     <View style={styles.field}>
       <Text style={styles.fieldLabel}>{label}</Text>
       <TextInput
-        style={[styles.input, multiline && styles.inputMultiline]}
+        style={[styles.modalInput, multiline && styles.modalInputMultiline]}
         value={value}
         onChangeText={onChange}
+        placeholder={placeholder}
+        placeholderTextColor={colors.textMuted}
         multiline={multiline}
         numberOfLines={multiline ? 3 : 1}
       />
@@ -389,186 +640,342 @@ function Field({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.bg,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: spacing.md,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  flex1: { flex: 1 },
-  welcome: { fontSize: 13, color: colors.textSecondary },
-  bold: { fontWeight: '600', color: colors.textPrimary },
-  logout: { color: colors.primary, fontWeight: '600', fontSize: 14 },
-
-  toolbar: {
+  topActionBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    marginBottom: spacing.md,
   },
-  title: { fontSize: 18, fontWeight: '600', color: colors.textPrimary },
-  toolbarActions: { flexDirection: 'row', gap: spacing.xs, alignItems: 'center' },
-  galleryButton: {
-    backgroundColor: '#EEF2FF',
-    borderWidth: 1,
-    borderColor: '#C7D2FE',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: 6,
+  topActionLeft: {
+    flexDirection: 'row',
+    gap: spacing.xs,
   },
-  galleryButtonText: { color: '#4338CA', fontWeight: '700', fontSize: 13 },
-  menuButton: {
-    backgroundColor: '#FEF3C7',
-    borderWidth: 1,
-    borderColor: '#FDE68A',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: 6,
-  },
-  menuButtonText: { color: '#92400E', fontWeight: '700', fontSize: 13 },
-  addButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: 6,
-  },
-  addButtonText: { color: colors.surface, fontWeight: '600', fontSize: 14 },
-
-  empty: { textAlign: 'center', color: colors.textMuted, marginTop: spacing.xl },
-  error: { color: colors.danger, paddingHorizontal: spacing.md, marginBottom: spacing.sm },
-
-  row: {
+  subActionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    marginHorizontal: spacing.md,
-    marginBottom: spacing.xs,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  rowName: { fontSize: 15, fontWeight: '600', color: colors.textPrimary },
-  nameRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 },
-  bloodPill: {
-    backgroundColor: '#FEE2E2',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  bloodPillText: { color: '#991B1B', fontWeight: '700', fontSize: 11 },
-  allergyPill: {
-    backgroundColor: '#FEF3C7',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  allergyPillText: { color: '#92400E', fontWeight: '600', fontSize: 11 },
-  rowMeta: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
-  rowNotes: { fontSize: 12, color: colors.textSecondary, marginTop: 4 },
-  rightCol: { alignItems: 'flex-end', gap: 4 },
-  badgeRow: { flexDirection: 'row', gap: 4, alignItems: 'center' },
-  attBadge: {
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  attBadgeText: { fontSize: 10, fontWeight: '700' },
-  badge: {
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  badgeText: { fontSize: 11, fontWeight: '600' },
-  actionBtnRow: { flexDirection: 'row', gap: 4 },
-  attendanceBtn: {
-    paddingHorizontal: spacing.xs,
-    paddingVertical: 2,
-    backgroundColor: '#ECFDF5',
-    borderRadius: 4,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: radii.full,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: colors.border,
+    gap: 4,
   },
-  attendanceBtnText: { fontSize: 11, color: '#047857', fontWeight: '600' },
-  passportBtn: {
-    paddingHorizontal: spacing.xs,
-    paddingVertical: 2,
-    backgroundColor: '#EFF6FF',
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#BFDBFE',
+  subActionText: {
+    ...typography.captionBold,
+    color: colors.primary,
   },
-  passportBtnText: { fontSize: 11, color: '#1D4ED8', fontWeight: '600' },
-  trackingBtn: {
-    paddingHorizontal: spacing.xs,
-    paddingVertical: 2,
-    backgroundColor: '#FEF3C7',
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#FDE68A',
+  primaryAddBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: radii.full,
+    gap: 4,
+    ...shadows.xs,
   },
-  trackingBtnText: { fontSize: 11, color: '#92400E', fontWeight: '600' },
+  primaryAddText: {
+    ...typography.captionBold,
+    color: colors.textInverse,
+  },
 
+  // Stats Row
+  statsRow: {
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginBottom: spacing.md,
+  },
+  statBox: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
+    borderRadius: radii.lg,
+  },
+  statValue: {
+    ...typography.bodyBold,
+    color: colors.textPrimary,
+    fontSize: 18,
+  },
+  statLabel: {
+    ...typography.caption,
+    color: colors.textSecondary,
+    fontSize: 11,
+    marginTop: 2,
+  },
+
+  // Search Bar
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.xl,
+    paddingHorizontal: spacing.md,
+    height: 44,
+    marginBottom: spacing.sm,
+    gap: spacing.xs,
+  },
+  searchInput: {
+    flex: 1,
+    ...typography.body,
+    color: colors.textPrimary,
+  },
+
+  // Filter Chips
+  filterScroll: {
+    marginBottom: spacing.md,
+  },
+  filterContainer: {
+    gap: spacing.xs,
+  },
+  filterChip: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: 6,
+    borderRadius: radii.full,
+    backgroundColor: colors.surfaceMuted,
+  },
+  filterChipActive: {
+    backgroundColor: colors.primaryLight,
+    borderWidth: 1,
+    borderColor: colors.primaryBorder,
+  },
+  filterChipText: {
+    ...typography.caption,
+    color: colors.textSecondary,
+  },
+  filterChipTextActive: {
+    color: colors.primaryDark,
+    fontWeight: '700',
+  },
+
+  // Center / Loading
+  centerBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.xxl,
+  },
+  loadingText: {
+    ...typography.caption,
+    color: colors.textSecondary,
+    marginTop: spacing.sm,
+  },
+
+  errorCard: {
+    borderColor: colors.dangerBg,
+    alignItems: 'center',
+    paddingVertical: spacing.lg,
+  },
+  errorText: {
+    ...typography.body,
+    color: colors.danger,
+    textAlign: 'center',
+    marginBottom: spacing.md,
+  },
+  retryBtn: {
+    backgroundColor: colors.dangerBg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    borderRadius: radii.full,
+  },
+  retryBtnText: {
+    ...typography.captionBold,
+    color: colors.dangerText,
+  },
+
+  // Student Card
+  studentCard: {
+    padding: spacing.md,
+    borderRadius: radii.xl,
+    marginBottom: spacing.sm,
+  },
+  studentCardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatarWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.primaryLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.md,
+  },
+  avatarText: {
+    ...typography.bodyBold,
+    color: colors.primary,
+  },
+  studentInfo: {
+    flex: 1,
+  },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  studentName: {
+    ...typography.bodyBold,
+    color: colors.textPrimary,
+  },
+  studentSub: {
+    ...typography.caption,
+    color: colors.textSecondary,
+    marginTop: 2,
+  },
+  bloodBadge: {
+    backgroundColor: colors.dangerBg,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: radii.sm,
+  },
+  bloodBadgeText: {
+    ...typography.tiny,
+    color: colors.dangerText,
+    fontWeight: '700',
+  },
+
+  statusBadge: {
+    paddingHorizontal: spacing.sm + 2,
+    paddingVertical: 3,
+    borderRadius: radii.full,
+  },
+  statusBadgeText: {
+    ...typography.captionBold,
+    fontSize: 11,
+  },
+
+  allergyBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.amberLight,
+    borderRadius: radii.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 4,
+    marginTop: spacing.sm,
+    gap: 4,
+  },
+  allergyText: {
+    ...typography.tiny,
+    color: colors.amberText,
+    flex: 1,
+  },
+
+  notesText: {
+    ...typography.caption,
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
+    fontStyle: 'italic',
+  },
+
+  actionBtnRow: {
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginTop: spacing.md,
+    paddingTop: spacing.xs + 2,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderLight,
+  },
+  actionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.xs + 2,
+    borderRadius: radii.md,
+    backgroundColor: colors.surfaceMuted,
+    gap: 4,
+  },
+  actionBtnText: {
+    ...typography.caption,
+    color: colors.primary,
+    fontWeight: '600',
+    fontSize: 11,
+  },
+  deleteBtn: {
+    flex: 0,
+    paddingHorizontal: spacing.sm + 2,
+    backgroundColor: colors.dangerBg,
+  },
+
+  // Modal
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     justifyContent: 'flex-end',
   },
   modalSheet: {
     backgroundColor: colors.surface,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopLeftRadius: radii.xxl,
+    borderTopRightRadius: radii.xxl,
     padding: spacing.lg,
     maxHeight: '90%',
+    width: '100%',
+    maxWidth: 640,
+    alignSelf: 'center',
+    ...shadows.modal,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.md,
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    ...typography.h3,
     color: colors.textPrimary,
+  },
+  field: {
     marginBottom: spacing.md,
+  },
+  fieldLabel: {
+    ...typography.captionBold,
+    color: colors.textSecondary,
+    marginBottom: 4,
+  },
+  modalInput: {
+    height: 46,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.lg,
+    paddingHorizontal: spacing.md,
+    ...typography.body,
+    color: colors.textPrimary,
+    backgroundColor: colors.surfaceMuted,
+  },
+  modalInputMultiline: {
+    height: 70,
+    textAlignVertical: 'top',
+    paddingTop: spacing.sm,
   },
   modalActions: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
     gap: spacing.sm,
     marginTop: spacing.md,
+    marginBottom: spacing.lg,
   },
-  modalButton: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: 6,
+  modalCancelBtn: {
+    flex: 1,
+    paddingVertical: spacing.md,
+    borderRadius: radii.xl,
+    backgroundColor: colors.surfaceMuted,
+    alignItems: 'center',
   },
-  modalButtonPrimary: { backgroundColor: colors.primary },
-  modalButtonSecondary: { backgroundColor: colors.bg },
-  modalButtonTextPrimary: { color: colors.surface, fontWeight: '600' },
-  modalButtonTextSecondary: { color: colors.textPrimary, fontWeight: '600' },
-
-  field: { marginBottom: spacing.md },
-  fieldLabel: {
-    fontSize: 13,
-    fontWeight: '500',
+  modalCancelText: {
+    ...typography.bodyBold,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 6,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    fontSize: 14,
-    color: colors.textPrimary,
-    backgroundColor: colors.surface,
+  modalSubmitBtn: {
+    flex: 1,
+    paddingVertical: spacing.md,
+    borderRadius: radii.xl,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
   },
-  inputMultiline: { minHeight: 60, textAlignVertical: 'top' },
+  modalSubmitText: {
+    ...typography.bodyBold,
+    color: colors.textInverse,
+  },
 });

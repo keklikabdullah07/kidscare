@@ -10,7 +10,8 @@ import { AuthProvider, useAuth } from './src/auth/AuthContext';
 import { LoginScreen } from './src/auth/LoginScreen';
 import { SignupScreen } from './src/auth/SignupScreen';
 import { StudentsScreen } from './src/students/StudentsScreen';
-import { ParentHomeScreen } from './src/parent/ParentHomeScreen';
+import { ParentTabs } from './src/navigation/ParentTabs';
+import { StaffTabs } from './src/navigation/StaffTabs';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
 
 type AuthStackParams = {
@@ -58,7 +59,7 @@ function AppNavigator(): React.ReactElement {
   if (state.status === 'loading') {
     return (
       <View style={styles.splash}>
-        <ActivityIndicator size="large" color="#2563EB" />
+        <ActivityIndicator size="large" color="#1D4ED8" />
       </View>
     );
   }
@@ -67,10 +68,10 @@ function AppNavigator(): React.ReactElement {
   }
 
   if (state.user.role === 'PARENT') {
-    return <ParentHomeScreen />;
+    return <ParentTabs />;
   }
 
-  return <StudentsScreen />;
+  return <StaffTabs />;
 }
 
 export default function App(): React.ReactElement {

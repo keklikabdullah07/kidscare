@@ -4,36 +4,40 @@ import {
   Modal,
   Pressable,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import type { DailyMenu, ParentChildOverview } from '@kidscare/shared-types';
 import { fetchParentChildrenOverview } from '../api/parent';
 import { getDailyMenu } from '../api/daily-menus';
-import { useAuth } from '../auth/AuthContext';
 import { DailyMenuModal } from '../daily-menus/DailyMenuModal';
 import { ActivityGalleryModal } from '../activities/ActivityGalleryModal';
-import { colors, spacing } from '../theme';
+import { Card } from '../components/Card';
+import { EmptyState } from '../components/EmptyState';
+import { ScreenContainer } from '../components/ScreenContainer';
+import { colors, radii, shadows, spacing, typography } from '../theme';
 
 export function ParentHomeScreen(): React.ReactElement {
-  const { logout, state: authState } = useAuth();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [childrenData, setChildrenData] = useState<ParentChildOverview[]>([]);
   const [dailyMenu, setDailyMenu] = useState<DailyMenu | null>(null);
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
-  const [selectedDate] = useState<string>(new Date().toISOString().split('T')[0] ?? '');
+
+  // Modals
   const [menuModalVisible, setMenuModalVisible] = useState(false);
   const [passportModalVisible, setPassportModalVisible] = useState(false);
   const [galleryModalVisible, setGalleryModalVisible] = useState(false);
 
+  const selectedDate = new Date().toISOString().split('T')[0] ?? '';
+
   const loadData = async () => {
     try {
       const [data, menuRes] = await Promise.all([
-        fetchParentChildrenOverview(selectedDate),
+        fetchParentChildrenOverview(selectedDate).catch(() => []),
         getDailyMenu(selectedDate).catch(() => ({ menu: null, allergenWarnings: [] })),
       ]);
       setChildrenData(data);
@@ -45,7 +49,7 @@ export function ParentHomeScreen(): React.ReactElement {
         setSelectedChildId(data[0]?.student.id ?? null);
       }
     } catch {
-      // silent or empty
+      // quiet failover
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -88,67 +92,63 @@ export function ParentHomeScreen(): React.ReactElement {
   const getMealBadge = (level?: string | null) => {
     switch (level) {
       case 'ALL':
-        return { text: '🟢 Hepsi', bg: '#DCFCE7', fg: '#166534' };
+        return { text: 'Hepsi', bg: colors.successBg, fg: colors.successText };
       case 'HALF':
-        return { text: '🟠 Yarısı', bg: '#FFEDD5', fg: '#9A3412' };
+        return { text: 'Yarısı', bg: colors.amberLight, fg: colors.amberText };
       case 'LITTLE':
-        return { text: '🔴 Az', bg: '#FEE2E2', fg: '#991B1B' };
+        return { text: 'Az', bg: colors.dangerBg, fg: colors.dangerText };
       case 'NONE':
-        return { text: '❌ Yemedi', bg: '#F3F4F6', fg: '#374151' };
+        return { text: 'Yemedi', bg: colors.surfaceMuted, fg: colors.textSecondary };
       default:
-        return { text: '-', bg: '#F3F4F6', fg: '#6B7280' };
+        return { text: 'Belirtilmedi', bg: colors.surfaceMuted, fg: colors.textMuted };
     }
   };
 
-  // Match allergens
+  // Match allergens with today's menu
   const childAllergies = activeChild?.student.passport?.allergies ?? [];
   const menuAllergens = dailyMenu?.allergens ?? [];
   const matchedAllergies = childAllergies.filter((alg) =>
     menuAllergens.some(
       (m) =>
-        m.toLowerCase().includes(alg.toLowerCase()) || alg.toLowerCase().includes(m.toLowerCase()),
+        m.toLowerCase().includes(alg.toLowerCase()) ||
+        alg.toLowerCase().includes(m.toLowerCase()),
     ),
   );
 
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* App Bar */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.headerTitle}>🏡 Veli Portalı</Text>
-          <Text style={styles.headerSubtitle}>
-            {authState.status === 'authenticated' ? authState.user.email : ''}
-          </Text>
-        </View>
-        <Pressable
-          onPress={() => {
-            void logout();
-          }}
-          style={styles.logoutButton}
-        >
-          <Text style={styles.logoutText}>Çıkış</Text>
-        </Pressable>
-      </View>
+  const attStatus = activeChild?.todayAttendance?.status;
 
+  return (
+    <ScreenContainer
+      icon="sunny"
+      title={
+        activeChild
+          ? `Merhaba, ${activeChild.student.firstName}'in Ailesi`
+          : 'KidsCare Veli Paneli'
+      }
+      subtitle="Bugünkü akış, günlük karne, beslenme ve okul durumu"
+      scrollable={false}
+    >
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        contentContainerStyle={{ paddingBottom: spacing.xxl * 2 }}
       >
         {loading ? (
           <View style={styles.centerBox}>
             <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={styles.loadingText}>Bilgiler yükleniyor...</Text>
+            <Text style={styles.loadingText}>Günün bülteni yükleniyor...</Text>
           </View>
         ) : !activeChild ? (
-          <View style={styles.emptyBox}>
-            <Text style={styles.emptyTitle}>Kayıtlı Öğrenci Bulunamadı</Text>
-            <Text style={styles.emptySubtitle}>
-              Hesabınıza bağlı bir öğrenci kaydı henüz tanımlanmamış.
-            </Text>
-          </View>
+          <Card>
+            <EmptyState
+              icon="👶"
+              title="Kayıtlı Öğrenci Bulunamadı"
+              description="Hesabınıza bağlı bir öğrenci kaydı henüz tanımlanmamış. Lütfen kreş idaresi ile iletişime geçiniz."
+            />
+          </Card>
         ) : (
-          <>
-            {/* Multi-child selector */}
+          <View style={{ gap: spacing.md }}>
+            {/* Multi-child Selector (if parent has multiple kids enrolled) */}
             {childrenData.length > 1 && (
               <ScrollView
                 horizontal
@@ -163,7 +163,12 @@ export function ParentHomeScreen(): React.ReactElement {
                       onPress={() => setSelectedChildId(child.student.id)}
                       style={[styles.childTab, isSelected && styles.childTabActive]}
                     >
-                      <Text style={[styles.childTabText, isSelected && styles.childTabTextActive]}>
+                      <Text
+                        style={[
+                          styles.childTabText,
+                          isSelected && styles.childTabTextActive,
+                        ]}
+                      >
                         👶 {child.student.firstName} {child.student.lastName}
                       </Text>
                     </Pressable>
@@ -172,14 +177,21 @@ export function ParentHomeScreen(): React.ReactElement {
               </ScrollView>
             )}
 
-            {/* Status Hero Card */}
-            <View style={styles.heroCard}>
+            {/* 1. Hero Status Card */}
+            <Card variant="primary" style={styles.heroCard}>
               <View style={styles.heroTop}>
-                <View>
-                  <Text style={styles.childName}>
+                <View style={styles.heroAvatar}>
+                  <Text style={styles.heroAvatarText}>
+                    {activeChild.student.firstName.charAt(0)}
+                    {activeChild.student.lastName.charAt(0)}
+                  </Text>
+                </View>
+
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.heroName}>
                     {activeChild.student.firstName} {activeChild.student.lastName}
                   </Text>
-                  <Text style={styles.dateLabel}>
+                  <Text style={styles.heroDate}>
                     {new Date(selectedDate).toLocaleDateString('tr-TR', {
                       weekday: 'long',
                       day: 'numeric',
@@ -188,38 +200,39 @@ export function ParentHomeScreen(): React.ReactElement {
                   </Text>
                 </View>
 
-                {/* Status Indicator */}
-                <View style={styles.statusBadge}>
-                  {activeChild.todayAttendance?.status === 'PRESENT' ? (
-                    <View style={styles.statusRow}>
-                      <View style={[styles.statusDot, { backgroundColor: '#4ADE80' }]} />
-                      <Text style={styles.statusText}>Okulda</Text>
-                    </View>
-                  ) : activeChild.todayAttendance?.status === 'LEFT' ? (
-                    <View style={styles.statusRow}>
-                      <View style={[styles.statusDot, { backgroundColor: '#93C5FD' }]} />
-                      <Text style={styles.statusText}>Ayrıldı</Text>
-                    </View>
-                  ) : activeChild.todayAttendance?.status === 'ABSENT' ? (
-                    <View style={styles.statusRow}>
-                      <View style={[styles.statusDot, { backgroundColor: '#F87171' }]} />
-                      <Text style={styles.statusText}>Katılmadı</Text>
-                    </View>
-                  ) : activeChild.todayAttendance?.status === 'EXCUSED' ? (
-                    <View style={styles.statusRow}>
-                      <View style={[styles.statusDot, { backgroundColor: '#FBBF24' }]} />
-                      <Text style={styles.statusText}>İzinli</Text>
-                    </View>
-                  ) : (
-                    <View style={styles.statusRow}>
-                      <View style={[styles.statusDot, { backgroundColor: '#FDE047' }]} />
-                      <Text style={styles.statusText}>Henüz Gelmedi</Text>
-                    </View>
-                  )}
+                {/* Status Badge */}
+                <View
+                  style={[
+                    styles.statusBadge,
+                    attStatus === 'PRESENT' && styles.statusBadgePresent,
+                    attStatus === 'LEFT' && styles.statusBadgeLeft,
+                    attStatus === 'EXCUSED' && styles.statusBadgeExcused,
+                    attStatus === 'ABSENT' && styles.statusBadgeAbsent,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.statusBadgeText,
+                      attStatus === 'PRESENT' && styles.statusBadgeTextPresent,
+                      attStatus === 'LEFT' && styles.statusBadgeTextLeft,
+                      attStatus === 'EXCUSED' && styles.statusBadgeTextExcused,
+                      attStatus === 'ABSENT' && styles.statusBadgeTextAbsent,
+                    ]}
+                  >
+                    {attStatus === 'PRESENT'
+                      ? '🟢 Okulda'
+                      : attStatus === 'LEFT'
+                        ? '🔵 Teslim Edildi'
+                        : attStatus === 'EXCUSED'
+                          ? '🟡 İzinli'
+                          : attStatus === 'ABSENT'
+                            ? '⚪ Gelmedi'
+                            : '⏳ Bekleniyor'}
+                  </Text>
                 </View>
               </View>
 
-              {/* Attendance Times */}
+              {/* Attendance Times Row */}
               <View style={styles.timeRow}>
                 <View style={styles.timeCol}>
                   <Text style={styles.timeTitle}>GİRİŞ SAATİ</Text>
@@ -227,7 +240,9 @@ export function ParentHomeScreen(): React.ReactElement {
                     {activeChild.todayAttendance?.checkInTime || '--:--'}
                   </Text>
                 </View>
+
                 <View style={styles.timeDivider} />
+
                 <View style={styles.timeCol}>
                   <Text style={styles.timeTitle}>ÇIKIŞ SAATİ</Text>
                   <Text style={styles.timeValue}>
@@ -235,205 +250,211 @@ export function ParentHomeScreen(): React.ReactElement {
                   </Text>
                 </View>
               </View>
-            </View>
+            </Card>
 
             {/* Personalized Allergy Alert Banner */}
             {matchedAllergies.length > 0 && (
-              <View style={styles.allergyBanner}>
-                <Text style={styles.allergyIcon}>⚠️</Text>
+              <Card style={styles.allergyBanner}>
                 <View style={styles.allergyContent}>
-                  <Text style={styles.allergyTitle}>Alerji Uyarısı!</Text>
-                  {matchedAllergies.map((w, idx) => (
-                    <Text key={idx} style={styles.allergyText}>
-                      • Menüde {activeChild.student.firstName}'in alerjisi olan{' '}
-                      <Text style={{ fontWeight: '800' }}>{w}</Text> bulunuyor!
-                    </Text>
-                  ))}
+                  <Ionicons name="warning" size={24} color={colors.amberDark} />
+                  <View style={{ flex: 1, marginLeft: spacing.sm }}>
+                    <Text style={styles.allergyTitle}>Alerji Uyarısı!</Text>
+                    {matchedAllergies.map((w, idx) => (
+                      <Text key={idx} style={styles.allergyText}>
+                        • Bugünün menüsünde {activeChild.student.firstName}'in alerjisi olan{' '}
+                        <Text style={{ fontWeight: '700' }}>{w}</Text> bulunuyor!
+                      </Text>
+                    ))}
+                  </View>
                 </View>
-              </View>
+              </Card>
             )}
 
-            {/* Quick Action Buttons */}
-            <View style={styles.actionButtonsRow}>
-              <Pressable onPress={() => setMenuModalVisible(true)} style={styles.actionButton}>
-                <Text style={styles.actionButtonIcon}>🍲</Text>
-                <Text style={styles.actionButtonText}>Yemek Listesi</Text>
+            {/* Quick Action Navigation Row */}
+            <View style={styles.actionRow}>
+              <Pressable style={styles.actionBtn} onPress={() => setMenuModalVisible(true)}>
+                <View style={[styles.actionIconWrap, { backgroundColor: colors.amberLight }]}>
+                  <Text style={{ fontSize: 20 }}>🍲</Text>
+                </View>
+                <Text style={styles.actionBtnLabel}>Yemek Menüsü</Text>
               </Pressable>
 
-              <Pressable
-                onPress={() => setGalleryModalVisible(true)}
-                style={[styles.actionButton, styles.actionButtonAccent]}
-              >
-                <Text style={styles.actionButtonIcon}>📸</Text>
-                <Text style={styles.actionButtonText}>Foto Galeri</Text>
+              <Pressable style={styles.actionBtn} onPress={() => setGalleryModalVisible(true)}>
+                <View style={[styles.actionIconWrap, { backgroundColor: colors.primaryLight }]}>
+                  <Text style={{ fontSize: 20 }}>📸</Text>
+                </View>
+                <Text style={styles.actionBtnLabel}>Foto Galeri</Text>
               </Pressable>
 
-              <Pressable
-                onPress={() => setPassportModalVisible(true)}
-                style={[styles.actionButton, styles.actionButtonSecondary]}
-              >
-                <Text style={styles.actionButtonIcon}>🛡️</Text>
-                <Text style={styles.actionButtonText}>Pasaport</Text>
+              <Pressable style={styles.actionBtn} onPress={() => setPassportModalVisible(true)}>
+                <View style={[styles.actionIconWrap, { backgroundColor: colors.infoBg }]}>
+                  <Text style={{ fontSize: 20 }}>🩺</Text>
+                </View>
+                <Text style={styles.actionBtnLabel}>Pasaport</Text>
               </Pressable>
             </View>
 
-            {/* Daily Report Card */}
-            <View style={styles.card}>
+            {/* 2. Daily Report Card */}
+            <Card style={styles.reportCard}>
               <View style={styles.cardHeader}>
-                <Text style={styles.cardTitle}>📝 Günlük Karne</Text>
-                {activeChild.todayDailyReport ? (
-                  <View style={styles.badgeSuccess}>
-                    <Text style={styles.badgeSuccessText}>Dolduruldu</Text>
-                  </View>
-                ) : (
-                  <View style={styles.badgePending}>
-                    <Text style={styles.badgePendingText}>Bekleniyor</Text>
-                  </View>
-                )}
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Text style={{ fontSize: 20 }}>📝</Text>
+                  <Text style={styles.cardTitle}>Günlük Karne & Akış</Text>
+                </View>
+                <View
+                  style={[
+                    styles.reportDoneBadge,
+                    activeChild.todayDailyReport
+                      ? styles.reportDoneBadgeSuccess
+                      : styles.reportDoneBadgePending,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.reportDoneBadgeText,
+                      activeChild.todayDailyReport
+                        ? styles.reportDoneBadgeTextSuccess
+                        : styles.reportDoneBadgeTextPending,
+                    ]}
+                  >
+                    {activeChild.todayDailyReport ? 'Tamamlandı' : 'Bekleniyor'}
+                  </Text>
+                </View>
               </View>
 
               {activeChild.todayDailyReport ? (
                 <View style={styles.reportContent}>
-                  {/* Mood */}
-                  <View style={styles.reportItemRow}>
-                    <Text style={styles.reportItemLabel}>Ruh Hali</Text>
-                    <Text style={styles.reportItemVal}>
+                  {/* Mood Row */}
+                  <View style={styles.moodRow}>
+                    <Text style={styles.reportLabel}>Günün Ruh Hali:</Text>
+                    <Text style={styles.moodValue}>
                       {getMoodLabel(activeChild.todayDailyReport.mood)}
                     </Text>
                   </View>
 
                   {/* Meals Breakdown */}
-                  <View style={styles.mealsContainer}>
-                    <Text style={styles.sectionSmallTitle}>🍽️ Yemek Durumu</Text>
-                    <View style={styles.mealsRow}>
-                      <View style={styles.mealBox}>
-                        <Text style={styles.mealLabel}>Kahvaltı</Text>
-                        <View
+                  <Text style={[styles.subSectionTitle, { marginTop: spacing.md }]}>
+                    🍽️ Yemek Tüketimi
+                  </Text>
+                  <View style={styles.mealsRow}>
+                    <View style={styles.mealBox}>
+                      <Text style={styles.mealLabel}>Kahvaltı</Text>
+                      <View
+                        style={[
+                          styles.mealPill,
+                          {
+                            backgroundColor: getMealBadge(
+                              activeChild.todayDailyReport.meals?.breakfast,
+                            ).bg,
+                          },
+                        ]}
+                      >
+                        <Text
                           style={[
-                            styles.mealPill,
+                            styles.mealPillText,
                             {
-                              backgroundColor: getMealBadge(
+                              color: getMealBadge(
                                 activeChild.todayDailyReport.meals?.breakfast,
-                              ).bg,
+                              ).fg,
                             },
                           ]}
                         >
-                          <Text
-                            style={[
-                              styles.mealPillText,
-                              {
-                                color: getMealBadge(activeChild.todayDailyReport.meals?.breakfast)
-                                  .fg,
-                              },
-                            ]}
-                          >
-                            {getMealBadge(activeChild.todayDailyReport.meals?.breakfast).text}
-                          </Text>
-                        </View>
+                          {getMealBadge(activeChild.todayDailyReport.meals?.breakfast).text}
+                        </Text>
                       </View>
+                    </View>
 
-                      <View style={styles.mealBox}>
-                        <Text style={styles.mealLabel}>Öğle</Text>
-                        <View
+                    <View style={styles.mealBox}>
+                      <Text style={styles.mealLabel}>Öğle</Text>
+                      <View
+                        style={[
+                          styles.mealPill,
+                          {
+                            backgroundColor: getMealBadge(
+                              activeChild.todayDailyReport.meals?.lunch,
+                            ).bg,
+                          },
+                        ]}
+                      >
+                        <Text
                           style={[
-                            styles.mealPill,
+                            styles.mealPillText,
                             {
-                              backgroundColor: getMealBadge(
-                                activeChild.todayDailyReport.meals?.lunch,
-                              ).bg,
+                              color: getMealBadge(activeChild.todayDailyReport.meals?.lunch).fg,
                             },
                           ]}
                         >
-                          <Text
-                            style={[
-                              styles.mealPillText,
-                              { color: getMealBadge(activeChild.todayDailyReport.meals?.lunch).fg },
-                            ]}
-                          >
-                            {getMealBadge(activeChild.todayDailyReport.meals?.lunch).text}
-                          </Text>
-                        </View>
+                          {getMealBadge(activeChild.todayDailyReport.meals?.lunch).text}
+                        </Text>
                       </View>
+                    </View>
 
-                      <View style={styles.mealBox}>
-                        <Text style={styles.mealLabel}>İkindi</Text>
-                        <View
+                    <View style={styles.mealBox}>
+                      <Text style={styles.mealLabel}>İkindi</Text>
+                      <View
+                        style={[
+                          styles.mealPill,
+                          {
+                            backgroundColor: getMealBadge(
+                              activeChild.todayDailyReport.meals?.afternoonSnack,
+                            ).bg,
+                          },
+                        ]}
+                      >
+                        <Text
                           style={[
-                            styles.mealPill,
+                            styles.mealPillText,
                             {
-                              backgroundColor: getMealBadge(
+                              color: getMealBadge(
                                 activeChild.todayDailyReport.meals?.afternoonSnack,
-                              ).bg,
+                              ).fg,
                             },
                           ]}
                         >
-                          <Text
-                            style={[
-                              styles.mealPillText,
-                              {
-                                color: getMealBadge(
-                                  activeChild.todayDailyReport.meals?.afternoonSnack,
-                                ).fg,
-                              },
-                            ]}
-                          >
-                            {getMealBadge(activeChild.todayDailyReport.meals?.afternoonSnack).text}
-                          </Text>
-                        </View>
+                          {
+                            getMealBadge(activeChild.todayDailyReport.meals?.afternoonSnack)
+                              .text
+                          }
+                        </Text>
                       </View>
                     </View>
                   </View>
 
-                  {/* Nap & Potty stats */}
-                  <View style={styles.statsRow}>
-                    <View style={styles.statBox}>
-                      <Text style={styles.statIcon}>😴</Text>
+                  {/* Nap & Potty Stats */}
+                  <View style={styles.miniStatsRow}>
+                    <View style={styles.miniStatBox}>
+                      <Text style={styles.miniStatEmoji}>😴</Text>
                       <View>
-                        <Text style={styles.statTitle}>Uyku</Text>
-                        <Text style={styles.statValue}>
+                        <Text style={styles.miniStatTitle}>Uyku & Dinlenme</Text>
+                        <Text style={styles.miniStatValue}>
                           {activeChild.todayDailyReport.naps?.startTime &&
                           activeChild.todayDailyReport.naps?.endTime
                             ? `${activeChild.todayDailyReport.naps.startTime} - ${activeChild.todayDailyReport.naps.endTime}`
                             : activeChild.todayDailyReport.naps?.quality === 'GOOD'
-                              ? 'İyi uyudu'
+                              ? 'Deliksiz uyudu'
                               : 'Uyumadı'}
                         </Text>
                       </View>
                     </View>
 
-                    <View style={styles.statBox}>
-                      <Text style={styles.statIcon}>🚽</Text>
+                    <View style={styles.miniStatBox}>
+                      <Text style={styles.miniStatEmoji}>🚽</Text>
                       <View>
-                        <Text style={styles.statTitle}>Tuvalet / Bez</Text>
-                        <Text style={styles.statValue}>
+                        <Text style={styles.miniStatTitle}>Tuvalet / Bez</Text>
+                        <Text style={styles.miniStatValue}>
                           {activeChild.todayDailyReport.potty &&
                           activeChild.todayDailyReport.potty.length > 0
                             ? `${activeChild.todayDailyReport.potty.length} kayıt`
-                            : 'Normal'}
+                            : 'Düzenli'}
                         </Text>
                       </View>
                     </View>
                   </View>
 
-                  {/* Activities */}
-                  {activeChild.todayDailyReport.activities &&
-                    activeChild.todayDailyReport.activities.length > 0 && (
-                      <View style={styles.activitiesSection}>
-                        <Text style={styles.sectionSmallTitle}>🎨 Aktiviteler</Text>
-                        <View style={styles.activityChips}>
-                          {activeChild.todayDailyReport.activities.map((act, i) => (
-                            <View key={i} style={styles.activityChip}>
-                              <Text style={styles.activityChipText}>{act}</Text>
-                            </View>
-                          ))}
-                        </View>
-                      </View>
-                    )}
-
                   {/* Teacher Note */}
                   {activeChild.todayDailyReport.teacherNote && (
                     <View style={styles.teacherNoteBox}>
-                      <Text style={styles.teacherNoteHeader}>💬 Öğretmenin Notu</Text>
+                      <Text style={styles.teacherNoteHeader}>💬 Öğretmenin Gün Sonu Notu</Text>
                       <Text style={styles.teacherNoteText}>
                         "{activeChild.todayDailyReport.teacherNote}"
                       </Text>
@@ -443,14 +464,15 @@ export function ParentHomeScreen(): React.ReactElement {
               ) : (
                 <View style={styles.emptyReportBox}>
                   <Text style={styles.emptyReportEmoji}>⏳</Text>
+                  <Text style={styles.emptyReportTitle}>Rapor Hazırlanıyor</Text>
                   <Text style={styles.emptyReportText}>
-                    Öğretmenimiz gün sonuna doğru aktiviteleri ve günlük karne raporunu sisteme
+                    Öğretmenlerimiz gün sonuna doğru aktiviteleri ve günlük karne raporunu sisteme
                     girecektir.
                   </Text>
                 </View>
               )}
-            </View>
-          </>
+            </Card>
+          </View>
         )}
       </ScrollView>
 
@@ -461,557 +483,434 @@ export function ParentHomeScreen(): React.ReactElement {
         onClose={() => setMenuModalVisible(false)}
       />
 
-      {/* Passport Modal */}
+      {/* Activity Gallery Modal */}
+      <ActivityGalleryModal
+        visible={galleryModalVisible}
+        onClose={() => setGalleryModalVisible(false)}
+        userRole="PARENT"
+        classroom={activeChild?.student?.classroomId ?? undefined}
+      />
+
+      {/* Student Passport Modal */}
       <Modal
         visible={passportModalVisible}
         transparent
         animationType="slide"
         onRequestClose={() => setPassportModalVisible(false)}
       >
-        <View style={styles.modalBackdrop}>
-          <View style={styles.passportCard}>
-            <View style={styles.passportHeader}>
-              <Text style={styles.passportTitle}>🛡️ Sağlık & Gelişim Pasaportu</Text>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalSheet}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>🛡️ Sağlık & Gelişim Pasaportu</Text>
               <Pressable onPress={() => setPassportModalVisible(false)}>
-                <Text style={styles.closeBtn}>✕</Text>
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
               </Pressable>
             </View>
 
-            <ScrollView style={styles.passportBody}>
-              <View style={styles.passportItem}>
+            <ScrollView style={{ maxHeight: 400 }}>
+              <View style={styles.passportRow}>
                 <Text style={styles.passportLabel}>Kan Grubu</Text>
                 <Text style={styles.passportValue}>
                   {activeChild?.student.passport?.bloodType || 'Belirtilmedi'}
                 </Text>
               </View>
 
-              <View style={styles.passportItem}>
-                <Text style={styles.passportLabel}>Alerjiler</Text>
-                {activeChild?.student.passport?.allergies &&
-                activeChild.student.passport.allergies.length > 0 ? (
-                  <View style={styles.allergyTagList}>
-                    {activeChild.student.passport.allergies.map((a, i) => (
-                      <View key={i} style={styles.allergyTag}>
-                        <Text style={styles.allergyTagText}>⚠️ {a}</Text>
-                      </View>
-                    ))}
-                  </View>
-                ) : (
-                  <Text style={styles.passportValueGreen}>✓ Kayıtlı alerji yok</Text>
-                )}
-              </View>
-
-              <View style={styles.passportItem}>
-                <Text style={styles.passportLabel}>Özel Beslenme / Diyet</Text>
-                <Text style={styles.passportValue}>
-                  {activeChild?.student.passport?.dietaryRestrictions?.join(', ') || 'Yok'}
+              <View style={styles.passportRow}>
+                <Text style={styles.passportLabel}>Bilinen Alerjiler</Text>
+                <Text
+                  style={[
+                    styles.passportValue,
+                    activeChild?.student.passport?.allergies?.length
+                      ? { color: colors.danger, fontWeight: '700' }
+                      : {},
+                  ]}
+                >
+                  {activeChild?.student.passport?.allergies?.length
+                    ? activeChild.student.passport.allergies.join(', ')
+                    : 'Kayıtlı alerji yok'}
                 </Text>
               </View>
 
-              <View style={styles.passportItem}>
-                <Text style={styles.passportLabel}>Kronik Rahatsızlıklar</Text>
+              <View style={styles.passportRow}>
+                <Text style={styles.passportLabel}>Kronik Rahatsızlık</Text>
                 <Text style={styles.passportValue}>
-                  {activeChild?.student.passport?.chronicConditions?.join(', ') || 'Yok'}
+                  {activeChild?.student.passport?.chronicConditions?.length
+                    ? activeChild.student.passport.chronicConditions.join(', ')
+                    : 'Yok'}
                 </Text>
               </View>
+
+              <View style={styles.passportRow}>
+                <Text style={styles.passportLabel}>Acil Durum Doktoru</Text>
+                <Text style={styles.passportValue}>
+                  {activeChild?.student.passport?.doctorName
+                    ? `${activeChild.student.passport.doctorName} (${activeChild.student.passport.doctorPhone || 'Tel Yok'})`
+                    : 'Belirtilmedi'}
+                </Text>
+              </View>
+
+              {activeChild?.student.passport?.specialNotes && (
+                <View style={[styles.passportRow, { borderBottomWidth: 0 }]}>
+                  <Text style={styles.passportLabel}>Özel Notlar</Text>
+                  <Text style={styles.passportValue}>
+                    {activeChild.student.passport.specialNotes}
+                  </Text>
+                </View>
+              )}
             </ScrollView>
           </View>
         </View>
       </Modal>
-
-      <ActivityGalleryModal
-        visible={galleryModalVisible}
-        onClose={() => setGalleryModalVisible(false)}
-        userRole={authState.status === 'authenticated' ? authState.user.role : undefined}
-      />
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-  },
-  header: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#0F172A',
-  },
-  headerSubtitle: {
-    fontSize: 12,
-    color: '#64748B',
-    marginTop: 2,
-  },
-  logoutButton: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: 8,
-    backgroundColor: '#F1F5F9',
-  },
-  logoutText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#475569',
-  },
-  scrollContent: {
-    padding: spacing.md,
-    paddingBottom: 40,
-  },
   centerBox: {
-    paddingVertical: 60,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: spacing.xxl * 2,
   },
   loadingText: {
+    ...typography.caption,
+    color: colors.textSecondary,
     marginTop: spacing.sm,
-    fontSize: 14,
-    color: '#64748B',
   },
-  emptyBox: {
-    padding: spacing.xl,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  emptyTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#1E293B',
-  },
-  emptySubtitle: {
-    fontSize: 13,
-    color: '#64748B',
-    textAlign: 'center',
-    marginTop: spacing.xs,
-  },
+
+  // Multi-child Selector
   childTabs: {
-    flexDirection: 'row',
-    marginBottom: spacing.md,
+    marginBottom: spacing.xs,
   },
   childTab: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: '#FFFFFF',
-    marginRight: 8,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: radii.full,
+    backgroundColor: colors.surfaceMuted,
+    marginRight: spacing.sm,
   },
   childTabActive: {
     backgroundColor: colors.primary,
-    borderColor: colors.primary,
   },
   childTabText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#475569',
+    ...typography.caption,
+    color: colors.textSecondary,
   },
   childTabTextActive: {
-    color: '#FFFFFF',
+    color: colors.textInverse,
+    fontWeight: '700',
   },
+
+  // Hero Card
   heroCard: {
-    backgroundColor: '#2563EB',
-    borderRadius: 20,
-    padding: spacing.lg,
-    marginBottom: spacing.md,
-    shadowColor: '#1E40AF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
+    padding: spacing.md,
+    borderRadius: radii.xl,
   },
   heroTop: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    marginBottom: spacing.md,
   },
-  childName: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#FFFFFF',
+  heroAvatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.md,
   },
-  dateLabel: {
-    fontSize: 13,
-    color: '#BFDBFE',
+  heroAvatarText: {
+    ...typography.bodyBold,
+    color: colors.textInverse,
+  },
+  heroName: {
+    ...typography.bodyBold,
+    color: colors.primaryDark,
+    fontSize: 16,
+  },
+  heroDate: {
+    ...typography.caption,
+    color: colors.primary,
     marginTop: 2,
   },
+
   statusBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
+    paddingHorizontal: spacing.sm + 2,
+    paddingVertical: 4,
+    borderRadius: radii.full,
+    backgroundColor: colors.surfaceMuted,
   },
-  statusRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
+  statusBadgePresent: { backgroundColor: colors.successBg },
+  statusBadgeLeft: { backgroundColor: colors.infoBg },
+  statusBadgeExcused: { backgroundColor: colors.amberLight },
+  statusBadgeAbsent: { backgroundColor: colors.surfaceMuted },
+
+  statusBadgeText: {
+    ...typography.captionBold,
+    fontSize: 11,
   },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
+  statusBadgeTextPresent: { color: colors.successText },
+  statusBadgeTextLeft: { color: colors.infoText },
+  statusBadgeTextExcused: { color: colors.amberText },
+  statusBadgeTextAbsent: { color: colors.textSecondary },
+
   timeRow: {
     flexDirection: 'row',
-    marginTop: spacing.lg,
-    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-    borderRadius: 12,
-    paddingVertical: 10,
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: radii.lg,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
   },
   timeCol: {
     flex: 1,
     alignItems: 'center',
   },
-  timeDivider: {
-    width: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  },
   timeTitle: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#93C5FD',
-    letterSpacing: 0.5,
+    ...typography.tiny,
+    color: colors.textMuted,
+    marginBottom: 2,
   },
   timeValue: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    marginTop: 2,
+    ...typography.bodyBold,
+    color: colors.textPrimary,
   },
+  timeDivider: {
+    width: 1,
+    height: 24,
+    backgroundColor: colors.borderLight,
+  },
+
+  // Allergy Banner
   allergyBanner: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    backgroundColor: '#FEF3C7',
-    borderWidth: 1.5,
-    borderColor: '#F59E0B',
-    borderRadius: 16,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    gap: 10,
-  },
-  allergyIcon: {
-    fontSize: 22,
+    borderColor: colors.amberBorder,
+    backgroundColor: colors.amberLight,
   },
   allergyContent: {
-    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   allergyTitle: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#92400E',
+    ...typography.bodyBold,
+    color: colors.amberDark,
+    marginBottom: 2,
   },
   allergyText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#B45309',
-    marginTop: 2,
+    ...typography.caption,
+    color: colors.amberText,
   },
-  actionButtonsRow: {
+
+  // Action Buttons
+  actionRow: {
     flexDirection: 'row',
     gap: spacing.sm,
-    marginBottom: spacing.md,
   },
-  actionButton: {
+  actionBtn: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    paddingVertical: spacing.md,
+    borderRadius: radii.xl,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 14,
-    paddingVertical: 12,
+    borderColor: colors.border,
+    ...shadows.xs,
+  },
+  actionIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.lg,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 8,
+    marginBottom: spacing.xs,
   },
-  actionButtonSecondary: {
-    backgroundColor: '#EFF6FF',
-    borderColor: '#BFDBFE',
+  actionBtnLabel: {
+    ...typography.captionBold,
+    color: colors.textPrimary,
+    fontSize: 11,
   },
-  actionButtonAccent: {
-    backgroundColor: '#EEF2FF',
-    borderColor: '#C7D2FE',
-  },
-  actionButtonIcon: {
-    fontSize: 16,
-  },
-  actionButtonText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#1E293B',
-  },
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+
+  // Report Card
+  reportCard: {
     padding: spacing.md,
-    marginBottom: spacing.md,
+    borderRadius: radii.xl,
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
-    paddingBottom: spacing.sm,
     marginBottom: spacing.md,
   },
   cardTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#0F172A',
+    ...typography.bodyBold,
+    color: colors.textPrimary,
   },
-  badgeSuccess: {
-    backgroundColor: '#DCFCE7',
-    paddingHorizontal: 8,
+  reportDoneBadge: {
+    paddingHorizontal: spacing.sm,
     paddingVertical: 3,
-    borderRadius: 8,
+    borderRadius: radii.full,
   },
-  badgeSuccessText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#166534',
+  reportDoneBadgeSuccess: { backgroundColor: colors.successBg },
+  reportDoneBadgePending: { backgroundColor: colors.surfaceMuted },
+  reportDoneBadgeText: {
+    ...typography.captionBold,
+    fontSize: 10,
   },
-  badgePending: {
-    backgroundColor: '#F1F5F9',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8,
-  },
-  badgePendingText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#64748B',
-  },
+  reportDoneBadgeTextSuccess: { color: colors.successText },
+  reportDoneBadgeTextPending: { color: colors.textSecondary },
+
   reportContent: {
-    gap: spacing.md,
+    gap: spacing.sm,
   },
-  reportItemRow: {
+  moodRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    padding: 12,
-    borderRadius: 12,
+    paddingVertical: spacing.xs,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
   },
-  reportItemLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#64748B',
+  reportLabel: {
+    ...typography.captionBold,
+    color: colors.textSecondary,
   },
-  reportItemVal: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#0F172A',
+  moodValue: {
+    ...typography.bodyBold,
+    color: colors.textPrimary,
   },
-  mealsContainer: {
-    backgroundColor: '#F8FAFC',
-    padding: 12,
-    borderRadius: 12,
-  },
-  sectionSmallTitle: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#475569',
-    marginBottom: 8,
-    textTransform: 'uppercase',
+
+  subSectionTitle: {
+    ...typography.captionBold,
+    color: colors.textPrimary,
   },
   mealsRow: {
     flexDirection: 'row',
-    gap: 8,
+    gap: spacing.xs,
   },
   mealBox: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    padding: 8,
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.lg,
+    paddingVertical: spacing.sm,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
   },
   mealLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#64748B',
+    ...typography.caption,
+    color: colors.textSecondary,
     marginBottom: 4,
   },
   mealPill: {
-    paddingHorizontal: 6,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 2,
-    borderRadius: 6,
+    borderRadius: radii.full,
   },
   mealPillText: {
+    ...typography.captionBold,
     fontSize: 11,
-    fontWeight: '700',
   },
-  statsRow: {
+
+  miniStatsRow: {
     flexDirection: 'row',
-    gap: 8,
+    gap: spacing.xs,
+    marginTop: spacing.xs,
   },
-  statBox: {
+  miniStatBox: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    padding: 12,
-    borderRadius: 12,
-    gap: 10,
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.lg,
+    padding: spacing.sm,
+    gap: spacing.sm,
   },
-  statIcon: {
-    fontSize: 20,
+  miniStatEmoji: {
+    fontSize: 22,
   },
-  statTitle: {
-    fontSize: 11,
-    color: '#64748B',
-    fontWeight: '600',
+  miniStatTitle: {
+    ...typography.tiny,
+    color: colors.textSecondary,
   },
-  statValue: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#0F172A',
-    marginTop: 2,
+  miniStatValue: {
+    ...typography.captionBold,
+    color: colors.textPrimary,
   },
-  activitiesSection: {
-    backgroundColor: '#F8FAFC',
-    padding: 12,
-    borderRadius: 12,
-  },
-  activityChips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-  },
-  activityChip: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  activityChipText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#334155',
-  },
+
   teacherNoteBox: {
-    backgroundColor: '#EFF6FF',
+    marginTop: spacing.sm,
+    backgroundColor: colors.primaryLight,
+    borderColor: colors.primaryBorder,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
-    padding: 12,
-    borderRadius: 12,
+    borderRadius: radii.lg,
+    padding: spacing.md,
   },
   teacherNoteHeader: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#1E40AF',
-    marginBottom: 4,
+    ...typography.captionBold,
+    color: colors.primaryDark,
+    marginBottom: 2,
   },
   teacherNoteText: {
-    fontSize: 13,
-    color: '#1E3A8A',
+    ...typography.body,
+    color: colors.primaryDark,
     fontStyle: 'italic',
-    lineHeight: 18,
   },
+
   emptyReportBox: {
-    paddingVertical: 30,
     alignItems: 'center',
+    paddingVertical: spacing.lg,
   },
   emptyReportEmoji: {
-    fontSize: 28,
-    marginBottom: 6,
+    fontSize: 32,
+    marginBottom: spacing.xs,
+  },
+  emptyReportTitle: {
+    ...typography.bodyBold,
+    color: colors.textPrimary,
   },
   emptyReportText: {
-    fontSize: 13,
-    color: '#94A3B8',
+    ...typography.caption,
+    color: colors.textSecondary,
     textAlign: 'center',
-    paddingHorizontal: 20,
+    marginTop: 2,
+    maxWidth: 260,
   },
-  modalBackdrop: {
+
+  // Modal
+  modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
-  passportCard: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    justifyContent: 'center',
     padding: spacing.lg,
-    maxHeight: '75%',
   },
-  passportHeader: {
+  modalSheet: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.xxl,
+    padding: spacing.lg,
+    ...shadows.modal,
+  },
+  modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
-    paddingBottom: spacing.sm,
-  },
-  passportTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: '#0F172A',
-  },
-  closeBtn: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#64748B',
-    padding: 4,
-  },
-  passportBody: {
-    marginTop: spacing.md,
-  },
-  passportItem: {
     marginBottom: spacing.md,
   },
+  modalTitle: {
+    ...typography.h3,
+    color: colors.textPrimary,
+  },
+  passportRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+  },
   passportLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#64748B',
-    textTransform: 'uppercase',
-    marginBottom: 4,
+    ...typography.caption,
+    color: colors.textSecondary,
   },
   passportValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#0F172A',
-  },
-  passportValueGreen: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#16A34A',
-  },
-  allergyTagList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-  },
-  allergyTag: {
-    backgroundColor: '#FEE2E2',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  allergyTagText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#991B1B',
+    ...typography.captionBold,
+    color: colors.textPrimary,
+    maxWidth: '65%',
+    textAlign: 'right',
   },
 });
