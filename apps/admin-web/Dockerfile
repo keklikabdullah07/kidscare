@@ -4,8 +4,8 @@ FROM node:20-alpine AS builder
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 WORKDIR /app
 
-# Copy monorepo workspace configuration and packages
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+# Copy monorepo workspace configuration, tsconfig and packages
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json ./
 COPY packages/ ./packages/
 COPY apps/admin-web/ ./apps/admin-web/
 
