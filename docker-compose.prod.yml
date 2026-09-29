@@ -47,8 +47,10 @@ services:
       DATABASE_AUTH_LOOKUP_URL: ${DATABASE_AUTH_LOOKUP_URL:-postgresql://kidscare_auth_lookup:auth_pw@postgres:5432/kidscare?schema=public}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       JWT_SECRET: ${JWT_SECRET:-kidscare_super_secret_jwt_key_2026}
+    expose:
+      - '3000'
     ports:
-      - '3000:3000'
+      - '3005:3000'
 
   web:
     build:
@@ -60,8 +62,10 @@ services:
     restart: always
     depends_on:
       - api
+    expose:
+      - '80'
     ports:
-      - '8080:80'
+      - '8085:80'
 
 volumes:
   postgres_data:
