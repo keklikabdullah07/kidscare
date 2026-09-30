@@ -14,13 +14,13 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://kidscare-api.onrender.com"
+        "EXPO_PUBLIC_API_URL": "http://212.87.221.101:3005"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://kidscare-api.onrender.com"
+        "EXPO_PUBLIC_API_URL": "http://212.87.221.101:3005"
       }
     }
   },

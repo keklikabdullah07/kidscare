@@ -11,7 +11,8 @@
       "bundleIdentifier": "com.kidscare.app"
     },
     "android": {
-      "package": "com.kidscare.app"
+      "package": "com.kidscare.app",
+      "usesCleartextTraffic": true
     },
     "extra": {
       "eas": {

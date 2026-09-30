@@ -21,7 +21,7 @@ export async function getCustomBaseUrl(): Promise<string | null> {
     await AsyncStorage.removeItem(CUSTOM_URL_KEY);
   }
   const envUrl = process.env.EXPO_PUBLIC_API_URL;
-  runtimeBaseUrl = envUrl || 'https://kidscare-api.onrender.com';
+  runtimeBaseUrl = envUrl || 'http://212.87.221.101:3005';
   return runtimeBaseUrl;
 }
 
@@ -36,7 +36,7 @@ export function resolveBaseUrl(): string {
   const envUrl = process.env.EXPO_PUBLIC_API_URL;
   if (envUrl) return envUrl;
 
-  return 'https://kidscare-api.onrender.com';
+  return 'http://212.87.221.101:3005';
 }
 
 export class ApiError extends Error {
