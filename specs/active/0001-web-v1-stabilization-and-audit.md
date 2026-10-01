@@ -1,0 +1,57 @@
+# Spec 0001 — Web Yönetim Paneli V1 Stabilizasyonu ve Kalite Denetimi
+
+- Status: Draft
+- Mode: lite
+- Plan: `specs/plans/0001-web-v1-stabilization-plan.md`
+
+## Intent
+
+KidsCare Web Yönetim Paneli (`apps/admin-web`), MVP aşamasında 14 sayfa ile hayata geçirilmiş ancak canlıda (`https://kidscare.abdullahkeklik.com`) resmi bir V1 kalite denetiminden geçmemiştir. Kullanıcı deneyiminde form gönderimleri, sayfa geçişleri, rol yetkileri ve API yanıtlarında hatalar yaşanmaktadır. Bu çalışma ile 14 web sayfasının tümü Admin, Öğretmen ve Veli rolleri için baştan sona denetlenecek, tespit edilen tüm API ve UI hataları çözülecek ve sistem "KidsCare Web V1" sertifikalı, kararlı bir sürüme ulaştırılacaktır.
+
+## Requirements
+
+1. **Rol Bazlı Erişim ve Navigasyon:**
+   - Admin kullanıcısı kreşin tüm yönetimsel sayfalarına erişebilmeli ve veri kaydedebilmelidir.
+   - Öğretmen kullanıcısı yalnızca kendi yetkili olduğu sınıfları, yoklama ve karne alanlarını yönetebilmelidir.
+   - Veli kullanıcısı yalnızca kendi çocuğunun verilerini görebilmeli, yönetimsel menülere ve başka çocukların verilerine asla erişememelidir.
+2. **Form ve Modal Güvenliği:**
+   - Öğrenci ekleme/düzenleme, sınıf oluşturma, öğretmen atama formlarında tüm alanlar doğrulanmalı, API 400/500 hataları kullanıcıya anlaşılır bildirim (toast) ile gösterilmelidir.
+   - Modal pencereler <kbd>Escape</kbd> veya backdrop tıklamasıyla sorunsuz kapanmalıdır.
+3. **Savunmacı Arayüz Garantisi:**
+   - Boş veri durumlarında asla boş veya kırık beyaz ekran gösterilmemeli, `<EmptyState>` bileşeni devreye girmelidir.
+   - Sayfa yüklenirken düzgün yüklenme (skeleton/spinner) durumları çalışmalıdır.
+
+## Constraints & out of scope
+
+- **Kapsam İçi:** Web Yönetim Paneli (`apps/admin-web`) ve ona hizmet eden API endpoint'leri (`apps/api`).
+- **Kapsam Dışı:** Bu şartname mobil uygulamayı (`apps/mobile`) kapsamaz; mobil stabilizasyonu ayrı bir iş paketi olarak yürütülecektir.
+
+## Acceptance criteria
+
+- [ ] AC-1 — Kimlik doğrulama (Giriş, çıkış, oturum yenileme) hatasız çalışmalıdır.
+- [ ] AC-2 — `/students` sayfasında öğrenci listeleme, arama, filtreleme, yeni öğrenci kaydı ve silme hatasız çalışmalıdır.
+- [ ] AC-3 — `/attendance` sayfasında sınıf bazlı günlük yoklama alma ve güncelleme hatasız kaydedilmelidir.
+- [ ] AC-4 — `/tracking` sayfasında günlük karne (yemek, uyku, ruh hali, etkinlik) doldurma ve veliye yansıma testi geçmelidir.
+- [ ] AC-5 — `/team` sayfasında öğretmen ve personel yönetimi sorunsuz çalışmalıdır.
+- [ ] AC-6 — `/settings` sayfasında kreş ayarları ve sınıf yönetimi güncellenebilmelidir.
+- [ ] AC-7 — `/medication`, `/pickup`, `/incidents`, `/menus`, `/gallery` modülleri temel akışları hata vermeden tamamlamalıdır.
+- [ ] AC-8 — Veli portalında (`/portal`) veli kendi çocuğunun karnesini ve duyurularını görebilmelidir.
+- [ ] AC-9 — Tarayıcı konsolunda (Chrome DevTools) çözülmemiş `Uncaught Error` veya kırmızı API çökmesi kalmamalıdır.
+
+## Definition of Done
+
+- [ ] Tüm 9 kabul kriteri tarayıcı ve API testleriyle kanıtlanmış olmalı
+- [ ] `scripts/check.ps1` (Types + Lint + Test) yeşil olmalı
+- [ ] İnceleme (Review) raporu oluşturulup bulunan hatalar giderilmiş olmalı
+- [ ] İlgili ADR veya dokümanlar güncellenmeli
+- [ ] Şartname `specs/done/` klasörüne taşınmalı
+
+## Scorecard (fill at ship)
+
+| Metric                        | Value |
+| ----------------------------- | ----- |
+| Spec revisions                |       |
+| Fix rounds                    |       |
+| Review findings: real / noise |       |
+| Regressions introduced        |       |
+| Bugs escaped to production    |       |
