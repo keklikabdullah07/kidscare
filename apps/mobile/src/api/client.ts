@@ -1,46 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TOKEN_KEY = 'kidscare.token';
-const CUSTOM_URL_KEY = 'kidscare.custom_api_url';
-let runtimeBaseUrl: string | null = null;
 
 declare const process: { env: Record<string, string | undefined> };
 
-export async function getCustomBaseUrl(): Promise<string | null> {
-  const stored = await AsyncStorage.getItem(CUSTOM_URL_KEY);
-  if (
-    stored &&
-    !stored.includes('loca.lt') &&
-    !stored.includes('192.168.1.154') &&
-    !stored.includes('192.168.68.') &&
-    !stored.includes('onrender.com')
-  ) {
-    runtimeBaseUrl = stored;
-    return stored;
-  }
-  if (stored) {
-    await AsyncStorage.removeItem(CUSTOM_URL_KEY);
-  }
-  const envUrl = process.env.EXPO_PUBLIC_API_URL;
-  runtimeBaseUrl = envUrl || 'https://kidscare.abdullahkeklik.com/api';
-  return runtimeBaseUrl;
-}
-
-export async function setCustomBaseUrl(url: string | null): Promise<void> {
-  runtimeBaseUrl = url?.trim() || null;
-  if (runtimeBaseUrl) await AsyncStorage.setItem(CUSTOM_URL_KEY, runtimeBaseUrl);
-  else await AsyncStorage.removeItem(CUSTOM_URL_KEY);
-}
-
-export function getDefaultBaseUrl(): string {
-  const envUrl = process.env.EXPO_PUBLIC_API_URL;
-  if (envUrl) return envUrl;
-  return 'https://kidscare.abdullahkeklik.com/api';
-}
-
 export function resolveBaseUrl(): string {
-  if (runtimeBaseUrl) return runtimeBaseUrl;
-  return getDefaultBaseUrl();
+  const envUrl = process.env.EXPO_PUBLIC_API_URL;
+  if (envUrl && envUrl.trim().length > 0) return envUrl.trim().replace(/\/$/, '');
+  return 'https://kidscare.abdullahkeklik.com/api';
 }
 
 export class ApiError extends Error {
@@ -64,10 +31,6 @@ export async function setStoredToken(token: string | null): Promise<void> {
 }
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
-  if (!runtimeBaseUrl) {
-    const custom = await getCustomBaseUrl();
-    if (custom) runtimeBaseUrl = custom;
-  }
   const baseUrl = resolveBaseUrl();
   const headers = new Headers(init.headers);
   headers.set('Bypass-Tunnel-Reminder', 'true');

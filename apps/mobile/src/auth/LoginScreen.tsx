@@ -14,7 +14,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from './AuthContext';
 import { colors, radii, shadows, spacing, typography } from '../theme';
-import { getCustomBaseUrl, getDefaultBaseUrl, resolveBaseUrl, setCustomBaseUrl } from '../api/client';
 import { KidsCareLogo } from '../components/KidsCareLogo';
 import { useResponsive } from '../utils/responsive';
 
@@ -57,29 +56,16 @@ export function LoginScreen({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [serverUrl, setServerUrl] = useState(resolveBaseUrl());
-  const [showServerConfig, setShowServerConfig] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [activePreset, setActivePreset] = useState<DemoRole>('PARENT');
   const error = state.status === 'unauthenticated' ? state.error : null;
   const { isSmallPhone } = useResponsive();
 
-  useEffect(() => {
-    void getCustomBaseUrl().then((url) => {
-      if (url) setServerUrl(url);
-    });
-  }, []);
-
   async function performLogin(targetSlug: string, targetEmail: string, targetPass: string): Promise<void> {
     if (submitting) return;
     setSubmitting(true);
-    console.log(`👉 [LOGIN ATTEMPT] slug: "${targetSlug}", email: "${targetEmail}", serverUrl: "${serverUrl}"`);
     try {
-      if (serverUrl) {
-        await setCustomBaseUrl(serverUrl);
-      }
       await login(targetSlug.trim(), targetEmail.trim(), targetPass);
-      console.log(`🎉 [LOGIN SUCCESS] Logged in as: "${targetEmail}"`);
     } catch (err) {
       console.error(`❌ [LOGIN ERROR]:`, err);
     } finally {
@@ -274,47 +260,6 @@ export function LoginScreen({
                 </View>
               )}
             </Pressable>
-
-            {/* Server Config Accordion */}
-            <Pressable
-              style={styles.serverToggle}
-              onPress={() => setShowServerConfig((prev) => !prev)}
-            >
-              <Ionicons name="hardware-chip-outline" size={12} color={colors.textMuted} />
-              <Text style={styles.serverToggleText} numberOfLines={1}>
-                {serverUrl.replace('https://', '').replace('http://', '')}
-              </Text>
-              <Ionicons
-                name={showServerConfig ? 'chevron-up' : 'chevron-down'}
-                size={12}
-                color={colors.textMuted}
-              />
-            </Pressable>
-
-            {showServerConfig && (
-              <View style={styles.serverConfigBox}>
-                <Text style={styles.serverConfigLabel}>API Sunucu Adresi:</Text>
-                <TextInput
-                  style={styles.serverInput}
-                  value={serverUrl}
-                  onChangeText={setServerUrl}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  placeholder="https://kidscare.abdullahkeklik.com/api"
-                  placeholderTextColor={colors.textMuted}
-                />
-                <Pressable
-                  style={styles.serverResetBtn}
-                  onPress={() => {
-                    const def = getDefaultBaseUrl();
-                    setServerUrl(def);
-                    void setCustomBaseUrl(def);
-                  }}
-                >
-                  <Text style={styles.serverResetText}>Varsayılana Sıfırla</Text>
-                </Pressable>
-              </View>
-            )}
           </View>
 
           {/* Footer Note */}
@@ -548,52 +493,6 @@ const styles = StyleSheet.create({
   buttonPressed: {
     opacity: 0.9,
     transform: [{ scale: 0.985 }],
-  },
-  serverToggle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
-    paddingVertical: 2,
-    gap: 4,
-  },
-  serverToggleText: {
-    fontSize: 10,
-    color: colors.textMuted,
-    maxWidth: 200,
-  },
-  serverConfigBox: {
-    marginTop: 6,
-    padding: spacing.sm,
-    backgroundColor: colors.bg,
-    borderRadius: radii.sm,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  serverConfigLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: colors.textSecondary,
-    marginBottom: 4,
-  },
-  serverInput: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radii.xs + 2,
-    paddingHorizontal: spacing.xs + 2,
-    height: 32,
-    fontSize: 11,
-    backgroundColor: colors.surface,
-    color: colors.textPrimary,
-  },
-  serverResetBtn: {
-    marginTop: 4,
-    alignItems: 'center',
-  },
-  serverResetText: {
-    fontSize: 10,
-    color: colors.primary,
-    fontWeight: '700',
   },
   footerText: {
     fontSize: 10,
