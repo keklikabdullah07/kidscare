@@ -14,13 +14,13 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://212.87.221.101:3005"
+        "EXPO_PUBLIC_API_URL": "https://kidscare.abdullahkeklik.com/api"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://212.87.221.101:3005"
+        "EXPO_PUBLIC_API_URL": "https://kidscare.abdullahkeklik.com/api"
       }
     }
   },

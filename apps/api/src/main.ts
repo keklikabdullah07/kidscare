@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 const DEFAULT_PROD_ORIGINS = [
+  'https://kidscare.abdullahkeklik.com',
   'https://kidscare-web.onrender.com',
   'https://kidscare-api.onrender.com',
 ];

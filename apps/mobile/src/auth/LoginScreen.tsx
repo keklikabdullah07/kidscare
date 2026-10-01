@@ -300,7 +300,7 @@ export function LoginScreen({
                   onChangeText={setServerUrl}
                   autoCapitalize="none"
                   autoCorrect={false}
-                  placeholder="http://192.168.1.155:3000"
+                  placeholder="https://kidscare.abdullahkeklik.com/api"
                   placeholderTextColor={colors.textMuted}
                 />
                 <Pressable

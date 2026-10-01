@@ -22,7 +22,7 @@ export async function getCustomBaseUrl(): Promise<string | null> {
     await AsyncStorage.removeItem(CUSTOM_URL_KEY);
   }
   const envUrl = process.env.EXPO_PUBLIC_API_URL;
-  runtimeBaseUrl = envUrl || 'http://212.87.221.101:3005';
+  runtimeBaseUrl = envUrl || 'https://kidscare.abdullahkeklik.com/api';
   return runtimeBaseUrl;
 }
 
@@ -35,7 +35,7 @@ export async function setCustomBaseUrl(url: string | null): Promise<void> {
 export function getDefaultBaseUrl(): string {
   const envUrl = process.env.EXPO_PUBLIC_API_URL;
   if (envUrl) return envUrl;
-  return 'http://212.87.221.101:3005';
+  return 'https://kidscare.abdullahkeklik.com/api';
 }
 
 export function resolveBaseUrl(): string {
