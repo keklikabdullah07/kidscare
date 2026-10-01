@@ -12,7 +12,8 @@ export async function getCustomBaseUrl(): Promise<string | null> {
     stored &&
     !stored.includes('loca.lt') &&
     !stored.includes('192.168.1.154') &&
-    !stored.includes('192.168.68.')
+    !stored.includes('192.168.68.') &&
+    !stored.includes('onrender.com')
   ) {
     runtimeBaseUrl = stored;
     return stored;
