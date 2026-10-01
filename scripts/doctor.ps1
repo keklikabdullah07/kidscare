@@ -2,16 +2,16 @@
 # Calistirma: ./scripts/doctor.ps1
 
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "🩺 KidsCare ANEW Workspace Doctor" -ForegroundColor Cyan
+Write-Host "[+] KidsCare ANEW Workspace Doctor" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
 $issues = 0
 
 function Check-File($path, $label) {
     if (Test-Path $path) {
-        Write-Host "  ✅ $label : $path" -ForegroundColor Green
+        Write-Host "  [OK] $label : $path" -ForegroundColor Green
     } else {
-        Write-Host "  ❌ $label Eksik : $path" -ForegroundColor Red
+        Write-Host "  [FAIL] $label Eksik : $path" -ForegroundColor Red
         $script:issues++
     }
 }
@@ -19,9 +19,9 @@ function Check-File($path, $label) {
 function Check-Tool($cmd, $label) {
     $found = Get-Command $cmd -ErrorAction SilentlyContinue
     if ($found) {
-        Write-Host "  ✅ $label yuklu : $($found.Source)" -ForegroundColor Green
+        Write-Host "  [OK] $label yuklu : $($found.Source)" -ForegroundColor Green
     } else {
-        Write-Host "  ❌ $label bulunamadi!" -ForegroundColor Red
+        Write-Host "  [FAIL] $label bulunamadi!" -ForegroundColor Red
         $script:issues++
     }
 }
@@ -53,19 +53,19 @@ if ($activeSpecs) {
         $content = Get-Content $spec.FullName -Raw
         if ($content -match "Status:\s*(\w+)") {
             $status = $matches[1]
-            Write-Host "  📋 $($spec.Name) -> Durum: $status" -ForegroundColor Cyan
+            Write-Host "  [*] $($spec.Name) -> Durum: $status" -ForegroundColor Cyan
         } else {
-            Write-Host "  ⚠️ $($spec.Name) -> Status alani bulunamadi!" -ForegroundColor Yellow
+            Write-Host "  [WARN] $($spec.Name) -> Status alani bulunamadi!" -ForegroundColor Yellow
             $issues++
         }
     }
 } else {
-    Write-Host "  ℹ️ Aktif sartname bulunmuyor." -ForegroundColor Gray
+    Write-Host "  [INFO] Aktif sartname bulunmuyor." -ForegroundColor Gray
 }
 
 Write-Host "`n------------------------------------------" -ForegroundColor Cyan
 if ($issues -eq 0) {
-    Write-Host "🎉 [DOKTOR RAPORU: MUKEMMEL] Calisma alani %100 saglikli ve ANEW kurallarina uygun!" -ForegroundColor Green
+    Write-Host "[DOKTOR RAPORU: MUKEMMEL] Calisma alani %100 saglikli ve ANEW kurallarina uygun!" -ForegroundColor Green
 } else {
-    Write-Host "⚠️ [DOKTOR RAPORU: UYARI] Toplam $issues adet eksik/uyari tespit edildi." -ForegroundColor Yellow
+    Write-Host "[DOKTOR RAPORU: UYARI] Toplam $issues adet eksik/uyari tespit edildi." -ForegroundColor Yellow
 }
