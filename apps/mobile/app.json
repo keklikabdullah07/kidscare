@@ -11,9 +11,18 @@
       "bundleIdentifier": "com.kidscare.app"
     },
     "android": {
-      "package": "com.kidscare.app",
-      "usesCleartextTraffic": true
+      "package": "com.kidscare.app"
     },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "eb3a5651-d4f5-4fc9-ba89-a00a1cf1691b"
