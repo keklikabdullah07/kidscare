@@ -38,10 +38,14 @@ coverage/
 # Superpowers & agent artifacts
 .superpowers/
 .agent/
+.agents/
 .claude/
 .codex/
 .cursor/
 .gemini/
+.impeccable/
+.kilo/
+scratch/
 
 # OS files
 .DS_Store
