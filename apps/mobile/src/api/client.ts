@@ -32,12 +32,15 @@ export async function setCustomBaseUrl(url: string | null): Promise<void> {
   else await AsyncStorage.removeItem(CUSTOM_URL_KEY);
 }
 
-export function resolveBaseUrl(): string {
-  if (runtimeBaseUrl) return runtimeBaseUrl;
+export function getDefaultBaseUrl(): string {
   const envUrl = process.env.EXPO_PUBLIC_API_URL;
   if (envUrl) return envUrl;
-
   return 'http://212.87.221.101:3005';
+}
+
+export function resolveBaseUrl(): string {
+  if (runtimeBaseUrl) return runtimeBaseUrl;
+  return getDefaultBaseUrl();
 }
 
 export class ApiError extends Error {

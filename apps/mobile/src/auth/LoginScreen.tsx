@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from './AuthContext';
 import { colors, radii, shadows, spacing, typography } from '../theme';
-import { getCustomBaseUrl, resolveBaseUrl, setCustomBaseUrl } from '../api/client';
+import { getCustomBaseUrl, getDefaultBaseUrl, resolveBaseUrl, setCustomBaseUrl } from '../api/client';
 import { KidsCareLogo } from '../components/KidsCareLogo';
 import { useResponsive } from '../utils/responsive';
 
@@ -306,7 +306,7 @@ export function LoginScreen({
                 <Pressable
                   style={styles.serverResetBtn}
                   onPress={() => {
-                    const def = resolveBaseUrl();
+                    const def = getDefaultBaseUrl();
                     setServerUrl(def);
                     void setCustomBaseUrl(def);
                   }}
