@@ -1,6 +1,6 @@
 # Spec 0001 — Web Yönetim Paneli V1 Stabilizasyonu ve Kalite Denetimi
 
-- Status: Draft
+- Status: Approved
 - Mode: lite
 - Plan: `specs/plans/0001-web-v1-stabilization-plan.md`
 
