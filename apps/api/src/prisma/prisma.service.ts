@@ -1,11 +1,18 @@
-import { ForbiddenException, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  OnModuleDestroy,
+  OnModuleInit,
+  Optional,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient, withTenantContext } from '@kidscare/database';
 import { tenantContext } from '@kidscare/tenant-context';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  constructor(config?: ConfigService) {
+  constructor(@Optional() @Inject(ConfigService) config?: ConfigService) {
     super({
       datasources: {
         db: {

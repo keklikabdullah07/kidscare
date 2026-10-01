@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Optional, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 import type { JwtClaims } from '@kidscare/shared-types';
@@ -9,7 +9,7 @@ const EXPIRES_IN = '24h';
 export class JwtService {
   private readonly secret: string;
 
-  constructor(config?: ConfigService) {
+  constructor(@Optional() @Inject(ConfigService) config?: ConfigService) {
     this.secret = config?.get<string>('JWT_SECRET') ?? process.env.JWT_SECRET ?? 'replace-me';
   }
 
