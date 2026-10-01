@@ -45,6 +45,7 @@ KidsCare yalnızca yoklama, aidat ve mesajlaşma kopyası olmayacak. Farklılaş
 6. İleri otomasyon ve tahminleme
 
 Ayrıntılı plan: `docs/product/implementation-plan.md`
+Ürün & Mühendislik Yol Haritası: `docs/ROADMAP.md`
 
 Piyasa ve ürün analizi: `docs/product/market-research-and-differentiation.md`
 
