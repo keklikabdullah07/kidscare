@@ -1,14 +1,18 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import type { Prisma } from '@kidscare/database';
 import type { AttendanceUpdateInput, CheckInInput, CheckOutInput } from '@kidscare/shared-schemas';
 import { Attendance } from '../entities/attendance.entity';
 import type { IAttendanceRepository } from '../repositories/attendance.repository';
+import { NotificationsService } from '../../notifications/services/notifications.service';
 
 @Injectable()
 export class AttendanceService {
   constructor(
     @Inject('IAttendanceRepository')
     private readonly repo: IAttendanceRepository,
+    @Optional()
+    @Inject(NotificationsService)
+    private readonly notificationsService?: NotificationsService,
   ) {}
 
   async findByDate(tenantId: string, dateStr: string): Promise<Attendance[]> {
@@ -45,6 +49,16 @@ export class AttendanceService {
     };
 
     const saved = await this.repo.upsert(tenantId, studentId, date, updateData);
+
+    if (this.notificationsService) {
+      void this.notificationsService.notifyStudentParents(tenantId, studentId, {
+        title: '⏰ Kreşe Giriş Yapıldı',
+        body: `Öğrenciniz saat ${saved.checkInTime || currentTime} itibarıyla kreşe giriş yaptı.`,
+        type: 'ATTENDANCE_CHECK_IN',
+        data: { studentId, date: dateStr, status: 'PRESENT' },
+      });
+    }
+
     return Attendance.fromPrisma(saved);
   }
 
@@ -68,6 +82,16 @@ export class AttendanceService {
     };
 
     const saved = await this.repo.upsert(tenantId, studentId, date, updateData);
+
+    if (this.notificationsService) {
+      void this.notificationsService.notifyStudentParents(tenantId, studentId, {
+        title: '🚗 Teslim Alındı',
+        body: `Öğrenciniz saat ${saved.checkOutTime || currentTime} itibarıyla ${input.checkOutBy} tarafından teslim alındı.`,
+        type: 'ATTENDANCE_CHECK_OUT',
+        data: { studentId, date: dateStr, checkOutBy: input.checkOutBy },
+      });
+    }
+
     return Attendance.fromPrisma(saved);
   }
 

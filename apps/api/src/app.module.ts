@@ -23,6 +23,7 @@ import { MedicationModule } from './modules/medication/medication.module';
 import { MessagingModule } from './modules/messaging/messaging.module';
 import { IncidentsModule } from './modules/incidents/incidents.module';
 import { DevelopmentModule } from './modules/development/development.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { DevelopmentModule } from './modules/development/development.module';
     MessagingModule,
     IncidentsModule,
     DevelopmentModule,
+    NotificationsModule,
   ],
   providers: [
     Reflector,

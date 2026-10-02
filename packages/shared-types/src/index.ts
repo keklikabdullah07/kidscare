@@ -13,3 +13,4 @@ export * from './medication';
 export * from './messaging';
 export * from './incident';
 export * from './development';
+export * from './notification';

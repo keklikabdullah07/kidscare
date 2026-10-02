@@ -50,6 +50,8 @@ model Tenant {
   developmentObservations DevelopmentObservation[]
   portfolioItems PortfolioItem[]
   homeActivitySuggestions HomeActivitySuggestion[]
+  pushTokens UserPushToken[]
+  notifications Notification[]
 
   @@map("tenants")
 }
@@ -83,6 +85,8 @@ model User {
   incidentsReported IncidentRecord[] @relation("IncidentReporter")
   incidentsNotified IncidentRecord[] @relation("IncidentNotifier")
   developmentObservationsAuthored DevelopmentObservation[] @relation("ObservationTeacher")
+  pushTokens UserPushToken[]
+  notifications Notification[]
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -615,5 +619,51 @@ model HomeActivitySuggestion {
 
   @@index([tenantId, domain])
   @@map("home_activity_suggestions")
+}
+
+enum NotificationType {
+  ATTENDANCE_CHECK_IN
+  ATTENDANCE_CHECK_OUT
+  DAILY_REPORT_SAVED
+  MEDICATION_GIVEN
+  ANNOUNCEMENT
+  SYSTEM
+}
+
+model UserPushToken {
+  id        String   @id @default(cuid())
+  tenantId  String
+  userId    String
+  token     String
+  platform  String   @default("mobile")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, token])
+  @@index([tenantId, userId])
+  @@map("user_push_tokens")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  tenantId  String
+  userId    String
+  title     String
+  body      String
+  type      NotificationType @default(SYSTEM)
+  data      Json?            @default("{}")
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, userId, isRead])
+  @@index([tenantId, createdAt])
+  @@map("notifications")
 }
 

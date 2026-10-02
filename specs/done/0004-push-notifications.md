@@ -1,6 +1,6 @@
 # Spec 0004 — Anlık Bildirimler (Push Notifications) ve Veli Bilgilendirme Sistemi
 
-- Status: Draft
+- Status: Done
 - Mode: lite
 - Plan: `specs/plans/0004-push-notifications-plan.md`
 
@@ -32,28 +32,28 @@ KidsCare platformunda velilerin ve öğretmenlerin çocukların durumuyla ilgili
 
 ## Acceptance criteria
 
-- [ ] AC-1 — Push Token Kaydı: `POST /notifications/token` endpoint'i üzerinden kullanıcı token'ı `user_push_tokens` tablosuna kaydedilmeli ve `DELETE /notifications/token` ile silinebilmelidir.
-- [ ] AC-2 — Yoklama Bildirim Tetikleyicisi: Öğretmen check-in yaptığında öğrencinin velisine Expo Push API üzerinden anlık bildirim gitmelidir.
-- [ ] AC-3 — Teslim Alma Bildirimi: Öğrenci teslim edildiğinde teslim alan kişi bilgisiyle veliye anlık bildirim iletilmelidir.
-- [ ] AC-4 — Günlük Karne Bildirimi: Öğretmen günlük karne kaydettiğinde veliye anlık bildirim iletilmelidir.
-- [ ] AC-5 — İlaç Takip Bildirimi: İlaç verildi işaretlendiğinde veliye anlık teyit bildirimi iletilmelidir.
-- [ ] AC-6 — Fail-Safe Güvencesi: Ağ hatası veya geçersiz push token durumunda yoklama/karne kaydı çökmeksizin başarıyla tamamlanmalıdır.
-- [ ] AC-7 — Bildirim Geçmişi API: `GET /notifications` endpoint'i kullanıcının son bildirimlerini tarih sırasına göre getirmelidir.
-- [ ] AC-8 — Test & Kalite Kapısı: Yeni servis ve repository için birim testleri yazılmalı, `./scripts/check.ps1` %100 yeşil kalmalıdır.
+- [x] AC-1 — Push Token Kaydı: `POST /notifications/token` endpoint'i üzerinden kullanıcı token'ı `user_push_tokens` tablosuna kaydedilmeli ve `DELETE /notifications/token` ile silinebilmelidir.
+- [x] AC-2 — Yoklama Bildirim Tetikleyicisi: Öğretmen check-in yaptığında öğrencinin velisine Expo Push API üzerinden anlık bildirim gitmelidir.
+- [x] AC-3 — Teslim Alma Bildirimi: Öğrenci teslim edildiğinde teslim alan kişi bilgisiyle veliye anlık bildirim iletilmelidir.
+- [x] AC-4 — Günlük Karne Bildirimi: Öğretmen günlük karne kaydettiğinde veliye anlık bildirim iletilmelidir.
+- [x] AC-5 — İlaç Takip Bildirimi: İlaç verildi işaretlendiğinde veliye anlık teyit bildirimi iletilmelidir.
+- [x] AC-6 — Fail-Safe Güvencesi: Ağ hatası veya geçersiz push token durumunda yoklama/karne kaydı çökmeksizin başarıyla tamamlanmalıdır.
+- [x] AC-7 — Bildirim Geçmişi API: `GET /notifications` endpoint'i kullanıcının son bildirimlerini tarih sırasına göre getirmelidir.
+- [x] AC-8 — Test & Kalite Kapısı: Yeni servis ve repository için birim testleri yazılmalı, `./scripts/check.ps1` %100 yeşil kalmalıdır.
 
 ## Definition of Done
 
-- [ ] Tüm 8 kabul kriteri birim testleri ve API çağrılarıyla doğrulanmış olmalı
-- [ ] `scripts/check.ps1` (Types + Lint + Test) yeşil olmalı
-- [ ] Bağımsız inceleme (Review) tamamlanıp bulgular çözülmüş olmalı
-- [ ] Şartname `specs/done/` klasörüne taşınmalı
+- [x] Tüm 8 kabul kriteri birim testleri ve API çağrılarıyla doğrulanmış olmalı
+- [x] `scripts/check.ps1` (Types + Lint + Test) yeşil olmalı
+- [x] Bağımsız inceleme (Review) tamamlanıp bulgular çözülmüş olmalı
+- [x] Şartname `specs/done/` klasörüne taşınmalı
 
 ## Scorecard (fill at ship)
 
 | Metric                        | Value |
 | ----------------------------- | ----- |
-| Spec revisions                |       |
-| Fix rounds                    |       |
-| Review findings: real / noise |       |
-| Regressions introduced        |       |
-| Bugs escaped to production    |       |
+| Spec revisions                | 0     |
+| Fix rounds                    | 1     |
+| Review findings: real / noise | 0 / 0 |
+| Regressions introduced        | 0     |
+| Bugs escaped to production    | 0     |

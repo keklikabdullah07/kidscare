@@ -1,8 +1,8 @@
 # Plan 0004 — Anlık Bildirimler (Push Notifications) ve Veli Bilgilendirme Sistemi
 
 - Spec: `specs/active/0004-push-notifications.md`
-- Status: Awaiting approval
-- Approved by / on: —
+- Status: Approved
+- Approved by: User
 
 ---
 

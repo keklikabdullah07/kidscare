@@ -411,6 +411,29 @@ exports.Prisma.HomeActivitySuggestionScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.UserPushTokenScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  token: 'token',
+  platform: 'platform',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  title: 'title',
+  body: 'body',
+  type: 'type',
+  data: 'data',
+  isRead: 'isRead',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -526,6 +549,15 @@ exports.DevelopmentDomain = exports.$Enums.DevelopmentDomain = {
   SANAT: 'SANAT',
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  ATTENDANCE_CHECK_IN: 'ATTENDANCE_CHECK_IN',
+  ATTENDANCE_CHECK_OUT: 'ATTENDANCE_CHECK_OUT',
+  DAILY_REPORT_SAVED: 'DAILY_REPORT_SAVED',
+  MEDICATION_GIVEN: 'MEDICATION_GIVEN',
+  ANNOUNCEMENT: 'ANNOUNCEMENT',
+  SYSTEM: 'SYSTEM',
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
@@ -549,6 +581,8 @@ exports.Prisma.ModelName = {
   DevelopmentObservation: 'DevelopmentObservation',
   PortfolioItem: 'PortfolioItem',
   HomeActivitySuggestion: 'HomeActivitySuggestion',
+  UserPushToken: 'UserPushToken',
+  Notification: 'Notification',
 };
 
 /**

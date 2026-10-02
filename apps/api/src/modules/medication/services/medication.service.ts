@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  Optional,
 } from '@nestjs/common';
 import type {
   MedicationRecordApprove,
@@ -17,12 +18,16 @@ import type {
   IMedicationRepository,
   MedicationRecordRow,
 } from '../repositories/medication.repository';
+import { NotificationsService } from '../../notifications/services/notifications.service';
 
 @Injectable()
 export class MedicationService {
   constructor(
     @Inject('IMedicationRepository')
     private readonly repo: IMedicationRepository,
+    @Optional()
+    @Inject(NotificationsService)
+    private readonly notificationsService?: NotificationsService,
   ) {}
 
   async list(
@@ -111,6 +116,20 @@ export class MedicationService {
       givenAt: input.givenAt ?? new Date(),
       ...(input.note !== undefined ? { instructions: input.note } : {}),
     });
+
+    if (this.notificationsService) {
+      void this.notificationsService.notifyStudentParents(tenantId, existing.studentId, {
+        title: '💊 İlaç Verildi',
+        body: `${existing.medicationName} ilacı saatinde başarıyla verildi.`,
+        type: 'MEDICATION_GIVEN',
+        data: {
+          medicationId: id,
+          studentId: existing.studentId,
+          medicationName: existing.medicationName,
+        },
+      });
+    }
+
     return this.toResponse(row);
   }
 

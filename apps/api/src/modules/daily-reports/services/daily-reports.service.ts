@@ -1,14 +1,18 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import type { Prisma } from '@kidscare/database';
 import type { BulkDailyReportItem, DailyReportInput } from '@kidscare/shared-schemas';
 import { DailyReport } from '../entities/daily-report.entity';
 import type { IDailyReportsRepository } from '../repositories/daily-reports.repository';
+import { NotificationsService } from '../../notifications/services/notifications.service';
 
 @Injectable()
 export class DailyReportsService {
   constructor(
     @Inject('IDailyReportsRepository')
     private readonly repo: IDailyReportsRepository,
+    @Optional()
+    @Inject(NotificationsService)
+    private readonly notificationsService?: NotificationsService,
   ) {}
 
   async findByDate(tenantId: string, dateStr: string): Promise<DailyReport[]> {
@@ -36,6 +40,16 @@ export class DailyReportsService {
     const date = new Date(dateStr);
     const updateData = this.toUpdateData(input);
     const saved = await this.repo.upsert(tenantId, studentId, date, updateData);
+
+    if (this.notificationsService) {
+      void this.notificationsService.notifyStudentParents(tenantId, studentId, {
+        title: '🌟 Günün Karnesi Paylaşıldı',
+        body: 'Öğretmeniniz bugünkü yemek, uyku ve aktivite karnesini paylaştı.',
+        type: 'DAILY_REPORT_SAVED',
+        data: { studentId, date: dateStr, mood: input.mood },
+      });
+    }
+
     return DailyReport.fromPrisma(saved);
   }
 

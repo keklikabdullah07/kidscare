@@ -18,4 +18,8 @@ export type {
   DevelopmentObservation,
   PortfolioItem,
   HomeActivitySuggestion,
+  UserPushToken,
+  Notification,
 } from './generated/client';
+
+export { NotificationType } from './generated/client';

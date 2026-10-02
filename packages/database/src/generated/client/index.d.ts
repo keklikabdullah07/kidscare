@@ -124,6 +124,16 @@ export type PortfolioItem = $Result.DefaultSelection<Prisma.$PortfolioItemPayloa
  */
 export type HomeActivitySuggestion =
   $Result.DefaultSelection<Prisma.$HomeActivitySuggestionPayload>;
+/**
+ * Model UserPushToken
+ *
+ */
+export type UserPushToken = $Result.DefaultSelection<Prisma.$UserPushTokenPayload>;
+/**
+ * Model Notification
+ *
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>;
 
 /**
  * Enums
@@ -239,6 +249,17 @@ export namespace $Enums {
   };
 
   export type DevelopmentDomain = (typeof DevelopmentDomain)[keyof typeof DevelopmentDomain];
+
+  export const NotificationType: {
+    ATTENDANCE_CHECK_IN: 'ATTENDANCE_CHECK_IN';
+    ATTENDANCE_CHECK_OUT: 'ATTENDANCE_CHECK_OUT';
+    DAILY_REPORT_SAVED: 'DAILY_REPORT_SAVED';
+    MEDICATION_GIVEN: 'MEDICATION_GIVEN';
+    ANNOUNCEMENT: 'ANNOUNCEMENT';
+    SYSTEM: 'SYSTEM';
+  };
+
+  export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
 }
 
 export type TenantStatus = $Enums.TenantStatus;
@@ -284,6 +305,10 @@ export const IncidentCategory: typeof $Enums.IncidentCategory;
 export type DevelopmentDomain = $Enums.DevelopmentDomain;
 
 export const DevelopmentDomain: typeof $Enums.DevelopmentDomain;
+
+export type NotificationType = $Enums.NotificationType;
+
+export const NotificationType: typeof $Enums.NotificationType;
 
 /**
  * ##  Prisma Client ʲˢ
@@ -648,6 +673,26 @@ export class PrismaClient<
    * ```
    */
   get homeActivitySuggestion(): Prisma.HomeActivitySuggestionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.userPushToken`: Exposes CRUD operations for the **UserPushToken** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more UserPushTokens
+   * const userPushTokens = await prisma.userPushToken.findMany()
+   * ```
+   */
+  get userPushToken(): Prisma.UserPushTokenDelegate<ExtArgs>;
+
+  /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more Notifications
+   * const notifications = await prisma.notification.findMany()
+   * ```
+   */
+  get notification(): Prisma.NotificationDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1104,6 +1149,8 @@ export namespace Prisma {
     DevelopmentObservation: 'DevelopmentObservation';
     PortfolioItem: 'PortfolioItem';
     HomeActivitySuggestion: 'HomeActivitySuggestion';
+    UserPushToken: 'UserPushToken';
+    Notification: 'Notification';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -1146,7 +1193,9 @@ export namespace Prisma {
         | 'incidentRecord'
         | 'developmentObservation'
         | 'portfolioItem'
-        | 'homeActivitySuggestion';
+        | 'homeActivitySuggestion'
+        | 'userPushToken'
+        | 'notification';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -2690,6 +2739,146 @@ export namespace Prisma {
           };
         };
       };
+      UserPushToken: {
+        payload: Prisma.$UserPushTokenPayload<ExtArgs>;
+        fields: Prisma.UserPushTokenFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.UserPushTokenFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.UserPushTokenFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload>;
+          };
+          findFirst: {
+            args: Prisma.UserPushTokenFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.UserPushTokenFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload>;
+          };
+          findMany: {
+            args: Prisma.UserPushTokenFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload>[];
+          };
+          create: {
+            args: Prisma.UserPushTokenCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload>;
+          };
+          createMany: {
+            args: Prisma.UserPushTokenCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.UserPushTokenCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload>[];
+          };
+          delete: {
+            args: Prisma.UserPushTokenDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload>;
+          };
+          update: {
+            args: Prisma.UserPushTokenUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload>;
+          };
+          deleteMany: {
+            args: Prisma.UserPushTokenDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.UserPushTokenUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.UserPushTokenUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserPushTokenPayload>;
+          };
+          aggregate: {
+            args: Prisma.UserPushTokenAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateUserPushToken>;
+          };
+          groupBy: {
+            args: Prisma.UserPushTokenGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<UserPushTokenGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.UserPushTokenCountArgs<ExtArgs>;
+            result: $Utils.Optional<UserPushTokenCountAggregateOutputType> | number;
+          };
+        };
+      };
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>;
+        fields: Prisma.NotificationFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[];
+          };
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[];
+          };
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>;
+          };
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateNotification>;
+          };
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<NotificationGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>;
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -2878,6 +3067,8 @@ export namespace Prisma {
     developmentObservations: number;
     portfolioItems: number;
     homeActivitySuggestions: number;
+    pushTokens: number;
+    notifications: number;
   };
 
   export type TenantCountOutputTypeSelect<
@@ -2904,6 +3095,8 @@ export namespace Prisma {
     developmentObservations?: boolean | TenantCountOutputTypeCountDevelopmentObservationsArgs;
     portfolioItems?: boolean | TenantCountOutputTypeCountPortfolioItemsArgs;
     homeActivitySuggestions?: boolean | TenantCountOutputTypeCountHomeActivitySuggestionsArgs;
+    pushTokens?: boolean | TenantCountOutputTypeCountPushTokensArgs;
+    notifications?: boolean | TenantCountOutputTypeCountNotificationsArgs;
   };
 
   // Custom InputTypes
@@ -3109,6 +3302,24 @@ export namespace Prisma {
   };
 
   /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountPushTokensArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: UserPushTokenWhereInput;
+  };
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountNotificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: NotificationWhereInput;
+  };
+
+  /**
    * Count Type UserCountOutputType
    */
 
@@ -3130,6 +3341,8 @@ export namespace Prisma {
     incidentsReported: number;
     incidentsNotified: number;
     developmentObservationsAuthored: number;
+    pushTokens: number;
+    notifications: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -3153,6 +3366,8 @@ export namespace Prisma {
     incidentsNotified?: boolean | UserCountOutputTypeCountIncidentsNotifiedArgs;
     developmentObservationsAuthored?:
       boolean | UserCountOutputTypeCountDevelopmentObservationsAuthoredArgs;
+    pushTokens?: boolean | UserCountOutputTypeCountPushTokensArgs;
+    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
   };
 
   // Custom InputTypes
@@ -3319,6 +3534,24 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: DevelopmentObservationWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPushTokensArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: UserPushTokenWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: NotificationWhereInput;
   };
 
   /**
@@ -3913,6 +4146,8 @@ export namespace Prisma {
         developmentObservations?: boolean | Tenant$developmentObservationsArgs<ExtArgs>;
         portfolioItems?: boolean | Tenant$portfolioItemsArgs<ExtArgs>;
         homeActivitySuggestions?: boolean | Tenant$homeActivitySuggestionsArgs<ExtArgs>;
+        pushTokens?: boolean | Tenant$pushTokensArgs<ExtArgs>;
+        notifications?: boolean | Tenant$notificationsArgs<ExtArgs>;
         _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['tenant']
@@ -3963,6 +4198,8 @@ export namespace Prisma {
     developmentObservations?: boolean | Tenant$developmentObservationsArgs<ExtArgs>;
     portfolioItems?: boolean | Tenant$portfolioItemsArgs<ExtArgs>;
     homeActivitySuggestions?: boolean | Tenant$homeActivitySuggestionsArgs<ExtArgs>;
+    pushTokens?: boolean | Tenant$pushTokensArgs<ExtArgs>;
+    notifications?: boolean | Tenant$notificationsArgs<ExtArgs>;
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TenantIncludeCreateManyAndReturn<
@@ -3993,6 +4230,8 @@ export namespace Prisma {
       developmentObservations: Prisma.$DevelopmentObservationPayload<ExtArgs>[];
       portfolioItems: Prisma.$PortfolioItemPayload<ExtArgs>[];
       homeActivitySuggestions: Prisma.$HomeActivitySuggestionPayload<ExtArgs>[];
+      pushTokens: Prisma.$UserPushTokenPayload<ExtArgs>[];
+      notifications: Prisma.$NotificationPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -4534,6 +4773,16 @@ export namespace Prisma {
       args?: Subset<T, Tenant$homeActivitySuggestionsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$HomeActivitySuggestionPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    pushTokens<T extends Tenant$pushTokensArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$pushTokensArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    notifications<T extends Tenant$notificationsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$notificationsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5376,6 +5625,50 @@ export namespace Prisma {
   };
 
   /**
+   * Tenant.pushTokens
+   */
+  export type Tenant$pushTokensArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    where?: UserPushTokenWhereInput;
+    orderBy?: UserPushTokenOrderByWithRelationInput | UserPushTokenOrderByWithRelationInput[];
+    cursor?: UserPushTokenWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: UserPushTokenScalarFieldEnum | UserPushTokenScalarFieldEnum[];
+  };
+
+  /**
+   * Tenant.notifications
+   */
+  export type Tenant$notificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    where?: NotificationWhereInput;
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    cursor?: NotificationWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
    * Tenant without action
    */
   export type TenantDefaultArgs<
@@ -5605,6 +5898,8 @@ export namespace Prisma {
         incidentsNotified?: boolean | User$incidentsNotifiedArgs<ExtArgs>;
         developmentObservationsAuthored?:
           boolean | User$developmentObservationsAuthoredArgs<ExtArgs>;
+        pushTokens?: boolean | User$pushTokensArgs<ExtArgs>;
+        notifications?: boolean | User$notificationsArgs<ExtArgs>;
         _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['user']
@@ -5659,6 +5954,8 @@ export namespace Prisma {
     incidentsReported?: boolean | User$incidentsReportedArgs<ExtArgs>;
     incidentsNotified?: boolean | User$incidentsNotifiedArgs<ExtArgs>;
     developmentObservationsAuthored?: boolean | User$developmentObservationsAuthoredArgs<ExtArgs>;
+    pushTokens?: boolean | User$pushTokensArgs<ExtArgs>;
+    notifications?: boolean | User$notificationsArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -5688,6 +5985,8 @@ export namespace Prisma {
       incidentsReported: Prisma.$IncidentRecordPayload<ExtArgs>[];
       incidentsNotified: Prisma.$IncidentRecordPayload<ExtArgs>[];
       developmentObservationsAuthored: Prisma.$DevelopmentObservationPayload<ExtArgs>[];
+      pushTokens: Prisma.$UserPushTokenPayload<ExtArgs>[];
+      notifications: Prisma.$NotificationPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -6225,6 +6524,16 @@ export namespace Prisma {
       args?: Subset<T, User$developmentObservationsAuthoredArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$DevelopmentObservationPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    pushTokens<T extends User$pushTokensArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$pushTokensArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$notificationsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6978,6 +7287,50 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: DevelopmentObservationScalarFieldEnum | DevelopmentObservationScalarFieldEnum[];
+  };
+
+  /**
+   * User.pushTokens
+   */
+  export type User$pushTokensArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    where?: UserPushTokenWhereInput;
+    orderBy?: UserPushTokenOrderByWithRelationInput | UserPushTokenOrderByWithRelationInput[];
+    cursor?: UserPushTokenWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: UserPushTokenScalarFieldEnum | UserPushTokenScalarFieldEnum[];
+  };
+
+  /**
+   * User.notifications
+   */
+  export type User$notificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    where?: NotificationWhereInput;
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    cursor?: NotificationWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
   };
 
   /**
@@ -30712,6 +31065,2214 @@ export namespace Prisma {
   };
 
   /**
+   * Model UserPushToken
+   */
+
+  export type AggregateUserPushToken = {
+    _count: UserPushTokenCountAggregateOutputType | null;
+    _min: UserPushTokenMinAggregateOutputType | null;
+    _max: UserPushTokenMaxAggregateOutputType | null;
+  };
+
+  export type UserPushTokenMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    userId: string | null;
+    token: string | null;
+    platform: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type UserPushTokenMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    userId: string | null;
+    token: string | null;
+    platform: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type UserPushTokenCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    userId: number;
+    token: number;
+    platform: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type UserPushTokenMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    token?: true;
+    platform?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type UserPushTokenMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    token?: true;
+    platform?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type UserPushTokenCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    token?: true;
+    platform?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type UserPushTokenAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which UserPushToken to aggregate.
+     */
+    where?: UserPushTokenWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserPushTokens to fetch.
+     */
+    orderBy?: UserPushTokenOrderByWithRelationInput | UserPushTokenOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: UserPushTokenWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserPushTokens from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserPushTokens.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned UserPushTokens
+     **/
+    _count?: true | UserPushTokenCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: UserPushTokenMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: UserPushTokenMaxAggregateInputType;
+  };
+
+  export type GetUserPushTokenAggregateType<T extends UserPushTokenAggregateArgs> = {
+    [P in keyof T & keyof AggregateUserPushToken]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserPushToken[P]>
+      : GetScalarType<T[P], AggregateUserPushToken[P]>;
+  };
+
+  export type UserPushTokenGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: UserPushTokenWhereInput;
+    orderBy?: UserPushTokenOrderByWithAggregationInput | UserPushTokenOrderByWithAggregationInput[];
+    by: UserPushTokenScalarFieldEnum[] | UserPushTokenScalarFieldEnum;
+    having?: UserPushTokenScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: UserPushTokenCountAggregateInputType | true;
+    _min?: UserPushTokenMinAggregateInputType;
+    _max?: UserPushTokenMaxAggregateInputType;
+  };
+
+  export type UserPushTokenGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    userId: string;
+    token: string;
+    platform: string;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: UserPushTokenCountAggregateOutputType | null;
+    _min: UserPushTokenMinAggregateOutputType | null;
+    _max: UserPushTokenMaxAggregateOutputType | null;
+  };
+
+  type GetUserPushTokenGroupByPayload<T extends UserPushTokenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserPushTokenGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof UserPushTokenGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], UserPushTokenGroupByOutputType[P]>
+          : GetScalarType<T[P], UserPushTokenGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type UserPushTokenSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      userId?: boolean;
+      token?: boolean;
+      platform?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['userPushToken']
+  >;
+
+  export type UserPushTokenSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      userId?: boolean;
+      token?: boolean;
+      platform?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['userPushToken']
+  >;
+
+  export type UserPushTokenSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    userId?: boolean;
+    token?: boolean;
+    platform?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type UserPushTokenInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type UserPushTokenIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $UserPushTokenPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'UserPushToken';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        userId: string;
+        token: string;
+        platform: string;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['userPushToken']
+    >;
+    composites: {};
+  };
+
+  type UserPushTokenGetPayload<S extends boolean | null | undefined | UserPushTokenDefaultArgs> =
+    $Result.GetResult<Prisma.$UserPushTokenPayload, S>;
+
+  type UserPushTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserPushTokenFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: UserPushTokenCountAggregateInputType | true;
+    };
+
+  export interface UserPushTokenDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['UserPushToken'];
+      meta: { name: 'UserPushToken' };
+    };
+    /**
+     * Find zero or one UserPushToken that matches the filter.
+     * @param {UserPushTokenFindUniqueArgs} args - Arguments to find a UserPushToken
+     * @example
+     * // Get one UserPushToken
+     * const userPushToken = await prisma.userPushToken.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserPushTokenFindUniqueArgs>(
+      args: SelectSubset<T, UserPushTokenFindUniqueArgs<ExtArgs>>,
+    ): Prisma__UserPushTokenClient<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one UserPushToken that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserPushTokenFindUniqueOrThrowArgs} args - Arguments to find a UserPushToken
+     * @example
+     * // Get one UserPushToken
+     * const userPushToken = await prisma.userPushToken.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserPushTokenFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, UserPushTokenFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__UserPushTokenClient<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first UserPushToken that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPushTokenFindFirstArgs} args - Arguments to find a UserPushToken
+     * @example
+     * // Get one UserPushToken
+     * const userPushToken = await prisma.userPushToken.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserPushTokenFindFirstArgs>(
+      args?: SelectSubset<T, UserPushTokenFindFirstArgs<ExtArgs>>,
+    ): Prisma__UserPushTokenClient<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first UserPushToken that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPushTokenFindFirstOrThrowArgs} args - Arguments to find a UserPushToken
+     * @example
+     * // Get one UserPushToken
+     * const userPushToken = await prisma.userPushToken.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserPushTokenFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, UserPushTokenFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__UserPushTokenClient<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more UserPushTokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPushTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserPushTokens
+     * const userPushTokens = await prisma.userPushToken.findMany()
+     *
+     * // Get first 10 UserPushTokens
+     * const userPushTokens = await prisma.userPushToken.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const userPushTokenWithIdOnly = await prisma.userPushToken.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends UserPushTokenFindManyArgs>(
+      args?: SelectSubset<T, UserPushTokenFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'findMany'>
+    >;
+
+    /**
+     * Create a UserPushToken.
+     * @param {UserPushTokenCreateArgs} args - Arguments to create a UserPushToken.
+     * @example
+     * // Create one UserPushToken
+     * const UserPushToken = await prisma.userPushToken.create({
+     *   data: {
+     *     // ... data to create a UserPushToken
+     *   }
+     * })
+     *
+     */
+    create<T extends UserPushTokenCreateArgs>(
+      args: SelectSubset<T, UserPushTokenCreateArgs<ExtArgs>>,
+    ): Prisma__UserPushTokenClient<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many UserPushTokens.
+     * @param {UserPushTokenCreateManyArgs} args - Arguments to create many UserPushTokens.
+     * @example
+     * // Create many UserPushTokens
+     * const userPushToken = await prisma.userPushToken.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends UserPushTokenCreateManyArgs>(
+      args?: SelectSubset<T, UserPushTokenCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many UserPushTokens and returns the data saved in the database.
+     * @param {UserPushTokenCreateManyAndReturnArgs} args - Arguments to create many UserPushTokens.
+     * @example
+     * // Create many UserPushTokens
+     * const userPushToken = await prisma.userPushToken.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many UserPushTokens and only return the `id`
+     * const userPushTokenWithIdOnly = await prisma.userPushToken.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends UserPushTokenCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, UserPushTokenCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a UserPushToken.
+     * @param {UserPushTokenDeleteArgs} args - Arguments to delete one UserPushToken.
+     * @example
+     * // Delete one UserPushToken
+     * const UserPushToken = await prisma.userPushToken.delete({
+     *   where: {
+     *     // ... filter to delete one UserPushToken
+     *   }
+     * })
+     *
+     */
+    delete<T extends UserPushTokenDeleteArgs>(
+      args: SelectSubset<T, UserPushTokenDeleteArgs<ExtArgs>>,
+    ): Prisma__UserPushTokenClient<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one UserPushToken.
+     * @param {UserPushTokenUpdateArgs} args - Arguments to update one UserPushToken.
+     * @example
+     * // Update one UserPushToken
+     * const userPushToken = await prisma.userPushToken.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends UserPushTokenUpdateArgs>(
+      args: SelectSubset<T, UserPushTokenUpdateArgs<ExtArgs>>,
+    ): Prisma__UserPushTokenClient<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more UserPushTokens.
+     * @param {UserPushTokenDeleteManyArgs} args - Arguments to filter UserPushTokens to delete.
+     * @example
+     * // Delete a few UserPushTokens
+     * const { count } = await prisma.userPushToken.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends UserPushTokenDeleteManyArgs>(
+      args?: SelectSubset<T, UserPushTokenDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more UserPushTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPushTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserPushTokens
+     * const userPushToken = await prisma.userPushToken.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends UserPushTokenUpdateManyArgs>(
+      args: SelectSubset<T, UserPushTokenUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one UserPushToken.
+     * @param {UserPushTokenUpsertArgs} args - Arguments to update or create a UserPushToken.
+     * @example
+     * // Update or create a UserPushToken
+     * const userPushToken = await prisma.userPushToken.upsert({
+     *   create: {
+     *     // ... data to create a UserPushToken
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserPushToken we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserPushTokenUpsertArgs>(
+      args: SelectSubset<T, UserPushTokenUpsertArgs<ExtArgs>>,
+    ): Prisma__UserPushTokenClient<
+      $Result.GetResult<Prisma.$UserPushTokenPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of UserPushTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPushTokenCountArgs} args - Arguments to filter UserPushTokens to count.
+     * @example
+     * // Count the number of UserPushTokens
+     * const count = await prisma.userPushToken.count({
+     *   where: {
+     *     // ... the filter for the UserPushTokens we want to count
+     *   }
+     * })
+     **/
+    count<T extends UserPushTokenCountArgs>(
+      args?: Subset<T, UserPushTokenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserPushTokenCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a UserPushToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPushTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends UserPushTokenAggregateArgs>(
+      args: Subset<T, UserPushTokenAggregateArgs>,
+    ): Prisma.PrismaPromise<GetUserPushTokenAggregateType<T>>;
+
+    /**
+     * Group by UserPushToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPushTokenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends UserPushTokenGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: UserPushTokenGroupByArgs['orderBy'] }
+        : { orderBy?: UserPushTokenGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, UserPushTokenGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetUserPushTokenGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the UserPushToken model
+     */
+    readonly fields: UserPushTokenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserPushToken.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserPushTokenClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the UserPushToken model
+   */
+  interface UserPushTokenFieldRefs {
+    readonly id: FieldRef<'UserPushToken', 'String'>;
+    readonly tenantId: FieldRef<'UserPushToken', 'String'>;
+    readonly userId: FieldRef<'UserPushToken', 'String'>;
+    readonly token: FieldRef<'UserPushToken', 'String'>;
+    readonly platform: FieldRef<'UserPushToken', 'String'>;
+    readonly createdAt: FieldRef<'UserPushToken', 'DateTime'>;
+    readonly updatedAt: FieldRef<'UserPushToken', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * UserPushToken findUnique
+   */
+  export type UserPushTokenFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserPushToken to fetch.
+     */
+    where: UserPushTokenWhereUniqueInput;
+  };
+
+  /**
+   * UserPushToken findUniqueOrThrow
+   */
+  export type UserPushTokenFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserPushToken to fetch.
+     */
+    where: UserPushTokenWhereUniqueInput;
+  };
+
+  /**
+   * UserPushToken findFirst
+   */
+  export type UserPushTokenFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserPushToken to fetch.
+     */
+    where?: UserPushTokenWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserPushTokens to fetch.
+     */
+    orderBy?: UserPushTokenOrderByWithRelationInput | UserPushTokenOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for UserPushTokens.
+     */
+    cursor?: UserPushTokenWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserPushTokens from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserPushTokens.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of UserPushTokens.
+     */
+    distinct?: UserPushTokenScalarFieldEnum | UserPushTokenScalarFieldEnum[];
+  };
+
+  /**
+   * UserPushToken findFirstOrThrow
+   */
+  export type UserPushTokenFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserPushToken to fetch.
+     */
+    where?: UserPushTokenWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserPushTokens to fetch.
+     */
+    orderBy?: UserPushTokenOrderByWithRelationInput | UserPushTokenOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for UserPushTokens.
+     */
+    cursor?: UserPushTokenWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserPushTokens from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserPushTokens.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of UserPushTokens.
+     */
+    distinct?: UserPushTokenScalarFieldEnum | UserPushTokenScalarFieldEnum[];
+  };
+
+  /**
+   * UserPushToken findMany
+   */
+  export type UserPushTokenFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserPushTokens to fetch.
+     */
+    where?: UserPushTokenWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserPushTokens to fetch.
+     */
+    orderBy?: UserPushTokenOrderByWithRelationInput | UserPushTokenOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing UserPushTokens.
+     */
+    cursor?: UserPushTokenWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserPushTokens from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserPushTokens.
+     */
+    skip?: number;
+    distinct?: UserPushTokenScalarFieldEnum | UserPushTokenScalarFieldEnum[];
+  };
+
+  /**
+   * UserPushToken create
+   */
+  export type UserPushTokenCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a UserPushToken.
+     */
+    data: XOR<UserPushTokenCreateInput, UserPushTokenUncheckedCreateInput>;
+  };
+
+  /**
+   * UserPushToken createMany
+   */
+  export type UserPushTokenCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many UserPushTokens.
+     */
+    data: UserPushTokenCreateManyInput | UserPushTokenCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * UserPushToken createManyAndReturn
+   */
+  export type UserPushTokenCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many UserPushTokens.
+     */
+    data: UserPushTokenCreateManyInput | UserPushTokenCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * UserPushToken update
+   */
+  export type UserPushTokenUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a UserPushToken.
+     */
+    data: XOR<UserPushTokenUpdateInput, UserPushTokenUncheckedUpdateInput>;
+    /**
+     * Choose, which UserPushToken to update.
+     */
+    where: UserPushTokenWhereUniqueInput;
+  };
+
+  /**
+   * UserPushToken updateMany
+   */
+  export type UserPushTokenUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update UserPushTokens.
+     */
+    data: XOR<UserPushTokenUpdateManyMutationInput, UserPushTokenUncheckedUpdateManyInput>;
+    /**
+     * Filter which UserPushTokens to update
+     */
+    where?: UserPushTokenWhereInput;
+  };
+
+  /**
+   * UserPushToken upsert
+   */
+  export type UserPushTokenUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the UserPushToken to update in case it exists.
+     */
+    where: UserPushTokenWhereUniqueInput;
+    /**
+     * In case the UserPushToken found by the `where` argument doesn't exist, create a new UserPushToken with this data.
+     */
+    create: XOR<UserPushTokenCreateInput, UserPushTokenUncheckedCreateInput>;
+    /**
+     * In case the UserPushToken was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserPushTokenUpdateInput, UserPushTokenUncheckedUpdateInput>;
+  };
+
+  /**
+   * UserPushToken delete
+   */
+  export type UserPushTokenDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+    /**
+     * Filter which UserPushToken to delete.
+     */
+    where: UserPushTokenWhereUniqueInput;
+  };
+
+  /**
+   * UserPushToken deleteMany
+   */
+  export type UserPushTokenDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which UserPushTokens to delete
+     */
+    where?: UserPushTokenWhereInput;
+  };
+
+  /**
+   * UserPushToken without action
+   */
+  export type UserPushTokenDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserPushToken
+     */
+    select?: UserPushTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPushTokenInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null;
+    _min: NotificationMinAggregateOutputType | null;
+    _max: NotificationMaxAggregateOutputType | null;
+  };
+
+  export type NotificationMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    userId: string | null;
+    title: string | null;
+    body: string | null;
+    type: $Enums.NotificationType | null;
+    isRead: boolean | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type NotificationMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    userId: string | null;
+    title: string | null;
+    body: string | null;
+    type: $Enums.NotificationType | null;
+    isRead: boolean | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type NotificationCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    userId: number;
+    title: number;
+    body: number;
+    type: number;
+    data: number;
+    isRead: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type NotificationMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    title?: true;
+    body?: true;
+    type?: true;
+    isRead?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    title?: true;
+    body?: true;
+    type?: true;
+    isRead?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type NotificationCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    title?: true;
+    body?: true;
+    type?: true;
+    data?: true;
+    isRead?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type NotificationAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Notifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned Notifications
+     **/
+    _count?: true | NotificationCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: NotificationMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: NotificationMaxAggregateInputType;
+  };
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+    [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>;
+  };
+
+  export type NotificationGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: NotificationWhereInput;
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[];
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum;
+    having?: NotificationScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: NotificationCountAggregateInputType | true;
+    _min?: NotificationMinAggregateInputType;
+    _max?: NotificationMaxAggregateInputType;
+  };
+
+  export type NotificationGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    userId: string;
+    title: string;
+    body: string;
+    type: $Enums.NotificationType;
+    data: JsonValue | null;
+    isRead: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: NotificationCountAggregateOutputType | null;
+    _min: NotificationMinAggregateOutputType | null;
+    _max: NotificationMaxAggregateOutputType | null;
+  };
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof NotificationGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+          : GetScalarType<T[P], NotificationGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type NotificationSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      userId?: boolean;
+      title?: boolean;
+      body?: boolean;
+      type?: boolean;
+      data?: boolean;
+      isRead?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['notification']
+  >;
+
+  export type NotificationSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      userId?: boolean;
+      title?: boolean;
+      body?: boolean;
+      type?: boolean;
+      data?: boolean;
+      isRead?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['notification']
+  >;
+
+  export type NotificationSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    userId?: boolean;
+    title?: boolean;
+    body?: boolean;
+    type?: boolean;
+    data?: boolean;
+    isRead?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type NotificationInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type NotificationIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $NotificationPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'Notification';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        userId: string;
+        title: string;
+        body: string;
+        type: $Enums.NotificationType;
+        data: Prisma.JsonValue | null;
+        isRead: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['notification']
+    >;
+    composites: {};
+  };
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> =
+    $Result.GetResult<Prisma.$NotificationPayload, S>;
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: NotificationCountAggregateInputType | true;
+    };
+
+  export interface NotificationDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['Notification'];
+      meta: { name: 'Notification' };
+    };
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(
+      args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(
+      args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     *
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends NotificationFindManyArgs>(
+      args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findMany'>>;
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     *
+     */
+    create<T extends NotificationCreateArgs>(
+      args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends NotificationCreateManyArgs>(
+      args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many Notifications and returns the data saved in the database.
+     * @param {NotificationCreateManyAndReturnArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends NotificationCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, NotificationCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     *
+     */
+    delete<T extends NotificationDeleteArgs>(
+      args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends NotificationUpdateArgs>(
+      args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(
+      args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(
+      args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(
+      args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>,
+    ): Prisma__NotificationClient<
+      $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+     **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends NotificationAggregateArgs>(
+      args: Subset<T, NotificationAggregateArgs>,
+    ): Prisma.PrismaPromise<GetNotificationAggregateType<T>>;
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetNotificationGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the Notification model
+     */
+    readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<'Notification', 'String'>;
+    readonly tenantId: FieldRef<'Notification', 'String'>;
+    readonly userId: FieldRef<'Notification', 'String'>;
+    readonly title: FieldRef<'Notification', 'String'>;
+    readonly body: FieldRef<'Notification', 'String'>;
+    readonly type: FieldRef<'Notification', 'NotificationType'>;
+    readonly data: FieldRef<'Notification', 'Json'>;
+    readonly isRead: FieldRef<'Notification', 'Boolean'>;
+    readonly createdAt: FieldRef<'Notification', 'DateTime'>;
+    readonly updatedAt: FieldRef<'Notification', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput;
+  };
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput;
+  };
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Notifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Notifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Notifications.
+     */
+    skip?: number;
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>;
+  };
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * Notification createManyAndReturn
+   */
+  export type NotificationCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>;
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput;
+  };
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>;
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput;
+  };
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput;
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>;
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>;
+  };
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput;
+  };
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput;
+  };
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null;
+  };
+
+  /**
    * Enums
    */
 
@@ -31083,6 +33644,35 @@ export namespace Prisma {
   export type HomeActivitySuggestionScalarFieldEnum =
     (typeof HomeActivitySuggestionScalarFieldEnum)[keyof typeof HomeActivitySuggestionScalarFieldEnum];
 
+  export const UserPushTokenScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    userId: 'userId';
+    token: 'token';
+    platform: 'platform';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type UserPushTokenScalarFieldEnum =
+    (typeof UserPushTokenScalarFieldEnum)[keyof typeof UserPushTokenScalarFieldEnum];
+
+  export const NotificationScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    userId: 'userId';
+    title: 'title';
+    body: 'body';
+    type: 'type';
+    data: 'data';
+    isRead: 'isRead';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type NotificationScalarFieldEnum =
+    (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
+
   export const SortOrder: {
     asc: 'asc';
     desc: 'desc';
@@ -31347,6 +33937,22 @@ export namespace Prisma {
   >;
 
   /**
+   * Reference to a field of type 'NotificationType'
+   */
+  export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'NotificationType'
+  >;
+
+  /**
+   * Reference to a field of type 'NotificationType[]'
+   */
+  export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'NotificationType[]'
+  >;
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>;
@@ -31391,6 +33997,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationListRelationFilter;
     portfolioItems?: PortfolioItemListRelationFilter;
     homeActivitySuggestions?: HomeActivitySuggestionListRelationFilter;
+    pushTokens?: UserPushTokenListRelationFilter;
+    notifications?: NotificationListRelationFilter;
   };
 
   export type TenantOrderByWithRelationInput = {
@@ -31421,6 +34029,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationOrderByRelationAggregateInput;
     portfolioItems?: PortfolioItemOrderByRelationAggregateInput;
     homeActivitySuggestions?: HomeActivitySuggestionOrderByRelationAggregateInput;
+    pushTokens?: UserPushTokenOrderByRelationAggregateInput;
+    notifications?: NotificationOrderByRelationAggregateInput;
   };
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<
@@ -31455,6 +34065,8 @@ export namespace Prisma {
       developmentObservations?: DevelopmentObservationListRelationFilter;
       portfolioItems?: PortfolioItemListRelationFilter;
       homeActivitySuggestions?: HomeActivitySuggestionListRelationFilter;
+      pushTokens?: UserPushTokenListRelationFilter;
+      notifications?: NotificationListRelationFilter;
     },
     'id' | 'slug'
   >;
@@ -31514,6 +34126,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordListRelationFilter;
     incidentsNotified?: IncidentRecordListRelationFilter;
     developmentObservationsAuthored?: DevelopmentObservationListRelationFilter;
+    pushTokens?: UserPushTokenListRelationFilter;
+    notifications?: NotificationListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -31544,6 +34158,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordOrderByRelationAggregateInput;
     incidentsNotified?: IncidentRecordOrderByRelationAggregateInput;
     developmentObservationsAuthored?: DevelopmentObservationOrderByRelationAggregateInput;
+    pushTokens?: UserPushTokenOrderByRelationAggregateInput;
+    notifications?: NotificationOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -31579,6 +34195,8 @@ export namespace Prisma {
       incidentsReported?: IncidentRecordListRelationFilter;
       incidentsNotified?: IncidentRecordListRelationFilter;
       developmentObservationsAuthored?: DevelopmentObservationListRelationFilter;
+      pushTokens?: UserPushTokenListRelationFilter;
+      notifications?: NotificationListRelationFilter;
     },
     'id' | 'tenantId_email'
   >;
@@ -33577,6 +36195,166 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<'HomeActivitySuggestion'> | Date | string;
   };
 
+  export type UserPushTokenWhereInput = {
+    AND?: UserPushTokenWhereInput | UserPushTokenWhereInput[];
+    OR?: UserPushTokenWhereInput[];
+    NOT?: UserPushTokenWhereInput | UserPushTokenWhereInput[];
+    id?: StringFilter<'UserPushToken'> | string;
+    tenantId?: StringFilter<'UserPushToken'> | string;
+    userId?: StringFilter<'UserPushToken'> | string;
+    token?: StringFilter<'UserPushToken'> | string;
+    platform?: StringFilter<'UserPushToken'> | string;
+    createdAt?: DateTimeFilter<'UserPushToken'> | Date | string;
+    updatedAt?: DateTimeFilter<'UserPushToken'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    user?: XOR<UserRelationFilter, UserWhereInput>;
+  };
+
+  export type UserPushTokenOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    token?: SortOrder;
+    platform?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type UserPushTokenWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      userId_token?: UserPushTokenUserIdTokenCompoundUniqueInput;
+      AND?: UserPushTokenWhereInput | UserPushTokenWhereInput[];
+      OR?: UserPushTokenWhereInput[];
+      NOT?: UserPushTokenWhereInput | UserPushTokenWhereInput[];
+      tenantId?: StringFilter<'UserPushToken'> | string;
+      userId?: StringFilter<'UserPushToken'> | string;
+      token?: StringFilter<'UserPushToken'> | string;
+      platform?: StringFilter<'UserPushToken'> | string;
+      createdAt?: DateTimeFilter<'UserPushToken'> | Date | string;
+      updatedAt?: DateTimeFilter<'UserPushToken'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      user?: XOR<UserRelationFilter, UserWhereInput>;
+    },
+    'id' | 'userId_token'
+  >;
+
+  export type UserPushTokenOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    token?: SortOrder;
+    platform?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: UserPushTokenCountOrderByAggregateInput;
+    _max?: UserPushTokenMaxOrderByAggregateInput;
+    _min?: UserPushTokenMinOrderByAggregateInput;
+  };
+
+  export type UserPushTokenScalarWhereWithAggregatesInput = {
+    AND?:
+      UserPushTokenScalarWhereWithAggregatesInput | UserPushTokenScalarWhereWithAggregatesInput[];
+    OR?: UserPushTokenScalarWhereWithAggregatesInput[];
+    NOT?:
+      UserPushTokenScalarWhereWithAggregatesInput | UserPushTokenScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'UserPushToken'> | string;
+    tenantId?: StringWithAggregatesFilter<'UserPushToken'> | string;
+    userId?: StringWithAggregatesFilter<'UserPushToken'> | string;
+    token?: StringWithAggregatesFilter<'UserPushToken'> | string;
+    platform?: StringWithAggregatesFilter<'UserPushToken'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'UserPushToken'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'UserPushToken'> | Date | string;
+  };
+
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[];
+    OR?: NotificationWhereInput[];
+    NOT?: NotificationWhereInput | NotificationWhereInput[];
+    id?: StringFilter<'Notification'> | string;
+    tenantId?: StringFilter<'Notification'> | string;
+    userId?: StringFilter<'Notification'> | string;
+    title?: StringFilter<'Notification'> | string;
+    body?: StringFilter<'Notification'> | string;
+    type?: EnumNotificationTypeFilter<'Notification'> | $Enums.NotificationType;
+    data?: JsonNullableFilter<'Notification'>;
+    isRead?: BoolFilter<'Notification'> | boolean;
+    createdAt?: DateTimeFilter<'Notification'> | Date | string;
+    updatedAt?: DateTimeFilter<'Notification'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    user?: XOR<UserRelationFilter, UserWhereInput>;
+  };
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    title?: SortOrder;
+    body?: SortOrder;
+    type?: SortOrder;
+    data?: SortOrderInput | SortOrder;
+    isRead?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: NotificationWhereInput | NotificationWhereInput[];
+      OR?: NotificationWhereInput[];
+      NOT?: NotificationWhereInput | NotificationWhereInput[];
+      tenantId?: StringFilter<'Notification'> | string;
+      userId?: StringFilter<'Notification'> | string;
+      title?: StringFilter<'Notification'> | string;
+      body?: StringFilter<'Notification'> | string;
+      type?: EnumNotificationTypeFilter<'Notification'> | $Enums.NotificationType;
+      data?: JsonNullableFilter<'Notification'>;
+      isRead?: BoolFilter<'Notification'> | boolean;
+      createdAt?: DateTimeFilter<'Notification'> | Date | string;
+      updatedAt?: DateTimeFilter<'Notification'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      user?: XOR<UserRelationFilter, UserWhereInput>;
+    },
+    'id'
+  >;
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    title?: SortOrder;
+    body?: SortOrder;
+    type?: SortOrder;
+    data?: SortOrderInput | SortOrder;
+    isRead?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: NotificationCountOrderByAggregateInput;
+    _max?: NotificationMaxOrderByAggregateInput;
+    _min?: NotificationMinOrderByAggregateInput;
+  };
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[];
+    OR?: NotificationScalarWhereWithAggregatesInput[];
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'Notification'> | string;
+    tenantId?: StringWithAggregatesFilter<'Notification'> | string;
+    userId?: StringWithAggregatesFilter<'Notification'> | string;
+    title?: StringWithAggregatesFilter<'Notification'> | string;
+    body?: StringWithAggregatesFilter<'Notification'> | string;
+    type?: EnumNotificationTypeWithAggregatesFilter<'Notification'> | $Enums.NotificationType;
+    data?: JsonNullableWithAggregatesFilter<'Notification'>;
+    isRead?: BoolWithAggregatesFilter<'Notification'> | boolean;
+    createdAt?: DateTimeWithAggregatesFilter<'Notification'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'Notification'> | Date | string;
+  };
+
   export type TenantCreateInput = {
     id?: string;
     slug: string;
@@ -33605,6 +36383,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateInput = {
@@ -33635,6 +36415,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUpdateInput = {
@@ -33665,6 +36447,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateInput = {
@@ -33695,6 +36479,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateManyInput = {
@@ -33751,6 +36537,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -33780,6 +36568,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserUpdateInput = {
@@ -33809,6 +36599,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -33838,6 +36630,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -35810,6 +38604,163 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type UserPushTokenCreateInput = {
+    id?: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutPushTokensInput;
+    user: UserCreateNestedOneWithoutPushTokensInput;
+  };
+
+  export type UserPushTokenUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    userId: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type UserPushTokenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutPushTokensNestedInput;
+    user?: UserUpdateOneRequiredWithoutPushTokensNestedInput;
+  };
+
+  export type UserPushTokenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserPushTokenCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    userId: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type UserPushTokenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserPushTokenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationCreateInput = {
+    id?: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutNotificationsInput;
+    user: UserCreateNestedOneWithoutNotificationsInput;
+  };
+
+  export type NotificationUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    userId: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutNotificationsNestedInput;
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput;
+  };
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    userId: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -35969,6 +38920,18 @@ export namespace Prisma {
     none?: HomeActivitySuggestionWhereInput;
   };
 
+  export type UserPushTokenListRelationFilter = {
+    every?: UserPushTokenWhereInput;
+    some?: UserPushTokenWhereInput;
+    none?: UserPushTokenWhereInput;
+  };
+
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput;
+    some?: NotificationWhereInput;
+    none?: NotificationWhereInput;
+  };
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -36050,6 +39013,14 @@ export namespace Prisma {
   };
 
   export type HomeActivitySuggestionOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type UserPushTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -37467,6 +40438,95 @@ export namespace Prisma {
     updatedAt?: SortOrder;
   };
 
+  export type UserPushTokenUserIdTokenCompoundUniqueInput = {
+    userId: string;
+    token: string;
+  };
+
+  export type UserPushTokenCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    token?: SortOrder;
+    platform?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type UserPushTokenMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    token?: SortOrder;
+    platform?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type UserPushTokenMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    token?: SortOrder;
+    platform?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type EnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType;
+  };
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    title?: SortOrder;
+    body?: SortOrder;
+    type?: SortOrder;
+    data?: SortOrder;
+    isRead?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    title?: SortOrder;
+    body?: SortOrder;
+    type?: SortOrder;
+    isRead?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    title?: SortOrder;
+    body?: SortOrder;
+    type?: SortOrder;
+    isRead?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>;
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>;
+  };
+
   export type UserCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -37732,6 +40792,30 @@ export namespace Prisma {
     connect?: HomeActivitySuggestionWhereUniqueInput | HomeActivitySuggestionWhereUniqueInput[];
   };
 
+  export type UserPushTokenCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<UserPushTokenCreateWithoutTenantInput, UserPushTokenUncheckedCreateWithoutTenantInput>
+      | UserPushTokenCreateWithoutTenantInput[]
+      | UserPushTokenUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | UserPushTokenCreateOrConnectWithoutTenantInput
+      | UserPushTokenCreateOrConnectWithoutTenantInput[];
+    createMany?: UserPushTokenCreateManyTenantInputEnvelope;
+    connect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+  };
+
+  export type NotificationCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<NotificationCreateWithoutTenantInput, NotificationUncheckedCreateWithoutTenantInput>
+      | NotificationCreateWithoutTenantInput[]
+      | NotificationUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutTenantInput
+      | NotificationCreateOrConnectWithoutTenantInput[];
+    createMany?: NotificationCreateManyTenantInputEnvelope;
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+  };
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -37995,6 +41079,30 @@ export namespace Prisma {
       | HomeActivitySuggestionCreateOrConnectWithoutTenantInput[];
     createMany?: HomeActivitySuggestionCreateManyTenantInputEnvelope;
     connect?: HomeActivitySuggestionWhereUniqueInput | HomeActivitySuggestionWhereUniqueInput[];
+  };
+
+  export type UserPushTokenUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<UserPushTokenCreateWithoutTenantInput, UserPushTokenUncheckedCreateWithoutTenantInput>
+      | UserPushTokenCreateWithoutTenantInput[]
+      | UserPushTokenUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | UserPushTokenCreateOrConnectWithoutTenantInput
+      | UserPushTokenCreateOrConnectWithoutTenantInput[];
+    createMany?: UserPushTokenCreateManyTenantInputEnvelope;
+    connect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+  };
+
+  export type NotificationUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<NotificationCreateWithoutTenantInput, NotificationUncheckedCreateWithoutTenantInput>
+      | NotificationCreateWithoutTenantInput[]
+      | NotificationUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutTenantInput
+      | NotificationCreateOrConnectWithoutTenantInput[];
+    createMany?: NotificationCreateManyTenantInputEnvelope;
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -38544,6 +41652,56 @@ export namespace Prisma {
     deleteMany?: HomeActivitySuggestionScalarWhereInput | HomeActivitySuggestionScalarWhereInput[];
   };
 
+  export type UserPushTokenUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<UserPushTokenCreateWithoutTenantInput, UserPushTokenUncheckedCreateWithoutTenantInput>
+      | UserPushTokenCreateWithoutTenantInput[]
+      | UserPushTokenUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | UserPushTokenCreateOrConnectWithoutTenantInput
+      | UserPushTokenCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | UserPushTokenUpsertWithWhereUniqueWithoutTenantInput
+      | UserPushTokenUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: UserPushTokenCreateManyTenantInputEnvelope;
+    set?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    disconnect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    delete?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    connect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    update?:
+      | UserPushTokenUpdateWithWhereUniqueWithoutTenantInput
+      | UserPushTokenUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | UserPushTokenUpdateManyWithWhereWithoutTenantInput
+      | UserPushTokenUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: UserPushTokenScalarWhereInput | UserPushTokenScalarWhereInput[];
+  };
+
+  export type NotificationUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<NotificationCreateWithoutTenantInput, NotificationUncheckedCreateWithoutTenantInput>
+      | NotificationCreateWithoutTenantInput[]
+      | NotificationUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutTenantInput
+      | NotificationCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | NotificationUpsertWithWhereUniqueWithoutTenantInput
+      | NotificationUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: NotificationCreateManyTenantInputEnvelope;
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    update?:
+      | NotificationUpdateWithWhereUniqueWithoutTenantInput
+      | NotificationUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | NotificationUpdateManyWithWhereWithoutTenantInput
+      | NotificationUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+  };
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -39079,6 +42237,56 @@ export namespace Prisma {
     deleteMany?: HomeActivitySuggestionScalarWhereInput | HomeActivitySuggestionScalarWhereInput[];
   };
 
+  export type UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<UserPushTokenCreateWithoutTenantInput, UserPushTokenUncheckedCreateWithoutTenantInput>
+      | UserPushTokenCreateWithoutTenantInput[]
+      | UserPushTokenUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | UserPushTokenCreateOrConnectWithoutTenantInput
+      | UserPushTokenCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | UserPushTokenUpsertWithWhereUniqueWithoutTenantInput
+      | UserPushTokenUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: UserPushTokenCreateManyTenantInputEnvelope;
+    set?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    disconnect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    delete?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    connect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    update?:
+      | UserPushTokenUpdateWithWhereUniqueWithoutTenantInput
+      | UserPushTokenUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | UserPushTokenUpdateManyWithWhereWithoutTenantInput
+      | UserPushTokenUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: UserPushTokenScalarWhereInput | UserPushTokenScalarWhereInput[];
+  };
+
+  export type NotificationUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<NotificationCreateWithoutTenantInput, NotificationUncheckedCreateWithoutTenantInput>
+      | NotificationCreateWithoutTenantInput[]
+      | NotificationUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | NotificationCreateOrConnectWithoutTenantInput
+      | NotificationCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | NotificationUpsertWithWhereUniqueWithoutTenantInput
+      | NotificationUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: NotificationCreateManyTenantInputEnvelope;
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    update?:
+      | NotificationUpdateWithWhereUniqueWithoutTenantInput
+      | NotificationUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | NotificationUpdateManyWithWhereWithoutTenantInput
+      | NotificationUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutUsersInput = {
     create?: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutUsersInput;
@@ -39329,6 +42537,28 @@ export namespace Prisma {
     connect?: DevelopmentObservationWhereUniqueInput | DevelopmentObservationWhereUniqueInput[];
   };
 
+  export type UserPushTokenCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<UserPushTokenCreateWithoutUserInput, UserPushTokenUncheckedCreateWithoutUserInput>
+      | UserPushTokenCreateWithoutUserInput[]
+      | UserPushTokenUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      UserPushTokenCreateOrConnectWithoutUserInput | UserPushTokenCreateOrConnectWithoutUserInput[];
+    createMany?: UserPushTokenCreateManyUserInputEnvelope;
+    connect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+  };
+
+  export type NotificationCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+      | NotificationCreateWithoutUserInput[]
+      | NotificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[];
+    createMany?: NotificationCreateManyUserInputEnvelope;
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+  };
+
   export type StudentUncheckedCreateNestedManyWithoutParentInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -39571,6 +42801,28 @@ export namespace Prisma {
       | DevelopmentObservationCreateOrConnectWithoutTeacherInput[];
     createMany?: DevelopmentObservationCreateManyTeacherInputEnvelope;
     connect?: DevelopmentObservationWhereUniqueInput | DevelopmentObservationWhereUniqueInput[];
+  };
+
+  export type UserPushTokenUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<UserPushTokenCreateWithoutUserInput, UserPushTokenUncheckedCreateWithoutUserInput>
+      | UserPushTokenCreateWithoutUserInput[]
+      | UserPushTokenUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      UserPushTokenCreateOrConnectWithoutUserInput | UserPushTokenCreateOrConnectWithoutUserInput[];
+    createMany?: UserPushTokenCreateManyUserInputEnvelope;
+    connect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+  };
+
+  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+      | NotificationCreateWithoutUserInput[]
+      | NotificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[];
+    createMany?: NotificationCreateManyUserInputEnvelope;
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
   };
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -40061,6 +43313,54 @@ export namespace Prisma {
     deleteMany?: DevelopmentObservationScalarWhereInput | DevelopmentObservationScalarWhereInput[];
   };
 
+  export type UserPushTokenUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<UserPushTokenCreateWithoutUserInput, UserPushTokenUncheckedCreateWithoutUserInput>
+      | UserPushTokenCreateWithoutUserInput[]
+      | UserPushTokenUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      UserPushTokenCreateOrConnectWithoutUserInput | UserPushTokenCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | UserPushTokenUpsertWithWhereUniqueWithoutUserInput
+      | UserPushTokenUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: UserPushTokenCreateManyUserInputEnvelope;
+    set?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    disconnect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    delete?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    connect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    update?:
+      | UserPushTokenUpdateWithWhereUniqueWithoutUserInput
+      | UserPushTokenUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | UserPushTokenUpdateManyWithWhereWithoutUserInput
+      | UserPushTokenUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: UserPushTokenScalarWhereInput | UserPushTokenScalarWhereInput[];
+  };
+
+  export type NotificationUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+      | NotificationCreateWithoutUserInput[]
+      | NotificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | NotificationUpsertWithWhereUniqueWithoutUserInput
+      | NotificationUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: NotificationCreateManyUserInputEnvelope;
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    update?:
+      | NotificationUpdateWithWhereUniqueWithoutUserInput
+      | NotificationUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | NotificationUpdateManyWithWhereWithoutUserInput
+      | NotificationUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+  };
+
   export type StudentUncheckedUpdateManyWithoutParentNestedInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -40524,6 +43824,54 @@ export namespace Prisma {
       | DevelopmentObservationUpdateManyWithWhereWithoutTeacherInput
       | DevelopmentObservationUpdateManyWithWhereWithoutTeacherInput[];
     deleteMany?: DevelopmentObservationScalarWhereInput | DevelopmentObservationScalarWhereInput[];
+  };
+
+  export type UserPushTokenUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<UserPushTokenCreateWithoutUserInput, UserPushTokenUncheckedCreateWithoutUserInput>
+      | UserPushTokenCreateWithoutUserInput[]
+      | UserPushTokenUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      UserPushTokenCreateOrConnectWithoutUserInput | UserPushTokenCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | UserPushTokenUpsertWithWhereUniqueWithoutUserInput
+      | UserPushTokenUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: UserPushTokenCreateManyUserInputEnvelope;
+    set?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    disconnect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    delete?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    connect?: UserPushTokenWhereUniqueInput | UserPushTokenWhereUniqueInput[];
+    update?:
+      | UserPushTokenUpdateWithWhereUniqueWithoutUserInput
+      | UserPushTokenUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | UserPushTokenUpdateManyWithWhereWithoutUserInput
+      | UserPushTokenUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: UserPushTokenScalarWhereInput | UserPushTokenScalarWhereInput[];
+  };
+
+  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+      | NotificationCreateWithoutUserInput[]
+      | NotificationUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | NotificationUpsertWithWhereUniqueWithoutUserInput
+      | NotificationUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: NotificationCreateManyUserInputEnvelope;
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+    update?:
+      | NotificationUpdateWithWhereUniqueWithoutUserInput
+      | NotificationUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | NotificationUpdateManyWithWhereWithoutUserInput
+      | NotificationUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
   };
 
   export type TenantCreateNestedOneWithoutStudentsInput = {
@@ -43600,6 +46948,87 @@ export namespace Prisma {
     >;
   };
 
+  export type TenantCreateNestedOneWithoutPushTokensInput = {
+    create?: XOR<TenantCreateWithoutPushTokensInput, TenantUncheckedCreateWithoutPushTokensInput>;
+    connectOrCreate?: TenantCreateOrConnectWithoutPushTokensInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutPushTokensInput = {
+    create?: XOR<UserCreateWithoutPushTokensInput, UserUncheckedCreateWithoutPushTokensInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutPushTokensInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type TenantUpdateOneRequiredWithoutPushTokensNestedInput = {
+    create?: XOR<TenantCreateWithoutPushTokensInput, TenantUncheckedCreateWithoutPushTokensInput>;
+    connectOrCreate?: TenantCreateOrConnectWithoutPushTokensInput;
+    upsert?: TenantUpsertWithoutPushTokensInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<TenantUpdateToOneWithWhereWithoutPushTokensInput, TenantUpdateWithoutPushTokensInput>,
+      TenantUncheckedUpdateWithoutPushTokensInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutPushTokensNestedInput = {
+    create?: XOR<UserCreateWithoutPushTokensInput, UserUncheckedCreateWithoutPushTokensInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutPushTokensInput;
+    upsert?: UserUpsertWithoutPushTokensInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutPushTokensInput, UserUpdateWithoutPushTokensInput>,
+      UserUncheckedUpdateWithoutPushTokensInput
+    >;
+  };
+
+  export type TenantCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<
+      TenantCreateWithoutNotificationsInput,
+      TenantUncheckedCreateWithoutNotificationsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutNotificationsInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EnumNotificationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationType;
+  };
+
+  export type TenantUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutNotificationsInput,
+      TenantUncheckedCreateWithoutNotificationsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutNotificationsInput;
+    upsert?: TenantUpsertWithoutNotificationsInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TenantUpdateToOneWithWhereWithoutNotificationsInput,
+        TenantUpdateWithoutNotificationsInput
+      >,
+      TenantUncheckedUpdateWithoutNotificationsInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput;
+    upsert?: UserUpsertWithoutNotificationsInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>,
+      UserUncheckedUpdateWithoutNotificationsInput
+    >;
+  };
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -44040,6 +47469,23 @@ export namespace Prisma {
     _max?: NestedEnumDevelopmentDomainFilter<$PrismaModel>;
   };
 
+  export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType;
+  };
+
+  export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>;
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>;
+  };
+
   export type UserCreateWithoutTenantInput = {
     id?: string;
     email: string;
@@ -44066,6 +47512,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutTenantInput = {
@@ -44094,6 +47542,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -44889,6 +48339,74 @@ export namespace Prisma {
   export type HomeActivitySuggestionCreateManyTenantInputEnvelope = {
     data:
       HomeActivitySuggestionCreateManyTenantInput | HomeActivitySuggestionCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type UserPushTokenCreateWithoutTenantInput = {
+    id?: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutPushTokensInput;
+  };
+
+  export type UserPushTokenUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    userId: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type UserPushTokenCreateOrConnectWithoutTenantInput = {
+    where: UserPushTokenWhereUniqueInput;
+    create: XOR<
+      UserPushTokenCreateWithoutTenantInput,
+      UserPushTokenUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type UserPushTokenCreateManyTenantInputEnvelope = {
+    data: UserPushTokenCreateManyTenantInput | UserPushTokenCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type NotificationCreateWithoutTenantInput = {
+    id?: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutNotificationsInput;
+  };
+
+  export type NotificationUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    userId: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type NotificationCreateOrConnectWithoutTenantInput = {
+    where: NotificationWhereUniqueInput;
+    create: XOR<
+      NotificationCreateWithoutTenantInput,
+      NotificationUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type NotificationCreateManyTenantInputEnvelope = {
+    data: NotificationCreateManyTenantInput | NotificationCreateManyTenantInput[];
     skipDuplicates?: boolean;
   };
 
@@ -45727,6 +49245,88 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'HomeActivitySuggestion'> | Date | string;
   };
 
+  export type UserPushTokenUpsertWithWhereUniqueWithoutTenantInput = {
+    where: UserPushTokenWhereUniqueInput;
+    update: XOR<
+      UserPushTokenUpdateWithoutTenantInput,
+      UserPushTokenUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      UserPushTokenCreateWithoutTenantInput,
+      UserPushTokenUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type UserPushTokenUpdateWithWhereUniqueWithoutTenantInput = {
+    where: UserPushTokenWhereUniqueInput;
+    data: XOR<
+      UserPushTokenUpdateWithoutTenantInput,
+      UserPushTokenUncheckedUpdateWithoutTenantInput
+    >;
+  };
+
+  export type UserPushTokenUpdateManyWithWhereWithoutTenantInput = {
+    where: UserPushTokenScalarWhereInput;
+    data: XOR<
+      UserPushTokenUpdateManyMutationInput,
+      UserPushTokenUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type UserPushTokenScalarWhereInput = {
+    AND?: UserPushTokenScalarWhereInput | UserPushTokenScalarWhereInput[];
+    OR?: UserPushTokenScalarWhereInput[];
+    NOT?: UserPushTokenScalarWhereInput | UserPushTokenScalarWhereInput[];
+    id?: StringFilter<'UserPushToken'> | string;
+    tenantId?: StringFilter<'UserPushToken'> | string;
+    userId?: StringFilter<'UserPushToken'> | string;
+    token?: StringFilter<'UserPushToken'> | string;
+    platform?: StringFilter<'UserPushToken'> | string;
+    createdAt?: DateTimeFilter<'UserPushToken'> | Date | string;
+    updatedAt?: DateTimeFilter<'UserPushToken'> | Date | string;
+  };
+
+  export type NotificationUpsertWithWhereUniqueWithoutTenantInput = {
+    where: NotificationWhereUniqueInput;
+    update: XOR<
+      NotificationUpdateWithoutTenantInput,
+      NotificationUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      NotificationCreateWithoutTenantInput,
+      NotificationUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type NotificationUpdateWithWhereUniqueWithoutTenantInput = {
+    where: NotificationWhereUniqueInput;
+    data: XOR<NotificationUpdateWithoutTenantInput, NotificationUncheckedUpdateWithoutTenantInput>;
+  };
+
+  export type NotificationUpdateManyWithWhereWithoutTenantInput = {
+    where: NotificationScalarWhereInput;
+    data: XOR<
+      NotificationUpdateManyMutationInput,
+      NotificationUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+    OR?: NotificationScalarWhereInput[];
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+    id?: StringFilter<'Notification'> | string;
+    tenantId?: StringFilter<'Notification'> | string;
+    userId?: StringFilter<'Notification'> | string;
+    title?: StringFilter<'Notification'> | string;
+    body?: StringFilter<'Notification'> | string;
+    type?: EnumNotificationTypeFilter<'Notification'> | $Enums.NotificationType;
+    data?: JsonNullableFilter<'Notification'>;
+    isRead?: BoolFilter<'Notification'> | boolean;
+    createdAt?: DateTimeFilter<'Notification'> | Date | string;
+    updatedAt?: DateTimeFilter<'Notification'> | Date | string;
+  };
+
   export type TenantCreateWithoutUsersInput = {
     id?: string;
     slug: string;
@@ -45754,6 +49354,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -45783,6 +49385,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -46511,6 +50115,68 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type UserPushTokenCreateWithoutUserInput = {
+    id?: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutPushTokensInput;
+  };
+
+  export type UserPushTokenUncheckedCreateWithoutUserInput = {
+    id?: string;
+    tenantId: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type UserPushTokenCreateOrConnectWithoutUserInput = {
+    where: UserPushTokenWhereUniqueInput;
+    create: XOR<UserPushTokenCreateWithoutUserInput, UserPushTokenUncheckedCreateWithoutUserInput>;
+  };
+
+  export type UserPushTokenCreateManyUserInputEnvelope = {
+    data: UserPushTokenCreateManyUserInput | UserPushTokenCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type NotificationCreateWithoutUserInput = {
+    id?: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutNotificationsInput;
+  };
+
+  export type NotificationUncheckedCreateWithoutUserInput = {
+    id?: string;
+    tenantId: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type NotificationCreateOrConnectWithoutUserInput = {
+    where: NotificationWhereUniqueInput;
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>;
+  };
+
+  export type NotificationCreateManyUserInputEnvelope = {
+    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>;
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
@@ -46549,6 +50215,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -46578,6 +50246,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutParentInput = {
@@ -47032,6 +50702,41 @@ export namespace Prisma {
     >;
   };
 
+  export type UserPushTokenUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserPushTokenWhereUniqueInput;
+    update: XOR<UserPushTokenUpdateWithoutUserInput, UserPushTokenUncheckedUpdateWithoutUserInput>;
+    create: XOR<UserPushTokenCreateWithoutUserInput, UserPushTokenUncheckedCreateWithoutUserInput>;
+  };
+
+  export type UserPushTokenUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserPushTokenWhereUniqueInput;
+    data: XOR<UserPushTokenUpdateWithoutUserInput, UserPushTokenUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type UserPushTokenUpdateManyWithWhereWithoutUserInput = {
+    where: UserPushTokenScalarWhereInput;
+    data: XOR<
+      UserPushTokenUpdateManyMutationInput,
+      UserPushTokenUncheckedUpdateManyWithoutUserInput
+    >;
+  };
+
+  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput;
+    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>;
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>;
+  };
+
+  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput;
+    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type NotificationUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationScalarWhereInput;
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>;
+  };
+
   export type TenantCreateWithoutStudentsInput = {
     id?: string;
     slug: string;
@@ -47059,6 +50764,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -47088,6 +50795,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -47121,6 +50830,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutChildrenInput = {
@@ -47149,6 +50860,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutChildrenInput = {
@@ -47688,6 +51401,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -47717,6 +51432,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutChildrenInput = {
@@ -47756,6 +51473,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutChildrenInput = {
@@ -47784,6 +51503,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type ClassroomUpsertWithoutStudentsInput = {
@@ -48136,6 +51857,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomsInput = {
@@ -48165,6 +51888,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomsInput = {
@@ -48303,6 +52028,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomsInput = {
@@ -48332,6 +52059,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutClassroomInput = {
@@ -48405,6 +52134,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomTeachersInput = {
@@ -48434,6 +52165,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomTeachersInput = {
@@ -48500,6 +52233,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutClassroomTeachersInput = {
@@ -48528,6 +52263,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutClassroomTeachersInput = {
@@ -48585,6 +52322,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -48614,6 +52353,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ClassroomUpsertWithoutTeacherAssignmentsInput = {
@@ -48704,6 +52445,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -48732,6 +52475,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutDailyReportsInput = {
@@ -48761,6 +52506,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyReportsInput = {
@@ -48790,6 +52537,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyReportsInput = {
@@ -48906,6 +52655,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyReportsInput = {
@@ -48935,6 +52686,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDailyReportsInput = {
@@ -49038,6 +52791,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendancesInput = {
@@ -49067,6 +52822,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendancesInput = {
@@ -49174,6 +52931,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendancesInput = {
@@ -49203,6 +52962,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendancesInput = {
@@ -49303,6 +53064,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyMenusInput = {
@@ -49332,6 +53095,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyMenusInput = {
@@ -49377,6 +53142,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyMenusInput = {
@@ -49406,6 +53173,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutActivityPostsInput = {
@@ -49435,6 +53204,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutActivityPostsInput = {
@@ -49464,6 +53235,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutActivityPostsInput = {
@@ -49521,6 +53294,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutActivityPostsInput = {
@@ -49550,6 +53325,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPickupContactsInput = {
@@ -49579,6 +53356,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupContactsInput = {
@@ -49608,6 +53387,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupContactsInput = {
@@ -49811,6 +53592,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupContactsInput = {
@@ -49840,6 +53623,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupContactsInput = {
@@ -49999,6 +53784,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupAuthorizationsInput = {
@@ -50028,6 +53815,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupAuthorizationsInput = {
@@ -50162,6 +53951,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthRequestedInput = {
@@ -50190,6 +53981,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthRequestedInput = {
@@ -50226,6 +54019,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthReviewedInput = {
@@ -50254,6 +54049,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthReviewedInput = {
@@ -50350,6 +54147,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupAuthorizationsInput = {
@@ -50379,6 +54178,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupAuthorizationsInput = {
@@ -50549,6 +54350,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthRequestedInput = {
@@ -50577,6 +54380,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutPickupAuthReviewedInput = {
@@ -50625,6 +54430,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthReviewedInput = {
@@ -50653,6 +54460,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type PickupEventUpsertWithWhereUniqueWithoutAuthorizationInput = {
@@ -50710,6 +54519,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupEventsInput = {
@@ -50739,6 +54550,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupEventsInput = {
@@ -50911,6 +54724,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupEventsVerifiedInput = {
@@ -50939,6 +54754,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupEventsVerifiedInput = {
@@ -50993,6 +54810,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupEventsInput = {
@@ -51022,6 +54841,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupEventsInput = {
@@ -51244,6 +55065,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupEventsVerifiedInput = {
@@ -51272,6 +55095,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutMedicationRecordsInput = {
@@ -51301,6 +55126,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMedicationRecordsInput = {
@@ -51330,6 +55157,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMedicationRecordsInput = {
@@ -51428,6 +55257,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsRequestedInput = {
@@ -51456,6 +55287,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsRequestedInput = {
@@ -51492,6 +55325,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsApprovedInput = {
@@ -51520,6 +55355,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsApprovedInput = {
@@ -51556,6 +55393,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsAdministeredInput = {
@@ -51584,6 +55423,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsAdministeredInput = {
@@ -51641,6 +55482,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMedicationRecordsInput = {
@@ -51670,6 +55513,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutMedicationRecordsInput = {
@@ -51792,6 +55637,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsRequestedInput = {
@@ -51820,6 +55667,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsApprovedInput = {
@@ -51868,6 +55717,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsApprovedInput = {
@@ -51896,6 +55747,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsAdministeredInput = {
@@ -51944,6 +55797,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsAdministeredInput = {
@@ -51972,6 +55827,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutConversationsInput = {
@@ -52001,6 +55858,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationsInput = {
@@ -52030,6 +55889,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationsInput = {
@@ -52128,6 +55989,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutConversationsCreatedInput = {
@@ -52156,6 +56019,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutConversationsCreatedInput = {
@@ -52277,6 +56142,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationsInput = {
@@ -52306,6 +56173,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutConversationsInput = {
@@ -52428,6 +56297,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationsCreatedInput = {
@@ -52456,6 +56327,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutConversationInput = {
@@ -52538,6 +56411,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationParticipantsInput = {
@@ -52567,6 +56442,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationParticipantsInput = {
@@ -52641,6 +56518,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutConversationParticipationsInput = {
@@ -52669,6 +56548,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutConversationParticipationsInput = {
@@ -52726,6 +56607,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationParticipantsInput = {
@@ -52755,6 +56638,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutParticipantsInput = {
@@ -52853,6 +56738,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationParticipationsInput = {
@@ -52881,6 +56768,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutMessagesInput = {
@@ -52910,6 +56799,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessagesInput = {
@@ -52939,6 +56830,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessagesInput = {
@@ -53010,6 +56903,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMessagesSentInput = {
@@ -53038,6 +56933,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMessagesSentInput = {
@@ -53110,6 +57007,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessagesInput = {
@@ -53139,6 +57038,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutMessagesInput = {
@@ -53228,6 +57129,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessagesSentInput = {
@@ -53256,6 +57159,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type MessageReadReceiptUpsertWithWhereUniqueWithoutMessageInput = {
@@ -53313,6 +57218,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessageReceiptsInput = {
@@ -53342,6 +57249,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessageReceiptsInput = {
@@ -53405,6 +57314,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMessageReceiptsInput = {
@@ -53433,6 +57344,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMessageReceiptsInput = {
@@ -53490,6 +57403,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -53519,6 +57434,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type MessageUpsertWithoutReceiptsInput = {
@@ -53600,6 +57517,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -53628,6 +57547,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutParentRequestsInput = {
@@ -53657,6 +57578,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutParentRequestsInput = {
@@ -53686,6 +57609,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutParentRequestsInput = {
@@ -53722,6 +57647,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsRaisedInput = {
@@ -53750,6 +57677,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsRaisedInput = {
@@ -53848,6 +57777,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsResolvedInput = {
@@ -53876,6 +57807,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsResolvedInput = {
@@ -53933,6 +57866,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutParentRequestsInput = {
@@ -53962,6 +57897,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutParentRequestsRaisedInput = {
@@ -54010,6 +57947,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsRaisedInput = {
@@ -54038,6 +57977,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type StudentUpsertWithoutParentRequestsInput = {
@@ -54160,6 +58101,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsResolvedInput = {
@@ -54188,6 +58131,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutIncidentRecordsInput = {
@@ -54217,6 +58162,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutIncidentRecordsInput = {
@@ -54246,6 +58193,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutIncidentRecordsInput = {
@@ -54344,6 +58293,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsReportedInput = {
@@ -54372,6 +58323,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsReportedInput = {
@@ -54408,6 +58361,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsNotifiedInput = {
@@ -54436,6 +58391,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsNotifiedInput = {
@@ -54493,6 +58450,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutIncidentRecordsInput = {
@@ -54522,6 +58481,8 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutIncidentRecordsInput = {
@@ -54644,6 +58605,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsReportedInput = {
@@ -54672,6 +58635,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutIncidentsNotifiedInput = {
@@ -54720,6 +58685,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsNotifiedInput = {
@@ -54748,6 +58715,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutDevelopmentObservationsInput = {
@@ -54777,6 +58746,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDevelopmentObservationsInput = {
@@ -54806,6 +58777,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDevelopmentObservationsInput = {
@@ -54904,6 +58877,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
     incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutDevelopmentObservationsAuthoredInput = {
@@ -54932,6 +58907,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
     incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutDevelopmentObservationsAuthoredInput = {
@@ -55026,6 +59003,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDevelopmentObservationsInput = {
@@ -55055,6 +59034,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDevelopmentObservationsInput = {
@@ -55177,6 +59158,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutDevelopmentObservationsAuthoredInput = {
@@ -55205,6 +59188,8 @@ export namespace Prisma {
     parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type PortfolioItemUpsertWithWhereUniqueWithoutObservationInput = {
@@ -55262,6 +59247,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPortfolioItemsInput = {
@@ -55291,6 +59278,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPortfolioItemsInput = {
@@ -55446,6 +59435,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -55475,6 +59466,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPortfolioItemsInput = {
@@ -55626,6 +59619,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutHomeActivitySuggestionsInput = {
@@ -55655,6 +59650,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutHomeActivitySuggestionsInput = {
@@ -55712,6 +59709,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutHomeActivitySuggestionsInput = {
@@ -55741,6 +59740,572 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantCreateWithoutPushTokensInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutPushTokensInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutPushTokensInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<TenantCreateWithoutPushTokensInput, TenantUncheckedCreateWithoutPushTokensInput>;
+  };
+
+  export type UserCreateWithoutPushTokensInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutPushTokensInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventUncheckedCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordUncheckedCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordUncheckedCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordUncheckedCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationUncheckedCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestUncheckedCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutPushTokensInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutPushTokensInput, UserUncheckedCreateWithoutPushTokensInput>;
+  };
+
+  export type TenantUpsertWithoutPushTokensInput = {
+    update: XOR<TenantUpdateWithoutPushTokensInput, TenantUncheckedUpdateWithoutPushTokensInput>;
+    create: XOR<TenantCreateWithoutPushTokensInput, TenantUncheckedCreateWithoutPushTokensInput>;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutPushTokensInput = {
+    where?: TenantWhereInput;
+    data: XOR<TenantUpdateWithoutPushTokensInput, TenantUncheckedUpdateWithoutPushTokensInput>;
+  };
+
+  export type TenantUpdateWithoutPushTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutPushTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type UserUpsertWithoutPushTokensInput = {
+    update: XOR<UserUpdateWithoutPushTokensInput, UserUncheckedUpdateWithoutPushTokensInput>;
+    create: XOR<UserCreateWithoutPushTokensInput, UserUncheckedCreateWithoutPushTokensInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutPushTokensInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutPushTokensInput, UserUncheckedUpdateWithoutPushTokensInput>;
+  };
+
+  export type UserUpdateWithoutPushTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutPushTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUncheckedUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUncheckedUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUncheckedUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUncheckedUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUncheckedUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUncheckedUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type TenantCreateWithoutNotificationsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutNotificationsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutNotificationsInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutNotificationsInput,
+      TenantUncheckedCreateWithoutNotificationsInput
+    >;
+  };
+
+  export type UserCreateWithoutNotificationsInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventUncheckedCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordUncheckedCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordUncheckedCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordUncheckedCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationUncheckedCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestUncheckedCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutNotificationsInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
+  };
+
+  export type TenantUpsertWithoutNotificationsInput = {
+    update: XOR<
+      TenantUpdateWithoutNotificationsInput,
+      TenantUncheckedUpdateWithoutNotificationsInput
+    >;
+    create: XOR<
+      TenantCreateWithoutNotificationsInput,
+      TenantUncheckedCreateWithoutNotificationsInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: TenantWhereInput;
+    data: XOR<
+      TenantUpdateWithoutNotificationsInput,
+      TenantUncheckedUpdateWithoutNotificationsInput
+    >;
+  };
+
+  export type TenantUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type UserUpsertWithoutNotificationsInput = {
+    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>;
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>;
+  };
+
+  export type UserUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUncheckedUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUncheckedUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUncheckedUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUncheckedUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUncheckedUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUncheckedUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateManyTenantInput = {
@@ -56006,6 +60571,27 @@ export namespace Prisma {
     updatedAt?: Date | string;
   };
 
+  export type UserPushTokenCreateManyTenantInput = {
+    id?: string;
+    userId: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type NotificationCreateManyTenantInput = {
+    id?: string;
+    userId: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
   export type UserUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
@@ -56032,6 +60618,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTenantInput = {
@@ -56060,6 +60648,8 @@ export namespace Prisma {
     incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -56875,6 +61465,69 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type UserPushTokenUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutPushTokensNestedInput;
+  };
+
+  export type UserPushTokenUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserPushTokenUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput;
+  };
+
+  export type NotificationUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StudentCreateManyParentInput = {
     id?: string;
     tenantId: string;
@@ -57103,6 +61756,27 @@ export namespace Prisma {
     observation: string;
     observedAt?: Date | string;
     isParentVisible?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type UserPushTokenCreateManyUserInput = {
+    id?: string;
+    tenantId: string;
+    token: string;
+    platform?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type NotificationCreateManyUserInput = {
+    id?: string;
+    tenantId: string;
+    title: string;
+    body: string;
+    type?: $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -57842,6 +62516,69 @@ export namespace Prisma {
     observation?: StringFieldUpdateOperationsInput | string;
     observedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     isParentVisible?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserPushTokenUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutPushTokensNestedInput;
+  };
+
+  export type UserPushTokenUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserPushTokenUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    token?: StringFieldUpdateOperationsInput | string;
+    platform?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutNotificationsNestedInput;
+  };
+
+  export type NotificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type NotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    body?: StringFieldUpdateOperationsInput | string;
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
+    data?: NullableJsonNullValueInput | InputJsonValue;
+    isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -59105,6 +63842,17 @@ export namespace Prisma {
   export type HomeActivitySuggestionArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = HomeActivitySuggestionDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use UserPushTokenDefaultArgs instead
+   */
+  export type UserPushTokenArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = UserPushTokenDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use NotificationDefaultArgs instead
+   */
+  export type NotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    NotificationDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
