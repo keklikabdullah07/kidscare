@@ -1,30 +1,41 @@
+import type { IncomingMessage } from 'node:http';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
 const API_TARGET = process.env.VITE_API_URL || 'http://localhost:3000';
 
+const proxyConfig = {
+  target: API_TARGET,
+  changeOrigin: true,
+  bypass: (req: IncomingMessage) => {
+    if (req.headers.accept?.includes('text/html')) {
+      return '/index.html';
+    }
+  },
+};
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
     proxy: {
-      '/auth': { target: API_TARGET, changeOrigin: true },
-      '/tenants': { target: API_TARGET, changeOrigin: true },
-      '/health': { target: API_TARGET, changeOrigin: true },
-      '/students': { target: API_TARGET, changeOrigin: true },
-      '/attendance': { target: API_TARGET, changeOrigin: true },
-      '/daily-reports': { target: API_TARGET, changeOrigin: true },
-      '/daily-menus': { target: API_TARGET, changeOrigin: true },
-      '/parent': { target: API_TARGET, changeOrigin: true },
-      '/activities': { target: API_TARGET, changeOrigin: true },
-      '/users': { target: API_TARGET, changeOrigin: true },
-      '/classrooms': { target: API_TARGET, changeOrigin: true },
-      '/pickup': { target: API_TARGET, changeOrigin: true },
-      '/medication': { target: API_TARGET, changeOrigin: true },
-      '/messaging': { target: API_TARGET, changeOrigin: true },
-      '/incidents': { target: API_TARGET, changeOrigin: true },
-      '/development': { target: API_TARGET, changeOrigin: true },
+      '/auth': proxyConfig,
+      '/tenants': proxyConfig,
+      '/health': proxyConfig,
+      '/students': proxyConfig,
+      '/attendance': proxyConfig,
+      '/daily-reports': proxyConfig,
+      '/daily-menus': proxyConfig,
+      '/parent': proxyConfig,
+      '/activities': proxyConfig,
+      '/users': proxyConfig,
+      '/classrooms': proxyConfig,
+      '/pickup': proxyConfig,
+      '/medication': proxyConfig,
+      '/messaging': proxyConfig,
+      '/incidents': proxyConfig,
+      '/development': proxyConfig,
     },
   },
   // Workspace deps expose TS source as `main`. Exclude them from the
