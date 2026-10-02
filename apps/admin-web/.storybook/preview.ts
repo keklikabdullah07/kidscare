@@ -15,7 +15,7 @@ const preview: Preview = {
       values: [
         {
           name: 'light',
-          value: '#FAF9F6', // KidsCare Impeccable Linen/Oat background
+          value: '#F6F3EC', // KidsCare Impeccable Warm Canvas
         },
         {
           name: 'dark',

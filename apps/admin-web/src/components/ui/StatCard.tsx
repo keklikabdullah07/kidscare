@@ -62,30 +62,30 @@ export function StatCard({
 
   return (
     <div
-      className={`bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 ${variantStyles.borderHover} shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between group cursor-default`}
+      className={`bg-white dark:bg-[#131B2E] p-6 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 ${variantStyles.borderHover} shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:shadow-[0_16px_36px_-4px_rgba(20,32,54,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group cursor-default`}
     >
       <div className="flex items-center justify-between">
         <span
-          className={`text-xs font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wider ${variantStyles.groupText} transition-colors`}
+          className={`text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ${variantStyles.groupText} transition-colors`}
         >
           {title}
         </span>
         {Icon && (
           <div
-            className={`w-9 h-9 rounded-xl ${variantStyles.iconBg} flex items-center justify-center group-hover:scale-110 transition-transform duration-200`}
+            className={`w-10 h-10 rounded-2xl ${variantStyles.iconBg} flex items-center justify-center group-hover:scale-108 transition-transform duration-300 shadow-2xs`}
           >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-4.5 h-4.5" />
           </div>
         )}
       </div>
 
-      <div className="mt-3">
-        <div className="flex items-baseline gap-2 flex-wrap">
-          <span className="text-2xl font-bold text-slate-900 dark:text-white tabular-nums">
+      <div className="mt-4">
+        <div className="flex items-baseline gap-2.5 flex-wrap">
+          <span className="text-3xl font-black text-slate-900 dark:text-white tabular-nums tracking-tight">
             {value}
           </span>
           {subtitle && (
-            <span className="text-xs text-slate-500 dark:text-slate-300 font-medium">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               {subtitle}
             </span>
           )}
@@ -93,15 +93,15 @@ export function StatCard({
         </div>
 
         {progressPercent !== undefined && (
-          <div className="w-full bg-slate-100 dark:bg-slate-900/80 dark:border dark:border-slate-700/40 h-1.5 rounded-full mt-2.5 overflow-hidden">
+          <div className="w-full bg-[#EFEAE0] dark:bg-slate-900/80 dark:border dark:border-slate-800 h-2 rounded-full mt-3 overflow-hidden">
             <div
-              className={`${variantStyles.progressBar} h-full rounded-full transition-all duration-300`}
+              className={`${variantStyles.progressBar} h-full rounded-full transition-all duration-500 ease-out`}
               style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%` }}
             />
           </div>
         )}
 
-        {footer && <div className="mt-2 text-xs">{footer}</div>}
+        {footer && <div className="mt-2.5 text-xs">{footer}</div>}
       </div>
     </div>
   );

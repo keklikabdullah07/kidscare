@@ -22,6 +22,7 @@ import {
   ClipboardList,
   AlertTriangle,
   Award,
+  Search,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
@@ -273,7 +274,7 @@ export function Layout(): JSX.Element {
   const navGroups = getNavGroupsForRole(userRole);
 
   return (
-    <div className="min-h-screen flex bg-[#FAF9F6] text-slate-900 dark:bg-slate-900 dark:text-slate-100 font-sans">
+    <div className="min-h-screen flex bg-[#F6F3EC] text-slate-900 dark:bg-[#090D16] dark:text-slate-100 font-sans">
       {/* Mobile Drawer Backdrop */}
       {mobileOpen && (
         <div
@@ -284,13 +285,13 @@ export function Layout(): JSX.Element {
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 sm:w-64 bg-white dark:bg-slate-900 border-r border-slate-200/80 dark:border-slate-700/80 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 sm:w-64 bg-[#FCFAF7]/95 dark:bg-[#0D1524]/95 backdrop-blur-xl border-r border-[#E8E2D5]/80 dark:border-slate-800/80 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="overflow-y-auto flex-1">
           {/* Brand Header with Authentic Logo */}
-          <div className="h-20 px-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-700/80 sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs z-10">
+          <div className="h-16 px-4 flex items-center justify-between border-b border-[#E8E2D5]/70 dark:border-slate-800 sticky top-0 bg-[#FCFAF7]/95 dark:bg-[#0D1524]/95 backdrop-blur-md z-10">
             <NavLink
               to="/"
               className="flex items-center group focus:outline-hidden"
@@ -323,10 +324,10 @@ export function Layout(): JSX.Element {
                       to={item.to}
                       onClick={() => setMobileOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${
+                        `flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition-all duration-200 group ${
                           isActive
-                            ? 'bg-teal-700 text-white font-semibold shadow-xs dark:bg-teal-700 dark:text-white'
-                            : 'text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-teal-50/50 dark:hover:bg-slate-800'
+                            ? 'bg-teal-800 text-white font-bold shadow-sm shadow-teal-950/20 dark:bg-teal-700 dark:text-white'
+                            : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-[#EFEAE0]/80 dark:hover:bg-slate-800/80'
                         }`
                       }
                     >
@@ -351,8 +352,8 @@ export function Layout(): JSX.Element {
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-3 border-t border-slate-100 dark:border-slate-700/80 shrink-0 bg-white dark:bg-slate-900">
-          <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/80 flex items-center justify-between gap-2">
+        <div className="p-3 border-t border-[#E8E2D5]/80 dark:border-slate-800/80 shrink-0 bg-[#FCFAF7]/95 dark:bg-[#0D1524]/95">
+          <div className="p-2.5 rounded-2xl bg-[#EFEAE0]/80 dark:bg-slate-800/80 border border-[#E3DCCE]/80 dark:border-slate-700/80 flex items-center justify-between gap-2 shadow-2xs">
             <div className="flex items-center gap-2.5 overflow-hidden">
               <div className="w-8 h-8 rounded-xl bg-teal-700 text-white dark:bg-teal-600 dark:text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
                 {userInitial}
@@ -384,13 +385,13 @@ export function Layout(): JSX.Element {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 md:pl-64">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-30 h-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-700/80 px-4 sm:px-6 flex items-center justify-between">
+        <header className="sticky top-0 z-30 h-16 bg-[#F6F3EC]/85 dark:bg-[#090D16]/85 backdrop-blur-xl border-b border-[#E8E2D5]/70 dark:border-slate-800/80 px-4 sm:px-6 flex items-center justify-between transition-colors">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label="Menüyü Aç"
-              className="p-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 md:hidden"
+              className="p-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-2xl text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 md:hidden"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -399,23 +400,30 @@ export function Layout(): JSX.Element {
                 <KidsCareLogo size="sm" showText={true} />
               </NavLink>
             </div>
-            <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/80 px-3.5 py-1.5 rounded-full border border-slate-200/70 dark:border-slate-700/80 shadow-2xs">
+            <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-white/90 dark:bg-slate-800/90 px-3.5 py-1.5 rounded-full border border-[#E3DCCE] dark:border-slate-700/80 shadow-2xs">
               <Calendar className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
               <span>{getTodayFormatted()}</span>
+            </div>
+            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-[#E3DCCE]/80 dark:border-slate-700/60 text-xs text-slate-400 shadow-2xs">
+              <Search className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-slate-500 dark:text-slate-400">Hızlı ara...</span>
+              <kbd className="text-[10px] font-semibold bg-[#EFEAE0] dark:bg-slate-700/80 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-300">
+                ⌘K
+              </kbd>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 rounded-full font-semibold">
+            <div className="hidden sm:flex items-center gap-2 text-xs text-teal-900 dark:text-teal-200 bg-teal-50/80 dark:bg-teal-950/40 border border-teal-200/80 dark:border-teal-800/60 px-3 py-1.5 rounded-full font-semibold shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
-              Sistem Aktif & Güvenli
+              Kreş Aktif & Güvenli
             </div>
             <button
               type="button"
               onClick={toggleTheme}
               title={isDark ? 'Aydınlık Mod' : 'Karanlık Mod'}
               aria-label={isDark ? 'Aydınlık moda geç' : 'Karanlık moda geç'}
-              className="group p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 rounded-xl transition-all duration-200 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 active:scale-90 cursor-pointer shadow-2xs"
+              className="group p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-white/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 rounded-2xl transition-all duration-200 border border-transparent hover:border-[#E3DCCE] dark:hover:border-slate-700 active:scale-90 cursor-pointer shadow-2xs"
             >
               {isDark ? (
                 <Sun className="w-4.5 h-4.5 text-amber-400 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-110" />

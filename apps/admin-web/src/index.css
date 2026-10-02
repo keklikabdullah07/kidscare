@@ -15,16 +15,20 @@
 
 @utility surface-card {
   background-color: #ffffff;
-  border-color: rgba(226, 232, 240, 0.8);
+  border-color: #ddd4c4;
   border-width: 1px;
   border-style: solid;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 20px -3px rgba(20, 32, 54, 0.08), 0 2px 6px -1px rgba(20, 32, 54, 0.04), inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 @utility surface-card-dark {
-  background-color: #1e293b;
-  border-color: #384758;
+  background-color: #131b2e;
+  border-color: rgba(255, 255, 255, 0.10);
   border-width: 1px;
   border-style: solid;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 24px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 @layer base {
@@ -40,7 +44,7 @@
   body {
     font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: #1e293b;
-    background-color: #faf9f6;
+    background-color: #f6f3ec;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
@@ -48,7 +52,7 @@
 
   html.dark body {
     color: #f1f5f9;
-    background-color: #0f172a;
+    background-color: #090d16;
   }
 
 
