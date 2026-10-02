@@ -52,6 +52,7 @@ model Tenant {
   homeActivitySuggestions HomeActivitySuggestion[]
   pushTokens UserPushToken[]
   notifications Notification[]
+  mediaFiles MediaFile[]
 
   @@map("tenants")
 }
@@ -87,6 +88,8 @@ model User {
   developmentObservationsAuthored DevelopmentObservation[] @relation("ObservationTeacher")
   pushTokens UserPushToken[]
   notifications Notification[]
+  uploadedMedia MediaFile[] @relation("MediaUploader")
+
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -666,4 +669,36 @@ model Notification {
   @@index([tenantId, createdAt])
   @@map("notifications")
 }
+
+enum MediaCategory {
+  STUDENT_AVATAR
+  DAILY_REPORT
+  ACTIVITY
+  PORTFOLIO
+  HEALTH_RECORD
+  GENERAL
+}
+
+model MediaFile {
+  id           String        @id @default(cuid())
+  tenantId     String
+  uploadedById String
+  category     MediaCategory @default(GENERAL)
+  fileName     String
+  fileKey      String        @unique
+  mimeType     String
+  fileSize     Int
+  url          String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  tenant     Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  uploadedBy User   @relation("MediaUploader", fields: [uploadedById], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, category])
+  @@index([tenantId, uploadedById])
+  @@index([tenantId, createdAt])
+  @@map("media_files")
+}
+
 

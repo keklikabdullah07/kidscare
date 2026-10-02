@@ -20,6 +20,7 @@ export type {
   HomeActivitySuggestion,
   UserPushToken,
   Notification,
+  MediaFile,
 } from './generated/client';
 
-export { NotificationType } from './generated/client';
+export { NotificationType, MediaCategory } from './generated/client';

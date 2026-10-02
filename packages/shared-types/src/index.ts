@@ -14,3 +14,4 @@ export * from './messaging';
 export * from './incident';
 export * from './development';
 export * from './notification';
+export * from './media';

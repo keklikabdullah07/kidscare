@@ -24,6 +24,7 @@ import { MessagingModule } from './modules/messaging/messaging.module';
 import { IncidentsModule } from './modules/incidents/incidents.module';
 import { DevelopmentModule } from './modules/development/development.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { MediaModule } from './modules/media/media.module';
 
 @Module({
   imports: [
@@ -51,7 +52,9 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     IncidentsModule,
     DevelopmentModule,
     NotificationsModule,
+    MediaModule,
   ],
+
   providers: [
     Reflector,
     {

@@ -45,6 +45,10 @@ workflows
 scripts
 scratch
 
+# Local uploads and media storage
+uploads
+**/uploads
+
 # Local environment variables
 .env
 .env.local

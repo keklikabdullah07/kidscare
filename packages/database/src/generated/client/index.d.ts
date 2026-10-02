@@ -134,6 +134,11 @@ export type UserPushToken = $Result.DefaultSelection<Prisma.$UserPushTokenPayloa
  *
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>;
+/**
+ * Model MediaFile
+ *
+ */
+export type MediaFile = $Result.DefaultSelection<Prisma.$MediaFilePayload>;
 
 /**
  * Enums
@@ -260,6 +265,17 @@ export namespace $Enums {
   };
 
   export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+
+  export const MediaCategory: {
+    STUDENT_AVATAR: 'STUDENT_AVATAR';
+    DAILY_REPORT: 'DAILY_REPORT';
+    ACTIVITY: 'ACTIVITY';
+    PORTFOLIO: 'PORTFOLIO';
+    HEALTH_RECORD: 'HEALTH_RECORD';
+    GENERAL: 'GENERAL';
+  };
+
+  export type MediaCategory = (typeof MediaCategory)[keyof typeof MediaCategory];
 }
 
 export type TenantStatus = $Enums.TenantStatus;
@@ -309,6 +325,10 @@ export const DevelopmentDomain: typeof $Enums.DevelopmentDomain;
 export type NotificationType = $Enums.NotificationType;
 
 export const NotificationType: typeof $Enums.NotificationType;
+
+export type MediaCategory = $Enums.MediaCategory;
+
+export const MediaCategory: typeof $Enums.MediaCategory;
 
 /**
  * ##  Prisma Client ʲˢ
@@ -693,6 +713,16 @@ export class PrismaClient<
    * ```
    */
   get notification(): Prisma.NotificationDelegate<ExtArgs>;
+
+  /**
+   * `prisma.mediaFile`: Exposes CRUD operations for the **MediaFile** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more MediaFiles
+   * const mediaFiles = await prisma.mediaFile.findMany()
+   * ```
+   */
+  get mediaFile(): Prisma.MediaFileDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1151,6 +1181,7 @@ export namespace Prisma {
     HomeActivitySuggestion: 'HomeActivitySuggestion';
     UserPushToken: 'UserPushToken';
     Notification: 'Notification';
+    MediaFile: 'MediaFile';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -1195,7 +1226,8 @@ export namespace Prisma {
         | 'portfolioItem'
         | 'homeActivitySuggestion'
         | 'userPushToken'
-        | 'notification';
+        | 'notification'
+        | 'mediaFile';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -2879,6 +2911,76 @@ export namespace Prisma {
           };
         };
       };
+      MediaFile: {
+        payload: Prisma.$MediaFilePayload<ExtArgs>;
+        fields: Prisma.MediaFileFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.MediaFileFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.MediaFileFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload>;
+          };
+          findFirst: {
+            args: Prisma.MediaFileFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.MediaFileFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload>;
+          };
+          findMany: {
+            args: Prisma.MediaFileFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload>[];
+          };
+          create: {
+            args: Prisma.MediaFileCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload>;
+          };
+          createMany: {
+            args: Prisma.MediaFileCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.MediaFileCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload>[];
+          };
+          delete: {
+            args: Prisma.MediaFileDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload>;
+          };
+          update: {
+            args: Prisma.MediaFileUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload>;
+          };
+          deleteMany: {
+            args: Prisma.MediaFileDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.MediaFileUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.MediaFileUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MediaFilePayload>;
+          };
+          aggregate: {
+            args: Prisma.MediaFileAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateMediaFile>;
+          };
+          groupBy: {
+            args: Prisma.MediaFileGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<MediaFileGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.MediaFileCountArgs<ExtArgs>;
+            result: $Utils.Optional<MediaFileCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -3069,6 +3171,7 @@ export namespace Prisma {
     homeActivitySuggestions: number;
     pushTokens: number;
     notifications: number;
+    mediaFiles: number;
   };
 
   export type TenantCountOutputTypeSelect<
@@ -3097,6 +3200,7 @@ export namespace Prisma {
     homeActivitySuggestions?: boolean | TenantCountOutputTypeCountHomeActivitySuggestionsArgs;
     pushTokens?: boolean | TenantCountOutputTypeCountPushTokensArgs;
     notifications?: boolean | TenantCountOutputTypeCountNotificationsArgs;
+    mediaFiles?: boolean | TenantCountOutputTypeCountMediaFilesArgs;
   };
 
   // Custom InputTypes
@@ -3320,6 +3424,15 @@ export namespace Prisma {
   };
 
   /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountMediaFilesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MediaFileWhereInput;
+  };
+
+  /**
    * Count Type UserCountOutputType
    */
 
@@ -3343,6 +3456,7 @@ export namespace Prisma {
     developmentObservationsAuthored: number;
     pushTokens: number;
     notifications: number;
+    uploadedMedia: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -3368,6 +3482,7 @@ export namespace Prisma {
       boolean | UserCountOutputTypeCountDevelopmentObservationsAuthoredArgs;
     pushTokens?: boolean | UserCountOutputTypeCountPushTokensArgs;
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
+    uploadedMedia?: boolean | UserCountOutputTypeCountUploadedMediaArgs;
   };
 
   // Custom InputTypes
@@ -3552,6 +3667,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: NotificationWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUploadedMediaArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MediaFileWhereInput;
   };
 
   /**
@@ -4148,6 +4272,7 @@ export namespace Prisma {
         homeActivitySuggestions?: boolean | Tenant$homeActivitySuggestionsArgs<ExtArgs>;
         pushTokens?: boolean | Tenant$pushTokensArgs<ExtArgs>;
         notifications?: boolean | Tenant$notificationsArgs<ExtArgs>;
+        mediaFiles?: boolean | Tenant$mediaFilesArgs<ExtArgs>;
         _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['tenant']
@@ -4200,6 +4325,7 @@ export namespace Prisma {
     homeActivitySuggestions?: boolean | Tenant$homeActivitySuggestionsArgs<ExtArgs>;
     pushTokens?: boolean | Tenant$pushTokensArgs<ExtArgs>;
     notifications?: boolean | Tenant$notificationsArgs<ExtArgs>;
+    mediaFiles?: boolean | Tenant$mediaFilesArgs<ExtArgs>;
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TenantIncludeCreateManyAndReturn<
@@ -4232,6 +4358,7 @@ export namespace Prisma {
       homeActivitySuggestions: Prisma.$HomeActivitySuggestionPayload<ExtArgs>[];
       pushTokens: Prisma.$UserPushTokenPayload<ExtArgs>[];
       notifications: Prisma.$NotificationPayload<ExtArgs>[];
+      mediaFiles: Prisma.$MediaFilePayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -4783,6 +4910,11 @@ export namespace Prisma {
       args?: Subset<T, Tenant$notificationsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    mediaFiles<T extends Tenant$mediaFilesArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$mediaFilesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5669,6 +5801,28 @@ export namespace Prisma {
   };
 
   /**
+   * Tenant.mediaFiles
+   */
+  export type Tenant$mediaFilesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    where?: MediaFileWhereInput;
+    orderBy?: MediaFileOrderByWithRelationInput | MediaFileOrderByWithRelationInput[];
+    cursor?: MediaFileWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: MediaFileScalarFieldEnum | MediaFileScalarFieldEnum[];
+  };
+
+  /**
    * Tenant without action
    */
   export type TenantDefaultArgs<
@@ -5900,6 +6054,7 @@ export namespace Prisma {
           boolean | User$developmentObservationsAuthoredArgs<ExtArgs>;
         pushTokens?: boolean | User$pushTokensArgs<ExtArgs>;
         notifications?: boolean | User$notificationsArgs<ExtArgs>;
+        uploadedMedia?: boolean | User$uploadedMediaArgs<ExtArgs>;
         _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['user']
@@ -5956,6 +6111,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: boolean | User$developmentObservationsAuthoredArgs<ExtArgs>;
     pushTokens?: boolean | User$pushTokensArgs<ExtArgs>;
     notifications?: boolean | User$notificationsArgs<ExtArgs>;
+    uploadedMedia?: boolean | User$uploadedMediaArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -5987,6 +6143,7 @@ export namespace Prisma {
       developmentObservationsAuthored: Prisma.$DevelopmentObservationPayload<ExtArgs>[];
       pushTokens: Prisma.$UserPushTokenPayload<ExtArgs>[];
       notifications: Prisma.$NotificationPayload<ExtArgs>[];
+      uploadedMedia: Prisma.$MediaFilePayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -6534,6 +6691,11 @@ export namespace Prisma {
       args?: Subset<T, User$notificationsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    uploadedMedia<T extends User$uploadedMediaArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$uploadedMediaArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7331,6 +7493,28 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[];
+  };
+
+  /**
+   * User.uploadedMedia
+   */
+  export type User$uploadedMediaArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    where?: MediaFileWhereInput;
+    orderBy?: MediaFileOrderByWithRelationInput | MediaFileOrderByWithRelationInput[];
+    cursor?: MediaFileWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: MediaFileScalarFieldEnum | MediaFileScalarFieldEnum[];
   };
 
   /**
@@ -33273,6 +33457,1171 @@ export namespace Prisma {
   };
 
   /**
+   * Model MediaFile
+   */
+
+  export type AggregateMediaFile = {
+    _count: MediaFileCountAggregateOutputType | null;
+    _avg: MediaFileAvgAggregateOutputType | null;
+    _sum: MediaFileSumAggregateOutputType | null;
+    _min: MediaFileMinAggregateOutputType | null;
+    _max: MediaFileMaxAggregateOutputType | null;
+  };
+
+  export type MediaFileAvgAggregateOutputType = {
+    fileSize: number | null;
+  };
+
+  export type MediaFileSumAggregateOutputType = {
+    fileSize: number | null;
+  };
+
+  export type MediaFileMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    uploadedById: string | null;
+    category: $Enums.MediaCategory | null;
+    fileName: string | null;
+    fileKey: string | null;
+    mimeType: string | null;
+    fileSize: number | null;
+    url: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type MediaFileMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    uploadedById: string | null;
+    category: $Enums.MediaCategory | null;
+    fileName: string | null;
+    fileKey: string | null;
+    mimeType: string | null;
+    fileSize: number | null;
+    url: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type MediaFileCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    uploadedById: number;
+    category: number;
+    fileName: number;
+    fileKey: number;
+    mimeType: number;
+    fileSize: number;
+    url: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type MediaFileAvgAggregateInputType = {
+    fileSize?: true;
+  };
+
+  export type MediaFileSumAggregateInputType = {
+    fileSize?: true;
+  };
+
+  export type MediaFileMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    uploadedById?: true;
+    category?: true;
+    fileName?: true;
+    fileKey?: true;
+    mimeType?: true;
+    fileSize?: true;
+    url?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type MediaFileMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    uploadedById?: true;
+    category?: true;
+    fileName?: true;
+    fileKey?: true;
+    mimeType?: true;
+    fileSize?: true;
+    url?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type MediaFileCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    uploadedById?: true;
+    category?: true;
+    fileName?: true;
+    fileKey?: true;
+    mimeType?: true;
+    fileSize?: true;
+    url?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type MediaFileAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MediaFile to aggregate.
+     */
+    where?: MediaFileWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MediaFiles to fetch.
+     */
+    orderBy?: MediaFileOrderByWithRelationInput | MediaFileOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: MediaFileWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MediaFiles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MediaFiles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned MediaFiles
+     **/
+    _count?: true | MediaFileCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: MediaFileAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: MediaFileSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: MediaFileMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: MediaFileMaxAggregateInputType;
+  };
+
+  export type GetMediaFileAggregateType<T extends MediaFileAggregateArgs> = {
+    [P in keyof T & keyof AggregateMediaFile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMediaFile[P]>
+      : GetScalarType<T[P], AggregateMediaFile[P]>;
+  };
+
+  export type MediaFileGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MediaFileWhereInput;
+    orderBy?: MediaFileOrderByWithAggregationInput | MediaFileOrderByWithAggregationInput[];
+    by: MediaFileScalarFieldEnum[] | MediaFileScalarFieldEnum;
+    having?: MediaFileScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: MediaFileCountAggregateInputType | true;
+    _avg?: MediaFileAvgAggregateInputType;
+    _sum?: MediaFileSumAggregateInputType;
+    _min?: MediaFileMinAggregateInputType;
+    _max?: MediaFileMaxAggregateInputType;
+  };
+
+  export type MediaFileGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    uploadedById: string;
+    category: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: MediaFileCountAggregateOutputType | null;
+    _avg: MediaFileAvgAggregateOutputType | null;
+    _sum: MediaFileSumAggregateOutputType | null;
+    _min: MediaFileMinAggregateOutputType | null;
+    _max: MediaFileMaxAggregateOutputType | null;
+  };
+
+  type GetMediaFileGroupByPayload<T extends MediaFileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MediaFileGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof MediaFileGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], MediaFileGroupByOutputType[P]>
+          : GetScalarType<T[P], MediaFileGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type MediaFileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetSelect<
+      {
+        id?: boolean;
+        tenantId?: boolean;
+        uploadedById?: boolean;
+        category?: boolean;
+        fileName?: boolean;
+        fileKey?: boolean;
+        mimeType?: boolean;
+        fileSize?: boolean;
+        url?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
+        tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+        uploadedBy?: boolean | UserDefaultArgs<ExtArgs>;
+      },
+      ExtArgs['result']['mediaFile']
+    >;
+
+  export type MediaFileSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      uploadedById?: boolean;
+      category?: boolean;
+      fileName?: boolean;
+      fileKey?: boolean;
+      mimeType?: boolean;
+      fileSize?: boolean;
+      url?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      uploadedBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['mediaFile']
+  >;
+
+  export type MediaFileSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    uploadedById?: boolean;
+    category?: boolean;
+    fileName?: boolean;
+    fileKey?: boolean;
+    mimeType?: boolean;
+    fileSize?: boolean;
+    url?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type MediaFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      uploadedBy?: boolean | UserDefaultArgs<ExtArgs>;
+    };
+  export type MediaFileIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    uploadedBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $MediaFilePayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'MediaFile';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      uploadedBy: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        uploadedById: string;
+        category: $Enums.MediaCategory;
+        fileName: string;
+        fileKey: string;
+        mimeType: string;
+        fileSize: number;
+        url: string;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['mediaFile']
+    >;
+    composites: {};
+  };
+
+  type MediaFileGetPayload<S extends boolean | null | undefined | MediaFileDefaultArgs> =
+    $Result.GetResult<Prisma.$MediaFilePayload, S>;
+
+  type MediaFileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MediaFileFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MediaFileCountAggregateInputType | true;
+    };
+
+  export interface MediaFileDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['MediaFile'];
+      meta: { name: 'MediaFile' };
+    };
+    /**
+     * Find zero or one MediaFile that matches the filter.
+     * @param {MediaFileFindUniqueArgs} args - Arguments to find a MediaFile
+     * @example
+     * // Get one MediaFile
+     * const mediaFile = await prisma.mediaFile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MediaFileFindUniqueArgs>(
+      args: SelectSubset<T, MediaFileFindUniqueArgs<ExtArgs>>,
+    ): Prisma__MediaFileClient<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one MediaFile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MediaFileFindUniqueOrThrowArgs} args - Arguments to find a MediaFile
+     * @example
+     * // Get one MediaFile
+     * const mediaFile = await prisma.mediaFile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MediaFileFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, MediaFileFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__MediaFileClient<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first MediaFile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaFileFindFirstArgs} args - Arguments to find a MediaFile
+     * @example
+     * // Get one MediaFile
+     * const mediaFile = await prisma.mediaFile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MediaFileFindFirstArgs>(
+      args?: SelectSubset<T, MediaFileFindFirstArgs<ExtArgs>>,
+    ): Prisma__MediaFileClient<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first MediaFile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaFileFindFirstOrThrowArgs} args - Arguments to find a MediaFile
+     * @example
+     * // Get one MediaFile
+     * const mediaFile = await prisma.mediaFile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MediaFileFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, MediaFileFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__MediaFileClient<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more MediaFiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaFileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MediaFiles
+     * const mediaFiles = await prisma.mediaFile.findMany()
+     *
+     * // Get first 10 MediaFiles
+     * const mediaFiles = await prisma.mediaFile.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const mediaFileWithIdOnly = await prisma.mediaFile.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends MediaFileFindManyArgs>(
+      args?: SelectSubset<T, MediaFileFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findMany'>>;
+
+    /**
+     * Create a MediaFile.
+     * @param {MediaFileCreateArgs} args - Arguments to create a MediaFile.
+     * @example
+     * // Create one MediaFile
+     * const MediaFile = await prisma.mediaFile.create({
+     *   data: {
+     *     // ... data to create a MediaFile
+     *   }
+     * })
+     *
+     */
+    create<T extends MediaFileCreateArgs>(
+      args: SelectSubset<T, MediaFileCreateArgs<ExtArgs>>,
+    ): Prisma__MediaFileClient<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many MediaFiles.
+     * @param {MediaFileCreateManyArgs} args - Arguments to create many MediaFiles.
+     * @example
+     * // Create many MediaFiles
+     * const mediaFile = await prisma.mediaFile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends MediaFileCreateManyArgs>(
+      args?: SelectSubset<T, MediaFileCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many MediaFiles and returns the data saved in the database.
+     * @param {MediaFileCreateManyAndReturnArgs} args - Arguments to create many MediaFiles.
+     * @example
+     * // Create many MediaFiles
+     * const mediaFile = await prisma.mediaFile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many MediaFiles and only return the `id`
+     * const mediaFileWithIdOnly = await prisma.mediaFile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends MediaFileCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, MediaFileCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a MediaFile.
+     * @param {MediaFileDeleteArgs} args - Arguments to delete one MediaFile.
+     * @example
+     * // Delete one MediaFile
+     * const MediaFile = await prisma.mediaFile.delete({
+     *   where: {
+     *     // ... filter to delete one MediaFile
+     *   }
+     * })
+     *
+     */
+    delete<T extends MediaFileDeleteArgs>(
+      args: SelectSubset<T, MediaFileDeleteArgs<ExtArgs>>,
+    ): Prisma__MediaFileClient<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one MediaFile.
+     * @param {MediaFileUpdateArgs} args - Arguments to update one MediaFile.
+     * @example
+     * // Update one MediaFile
+     * const mediaFile = await prisma.mediaFile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends MediaFileUpdateArgs>(
+      args: SelectSubset<T, MediaFileUpdateArgs<ExtArgs>>,
+    ): Prisma__MediaFileClient<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more MediaFiles.
+     * @param {MediaFileDeleteManyArgs} args - Arguments to filter MediaFiles to delete.
+     * @example
+     * // Delete a few MediaFiles
+     * const { count } = await prisma.mediaFile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends MediaFileDeleteManyArgs>(
+      args?: SelectSubset<T, MediaFileDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more MediaFiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaFileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MediaFiles
+     * const mediaFile = await prisma.mediaFile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends MediaFileUpdateManyArgs>(
+      args: SelectSubset<T, MediaFileUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one MediaFile.
+     * @param {MediaFileUpsertArgs} args - Arguments to update or create a MediaFile.
+     * @example
+     * // Update or create a MediaFile
+     * const mediaFile = await prisma.mediaFile.upsert({
+     *   create: {
+     *     // ... data to create a MediaFile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MediaFile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MediaFileUpsertArgs>(
+      args: SelectSubset<T, MediaFileUpsertArgs<ExtArgs>>,
+    ): Prisma__MediaFileClient<
+      $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of MediaFiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaFileCountArgs} args - Arguments to filter MediaFiles to count.
+     * @example
+     * // Count the number of MediaFiles
+     * const count = await prisma.mediaFile.count({
+     *   where: {
+     *     // ... the filter for the MediaFiles we want to count
+     *   }
+     * })
+     **/
+    count<T extends MediaFileCountArgs>(
+      args?: Subset<T, MediaFileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MediaFileCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a MediaFile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaFileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends MediaFileAggregateArgs>(
+      args: Subset<T, MediaFileAggregateArgs>,
+    ): Prisma.PrismaPromise<GetMediaFileAggregateType<T>>;
+
+    /**
+     * Group by MediaFile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaFileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends MediaFileGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: MediaFileGroupByArgs['orderBy'] }
+        : { orderBy?: MediaFileGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, MediaFileGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors ? GetMediaFileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the MediaFile model
+     */
+    readonly fields: MediaFileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MediaFile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MediaFileClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    uploadedBy<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the MediaFile model
+   */
+  interface MediaFileFieldRefs {
+    readonly id: FieldRef<'MediaFile', 'String'>;
+    readonly tenantId: FieldRef<'MediaFile', 'String'>;
+    readonly uploadedById: FieldRef<'MediaFile', 'String'>;
+    readonly category: FieldRef<'MediaFile', 'MediaCategory'>;
+    readonly fileName: FieldRef<'MediaFile', 'String'>;
+    readonly fileKey: FieldRef<'MediaFile', 'String'>;
+    readonly mimeType: FieldRef<'MediaFile', 'String'>;
+    readonly fileSize: FieldRef<'MediaFile', 'Int'>;
+    readonly url: FieldRef<'MediaFile', 'String'>;
+    readonly createdAt: FieldRef<'MediaFile', 'DateTime'>;
+    readonly updatedAt: FieldRef<'MediaFile', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * MediaFile findUnique
+   */
+  export type MediaFileFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * Filter, which MediaFile to fetch.
+     */
+    where: MediaFileWhereUniqueInput;
+  };
+
+  /**
+   * MediaFile findUniqueOrThrow
+   */
+  export type MediaFileFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * Filter, which MediaFile to fetch.
+     */
+    where: MediaFileWhereUniqueInput;
+  };
+
+  /**
+   * MediaFile findFirst
+   */
+  export type MediaFileFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * Filter, which MediaFile to fetch.
+     */
+    where?: MediaFileWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MediaFiles to fetch.
+     */
+    orderBy?: MediaFileOrderByWithRelationInput | MediaFileOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MediaFiles.
+     */
+    cursor?: MediaFileWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MediaFiles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MediaFiles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MediaFiles.
+     */
+    distinct?: MediaFileScalarFieldEnum | MediaFileScalarFieldEnum[];
+  };
+
+  /**
+   * MediaFile findFirstOrThrow
+   */
+  export type MediaFileFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * Filter, which MediaFile to fetch.
+     */
+    where?: MediaFileWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MediaFiles to fetch.
+     */
+    orderBy?: MediaFileOrderByWithRelationInput | MediaFileOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MediaFiles.
+     */
+    cursor?: MediaFileWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MediaFiles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MediaFiles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MediaFiles.
+     */
+    distinct?: MediaFileScalarFieldEnum | MediaFileScalarFieldEnum[];
+  };
+
+  /**
+   * MediaFile findMany
+   */
+  export type MediaFileFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * Filter, which MediaFiles to fetch.
+     */
+    where?: MediaFileWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MediaFiles to fetch.
+     */
+    orderBy?: MediaFileOrderByWithRelationInput | MediaFileOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing MediaFiles.
+     */
+    cursor?: MediaFileWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MediaFiles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MediaFiles.
+     */
+    skip?: number;
+    distinct?: MediaFileScalarFieldEnum | MediaFileScalarFieldEnum[];
+  };
+
+  /**
+   * MediaFile create
+   */
+  export type MediaFileCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a MediaFile.
+     */
+    data: XOR<MediaFileCreateInput, MediaFileUncheckedCreateInput>;
+  };
+
+  /**
+   * MediaFile createMany
+   */
+  export type MediaFileCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many MediaFiles.
+     */
+    data: MediaFileCreateManyInput | MediaFileCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * MediaFile createManyAndReturn
+   */
+  export type MediaFileCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many MediaFiles.
+     */
+    data: MediaFileCreateManyInput | MediaFileCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * MediaFile update
+   */
+  export type MediaFileUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a MediaFile.
+     */
+    data: XOR<MediaFileUpdateInput, MediaFileUncheckedUpdateInput>;
+    /**
+     * Choose, which MediaFile to update.
+     */
+    where: MediaFileWhereUniqueInput;
+  };
+
+  /**
+   * MediaFile updateMany
+   */
+  export type MediaFileUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update MediaFiles.
+     */
+    data: XOR<MediaFileUpdateManyMutationInput, MediaFileUncheckedUpdateManyInput>;
+    /**
+     * Filter which MediaFiles to update
+     */
+    where?: MediaFileWhereInput;
+  };
+
+  /**
+   * MediaFile upsert
+   */
+  export type MediaFileUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the MediaFile to update in case it exists.
+     */
+    where: MediaFileWhereUniqueInput;
+    /**
+     * In case the MediaFile found by the `where` argument doesn't exist, create a new MediaFile with this data.
+     */
+    create: XOR<MediaFileCreateInput, MediaFileUncheckedCreateInput>;
+    /**
+     * In case the MediaFile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MediaFileUpdateInput, MediaFileUncheckedUpdateInput>;
+  };
+
+  /**
+   * MediaFile delete
+   */
+  export type MediaFileDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+    /**
+     * Filter which MediaFile to delete.
+     */
+    where: MediaFileWhereUniqueInput;
+  };
+
+  /**
+   * MediaFile deleteMany
+   */
+  export type MediaFileDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MediaFiles to delete
+     */
+    where?: MediaFileWhereInput;
+  };
+
+  /**
+   * MediaFile without action
+   */
+  export type MediaFileDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MediaFile
+     */
+    select?: MediaFileSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaFileInclude<ExtArgs> | null;
+  };
+
+  /**
    * Enums
    */
 
@@ -33673,6 +35022,23 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum =
     (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
 
+  export const MediaFileScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    uploadedById: 'uploadedById';
+    category: 'category';
+    fileName: 'fileName';
+    fileKey: 'fileKey';
+    mimeType: 'mimeType';
+    fileSize: 'fileSize';
+    url: 'url';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type MediaFileScalarFieldEnum =
+    (typeof MediaFileScalarFieldEnum)[keyof typeof MediaFileScalarFieldEnum];
+
   export const SortOrder: {
     asc: 'asc';
     desc: 'desc';
@@ -33953,6 +35319,22 @@ export namespace Prisma {
   >;
 
   /**
+   * Reference to a field of type 'MediaCategory'
+   */
+  export type EnumMediaCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'MediaCategory'
+  >;
+
+  /**
+   * Reference to a field of type 'MediaCategory[]'
+   */
+  export type ListEnumMediaCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'MediaCategory[]'
+  >;
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>;
@@ -33999,6 +35381,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionListRelationFilter;
     pushTokens?: UserPushTokenListRelationFilter;
     notifications?: NotificationListRelationFilter;
+    mediaFiles?: MediaFileListRelationFilter;
   };
 
   export type TenantOrderByWithRelationInput = {
@@ -34031,6 +35414,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionOrderByRelationAggregateInput;
     pushTokens?: UserPushTokenOrderByRelationAggregateInput;
     notifications?: NotificationOrderByRelationAggregateInput;
+    mediaFiles?: MediaFileOrderByRelationAggregateInput;
   };
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<
@@ -34067,6 +35451,7 @@ export namespace Prisma {
       homeActivitySuggestions?: HomeActivitySuggestionListRelationFilter;
       pushTokens?: UserPushTokenListRelationFilter;
       notifications?: NotificationListRelationFilter;
+      mediaFiles?: MediaFileListRelationFilter;
     },
     'id' | 'slug'
   >;
@@ -34128,6 +35513,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationListRelationFilter;
     pushTokens?: UserPushTokenListRelationFilter;
     notifications?: NotificationListRelationFilter;
+    uploadedMedia?: MediaFileListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -34160,6 +35546,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationOrderByRelationAggregateInput;
     pushTokens?: UserPushTokenOrderByRelationAggregateInput;
     notifications?: NotificationOrderByRelationAggregateInput;
+    uploadedMedia?: MediaFileOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -34197,6 +35584,7 @@ export namespace Prisma {
       developmentObservationsAuthored?: DevelopmentObservationListRelationFilter;
       pushTokens?: UserPushTokenListRelationFilter;
       notifications?: NotificationListRelationFilter;
+      uploadedMedia?: MediaFileListRelationFilter;
     },
     'id' | 'tenantId_email'
   >;
@@ -36355,6 +37743,99 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<'Notification'> | Date | string;
   };
 
+  export type MediaFileWhereInput = {
+    AND?: MediaFileWhereInput | MediaFileWhereInput[];
+    OR?: MediaFileWhereInput[];
+    NOT?: MediaFileWhereInput | MediaFileWhereInput[];
+    id?: StringFilter<'MediaFile'> | string;
+    tenantId?: StringFilter<'MediaFile'> | string;
+    uploadedById?: StringFilter<'MediaFile'> | string;
+    category?: EnumMediaCategoryFilter<'MediaFile'> | $Enums.MediaCategory;
+    fileName?: StringFilter<'MediaFile'> | string;
+    fileKey?: StringFilter<'MediaFile'> | string;
+    mimeType?: StringFilter<'MediaFile'> | string;
+    fileSize?: IntFilter<'MediaFile'> | number;
+    url?: StringFilter<'MediaFile'> | string;
+    createdAt?: DateTimeFilter<'MediaFile'> | Date | string;
+    updatedAt?: DateTimeFilter<'MediaFile'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    uploadedBy?: XOR<UserRelationFilter, UserWhereInput>;
+  };
+
+  export type MediaFileOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    uploadedById?: SortOrder;
+    category?: SortOrder;
+    fileName?: SortOrder;
+    fileKey?: SortOrder;
+    mimeType?: SortOrder;
+    fileSize?: SortOrder;
+    url?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    uploadedBy?: UserOrderByWithRelationInput;
+  };
+
+  export type MediaFileWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      fileKey?: string;
+      AND?: MediaFileWhereInput | MediaFileWhereInput[];
+      OR?: MediaFileWhereInput[];
+      NOT?: MediaFileWhereInput | MediaFileWhereInput[];
+      tenantId?: StringFilter<'MediaFile'> | string;
+      uploadedById?: StringFilter<'MediaFile'> | string;
+      category?: EnumMediaCategoryFilter<'MediaFile'> | $Enums.MediaCategory;
+      fileName?: StringFilter<'MediaFile'> | string;
+      mimeType?: StringFilter<'MediaFile'> | string;
+      fileSize?: IntFilter<'MediaFile'> | number;
+      url?: StringFilter<'MediaFile'> | string;
+      createdAt?: DateTimeFilter<'MediaFile'> | Date | string;
+      updatedAt?: DateTimeFilter<'MediaFile'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      uploadedBy?: XOR<UserRelationFilter, UserWhereInput>;
+    },
+    'id' | 'fileKey'
+  >;
+
+  export type MediaFileOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    uploadedById?: SortOrder;
+    category?: SortOrder;
+    fileName?: SortOrder;
+    fileKey?: SortOrder;
+    mimeType?: SortOrder;
+    fileSize?: SortOrder;
+    url?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: MediaFileCountOrderByAggregateInput;
+    _avg?: MediaFileAvgOrderByAggregateInput;
+    _max?: MediaFileMaxOrderByAggregateInput;
+    _min?: MediaFileMinOrderByAggregateInput;
+    _sum?: MediaFileSumOrderByAggregateInput;
+  };
+
+  export type MediaFileScalarWhereWithAggregatesInput = {
+    AND?: MediaFileScalarWhereWithAggregatesInput | MediaFileScalarWhereWithAggregatesInput[];
+    OR?: MediaFileScalarWhereWithAggregatesInput[];
+    NOT?: MediaFileScalarWhereWithAggregatesInput | MediaFileScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'MediaFile'> | string;
+    tenantId?: StringWithAggregatesFilter<'MediaFile'> | string;
+    uploadedById?: StringWithAggregatesFilter<'MediaFile'> | string;
+    category?: EnumMediaCategoryWithAggregatesFilter<'MediaFile'> | $Enums.MediaCategory;
+    fileName?: StringWithAggregatesFilter<'MediaFile'> | string;
+    fileKey?: StringWithAggregatesFilter<'MediaFile'> | string;
+    mimeType?: StringWithAggregatesFilter<'MediaFile'> | string;
+    fileSize?: IntWithAggregatesFilter<'MediaFile'> | number;
+    url?: StringWithAggregatesFilter<'MediaFile'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'MediaFile'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'MediaFile'> | Date | string;
+  };
+
   export type TenantCreateInput = {
     id?: string;
     slug: string;
@@ -36385,6 +37866,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateInput = {
@@ -36417,6 +37899,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUpdateInput = {
@@ -36449,6 +37932,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateInput = {
@@ -36481,6 +37965,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateManyInput = {
@@ -36539,6 +38024,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -36570,6 +38056,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUpdateInput = {
@@ -36601,6 +38088,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -36632,6 +38120,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -38761,6 +40250,102 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type MediaFileCreateInput = {
+    id?: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutMediaFilesInput;
+    uploadedBy: UserCreateNestedOneWithoutUploadedMediaInput;
+  };
+
+  export type MediaFileUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    uploadedById: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MediaFileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutMediaFilesNestedInput;
+    uploadedBy?: UserUpdateOneRequiredWithoutUploadedMediaNestedInput;
+  };
+
+  export type MediaFileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    uploadedById?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MediaFileCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    uploadedById: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MediaFileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MediaFileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    uploadedById?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -38932,6 +40517,12 @@ export namespace Prisma {
     none?: NotificationWhereInput;
   };
 
+  export type MediaFileListRelationFilter = {
+    every?: MediaFileWhereInput;
+    some?: MediaFileWhereInput;
+    none?: MediaFileWhereInput;
+  };
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -39021,6 +40612,10 @@ export namespace Prisma {
   };
 
   export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type MediaFileOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -40527,6 +42122,100 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>;
   };
 
+  export type EnumMediaCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaCategory | EnumMediaCategoryFieldRefInput<$PrismaModel>;
+    in?: $Enums.MediaCategory[] | ListEnumMediaCategoryFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.MediaCategory[] | ListEnumMediaCategoryFieldRefInput<$PrismaModel>;
+    not?: NestedEnumMediaCategoryFilter<$PrismaModel> | $Enums.MediaCategory;
+  };
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntFilter<$PrismaModel> | number;
+  };
+
+  export type MediaFileCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    uploadedById?: SortOrder;
+    category?: SortOrder;
+    fileName?: SortOrder;
+    fileKey?: SortOrder;
+    mimeType?: SortOrder;
+    fileSize?: SortOrder;
+    url?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type MediaFileAvgOrderByAggregateInput = {
+    fileSize?: SortOrder;
+  };
+
+  export type MediaFileMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    uploadedById?: SortOrder;
+    category?: SortOrder;
+    fileName?: SortOrder;
+    fileKey?: SortOrder;
+    mimeType?: SortOrder;
+    fileSize?: SortOrder;
+    url?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type MediaFileMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    uploadedById?: SortOrder;
+    category?: SortOrder;
+    fileName?: SortOrder;
+    fileKey?: SortOrder;
+    mimeType?: SortOrder;
+    fileSize?: SortOrder;
+    url?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type MediaFileSumOrderByAggregateInput = {
+    fileSize?: SortOrder;
+  };
+
+  export type EnumMediaCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaCategory | EnumMediaCategoryFieldRefInput<$PrismaModel>;
+    in?: $Enums.MediaCategory[] | ListEnumMediaCategoryFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.MediaCategory[] | ListEnumMediaCategoryFieldRefInput<$PrismaModel>;
+    not?: NestedEnumMediaCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MediaCategory;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumMediaCategoryFilter<$PrismaModel>;
+    _max?: NestedEnumMediaCategoryFilter<$PrismaModel>;
+  };
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _avg?: NestedFloatFilter<$PrismaModel>;
+    _sum?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedIntFilter<$PrismaModel>;
+    _max?: NestedIntFilter<$PrismaModel>;
+  };
+
   export type UserCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -40816,6 +42505,17 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
   };
 
+  export type MediaFileCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<MediaFileCreateWithoutTenantInput, MediaFileUncheckedCreateWithoutTenantInput>
+      | MediaFileCreateWithoutTenantInput[]
+      | MediaFileUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      MediaFileCreateOrConnectWithoutTenantInput | MediaFileCreateOrConnectWithoutTenantInput[];
+    createMany?: MediaFileCreateManyTenantInputEnvelope;
+    connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+  };
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -41103,6 +42803,17 @@ export namespace Prisma {
       | NotificationCreateOrConnectWithoutTenantInput[];
     createMany?: NotificationCreateManyTenantInputEnvelope;
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+  };
+
+  export type MediaFileUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<MediaFileCreateWithoutTenantInput, MediaFileUncheckedCreateWithoutTenantInput>
+      | MediaFileCreateWithoutTenantInput[]
+      | MediaFileUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      MediaFileCreateOrConnectWithoutTenantInput | MediaFileCreateOrConnectWithoutTenantInput[];
+    createMany?: MediaFileCreateManyTenantInputEnvelope;
+    connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -41702,6 +43413,30 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
   };
 
+  export type MediaFileUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<MediaFileCreateWithoutTenantInput, MediaFileUncheckedCreateWithoutTenantInput>
+      | MediaFileCreateWithoutTenantInput[]
+      | MediaFileUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      MediaFileCreateOrConnectWithoutTenantInput | MediaFileCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | MediaFileUpsertWithWhereUniqueWithoutTenantInput
+      | MediaFileUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: MediaFileCreateManyTenantInputEnvelope;
+    set?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    disconnect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    delete?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    update?:
+      | MediaFileUpdateWithWhereUniqueWithoutTenantInput
+      | MediaFileUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | MediaFileUpdateManyWithWhereWithoutTenantInput
+      | MediaFileUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
+  };
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -42287,6 +44022,30 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
   };
 
+  export type MediaFileUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<MediaFileCreateWithoutTenantInput, MediaFileUncheckedCreateWithoutTenantInput>
+      | MediaFileCreateWithoutTenantInput[]
+      | MediaFileUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      MediaFileCreateOrConnectWithoutTenantInput | MediaFileCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | MediaFileUpsertWithWhereUniqueWithoutTenantInput
+      | MediaFileUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: MediaFileCreateManyTenantInputEnvelope;
+    set?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    disconnect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    delete?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    update?:
+      | MediaFileUpdateWithWhereUniqueWithoutTenantInput
+      | MediaFileUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | MediaFileUpdateManyWithWhereWithoutTenantInput
+      | MediaFileUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutUsersInput = {
     create?: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutUsersInput;
@@ -42559,6 +44318,18 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
   };
 
+  export type MediaFileCreateNestedManyWithoutUploadedByInput = {
+    create?:
+      | XOR<MediaFileCreateWithoutUploadedByInput, MediaFileUncheckedCreateWithoutUploadedByInput>
+      | MediaFileCreateWithoutUploadedByInput[]
+      | MediaFileUncheckedCreateWithoutUploadedByInput[];
+    connectOrCreate?:
+      | MediaFileCreateOrConnectWithoutUploadedByInput
+      | MediaFileCreateOrConnectWithoutUploadedByInput[];
+    createMany?: MediaFileCreateManyUploadedByInputEnvelope;
+    connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+  };
+
   export type StudentUncheckedCreateNestedManyWithoutParentInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -42823,6 +44594,18 @@ export namespace Prisma {
       NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[];
     createMany?: NotificationCreateManyUserInputEnvelope;
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[];
+  };
+
+  export type MediaFileUncheckedCreateNestedManyWithoutUploadedByInput = {
+    create?:
+      | XOR<MediaFileCreateWithoutUploadedByInput, MediaFileUncheckedCreateWithoutUploadedByInput>
+      | MediaFileCreateWithoutUploadedByInput[]
+      | MediaFileUncheckedCreateWithoutUploadedByInput[];
+    connectOrCreate?:
+      | MediaFileCreateOrConnectWithoutUploadedByInput
+      | MediaFileCreateOrConnectWithoutUploadedByInput[];
+    createMany?: MediaFileCreateManyUploadedByInputEnvelope;
+    connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
   };
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -43361,6 +45144,31 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
   };
 
+  export type MediaFileUpdateManyWithoutUploadedByNestedInput = {
+    create?:
+      | XOR<MediaFileCreateWithoutUploadedByInput, MediaFileUncheckedCreateWithoutUploadedByInput>
+      | MediaFileCreateWithoutUploadedByInput[]
+      | MediaFileUncheckedCreateWithoutUploadedByInput[];
+    connectOrCreate?:
+      | MediaFileCreateOrConnectWithoutUploadedByInput
+      | MediaFileCreateOrConnectWithoutUploadedByInput[];
+    upsert?:
+      | MediaFileUpsertWithWhereUniqueWithoutUploadedByInput
+      | MediaFileUpsertWithWhereUniqueWithoutUploadedByInput[];
+    createMany?: MediaFileCreateManyUploadedByInputEnvelope;
+    set?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    disconnect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    delete?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    update?:
+      | MediaFileUpdateWithWhereUniqueWithoutUploadedByInput
+      | MediaFileUpdateWithWhereUniqueWithoutUploadedByInput[];
+    updateMany?:
+      | MediaFileUpdateManyWithWhereWithoutUploadedByInput
+      | MediaFileUpdateManyWithWhereWithoutUploadedByInput[];
+    deleteMany?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
+  };
+
   export type StudentUncheckedUpdateManyWithoutParentNestedInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -43872,6 +45680,31 @@ export namespace Prisma {
       | NotificationUpdateManyWithWhereWithoutUserInput
       | NotificationUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[];
+  };
+
+  export type MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput = {
+    create?:
+      | XOR<MediaFileCreateWithoutUploadedByInput, MediaFileUncheckedCreateWithoutUploadedByInput>
+      | MediaFileCreateWithoutUploadedByInput[]
+      | MediaFileUncheckedCreateWithoutUploadedByInput[];
+    connectOrCreate?:
+      | MediaFileCreateOrConnectWithoutUploadedByInput
+      | MediaFileCreateOrConnectWithoutUploadedByInput[];
+    upsert?:
+      | MediaFileUpsertWithWhereUniqueWithoutUploadedByInput
+      | MediaFileUpsertWithWhereUniqueWithoutUploadedByInput[];
+    createMany?: MediaFileCreateManyUploadedByInputEnvelope;
+    set?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    disconnect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    delete?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+    update?:
+      | MediaFileUpdateWithWhereUniqueWithoutUploadedByInput
+      | MediaFileUpdateWithWhereUniqueWithoutUploadedByInput[];
+    updateMany?:
+      | MediaFileUpdateManyWithWhereWithoutUploadedByInput
+      | MediaFileUpdateManyWithWhereWithoutUploadedByInput[];
+    deleteMany?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
   };
 
   export type TenantCreateNestedOneWithoutStudentsInput = {
@@ -47029,6 +48862,52 @@ export namespace Prisma {
     >;
   };
 
+  export type TenantCreateNestedOneWithoutMediaFilesInput = {
+    create?: XOR<TenantCreateWithoutMediaFilesInput, TenantUncheckedCreateWithoutMediaFilesInput>;
+    connectOrCreate?: TenantCreateOrConnectWithoutMediaFilesInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutUploadedMediaInput = {
+    create?: XOR<UserCreateWithoutUploadedMediaInput, UserUncheckedCreateWithoutUploadedMediaInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutUploadedMediaInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EnumMediaCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.MediaCategory;
+  };
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number;
+    increment?: number;
+    decrement?: number;
+    multiply?: number;
+    divide?: number;
+  };
+
+  export type TenantUpdateOneRequiredWithoutMediaFilesNestedInput = {
+    create?: XOR<TenantCreateWithoutMediaFilesInput, TenantUncheckedCreateWithoutMediaFilesInput>;
+    connectOrCreate?: TenantCreateOrConnectWithoutMediaFilesInput;
+    upsert?: TenantUpsertWithoutMediaFilesInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<TenantUpdateToOneWithWhereWithoutMediaFilesInput, TenantUpdateWithoutMediaFilesInput>,
+      TenantUncheckedUpdateWithoutMediaFilesInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutUploadedMediaNestedInput = {
+    create?: XOR<UserCreateWithoutUploadedMediaInput, UserUncheckedCreateWithoutUploadedMediaInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutUploadedMediaInput;
+    upsert?: UserUpsertWithoutUploadedMediaInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutUploadedMediaInput, UserUpdateWithoutUploadedMediaInput>,
+      UserUncheckedUpdateWithoutUploadedMediaInput
+    >;
+  };
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -47486,6 +49365,50 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>;
   };
 
+  export type NestedEnumMediaCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaCategory | EnumMediaCategoryFieldRefInput<$PrismaModel>;
+    in?: $Enums.MediaCategory[] | ListEnumMediaCategoryFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.MediaCategory[] | ListEnumMediaCategoryFieldRefInput<$PrismaModel>;
+    not?: NestedEnumMediaCategoryFilter<$PrismaModel> | $Enums.MediaCategory;
+  };
+
+  export type NestedEnumMediaCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaCategory | EnumMediaCategoryFieldRefInput<$PrismaModel>;
+    in?: $Enums.MediaCategory[] | ListEnumMediaCategoryFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.MediaCategory[] | ListEnumMediaCategoryFieldRefInput<$PrismaModel>;
+    not?: NestedEnumMediaCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MediaCategory;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumMediaCategoryFilter<$PrismaModel>;
+    _max?: NestedEnumMediaCategoryFilter<$PrismaModel>;
+  };
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _avg?: NestedFloatFilter<$PrismaModel>;
+    _sum?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedIntFilter<$PrismaModel>;
+    _max?: NestedIntFilter<$PrismaModel>;
+  };
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>;
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>;
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>;
+    lt?: number | FloatFieldRefInput<$PrismaModel>;
+    lte?: number | FloatFieldRefInput<$PrismaModel>;
+    gt?: number | FloatFieldRefInput<$PrismaModel>;
+    gte?: number | FloatFieldRefInput<$PrismaModel>;
+    not?: NestedFloatFilter<$PrismaModel> | number;
+  };
+
   export type UserCreateWithoutTenantInput = {
     id?: string;
     email: string;
@@ -47514,6 +49437,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutTenantInput = {
@@ -47544,6 +49468,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -48407,6 +50332,42 @@ export namespace Prisma {
 
   export type NotificationCreateManyTenantInputEnvelope = {
     data: NotificationCreateManyTenantInput | NotificationCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type MediaFileCreateWithoutTenantInput = {
+    id?: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    uploadedBy: UserCreateNestedOneWithoutUploadedMediaInput;
+  };
+
+  export type MediaFileUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    uploadedById: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MediaFileCreateOrConnectWithoutTenantInput = {
+    where: MediaFileWhereUniqueInput;
+    create: XOR<MediaFileCreateWithoutTenantInput, MediaFileUncheckedCreateWithoutTenantInput>;
+  };
+
+  export type MediaFileCreateManyTenantInputEnvelope = {
+    data: MediaFileCreateManyTenantInput | MediaFileCreateManyTenantInput[];
     skipDuplicates?: boolean;
   };
 
@@ -49327,6 +51288,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'Notification'> | Date | string;
   };
 
+  export type MediaFileUpsertWithWhereUniqueWithoutTenantInput = {
+    where: MediaFileWhereUniqueInput;
+    update: XOR<MediaFileUpdateWithoutTenantInput, MediaFileUncheckedUpdateWithoutTenantInput>;
+    create: XOR<MediaFileCreateWithoutTenantInput, MediaFileUncheckedCreateWithoutTenantInput>;
+  };
+
+  export type MediaFileUpdateWithWhereUniqueWithoutTenantInput = {
+    where: MediaFileWhereUniqueInput;
+    data: XOR<MediaFileUpdateWithoutTenantInput, MediaFileUncheckedUpdateWithoutTenantInput>;
+  };
+
+  export type MediaFileUpdateManyWithWhereWithoutTenantInput = {
+    where: MediaFileScalarWhereInput;
+    data: XOR<MediaFileUpdateManyMutationInput, MediaFileUncheckedUpdateManyWithoutTenantInput>;
+  };
+
+  export type MediaFileScalarWhereInput = {
+    AND?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
+    OR?: MediaFileScalarWhereInput[];
+    NOT?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
+    id?: StringFilter<'MediaFile'> | string;
+    tenantId?: StringFilter<'MediaFile'> | string;
+    uploadedById?: StringFilter<'MediaFile'> | string;
+    category?: EnumMediaCategoryFilter<'MediaFile'> | $Enums.MediaCategory;
+    fileName?: StringFilter<'MediaFile'> | string;
+    fileKey?: StringFilter<'MediaFile'> | string;
+    mimeType?: StringFilter<'MediaFile'> | string;
+    fileSize?: IntFilter<'MediaFile'> | number;
+    url?: StringFilter<'MediaFile'> | string;
+    createdAt?: DateTimeFilter<'MediaFile'> | Date | string;
+    updatedAt?: DateTimeFilter<'MediaFile'> | Date | string;
+  };
+
   export type TenantCreateWithoutUsersInput = {
     id?: string;
     slug: string;
@@ -49356,6 +51350,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -49387,6 +51382,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -50177,6 +52173,45 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type MediaFileCreateWithoutUploadedByInput = {
+    id?: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutMediaFilesInput;
+  };
+
+  export type MediaFileUncheckedCreateWithoutUploadedByInput = {
+    id?: string;
+    tenantId: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MediaFileCreateOrConnectWithoutUploadedByInput = {
+    where: MediaFileWhereUniqueInput;
+    create: XOR<
+      MediaFileCreateWithoutUploadedByInput,
+      MediaFileUncheckedCreateWithoutUploadedByInput
+    >;
+  };
+
+  export type MediaFileCreateManyUploadedByInputEnvelope = {
+    data: MediaFileCreateManyUploadedByInput | MediaFileCreateManyUploadedByInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>;
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
@@ -50217,6 +52252,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -50248,6 +52284,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutParentInput = {
@@ -50737,6 +52774,31 @@ export namespace Prisma {
     data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>;
   };
 
+  export type MediaFileUpsertWithWhereUniqueWithoutUploadedByInput = {
+    where: MediaFileWhereUniqueInput;
+    update: XOR<
+      MediaFileUpdateWithoutUploadedByInput,
+      MediaFileUncheckedUpdateWithoutUploadedByInput
+    >;
+    create: XOR<
+      MediaFileCreateWithoutUploadedByInput,
+      MediaFileUncheckedCreateWithoutUploadedByInput
+    >;
+  };
+
+  export type MediaFileUpdateWithWhereUniqueWithoutUploadedByInput = {
+    where: MediaFileWhereUniqueInput;
+    data: XOR<
+      MediaFileUpdateWithoutUploadedByInput,
+      MediaFileUncheckedUpdateWithoutUploadedByInput
+    >;
+  };
+
+  export type MediaFileUpdateManyWithWhereWithoutUploadedByInput = {
+    where: MediaFileScalarWhereInput;
+    data: XOR<MediaFileUpdateManyMutationInput, MediaFileUncheckedUpdateManyWithoutUploadedByInput>;
+  };
+
   export type TenantCreateWithoutStudentsInput = {
     id?: string;
     slug: string;
@@ -50766,6 +52828,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -50797,6 +52860,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -50832,6 +52896,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutChildrenInput = {
@@ -50862,6 +52927,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutChildrenInput = {
@@ -51403,6 +53469,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -51434,6 +53501,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutChildrenInput = {
@@ -51475,6 +53543,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutChildrenInput = {
@@ -51505,6 +53574,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type ClassroomUpsertWithoutStudentsInput = {
@@ -51859,6 +53929,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomsInput = {
@@ -51890,6 +53961,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomsInput = {
@@ -52030,6 +54102,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomsInput = {
@@ -52061,6 +54134,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutClassroomInput = {
@@ -52136,6 +54210,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomTeachersInput = {
@@ -52167,6 +54242,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomTeachersInput = {
@@ -52235,6 +54311,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutClassroomTeachersInput = {
@@ -52265,6 +54342,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutClassroomTeachersInput = {
@@ -52324,6 +54402,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -52355,6 +54434,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ClassroomUpsertWithoutTeacherAssignmentsInput = {
@@ -52447,6 +54527,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -52477,6 +54558,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type TenantCreateWithoutDailyReportsInput = {
@@ -52508,6 +54590,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyReportsInput = {
@@ -52539,6 +54622,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyReportsInput = {
@@ -52657,6 +54741,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyReportsInput = {
@@ -52688,6 +54773,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDailyReportsInput = {
@@ -52793,6 +54879,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendancesInput = {
@@ -52824,6 +54911,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendancesInput = {
@@ -52933,6 +55021,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendancesInput = {
@@ -52964,6 +55053,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendancesInput = {
@@ -53066,6 +55156,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyMenusInput = {
@@ -53097,6 +55188,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyMenusInput = {
@@ -53144,6 +55236,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyMenusInput = {
@@ -53175,6 +55268,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutActivityPostsInput = {
@@ -53206,6 +55300,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutActivityPostsInput = {
@@ -53237,6 +55332,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutActivityPostsInput = {
@@ -53296,6 +55392,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutActivityPostsInput = {
@@ -53327,6 +55424,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPickupContactsInput = {
@@ -53358,6 +55456,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupContactsInput = {
@@ -53389,6 +55488,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupContactsInput = {
@@ -53594,6 +55694,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupContactsInput = {
@@ -53625,6 +55726,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupContactsInput = {
@@ -53786,6 +55888,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupAuthorizationsInput = {
@@ -53817,6 +55920,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupAuthorizationsInput = {
@@ -53953,6 +56057,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthRequestedInput = {
@@ -53983,6 +56088,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthRequestedInput = {
@@ -54021,6 +56127,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthReviewedInput = {
@@ -54051,6 +56158,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthReviewedInput = {
@@ -54149,6 +56257,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupAuthorizationsInput = {
@@ -54180,6 +56289,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupAuthorizationsInput = {
@@ -54352,6 +56462,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthRequestedInput = {
@@ -54382,6 +56493,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUpsertWithoutPickupAuthReviewedInput = {
@@ -54432,6 +56544,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthReviewedInput = {
@@ -54462,6 +56575,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type PickupEventUpsertWithWhereUniqueWithoutAuthorizationInput = {
@@ -54521,6 +56635,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupEventsInput = {
@@ -54552,6 +56667,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupEventsInput = {
@@ -54726,6 +56842,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutPickupEventsVerifiedInput = {
@@ -54756,6 +56873,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutPickupEventsVerifiedInput = {
@@ -54812,6 +56930,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupEventsInput = {
@@ -54843,6 +56962,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupEventsInput = {
@@ -55067,6 +57187,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupEventsVerifiedInput = {
@@ -55097,6 +57218,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type TenantCreateWithoutMedicationRecordsInput = {
@@ -55128,6 +57250,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMedicationRecordsInput = {
@@ -55159,6 +57282,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMedicationRecordsInput = {
@@ -55259,6 +57383,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsRequestedInput = {
@@ -55289,6 +57414,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsRequestedInput = {
@@ -55327,6 +57453,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsApprovedInput = {
@@ -55357,6 +57484,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsApprovedInput = {
@@ -55395,6 +57523,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsAdministeredInput = {
@@ -55425,6 +57554,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsAdministeredInput = {
@@ -55484,6 +57614,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMedicationRecordsInput = {
@@ -55515,6 +57646,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutMedicationRecordsInput = {
@@ -55639,6 +57771,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsRequestedInput = {
@@ -55669,6 +57802,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsApprovedInput = {
@@ -55719,6 +57853,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsApprovedInput = {
@@ -55749,6 +57884,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsAdministeredInput = {
@@ -55799,6 +57935,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsAdministeredInput = {
@@ -55829,6 +57966,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type TenantCreateWithoutConversationsInput = {
@@ -55860,6 +57998,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationsInput = {
@@ -55891,6 +58030,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationsInput = {
@@ -55991,6 +58131,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutConversationsCreatedInput = {
@@ -56021,6 +58162,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutConversationsCreatedInput = {
@@ -56144,6 +58286,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationsInput = {
@@ -56175,6 +58318,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutConversationsInput = {
@@ -56299,6 +58443,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationsCreatedInput = {
@@ -56329,6 +58474,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutConversationInput = {
@@ -56413,6 +58559,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationParticipantsInput = {
@@ -56444,6 +58591,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationParticipantsInput = {
@@ -56520,6 +58668,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutConversationParticipationsInput = {
@@ -56550,6 +58699,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutConversationParticipationsInput = {
@@ -56609,6 +58759,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationParticipantsInput = {
@@ -56640,6 +58791,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutParticipantsInput = {
@@ -56740,6 +58892,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationParticipationsInput = {
@@ -56770,6 +58923,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type TenantCreateWithoutMessagesInput = {
@@ -56801,6 +58955,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessagesInput = {
@@ -56832,6 +58987,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessagesInput = {
@@ -56905,6 +59061,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutMessagesSentInput = {
@@ -56935,6 +59092,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutMessagesSentInput = {
@@ -57009,6 +59167,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessagesInput = {
@@ -57040,6 +59199,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutMessagesInput = {
@@ -57131,6 +59291,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessagesSentInput = {
@@ -57161,6 +59322,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type MessageReadReceiptUpsertWithWhereUniqueWithoutMessageInput = {
@@ -57220,6 +59382,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessageReceiptsInput = {
@@ -57251,6 +59414,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessageReceiptsInput = {
@@ -57316,6 +59480,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutMessageReceiptsInput = {
@@ -57346,6 +59511,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutMessageReceiptsInput = {
@@ -57405,6 +59571,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -57436,6 +59603,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type MessageUpsertWithoutReceiptsInput = {
@@ -57519,6 +59687,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -57549,6 +59718,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type TenantCreateWithoutParentRequestsInput = {
@@ -57580,6 +59750,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutParentRequestsInput = {
@@ -57611,6 +59782,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutParentRequestsInput = {
@@ -57649,6 +59821,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsRaisedInput = {
@@ -57679,6 +59852,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsRaisedInput = {
@@ -57779,6 +59953,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsResolvedInput = {
@@ -57809,6 +59984,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsResolvedInput = {
@@ -57868,6 +60044,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutParentRequestsInput = {
@@ -57899,6 +60076,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutParentRequestsRaisedInput = {
@@ -57949,6 +60127,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsRaisedInput = {
@@ -57979,6 +60158,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type StudentUpsertWithoutParentRequestsInput = {
@@ -58103,6 +60283,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsResolvedInput = {
@@ -58133,6 +60314,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type TenantCreateWithoutIncidentRecordsInput = {
@@ -58164,6 +60346,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutIncidentRecordsInput = {
@@ -58195,6 +60378,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutIncidentRecordsInput = {
@@ -58295,6 +60479,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsReportedInput = {
@@ -58325,6 +60510,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsReportedInput = {
@@ -58363,6 +60549,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsNotifiedInput = {
@@ -58393,6 +60580,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsNotifiedInput = {
@@ -58452,6 +60640,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutIncidentRecordsInput = {
@@ -58483,6 +60672,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutIncidentRecordsInput = {
@@ -58607,6 +60797,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsReportedInput = {
@@ -58637,6 +60828,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUpsertWithoutIncidentsNotifiedInput = {
@@ -58687,6 +60879,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsNotifiedInput = {
@@ -58717,6 +60910,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type TenantCreateWithoutDevelopmentObservationsInput = {
@@ -58748,6 +60942,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDevelopmentObservationsInput = {
@@ -58779,6 +60974,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDevelopmentObservationsInput = {
@@ -58879,6 +61075,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutDevelopmentObservationsAuthoredInput = {
@@ -58909,6 +61106,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutDevelopmentObservationsAuthoredInput = {
@@ -59005,6 +61203,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDevelopmentObservationsInput = {
@@ -59036,6 +61235,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDevelopmentObservationsInput = {
@@ -59160,6 +61360,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutDevelopmentObservationsAuthoredInput = {
@@ -59190,6 +61391,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type PortfolioItemUpsertWithWhereUniqueWithoutObservationInput = {
@@ -59249,6 +61451,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPortfolioItemsInput = {
@@ -59280,6 +61483,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPortfolioItemsInput = {
@@ -59437,6 +61641,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -59468,6 +61673,7 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPortfolioItemsInput = {
@@ -59621,6 +61827,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutHomeActivitySuggestionsInput = {
@@ -59652,6 +61859,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutHomeActivitySuggestionsInput = {
@@ -59711,6 +61919,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutHomeActivitySuggestionsInput = {
@@ -59742,6 +61951,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPushTokensInput = {
@@ -59773,6 +61983,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPushTokensInput = {
@@ -59804,6 +62015,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPushTokensInput = {
@@ -59839,6 +62051,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutPushTokensInput = {
@@ -59869,6 +62082,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutPushTokensInput = {
@@ -59916,6 +62130,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPushTokensInput = {
@@ -59947,6 +62162,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutPushTokensInput = {
@@ -59988,6 +62204,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPushTokensInput = {
@@ -60018,6 +62235,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type TenantCreateWithoutNotificationsInput = {
@@ -60049,6 +62267,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutNotificationsInput = {
@@ -60080,6 +62299,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutNotificationsInput = {
@@ -60118,6 +62338,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -60148,6 +62369,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
   };
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -60204,6 +62426,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutNotificationsInput = {
@@ -60235,6 +62458,7 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -60276,6 +62500,7 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -60306,6 +62531,291 @@ export namespace Prisma {
     incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+  };
+
+  export type TenantCreateWithoutMediaFilesInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutMediaFilesInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutMediaFilesInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<TenantCreateWithoutMediaFilesInput, TenantUncheckedCreateWithoutMediaFilesInput>;
+  };
+
+  export type UserCreateWithoutUploadedMediaInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutUploadedMediaInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventUncheckedCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordUncheckedCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordUncheckedCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordUncheckedCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationUncheckedCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestUncheckedCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutUploadedMediaInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutUploadedMediaInput, UserUncheckedCreateWithoutUploadedMediaInput>;
+  };
+
+  export type TenantUpsertWithoutMediaFilesInput = {
+    update: XOR<TenantUpdateWithoutMediaFilesInput, TenantUncheckedUpdateWithoutMediaFilesInput>;
+    create: XOR<TenantCreateWithoutMediaFilesInput, TenantUncheckedCreateWithoutMediaFilesInput>;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutMediaFilesInput = {
+    where?: TenantWhereInput;
+    data: XOR<TenantUpdateWithoutMediaFilesInput, TenantUncheckedUpdateWithoutMediaFilesInput>;
+  };
+
+  export type TenantUpdateWithoutMediaFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutMediaFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type UserUpsertWithoutUploadedMediaInput = {
+    update: XOR<UserUpdateWithoutUploadedMediaInput, UserUncheckedUpdateWithoutUploadedMediaInput>;
+    create: XOR<UserCreateWithoutUploadedMediaInput, UserUncheckedCreateWithoutUploadedMediaInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutUploadedMediaInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutUploadedMediaInput, UserUncheckedUpdateWithoutUploadedMediaInput>;
+  };
+
+  export type UserUpdateWithoutUploadedMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutUploadedMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUncheckedUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUncheckedUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUncheckedUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUncheckedUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUncheckedUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUncheckedUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateManyTenantInput = {
@@ -60592,6 +63102,19 @@ export namespace Prisma {
     updatedAt?: Date | string;
   };
 
+  export type MediaFileCreateManyTenantInput = {
+    id?: string;
+    uploadedById: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
   export type UserUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
@@ -60620,6 +63143,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTenantInput = {
@@ -60650,6 +63174,7 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
   };
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -61528,6 +64053,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type MediaFileUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    uploadedBy?: UserUpdateOneRequiredWithoutUploadedMediaNestedInput;
+  };
+
+  export type MediaFileUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    uploadedById?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MediaFileUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    uploadedById?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StudentCreateManyParentInput = {
     id?: string;
     tenantId: string;
@@ -61777,6 +64341,19 @@ export namespace Prisma {
     type?: $Enums.NotificationType;
     data?: NullableJsonNullValueInput | InputJsonValue;
     isRead?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MediaFileCreateManyUploadedByInput = {
+    id?: string;
+    tenantId: string;
+    category?: $Enums.MediaCategory;
+    fileName: string;
+    fileKey: string;
+    mimeType: string;
+    fileSize: number;
+    url: string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -62579,6 +65156,45 @@ export namespace Prisma {
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     data?: NullableJsonNullValueInput | InputJsonValue;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MediaFileUpdateWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutMediaFilesNestedInput;
+  };
+
+  export type MediaFileUncheckedUpdateWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MediaFileUncheckedUpdateManyWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    category?: EnumMediaCategoryFieldUpdateOperationsInput | $Enums.MediaCategory;
+    fileName?: StringFieldUpdateOperationsInput | string;
+    fileKey?: StringFieldUpdateOperationsInput | string;
+    mimeType?: StringFieldUpdateOperationsInput | string;
+    fileSize?: IntFieldUpdateOperationsInput | number;
+    url?: StringFieldUpdateOperationsInput | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -63853,6 +66469,11 @@ export namespace Prisma {
    */
   export type NotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     NotificationDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use MediaFileDefaultArgs instead
+   */
+  export type MediaFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    MediaFileDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

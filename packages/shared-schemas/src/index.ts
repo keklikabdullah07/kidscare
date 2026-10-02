@@ -13,3 +13,4 @@ export * from './messaging.schema';
 export * from './incident.schema';
 export * from './development.schema';
 export * from './notification.schema';
+export * from './media.schema';

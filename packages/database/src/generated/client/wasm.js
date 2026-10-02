@@ -434,6 +434,20 @@ exports.Prisma.NotificationScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.MediaFileScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  uploadedById: 'uploadedById',
+  category: 'category',
+  fileName: 'fileName',
+  fileKey: 'fileKey',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  url: 'url',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -558,6 +572,15 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   SYSTEM: 'SYSTEM',
 };
 
+exports.MediaCategory = exports.$Enums.MediaCategory = {
+  STUDENT_AVATAR: 'STUDENT_AVATAR',
+  DAILY_REPORT: 'DAILY_REPORT',
+  ACTIVITY: 'ACTIVITY',
+  PORTFOLIO: 'PORTFOLIO',
+  HEALTH_RECORD: 'HEALTH_RECORD',
+  GENERAL: 'GENERAL',
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
@@ -583,6 +606,7 @@ exports.Prisma.ModelName = {
   HomeActivitySuggestion: 'HomeActivitySuggestion',
   UserPushToken: 'UserPushToken',
   Notification: 'Notification',
+  MediaFile: 'MediaFile',
 };
 
 /**
