@@ -9,10 +9,10 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { AuthProvider, useAuth } from './src/auth/AuthContext';
 import { LoginScreen } from './src/auth/LoginScreen';
 import { SignupScreen } from './src/auth/SignupScreen';
-import { StudentsScreen } from './src/students/StudentsScreen';
 import { ParentTabs } from './src/navigation/ParentTabs';
 import { StaffTabs } from './src/navigation/StaffTabs';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
+import { colors } from './src/theme';
 
 type AuthStackParams = {
   Login: undefined;
@@ -59,7 +59,7 @@ function AppNavigator(): React.ReactElement {
   if (state.status === 'loading') {
     return (
       <View style={styles.splash}>
-        <ActivityIndicator size="large" color="#1D4ED8" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -94,6 +94,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.bg,
   },
 });

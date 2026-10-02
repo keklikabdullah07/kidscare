@@ -1,8 +1,8 @@
 # Plan 0002 — Mobil Uygulama (Expo) V1 Stabilizasyonu ve Entegrasyonu
 
 - Spec: `specs/active/0002-mobile-core-features.md`
-- Status: Awaiting approval
-- Approved by / on: —
+- Status: Approved
+- Approved by: User
 
 ---
 
