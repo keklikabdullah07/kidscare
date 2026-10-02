@@ -74,12 +74,12 @@ constructor(private readonly prisma: PrismaService) {}
 
 ---
 
-## 4. Geliştirme Fazı: Faz 2 — Mobil Uygulama & Web V1 Stabilizasyonu
+## 4. Geliştirme Fazı: Faz 3 — Anlık Bildirimler, Medya Depolama & Pazarlama
 
-- ✅ Web paneli V1 kalite denetimi ve stabilizasyonu (`specs/active/0001-web-v1-stabilization-and-audit.md`)
-- ✅ Mobil uygulama geliştirme (`apps/mobile` — Expo SDK 57 + React Native 0.86)
-- ✅ Backend API geliştirme, entegrasyon ve mobil endpoint testleri (`apps/api`)
-- ✅ Ortak paketler (`packages/shared-types`, `packages/shared-schemas`)
+- ✅ **Faz 1:** Çekirdek altyapı, NestJS API, monorepo ve Web MVP
+- ✅ **Faz 2:** Web V1 stabilizasyonu (`specs/done/0001`), Docker optimizasyonu (`specs/done/0003`), Mobil temel akışlar (`specs/done/0002`)
+- ⏳ **Faz 3:** Anlık Bildirimler (Push Notifications — Expo/FCM), Medya/Fotoğraf depolama servisi ve Landing Page (`apps/marketing`)
+- 🚀 **Faz 4:** AI Destekli Pedagojik Karne Özeti, Storybook UI Atölyesi & İleri Analitik
 
 ---
 
