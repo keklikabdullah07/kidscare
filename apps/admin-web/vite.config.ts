@@ -46,7 +46,7 @@ export default defineConfig({
   },
   esbuild: {
     loader: 'tsx',
-    include: [/src\/.*\.tsx?$/],
+    include: [/(src|\.storybook)\/.*\.tsx?$/],
   },
   test: {
     environment: 'jsdom',

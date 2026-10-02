@@ -49,6 +49,11 @@ scratch
 uploads
 **/uploads
 
+# Storybook artifacts
+storybook-static
+**/storybook-static
+
+
 # Local environment variables
 .env
 .env.local

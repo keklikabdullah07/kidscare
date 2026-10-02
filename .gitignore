@@ -11,6 +11,8 @@ build/
 .next/
 apps/marketing/.next/
 apps/admin-web/dist/
+apps/admin-web/storybook-static/
+storybook-static/
 apps/api/dist/
 apps/mobile/.expo/
 .cache/
