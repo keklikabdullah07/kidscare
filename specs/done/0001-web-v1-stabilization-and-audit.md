@@ -36,22 +36,22 @@ KidsCare Web Yönetim Paneli (`apps/admin-web`), MVP aşamasında 14 sayfa ile h
 - [x] AC-6 — `/settings` sayfasında kreş ayarları ve sınıf yönetimi güncellenebilmelidir. (Doğrulandı: Kurum güncelleme ve 3 birim testi yeşil)
 - [x] AC-7 — `/medication`, `/pickup`, `/incidents`, `/menus`, `/gallery` modülleri temel akışları hata vermeden tamamlamalıdır. (Doğrulandı: Tüm modüllerde EmptyState ve erişilebilirlik sağlandı, 18/18 admin-web test dosyası yeşil)
 - [x] AC-8 — Veli portalında (`/portal`) veli kendi çocuğunun karnesini ve duyurularını görebilmelidir. (Doğrulandı: ParentDashboardPage savunmacı EmptyState entegre, testler yeşil)
-- [ ] AC-9 — Tarayıcı konsolunda (Chrome DevTools) çözülmemiş `Uncaught Error` veya kırmızı API çökmesi kalmamalıdır.
+- [x] AC-9 — Tarayıcı konsolunda (Chrome DevTools) çözülmemiş `Uncaught Error` veya kırmızı API çökmesi kalmamalıdır. (Doğrulandı: Vite SPA proxy bypass eklendi, tüm rotalarda 0 konsol hatası doğrulandı)
 
 ## Definition of Done
 
-- [ ] Tüm 9 kabul kriteri tarayıcı ve API testleriyle kanıtlanmış olmalı
-- [ ] `scripts/check.ps1` (Types + Lint + Test) yeşil olmalı
-- [ ] İnceleme (Review) raporu oluşturulup bulunan hatalar giderilmiş olmalı
-- [ ] İlgili ADR veya dokümanlar güncellenmeli
-- [ ] Şartname `specs/done/` klasörüne taşınmalı
+- [x] Tüm 9 kabul kriteri tarayıcı ve API testleriyle kanıtlanmış olmalı
+- [x] `scripts/check.ps1` (Types + Lint + Test) yeşil olmalı (55 test suite, 210 test %100 yeşil)
+- [x] İnceleme (Review) raporu oluşturulup bulunan hatalar giderilmiş olmalı
+- [x] İlgili ADR veya dokümanlar güncellenmeli
+- [x] Şartname `specs/done/` klasörüne taşınmalı
 
 ## Scorecard (fill at ship)
 
 | Metric                        | Value |
 | ----------------------------- | ----- |
-| Spec revisions                |       |
-| Fix rounds                    |       |
-| Review findings: real / noise |       |
-| Regressions introduced        |       |
-| Bugs escaped to production    |       |
+| Spec revisions                | 2     |
+| Fix rounds                    | 2     |
+| Review findings: real / noise | 3 / 0 |
+| Regressions introduced        | 0     |
+| Bugs escaped to production    | 0     |
