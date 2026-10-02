@@ -1,5 +1,5 @@
 import { useEffect, useState, type JSX } from 'react';
-import { ShieldCheck, Clock, CheckCircle2, XCircle, RotateCw, Calendar } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, XCircle, RotateCw, Calendar } from 'lucide-react';
 import type { PickupAuthorization, PickupAuthorizationStatus } from '@kidscare/shared-types';
 import { listPickupAuthorizations, reviewPickupAuthorization } from '../../api/pickup';
 import { listStudents } from '../../api/students';
@@ -7,6 +7,7 @@ import type { Student } from '@kidscare/shared-types';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 const STATUS_LABEL: Record<PickupAuthorizationStatus, string> = {
   PENDING: 'Bekliyor',
@@ -126,17 +127,11 @@ export function PickupPage(): JSX.Element {
           </p>
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700/80 p-8">
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
-            <Clock className="w-6 h-6" />
-          </div>
-          <p className="text-slate-800 dark:text-white text-sm font-bold">
-            Bu kategoride kayıt yok.
-          </p>
-          <p className="text-xs text-slate-500 dark:text-slate-300 mt-1 max-w-sm mx-auto">
-            Öğrenci teslimat talepleri ve onayları burada listelenir.
-          </p>
-        </div>
+        <EmptyState
+          icon={ShieldCheck}
+          title="Bu kategoride kayıt yok."
+          description="Öğrenci teslimat talepleri ve onayları burada listelenir."
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {items.map((item) => (

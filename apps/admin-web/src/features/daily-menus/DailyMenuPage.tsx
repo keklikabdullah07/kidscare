@@ -22,6 +22,7 @@ import { deleteDailyMenu, getDailyMenu, saveDailyMenu } from '../../api/daily-me
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 const COMMON_ALLERGENS = [
   'Süt / Laktoz',
@@ -322,17 +323,11 @@ export function DailyMenuPage(): JSX.Element {
         <div className="space-y-6">
           {!menu ||
           (menu.breakfast.length === 0 && menu.lunch.length === 0 && menu.snack.length === 0) ? (
-            <div className="bg-white dark:bg-slate-800 p-12 text-center rounded-2xl border border-dashed border-slate-200 dark:border-slate-700/80">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
-                <Utensils className="w-6 h-6" />
-              </div>
-              <p className="text-slate-800 dark:text-white text-sm font-bold">
-                Bu gün için menü girilmemiştir.
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">
-                İlgili güne ait yemek planı henüz oluşturulmadı.
-              </p>
-            </div>
+            <EmptyState
+              icon={Utensils}
+              title="Bu gün için menü girilmemiştir."
+              description="İlgili güne ait yemek planı henüz oluşturulmadı."
+            />
           ) : (
             <>
               {/* Meal Cards - View Only */}

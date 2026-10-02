@@ -14,6 +14,7 @@ import type { Student } from '@kidscare/shared-types';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { PromptModal } from '../../components/ui/PromptModal';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 const STATUS_LABEL: Record<StandaloneMedicationStatus, string> = {
   REQUESTED: 'Onay Bekliyor',
@@ -305,17 +306,22 @@ export function MedicationPage(): JSX.Element {
           </p>
         </div>
       ) : records.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-amber-500/10 text-teal-900 dark:text-teal-300 flex items-center justify-center mx-auto mb-3">
-            <Clock className="w-6 h-6" />
-          </div>
-          <p className="text-slate-800 dark:text-white text-sm font-bold">
-            Aktif ilaç kaydı bulunmuyor.
-          </p>
-          <p className="text-xs text-slate-500 dark:text-slate-300 mt-1 max-w-sm mx-auto">
-            Öğrencilerin güncel ve onay bekleyen ilaç kullanım talepleri burada listelenir.
-          </p>
-        </div>
+        <EmptyState
+          icon={Pill}
+          title="Aktif ilaç kaydı bulunmuyor."
+          description="Öğrencilerin güncel ve onay bekleyen ilaç kullanım talepleri burada listelenir."
+          action={
+            (role === 'PARENT' || role === 'ADMIN' || role === 'SUPER_ADMIN') && !createOpen ? (
+              <button
+                type="button"
+                onClick={() => setCreateOpen(true)}
+                className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition shadow-xs active:scale-98"
+              >
+                <Plus className="w-3.5 h-3.5" /> Yeni Talep Oluştur
+              </button>
+            ) : undefined
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {records.map((r) => (

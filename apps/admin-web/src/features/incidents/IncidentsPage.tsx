@@ -19,6 +19,7 @@ import { createIncident, listIncidents, updateIncident } from '../../api/inciden
 import { listStudents } from '../../api/students';
 import type { Student } from '@kidscare/shared-types';
 import { useToast } from '../../components/Toast';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 interface CategoryMeta {
   label: string;
@@ -292,17 +293,22 @@ export function IncidentsPage(): JSX.Element {
           </p>
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8">
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
-            <AlertTriangle className="w-6 h-6" />
-          </div>
-          <p className="text-slate-700 dark:text-white text-sm font-bold">
-            Kayıtlı Olay Bulunmuyor
-          </p>
-          <p className="text-xs text-slate-500 dark:text-slate-300 mt-1 max-w-sm mx-auto">
-            Kreşinizde henüz bildirilmiş bir kaza veya yaralanma kaydı yok.
-          </p>
-        </div>
+        <EmptyState
+          icon={ShieldAlert}
+          title="Kayıtlı Olay Bulunmuyor"
+          description="Kreşinizde henüz bildirilmiş bir kaza veya yaralanma kaydı yok."
+          action={
+            !showForm ? (
+              <button
+                type="button"
+                onClick={() => setShowForm(true)}
+                className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition shadow-xs active:scale-98"
+              >
+                <Plus className="w-3.5 h-3.5" /> Yeni Tutanak Oluştur
+              </button>
+            ) : undefined
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {items.map((i) => {

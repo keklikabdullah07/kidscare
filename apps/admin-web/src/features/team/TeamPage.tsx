@@ -5,6 +5,7 @@ import { ApiError } from '../../api/client';
 import { inviteUser, listUsers } from '../../api/users';
 import { useToast } from '../../components/Toast';
 import { Badge, type BadgeVariant } from '../../components/ui/Badge';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 type Status = 'loading' | 'ready' | 'error';
 
@@ -191,7 +192,13 @@ export function TeamPage(): JSX.Element {
             <p className="p-6 text-sm text-rose-600 dark:text-rose-400">{errorMsg ?? 'Hata'}</p>
           )}
           {status === 'ready' && users.length === 0 && (
-            <p className="p-6 text-sm text-slate-500 dark:text-slate-300">Henüz kullanıcı yok.</p>
+            <div className="p-6">
+              <EmptyState
+                icon={Users}
+                title="Henüz kullanıcı yok."
+                description="Sol taraftaki formu kullanarak öğretmen veya veli hesabı oluşturabilirsiniz."
+              />
+            </div>
           )}
           {status === 'ready' && users.length > 0 && (
             <ul className="divide-y divide-slate-100 dark:divide-slate-700">

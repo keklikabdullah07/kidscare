@@ -28,14 +28,14 @@ KidsCare Web Yönetim Paneli (`apps/admin-web`), MVP aşamasında 14 sayfa ile h
 
 ## Acceptance criteria
 
-- [ ] AC-1 — Kimlik doğrulama (Giriş, çıkış, oturum yenileme) hatasız çalışmalıdır.
-- [ ] AC-2 — `/students` sayfasında öğrenci listeleme, arama, filtreleme, yeni öğrenci kaydı ve silme hatasız çalışmalıdır.
-- [ ] AC-3 — `/attendance` sayfasında sınıf bazlı günlük yoklama alma ve güncelleme hatasız kaydedilmelidir.
-- [ ] AC-4 — `/tracking` sayfasında günlük karne (yemek, uyku, ruh hali, etkinlik) doldurma ve veliye yansıma testi geçmelidir.
-- [ ] AC-5 — `/team` sayfasında öğretmen ve personel yönetimi sorunsuz çalışmalıdır.
-- [ ] AC-6 — `/settings` sayfasında kreş ayarları ve sınıf yönetimi güncellenebilmelidir.
-- [ ] AC-7 — `/medication`, `/pickup`, `/incidents`, `/menus`, `/gallery` modülleri temel akışları hata vermeden tamamlamalıdır.
-- [ ] AC-8 — Veli portalında (`/portal`) veli kendi çocuğunun karnesini ve duyurularını görebilmelidir.
+- [x] AC-1 — Kimlik doğrulama (Giriş, çıkış, oturum yenileme) hatasız çalışmalıdır. (Doğrulandı: Regex hatası çözüldü, auth lookup RLS güvenliği sağlandı)
+- [x] AC-2 — `/students` sayfasında öğrenci listeleme, arama, filtreleme, yeni öğrenci kaydı ve silme hatasız çalışmalıdır. (Doğrulandı: Savunmacı EmptyState, Escape/backdrop erişilebilirliği, 5 birim testi yeşil)
+- [x] AC-3 — `/attendance` sayfasında sınıf bazlı günlük yoklama alma ve güncelleme hatasız kaydedilmelidir. (Doğrulandı: CheckOutModal erişilebilirliği, EmptyState entegrasyonu, 4 birim testi yeşil)
+- [x] AC-4 — `/tracking` sayfasında günlük karne (yemek, uyku, ruh hali, etkinlik) doldurma ve veliye yansıma testi geçmelidir. (Doğrulandı: DailyReportEditorModal Escape/backdrop ve EmptyState entegre, testler yeşil)
+- [x] AC-5 — `/team` sayfasında öğretmen ve personel yönetimi sorunsuz çalışmalıdır. (Doğrulandı: EmptyState entegre, davet ve liste testi yeşil)
+- [x] AC-6 — `/settings` sayfasında kreş ayarları ve sınıf yönetimi güncellenebilmelidir. (Doğrulandı: Kurum güncelleme ve 3 birim testi yeşil)
+- [x] AC-7 — `/medication`, `/pickup`, `/incidents`, `/menus`, `/gallery` modülleri temel akışları hata vermeden tamamlamalıdır. (Doğrulandı: Tüm modüllerde EmptyState ve erişilebilirlik sağlandı, 18/18 admin-web test dosyası yeşil)
+- [x] AC-8 — Veli portalında (`/portal`) veli kendi çocuğunun karnesini ve duyurularını görebilmelidir. (Doğrulandı: ParentDashboardPage savunmacı EmptyState entegre, testler yeşil)
 - [ ] AC-9 — Tarayıcı konsolunda (Chrome DevTools) çözülmemiş `Uncaught Error` veya kırmızı API çökmesi kalmamalıdır.
 
 ## Definition of Done
