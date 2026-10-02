@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* KidsCare Impeccable Color Palette */
+  --color-primary: #0F4C3A;       /* Derin Çam Yeşili */
+  --color-primary-hover: #0A3629;
+  --color-primary-light: #EBF5F0;
+  --color-primary-border: #C8E3D8;
+  
+  --color-accent: #F59E0B;        /* Bal Kehribarı / Sıcak Güneş */
+  --color-accent-hover: #D97706;
+  --color-accent-light: #FEF3C7;
+  --color-accent-border: #FDE68A;
+  
+  --color-bg-base: #FAF9F6;       /* Parlamayan Keten / Yulaf */
+  --color-bg-surface: #FFFFFF;
+  --color-bg-subtle: #F4F1EA;
+  
+  --color-text-main: #0F172A;     /* Obsidyen Lacivert Siyah */
+  --color-text-muted: #475569;
+  --color-text-light: #94A3B8;
+  
+  --color-border: #E2E8F0;
+  --color-border-subtle: #EDE9E3;
+
+  --shadow-sm: 0 1px 2px 0 rgba(15, 76, 58, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 76, 58, 0.08), 0 2px 4px -2px rgba(15, 76, 58, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 76, 58, 0.08), 0 4px 6px -4px rgba(15, 76, 58, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 76, 58, 0.08), 0 8px 10px -6px rgba(15, 76, 58, 0.05);
+  --shadow-glow: 0 0 35px -5px rgba(15, 76, 58, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-base);
+  color: var(--color-text-main);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--color-bg-base);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Container */
+.kc-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Glassmorphism */
+.kc-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.kc-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.kc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary-border);
+}
+
+/* Badges */
+.kc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.kc-badge-primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-border);
+}
+
+.kc-badge-accent {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent-hover);
+  border: 1px solid var(--color-accent-border);
+}
+
+/* Buttons */
+.kc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  font-size: 0.975rem;
+  font-weight: 700;
+  border-radius: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.kc-btn:active {
+  transform: scale(0.97);
+}
+
+.kc-btn-primary {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+.kc-btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 10px 20px -5px rgba(15, 76, 58, 0.35);
+}
+
+.kc-btn-accent {
+  background-color: var(--color-accent);
+  color: #FFFFFF;
+}
+
+.kc-btn-accent:hover {
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.35);
+}
+
+.kc-btn-outline {
+  background-color: #FFFFFF;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-border);
+}
+
+.kc-btn-outline:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+/* Form inputs */
+.kc-input {
+  width: 100%;
+  padding: 0.85rem 1.15rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid var(--color-border);
+  background-color: #FFFFFF;
+  color: var(--color-text-main);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kc-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(15, 76, 58, 0.15);
+}
+
+/* Radial background glow */
+.kc-radial-glow {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(15, 76, 58, 0.08) 0%, rgba(245, 158, 11, 0.04) 50%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+}
