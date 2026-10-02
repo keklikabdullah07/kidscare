@@ -57,7 +57,21 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
     try {
       const res = await fetch(url, { ...init, method, headers, signal: controller.signal });
       const text = await res.text();
-      const body: unknown = text.length > 0 ? JSON.parse(text) : null;
+      let body: unknown = null;
+      if (text.length > 0) {
+        try {
+          body = JSON.parse(text);
+        } catch {
+          if (!res.ok) {
+            throw new ApiError(
+              res.status,
+              null,
+              `Sunucu hatası (${res.status}): Beklenen JSON yerine geçersiz yanıt döndü. API servisinin ayakta olduğundan emin olun.`,
+            );
+          }
+          throw new Error('Sunucudan geçersiz veri biçimi döndü (JSON formatı bekleniyordu).');
+        }
+      }
 
       if (res.status === 401) {
         setStoredToken(null);

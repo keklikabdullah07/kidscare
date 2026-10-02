@@ -36,6 +36,9 @@ export default defineConfig({
       '/messaging': proxyConfig,
       '/incidents': proxyConfig,
       '/development': proxyConfig,
+      '/media': proxyConfig,
+      '/notifications': proxyConfig,
+      '/uploads': proxyConfig,
     },
   },
   // Workspace deps expose TS source as `main`. Exclude them from the
