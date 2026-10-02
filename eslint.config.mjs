@@ -20,6 +20,8 @@ export default [
       'packages/**/prisma/**',
       'scripts/**',
       '**/.agents/**',
+      '**/.storybook/**',
+      '**/storybook-static/**',
     ],
   },
   js.configs.recommended,
