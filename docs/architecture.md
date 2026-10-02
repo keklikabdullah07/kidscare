@@ -75,3 +75,19 @@ KidsCare, SaaS (Software as a Service) mimarisinde **Paylaşımlı Veritabanı, 
 2. `TenantGuard` isteği doğrular ve `TenantContext` nesnesini başlatır.
 3. Tüm veri tabanı sorguları Repository katmanında `withTenant` ile sarmalanır; `tenant_id` filtresi otomatik enjekte edilir.
 4. Bir kreşin kullanıcısı asla başka bir kreşin öğrencisini veya verisini göremez.
+
+---
+
+## 5. Vertical Slice Mimarisi (VSA — Dikey Dilimler)
+
+KidsCare, yatay katman karmaşasını önlemek ve her özelliği bağımsız, güvenli ve kolay test edilebilir kılmak için **Vertical Slice Architecture (VSA)** prensibini benimser:
+
+1. **Backend Dikey Dilimleri (`apps/api/src/modules/<slice>/`):**
+   - Her modül (`attendance`, `daily-reports`, `medication`, `students`, `pickup`, `incidents`, `development` vb.) kendi kendine yeten bağımsız bir dikey dilimdir.
+   - O dilime ait Controller, Service/Handler ve Repository aynı klasör hiyerarşisinde yaşar.
+   - Bir dilimde yapılan değişiklik veya refactor diğer dilimleri asla bozmaz.
+2. **Frontend & Mobil Dilim Simetrisi:**
+   - Web (`apps/admin-web/src/features/<slice>/`) ve Mobil (`apps/mobile/src/<slice>/`) aynı dikey dilim isimlendirmesini ve sorumluluk sınırlarını korur.
+3. **Dilimler Arası İletişim & Ortak Sözleşmeler:**
+   - Dilimler arası veri transfer nesneleri (DTO) yalnızca `packages/shared-types` ve `packages/shared-schemas` üzerinden sözleşmeye (contract) bağlanır.
+   - Bir dilim asla başka bir dilimin veritabanı Repository'sine doğrudan erişemez; ihtiyaç halinde ilgili dilimin açık servis API'si kullanılır.

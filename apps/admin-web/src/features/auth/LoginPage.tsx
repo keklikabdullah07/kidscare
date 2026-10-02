@@ -315,7 +315,7 @@ export function LoginPage(): JSX.Element {
                     required
                     minLength={2}
                     maxLength={64}
-                    pattern="[-a-z0-9]+"
+                    pattern="[a-z0-9-]+"
                     autoComplete="off"
                     disabled={submitting}
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50/50 dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-teal-600 dark:focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20 focus:outline-none transition-all disabled:opacity-50"

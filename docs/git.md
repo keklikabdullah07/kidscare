@@ -39,3 +39,18 @@ Bir branch `developer` veya `main` dalına merge edilmeden önce:
 1. `scripts/check.ps1` veya `scripts/check` yerel ortamda çalıştırılmış ve **tamamı yeşil** olmalıdır.
 2. Kod stili `prettier` ve `eslint` kurallarına uymalıdır.
 3. Kırıcı bir değişiklik (breaking change) varsa ilgili `ADR` belgesi güncellenmelidir.
+
+---
+
+## 4. Küçük / Trivial Değişiklik Politikası (Trivial-Change Policy)
+
+KidsCare projesinde tek kişilik geliştirme ortamında hız ve disiplin dengesi şu kurallarla korunur:
+
+1. **Hızlı Yol (Trivial Lane):**
+   - İmla hataları (typo), buton metinleri, CSS renk/boşluk mikro-ayarları ve açıklama satırları gibi iş mantığını değiştirmeyen yüzeysel değişiklikler için tam şartname (`specs/`) açılması gerekmez.
+   - Doğrudan ilgili dalda commit edilebilir.
+2. **Özensizlik Yasağı (Kalite Kapısı Asla Atlanamaz):**
+   - Tek kişi geliştirmek asla gevşek veya özensiz kod anlamına gelmez.
+   - En ufak bir CSS veya metin değişikliğinde dahi `./scripts/check.ps1` (Typecheck + Lint + Test) çalıştırılmalı ve yeşil olduğu doğrulanmalıdır.
+3. **Şartnameye Zorunlu Durumlar:**
+   - Yeni bir özellik (feature), veri modeli değişikliği, API sözleşmesi, yetkilendirme veya iş mantığına dokunan her değişiklik **kesinlikle şartname (`specs/active/`) ve plan (`specs/plans/`) süzgecinden geçer.**

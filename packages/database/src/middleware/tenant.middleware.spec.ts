@@ -1,7 +1,15 @@
 import { PrismaClient } from '../generated/client';
 import { withTenantContext } from './tenant.middleware';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url:
+        process.env.DATABASE_APP_URL ||
+        'postgresql://kidscare_app:app_pw@localhost:5433/kidscare?schema=public',
+    },
+  },
+});
 const DEMO_TENANT_ID = 'demo-tenant-seed-001';
 const TENANT_A_ID = 'test-tenant-a-unique';
 const TENANT_B_ID = 'test-tenant-b-unique';
@@ -34,7 +42,7 @@ describe('withTenantContext', () => {
   // triggers the `@typescript-eslint/no-unsafe-*` family. The runtime type
   // is correct — these are first-class Prisma model delegates — but Prisma
   // does not expose a generic for the `$transaction(...)` return value.
-  /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+   
   beforeAll(async () => {
     // Three tenants, one user per tenant
     await withTenantSession(DEMO_TENANT_ID, async (tx) => {
@@ -97,7 +105,7 @@ describe('withTenantContext', () => {
     await prisma.$disconnect();
   });
 
-  /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+   
 
   it('returns rows where tenantId matches the context', async () => {
     const extended = prisma.$extends(

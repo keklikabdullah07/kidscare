@@ -3,23 +3,22 @@
 > **DİKKAT (TÜM YAPAY ZEKA MODELLERİ VE AJANLAR İÇİN KESİN KURAL):**
 > Bu dosya projenin anayasasıdır. Hangi yapay zeka veya geliştirici çalışırsa çalışsın, bu dosyadaki mimari kurallardan, teknoloji sürümlerinden ve çalışma mantığından **ASLA sapamaz ve kafasına göre değiştiremez.**
 
----
-
 ## 0. ANEW Çalışma Modu ve Değişmez Kurallar (Invariant Rules)
 
-- **Operating Mode:** `lite` (`/new-feature` ile segmentleri sırayla işletir, her kapıda insan onayı sorar) veya `strict` (`/analyze` ile segment bazlı çalışır).
+- **Operating Mode:** `lite` (`/new-feature` ile segmentleri sırayla işletir, her kapıda insan onayı sorar).
 - **Language:** `chat=tr · docs=tr` (İletişim ve belgeler Türkçe, protokol anahtarları İngilizce kalır).
+- **Mimari:** Vertical Slice Architecture (VSA) — Her özellik kendi dikey diliminde izoledir (`docs/architecture.md`).
+- **Trivial Değişiklik:** Yüzeysel imla/CSS düzeltmelerinde hızlı yol işletilebilir; ancak `./scripts/check.ps1` kanıtı asla atlanamaz (`docs/git.md`).
+- **Tek Kişi Disiplini:** Tek geliştirici olmak asla özensizlik veya kestirme kod yazma gerekçesi olamaz; kalite çıtası en yüksek seviyede tutulur.
 
 ### 4 Değişmez Kural (Never Delete or Weaken):
 
 1. **No spec, no code:** Şartnamesi (`specs/active/NNNN-<ad>.md`) olmayan hiçbir iş için kod yazılamaz.
 2. **Plan before build:** Kod yazılmadan önce uygulama planı (`specs/plans/NNNN-plan.md`) insan tarafından onaylanmalıdır.
-3. **The producer never verifies its own work:** Kodu yazan yapay zeka kendi kodunu denetleyemez; inceleme (Review) ve kalite kontrolü (QA) ayrı bir oturumda veya bağımsız subagent ile yapılır.
-4. **Evidence over claims:** "Hallettim" demek yasaktır. İşi bitirmek için `scripts/check.ps1` veya `scripts/check` yeşil çıktısı ve test kanıtı sunulmalıdır.
+3. **The producer never verifies its own work:** Kodu yazan yapay zeka kendi kodunu denetleyemez; inceleme (Review) ve kalite kontrolü (QA) bağımsız yürütülür.
+4. **Evidence over claims:** "Hallettim" demek yasaktır. İşi bitirmek için `scripts/check.ps1` yeşil çıktısı ve test kanıtı sunulmalıdır.
 
 ---
-
-## 1. Teknoloji Yığını ve Güncel Sürümler
 
 - **Monorepo:** Nx / pnpm workspaces (`/apps` ve `/packages`).
 - **Backend (`apps/api`):** NestJS 10 + Fastify/Express + `tsx watch` + Prisma ORM.
