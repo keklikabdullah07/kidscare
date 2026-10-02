@@ -31,6 +31,7 @@ import {
 import { listStudents } from '../../api/students';
 import { DailyReportEditorModal } from './DailyReportEditorModal';
 import { useToast } from '../../components/Toast';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 const MOOD_MAP: Record<StudentMood, { label: string; emoji: string; badgeClass: string }> = {
   HAPPY: {
@@ -770,25 +771,35 @@ export function DailyTrackingPage(): JSX.Element {
           </p>
         </div>
       ) : students.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700/80">
-          <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-600 dark:text-slate-300 text-sm font-semibold">
-            {classrooms.length === 0
-              ? 'Atanmış sınıf bulunamadı.'
-              : 'Bu sınıfta öğrenci bulunamadı.'}
-          </p>
-          <p className="text-slate-400 dark:text-slate-300 text-xs mt-1">
-            {classrooms.length === 0
+        <EmptyState
+          icon={Users}
+          title={
+            classrooms.length === 0 ? 'Atanmış sınıf bulunamadı.' : 'Bu sınıfta öğrenci bulunamadı.'
+          }
+          description={
+            classrooms.length === 0
               ? 'Önce admin tarafından sınıf ve öğretmen ataması yapılmalı.'
-              : 'Önce Öğrenciler sekmesinden öğrenci ekleyin.'}
-          </p>
-        </div>
+              : 'Önce Öğrenciler sekmesinden öğrenci ekleyin.'
+          }
+        />
       ) : filteredStudents.length === 0 ? (
-        <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
-          <p className="text-slate-500 dark:text-slate-300 text-sm">
-            Filtrelere uygun öğrenci bulunamadı.
-          </p>
-        </div>
+        <EmptyState
+          icon={Search}
+          title="Filtrelere uygun öğrenci bulunamadı."
+          description="Arama sorgusunu değiştirin ya da filtreleri temizleyin."
+          action={
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setFilterType('all');
+              }}
+              className="text-xs text-teal-900 dark:text-teal-300 font-semibold hover:underline"
+            >
+              Filtreleri Temizle
+            </button>
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredStudents.map((student) => {

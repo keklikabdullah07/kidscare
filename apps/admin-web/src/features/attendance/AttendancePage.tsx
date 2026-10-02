@@ -21,6 +21,7 @@ import { listStudents } from '../../api/students';
 import { CheckOutModal } from './CheckOutModal';
 import { useToast } from '../../components/Toast';
 import { ConfirmModal } from '../../components/ui/PromptModal';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 const STATUS_CONFIG: Record<
   AttendanceStatus,
@@ -471,28 +472,29 @@ export function AttendancePage(): JSX.Element {
           </p>
         </div>
       ) : students.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
-          <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-500 dark:text-slate-300 text-sm font-medium">
-            Kayıtlı öğrenci bulunamadı.
-          </p>
-        </div>
+        <EmptyState
+          icon={Users}
+          title="Kayıtlı öğrenci bulunamadı."
+          description="Yoklama alabilmek için önce sisteme öğrenci kaydetmelisiniz."
+        />
       ) : filteredStudents.length === 0 ? (
-        <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
-          <p className="text-slate-500 dark:text-slate-300 text-sm">
-            Filtrelere uygun öğrenci bulunamadı.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              setSearchQuery('');
-              setStatusFilter('all');
-            }}
-            className="mt-2 text-xs text-blue-600 dark:text-amber-400 font-semibold hover:underline"
-          >
-            Filtreleri Temizle
-          </button>
-        </div>
+        <EmptyState
+          icon={Search}
+          title="Filtrelere uygun öğrenci bulunamadı."
+          description="Arama kriterlerinizi değiştirebilir veya filtreleri sıfırlayabilirsiniz."
+          action={
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setStatusFilter('all');
+              }}
+              className="text-xs text-teal-900 dark:text-teal-300 font-semibold hover:underline"
+            >
+              Filtreleri Temizle
+            </button>
+          }
+        />
       ) : viewMode === 'table' ? (
         <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">

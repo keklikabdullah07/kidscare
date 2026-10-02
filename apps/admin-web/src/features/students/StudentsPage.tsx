@@ -27,6 +27,7 @@ import { StudentPassportModal } from './StudentPassportModal';
 import { PickupContactsModal } from './PickupContactsModal';
 import { useToast } from '../../components/Toast';
 import { ConfirmModal } from '../../components/ui/PromptModal';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 type Status = 'loading' | 'ready' | 'error';
 type ViewMode = 'grid' | 'table';
@@ -307,40 +308,40 @@ export function StudentsPage(): JSX.Element {
       )}
 
       {status === 'ready' && students.length === 0 && (
-        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
-          <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
-            Henüz öğrenci yok.
-          </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-300 mt-1 max-w-sm mx-auto">
-            Kreşinize ilk öğrencinizi eklemek için aşağıdaki butonu kullanabilirsiniz.
-          </p>
-          <button
-            type="button"
-            onClick={() => setShowAddModal(true)}
-            className="mt-4 inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl px-4 py-2 text-xs font-bold transition shadow-xs"
-          >
-            <UserPlus className="w-4 h-4" /> + Yeni Öğrenci
-          </button>
-        </div>
+        <EmptyState
+          icon={Users}
+          title="Henüz öğrenci yok."
+          description="Kreşinize ilk öğrencinizi eklemek için aşağıdaki butonu kullanabilirsiniz."
+          action={
+            <button
+              type="button"
+              onClick={() => setShowAddModal(true)}
+              className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl px-4 py-2 text-xs font-bold transition active:scale-95 shadow-xs"
+            >
+              <UserPlus className="w-4 h-4" /> + Yeni Öğrenci
+            </button>
+          }
+        />
       )}
 
       {status === 'ready' && students.length > 0 && filteredStudents.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
-          <p className="text-slate-500 dark:text-slate-300 text-sm">
-            Arama kriterlerine uygun öğrenci bulunamadı.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              setSearchQuery('');
-              setFilterType('all');
-            }}
-            className="mt-2 text-xs text-teal-900 dark:text-teal-300 font-semibold hover:underline"
-          >
-            Filtreleri Temizle
-          </button>
-        </div>
+        <EmptyState
+          icon={Search}
+          title="Arama kriterlerine uygun öğrenci bulunamadı."
+          description="Farklı bir arama terimi deneyebilir veya filtreleri temizleyebilirsiniz."
+          action={
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setFilterType('all');
+              }}
+              className="text-xs text-teal-900 dark:text-teal-300 font-semibold hover:underline"
+            >
+              Filtreleri Temizle
+            </button>
+          }
+        />
       )}
 
       {/* Content: Grid or Table View */}
@@ -834,15 +835,34 @@ function StudentFormModal({
         onSaved(created);
       }
     } catch (err) {
-      setFormError(
-        err instanceof ApiError ? `API Hatası: ${err.status}` : 'Kaydetme işlemi başarısız',
-      );
+      const msg =
+        err instanceof ApiError
+          ? err.message || `API Hatası: ${err.status}`
+          : 'Kaydetme işlemi başarısız';
+      setFormError(msg);
       setSaving(false);
     }
   }
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-150">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-150"
+    >
       <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-800 shadow-2xl border border-slate-200 dark:border-slate-700/80 overflow-hidden flex flex-col">
         <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/80 bg-slate-50/80 dark:bg-slate-800/90 px-6 py-4">
           <div className="flex items-center gap-2">

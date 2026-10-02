@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Attendance, EmergencyContact, Student } from '@kidscare/shared-types';
 import { checkOutStudent } from '../../api/attendance';
 
@@ -20,6 +20,16 @@ export function CheckOutModal({ student, date, onClose, onSaved }: Props): React
   const [selectedContactId, setSelectedContactId] = useState<string>('');
   const [customPerson, setCustomPerson] = useState('');
   const [pickupNote, setPickupNote] = useState('');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   if (!student) return <></>;
 
@@ -69,7 +79,14 @@ export function CheckOutModal({ student, date, onClose, onSaved }: Props): React
   const isCustom = selectedContactId === 'CUSTOM' || (!selectedContactId && contacts.length === 0);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-150"
+    >
       <div className="flex max-h-[90vh] w-full max-w-lg flex-col rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/80 bg-slate-50/80 dark:bg-slate-900/40 px-6 py-4">

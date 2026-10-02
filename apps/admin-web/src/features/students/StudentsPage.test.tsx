@@ -103,9 +103,7 @@ describe('StudentsPage', () => {
       expect(screen.getByText('Can Demir')).toBeInTheDocument();
     });
 
-    const postCall = fetchSpy.mock.calls.find(
-      ([, init]) => (init)?.method === 'POST',
-    );
+    const postCall = fetchSpy.mock.calls.find(([, init]) => init?.method === 'POST');
     expect(postCall).toBeDefined();
     expect(JSON.parse((postCall?.[1] as RequestInit).body as string)).toEqual({
       firstName: 'Can',
@@ -113,6 +111,22 @@ describe('StudentsPage', () => {
       dateOfBirth: '2019-08-23',
       gender: undefined,
       notes: undefined,
+    });
+  });
+
+  it('closes new-student modal when Escape key is pressed', async () => {
+    mockFetchByUrl({
+      '/students': () => new Response(JSON.stringify([]), { status: 200 }),
+    });
+
+    const user = userEvent.setup();
+    render(<StudentsPage />);
+    await user.click(screen.getByRole('button', { name: /yeni öğrenci/i }));
+    expect(screen.getByText('Yeni Öğrenci Ekle')).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByText('Yeni Öğrenci Ekle')).not.toBeInTheDocument();
     });
   });
 });

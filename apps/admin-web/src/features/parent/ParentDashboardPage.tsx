@@ -22,6 +22,7 @@ import type {
   ParentChildOverview,
   PortfolioItemDto,
 } from '@kidscare/shared-types';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 export function ParentDashboardPage(): JSX.Element {
   const [childrenData, setChildrenData] = useState<ParentChildOverview[]>([]);
@@ -195,14 +196,11 @@ export function ParentDashboardPage(): JSX.Element {
           <p className="text-xs mt-1">{error}</p>
         </div>
       ) : !activeChildOverview ? (
-        <div className="bg-white dark:bg-slate-800 p-16 text-center rounded-2xl border border-slate-200/80 dark:border-slate-700/80 text-slate-500 dark:text-slate-300">
-          <p className="text-base font-semibold text-slate-800 dark:text-white">
-            Kayıtlı öğrenci bilgisi bulunamadı.
-          </p>
-          <p className="text-xs mt-1 text-slate-400 dark:text-slate-300">
-            Lütfen kreş yönetimiyle iletişime geçiniz.
-          </p>
-        </div>
+        <EmptyState
+          icon={Heart}
+          title="Kayıtlı öğrenci bilgisi bulunamadı."
+          description="Hesabınıza bağlı bir öğrenci kaydı görünmüyor. Lütfen kreş yönetimiyle iletişime geçiniz."
+        />
       ) : (
         <>
           {/* Multi-child switch tabs */}
