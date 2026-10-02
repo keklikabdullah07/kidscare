@@ -1,0 +1,51 @@
+# Dependency directories and package manager caches
+node_modules
+**/node_modules
+.pnpm-store
+.yarn
+.npm
+
+# Version control and IDE files
+.git
+.gitignore
+.gitattributes
+.husky
+.gemini
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Build artifacts, caches and temporary files
+dist
+**/dist
+.nx
+**/.nx
+coverage
+**/coverage
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Mobile app (not built inside API/Web docker containers)
+apps/mobile
+.expo
+android
+ios
+
+# Marketing app (if separate)
+apps/marketing
+
+# Documentation, specs and development workflows
+docs
+specs
+prompts
+workflows
+scripts
+scratch
+
+# Local environment variables
+.env
+.env.local
+.env.*.local
