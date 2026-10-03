@@ -147,19 +147,20 @@ export function StudentsPage(): JSX.Element {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-2 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 text-xs text-slate-600 dark:text-slate-300 shadow-xs">
+          <div className="hidden md:flex items-center gap-2.5 bg-white dark:bg-[#131B2E] px-4 py-2 rounded-2xl border border-[#DDD4C4] dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 shadow-2xs font-medium">
             <span>
-              Toplam: <strong className="text-slate-900 dark:text-white">{totalCount}</strong>
+              Toplam:{' '}
+              <strong className="text-slate-900 dark:text-white font-bold">{totalCount}</strong>
             </span>
-            <span className="text-slate-300 dark:text-slate-600">|</span>
+            <span className="text-[#DDD4C4] dark:text-slate-700">|</span>
             <span>
               Aktif:{' '}
-              <strong className="text-emerald-700 dark:text-emerald-400">{activeCount}</strong>
+              <strong className="text-teal-800 dark:text-teal-400 font-bold">{activeCount}</strong>
             </span>
             {allergyCount > 0 && (
               <>
-                <span className="text-slate-300 dark:text-slate-700">|</span>
-                <span className="text-rose-600 dark:text-rose-400 font-semibold flex items-center gap-1">
+                <span className="text-[#DDD4C4] dark:text-slate-700">|</span>
+                <span className="text-rose-700 dark:text-rose-400 font-bold flex items-center gap-1">
                   <AlertTriangle className="w-3.5 h-3.5" /> {allergyCount} Alerji
                 </span>
               </>
@@ -169,7 +170,7 @@ export function StudentsPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl px-4 py-2 text-sm font-bold transition active:scale-98 shadow-xs"
+            className="inline-flex items-center gap-2 bg-teal-800 hover:bg-teal-900 text-white rounded-2xl px-5 py-2.5 text-sm font-bold transition-all active:scale-95 shadow-xs hover:shadow-sm"
           >
             <UserPlus className="w-4 h-4" />
             <span>+ Yeni Öğrenci</span>
@@ -178,7 +179,7 @@ export function StudentsPage(): JSX.Element {
       </div>
 
       {/* Search & Filter Toolbar */}
-      <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white dark:bg-[#131B2E] p-4.5 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
         {/* Search Box */}
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -187,13 +188,13 @@ export function StudentsPage(): JSX.Element {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Öğrenci adı, veli telefonu veya alerji ara..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50/70 hover:bg-slate-50 focus:bg-white dark:bg-slate-900 dark:hover:bg-slate-850 dark:focus:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 transition"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#FCFAF7] hover:bg-white focus:bg-white dark:bg-slate-900 dark:hover:bg-slate-850 dark:focus:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 rounded-2xl text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-700 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 transition shadow-2xs font-medium"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -206,10 +207,10 @@ export function StudentsPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setFilterType('all')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs ${
                 filterType === 'all'
-                  ? 'bg-teal-700 text-white dark:bg-teal-600 dark:text-white font-semibold'
-                  : 'bg-slate-100 text-slate-600 dark:bg-slate-700/80 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  ? 'bg-teal-800 text-white dark:bg-teal-700 dark:text-white'
+                  : 'bg-[#FCFAF7] text-slate-700 dark:bg-slate-800 dark:text-slate-200 border border-[#DDD4C4] dark:border-slate-700 hover:bg-white'
               }`}
             >
               Tümü ({students.length})
@@ -217,10 +218,10 @@ export function StudentsPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setFilterType('active')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs ${
                 filterType === 'active'
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 hover:bg-emerald-100'
+                  ? 'bg-emerald-700 text-white'
+                  : 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 hover:bg-emerald-100'
               }`}
             >
               Aktifler ({activeCount})
@@ -228,10 +229,10 @@ export function StudentsPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setFilterType('allergy')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1 ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-2xs ${
                 filterType === 'allergy'
-                  ? 'bg-rose-600 text-white'
-                  : 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 hover:bg-rose-100'
+                  ? 'bg-rose-700 text-white'
+                  : 'bg-rose-50 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/80 hover:bg-rose-100'
               }`}
             >
               <AlertTriangle className="w-3 h-3" />
@@ -239,13 +240,13 @@ export function StudentsPage(): JSX.Element {
             </button>
           </div>
 
-          <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-slate-200/60 dark:border-slate-700">
+          <div className="flex items-center bg-[#FCFAF7] dark:bg-slate-900 p-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 shadow-2xs">
             <button
               type="button"
               onClick={() => setViewMode('grid')}
-              className={`p-1.5 rounded-md transition ${
+              className={`p-1.5 rounded-xl transition ${
                 viewMode === 'grid'
-                  ? 'bg-white dark:bg-slate-700 shadow-xs text-teal-900 dark:text-white'
+                  ? 'bg-white dark:bg-slate-700 shadow-2xs text-teal-900 dark:text-white font-bold'
                   : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
               title="Kart Görünümü"
@@ -255,9 +256,9 @@ export function StudentsPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded-md transition ${
+              className={`p-1.5 rounded-xl transition ${
                 viewMode === 'table'
-                  ? 'bg-white dark:bg-slate-700 shadow-xs text-teal-900 dark:text-white'
+                  ? 'bg-white dark:bg-slate-700 shadow-2xs text-teal-900 dark:text-white font-bold'
                   : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
               title="Tablo Görünümü"
@@ -362,21 +363,21 @@ export function StudentsPage(): JSX.Element {
               ))}
             </div>
           ) : (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs overflow-hidden">
+            <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="text-left text-slate-500 dark:text-slate-300 bg-slate-50/80 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-700/80 text-xs uppercase tracking-wider font-semibold">
+                  <thead className="text-left text-slate-700 dark:text-slate-300 bg-[#FAF8F5] dark:bg-slate-900/80 border-b border-[#E8E2D5] dark:border-slate-800 text-xs uppercase tracking-wider font-bold">
                     <tr>
-                      <th className="py-3.5 px-4">Ad Soyad</th>
-                      <th className="py-3.5 px-4">Doğum</th>
-                      <th className="py-3.5 px-4">Cinsiyet</th>
-                      <th className="py-3.5 px-4">Pasaport Özeti</th>
-                      <th className="py-3.5 px-4">Acil İletişim / Veli</th>
-                      <th className="py-3.5 px-4">Durum</th>
-                      <th className="py-3.5 px-4 text-right">İşlemler</th>
+                      <th className="py-4 px-5">Ad Soyad</th>
+                      <th className="py-4 px-5">Doğum</th>
+                      <th className="py-4 px-5">Cinsiyet</th>
+                      <th className="py-4 px-5">Pasaport Özeti</th>
+                      <th className="py-4 px-5">Acil İletişim / Veli</th>
+                      <th className="py-4 px-5">Durum</th>
+                      <th className="py-4 px-5 text-right">İşlemler</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                  <tbody className="divide-y divide-[#EFEAE0] dark:divide-slate-800/80">
                     {filteredStudents.map((s) => {
                       const p = s.passport;
                       const hasAllergy = p?.allergies && p.allergies.length > 0;
@@ -387,68 +388,68 @@ export function StudentsPage(): JSX.Element {
                       return (
                         <tr
                           key={s.id}
-                          className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                          className="hover:bg-[#FAF8F5]/80 dark:hover:bg-slate-800/40 transition-colors"
                         >
-                          <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-slate-100">
-                            <div className="flex items-center gap-2.5">
-                              <div className="w-8 h-8 rounded-xl bg-teal-100 text-teal-800 dark:bg-slate-800 dark:text-teal-200 font-bold text-xs flex items-center justify-center shrink-0 border border-teal-200/50 dark:border-slate-700">
+                          <td className="py-3.5 px-5 font-semibold text-slate-900 dark:text-slate-100">
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-2xl bg-teal-50 text-teal-800 dark:bg-slate-800 dark:text-teal-200 font-bold text-xs flex items-center justify-center shrink-0 border border-teal-200/80 dark:border-slate-700 shadow-2xs">
                                 {s.firstName.charAt(0)}
                                 {s.lastName.charAt(0)}
                               </div>
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                   <span
-                                    className="font-semibold text-slate-900 dark:text-slate-100 truncate max-w-[220px] block"
+                                    className="font-bold text-slate-900 dark:text-slate-100 truncate max-w-[220px] block"
                                     title={`${s.firstName} ${s.lastName}`}
                                   >
                                     {s.firstName} {s.lastName}
                                   </span>
                                   {cName && (
-                                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 px-1.5 py-0.5 rounded border border-teal-200 dark:border-slate-700 shrink-0">
+                                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-lg border border-teal-200/80 dark:border-slate-700 shrink-0">
                                       <School className="w-2.5 h-2.5" /> {cName}
                                     </span>
                                   )}
                                 </div>
                                 {s.notes && (
-                                  <span className="text-[11px] text-slate-400 line-clamp-1 truncate max-w-[220px] block">
+                                  <span className="text-[11px] text-slate-500 line-clamp-1 truncate max-w-[220px] block font-medium">
                                     {s.notes}
                                   </span>
                                 )}
                               </div>
                             </div>
                           </td>
-                          <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 text-xs whitespace-nowrap">
+                          <td className="py-3.5 px-5 text-slate-700 dark:text-slate-300 text-xs whitespace-nowrap font-medium">
                             {s.dateOfBirth}
                           </td>
-                          <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 text-xs capitalize">
+                          <td className="py-3.5 px-5 text-slate-700 dark:text-slate-300 text-xs capitalize font-medium">
                             {s.gender ?? '—'}
                           </td>
-                          <td className="py-3.5 px-4">
+                          <td className="py-3.5 px-5">
                             <div className="flex items-center gap-1.5 flex-wrap">
                               {blood && (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60">
-                                  <HeartPulse className="w-2.5 h-2.5" /> {blood}
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 shadow-2xs">
+                                  <HeartPulse className="w-3 h-3 text-rose-600" /> {blood}
                                 </span>
                               )}
                               {hasAllergy && (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60">
-                                  <AlertTriangle className="w-2.5 h-2.5 text-amber-600" />{' '}
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60 shadow-2xs">
+                                  <AlertTriangle className="w-3 h-3 text-amber-600" />{' '}
                                   {p.allergies.length} Alerji
                                 </span>
                               )}
                               {!blood && !hasAllergy && (
-                                <span className="text-slate-400 text-xs">—</span>
+                                <span className="text-slate-400 text-xs font-medium">—</span>
                               )}
                             </div>
                           </td>
-                          <td className="py-3.5 px-4 text-xs">
+                          <td className="py-3.5 px-5 text-xs">
                             {primaryContact ? (
                               <div className="flex items-center gap-1.5">
                                 <a
                                   href={`tel:${primaryContact.phone}`}
-                                  className="text-teal-900 dark:text-teal-300 font-medium hover:underline flex items-center gap-1"
+                                  className="text-teal-900 dark:text-teal-300 font-semibold hover:underline flex items-center gap-1"
                                 >
-                                  <Phone className="w-3 h-3 text-slate-400" />
+                                  <Phone className="w-3.5 h-3.5 text-teal-700" />
                                   {primaryContact.name} ({primaryContact.relationship})
                                 </a>
                               </div>
@@ -456,24 +457,24 @@ export function StudentsPage(): JSX.Element {
                               <span className="text-slate-400 text-xs">—</span>
                             )}
                           </td>
-                          <td className="py-3.5 px-4">
+                          <td className="py-3.5 px-5">
                             <span
                               className={
                                 s.isActive
-                                  ? 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                                  : 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                  ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-2xs'
+                                  : 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                               }
                             >
                               {s.isActive ? 'Aktif' : 'Pasif'}
                             </span>
                           </td>
-                          <td className="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
+                          <td className="py-3.5 px-5 text-right space-x-1.5 whitespace-nowrap">
                             <button
                               type="button"
                               onClick={() => setPassportStudent(s)}
-                              className="inline-flex items-center gap-1 rounded-lg bg-teal-50 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-teal-800 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-slate-700 transition"
+                              className="inline-flex items-center gap-1 rounded-xl bg-white dark:bg-slate-800 border border-[#DDD4C4] dark:border-slate-700 px-3 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-teal-50 hover:text-teal-900 hover:border-teal-300 transition shadow-2xs"
                             >
-                              <FileText className="w-3 h-3" /> Pasaport
+                              <FileText className="w-3.5 h-3.5 text-teal-700" /> Pasaport
                             </button>
                             <button
                               type="button"
@@ -596,24 +597,24 @@ function StudentCard({
   const estimatedAge = birthYear ? currentYear - birthYear : null;
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 hover:border-teal-500/50 dark:hover:border-teal-400/50 shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group">
+    <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 hover:border-teal-600/50 dark:hover:border-teal-500/50 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:shadow-[0_16px_36px_-4px_rgba(20,32,54,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-default">
       {/* Top Banner & Info */}
-      <div className="p-5 space-y-4">
+      <div className="p-5.5 space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 dark:bg-slate-700 dark:text-teal-200 font-bold text-base flex items-center justify-center border border-teal-200/70 dark:border-slate-600 shadow-xs shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-800 dark:bg-teal-950/70 dark:text-teal-200 font-bold text-base flex items-center justify-center border border-teal-200/80 dark:border-teal-800 shadow-2xs shrink-0">
               {student.firstName.charAt(0)}
               {student.lastName.charAt(0)}
             </div>
             <div className="min-w-0 flex-1">
               <h3
-                className="font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-teal-900 dark:group-hover:text-amber-400 transition-colors truncate"
+                className="font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-teal-800 dark:group-hover:text-amber-400 transition-colors truncate"
                 title={`${student.firstName} ${student.lastName}`}
               >
                 {student.firstName} {student.lastName}
               </h3>
-              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-300 mt-0.5 flex-wrap">
-                <span className="flex items-center gap-1 shrink-0">
+              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-300 mt-1 flex-wrap">
+                <span className="flex items-center gap-1 shrink-0 font-medium">
                   <Calendar className="w-3.5 h-3.5 text-slate-400" />
                   <span>{student.dateOfBirth}</span>
                   {estimatedAge !== null && (
@@ -623,13 +624,13 @@ function StudentCard({
                 {student.gender && (
                   <>
                     <span className="text-slate-300 dark:text-slate-700">•</span>
-                    <span className="capitalize">{student.gender}</span>
+                    <span className="capitalize font-medium">{student.gender}</span>
                   </>
                 )}
                 {classroomName && (
                   <>
                     <span className="text-slate-300 dark:text-slate-700">•</span>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-teal-800 dark:text-teal-200 bg-teal-50 dark:bg-slate-700 px-1.5 py-0.5 rounded border border-teal-200 dark:border-slate-600 truncate max-w-[120px]">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-800 dark:text-teal-200 bg-teal-50 dark:bg-slate-700 px-2 py-0.5 rounded-lg border border-teal-200/80 dark:border-slate-600 truncate max-w-[120px]">
                       <School className="w-2.5 h-2.5 shrink-0" />
                       <span className="truncate">{classroomName}</span>
                     </span>
@@ -642,8 +643,8 @@ function StudentCard({
           <span
             className={
               student.isActive
-                ? 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shrink-0'
-                : 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 shrink-0'
+                ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-2xs shrink-0'
+                : 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 shrink-0'
             }
           >
             {student.isActive ? 'Aktif' : 'Pasif'}
@@ -651,22 +652,22 @@ function StudentCard({
         </div>
 
         {/* Health & Passport Highlights */}
-        <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-700/80">
+        <div className="space-y-2 pt-2 border-t border-[#EFEAE0] dark:border-slate-700/80">
           <div className="flex items-center gap-1.5 flex-wrap">
             {blood && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60">
-                <HeartPulse className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 shadow-2xs">
+                <HeartPulse className="w-3 h-3 text-rose-600" />
                 <span>Kan: {blood}</span>
               </span>
             )}
             {p?.dietaryRestrictions && p.dietaryRestrictions.length > 0 && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60">
-                <Apple className="w-3 h-3 text-amber-700 dark:text-amber-400" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60 shadow-2xs">
+                <Apple className="w-3 h-3 text-amber-700" />
                 <span>{p.dietaryRestrictions.join(', ')}</span>
               </span>
             )}
             {allergies.length === 0 && !blood && (
-              <span className="text-[11px] text-slate-400 dark:text-slate-300 italic">
+              <span className="text-xs text-slate-400 dark:text-slate-300 italic font-medium">
                 Sağlık notu belirtilmedi
               </span>
             )}
@@ -674,16 +675,16 @@ function StudentCard({
 
           {/* Allergies Highlight (Prominent) */}
           {allergies.length > 0 && (
-            <div className="bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/80 dark:border-rose-900/60 rounded-xl p-2.5 space-y-1">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-rose-800 dark:text-rose-300">
+            <div className="bg-rose-50/80 dark:bg-rose-950/30 border border-rose-200/90 dark:border-rose-900/60 rounded-2xl p-3 space-y-1.5 shadow-2xs">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-rose-900 dark:text-rose-300">
                 <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
                 <span>Kritik Alerji Uyarısı:</span>
               </div>
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-1.5">
                 {allergies.map((allergy) => (
                   <span
                     key={allergy}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 border border-rose-200/60 dark:border-rose-800/60"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 border border-rose-200 dark:border-rose-800/60"
                   >
                     <AlertTriangle className="w-2.5 h-2.5 text-rose-600 dark:text-rose-400" />
                     {allergy}
@@ -696,28 +697,28 @@ function StudentCard({
 
         {/* Primary Contact / Parent */}
         {primaryContact && (
-          <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 flex items-center justify-between text-xs border border-slate-200/60 dark:border-slate-700/60">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-teal-100/70 dark:bg-slate-700 text-teal-900 dark:text-teal-200 flex items-center justify-center shrink-0">
+          <div className="bg-[#FCFAF7] dark:bg-slate-900/60 rounded-2xl p-3 flex items-center justify-between text-xs border border-[#E3DACB] dark:border-slate-700/60 shadow-2xs">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-teal-50 dark:bg-slate-700 text-teal-800 dark:text-teal-200 border border-teal-200/70 dark:border-slate-600 flex items-center justify-center shrink-0 shadow-2xs">
                 <Phone className="w-3.5 h-3.5" />
               </div>
               <div>
-                <p className="font-semibold text-slate-800 dark:text-white">
+                <p className="font-bold text-slate-800 dark:text-white">
                   {primaryContact.name}{' '}
-                  <span className="font-normal text-slate-500 dark:text-slate-300">
+                  <span className="font-medium text-slate-500 dark:text-slate-400">
                     ({primaryContact.relationship})
                   </span>
                 </p>
                 <a
                   href={`tel:${primaryContact.phone}`}
-                  className="text-teal-900 dark:text-teal-300 hover:underline font-mono text-[11px]"
+                  className="text-teal-900 dark:text-teal-300 hover:underline font-mono text-xs font-semibold"
                 >
                   {primaryContact.phone}
                 </a>
               </div>
             </div>
             {primaryContact.isAuthorizedPickup && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800">
                 <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                 Teslim Yetkili
               </span>
@@ -727,29 +728,29 @@ function StudentCard({
       </div>
 
       {/* Card Action Buttons */}
-      <div className="bg-slate-50/70 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-700/80 px-5 py-3 flex items-center justify-between gap-2">
+      <div className="bg-[#FAF8F5] dark:bg-slate-900/50 border-t border-[#E8E2D5] dark:border-slate-800 px-5 py-3.5 flex items-center justify-between gap-2">
         <button
           type="button"
           onClick={onOpenPassport}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-200 border border-teal-200/80 dark:border-teal-700/80 hover:bg-teal-100 dark:hover:bg-teal-900/60 font-semibold text-xs transition"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 text-teal-900 dark:text-teal-200 border border-[#DDD4C4] dark:border-slate-700 hover:bg-teal-50 hover:border-teal-300 font-bold text-xs transition shadow-2xs"
         >
-          <FileText className="w-3.5 h-3.5" />
+          <FileText className="w-3.5 h-3.5 text-teal-700" />
           <span>Pasaport & Sağlık</span>
         </button>
         <button
           type="button"
           onClick={onOpenPickupContacts}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 font-semibold text-xs transition"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 text-amber-900 dark:text-amber-300 border border-[#DDD4C4] dark:border-slate-700 hover:bg-amber-50 hover:border-amber-300 font-bold text-xs transition shadow-2xs"
         >
-          <Users className="w-3.5 h-3.5" />
+          <Users className="w-3.5 h-3.5 text-amber-700" />
           <span>Teslim Kişileri</span>
         </button>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={onEdit}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+            className="p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-white dark:hover:bg-slate-700 border border-transparent hover:border-[#DDD4C4] transition shadow-2xs"
             title="Düzenle"
           >
             <Edit2 className="w-4 h-4" />
@@ -757,7 +758,7 @@ function StudentCard({
           <button
             type="button"
             onClick={onDelete}
-            className="p-1.5 rounded-lg text-rose-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition text-xs"
+            className="p-1.5 rounded-xl text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/50 border border-transparent hover:border-rose-200 transition shadow-2xs text-xs"
             title="Sil"
           >
             <Trash2 className="w-4 h-4" />

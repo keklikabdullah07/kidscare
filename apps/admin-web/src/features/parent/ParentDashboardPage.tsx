@@ -135,26 +135,26 @@ export function ParentDashboardPage(): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Header & Date / Child Selector */}
-      <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="bg-white dark:bg-[#131B2E] p-5.5 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-teal-700 text-white dark:bg-slate-800 dark:text-teal-300 dark:border dark:border-slate-700 flex items-center justify-center font-bold shadow-xs">
+          <div className="w-11 h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
             <Heart className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
               Veli Portalı
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
               Çocuğunuzun kreşteki anlık durumu, günlük karnesi ve yemek menüsü
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-1.5 rounded-xl">
+        <div className="flex items-center gap-2 bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 p-1.5 rounded-2xl shadow-2xs">
           <button
             type="button"
             onClick={() => changeDay(-1)}
-            className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700/60 transition shadow-2xs active:scale-98"
+            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700/60 transition shadow-2xs active:scale-95 cursor-pointer"
             title="Önceki Gün"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -163,12 +163,12 @@ export function ParentDashboardPage(): JSX.Element {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="text-xs font-semibold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer"
+            className="text-xs font-bold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer"
           />
           <button
             type="button"
             onClick={() => changeDay(1)}
-            className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700/60 transition shadow-2xs active:scale-98"
+            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700/60 transition shadow-2xs active:scale-95 cursor-pointer"
             title="Sonraki Gün"
           >
             <ChevronRight className="w-4 h-4" />
@@ -177,7 +177,7 @@ export function ParentDashboardPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setSelectedDate(todayStr)}
-              className="text-[11px] font-bold text-teal-900 dark:text-teal-300 hover:bg-blue-100/60 dark:hover:bg-amber-950/60 bg-blue-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-lg ml-1 transition active:scale-98"
+              className="text-[11px] font-bold text-teal-800 dark:text-teal-300 hover:bg-teal-100/60 dark:hover:bg-teal-950/60 bg-teal-50 dark:bg-teal-950/40 px-2.5 py-1 rounded-xl ml-1 transition active:scale-95 border border-teal-200/60 cursor-pointer"
             >
               Bugün
             </button>
@@ -186,12 +186,12 @@ export function ParentDashboardPage(): JSX.Element {
       </div>
 
       {loading ? (
-        <div className="bg-white dark:bg-slate-800 p-16 text-center rounded-2xl border border-slate-200/80 dark:border-slate-700/80 text-slate-500 dark:text-slate-300">
+        <div className="bg-white dark:bg-[#131B2E] p-16 text-center rounded-3xl border border-[#DDD4C4] dark:border-slate-800 text-slate-600 dark:text-slate-300 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)]">
           <div className="animate-spin inline-block w-8 h-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent rounded-full mb-3" />
           <p className="text-sm font-medium">Bilgiler yükleniyor, lütfen bekleyin...</p>
         </div>
       ) : error ? (
-        <div className="bg-rose-50 dark:bg-rose-950/50 p-6 rounded-2xl border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-200">
+        <div className="bg-rose-50 dark:bg-rose-950/50 p-6 rounded-3xl border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-200">
           <p className="font-semibold text-sm">Hata oluştu</p>
           <p className="text-xs mt-1">{error}</p>
         </div>
@@ -205,18 +205,18 @@ export function ParentDashboardPage(): JSX.Element {
         <>
           {/* Multi-child switch tabs */}
           {childrenData.length > 1 && (
-            <div className="flex gap-2 border-b border-slate-200/80 dark:border-slate-700/80 pb-2">
+            <div className="flex gap-2 border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-2">
               {childrenData.map((child) => (
                 <button
                   key={child.student.id}
                   onClick={() => setSelectedChildId(child.student.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 active:scale-98 ${
+                  className={`px-4 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2 active:scale-95 cursor-pointer ${
                     activeChildOverview.student.id === child.student.id
                       ? 'bg-teal-700 text-white dark:bg-teal-600 dark:text-white shadow-xs'
-                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80'
+                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-[#F9F7F3] dark:hover:bg-slate-700 border border-[#DDD4C4] dark:border-slate-700'
                   }`}
                 >
-                  <span className="w-2 h-2 rounded-full bg-amber-400 dark:bg-teal-700" />
+                  <span className="w-2 h-2 rounded-full bg-amber-400 dark:bg-teal-400" />
                   <span>
                     {child.student.firstName} {child.student.lastName}
                   </span>
@@ -226,7 +226,7 @@ export function ParentDashboardPage(): JSX.Element {
           )}
 
           {/* Real-time Status Card (Hero Banner) */}
-          <div className="bg-gradient-to-r from-teal-950 via-slate-900 to-teal-950 border border-teal-800/40 rounded-3xl p-6 text-white shadow-sm overflow-hidden relative">
+          <div className="bg-gradient-to-r from-teal-950 via-slate-900 to-teal-950 border border-teal-800/40 rounded-3xl p-6 text-white shadow-[0_8px_24px_-4px_rgba(15,118,110,0.25)] overflow-hidden relative">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-white text-2xl font-bold shadow-xs">
@@ -237,7 +237,7 @@ export function ParentDashboardPage(): JSX.Element {
                   <h2 className="text-2xl font-bold tracking-tight">
                     {activeChildOverview.student.firstName} {activeChildOverview.student.lastName}
                   </h2>
-                  <p className="text-blue-200/90 text-xs mt-1 flex items-center gap-1.5 font-medium">
+                  <p className="text-teal-200/90 text-xs mt-1 flex items-center gap-1.5 font-medium">
                     <Calendar className="w-3.5 h-3.5 text-amber-400" />
                     {new Date(selectedDate).toLocaleDateString('tr-TR', {
                       weekday: 'long',
@@ -288,9 +288,9 @@ export function ParentDashboardPage(): JSX.Element {
 
           {/* Personalized Allergy Alert Banner */}
           {matchedAllergies.length > 0 && (
-            <div className="bg-amber-50 dark:bg-amber-950/30 border-2 border-amber-400/90 dark:border-amber-700/60 rounded-2xl p-5 shadow-xs">
+            <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700/60 rounded-3xl p-5.5 shadow-[0_6px_20px_-3px_rgba(217,119,6,0.1)]">
               <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400 flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-300 dark:border-amber-700 shadow-2xs">
                   <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div>
@@ -309,7 +309,7 @@ export function ParentDashboardPage(): JSX.Element {
                       </p>
                     ))}
                   </div>
-                  <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-2">
+                  <p className="text-[11px] text-amber-800 dark:text-amber-400 mt-2 font-medium">
                     * Mutfak ve sınıf öğretmenleri bu konuda sistem tarafından otomatik olarak
                     uyarılmıştır.
                   </p>
@@ -321,18 +321,18 @@ export function ParentDashboardPage(): JSX.Element {
           {/* Grid of Report, Menu, and Health Passport */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Daily Report Card */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 p-6 shadow-xs space-y-5">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/80 pb-3">
+            <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-5">
+              <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
                 <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <Award className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>Günlük Karne</span>
                 </h3>
                 {activeChildOverview.todayDailyReport ? (
-                  <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+                  <span className="px-3 py-1 text-xs font-bold rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800/60 shadow-2xs">
                     Öğretmen Doldurdu
                   </span>
                 ) : (
-                  <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/80">
+                  <span className="px-3 py-1 text-xs font-bold rounded-full bg-[#FCFAF7] dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-[#DDD4C4] dark:border-slate-700/80">
                     Henüz Rapor Girilmedi
                   </span>
                 )}
@@ -341,8 +341,8 @@ export function ParentDashboardPage(): JSX.Element {
               {activeChildOverview.todayDailyReport ? (
                 <div className="space-y-4">
                   {/* Mood */}
-                  <div className="p-3.5 bg-slate-50/80 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-700/60 rounded-xl flex items-center justify-between">
-                    <span className="text-xs text-slate-600 dark:text-slate-300 font-semibold flex items-center gap-1.5">
+                  <div className="p-3.5 bg-[#FCFAF7] dark:bg-slate-900/60 border border-[#DDD4C4]/70 dark:border-slate-700/60 rounded-2xl flex items-center justify-between">
+                    <span className="text-xs text-slate-700 dark:text-slate-300 font-bold flex items-center gap-1.5">
                       <Smile className="w-4 h-4 text-amber-500" />
                       Ruh Hali & Mod
                     </span>
@@ -357,7 +357,7 @@ export function ParentDashboardPage(): JSX.Element {
                       Beslenme Durumu
                     </span>
                     <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                      <div className="p-3 bg-amber-50/60 dark:bg-slate-900/50 border border-amber-200/60 dark:border-amber-900/40 rounded-xl">
+                      <div className="p-3 bg-amber-50/70 dark:bg-slate-900/50 border border-amber-200 dark:border-amber-900/40 rounded-2xl">
                         <span className="block text-slate-600 dark:text-slate-300 font-medium text-[11px]">
                           Kahvaltı
                         </span>
@@ -365,7 +365,7 @@ export function ParentDashboardPage(): JSX.Element {
                           {getMealLevel(activeChildOverview.todayDailyReport.meals?.breakfast)}
                         </span>
                       </div>
-                      <div className="p-3 bg-emerald-50/60 dark:bg-slate-900/50 border border-emerald-200/60 dark:border-emerald-900/40 rounded-xl">
+                      <div className="p-3 bg-emerald-50/70 dark:bg-slate-900/50 border border-emerald-200 dark:border-emerald-900/40 rounded-2xl">
                         <span className="block text-slate-600 dark:text-slate-300 font-medium text-[11px]">
                           Öğle
                         </span>
@@ -373,7 +373,7 @@ export function ParentDashboardPage(): JSX.Element {
                           {getMealLevel(activeChildOverview.todayDailyReport.meals?.lunch)}
                         </span>
                       </div>
-                      <div className="p-3 bg-orange-50/60 dark:bg-slate-900/50 border border-orange-200/60 dark:border-orange-900/40 rounded-xl">
+                      <div className="p-3 bg-orange-50/70 dark:bg-slate-900/50 border border-orange-200 dark:border-orange-900/40 rounded-2xl">
                         <span className="block text-slate-600 dark:text-slate-300 font-medium text-[11px]">
                           İkindi
                         </span>
@@ -386,8 +386,8 @@ export function ParentDashboardPage(): JSX.Element {
 
                   {/* Sleep / Nap */}
                   <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 bg-purple-50/50 dark:bg-slate-900/50 rounded-xl border border-purple-100 dark:border-purple-900/40">
-                      <span className="text-xs text-purple-800 dark:text-purple-300 font-semibold block flex items-center gap-1.5">
+                    <div className="p-3 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-purple-900/40">
+                      <span className="text-xs text-purple-800 dark:text-purple-300 font-bold block flex items-center gap-1.5">
                         <Moon className="w-3.5 h-3.5 text-purple-500" />
                         <span>Uyku</span>
                       </span>
@@ -401,8 +401,8 @@ export function ParentDashboardPage(): JSX.Element {
                       </span>
                     </div>
 
-                    <div className="p-3 bg-teal-50/50 dark:bg-slate-900/50 rounded-xl border border-teal-100 dark:border-teal-900/40">
-                      <span className="text-xs text-teal-800 dark:text-teal-300 font-semibold block flex items-center gap-1.5">
+                    <div className="p-3 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-teal-900/40">
+                      <span className="text-xs text-teal-800 dark:text-teal-300 font-bold block flex items-center gap-1.5">
                         <Heart className="w-3.5 h-3.5 text-teal-500" />
                         <span>Tuvalet / Bez</span>
                       </span>
@@ -419,14 +419,14 @@ export function ParentDashboardPage(): JSX.Element {
                   {activeChildOverview.todayDailyReport.activities &&
                     activeChildOverview.todayDailyReport.activities.length > 0 && (
                       <div>
-                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                           Günün Aktiviteleri
                         </span>
                         <div className="flex flex-wrap gap-1.5 mt-2">
                           {activeChildOverview.todayDailyReport.activities.map((act, i) => (
                             <span
                               key={i}
-                              className="px-2.5 py-1 bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-200/60 dark:border-slate-700/80 rounded-lg text-xs font-medium"
+                              className="px-3 py-1 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-[#DDD4C4] dark:border-slate-700/80 rounded-xl text-xs font-bold shadow-2xs"
                             >
                               {act}
                             </span>
@@ -437,11 +437,11 @@ export function ParentDashboardPage(): JSX.Element {
 
                   {/* Teacher Note */}
                   {activeChildOverview.todayDailyReport.teacherNote && (
-                    <div className="p-4 bg-amber-50/70 dark:bg-slate-900 rounded-xl border border-amber-200/70 dark:border-amber-900/40">
+                    <div className="p-4 bg-amber-50/70 dark:bg-slate-900 rounded-2xl border border-amber-200/80 dark:border-amber-900/40">
                       <span className="text-xs font-bold text-amber-900 dark:text-amber-300 block mb-1">
                         Öğretmenin Notu
                       </span>
-                      <p className="text-xs text-amber-950 dark:text-slate-200 italic">
+                      <p className="text-xs text-amber-950 dark:text-slate-200 italic font-medium">
                         "{activeChildOverview.todayDailyReport.teacherNote}"
                       </p>
                     </div>
@@ -451,43 +451,45 @@ export function ParentDashboardPage(): JSX.Element {
                   {activeChildOverview.todayDailyReport.medications &&
                     activeChildOverview.todayDailyReport.medications.length > 0 && (
                       <div className="space-y-2">
-                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                           İlaç Takip & Sağlık
                         </span>
-                        <div className="space-y-1.5">
+                        <div className="space-y-2">
                           {activeChildOverview.todayDailyReport.medications.map((med, i) => {
                             const isGiven = med.status === 'GIVEN';
                             return (
                               <div
                                 key={med.id ?? i}
-                                className={`p-3 rounded-xl border text-xs flex items-start gap-2.5 ${
+                                className={`p-3.5 rounded-2xl border text-xs flex items-start gap-3 ${
                                   isGiven
-                                    ? 'bg-emerald-50/60 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900/60'
-                                    : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700/80'
+                                    ? 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-900/60'
+                                    : 'bg-[#FCFAF7] dark:bg-slate-900 border-[#DDD4C4] dark:border-slate-700/80'
                                 }`}
                               >
                                 <span
-                                  className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                  className={`mt-0.5 shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                                     isGiven
                                       ? 'bg-emerald-500 border-emerald-500 text-white'
                                       : 'border-slate-300 dark:border-slate-600'
                                   }`}
                                 >
-                                  {isGiven && <span className="text-[10px] leading-none">✓</span>}
+                                  {isGiven && (
+                                    <span className="text-[10px] leading-none font-bold">✓</span>
+                                  )}
                                 </span>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-1.5 flex-wrap">
                                     <span
-                                      className={`font-bold ${isGiven ? 'text-emerald-800 dark:text-emerald-300' : 'text-slate-800 dark:text-slate-100'}`}
+                                      className={`font-bold ${isGiven ? 'text-emerald-900 dark:text-emerald-300' : 'text-slate-800 dark:text-slate-100'}`}
                                     >
                                       {med.name}
                                     </span>
                                     <span className="text-slate-400">·</span>
-                                    <span className="text-slate-600 dark:text-slate-300">
+                                    <span className="text-slate-600 dark:text-slate-300 font-medium">
                                       {med.time}
                                     </span>
                                     {med.dosage && (
-                                      <span className="text-slate-500 dark:text-slate-400">
+                                      <span className="text-slate-500 dark:text-slate-400 font-medium">
                                         ({med.dosage})
                                       </span>
                                     )}
@@ -495,7 +497,7 @@ export function ParentDashboardPage(): JSX.Element {
                                   <div className="flex items-center gap-2 mt-1 flex-wrap">
                                     {med.temperature !== undefined && med.temperature !== null && (
                                       <span
-                                        className={`font-semibold ${med.temperature >= 38 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-600 dark:text-slate-300'}`}
+                                        className={`font-bold ${med.temperature >= 38 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-700 dark:text-slate-300'}`}
                                       >
                                         🌡️ {med.temperature.toFixed(1)}°C
                                       </span>
@@ -505,12 +507,12 @@ export function ParentDashboardPage(): JSX.Element {
                                         ✓ Verildi{med.givenAt ? ` (${med.givenAt})` : ''}
                                       </span>
                                     ) : (
-                                      <span className="text-amber-600 dark:text-amber-400 font-bold">
+                                      <span className="text-amber-700 dark:text-amber-400 font-bold">
                                         Planlandı
                                       </span>
                                     )}
                                     {med.notes && (
-                                      <span className="text-slate-400 dark:text-slate-300 italic">
+                                      <span className="text-slate-500 dark:text-slate-300 italic">
                                         — {med.notes}
                                       </span>
                                     )}
@@ -536,18 +538,18 @@ export function ParentDashboardPage(): JSX.Element {
             {/* Daily Menu & Health Passport Column */}
             <div className="space-y-6">
               {/* Daily Menu Card */}
-              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 p-6 shadow-xs space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/80 pb-3">
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-4">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Coffee className="w-4 h-4 text-amber-600" />
                     <span>Günün Yemek Menüsü</span>
                   </h3>
                   {dailyMenu ? (
-                    <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+                    <span className="px-3 py-1 text-xs font-bold rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800/60 shadow-2xs">
                       Yayınlandı
                     </span>
                   ) : (
-                    <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/80">
+                    <span className="px-3 py-1 text-xs font-bold rounded-full bg-[#FCFAF7] dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-[#DDD4C4] dark:border-slate-700/80">
                       Menü Eklenmedi
                     </span>
                   )}
@@ -556,7 +558,7 @@ export function ParentDashboardPage(): JSX.Element {
                 {dailyMenu ? (
                   <div className="space-y-3 text-xs">
                     {/* Breakfast */}
-                    <div className="p-3 bg-amber-50/50 dark:bg-slate-900 rounded-xl border border-amber-100 dark:border-amber-900/40">
+                    <div className="p-3.5 bg-amber-50/60 dark:bg-slate-900 rounded-2xl border border-amber-200 dark:border-amber-900/40">
                       <span className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider block mb-1 flex items-center gap-1.5">
                         <Coffee className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                         <span>Sabah Kahvaltısı</span>
@@ -567,7 +569,7 @@ export function ParentDashboardPage(): JSX.Element {
                     </div>
 
                     {/* Lunch */}
-                    <div className="p-3 bg-emerald-50/50 dark:bg-slate-900 rounded-xl border border-emerald-100 dark:border-emerald-900/40">
+                    <div className="p-3.5 bg-emerald-50/60 dark:bg-slate-900 rounded-2xl border border-emerald-200 dark:border-emerald-900/40">
                       <span className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider block mb-1 flex items-center gap-1.5">
                         <Soup className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         <span>Öğle Yemeği</span>
@@ -578,7 +580,7 @@ export function ParentDashboardPage(): JSX.Element {
                     </div>
 
                     {/* Snack */}
-                    <div className="p-3 bg-orange-50/50 dark:bg-slate-900 rounded-xl border border-orange-100 dark:border-orange-900/40">
+                    <div className="p-3.5 bg-orange-50/60 dark:bg-slate-900 rounded-2xl border border-orange-200 dark:border-orange-900/40">
                       <span className="text-xs font-bold text-orange-900 dark:text-orange-300 uppercase tracking-wider block mb-1 flex items-center gap-1.5">
                         <Cookie className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400" />
                         <span>İkindi Beslenmesi</span>
@@ -591,14 +593,14 @@ export function ParentDashboardPage(): JSX.Element {
                     {/* Allergens in menu */}
                     {dailyMenu.allergens && dailyMenu.allergens.length > 0 && (
                       <div className="pt-2">
-                        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1.5">
+                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400 block mb-1.5">
                           Menüdeki Alerjenler:
                         </span>
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-1.5">
                           {dailyMenu.allergens.map((alg, i) => (
                             <span
                               key={i}
-                              className="px-2 py-0.5 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/80 rounded text-xs font-medium"
+                              className="px-2.5 py-1 bg-[#FCFAF7] dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-[#DDD4C4] dark:border-slate-700/80 rounded-xl text-xs font-medium"
                             >
                               {alg}
                             </span>
@@ -615,23 +617,23 @@ export function ParentDashboardPage(): JSX.Element {
               </div>
 
               {/* Child Health & Development Passport Summary */}
-              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 p-6 shadow-xs space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/80 pb-3">
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-4">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Heart className="w-4 h-4 text-rose-500" />
                     <span>Gelişim & Sağlık Pasaportu</span>
                   </h3>
-                  <span className="text-xs font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900/60 px-2.5 py-1 rounded-full">
+                  <span className="text-xs font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-900/60 px-3 py-1 rounded-full shadow-2xs">
                     {activeChildOverview.student.passport?.bloodType
                       ? `Kan Grubu: ${activeChildOverview.student.passport.bloodType}`
                       : 'Kan Grubu: -'}
                   </span>
                 </div>
 
-                <div className="space-y-3 text-xs">
+                <div className="space-y-3.5 text-xs">
                   {/* Allergies list */}
                   <div>
-                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                    <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
                       Bilinen Alerjiler
                     </span>
                     {activeChildOverview.student.passport?.allergies &&
@@ -640,15 +642,15 @@ export function ParentDashboardPage(): JSX.Element {
                         {activeChildOverview.student.passport.allergies.map((alg, idx) => (
                           <span
                             key={idx}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 rounded-lg text-xs font-bold"
+                            className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 border border-rose-300 dark:border-rose-900/60 rounded-xl text-xs font-bold shadow-2xs"
                           >
-                            <AlertTriangle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                             {alg}
                           </span>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-950/60 p-2 rounded-lg inline-block border border-emerald-200 dark:border-emerald-800/60">
+                      <p className="text-xs text-emerald-800 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 p-2.5 rounded-2xl inline-block border border-emerald-200 dark:border-emerald-800/60">
                         Kayıtlı alerji bulunmuyor.
                       </p>
                     )}
@@ -658,7 +660,7 @@ export function ParentDashboardPage(): JSX.Element {
                   {activeChildOverview.student.passport?.dietaryRestrictions &&
                     activeChildOverview.student.passport.dietaryRestrictions.length > 0 && (
                       <div>
-                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
                           Diyet / Özel Beslenme
                         </span>
                         <div className="flex flex-wrap gap-1.5">
@@ -666,7 +668,7 @@ export function ParentDashboardPage(): JSX.Element {
                             (diet, idx) => (
                               <span
                                 key={idx}
-                                className="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 rounded-lg text-xs font-semibold"
+                                className="px-3 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-800/60 rounded-xl text-xs font-bold shadow-2xs"
                               >
                                 {diet}
                               </span>
@@ -679,12 +681,12 @@ export function ParentDashboardPage(): JSX.Element {
               </div>
 
               {/* Development & Portfolio Section */}
-              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 p-6 shadow-xs space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/80 pb-3">
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-4">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Award className="w-5 h-5 text-amber-500" /> Gelişim Gözlemleri & Karnesi
                   </h3>
-                  <span className="text-xs text-slate-400 dark:text-slate-300 font-semibold">
+                  <span className="text-xs text-slate-500 dark:text-slate-300 font-bold">
                     {devObservations.length} Gözlem Kaydı
                   </span>
                 </div>
@@ -698,17 +700,17 @@ export function ParentDashboardPage(): JSX.Element {
                     {devObservations.slice(0, 3).map((obs) => (
                       <div
                         key={obs.id}
-                        className="bg-amber-50/50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-amber-100/60 dark:border-slate-700/60 text-xs space-y-1.5"
+                        className="bg-[#FCFAF7] dark:bg-slate-900/60 p-4 rounded-2xl border border-[#DDD4C4]/70 dark:border-slate-700/60 text-xs space-y-1.5"
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-amber-900 dark:text-amber-300">
                             {obs.skillName}
                           </span>
-                          <span className="text-[10px] text-slate-400 dark:text-slate-300">
+                          <span className="text-[10px] text-slate-500 dark:text-slate-300 font-medium">
                             {new Date(obs.observedAt).toLocaleDateString('tr-TR')}
                           </span>
                         </div>
-                        <p className="text-slate-600 dark:text-slate-200 leading-relaxed font-medium">
+                        <p className="text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
                           {obs.observation}
                         </p>
                       </div>
@@ -718,16 +720,16 @@ export function ParentDashboardPage(): JSX.Element {
 
                 {/* Portfolio Showcase */}
                 {portfolioItems.length > 0 && (
-                  <div className="pt-2 border-t border-slate-100 dark:border-slate-700/80">
+                  <div className="pt-2 border-t border-[#DDD4C4]/60 dark:border-slate-800">
                     <span className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-2 flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" /> Dijital
                       Portfolyo
                     </span>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-3">
                       {portfolioItems.slice(0, 2).map((item) => (
                         <div
                           key={item.id}
-                          className="rounded-xl border border-slate-200 dark:border-slate-700/80 overflow-hidden bg-slate-50 dark:bg-slate-900"
+                          className="rounded-2xl border border-[#DDD4C4] dark:border-slate-700/80 overflow-hidden bg-[#FCFAF7] dark:bg-slate-900 shadow-2xs"
                         >
                           <img
                             src={item.mediaUrl}
@@ -737,7 +739,7 @@ export function ParentDashboardPage(): JSX.Element {
                               (e.target as HTMLElement).style.display = 'none';
                             }}
                           />
-                          <div className="p-2">
+                          <div className="p-2.5">
                             <p className="font-bold text-slate-800 dark:text-slate-200 text-[11px] truncate">
                               {item.title}
                             </p>
