@@ -389,10 +389,10 @@ export function DailyTrackingPage(): JSX.Element {
                 type="button"
                 onClick={() => setSelectedClassroomId(classroom.id)}
                 aria-pressed={isActive}
-                className={`text-left rounded-3xl border p-4.5 transition-all duration-300 flex items-center gap-3.5 cursor-pointer ${
+                className={`text-left rounded-3xl border-2 p-4.5 transition-all duration-150 flex items-center gap-3.5 cursor-pointer active:translate-y-[3px] active:shadow-none ${
                   isActive
-                    ? 'border-teal-700 bg-teal-50/80 ring-2 ring-teal-600/30 dark:border-teal-500/80 dark:bg-teal-950/30 shadow-[0_8px_20px_-3px_rgba(15,118,110,0.2)]'
-                    : 'border-[#DDD4C4] bg-white hover:border-slate-400 dark:bg-[#131B2E] dark:border-slate-800 dark:hover:border-slate-600 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:-translate-y-1'
+                    ? 'border-teal-700 bg-teal-50/80 ring-2 ring-teal-600/30 dark:border-teal-500/80 dark:bg-teal-950/30 shadow-[0_4px_0_0_#0f766e,0_8px_20px_-3px_rgba(15,118,110,0.2)]'
+                    : 'border-[#DDD4C4] bg-white hover:border-[#b8ad9b] dark:bg-[#131B2E] dark:border-slate-700 shadow-[0_4px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.06)] hover:-translate-y-1'
                 }`}
               >
                 <div
@@ -446,27 +446,49 @@ export function DailyTrackingPage(): JSX.Element {
 
       {/* Progress / KPI Bar */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white dark:bg-[#131B2E] p-5 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => setFilterType('all')}
+          className={`p-5 rounded-3xl border-2 text-left transition-all duration-150 cursor-pointer flex items-center justify-between active:translate-y-[3px] active:shadow-none ${
+            filterType === 'all'
+              ? 'border-teal-700 bg-teal-700 text-white shadow-[0_4px_0_0_#042f2e,0_8px_20px_-3px_rgba(15,118,110,0.3)]'
+              : 'border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.06)] hover:-translate-y-1 hover:border-[#b8ad9b]'
+          }`}
+        >
           <div>
-            <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+            <p
+              className={`text-xs font-bold uppercase tracking-wider ${
+                filterType === 'all' ? 'text-teal-100' : 'text-slate-600 dark:text-slate-300'
+              }`}
+            >
               Toplam Öğrenci
             </p>
-            <p className="text-3xl font-black text-slate-900 dark:text-white mt-1 tracking-tight tabular-nums">
+            <p
+              className={`text-3xl font-black mt-1 tracking-tight tabular-nums ${
+                filterType === 'all' ? 'text-white' : 'text-slate-900 dark:text-white'
+              }`}
+            >
               {totalStudents}
             </p>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
+          <div
+            className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold shadow-2xs ${
+              filterType === 'all'
+                ? 'bg-teal-800 text-white border border-teal-500/50'
+                : 'bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60'
+            }`}
+          >
             <Users className="w-5 h-5" />
           </div>
-        </div>
+        </button>
 
         <button
           type="button"
           onClick={() => setFilterType(filterType === 'filled' ? 'all' : 'filled')}
-          className={`p-5 rounded-3xl border text-left transition-all duration-300 cursor-pointer shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:-translate-y-1 flex items-center justify-between ${
+          className={`p-5 rounded-3xl border-2 text-left transition-all duration-150 cursor-pointer flex items-center justify-between active:translate-y-[3px] active:shadow-none ${
             filterType === 'filled'
-              ? 'border-emerald-600 bg-emerald-600 text-white ring-2 ring-emerald-500 shadow-[0_8px_20px_-3px_rgba(5,150,105,0.3)]'
-              : 'border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] hover:border-emerald-500/50'
+              ? 'border-emerald-700 bg-emerald-600 text-white shadow-[0_4px_0_0_#064e3b,0_8px_20px_-3px_rgba(5,150,105,0.3)]'
+              : 'border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.06)] hover:-translate-y-1 hover:border-emerald-500/50'
           }`}
         >
           <div>
@@ -501,10 +523,10 @@ export function DailyTrackingPage(): JSX.Element {
         <button
           type="button"
           onClick={() => setFilterType(filterType === 'pending' ? 'all' : 'pending')}
-          className={`p-5 rounded-3xl border text-left transition-all duration-300 cursor-pointer shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:-translate-y-1 flex items-center justify-between ${
+          className={`p-5 rounded-3xl border-2 text-left transition-all duration-150 cursor-pointer flex items-center justify-between active:translate-y-[3px] active:shadow-none ${
             filterType === 'pending'
-              ? 'border-amber-600 bg-amber-600 text-white ring-2 ring-amber-500 shadow-[0_8px_20px_-3px_rgba(217,119,6,0.3)]'
-              : 'border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] hover:border-amber-500/50'
+              ? 'border-amber-700 bg-amber-600 text-white shadow-[0_4px_0_0_#78350f,0_8px_20px_-3px_rgba(217,119,6,0.3)]'
+              : 'border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.06)] hover:-translate-y-1 hover:border-amber-500/50'
           }`}
         >
           <div>
@@ -839,7 +861,7 @@ export function DailyTrackingPage(): JSX.Element {
             return (
               <div
                 key={student.id}
-                className="flex flex-col justify-between rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-5.5 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group"
+                className="flex flex-col justify-between rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-5.5 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] transition-all duration-200 group"
               >
                 <div>
                   {/* Student Title & Mood */}

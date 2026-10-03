@@ -28,6 +28,7 @@ import { PickupContactsModal } from './PickupContactsModal';
 import { useToast } from '../../components/Toast';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { TactileButton } from '../../components/ui/TactileButton';
 
 type Status = 'loading' | 'ready' | 'error';
 type ViewMode = 'grid' | 'table';
@@ -167,14 +168,15 @@ export function StudentsPage(): JSX.Element {
             )}
           </div>
 
-          <button
+          <TactileButton
             type="button"
+            variant="teal"
             onClick={() => setShowAddModal(true)}
-            className="btn-tactile-teal px-5 py-2.5 text-sm"
+            className="px-5 py-2.5 text-sm"
           >
             <UserPlus className="w-4 h-4" />
             <span>+ Yeni Öğrenci</span>
-          </button>
+          </TactileButton>
         </div>
       </div>
 
@@ -204,34 +206,31 @@ export function StudentsPage(): JSX.Element {
         {/* Filter Badges & View Switcher */}
         <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
           <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-            <button
+            <TactileButton
               type="button"
+              variant={filterType === 'all' ? 'teal' : 'secondary'}
               onClick={() => setFilterType('all')}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                filterType === 'all' ? 'btn-tactile-teal' : 'btn-tactile-secondary'
-              }`}
+              className="px-4 py-1.5 text-xs"
             >
               Tümü ({students.length})
-            </button>
-            <button
+            </TactileButton>
+            <TactileButton
               type="button"
+              variant={filterType === 'active' ? 'amber' : 'secondary'}
               onClick={() => setFilterType('active')}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                filterType === 'active' ? 'btn-tactile-amber' : 'btn-tactile-secondary'
-              }`}
+              className="px-4 py-1.5 text-xs"
             >
               Aktifler ({activeCount})
-            </button>
-            <button
+            </TactileButton>
+            <TactileButton
               type="button"
+              variant={filterType === 'allergy' ? 'danger' : 'secondary'}
               onClick={() => setFilterType('allergy')}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
-                filterType === 'allergy' ? 'btn-tactile-danger' : 'btn-tactile-secondary'
-              }`}
+              className="px-4 py-1.5 text-xs flex items-center gap-1.5"
             >
               <AlertTriangle className="w-3.5 h-3.5" />
               Alerjisi Olanlar ({allergyCount})
-            </button>
+            </TactileButton>
           </div>
 
           <div className="flex items-center bg-[#FCFAF7] dark:bg-slate-900 p-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 shadow-2xs">
@@ -463,13 +462,14 @@ export function StudentsPage(): JSX.Element {
                             </span>
                           </td>
                           <td className="py-3.5 px-5 text-right space-x-1.5 whitespace-nowrap">
-                            <button
+                            <TactileButton
                               type="button"
+                              variant="secondary"
                               onClick={() => setPassportStudent(s)}
-                              className="btn-tactile-secondary px-3 py-1 text-xs font-bold"
+                              className="px-3 py-1 text-xs"
                             >
                               <FileText className="w-3.5 h-3.5 text-teal-700" /> Pasaport
-                            </button>
+                            </TactileButton>
                             <button
                               type="button"
                               onClick={() => setEditingStudent(s)}
@@ -591,7 +591,7 @@ function StudentCard({
   const estimatedAge = birthYear ? currentYear - birthYear : null;
 
   return (
-    <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 hover:border-teal-600/50 dark:hover:border-teal-500/50 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:shadow-[0_16px_36px_-4px_rgba(20,32,54,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-default">
+    <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between overflow-hidden group cursor-default">
       {/* Top Banner & Info */}
       <div className="p-5.5 space-y-4">
         <div className="flex items-start justify-between gap-3">
@@ -723,28 +723,30 @@ function StudentCard({
 
       {/* Card Action Buttons */}
       <div className="bg-[#FAF8F5] dark:bg-slate-900/50 border-t border-[#E8E2D5] dark:border-slate-800 px-5 py-3.5 flex items-center justify-between gap-2">
-        <button
+        <TactileButton
           type="button"
+          variant="secondary"
           onClick={onOpenPassport}
-          className="btn-tactile-secondary px-3 py-1.5 text-xs font-bold text-teal-900 dark:text-teal-200"
+          className="px-3.5 py-1.5 text-xs text-teal-900 dark:text-teal-200"
         >
           <FileText className="w-3.5 h-3.5 text-teal-700" />
           <span>Pasaport & Sağlık</span>
-        </button>
-        <button
+        </TactileButton>
+        <TactileButton
           type="button"
+          variant="secondary"
           onClick={onOpenPickupContacts}
-          className="btn-tactile-secondary px-3 py-1.5 text-xs font-bold text-amber-900 dark:text-amber-300"
+          className="px-3.5 py-1.5 text-xs text-amber-900 dark:text-amber-300"
         >
           <Users className="w-3.5 h-3.5 text-amber-700" />
           <span>Teslim Kişileri</span>
-        </button>
+        </TactileButton>
 
         <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={onEdit}
-            className="p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-white dark:hover:bg-slate-700 border border-transparent hover:border-[#DDD4C4] transition shadow-2xs"
+            className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-white dark:hover:bg-slate-700 border border-transparent hover:border-[#DDD4C4] active:scale-95 transition shadow-2xs cursor-pointer"
             title="Düzenle"
           >
             <Edit2 className="w-4 h-4" />
@@ -752,7 +754,7 @@ function StudentCard({
           <button
             type="button"
             onClick={onDelete}
-            className="p-1.5 rounded-xl text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/50 border border-transparent hover:border-rose-200 transition shadow-2xs text-xs"
+            className="p-2 rounded-xl text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/50 border border-transparent hover:border-rose-200 active:scale-95 transition shadow-2xs text-xs cursor-pointer"
             title="Sil"
           >
             <Trash2 className="w-4 h-4" />
@@ -1009,20 +1011,22 @@ function StudentFormModal({
           )}
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200/80 dark:border-slate-700/80">
-            <button
+            <TactileButton
               type="button"
+              variant="secondary"
               onClick={onClose}
-              className="btn-tactile-secondary px-4 py-2 text-xs font-semibold"
+              className="px-4 py-2 text-xs"
             >
               İptal
-            </button>
-            <button
+            </TactileButton>
+            <TactileButton
               type="submit"
+              variant="teal"
               disabled={saving}
-              className="btn-tactile-teal px-5 py-2 text-xs font-bold disabled:opacity-50"
+              className="px-5 py-2 text-xs"
             >
               {saving ? 'Kaydediliyor…' : initialStudent ? 'Güncelle' : 'Ekle'}
-            </button>
+            </TactileButton>
           </div>
         </form>
       </div>

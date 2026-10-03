@@ -62,7 +62,7 @@ export function StatCard({
 
   return (
     <div
-      className={`bg-white dark:bg-[#131B2E] p-6 rounded-3xl border-[1.5px] border-[#DCD4C6] dark:border-slate-800/90 ${variantStyles.borderHover} shadow-[0_2px_4px_-1px_rgba(28,25,23,0.05),0_10px_24px_-3px_rgba(28,25,23,0.08),0_20px_38px_-6px_rgba(28,25,23,0.06),inset_0_1.5px_0_0_rgba(255,255,255,1)] hover:shadow-[0_4px_8px_-2px_rgba(28,25,23,0.06),0_14px_28px_-4px_rgba(28,25,23,0.10),0_26px_48px_-8px_rgba(28,25,23,0.08),inset_0_1.5px_0_0_rgba(255,255,255,1)] hover:-translate-y-1 active:translate-y-[2px] active:scale-[0.998] active:shadow-[0_1px_2px_0_rgba(28,25,23,0.06),0_4px_10px_-2px_rgba(28,25,23,0.05),inset_0_2px_4px_0_rgba(0,0,0,0.04)] transition-all duration-200 ease-out flex flex-col justify-between group cursor-default`}
+      className={`bg-white dark:bg-[#131B2E] p-6 rounded-3xl border-2 border-[#DCD4C6] dark:border-slate-800/90 ${variantStyles.borderHover} shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1 active:translate-y-[3px] active:shadow-none transition-all duration-150 ease-out flex flex-col justify-between group cursor-pointer`}
     >
       <div className="flex items-center justify-between">
         <span

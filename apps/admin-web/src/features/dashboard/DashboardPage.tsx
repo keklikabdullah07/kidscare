@@ -219,10 +219,13 @@ export function DashboardPage(): JSX.Element {
         </div>
       </section>
 
-      {/* 2. Structured Operational KPIs with Apple squircle elevation and crisp contrast */}
+      {/* 2. Structured Operational KPIs with 3D Tactile Interactive Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Katılım Oranı & Yoklama */}
-        <div className="bg-white dark:bg-[#131B2E] p-6 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 hover:border-teal-600/50 dark:hover:border-teal-500/50 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:shadow-[0_16px_36px_-4px_rgba(20,32,54,0.14)] hover:-translate-y-1 transition-all duration-300 cursor-default flex flex-col justify-between group">
+        {/* Katılım Oranı & Yoklama (Clickable Tactile Card) */}
+        <Link
+          to="/attendance"
+          className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] active:translate-y-[3px] active:shadow-none transition-all duration-150 flex flex-col justify-between group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider group-hover:text-teal-800 dark:group-hover:text-teal-300 transition-colors">
               Katılım Oranı
@@ -247,14 +250,21 @@ export function DashboardPage(): JSX.Element {
               ></div>
             </div>
             <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300 mt-2.5 font-medium">
-              <span>{absentCount} Gelmedi</span>
-              <span>{excusedCount} İzinli</span>
+              <span>
+                {absentCount} Gelmedi · {excusedCount} İzinli
+              </span>
+              <span className="font-bold text-teal-800 dark:text-teal-300 group-hover:underline">
+                Yoklama Al →
+              </span>
             </div>
           </div>
-        </div>
+        </Link>
 
-        {/* Günlük Bülten / Karne */}
-        <div className="bg-white dark:bg-[#131B2E] p-6 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 hover:border-amber-500/50 dark:hover:border-amber-500/50 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:shadow-[0_16px_36px_-4px_rgba(20,32,54,0.14)] hover:-translate-y-1 transition-all duration-300 cursor-default flex flex-col justify-between group">
+        {/* Günlük Bülten / Karne (Clickable Tactile Card) */}
+        <Link
+          to="/tracking"
+          className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] active:translate-y-[3px] active:shadow-none transition-all duration-150 flex flex-col justify-between group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
               Günlük Bülten
@@ -278,16 +288,19 @@ export function DashboardPage(): JSX.Element {
                 style={{ width: `${Math.min(100, reportRate)}%` }}
               ></div>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-2.5 font-medium">
-              {Math.max(0, targetReportCount - filledReportsCount)} öğrenci raporu bekleniyor
-            </p>
+            <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300 mt-2.5 font-medium">
+              <span>{Math.max(0, targetReportCount - filledReportsCount)} bekliyor</span>
+              <span className="font-bold text-amber-800 dark:text-amber-300 group-hover:underline">
+                Bültene Git →
+              </span>
+            </div>
           </div>
-        </div>
+        </Link>
 
-        {/* Kayıtlı Öğrenci */}
+        {/* Kayıtlı Öğrenci (Clickable Tactile Card) */}
         <Link
           to="/students"
-          className="bg-white dark:bg-[#131B2E] p-6 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-indigo-500/50 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:shadow-[0_16px_36px_-4px_rgba(20,32,54,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
+          className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] active:translate-y-[3px] active:shadow-none transition-all duration-150 flex flex-col justify-between group cursor-pointer"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors">
@@ -310,15 +323,15 @@ export function DashboardPage(): JSX.Element {
             </div>
             <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 mt-2.5 font-medium">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-              Öğrenci listesi ve pasaportları →
+              <span className="group-hover:underline">Öğrenci listesi ve pasaportları →</span>
             </div>
           </div>
         </Link>
 
-        {/* Günün Öğle Menüsü */}
+        {/* Günün Öğle Menüsü (Clickable Tactile Card) */}
         <Link
           to="/menus"
-          className="bg-white dark:bg-[#131B2E] p-6 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 hover:border-amber-500/50 dark:hover:border-amber-500/50 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] hover:shadow-[0_16px_36px_-4px_rgba(20,32,54,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
+          className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] active:translate-y-[3px] active:shadow-none transition-all duration-150 flex flex-col justify-between group cursor-pointer"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
@@ -332,7 +345,7 @@ export function DashboardPage(): JSX.Element {
             <div className="text-sm font-bold text-slate-900 dark:text-white truncate group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
               {lunch.length > 0 ? lunch.slice(0, 2).join(', ') : 'Menü Planlanmadı'}
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 font-semibold">
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 font-semibold group-hover:underline">
               {lunch.length > 0
                 ? `${lunch.length} çeşit öğle yemeği →`
                 : 'Menü girmek için tıklayın →'}
@@ -388,10 +401,10 @@ export function DashboardPage(): JSX.Element {
             {alerts.immediateActions.items.map((item) => (
               <div
                 key={item.id}
-                className={`p-4 rounded-2xl border flex items-start justify-between gap-3.5 transition-all shadow-2xs hover:shadow-xs ${
+                className={`p-4 rounded-2xl border-2 flex items-start justify-between gap-3.5 transition-all duration-150 cursor-pointer ${
                   item.urgency === 'HIGH'
-                    ? 'bg-rose-50/70 border-rose-200/90 dark:bg-rose-950/30 dark:border-rose-900/60'
-                    : 'bg-[#FCFAF7] border-[#E2DACB] dark:bg-slate-900/60 dark:border-slate-700/80'
+                    ? 'bg-rose-50/70 border-rose-200/90 dark:bg-rose-950/30 dark:border-rose-900/60 shadow-[0_3px_0_0_#fecdd3,0_6px_14px_rgba(244,63,94,0.06)] hover:-translate-y-0.5 hover:shadow-[0_4px_0_0_#fecdd3] active:translate-y-[2px] active:shadow-none'
+                    : 'bg-[#FCFAF7] border-[#E2DACB] dark:bg-slate-900/60 dark:border-slate-700/80 shadow-[0_3px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.05)] hover:-translate-y-0.5 hover:shadow-[0_4px_0_0_#D5CBB9] active:translate-y-[2px] active:shadow-none'
                 }`}
               >
                 <div className="flex items-start gap-3 min-w-0">
@@ -428,7 +441,7 @@ export function DashboardPage(): JSX.Element {
 
                 <Link
                   to={item.actionUrl}
-                  className="shrink-0 text-xs font-bold px-4 py-1.5 rounded-full border-2 border-[#D5CBB9] bg-white text-slate-800 shadow-[0_2.5px_0_0_#D5CBB9,0_4px_8px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-[0_3.5px_0_0_#D5CBB9] active:translate-y-[2.5px] active:shadow-none transition-all duration-150 flex items-center gap-1.5"
+                  className="shrink-0 text-xs font-bold px-4 py-1.5 rounded-full border-2 border-[#D5CBB9] bg-white hover:bg-[#FAF8F5] text-slate-800 shadow-[0_2.5px_0_0_#D5CBB9,0_4px_8px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-[0_3.5px_0_0_#D5CBB9] active:translate-y-[2.5px] active:shadow-none transition-all duration-100 flex items-center gap-1.5 cursor-pointer"
                 >
                   İncele <ArrowRight className="w-3.5 h-3.5" />
                 </Link>

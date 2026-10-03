@@ -216,106 +216,172 @@
 
 /* ========================================================
    Tactile 3D Extruded Pill Buttons (Morrow Reference Style)
+   Standard CSS Rules + Tailwind v4 Compatibility
    ======================================================== */
 
 .btn-tactile-amber {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  border-radius: 9999px !important;
-  border: 2px solid #d97706 !important;
-  background-color: #f59e0b !important;
-  color: #451a03 !important;
-  font-weight: 800 !important;
-  box-shadow: 0 3px 0 0 #b45309, 0 6px 14px rgba(245, 158, 11, 0.25) !important;
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 2px solid #d97706;
+  background-color: #f59e0b;
+  color: #451a03;
+  font-weight: 800;
+  box-shadow: 0 3px 0 0 #b45309, 0 6px 14px rgba(245, 158, 11, 0.25);
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
 }
-
 .btn-tactile-amber:hover {
-  background-color: #fbbf24 !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 0 0 #b45309, 0 8px 18px rgba(245, 158, 11, 0.30) !important;
+  background-color: #fbbf24;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 0 #b45309, 0 8px 18px rgba(245, 158, 11, 0.30);
 }
-
 .btn-tactile-amber:active {
-  transform: translateY(3px) !important;
-  box-shadow: 0 0 0 0 #b45309 !important;
+  transform: translateY(3px);
+  box-shadow: 0 0 0 0 #b45309;
 }
 
 .btn-tactile-teal {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  border-radius: 9999px !important;
-  border: 2px solid #0f766e !important;
-  background-color: #115e59 !important;
-  color: #ffffff !important;
-  font-weight: 800 !important;
-  box-shadow: 0 3px 0 0 #042f2e, 0 6px 14px rgba(17, 94, 89, 0.25) !important;
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 2px solid #0f766e;
+  background-color: #115e59;
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 3px 0 0 #042f2e, 0 6px 14px rgba(17, 94, 89, 0.25);
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
 }
-
 .btn-tactile-teal:hover {
-  background-color: #0f766e !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 0 0 #042f2e, 0 8px 18px rgba(17, 94, 89, 0.30) !important;
+  background-color: #0f766e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 0 #042f2e, 0 8px 18px rgba(17, 94, 89, 0.30);
 }
-
 .btn-tactile-teal:active {
-  transform: translateY(3px) !important;
-  box-shadow: 0 0 0 0 #042f2e !important;
+  transform: translateY(3px);
+  box-shadow: 0 0 0 0 #042f2e;
 }
 
 .btn-tactile-secondary {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  border-radius: 9999px !important;
-  border: 2px solid #d5cbb9 !important;
-  background-color: #ffffff !important;
-  color: #1e293b !important;
-  font-weight: 700 !important;
-  box-shadow: 0 3px 0 0 #d5cbb9, 0 4px 10px rgba(45, 38, 30, 0.05) !important;
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 2px solid #d5cbb9;
+  background-color: #ffffff;
+  color: #1e293b;
+  font-weight: 700;
+  box-shadow: 0 3px 0 0 #d5cbb9, 0 4px 10px rgba(45, 38, 30, 0.05);
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
 }
-
 .btn-tactile-secondary:hover {
-  background-color: #faf8f5 !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 0 0 #d5cbb9, 0 8px 14px rgba(45, 38, 30, 0.08) !important;
+  background-color: #faf8f5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 0 #d5cbb9, 0 8px 14px rgba(45, 38, 30, 0.08);
 }
-
 .btn-tactile-secondary:active {
-  transform: translateY(3px) !important;
-  box-shadow: 0 0 0 0 #d5cbb9 !important;
+  transform: translateY(3px);
+  box-shadow: 0 0 0 0 #d5cbb9;
 }
 
 .btn-tactile-danger {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  border-radius: 9999px !important;
-  border: 2px solid #e11d48 !important;
-  background-color: #f43f5e !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  box-shadow: 0 3px 0 0 #be123c, 0 6px 12px rgba(244, 63, 94, 0.25) !important;
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 2px solid #e11d48;
+  background-color: #f43f5e;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 3px 0 0 #be123c, 0 6px 12px rgba(244, 63, 94, 0.25);
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
 }
-
 .btn-tactile-danger:hover {
-  background-color: #fb7185 !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 0 0 #be123c, 0 8px 16px rgba(244, 63, 94, 0.30) !important;
+  background-color: #fb7185;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 0 #be123c, 0 8px 16px rgba(244, 63, 94, 0.30);
+}
+.btn-tactile-danger:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 0 #be123c;
 }
 
-.btn-tactile-danger:active {
-  transform: translateY(3px) !important;
-  box-shadow: 0 0 0 0 #be123c !important;
+/* ========================================================
+   Interactive Tactile Cards (Dashboard KPIs & Action Cards)
+   ======================================================== */
+
+.tactile-card {
+  background-color: #ffffff;
+  border: 1.5px solid #DDD4C4;
+  border-radius: 1.5rem;
+  box-shadow: 
+    0 3px 0 0 #D5CBB9,
+    0 8px 20px -2px rgba(45, 38, 30, 0.06),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.tactile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 5px 0 0 #D5CBB9,
+    0 14px 26px -3px rgba(45, 38, 30, 0.10),
+    inset 0 1px 0 0 rgba(255, 255, 255, 1);
+}
+
+.tactile-card:active {
+  transform: translateY(3px);
+  box-shadow: 
+    0 0 0 0 #D5CBB9,
+    0 2px 6px 0 rgba(45, 38, 30, 0.04);
+}
+
+.dark .tactile-card {
+  background-color: #131B2E;
+  border-color: rgba(51, 65, 85, 0.8);
+  box-shadow: 
+    0 3px 0 0 #1E293B,
+    0 8px 20px -2px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+.dark .tactile-card:hover {
+  box-shadow: 
+    0 5px 0 0 #1E293B,
+    0 14px 26px -3px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+.dark .tactile-card:active {
+  box-shadow: 
+    0 0 0 0 #1E293B,
+    0 2px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.dark .btn-tactile-secondary {
+  border-color: #334155;
+  background-color: #1e293b;
+  color: #f1f5f9;
+  box-shadow: 0 3px 0 0 #0f172a, 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.dark .btn-tactile-secondary:hover {
+  background-color: #334155;
+  box-shadow: 0 4px 0 0 #0f172a, 0 8px 14px rgba(0, 0, 0, 0.3);
+}
+.dark .btn-tactile-secondary:active {
+  box-shadow: 0 0 0 0 #0f172a;
 }
 
 /* Clay Action Arrow (Top right ↗) */
