@@ -135,7 +135,7 @@ export function ParentDashboardPage(): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Header & Date / Child Selector */}
-      <div className="bg-white dark:bg-[#131B2E] p-5.5 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="bg-white dark:bg-[#131B2E] p-5.5 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
             <Heart className="w-5 h-5" />
@@ -154,7 +154,7 @@ export function ParentDashboardPage(): JSX.Element {
           <button
             type="button"
             onClick={() => changeDay(-1)}
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700/60 transition shadow-2xs active:scale-95 cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs active:scale-95 cursor-pointer"
             title="Önceki Gün"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -168,7 +168,7 @@ export function ParentDashboardPage(): JSX.Element {
           <button
             type="button"
             onClick={() => changeDay(1)}
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700/60 transition shadow-2xs active:scale-95 cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs active:scale-95 cursor-pointer"
             title="Sonraki Gün"
           >
             <ChevronRight className="w-4 h-4" />
@@ -177,7 +177,7 @@ export function ParentDashboardPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setSelectedDate(todayStr)}
-              className="text-[11px] font-bold text-teal-800 dark:text-teal-300 hover:bg-teal-100/60 dark:hover:bg-teal-950/60 bg-teal-50 dark:bg-teal-950/40 px-2.5 py-1 rounded-xl ml-1 transition active:scale-95 border border-teal-200/60 cursor-pointer"
+              className="btn-tactile-secondary px-3 py-1 text-xs font-bold ml-1"
             >
               Bugün
             </button>
@@ -186,7 +186,7 @@ export function ParentDashboardPage(): JSX.Element {
       </div>
 
       {loading ? (
-        <div className="bg-white dark:bg-[#131B2E] p-16 text-center rounded-3xl border border-[#DDD4C4] dark:border-slate-800 text-slate-600 dark:text-slate-300 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)]">
+        <div className="bg-white dark:bg-[#131B2E] p-16 text-center rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 text-slate-600 dark:text-slate-300 shadow-2xs">
           <div className="animate-spin inline-block w-8 h-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent rounded-full mb-3" />
           <p className="text-sm font-medium">Bilgiler yükleniyor, lütfen bekleyin...</p>
         </div>
@@ -226,7 +226,7 @@ export function ParentDashboardPage(): JSX.Element {
           )}
 
           {/* Real-time Status Card (Hero Banner) */}
-          <div className="bg-gradient-to-r from-teal-950 via-slate-900 to-teal-950 border border-teal-800/40 rounded-3xl p-6 text-white shadow-[0_8px_24px_-4px_rgba(15,118,110,0.25)] overflow-hidden relative">
+          <div className="bg-gradient-to-r from-teal-950 via-slate-900 to-teal-950 border-2 border-teal-800/50 rounded-3xl p-6 text-white shadow-2xs overflow-hidden relative">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-white text-2xl font-bold shadow-xs">
@@ -250,7 +250,7 @@ export function ParentDashboardPage(): JSX.Element {
               </div>
 
               {/* Status Badge */}
-              <div className="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/15">
+              <div className="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/15 shadow-xs">
                 <span className="text-[10px] uppercase tracking-wider text-amber-300 block font-bold">
                   Anlık Durum
                 </span>
@@ -288,7 +288,7 @@ export function ParentDashboardPage(): JSX.Element {
 
           {/* Personalized Allergy Alert Banner */}
           {matchedAllergies.length > 0 && (
-            <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700/60 rounded-3xl p-5.5 shadow-[0_6px_20px_-3px_rgba(217,119,6,0.1)]">
+            <div className="bg-amber-50 dark:bg-amber-950/30 border-2 border-amber-300 dark:border-amber-700/60 rounded-3xl p-5.5 shadow-2xs">
               <div className="flex items-start gap-3.5">
                 <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-300 dark:border-amber-700 shadow-2xs">
                   <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
@@ -321,7 +321,7 @@ export function ParentDashboardPage(): JSX.Element {
           {/* Grid of Report, Menu, and Health Passport */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Daily Report Card */}
-            <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-5">
+            <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-5">
               <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
                 <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <Award className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -341,7 +341,7 @@ export function ParentDashboardPage(): JSX.Element {
               {activeChildOverview.todayDailyReport ? (
                 <div className="space-y-4">
                   {/* Mood */}
-                  <div className="p-3.5 bg-[#FCFAF7] dark:bg-slate-900/60 border border-[#DDD4C4]/70 dark:border-slate-700/60 rounded-2xl flex items-center justify-between">
+                  <div className="p-3.5 bg-[#FCFAF7] dark:bg-slate-900/60 border border-[#DDD4C4]/70 dark:border-slate-700/60 rounded-2xl flex items-center justify-between shadow-2xs">
                     <span className="text-xs text-slate-700 dark:text-slate-300 font-bold flex items-center gap-1.5">
                       <Smile className="w-4 h-4 text-amber-500" />
                       Ruh Hali & Mod
@@ -357,7 +357,7 @@ export function ParentDashboardPage(): JSX.Element {
                       Beslenme Durumu
                     </span>
                     <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                      <div className="p-3 bg-amber-50/70 dark:bg-slate-900/50 border border-amber-200 dark:border-amber-900/40 rounded-2xl">
+                      <div className="p-3 bg-amber-50/70 dark:bg-slate-900/50 border border-amber-200 dark:border-amber-900/40 rounded-2xl shadow-2xs">
                         <span className="block text-slate-600 dark:text-slate-300 font-medium text-[11px]">
                           Kahvaltı
                         </span>
@@ -365,7 +365,7 @@ export function ParentDashboardPage(): JSX.Element {
                           {getMealLevel(activeChildOverview.todayDailyReport.meals?.breakfast)}
                         </span>
                       </div>
-                      <div className="p-3 bg-emerald-50/70 dark:bg-slate-900/50 border border-emerald-200 dark:border-emerald-900/40 rounded-2xl">
+                      <div className="p-3 bg-emerald-50/70 dark:bg-slate-900/50 border border-emerald-200 dark:border-emerald-900/40 rounded-2xl shadow-2xs">
                         <span className="block text-slate-600 dark:text-slate-300 font-medium text-[11px]">
                           Öğle
                         </span>
@@ -373,7 +373,7 @@ export function ParentDashboardPage(): JSX.Element {
                           {getMealLevel(activeChildOverview.todayDailyReport.meals?.lunch)}
                         </span>
                       </div>
-                      <div className="p-3 bg-orange-50/70 dark:bg-slate-900/50 border border-orange-200 dark:border-orange-900/40 rounded-2xl">
+                      <div className="p-3 bg-orange-50/70 dark:bg-slate-900/50 border border-orange-200 dark:border-orange-900/40 rounded-2xl shadow-2xs">
                         <span className="block text-slate-600 dark:text-slate-300 font-medium text-[11px]">
                           İkindi
                         </span>
@@ -386,7 +386,7 @@ export function ParentDashboardPage(): JSX.Element {
 
                   {/* Sleep / Nap */}
                   <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-purple-900/40">
+                    <div className="p-3 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-purple-900/40 shadow-2xs">
                       <span className="text-xs text-purple-800 dark:text-purple-300 font-bold block flex items-center gap-1.5">
                         <Moon className="w-3.5 h-3.5 text-purple-500" />
                         <span>Uyku</span>
@@ -401,7 +401,7 @@ export function ParentDashboardPage(): JSX.Element {
                       </span>
                     </div>
 
-                    <div className="p-3 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-teal-900/40">
+                    <div className="p-3 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-teal-900/40 shadow-2xs">
                       <span className="text-xs text-teal-800 dark:text-teal-300 font-bold block flex items-center gap-1.5">
                         <Heart className="w-3.5 h-3.5 text-teal-500" />
                         <span>Tuvalet / Bez</span>
@@ -538,7 +538,7 @@ export function ParentDashboardPage(): JSX.Element {
             {/* Daily Menu & Health Passport Column */}
             <div className="space-y-6">
               {/* Daily Menu Card */}
-              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-4">
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Coffee className="w-4 h-4 text-amber-600" />
@@ -558,7 +558,7 @@ export function ParentDashboardPage(): JSX.Element {
                 {dailyMenu ? (
                   <div className="space-y-3 text-xs">
                     {/* Breakfast */}
-                    <div className="p-3.5 bg-amber-50/60 dark:bg-slate-900 rounded-2xl border border-amber-200 dark:border-amber-900/40">
+                    <div className="p-3.5 bg-amber-50/60 dark:bg-slate-900 rounded-2xl border border-amber-200 dark:border-amber-900/40 shadow-2xs">
                       <span className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider block mb-1 flex items-center gap-1.5">
                         <Coffee className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                         <span>Sabah Kahvaltısı</span>
@@ -569,7 +569,7 @@ export function ParentDashboardPage(): JSX.Element {
                     </div>
 
                     {/* Lunch */}
-                    <div className="p-3.5 bg-emerald-50/60 dark:bg-slate-900 rounded-2xl border border-emerald-200 dark:border-emerald-900/40">
+                    <div className="p-3.5 bg-emerald-50/60 dark:bg-slate-900 rounded-2xl border border-emerald-200 dark:border-emerald-900/40 shadow-2xs">
                       <span className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider block mb-1 flex items-center gap-1.5">
                         <Soup className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         <span>Öğle Yemeği</span>
@@ -580,7 +580,7 @@ export function ParentDashboardPage(): JSX.Element {
                     </div>
 
                     {/* Snack */}
-                    <div className="p-3.5 bg-orange-50/60 dark:bg-slate-900 rounded-2xl border border-orange-200 dark:border-orange-900/40">
+                    <div className="p-3.5 bg-orange-50/60 dark:bg-slate-900 rounded-2xl border border-orange-200 dark:border-orange-900/40 shadow-2xs">
                       <span className="text-xs font-bold text-orange-900 dark:text-orange-300 uppercase tracking-wider block mb-1 flex items-center gap-1.5">
                         <Cookie className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400" />
                         <span>İkindi Beslenmesi</span>
@@ -617,7 +617,7 @@ export function ParentDashboardPage(): JSX.Element {
               </div>
 
               {/* Child Health & Development Passport Summary */}
-              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-4">
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Heart className="w-4 h-4 text-rose-500" />
@@ -681,7 +681,7 @@ export function ParentDashboardPage(): JSX.Element {
               </div>
 
               {/* Development & Portfolio Section */}
-              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-4">
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
                   <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Award className="w-5 h-5 text-amber-500" /> Gelişim Gözlemleri & Karnesi
