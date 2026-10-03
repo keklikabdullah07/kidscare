@@ -238,7 +238,7 @@ export function DailyMenuPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setSelectedDate(todayStr)}
-              className="text-[11px] font-bold text-teal-800 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900/50 bg-teal-50 dark:bg-teal-950/40 px-2.5 py-1 rounded-xl ml-1 transition border border-teal-200/60 cursor-pointer"
+              className="btn-tactile-secondary text-xs px-3 py-1 font-bold text-teal-900 dark:text-teal-300 ml-1"
             >
               Bugün
             </button>
@@ -333,7 +333,7 @@ export function DailyMenuPage(): JSX.Element {
               {/* Meal Cards - View Only */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {menu.breakfast.length > 0 && (
-                  <div className="rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)]">
+                  <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-200/60 dark:border-amber-800/60 shadow-2xs">
                         <Coffee className="w-4 h-4" />
@@ -357,7 +357,7 @@ export function DailyMenuPage(): JSX.Element {
                 )}
 
                 {menu.lunch.length > 0 && (
-                  <div className="rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)]">
+                  <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-2xl bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 flex items-center justify-center shrink-0 border border-teal-200/60 dark:border-teal-800/60 shadow-2xs">
                         <Soup className="w-4 h-4" />
@@ -381,7 +381,7 @@ export function DailyMenuPage(): JSX.Element {
                 )}
 
                 {menu.snack.length > 0 && (
-                  <div className="rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)]">
+                  <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-2xl bg-orange-50 dark:bg-orange-950/40 text-orange-700 dark:text-orange-400 flex items-center justify-center shrink-0 border border-orange-200/60 dark:border-orange-800/60 shadow-2xs">
                         <Cookie className="w-4 h-4" />
@@ -407,7 +407,7 @@ export function DailyMenuPage(): JSX.Element {
 
               {/* Nutrition Info - View Only */}
               {(menu.allergens.length > 0 || menu.calories || menu.notes) && (
-                <div className="rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-4">
+                <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs space-y-4">
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Tag className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                     İçerdiği Alerjenler & Beslenme Bilgisi
@@ -458,7 +458,7 @@ export function DailyMenuPage(): JSX.Element {
           {/* Meal Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Breakfast */}
-            <div className="rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] flex flex-col justify-between">
+            <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-3.5">
                   <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-200/60 dark:border-amber-800/60 shadow-2xs">
@@ -484,7 +484,7 @@ export function DailyMenuPage(): JSX.Element {
             </div>
 
             {/* Lunch */}
-            <div className="rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] flex flex-col justify-between">
+            <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-3.5">
                   <div className="w-10 h-10 rounded-2xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 border border-teal-200/60 dark:border-teal-800/60 shadow-2xs">
@@ -510,7 +510,7 @@ export function DailyMenuPage(): JSX.Element {
             </div>
 
             {/* Snack */}
-            <div className="rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] flex flex-col justify-between">
+            <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-3.5">
                   <div className="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center shrink-0 border border-orange-200/60 dark:border-orange-800/60 shadow-2xs">
@@ -537,7 +537,7 @@ export function DailyMenuPage(): JSX.Element {
           </div>
 
           {/* Allergens & Nutrition Information */}
-          <div className="rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-6">
+          <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs space-y-6">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Tag className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               İçerdiği Alerjenler & Beslenme Bilgisi
@@ -557,10 +557,10 @@ export function DailyMenuPage(): JSX.Element {
                       key={all}
                       type="button"
                       onClick={() => toggleAllergen(all)}
-                      className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl text-xs font-bold border transition-all cursor-pointer active:scale-95 ${
+                      className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl text-xs font-bold border transition-all cursor-pointer ${
                         isSel
-                          ? 'bg-rose-50 border-rose-300 text-rose-800 dark:bg-rose-950/50 dark:border-rose-700/60 dark:text-rose-200 shadow-2xs'
-                          : 'bg-[#FCFAF7] dark:bg-slate-800/80 border-[#DDD4C4] dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-[#F9F7F3] dark:hover:bg-slate-700'
+                          ? 'bg-rose-50 border-rose-300 text-rose-800 dark:bg-rose-950/50 dark:border-rose-700/60 dark:text-rose-200 shadow-[0_2px_0_0_#f43f5e] active:translate-y-[2px] active:shadow-none'
+                          : 'bg-[#FCFAF7] dark:bg-slate-800/80 border-[#DDD4C4] dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-[#F9F7F3] dark:hover:bg-slate-700 shadow-2xs'
                       }`}
                     >
                       <span>{all}</span>
