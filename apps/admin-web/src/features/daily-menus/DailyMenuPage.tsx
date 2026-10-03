@@ -593,7 +593,7 @@ export function DailyMenuPage(): JSX.Element {
               <button
                 type="button"
                 onClick={addCustomAllergen}
-                className="bg-[#FCFAF7] dark:bg-slate-700/70 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-2xl text-xs font-bold border border-[#DDD4C4] dark:border-slate-600 transition cursor-pointer active:scale-95"
+                className="btn-tactile-secondary px-4 py-2.5 text-xs font-bold"
               >
                 Ekle
               </button>
@@ -639,7 +639,7 @@ export function DailyMenuPage(): JSX.Element {
                     type="button"
                     onClick={() => void handleDelete()}
                     disabled={saving}
-                    className="inline-flex items-center gap-1.5 rounded-2xl border border-rose-300 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/40 px-4 py-2.5 text-xs font-bold text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition cursor-pointer active:scale-95"
+                    className="btn-tactile-danger px-4 py-2.5 text-xs font-bold"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>Kreş Menüsünü Sil</span>
@@ -651,7 +651,7 @@ export function DailyMenuPage(): JSX.Element {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 px-6 py-2.5 text-sm font-bold transition shadow-xs disabled:opacity-50 active:scale-95 cursor-pointer"
+                  className="btn-tactile-teal px-6 py-2.5 text-sm font-bold disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
                   <span>{saving ? 'Kaydediliyor…' : 'Günün Menüsünü Kaydet'}</span>

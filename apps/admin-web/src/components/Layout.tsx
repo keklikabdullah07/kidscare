@@ -400,21 +400,21 @@ export function Layout(): JSX.Element {
                 <KidsCareLogo size="sm" showText={true} />
               </NavLink>
             </div>
-            <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-white/90 dark:bg-slate-800/90 px-3.5 py-1.5 rounded-full border border-[#E3DCCE] dark:border-slate-700/80 shadow-2xs">
+            <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-white/95 dark:bg-slate-800/95 px-3.5 py-1.5 rounded-full border-[1.5px] border-[#DCD4C6] dark:border-slate-700/80 shadow-[0_2px_4px_rgba(28,25,23,0.04)]">
               <Calendar className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
               <span>{getTodayFormatted()}</span>
             </div>
-            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-[#E3DCCE]/80 dark:border-slate-700/60 text-xs text-slate-400 shadow-2xs">
+            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 border-[1.5px] border-[#DCD4C6] dark:border-slate-700/70 text-xs text-slate-400 shadow-[0_2px_4px_rgba(28,25,23,0.04)] hover:border-teal-600/50 transition-colors">
               <Search className="w-3.5 h-3.5 text-slate-400" />
               <span className="text-slate-500 dark:text-slate-400">Hızlı ara...</span>
-              <kbd className="text-[10px] font-semibold bg-[#EFEAE0] dark:bg-slate-700/80 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-300">
+              <kbd className="text-[10px] font-semibold bg-[#EFEAE0] dark:bg-slate-700/80 px-1.5 py-0.5 rounded-full text-slate-600 dark:text-slate-300 border border-[#DDD4C4]/60">
                 ⌘K
               </kbd>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 text-xs text-teal-900 dark:text-teal-200 bg-teal-50/80 dark:bg-teal-950/40 border border-teal-200/80 dark:border-teal-800/60 px-3 py-1.5 rounded-full font-semibold shadow-2xs">
+            <div className="hidden sm:flex items-center gap-2 text-xs text-teal-900 dark:text-teal-200 bg-teal-50/90 dark:bg-teal-950/50 border-[1.5px] border-teal-300/80 dark:border-teal-800/80 px-3.5 py-1.5 rounded-full font-semibold shadow-[0_2px_4px_rgba(15,118,110,0.08)]">
               <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
               Kreş Aktif & Güvenli
             </div>
@@ -423,7 +423,7 @@ export function Layout(): JSX.Element {
               onClick={toggleTheme}
               title={isDark ? 'Aydınlık Mod' : 'Karanlık Mod'}
               aria-label={isDark ? 'Aydınlık moda geç' : 'Karanlık moda geç'}
-              className="group p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-white/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 rounded-2xl transition-all duration-200 border border-transparent hover:border-[#E3DCCE] dark:hover:border-slate-700 active:scale-90 cursor-pointer shadow-2xs"
+              className="group p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-white dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 rounded-full transition-all duration-150 border-[1.5px] border-transparent hover:border-[#DCD4C6] dark:hover:border-slate-700 active:translate-y-[2px] active:scale-95 cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
             >
               {isDark ? (
                 <Sun className="w-4.5 h-4.5 text-amber-400 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-110" />

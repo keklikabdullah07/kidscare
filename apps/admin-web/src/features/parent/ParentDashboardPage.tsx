@@ -210,10 +210,10 @@ export function ParentDashboardPage(): JSX.Element {
                 <button
                   key={child.student.id}
                   onClick={() => setSelectedChildId(child.student.id)}
-                  className={`px-4 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2 active:scale-95 cursor-pointer ${
+                  className={`px-4 py-2 text-xs font-bold flex items-center gap-2 ${
                     activeChildOverview.student.id === child.student.id
-                      ? 'bg-teal-700 text-white dark:bg-teal-600 dark:text-white shadow-xs'
-                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-[#F9F7F3] dark:hover:bg-slate-700 border border-[#DDD4C4] dark:border-slate-700'
+                      ? 'btn-tactile-teal'
+                      : 'btn-tactile-secondary'
                   }`}
                 >
                   <span className="w-2 h-2 rounded-full bg-amber-400 dark:bg-teal-400" />

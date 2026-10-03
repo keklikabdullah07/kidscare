@@ -59,25 +59,25 @@ export function PromptModal({
     switch (variant) {
       case 'danger':
         return {
-          btn: 'bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus:ring-rose-500',
+          btn: 'btn-tactile-danger',
           iconBg: 'bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:text-rose-400',
           icon: <AlertCircle className="w-5 h-5" />,
         };
       case 'warning':
         return {
-          btn: 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs focus:ring-amber-500',
+          btn: 'btn-tactile-amber',
           iconBg: 'bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400',
           icon: <AlertCircle className="w-5 h-5" />,
         };
       case 'success':
         return {
-          btn: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs focus:ring-emerald-500',
+          btn: 'btn-tactile-teal',
           iconBg: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400',
           icon: <CheckCircle2 className="w-5 h-5" />,
         };
       default:
         return {
-          btn: 'bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white shadow-xs focus:ring-teal-500 dark:focus:ring-amber-500 font-semibold',
+          btn: 'btn-tactile-teal',
           iconBg: 'bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
           icon: <HelpCircle className="w-5 h-5" />,
         };
@@ -156,14 +156,14 @@ export function PromptModal({
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-colors cursor-pointer"
+              className="btn-tactile-secondary px-4 py-2 text-xs font-semibold"
             >
               {cancelText}
             </button>
             <button
               type="submit"
               disabled={requireInput && !value.trim()}
-              className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${styles.btn}`}
+              className={`px-4 py-2 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed ${styles.btn}`}
             >
               {confirmText}
             </button>

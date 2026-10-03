@@ -157,7 +157,7 @@ export function PickupContactsModal({
             <button
               type="button"
               onClick={() => setShowForm((v) => !v)}
-              className="rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-3.5 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs transition"
+              className="btn-tactile-teal px-3.5 py-1.5 text-xs font-bold inline-flex items-center gap-1.5"
             >
               <Plus className="w-3.5 h-3.5" />
               {showForm ? 'İptal' : 'Yeni Kişi'}
@@ -225,14 +225,14 @@ export function PickupContactsModal({
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="text-xs font-semibold text-slate-600 dark:text-slate-300 px-3 py-1.5 hover:text-slate-900 dark:hover:text-white"
+                  className="btn-tactile-secondary px-3 py-1.5 text-xs font-semibold"
                 >
                   İptal
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-4 py-1.5 text-xs font-bold disabled:opacity-50 transition"
+                  className="btn-tactile-teal px-4 py-1.5 text-xs font-bold disabled:opacity-50"
                 >
                   {submitting ? 'Ekleniyor…' : 'Ekle'}
                 </button>

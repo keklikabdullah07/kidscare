@@ -254,14 +254,14 @@ export function CheckOutModal({ student, date, onClose, onSaved }: Props): React
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+              className="btn-tactile-secondary px-4 py-2 text-sm font-medium"
             >
               İptal
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-5 py-2 text-sm font-bold shadow-xs disabled:opacity-50 flex items-center gap-2 transition active:scale-98"
+              className="btn-tactile-teal px-5 py-2 text-sm font-bold disabled:opacity-50 flex items-center gap-2"
             >
               <span>🔒</span>
               <span>{saving ? 'Kaydediliyor…' : 'Güvenli Çıkışı Tamamla'}</span>

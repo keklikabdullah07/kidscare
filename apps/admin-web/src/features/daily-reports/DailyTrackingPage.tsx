@@ -553,7 +553,7 @@ export function DailyTrackingPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setBulkOpen((v) => !v)}
-              className="text-xs font-bold text-teal-800 dark:text-teal-300 hover:text-teal-950 dark:hover:text-teal-200 bg-teal-50 dark:bg-teal-950/40 border border-teal-200/70 dark:border-teal-500/30 px-3.5 py-2 rounded-xl transition shadow-2xs cursor-pointer active:scale-95"
+              className="btn-tactile-secondary px-3.5 py-1.5 text-xs font-bold text-teal-900 dark:text-teal-300"
             >
               {bulkOpen ? 'Paneli Kapat' : 'Paneli Aç'}
             </button>
@@ -720,7 +720,7 @@ export function DailyTrackingPage(): JSX.Element {
                     type="button"
                     onClick={() => void applyBulkToPending()}
                     disabled={bulkSaving || !bulkHasContent || pendingCount === 0}
-                    className="px-3.5 py-2 rounded-xl bg-amber-50 dark:bg-amber-500/10 text-amber-900 dark:text-amber-300 text-xs font-bold border border-amber-300 dark:border-amber-500/30 hover:bg-amber-100 dark:hover:bg-amber-500/20 transition disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    className="btn-tactile-amber px-3.5 py-2 text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Clock className="w-3.5 h-3.5" />
                     Bekleyen {pendingCount} Öğrenciye
@@ -729,7 +729,7 @@ export function DailyTrackingPage(): JSX.Element {
                     type="button"
                     onClick={() => void applyBulkToAll()}
                     disabled={bulkSaving || !bulkHasContent}
-                    className="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 text-xs font-bold transition shadow-xs disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    className="btn-tactile-teal px-4 py-2 text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Save className="w-3.5 h-3.5" />
                     {bulkSaving
@@ -951,10 +951,10 @@ export function DailyTrackingPage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => setActiveStudent(student)}
-                    className={`w-full rounded-2xl py-2.5 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer active:scale-95 ${
+                    className={`w-full py-2.5 text-xs font-bold flex items-center justify-center gap-1.5 ${
                       report
-                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-300 dark:border-emerald-800/60'
-                        : 'bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500'
+                        ? 'btn-tactile-secondary text-emerald-900 dark:text-emerald-300'
+                        : 'btn-tactile-teal'
                     }`}
                   >
                     <Edit3 className="w-3.5 h-3.5" />

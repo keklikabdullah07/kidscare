@@ -170,7 +170,7 @@ export function StudentsPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 bg-teal-800 hover:bg-teal-900 text-white rounded-2xl px-5 py-2.5 text-sm font-bold transition-all active:scale-95 shadow-xs hover:shadow-sm"
+            className="btn-tactile-teal px-5 py-2.5 text-sm"
           >
             <UserPlus className="w-4 h-4" />
             <span>+ Yeni Öğrenci</span>
@@ -203,14 +203,12 @@ export function StudentsPage(): JSX.Element {
 
         {/* Filter Badges & View Switcher */}
         <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
             <button
               type="button"
               onClick={() => setFilterType('all')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs ${
-                filterType === 'all'
-                  ? 'bg-teal-800 text-white dark:bg-teal-700 dark:text-white'
-                  : 'bg-[#FCFAF7] text-slate-700 dark:bg-slate-800 dark:text-slate-200 border border-[#DDD4C4] dark:border-slate-700 hover:bg-white'
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                filterType === 'all' ? 'btn-tactile-teal' : 'btn-tactile-secondary'
               }`}
             >
               Tümü ({students.length})
@@ -218,10 +216,8 @@ export function StudentsPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setFilterType('active')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs ${
-                filterType === 'active'
-                  ? 'bg-emerald-700 text-white'
-                  : 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 hover:bg-emerald-100'
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                filterType === 'active' ? 'btn-tactile-amber' : 'btn-tactile-secondary'
               }`}
             >
               Aktifler ({activeCount})
@@ -229,13 +225,11 @@ export function StudentsPage(): JSX.Element {
             <button
               type="button"
               onClick={() => setFilterType('allergy')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-2xs ${
-                filterType === 'allergy'
-                  ? 'bg-rose-700 text-white'
-                  : 'bg-rose-50 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/80 hover:bg-rose-100'
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+                filterType === 'allergy' ? 'btn-tactile-danger' : 'btn-tactile-secondary'
               }`}
             >
-              <AlertTriangle className="w-3 h-3" />
+              <AlertTriangle className="w-3.5 h-3.5" />
               Alerjisi Olanlar ({allergyCount})
             </button>
           </div>
@@ -472,7 +466,7 @@ export function StudentsPage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => setPassportStudent(s)}
-                              className="inline-flex items-center gap-1 rounded-xl bg-white dark:bg-slate-800 border border-[#DDD4C4] dark:border-slate-700 px-3 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-teal-50 hover:text-teal-900 hover:border-teal-300 transition shadow-2xs"
+                              className="btn-tactile-secondary px-3 py-1 text-xs font-bold"
                             >
                               <FileText className="w-3.5 h-3.5 text-teal-700" /> Pasaport
                             </button>
@@ -732,7 +726,7 @@ function StudentCard({
         <button
           type="button"
           onClick={onOpenPassport}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 text-teal-900 dark:text-teal-200 border border-[#DDD4C4] dark:border-slate-700 hover:bg-teal-50 hover:border-teal-300 font-bold text-xs transition shadow-2xs"
+          className="btn-tactile-secondary px-3 py-1.5 text-xs font-bold text-teal-900 dark:text-teal-200"
         >
           <FileText className="w-3.5 h-3.5 text-teal-700" />
           <span>Pasaport & Sağlık</span>
@@ -740,7 +734,7 @@ function StudentCard({
         <button
           type="button"
           onClick={onOpenPickupContacts}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 text-amber-900 dark:text-amber-300 border border-[#DDD4C4] dark:border-slate-700 hover:bg-amber-50 hover:border-amber-300 font-bold text-xs transition shadow-2xs"
+          className="btn-tactile-secondary px-3 py-1.5 text-xs font-bold text-amber-900 dark:text-amber-300"
         >
           <Users className="w-3.5 h-3.5 text-amber-700" />
           <span>Teslim Kişileri</span>
@@ -1018,14 +1012,14 @@ function StudentFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+              className="btn-tactile-secondary px-4 py-2 text-xs font-semibold"
             >
               İptal
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-5 py-2 text-xs font-bold transition shadow-xs disabled:opacity-50 active:scale-98"
+              className="btn-tactile-teal px-5 py-2 text-xs font-bold disabled:opacity-50"
             >
               {saving ? 'Kaydediliyor…' : initialStudent ? 'Güncelle' : 'Ekle'}
             </button>

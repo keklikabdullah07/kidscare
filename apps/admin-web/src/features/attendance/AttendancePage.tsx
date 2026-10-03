@@ -300,7 +300,7 @@ export function AttendancePage(): JSX.Element {
             type="button"
             disabled={bulkLoading || absentCount === 0}
             onClick={() => void handleMarkAllPresent()}
-            className="inline-flex items-center gap-2 bg-teal-800 hover:bg-teal-900 text-white rounded-2xl px-4 py-2.5 text-xs font-bold shadow-xs hover:shadow-sm transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-tactile-teal px-4 py-2.5 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             title="Sınıftaki henüz gelmedi durumundaki tüm öğrencileri tek tıkla sınıfa al"
           >
             <CheckCheck className="w-4 h-4" />
@@ -614,7 +614,7 @@ export function AttendancePage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => void handleQuickCheckIn(student)}
-                              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl font-bold text-xs shadow-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                              className="btn-tactile-teal px-3 py-1.5 text-xs font-bold"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>Giriş Yap</span>
@@ -625,7 +625,7 @@ export function AttendancePage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => setCheckoutStudent(student)}
-                              className="bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 px-3 py-1.5 rounded-xl font-bold text-xs shadow-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                              className="btn-tactile-amber px-3 py-1.5 text-xs font-bold"
                             >
                               <ShieldCheck className="w-3.5 h-3.5" />
                               <span>Teslim Et</span>
@@ -636,7 +636,7 @@ export function AttendancePage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => setCheckoutStudent(student)}
-                              className="bg-[#FCFAF7] hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-[#DDD4C4] dark:border-slate-700 px-3 py-1.5 rounded-xl font-semibold text-xs transition cursor-pointer"
+                              className="btn-tactile-secondary px-3 py-1.5 text-xs font-semibold"
                             >
                               Düzenle
                             </button>
@@ -647,7 +647,7 @@ export function AttendancePage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => void handleSetStatus(student, 'EXCUSED')}
-                              className="bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-900/60 px-2.5 py-1.5 rounded-xl font-bold text-xs transition cursor-pointer"
+                              className="btn-tactile-secondary px-2.5 py-1 text-xs font-bold text-amber-900 dark:text-amber-300"
                               title="İzinli Olarak İşaretle"
                             >
                               İzinli
@@ -658,7 +658,7 @@ export function AttendancePage(): JSX.Element {
                             <button
                               type="button"
                               onClick={() => void handleSetStatus(student, 'ABSENT')}
-                              className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 px-2.5 py-1.5 rounded-xl font-bold text-xs transition cursor-pointer"
+                              className="btn-tactile-secondary px-2.5 py-1 text-xs font-bold text-slate-700 dark:text-slate-200"
                               title="Gelmedi Olarak İşaretle"
                             >
                               Gelmedi
@@ -740,7 +740,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => void handleQuickCheckIn(student)}
-                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer"
+                      className="btn-tactile-teal flex-1 py-2 text-xs font-bold"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Giriş Yap</span>
@@ -751,7 +751,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => setCheckoutStudent(student)}
-                      className="flex-1 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 py-2 rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer"
+                      className="btn-tactile-amber flex-1 py-2 text-xs font-bold"
                     >
                       <ShieldCheck className="w-3.5 h-3.5" />
                       <span>Teslim Et</span>
@@ -762,7 +762,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => setCheckoutStudent(student)}
-                      className="flex-1 bg-[#FCFAF7] hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-[#DDD4C4] dark:border-slate-700 py-2 rounded-xl text-xs font-semibold transition cursor-pointer"
+                      className="btn-tactile-secondary flex-1 py-2 text-xs font-semibold"
                     >
                       Düzenle
                     </button>
@@ -771,7 +771,7 @@ export function AttendancePage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => void handleSetStatus(student, 'EXCUSED')}
-                    className="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-800/80 text-xs font-bold transition cursor-pointer"
+                    className="btn-tactile-secondary px-3 py-2 text-xs font-bold text-amber-900 dark:text-amber-300"
                     title="İzinli"
                   >
                     İzinli
@@ -780,7 +780,7 @@ export function AttendancePage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => void handleSetStatus(student, 'ABSENT')}
-                    className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-bold transition cursor-pointer"
+                    className="btn-tactile-secondary px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-200"
                     title="Gelmedi"
                   >
                     Gelmedi

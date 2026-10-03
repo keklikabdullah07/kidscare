@@ -203,16 +203,16 @@ export function DashboardPage(): JSX.Element {
           <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <Link
               to="/attendance"
-              className="bg-amber-500 hover:bg-amber-600 text-amber-950 px-4 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 hover:shadow-md shadow-xs flex items-center gap-2"
+              className="rounded-full border-2 border-amber-600 bg-amber-500 hover:bg-amber-400 text-amber-950 px-5 py-2.5 text-sm font-extrabold shadow-[0_3px_0_0_#b45309,0_8px_16px_rgba(245,158,11,0.25)] hover:-translate-y-0.5 hover:shadow-[0_4px_0_0_#b45309] active:translate-y-[3px] active:shadow-none transition-all duration-150 flex items-center gap-2"
             >
-              <CheckCircle2 className="w-4 h-4 text-amber-950" />
+              <CheckCircle2 className="w-4.5 h-4.5 text-amber-950" />
               Yoklama Al
             </Link>
             <Link
               to="/tracking"
-              className="bg-white/15 hover:bg-white/25 dark:bg-white/10 dark:hover:bg-white/20 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 border border-white/20 flex items-center gap-2 shadow-xs hover:shadow-sm"
+              className="rounded-full border-2 border-white/40 bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 text-sm font-bold shadow-[0_3px_0_0_rgba(255,255,255,0.25),0_6px_14px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 active:translate-y-[3px] active:shadow-none transition-all duration-150 flex items-center gap-2"
             >
-              <BookOpenCheck className="w-4 h-4 text-amber-200" />
+              <BookOpenCheck className="w-4.5 h-4.5 text-amber-200" />
               Günlük Takip
             </Link>
           </div>
@@ -428,9 +428,9 @@ export function DashboardPage(): JSX.Element {
 
                 <Link
                   to={item.actionUrl}
-                  className="shrink-0 text-xs font-bold px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:text-teal-900 hover:bg-teal-50/70 hover:border-teal-300 transition-colors flex items-center gap-1 shadow-2xs"
+                  className="shrink-0 text-xs font-bold px-4 py-1.5 rounded-full border-2 border-[#D5CBB9] bg-white text-slate-800 shadow-[0_2.5px_0_0_#D5CBB9,0_4px_8px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-[0_3.5px_0_0_#D5CBB9] active:translate-y-[2.5px] active:shadow-none transition-all duration-150 flex items-center gap-1.5"
                 >
-                  İncele <ArrowRight className="w-3 h-3" />
+                  İncele <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             ))}
@@ -478,7 +478,7 @@ export function DashboardPage(): JSX.Element {
             </div>
             <Link
               to="/menus"
-              className="text-xs font-bold text-amber-800 dark:text-amber-300 hover:text-amber-900 flex items-center gap-1"
+              className="text-xs font-bold px-4 py-1.5 rounded-full border-2 border-[#D5CBB9] bg-white text-amber-900 shadow-[0_2.5px_0_0_#D5CBB9,0_4px_8px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-[0_3.5px_0_0_#D5CBB9] active:translate-y-[2.5px] active:shadow-none transition-all duration-150 flex items-center gap-1.5"
             >
               Menü Detayı <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -627,7 +627,7 @@ export function DashboardPage(): JSX.Element {
 
           <Link
             to="/students"
-            className="w-full py-2.5 bg-[#FCFAF7] dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-2xl border border-[#DDD4C4] dark:border-slate-700 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"
+            className="w-full py-2.5 rounded-full border-2 border-[#D5CBB9] bg-white text-slate-800 text-xs font-bold shadow-[0_3px_0_0_#D5CBB9,0_6px_12px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-[0_4px_0_0_#D5CBB9] active:translate-y-[3px] active:shadow-none transition-all duration-150 flex items-center justify-center gap-1.5"
           >
             Tüm Öğrenci Dosyaları <ArrowRight className="w-3.5 h-3.5" />
           </Link>
