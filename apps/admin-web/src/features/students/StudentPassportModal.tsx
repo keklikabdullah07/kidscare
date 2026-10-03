@@ -175,9 +175,9 @@ export function StudentPassportModal({
       }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-150"
     >
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-2xl overflow-hidden">
+      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-3xl bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/80 bg-slate-50/80 dark:bg-slate-800/80 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-[#DDD4C4]/80 dark:border-slate-800 bg-[#FCFAF7]/90 dark:bg-slate-900/50 px-6 py-4.5">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl">📋</span>
@@ -192,7 +192,7 @@ export function StudentPassportModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 transition"
+            className="p-1.5 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition cursor-pointer"
           >
             ✕
           </button>
@@ -211,25 +211,25 @@ export function StudentPassportModal({
             className="flex-1 overflow-y-auto p-6 space-y-6"
           >
             {error && (
-              <div className="rounded-xl bg-rose-50 dark:bg-rose-950/40 p-3 text-sm text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60">
+              <div className="rounded-2xl bg-rose-50 dark:bg-rose-950/40 p-3.5 text-xs font-semibold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 shadow-2xs">
                 {error}
               </div>
             )}
 
             {/* Section: Kan Grubu & Sağlık */}
-            <div className="rounded-xl border border-slate-200/80 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/40 space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <div className="rounded-2xl border border-[#DDD4C4] dark:border-slate-800 p-4.5 bg-[#FCFAF7]/60 dark:bg-slate-900/40 space-y-3 shadow-2xs">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>🩸</span> Temel Sağlık & Kan Grubu
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
                     Kan Grubu
                   </label>
                   <select
                     value={bloodType}
                     onChange={(e) => setBloodType(e.target.value as BloodType)}
-                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 py-1.5 text-sm font-medium shadow-xs focus:border-teal-600 focus:outline-hidden"
+                    className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3.5 py-2 text-xs font-bold shadow-2xs focus:border-teal-700 focus:outline-hidden"
                   >
                     {BLOOD_TYPES.map((bt) => (
                       <option key={bt} value={bt}>
@@ -239,7 +239,7 @@ export function StudentPassportModal({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
                     Doktor Adı
                   </label>
                   <input
@@ -247,11 +247,11 @@ export function StudentPassportModal({
                     value={doctorName}
                     onChange={(e) => setDoctorName(e.target.value)}
                     placeholder="Örn. Dr. Mehmet Öz"
-                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3 py-1.5 text-sm shadow-xs focus:border-teal-600 focus:outline-hidden"
+                    className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs focus:border-teal-700 focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
                     Doktor / Klinik Tel
                   </label>
                   <input
@@ -259,20 +259,20 @@ export function StudentPassportModal({
                     value={doctorPhone}
                     onChange={(e) => setDoctorPhone(e.target.value)}
                     placeholder="+90 5XX XXX XX XX"
-                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3 py-1.5 text-sm shadow-xs focus:border-teal-600 focus:outline-hidden"
+                    className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs focus:border-teal-700 focus:outline-hidden"
                   />
                 </div>
               </div>
             </div>
 
             {/* Section: Alerjiler */}
-            <div className="rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/40 dark:bg-rose-950/30 p-4 space-y-3">
+            <div className="rounded-2xl border border-rose-300 dark:border-rose-900/60 bg-rose-50/50 dark:bg-rose-950/30 p-4.5 space-y-3 shadow-2xs">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-rose-900 dark:text-rose-300 flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-rose-900 dark:text-rose-200 flex items-center gap-1.5">
                   <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" /> Alerjiler (
                   {allergies.length})
                 </h3>
-                <span className="text-xs text-rose-700 dark:text-rose-300 font-medium">
+                <span className="text-xs text-rose-700 dark:text-rose-300 font-bold">
                   Öğretmenler için kritik uyarı
                 </span>
               </div>
@@ -286,10 +286,10 @@ export function StudentPassportModal({
                       key={item}
                       type="button"
                       onClick={() => toggleAllergy(item)}
-                      className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                         selected
-                          ? 'bg-rose-700 text-white shadow-xs'
-                          : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                          ? 'bg-rose-700 text-white shadow-[0_2px_0_0_#9f1239] active:translate-y-[2px] active:shadow-none'
+                          : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-[#DDD4C4] dark:border-slate-700 hover:bg-[#FAF8F5] shadow-2xs'
                       }`}
                     >
                       {selected ? `✓ ${item}` : `+ ${item}`}
@@ -311,31 +311,31 @@ export function StudentPassportModal({
                     }
                   }}
                   placeholder="Başka alerji ekle (örn: Arı sokması)..."
-                  className="flex-1 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3 py-1.5 text-xs shadow-xs focus:border-rose-500 focus:outline-hidden"
+                  className="flex-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs focus:border-rose-600 focus:outline-hidden"
                 />
                 <button
                   type="button"
                   onClick={addCustomAllergy}
-                  className="px-3 py-1.5 bg-rose-700 hover:bg-rose-800 text-white rounded-xl text-xs font-medium"
+                  className="btn-tactile-danger px-3.5 py-1.5 text-xs font-bold"
                 >
                   Ekle
                 </button>
               </div>
 
               {allergies.filter((a) => !COMMON_ALLERGIES.includes(a)).length > 0 && (
-                <div className="flex flex-wrap gap-1 pt-1">
+                <div className="flex flex-wrap gap-1.5 pt-1">
                   {allergies
                     .filter((a) => !COMMON_ALLERGIES.includes(a))
                     .map((item) => (
                       <span
                         key={item}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 border border-rose-200 dark:border-rose-800/60"
+                        className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 border border-rose-300 dark:border-rose-800/60 shadow-2xs"
                       >
                         {item}
                         <button
                           type="button"
                           onClick={() => toggleAllergy(item)}
-                          className="text-rose-700 dark:text-rose-300 hover:text-rose-950 dark:hover:text-white font-bold ml-1"
+                          className="text-rose-700 dark:text-rose-300 hover:text-rose-950 dark:hover:text-white font-bold ml-1 cursor-pointer"
                         >
                           ×
                         </button>
@@ -348,8 +348,8 @@ export function StudentPassportModal({
             {/* Section: Beslenme & İlaçlar */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Beslenme */}
-              <div className="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/40 dark:bg-amber-950/30 p-4 space-y-2.5">
-                <h3 className="text-sm font-semibold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+              <div className="rounded-2xl border border-amber-300 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/30 p-4.5 space-y-3 shadow-2xs">
+                <h3 className="text-sm font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
                   <Utensils className="w-4 h-4 text-amber-700 dark:text-amber-400" /> Beslenme
                   Kısıtlamaları
                 </h3>
@@ -361,10 +361,10 @@ export function StudentPassportModal({
                         key={item}
                         type="button"
                         onClick={() => toggleDiet(item)}
-                        className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                           selected
-                            ? 'bg-amber-700 text-white'
-                            : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                            ? 'bg-amber-600 text-white shadow-[0_2px_0_0_#b45309] active:translate-y-[2px] active:shadow-none'
+                            : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-[#DDD4C4] dark:border-slate-700 hover:bg-[#FAF8F5] shadow-2xs'
                         }`}
                       >
                         {selected ? `✓ ${item}` : `+ ${item}`}
@@ -384,12 +384,12 @@ export function StudentPassportModal({
                       }
                     }}
                     placeholder="Özel diyet / beslenme notu..."
-                    className="flex-1 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-2.5 py-1 text-xs"
+                    className="flex-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs"
                   />
                   <button
                     type="button"
                     onClick={addCustomDiet}
-                    className="px-2.5 py-1 bg-amber-600 text-white rounded-xl text-xs font-medium"
+                    className="btn-tactile-amber px-3.5 py-1.5 text-xs font-bold"
                   >
                     Ekle
                   </button>
@@ -397,8 +397,8 @@ export function StudentPassportModal({
               </div>
 
               {/* Düzenli İlaç & Kronik */}
-              <div className="rounded-xl border border-blue-200 dark:border-teal-900/60 bg-blue-50/30 dark:bg-slate-900/50 p-4 space-y-2.5">
-                <h3 className="text-sm font-semibold text-teal-900 dark:text-teal-300 flex items-center gap-1.5">
+              <div className="rounded-2xl border border-[#DDD4C4] dark:border-teal-900/60 bg-[#FCFAF7]/60 dark:bg-slate-900/50 p-4.5 space-y-3 shadow-2xs">
+                <h3 className="text-sm font-bold text-teal-900 dark:text-teal-300 flex items-center gap-1.5">
                   <span>💊</span> Kronik Durum & İlaçlar
                 </h3>
                 <div className="space-y-2">
@@ -408,12 +408,12 @@ export function StudentPassportModal({
                       value={chronicInput}
                       onChange={(e) => setChronicInput(e.target.value)}
                       placeholder="Kronik durum (örn: Astım)..."
-                      className="flex-1 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-2.5 py-1 text-xs"
+                      className="flex-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs"
                     />
                     <button
                       type="button"
                       onClick={addChronic}
-                      className="px-2.5 py-1 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-medium transition"
+                      className="btn-tactile-teal px-3 py-1 text-xs font-bold"
                     >
                       Ekle
                     </button>
@@ -423,12 +423,13 @@ export function StudentPassportModal({
                       {chronicConditions.map((c) => (
                         <span
                           key={c}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60"
+                          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60 shadow-2xs"
                         >
                           {c}
                           <button
                             type="button"
                             onClick={() => setChronicConditions((p) => p.filter((x) => x !== c))}
+                            className="cursor-pointer ml-1 font-bold"
                           >
                             ×
                           </button>
@@ -443,12 +444,12 @@ export function StudentPassportModal({
                       value={medInput}
                       onChange={(e) => setMedInput(e.target.value)}
                       placeholder="Düzenli ilaç (örn: Sabah 10:00 Ventolin)..."
-                      className="flex-1 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-2.5 py-1 text-xs"
+                      className="flex-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs"
                     />
                     <button
                       type="button"
                       onClick={addMed}
-                      className="px-2.5 py-1 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-medium transition"
+                      className="btn-tactile-teal px-3 py-1 text-xs font-bold"
                     >
                       Ekle
                     </button>
@@ -458,12 +459,13 @@ export function StudentPassportModal({
                       {regularMedications.map((m) => (
                         <span
                           key={m}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60"
+                          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-50 dark:bg-blue-950/60 text-teal-900 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60 shadow-2xs"
                         >
                           {m}
                           <button
                             type="button"
                             onClick={() => setRegularMedications((p) => p.filter((x) => x !== m))}
+                            className="cursor-pointer ml-1 font-bold"
                           >
                             ×
                           </button>
@@ -476,41 +478,41 @@ export function StudentPassportModal({
             </div>
 
             {/* Section: Acil Durum & Teslim Alıcılar */}
-            <div className="rounded-xl border border-slate-200/80 dark:border-slate-700 p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/40">
-              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <div className="rounded-2xl border border-[#DDD4C4] dark:border-slate-800 p-4.5 space-y-3 bg-[#FCFAF7]/60 dark:bg-slate-900/40 shadow-2xs">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>📞</span> Acil Durum İletişim & Yetkili Teslim Kişileri (
                 {emergencyContacts.length})
               </h3>
 
               {/* Existing contacts table */}
               {emergencyContacts.length > 0 ? (
-                <div className="divide-y divide-slate-100 dark:divide-slate-700/60 border border-slate-200/80 dark:border-slate-700 rounded-xl overflow-hidden text-xs bg-white dark:bg-slate-900">
+                <div className="divide-y divide-[#DDD4C4]/60 dark:divide-slate-800 border border-[#DDD4C4] dark:border-slate-800 rounded-2xl overflow-hidden text-xs bg-white dark:bg-[#131B2E] shadow-2xs">
                   {emergencyContacts.map((c) => (
                     <div
                       key={c.id}
-                      className="flex items-center justify-between p-2.5 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                      className="flex items-center justify-between p-3 hover:bg-[#FCFAF7] dark:hover:bg-slate-800/60 transition"
                     >
                       <div>
-                        <span className="font-semibold text-slate-900 dark:text-white mr-2">
+                        <span className="font-bold text-slate-900 dark:text-white mr-2">
                           {c.name}
                         </span>
-                        <span className="text-slate-500 dark:text-slate-300 mr-2">
+                        <span className="text-slate-500 dark:text-slate-300 mr-2 font-medium">
                           ({c.relationship})
                         </span>
-                        <span className="text-teal-900 dark:text-teal-300 font-mono">
+                        <span className="text-teal-900 dark:text-teal-300 font-mono font-bold">
                           {c.phone}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         {c.isAuthorizedPickup && (
-                          <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 dark:text-emerald-300">
+                          <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 shadow-2xs">
                             ✓ Teslim Yetkili
                           </span>
                         )}
                         <button
                           type="button"
                           onClick={() => removeContact(c.id)}
-                          className="text-rose-500 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 font-medium"
+                          className="text-rose-500 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 font-bold cursor-pointer"
                         >
                           Sil
                         </button>
@@ -531,24 +533,24 @@ export function StudentPassportModal({
                   value={cName}
                   onChange={(e) => setCName(e.target.value)}
                   placeholder="Kişi Adı Soyadı"
-                  className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400"
+                  className="rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 shadow-2xs font-medium"
                 />
                 <input
                   type="text"
                   value={cRel}
                   onChange={(e) => setCRel(e.target.value)}
                   placeholder="Yakınlık (Anne, Baba...)"
-                  className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400"
+                  className="rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 shadow-2xs font-medium"
                 />
                 <input
                   type="tel"
                   value={cPhone}
                   onChange={(e) => setCPhone(e.target.value)}
                   placeholder="Telefon"
-                  className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400"
+                  className="rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 shadow-2xs font-medium"
                 />
                 <div className="flex items-center gap-2">
-                  <label className="flex items-center gap-1 text-[11px] text-slate-700 dark:text-slate-300 cursor-pointer">
+                  <label className="flex items-center gap-1.5 text-[11px] text-slate-700 dark:text-slate-300 cursor-pointer font-bold">
                     <input
                       type="checkbox"
                       checked={cPickup}
@@ -560,7 +562,7 @@ export function StudentPassportModal({
                   <button
                     type="button"
                     onClick={addContact}
-                    className="ml-auto px-3 py-1 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl text-xs font-bold transition"
+                    className="btn-tactile-teal px-3.5 py-1.5 text-xs font-bold ml-auto"
                   >
                     + Ekle
                   </button>
@@ -570,7 +572,7 @@ export function StudentPassportModal({
 
             {/* Section: Özel / Pedagojik Notlar */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                 Öğretmene Özel Hatırlatma & Bireysel Notlar
               </label>
               <textarea
@@ -578,24 +580,24 @@ export function StudentPassportModal({
                 onChange={(e) => setSpecialNotes(e.target.value)}
                 rows={2}
                 placeholder="Örn: Uyku öncesi masal dinlemeyi sever, yüksek sesten tedirgin olur..."
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3 py-2 text-xs focus:border-teal-600 focus:outline-hidden"
+                className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2.5 text-xs focus:border-teal-700 focus:outline-hidden shadow-2xs font-medium"
               />
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 border-t border-slate-200/80 dark:border-slate-700/80 pt-4">
+            <div className="flex items-center justify-end gap-3 border-t border-[#DDD4C4]/80 dark:border-slate-800 pt-4">
               <button
                 type="button"
                 onClick={onClose}
                 disabled={saving}
-                className="btn-tactile-secondary px-4 py-2 text-sm font-medium"
+                className="btn-tactile-secondary px-4 py-2 text-xs font-bold"
               >
                 İptal
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="btn-tactile-teal px-5 py-2 text-sm font-bold disabled:opacity-50"
+                className="btn-tactile-teal px-5 py-2 text-xs font-bold disabled:opacity-50"
               >
                 {saving ? 'Kaydediliyor…' : 'Pasaportu Kaydet'}
               </button>
