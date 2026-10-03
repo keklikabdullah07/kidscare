@@ -13,7 +13,7 @@
   --color-brand-bg-dark: #0f172a;
 }
 
-@utility surface-card {
+.surface-card {
   background-color: #ffffff;
   border-color: #dcd4c6;
   border-width: 1.5px;
@@ -28,7 +28,7 @@
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@utility surface-card:hover {
+.surface-card:hover {
   transform: translateY(-2px);
   box-shadow: 
     0 4px 8px -2px rgba(28, 25, 23, 0.06),
@@ -38,7 +38,7 @@
 }
 
 /* Tactile pushed-down / pressed effect */
-@utility surface-card:active {
+.surface-card:active {
   transform: translateY(2px) scale(0.998);
   box-shadow: 
     0 1px 2px 0 rgba(28, 25, 23, 0.06),
@@ -46,7 +46,7 @@
     inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
 }
 
-@utility surface-card-dark {
+.surface-card-dark {
   background-color: #131b2e;
   border-color: rgba(255, 255, 255, 0.12);
   border-width: 1.5px;
@@ -60,7 +60,7 @@
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@utility surface-card-dark:hover {
+.surface-card-dark:hover {
   transform: translateY(-2px);
   box-shadow: 
     0 4px 10px 0 rgba(0, 0, 0, 0.45),
@@ -69,7 +69,7 @@
     inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
 }
 
-@utility surface-card-dark:active {
+.surface-card-dark:active {
   transform: translateY(2px) scale(0.998);
   box-shadow: 
     0 1px 3px 0 rgba(0, 0, 0, 0.5),
@@ -78,7 +78,7 @@
 }
 
 /* Tactile Pill Button */
-@utility tactile-pill-btn {
+.tactile-pill-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +97,7 @@
   transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@utility tactile-pill-btn:hover {
+.tactile-pill-btn:hover {
   transform: translateY(-1px);
   box-shadow: 
     0 3px 6px rgba(28, 25, 23, 0.08),
@@ -105,7 +105,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
-@utility tactile-pill-btn:active {
+.tactile-pill-btn:active {
   transform: translateY(1.5px);
   box-shadow: 
     0 1px 2px rgba(28, 25, 23, 0.06),
@@ -113,7 +113,7 @@
 }
 
 /* Tactile Primary Pill Button (Teal) */
-@utility tactile-pill-primary {
+.tactile-pill-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -132,7 +132,7 @@
   transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@utility tactile-pill-primary:hover {
+.tactile-pill-primary:hover {
   background-color: #115e59;
   transform: translateY(-1px);
   box-shadow: 
@@ -141,7 +141,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.30);
 }
 
-@utility tactile-pill-primary:active {
+.tactile-pill-primary:active {
   transform: translateY(1.5px);
   box-shadow: 
     0 1px 2px rgba(15, 118, 110, 0.20),
@@ -149,7 +149,7 @@
 }
 
 /* Micro-badge for categories & statuses */
-@utility micro-badge {
+.micro-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
