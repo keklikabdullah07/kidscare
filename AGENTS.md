@@ -104,12 +104,19 @@ Varsayılan Seed Kullanıcıları:
 
 ---
 
-## 7. Tasarım Sistemi ve UI Standartları (KidsCare Impeccable Design System)
+## 7. Tasarım Sistemi ve UI Standartları (KidsCare Dokunsal / Tactile Claymorphic System)
 
-- **Birincil Marka Rengi:** İskandinav Adaçayı / Derin Çam Yeşili (`text-teal-900`, `bg-teal-700`, koyu modda `dark:text-teal-300`, `dark:bg-slate-800`).
-- **Kreş Sıcaklığı & Vurgu Rengi:** Güneş Işığı & Bal Kehribarı (`bg-amber-500`, `text-amber-800`, koyu modda `dark:text-amber-300`, `dark:bg-amber-500/20`).
-- **Koyu Mod Yüzeyleri:** Ana arka plan derin obsidyen `#090D16`, kart yüzeyleri `#131B2E`, sınırlar `border-slate-800/80`.
-- **Açık Mod Yüzeyleri:** Ana arka plan parlamayan keten/yulaf `#FAF9F6`, kart yüzeyleri `#FFFFFF`, sınırlar `border-slate-200/80`.
+> **KAPSAMLI REHBER:** Ayrıntılı renk kodları, 3D ekstrüzyon gölge formülleri ve yeni projelere uyarlama rehberi için mutlaka **[`docs/design-system.md`](file:///c:/Users/Partridge/Desktop/KidsCare/docs/design-system.md)** ve Storybook **`Design System / Living Design Guide`** incelenmelidir.
+
+- **Birincil Marka Rengi:** İskandinav Adaçayı / Derin Çam Yeşili (`#115e59`, hover `#0f766e`, `text-teal-900`, koyu modda `dark:text-teal-300`, `dark:bg-slate-800`).
+- **Kreş Sıcaklığı & Vurgu Rengi:** Güneş Işığı & Bal Kehribarı (`#f59e0b`, hover `#fbbf24`, `text-amber-800`, koyu modda `dark:text-amber-300`).
+- **Özel Hero Rengi:** Sıcak Şeftali / Pişmiş Toprak (`#F3D5C3`, sınır `#E5C1AE`).
+- **Açık Mod Yüzeyleri:** Ana arka plan parlamayan keten/yulaf `#FAF9F6`, kart yüzeyleri `#FFFFFF`, form/input zeminleri `#FCFAF7`, sınırlar `#DDD4C4`.
+- **Koyu Mod Yüzeyleri:** Ana arka plan derin obsidyen `#090D16`, kart yüzeyleri `#131B2E`, form zeminleri `#0F172A`, sınırlar `#1E293B`.
+- **3D Fiziksel Basma Duygusu (Tactile Depth):** Butonlarda 3D alt dudak (`shadow-[0_3px_0_0_#...,0_6px_14px_rgba(...)]`), basıldığında içeri gömülme (`active:translate-y-[3px] active:shadow-none`). Standart olarak `<TactileButton />` veya `.btn-tactile-*` kullanılır.
+- **🚨 ALTIN KURAL — Tek Etkileşimli Varlık İlkesi:** Asla hareket eden bir kartın içerisine ayrıca hareket eden buton koyulamaz!
+  - Kart içinde eylem butonu varsa **KART SABİTTİR** (`shadow-sm`/`shadow-2xs`), sadece içindeki buton yükselir ve basılır.
+  - Kartın içinde buton yoksa (örn. KPI kartı), **KARTIN KENDİSİ DOKUNSALDIR** (`TACTILE_CARD_CLASSES`).
+- **CSS Taşma (Clipping) Kuralı:** 3D alt dudağın ve gölgenin kesilmemesi için buton kapsayıcılarında `overflow-x: auto` yerine `flex-wrap py-1.5` kullanılır.
 - **YASAK:** Çiğ jenerik renkler (saf kırmızı, çiğ yeşil, donuk kurumsal gri, çamurlu lacivert koyu mod).
 - **Savunmacı UI:** Uzun isimlerde `min-w-0 flex-1 truncate` + `title`, kırık görsellerde `onError`, boş durumlarda `<EmptyState>`.
-- **Mikro-Etkileşim:** Butonlarda `active:scale-95`, kartlarda `hover:-translate-y-1`.

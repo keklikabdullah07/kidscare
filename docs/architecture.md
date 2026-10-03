@@ -38,7 +38,7 @@ KidsCare/
 ### Web Yönetim Paneli (`apps/admin-web`)
 
 - **Framework:** React 19 + Vite 5 (SPA)
-- **Stil & Tasarım:** TailwindCSS v3 + KidsCare Impeccable Design System (İskandinav Adaçayı `#0f766e`, Bal Kehribarı `#f59e0b`, Obsidyen koyu mod `#090D16` / `#131B2E`)
+- **Stil & Tasarım:** TailwindCSS v4 + KidsCare Dokunsal (Tactile Claymorphic) Tasarım Sistemi (`docs/design-system.md` & Storybook Showroom). Keten zemin `#FAF9F6`, İskandinav Adaçayı `#115e59`, Bal Kehribarı `#f59e0b`, 3D fiziksel dudaklar (`shadow-[0_3px_0_0_#...]`), Obsidyen koyu mod (`#090D16` / `#131B2E`).
 - **İletişim:** Axios tabanlı merkezi API istemcisi, JWT kimlik doğrulama başlığı (`Authorization: Bearer <token>`)
 
 ### Mobil Uygulama Katmanı (`apps/mobile`)
