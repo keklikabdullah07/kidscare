@@ -205,7 +205,7 @@ export function StudentsPage(): JSX.Element {
 
         {/* Filter Badges & View Switcher */}
         <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
+          <div className="flex items-center gap-2.5 py-1.5 flex-wrap">
             <TactileButton
               type="button"
               variant={filterType === 'all' ? 'teal' : 'secondary'}
@@ -216,7 +216,7 @@ export function StudentsPage(): JSX.Element {
             </TactileButton>
             <TactileButton
               type="button"
-              variant={filterType === 'active' ? 'amber' : 'secondary'}
+              variant={filterType === 'active' ? 'teal' : 'secondary'}
               onClick={() => setFilterType('active')}
               className="px-4 py-1.5 text-xs"
             >
