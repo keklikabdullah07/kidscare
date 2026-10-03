@@ -288,7 +288,7 @@ export function AttendancePage(): JSX.Element {
               <button
                 type="button"
                 onClick={() => setSelectedDate(todayStr)}
-                className="text-xs font-bold text-teal-900 dark:text-teal-300 hover:text-teal-800 bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-xl ml-1 transition border border-teal-200/80"
+                className="btn-tactile-secondary text-xs px-3 py-1 font-bold text-teal-900 dark:text-teal-300 ml-1"
               >
                 Bugün
               </button>
@@ -322,15 +322,15 @@ export function AttendancePage(): JSX.Element {
         </div>
       )}
 
-      {/* Stats Summary Cards with warm squircle elevation and high contrast */}
+      {/* Stats Summary Cards with tactile 3D extrusion and claymorphic depth */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
         <button
           type="button"
           onClick={() => setStatusFilter('all')}
-          className={`rounded-3xl border text-left p-5 transition-all duration-300 cursor-pointer shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)] hover:-translate-y-1 hover:shadow-md ${
+          className={`rounded-3xl border-2 text-left p-5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
             statusFilter === 'all'
-              ? 'border-teal-800 bg-teal-800 text-white ring-2 ring-teal-700 shadow-[0_8px_20px_-3px_rgba(15,118,110,0.3)] font-semibold'
-              : 'border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] hover:border-teal-600/40 text-slate-900 dark:text-white'
+              ? 'border-[#0f766e] bg-[#115e59] text-white shadow-[0_4px_0_0_#042f2e,0_8px_20px_-2px_rgba(17,94,89,0.35)] font-bold'
+              : 'border-[#DCD4C6] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-slate-900 dark:text-white shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
           }`}
         >
           <p
@@ -344,10 +344,10 @@ export function AttendancePage(): JSX.Element {
         <button
           type="button"
           onClick={() => setStatusFilter('PRESENT')}
-          className={`rounded-3xl border text-left p-5 transition-all duration-300 cursor-pointer shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)] hover:-translate-y-1 hover:shadow-md ${
+          className={`rounded-3xl border-2 text-left p-5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
             statusFilter === 'PRESENT'
-              ? 'border-emerald-700 bg-emerald-700 text-white ring-2 ring-emerald-600 shadow-[0_8px_20px_-3px_rgba(5,150,105,0.3)]'
-              : 'border-[#DDD4C4] dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/20 hover:border-emerald-500/50 text-emerald-900 dark:text-emerald-200'
+              ? 'border-emerald-700 bg-emerald-700 text-white shadow-[0_4px_0_0_#064e3b,0_8px_20px_-2px_rgba(5,150,105,0.35)] font-bold'
+              : 'border-[#DCD4C6] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-emerald-900 dark:text-emerald-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
           }`}
         >
           <p
@@ -362,10 +362,10 @@ export function AttendancePage(): JSX.Element {
         <button
           type="button"
           onClick={() => setStatusFilter('LEFT')}
-          className={`rounded-3xl border text-left p-5 transition-all duration-300 cursor-pointer shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)] hover:-translate-y-1 hover:shadow-md ${
+          className={`rounded-3xl border-2 text-left p-5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
             statusFilter === 'LEFT'
-              ? 'border-teal-800 bg-teal-800 text-white ring-2 ring-teal-700 shadow-[0_8px_20px_-3px_rgba(15,118,110,0.3)]'
-              : 'border-[#DDD4C4] dark:border-slate-700 bg-teal-50/50 dark:bg-slate-800/40 hover:border-teal-500/50 text-teal-900 dark:text-teal-200'
+              ? 'border-teal-800 bg-teal-800 text-white shadow-[0_4px_0_0_#042f2e,0_8px_20px_-2px_rgba(15,118,110,0.35)] font-bold'
+              : 'border-[#DCD4C6] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-teal-900 dark:text-teal-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
           }`}
         >
           <p
@@ -380,10 +380,10 @@ export function AttendancePage(): JSX.Element {
         <button
           type="button"
           onClick={() => setStatusFilter('EXCUSED')}
-          className={`rounded-3xl border text-left p-5 transition-all duration-300 cursor-pointer shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)] hover:-translate-y-1 hover:shadow-md ${
+          className={`rounded-3xl border-2 text-left p-5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
             statusFilter === 'EXCUSED'
-              ? 'border-amber-600 bg-amber-600 text-white ring-2 ring-amber-500 shadow-[0_8px_20px_-3px_rgba(217,119,6,0.3)]'
-              : 'border-[#DDD4C4] dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 hover:border-amber-500/50 text-amber-900 dark:text-amber-200'
+              ? 'border-amber-600 bg-amber-600 text-white shadow-[0_4px_0_0_#92400e,0_8px_20px_-2px_rgba(217,119,6,0.35)] font-bold'
+              : 'border-[#DCD4C6] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-amber-900 dark:text-amber-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
           }`}
         >
           <p
@@ -398,10 +398,10 @@ export function AttendancePage(): JSX.Element {
         <button
           type="button"
           onClick={() => setStatusFilter('ABSENT')}
-          className={`rounded-3xl border text-left p-5 transition-all duration-300 cursor-pointer shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)] hover:-translate-y-1 hover:shadow-md ${
+          className={`rounded-3xl border-2 text-left p-5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
             statusFilter === 'ABSENT'
-              ? 'border-slate-700 bg-slate-700 text-white ring-2 ring-slate-600 shadow-[0_8px_20px_-3px_rgba(71,85,105,0.3)]'
-              : 'border-[#DDD4C4] dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800 hover:border-slate-400 text-slate-800 dark:text-slate-200'
+              ? 'border-slate-700 bg-slate-700 text-white shadow-[0_4px_0_0_#1e293b,0_8px_20px_-2px_rgba(71,85,105,0.35)] font-bold'
+              : 'border-[#DCD4C6] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-slate-800 dark:text-slate-200 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
           }`}
         >
           <p
@@ -685,7 +685,7 @@ export function AttendancePage(): JSX.Element {
             return (
               <div
                 key={student.id}
-                className="p-5 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex flex-col justify-between"
+                className="p-5 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] shadow-2xs flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3">
@@ -762,7 +762,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => setCheckoutStudent(student)}
-                      className="btn-tactile-secondary flex-1 py-2 text-xs font-semibold"
+                      className="btn-tactile-secondary flex-1 py-2 text-xs font-bold"
                     >
                       Düzenle
                     </button>
