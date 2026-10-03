@@ -401,10 +401,10 @@ export function DashboardPage(): JSX.Element {
             {alerts.immediateActions.items.map((item) => (
               <div
                 key={item.id}
-                className={`p-4 rounded-2xl border-2 flex items-start justify-between gap-3.5 transition-all duration-150 cursor-pointer ${
+                className={`p-4 rounded-2xl border flex items-start justify-between gap-3.5 shadow-2xs ${
                   item.urgency === 'HIGH'
-                    ? 'bg-rose-50/70 border-rose-200/90 dark:bg-rose-950/30 dark:border-rose-900/60 shadow-[0_3px_0_0_#fecdd3,0_6px_14px_rgba(244,63,94,0.06)] hover:-translate-y-0.5 hover:shadow-[0_4px_0_0_#fecdd3] active:translate-y-[2px] active:shadow-none'
-                    : 'bg-[#FCFAF7] border-[#E2DACB] dark:bg-slate-900/60 dark:border-slate-700/80 shadow-[0_3px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.05)] hover:-translate-y-0.5 hover:shadow-[0_4px_0_0_#D5CBB9] active:translate-y-[2px] active:shadow-none'
+                    ? 'bg-rose-50/60 border-rose-200 dark:bg-rose-950/25 dark:border-rose-900/60'
+                    : 'bg-[#FCFAF7] border-[#E3DACB] dark:bg-slate-900/50 dark:border-slate-800'
                 }`}
               >
                 <div className="flex items-start gap-3 min-w-0">
@@ -441,9 +441,10 @@ export function DashboardPage(): JSX.Element {
 
                 <Link
                   to={item.actionUrl}
-                  className="shrink-0 text-xs font-bold px-4 py-1.5 rounded-full border-2 border-[#D5CBB9] bg-white hover:bg-[#FAF8F5] text-slate-800 shadow-[0_2.5px_0_0_#D5CBB9,0_4px_8px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-[0_3.5px_0_0_#D5CBB9] active:translate-y-[2.5px] active:shadow-none transition-all duration-100 flex items-center gap-1.5 cursor-pointer"
+                  className="btn-tactile-secondary shrink-0 text-xs font-bold px-4 py-1.5 flex items-center gap-1.5"
                 >
-                  İncele <ArrowRight className="w-3.5 h-3.5" />
+                  <span>İncele</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             ))}

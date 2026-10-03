@@ -591,7 +591,7 @@ function StudentCard({
   const estimatedAge = birthYear ? currentYear - birthYear : null;
 
   return (
-    <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between overflow-hidden group cursor-default">
+    <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_4px_16px_-4px_rgba(45,38,30,0.06)] flex flex-col justify-between overflow-hidden group">
       {/* Top Banner & Info */}
       <div className="p-5.5 space-y-4">
         <div className="flex items-start justify-between gap-3">

@@ -861,7 +861,7 @@ export function DailyTrackingPage(): JSX.Element {
             return (
               <div
                 key={student.id}
-                className="flex flex-col justify-between rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-5.5 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] transition-all duration-200 group"
+                className="flex flex-col justify-between rounded-3xl border border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-5.5 shadow-[0_4px_16px_-4px_rgba(45,38,30,0.06)] group"
               >
                 <div>
                   {/* Student Title & Mood */}
