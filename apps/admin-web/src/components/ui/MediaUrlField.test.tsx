@@ -9,12 +9,35 @@ describe('MediaUrlField', () => {
     expect(screen.getByPlaceholderText('https://...')).toBeInTheDocument();
   });
 
-  it('calls onChange when URL input changes', () => {
+  it('calls onChange when Ekle button clicked (tekil mod)', async () => {
     const onChange = vi.fn();
     render(<MediaUrlField value="" onChange={onChange} />);
     const input = screen.getByPlaceholderText('https://...');
     fireEvent.change(input, { target: { value: 'https://example.com/x.jpg' } });
+    const ekleBtn = screen.getByRole('button', { name: /^Ekle$/ });
+    await userEvent.click(ekleBtn);
     expect(onChange).toHaveBeenCalledWith('https://example.com/x.jpg');
+  });
+
+  it('calls onValuesChange on Enter (coklu mod)', () => {
+    const onValuesChange = vi.fn();
+    render(
+      <MediaUrlField
+        value=""
+        onChange={() => {}}
+        values={['https://a/1.jpg']}
+        onValuesChange={onValuesChange}
+      />,
+    );
+    const input = screen.getByPlaceholderText('https://...');
+    fireEvent.change(input, { target: { value: 'https://a/2.jpg' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(onValuesChange).toHaveBeenCalledWith(['https://a/1.jpg', 'https://a/2.jpg']);
+  });
+
+  it('Ekle button is disabled when input is empty', () => {
+    render(<MediaUrlField value="" onChange={() => {}} />);
+    expect(screen.getByRole('button', { name: /^Ekle$/ })).toBeDisabled();
   });
 
   it('shows preview img when value is set and showPreview=true', () => {

@@ -1,4 +1,5 @@
 import { useRef, useState, type JSX } from 'react';
+import type { ChangeEvent, KeyboardEvent } from 'react';
 import { Upload, X } from 'lucide-react';
 import { uploadMediaFile } from '../../api/media';
 import { useToast } from '../Toast';
@@ -46,14 +47,36 @@ export function MediaUrlField({
   showPreview = true,
   showMultiplePreview = true,
   multipleFiles = false,
+  showAddButton = true,
 }: MediaUrlFieldProps): JSX.Element {
   const { showToast } = useToast();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [inputUrl, setInputUrl] = useState('');
 
   const isMultiple = Array.isArray(values) && Boolean(onValuesChange);
 
-  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>): Promise<void> {
+  function handleAddUrl(): void {
+    const trimmed = inputUrl.trim();
+    if (!trimmed) return;
+    if (isMultiple && onValuesChange) {
+      if (!values?.includes(trimmed)) {
+        onValuesChange([...(values ?? []), trimmed]);
+      }
+    } else {
+      onChange(trimmed);
+    }
+    setInputUrl('');
+  }
+
+  function handleInputKey(e: KeyboardEvent<HTMLInputElement>): void {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddUrl();
+    }
+  }
+
+  async function handleFileUpload(e: ChangeEvent<HTMLInputElement>): Promise<void> {
     const files = e.target.files;
     if (!files || files.length === 0) return;
     setUploading(true);
@@ -100,10 +123,22 @@ export function MediaUrlField({
         <input
           type="url"
           placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={inputUrl}
+          onChange={(e) => setInputUrl(e.target.value)}
+          onKeyDown={handleInputKey}
           className="flex-1 text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-teal-700 dark:focus:border-teal-400"
         />
+        {showAddButton && (
+          <TactileButton
+            type="button"
+            variant="secondary"
+            size="md"
+            onClick={handleAddUrl}
+            disabled={!inputUrl.trim()}
+          >
+            Ekle
+          </TactileButton>
+        )}
         {allowFileUpload && (
           <TactileButton
             type="button"
