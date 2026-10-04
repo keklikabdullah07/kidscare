@@ -127,4 +127,29 @@ describe('ActivityGalleryPage', () => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
   });
+
+  it('Dosya butonu URL satırında file picker tetikler', async () => {
+    mockFetchByUrl({
+      '/activities': () => new Response(JSON.stringify([]), { status: 200 }),
+    });
+
+    const clickSpy = vi.spyOn(HTMLInputElement.prototype, 'click');
+
+    render(<ActivityGalleryPage />);
+
+    const openBtn = await screen.findByRole('button', {
+      name: /Yeni Etkinlik & Fotoğraf Paylaş/i,
+    });
+    await userEvent.click(openBtn);
+
+    // URL satırındaki "Dosfa" butonu (üst zone "Dosya Seç" diye geçiyor)
+    const urlFileBtn = screen
+      .getAllByRole('button', { name: /Dosya/i })
+      .find((b) => b.title === 'Cihazınızdan fotoğraf yükle');
+    expect(urlFileBtn).toBeDefined();
+    await userEvent.click(urlFileBtn!);
+
+    expect(clickSpy).toHaveBeenCalled();
+    clickSpy.mockRestore();
+  });
 });

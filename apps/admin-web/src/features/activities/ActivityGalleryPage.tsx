@@ -717,6 +717,16 @@ export function ActivityGalleryPage(): JSX.Element {
                   />
                   <button
                     type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingFiles}
+                    className="btn-tactile-secondary px-3 py-2 text-xs font-bold shrink-0 inline-flex items-center gap-1.5 disabled:opacity-50"
+                    title="Cihazınızdan fotoğraf yükle"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    Dosya
+                  </button>
+                  <button
+                    type="button"
                     onClick={addCustomUrl}
                     className="btn-tactile-secondary px-4 py-2 text-xs font-bold shrink-0"
                   >
