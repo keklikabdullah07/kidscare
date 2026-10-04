@@ -1,11 +1,23 @@
-import { useEffect, useState, type FormEvent, type JSX } from 'react';
+import { useEffect, useMemo, useState, type FormEvent, type JSX } from 'react';
 import type { User } from '@kidscare/shared-types';
-import { UserPlus, Users, RefreshCw, Mail, CheckCircle2 } from 'lucide-react';
+import {
+  UserPlus,
+  Users,
+  RefreshCw,
+  Mail,
+  CheckCircle2,
+  GraduationCap,
+  HeartHandshake,
+  Shield,
+} from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { inviteUser, listUsers } from '../../api/users';
 import { useToast } from '../../components/Toast';
 import { Badge, type BadgeVariant } from '../../components/ui/Badge';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { StatCard } from '../../components/ui/StatCard';
+import { TactileButton } from '../../components/ui/TactileButton';
 
 type Status = 'loading' | 'ready' | 'error';
 
@@ -33,6 +45,14 @@ export function TeamPage(): JSX.Element {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'TEACHER' | 'PARENT'>('TEACHER');
   const [inviting, setInviting] = useState(false);
+
+  const totalCount = useMemo(() => users.length, [users]);
+  const teacherCount = useMemo(() => users.filter((u) => u.role === 'TEACHER').length, [users]);
+  const parentCount = useMemo(() => users.filter((u) => u.role === 'PARENT').length, [users]);
+  const adminCount = useMemo(
+    () => users.filter((u) => u.role === 'ADMIN' || u.role === 'SUPER_ADMIN').length,
+    [users],
+  );
 
   const loadUsers = () => {
     setStatus('loading');
@@ -82,35 +102,55 @@ export function TeamPage(): JSX.Element {
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-teal-700 text-white dark:bg-slate-800 dark:text-teal-300 dark:border dark:border-slate-700 flex items-center justify-center font-bold shadow-xs">
-            <Users className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-              Ekip & Veliler
-            </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
-              Öğretmen ve veli hesaplarını yönetin; öğrenci kayıtlarında veli eşleştirmesi yapın
-            </p>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={loadUsers}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/60 shadow-2xs transition active:scale-98"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          Yenile
-        </button>
+      <PageHeader
+        title="Ekip & Veliler"
+        description="Öğretmen ve veli hesaplarını yönetin; öğrenci kayıtlarında veli eşleştirmesi yapın"
+        icon={Users}
+        actions={
+          <TactileButton variant="secondary" size="sm" onClick={loadUsers}>
+            <RefreshCw className="w-3.5 h-3.5" />
+            Yenile
+          </TactileButton>
+        }
+      />
+
+      {/* KPI Stat Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          title="Toplam Kullanıcı"
+          value={totalCount}
+          subtitle="Aktif Hesap"
+          icon={Users}
+          variant="teal"
+        />
+        <StatCard
+          title="Öğretmenler"
+          value={teacherCount}
+          subtitle="Sınıf Öğretmeni"
+          icon={GraduationCap}
+          variant="indigo"
+        />
+        <StatCard
+          title="Veliler"
+          value={parentCount}
+          subtitle="Öğrenci Velisi"
+          icon={HeartHandshake}
+          variant="amber"
+        />
+        <StatCard
+          title="Yöneticiler"
+          value={adminCount}
+          subtitle="Admin & Süper Admin"
+          icon={Shield}
+          variant="rose"
+        />
       </div>
 
       <div className="grid lg:grid-cols-5 gap-6">
         {/* Create Form */}
         <form
           onSubmit={(e) => void handleInvite(e)}
-          className="lg:col-span-2 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 p-6 shadow-xs space-y-4"
+          className="lg:col-span-2 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] p-6 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] space-y-4"
         >
           <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-sm">
             <UserPlus className="w-4 h-4 text-teal-900 dark:text-teal-300" />
@@ -126,7 +166,7 @@ export function TeamPage(): JSX.Element {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-700 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
               placeholder="veli@ornek.com"
             />
           </label>
@@ -141,7 +181,7 @@ export function TeamPage(): JSX.Element {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-700 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
               placeholder="En az 8 karakter"
             />
           </label>
@@ -153,24 +193,26 @@ export function TeamPage(): JSX.Element {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as 'TEACHER' | 'PARENT')}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 px-3.5 py-2.5 text-xs bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:border-teal-700 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
             >
               <option value="TEACHER">Öğretmen</option>
               <option value="PARENT">Veli</option>
             </select>
           </label>
 
-          <button
+          <TactileButton
             type="submit"
+            variant="teal"
+            size="md"
             disabled={inviting}
-            className="w-full rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white py-2.5 text-xs font-bold transition shadow-xs disabled:opacity-50 active:scale-98"
+            className="w-full"
           >
             {inviting ? 'Oluşturuluyor…' : 'Hesap Oluştur'}
-          </button>
+          </TactileButton>
         </form>
 
         {/* Users List */}
-        <div className="lg:col-span-3 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 shadow-xs overflow-hidden">
+        <div className="lg:col-span-3 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700/80 flex items-center justify-between font-bold text-sm text-slate-900 dark:text-white">
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-teal-900 dark:text-teal-300" />
