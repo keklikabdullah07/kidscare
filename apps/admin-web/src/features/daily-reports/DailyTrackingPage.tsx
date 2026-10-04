@@ -32,6 +32,8 @@ import { listStudents } from '../../api/students';
 import { DailyReportEditorModal } from './DailyReportEditorModal';
 import { useToast } from '../../components/Toast';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { TactileButton } from '../../components/ui/TactileButton';
 
 const MOOD_MAP: Record<StudentMood, { label: string; emoji: string; badgeClass: string }> = {
   HAPPY: {
@@ -310,58 +312,49 @@ export function DailyTrackingPage(): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Header & Date Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-                Günlük Yaşam & Aktivite Takibi
-              </h1>
-              <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
-                Öğrencilerin beslenme, uyku, tuvalet, ruh hali ve günlük öğretmen notlarını yönetin.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Date Selector */}
-        <div className="flex items-center gap-2 bg-white dark:bg-[#131B2E] border border-[#DDD4C4] dark:border-slate-800 p-1.5 rounded-2xl shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)]">
-          <button
-            type="button"
-            onClick={() => changeDay(-1)}
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-800 transition cursor-pointer"
-            title="Önceki Gün"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="text-xs font-bold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer"
-          />
-          <button
-            type="button"
-            onClick={() => changeDay(1)}
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-800 transition cursor-pointer"
-            title="Sonraki Gün"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-          {!isToday && (
+      <PageHeader
+        title="Günlük Yaşam & Aktivite Takibi"
+        description="Öğrencilerin beslenme, uyku, tuvalet, ruh hali ve günlük öğretmen notlarını yönetin."
+        icon={Sparkles}
+        actions={
+          <div className="flex items-center gap-2 bg-white dark:bg-[#131B2E] border border-[#DDD4C4] dark:border-slate-800 p-1.5 rounded-2xl shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)]">
             <button
               type="button"
-              onClick={() => setSelectedDate(todayStr)}
-              className="text-[11px] font-bold text-teal-800 dark:text-teal-300 hover:text-teal-900 dark:hover:text-teal-200 bg-teal-50 dark:bg-teal-950/40 px-2.5 py-1 rounded-xl ml-1 transition border border-teal-200/60 dark:border-teal-500/30 cursor-pointer"
+              onClick={() => changeDay(-1)}
+              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-800 transition cursor-pointer"
+              title="Önceki Gün"
+              aria-label="Önceki Gün"
             >
-              Bugün
+              <ChevronLeft className="w-4 h-4" />
             </button>
-          )}
-        </div>
-      </div>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="text-xs font-bold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer rounded-xl"
+            />
+            <button
+              type="button"
+              onClick={() => changeDay(1)}
+              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-800 transition cursor-pointer"
+              title="Sonraki Gün"
+              aria-label="Sonraki Gün"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            {!isToday && (
+              <TactileButton
+                variant="secondary"
+                size="sm"
+                onClick={() => setSelectedDate(todayStr)}
+                className="ml-1"
+              >
+                Bugün
+              </TactileButton>
+            )}
+          </div>
+        }
+      />
 
       {error && (
         <div className="rounded-2xl bg-rose-50 p-4 text-sm text-rose-700 border border-rose-200 flex items-center justify-between">

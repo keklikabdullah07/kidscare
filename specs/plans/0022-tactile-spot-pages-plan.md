@@ -28,6 +28,11 @@ Bu plan, dört sayfada spot harmonizasyon uygular. Her sayfa bağımsız commit 
 - Header bloğu → `<PageHeader>`.
 - Ana butonlar (Yoklama Al, vb.) → `<TactileButton>`.
 
+### Adım 5 — `apps/admin-web/src/features/daily-reports/DailyTrackingPage.tsx`
+
+- Header bloğu → `<PageHeader icon={Sparkles} title="Günlük Yaşam & Aktivite Takibi" actions={…} />`.
+- Tarih gezici gezgini ve "Bugün" → `<TactileButton>` (icon-only `secondary` `size="sm"`).
+
 ## Doğrulama (her adımda)
 
 ```powershell
@@ -39,4 +44,5 @@ pwsh -File ./scripts/check.ps1
 ## Commitler
 
 - 1 commit her sayfa için (`feat(<h>): spot tactile harmonization`).
-- **DashboardPage** atlandı; 3 commit (pickup, gallery, attendance) uygulandı.
+- **DashboardPage** `DashboardHero` bileşenine çıkarıldı (0023).
+- 4 commit (pickup, gallery, attendance, daily-tracking) uygulandı / uygulanacak.
