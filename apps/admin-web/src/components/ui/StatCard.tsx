@@ -5,7 +5,7 @@ export interface StatCardProps {
   value: string | number;
   subtitle?: string;
   icon?: ElementType<{ className?: string }>;
-  variant?: 'blue' | 'amber' | 'emerald' | 'rose' | 'indigo' | 'teal';
+  variant?: 'blue' | 'amber' | 'emerald' | 'rose' | 'indigo' | 'teal' | 'orange';
   badge?: ReactNode;
   progressPercent?: number;
   footer?: ReactNode;
@@ -61,6 +61,12 @@ export function StatCard({
       iconBg: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300',
       groupText: 'group-hover:text-indigo-700 dark:group-hover:text-indigo-300',
       progressBar: 'bg-indigo-600',
+    },
+    orange: {
+      borderHover: 'hover:border-orange-500/40 dark:hover:border-orange-500/40',
+      iconBg: 'bg-orange-50 text-orange-700 dark:bg-orange-950/60 dark:text-orange-300',
+      groupText: 'group-hover:text-orange-700 dark:group-hover:text-orange-300',
+      progressBar: 'bg-orange-500',
     },
   }[variant];
 

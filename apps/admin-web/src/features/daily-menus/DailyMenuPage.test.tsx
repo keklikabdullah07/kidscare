@@ -125,4 +125,67 @@ describe('DailyMenuPage', () => {
     });
     expect(savedBody).not.toBeNull();
   });
+
+  it('renders 4 KPI stat cards reflecting menu counts and allergen risk', async () => {
+    mockFetchByUrl({
+      '/daily-menus': () => new Response(JSON.stringify(fakeMenuResponse), { status: 200 }),
+    });
+
+    render(<DailyMenuPage />);
+
+    await waitFor(() => {
+      expect(screen.getAllByText('Sabah Kahvaltısı').length).toBeGreaterThanOrEqual(2);
+    });
+
+    // KPI titles — multiple occurrences expected (KPI label + card heading)
+    expect(screen.getAllByText('Öğle Yemeği').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText('İkindi Ara Öğünü').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText('Alerjen Riski')).toBeInTheDocument();
+
+    // Allergen risk > 0 → rose subtitle
+    expect(screen.getByText('Öğrenci Etkileniyor')).toBeInTheDocument();
+  });
+
+  it('uses emerald variant when there are no allergen risks', async () => {
+    mockFetchByUrl({
+      '/daily-menus': () =>
+        new Response(
+          JSON.stringify({
+            menu: fakeMenuResponse.menu,
+            allergenWarnings: [],
+          }),
+          { status: 200 },
+        ),
+    });
+
+    render(<DailyMenuPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Güvenli')).toBeInTheDocument();
+    });
+  });
+
+  it('returns to today via the "Bugün" tactile button', async () => {
+    mockFetchByUrl({
+      '/daily-menus': () => new Response(JSON.stringify(fakeMenuResponse), { status: 200 }),
+    });
+
+    const user = userEvent.setup();
+    render(<DailyMenuPage />);
+
+    // Move to a non-today date via previous-day chevron
+    const prevBtn = await screen.findByLabelText('Önceki Gün');
+    await user.click(prevBtn);
+
+    // Bugün button visible after date change
+    const todayBtn = await screen.findByRole('button', { name: 'Bugün' });
+    await user.click(todayBtn);
+
+    // Date input reflects today
+    await waitFor(() => {
+      const today = new Date().toISOString().slice(0, 10);
+      const dateInput = screen.getByDisplayValue(today);
+      expect(dateInput).toBeInTheDocument();
+    });
+  });
 });

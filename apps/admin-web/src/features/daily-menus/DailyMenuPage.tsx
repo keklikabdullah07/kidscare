@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from 'react';
+import { useEffect, useMemo, useState, type JSX } from 'react';
 import type { AllergenWarningSummary, DailyMenu } from '@kidscare/shared-types';
 import {
   Utensils,
@@ -17,12 +17,28 @@ import {
   Tag,
   Plus,
   Check,
+  ShieldCheck,
+  ShieldAlert,
 } from 'lucide-react';
 import { deleteDailyMenu, getDailyMenu, saveDailyMenu } from '../../api/daily-menus';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { StatCard } from '../../components/ui/StatCard';
+import { TactileTabs } from '../../components/ui/TactileTabs';
+import { TactileButton } from '../../components/ui/TactileButton';
+
+type MealTab = 'ALL' | 'BREAKFAST' | 'LUNCH' | 'SNACK' | 'ALLERGENS';
+
+const MEAL_TABS: { id: MealTab; label: string; icon: typeof Utensils }[] = [
+  { id: 'ALL', label: 'Tüm Öğünler', icon: Utensils },
+  { id: 'BREAKFAST', label: 'Sabah Kahvaltısı', icon: Coffee },
+  { id: 'LUNCH', label: 'Öğle Yemeği', icon: Soup },
+  { id: 'SNACK', label: 'İkindi Ara Öğünü', icon: Cookie },
+  { id: 'ALLERGENS', label: 'Alerjen Denetimi', icon: AlertTriangle },
+];
 
 const COMMON_ALLERGENS = [
   'Süt / Laktoz',
@@ -162,6 +178,12 @@ export function DailyMenuPage(): JSX.Element {
   }
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [activeTab, setActiveTab] = useState<MealTab>('ALL');
+
+  const breakfastCount = useMemo(() => menu?.breakfast.length ?? 0, [menu]);
+  const lunchCount = useMemo(() => menu?.lunch.length ?? 0, [menu]);
+  const snackCount = useMemo(() => menu?.snack.length ?? 0, [menu]);
+  const allergenRiskCount = useMemo(() => warnings.length, [warnings]);
 
   function handleDelete(): void {
     setShowDeleteConfirm(true);
@@ -195,55 +217,80 @@ export function DailyMenuPage(): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Header & Date Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
-            <Utensils className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-              Kreş Yemek Menüsü & Beslenme Yönetimi
-            </h1>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
-              Kahvaltı, öğle ve ikindi menüleri ile otomatik öğrenci alerjen denetimi
-            </p>
-          </div>
-        </div>
-
-        {/* Date Selector */}
-        <div className="flex items-center gap-2 bg-white dark:bg-[#131B2E] border border-[#DDD4C4] dark:border-slate-800 p-1.5 rounded-2xl shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)]">
-          <button
-            type="button"
-            onClick={() => changeDay(-1)}
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-700/60 transition cursor-pointer"
-            title="Önceki Gün"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="text-xs font-bold text-slate-800 dark:text-white bg-transparent px-2 py-1 outline-none cursor-pointer"
-          />
-          <button
-            type="button"
-            onClick={() => changeDay(1)}
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-700/60 transition cursor-pointer"
-            title="Sonraki Gün"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-          {!isToday && (
+      <PageHeader
+        title="Kreş Yemek Menüsü & Beslenme Yönetimi"
+        description="Kahvaltı, öğle ve ikindi menüleri ile otomatik öğrenci alerjen denetimi"
+        icon={Utensils}
+        actions={
+          <div className="flex items-center gap-2 bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 p-1.5 rounded-2xl shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)]">
             <button
               type="button"
-              onClick={() => setSelectedDate(todayStr)}
-              className="btn-tactile-secondary text-xs px-3 py-1 font-bold text-teal-900 dark:text-teal-300 ml-1"
+              onClick={() => changeDay(-1)}
+              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-700/60 transition cursor-pointer"
+              title="Önceki Gün"
+              aria-label="Önceki Gün"
             >
-              Bugün
+              <ChevronLeft className="w-4 h-4" />
             </button>
-          )}
-        </div>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="text-xs font-bold text-slate-800 dark:text-white bg-transparent px-2 py-1 outline-none cursor-pointer rounded-xl"
+            />
+            <button
+              type="button"
+              onClick={() => changeDay(1)}
+              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-700/60 transition cursor-pointer"
+              title="Sonraki Gün"
+              aria-label="Sonraki Gün"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            {!isToday && (
+              <TactileButton
+                variant="secondary"
+                size="sm"
+                onClick={() => setSelectedDate(todayStr)}
+                className="ml-1"
+              >
+                Bugün
+              </TactileButton>
+            )}
+          </div>
+        }
+      />
+
+      {/* KPI Stat Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          title="Sabah Kahvaltısı"
+          value={breakfastCount}
+          subtitle="Çeşit"
+          icon={Coffee}
+          variant="amber"
+        />
+        <StatCard
+          title="Öğle Yemeği"
+          value={lunchCount}
+          subtitle="Çeşit"
+          icon={Soup}
+          variant="teal"
+        />
+        <StatCard
+          title="İkindi Ara Öğünü"
+          value={snackCount}
+          subtitle="Çeşit"
+          icon={Cookie}
+          variant="orange"
+        />
+        <StatCard
+          title="Alerjen Riski"
+          value={allergenRiskCount}
+          subtitle={allergenRiskCount === 0 ? 'Güvenli' : 'Öğrenci Etkileniyor'}
+          icon={allergenRiskCount === 0 ? ShieldCheck : ShieldAlert}
+          variant={allergenRiskCount === 0 ? 'emerald' : 'rose'}
+        />
       </div>
 
       {error && (
@@ -277,7 +324,7 @@ export function DailyMenuPage(): JSX.Element {
 
       {/* Allergen Warning Banner */}
       {warnings.length > 0 && (
-        <div className="rounded-3xl border border-amber-300 dark:border-amber-800/60 bg-amber-50/90 dark:bg-amber-950/30 p-5.5 shadow-[0_6px_20px_-3px_rgba(217,119,6,0.1)]">
+        <div className="rounded-3xl border-2 border-amber-300 dark:border-amber-800/60 bg-amber-50/90 dark:bg-amber-950/30 p-5 shadow-[0_4px_0_0_#D5CBB9,0_10px_24px_-3px_rgba(217,119,6,0.18)] dark:shadow-[0_4px_0_0_#1E293B,0_10px_24px_-3px_rgba(0,0,0,0.5)]">
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0 border border-amber-300 dark:border-amber-700 shadow-2xs">
               <AlertTriangle className="w-5 h-5" />
@@ -330,34 +377,44 @@ export function DailyMenuPage(): JSX.Element {
             />
           ) : (
             <>
+              {/* Meal Tabs - Parent focus */}
+              <TactileTabs<MealTab>
+                ariaLabel="Öğün sekmeleri"
+                defaultActiveVariant="teal"
+                tabs={MEAL_TABS.map((t) => ({ id: t.id, label: t.label, icon: t.icon }))}
+                activeId={activeTab}
+                onChange={setActiveTab}
+              />
+
               {/* Meal Cards - View Only */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                {menu.breakfast.length > 0 && (
-                  <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-200/60 dark:border-amber-800/60 shadow-2xs">
-                        <Coffee className="w-4 h-4" />
-                      </div>
-                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                        Sabah Kahvaltısı
-                      </h3>
-                    </div>
-                    <div className="space-y-2">
-                      {menu.breakfast.map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2.5 py-1"
-                        >
-                          <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
-                          <span className="font-medium">{item}</span>
+                {(activeTab === 'ALL' || activeTab === 'BREAKFAST') &&
+                  menu.breakfast.length > 0 && (
+                    <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-200/60 dark:border-amber-800/60 shadow-2xs">
+                          <Coffee className="w-4 h-4" />
                         </div>
-                      ))}
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                          Sabah Kahvaltısı
+                        </h3>
+                      </div>
+                      <div className="space-y-2">
+                        {menu.breakfast.map((item, idx) => (
+                          <div
+                            key={idx}
+                            className="text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2.5 py-1"
+                          >
+                            <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                            <span className="font-medium">{item}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {menu.lunch.length > 0 && (
-                  <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
+                {(activeTab === 'ALL' || activeTab === 'LUNCH') && menu.lunch.length > 0 && (
+                  <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-2xl bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 flex items-center justify-center shrink-0 border border-teal-200/60 dark:border-teal-800/60 shadow-2xs">
                         <Soup className="w-4 h-4" />
@@ -380,8 +437,8 @@ export function DailyMenuPage(): JSX.Element {
                   </div>
                 )}
 
-                {menu.snack.length > 0 && (
-                  <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
+                {(activeTab === 'ALL' || activeTab === 'SNACK') && menu.snack.length > 0 && (
+                  <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] p-6 shadow-2xs">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-2xl bg-orange-50 dark:bg-orange-950/40 text-orange-700 dark:text-orange-400 flex items-center justify-center shrink-0 border border-orange-200/60 dark:border-orange-800/60 shadow-2xs">
                         <Cookie className="w-4 h-4" />
@@ -590,13 +647,14 @@ export function DailyMenuPage(): JSX.Element {
                 placeholder="Başka alerjen ekle (Örn: Kivi, Susam)"
                 className="flex-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-700 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
               />
-              <button
+              <TactileButton
                 type="button"
+                variant="secondary"
+                size="md"
                 onClick={addCustomAllergen}
-                className="btn-tactile-secondary px-4 py-2.5 text-xs font-bold"
               >
                 Ekle
-              </button>
+              </TactileButton>
             </div>
 
             {/* Calories & Notes */}
@@ -632,30 +690,27 @@ export function DailyMenuPage(): JSX.Element {
 
           {/* Form Actions */}
           {canEdit && (
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex flex-wrap items-center justify-between gap-3 py-2">
               <div>
                 {menu && (
-                  <button
+                  <TactileButton
                     type="button"
+                    variant="danger"
+                    size="md"
                     onClick={() => void handleDelete()}
                     disabled={saving}
-                    className="btn-tactile-danger px-4 py-2.5 text-xs font-bold"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>Kreş Menüsünü Sil</span>
-                  </button>
+                  </TactileButton>
                 )}
               </div>
 
               <div className="flex items-center gap-3">
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="btn-tactile-teal px-6 py-2.5 text-sm font-bold disabled:opacity-50"
-                >
+                <TactileButton type="submit" variant="teal" size="lg" disabled={saving}>
                   <Save className="w-4 h-4" />
                   <span>{saving ? 'Kaydediliyor…' : 'Günün Menüsünü Kaydet'}</span>
-                </button>
+                </TactileButton>
               </div>
             </div>
           )}
