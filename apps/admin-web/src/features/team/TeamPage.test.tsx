@@ -117,4 +117,33 @@ describe('TeamPage', () => {
       expect(screen.getByText('teacher2@demo.test')).toBeInTheDocument();
     });
   });
+
+  it('filters the list when a role KPI card is clicked', async () => {
+    mockUsersApi(fakeUsers);
+
+    const user = userEvent.setup();
+    render(<TeamPage />);
+
+    // Wait for all four users to render
+    await screen.findByText('teacher@demo.test');
+    expect(screen.getByText('admin@demo.test')).toBeInTheDocument();
+    expect(screen.getByText('parent@demo.test')).toBeInTheDocument();
+    expect(screen.getByText('superadmin@demo.test')).toBeInTheDocument();
+
+    // Click "Öğretmenler" KPI → list should only show teacher
+    await user.click(screen.getByText('Öğretmenler'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('parent@demo.test')).not.toBeInTheDocument();
+    });
+    expect(screen.getByText('teacher@demo.test')).toBeInTheDocument();
+    expect(screen.queryByText('admin@demo.test')).not.toBeInTheDocument();
+
+    // Click "Toplam Kullanıcı" → list restored
+    await user.click(screen.getByText('Toplam Kullanıcı'));
+
+    await waitFor(() => {
+      expect(screen.getByText('parent@demo.test')).toBeInTheDocument();
+    });
+  });
 });

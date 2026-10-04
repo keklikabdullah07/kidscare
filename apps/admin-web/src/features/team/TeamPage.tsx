@@ -45,6 +45,9 @@ export function TeamPage(): JSX.Element {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'TEACHER' | 'PARENT'>('TEACHER');
   const [inviting, setInviting] = useState(false);
+  const [activeRoleFilter, setActiveRoleFilter] = useState<'ALL' | 'TEACHER' | 'PARENT' | 'ADMIN'>(
+    'ALL',
+  );
 
   const totalCount = useMemo(() => users.length, [users]);
   const teacherCount = useMemo(() => users.filter((u) => u.role === 'TEACHER').length, [users]);
@@ -53,6 +56,19 @@ export function TeamPage(): JSX.Element {
     () => users.filter((u) => u.role === 'ADMIN' || u.role === 'SUPER_ADMIN').length,
     [users],
   );
+
+  const filteredUsers = useMemo(() => {
+    switch (activeRoleFilter) {
+      case 'TEACHER':
+        return users.filter((u) => u.role === 'TEACHER');
+      case 'PARENT':
+        return users.filter((u) => u.role === 'PARENT');
+      case 'ADMIN':
+        return users.filter((u) => u.role === 'ADMIN' || u.role === 'SUPER_ADMIN');
+      default:
+        return users;
+    }
+  }, [users, activeRoleFilter]);
 
   const loadUsers = () => {
     setStatus('loading');
@@ -122,6 +138,12 @@ export function TeamPage(): JSX.Element {
           subtitle="Aktif Hesap"
           icon={Users}
           variant="teal"
+          onClick={() => setActiveRoleFilter('ALL')}
+          className={
+            activeRoleFilter === 'ALL'
+              ? 'ring-2 ring-offset-2 ring-teal-500/60 dark:ring-teal-400/60'
+              : ''
+          }
         />
         <StatCard
           title="Öğretmenler"
@@ -129,6 +151,12 @@ export function TeamPage(): JSX.Element {
           subtitle="Sınıf Öğretmeni"
           icon={GraduationCap}
           variant="indigo"
+          onClick={() => setActiveRoleFilter('TEACHER')}
+          className={
+            activeRoleFilter === 'TEACHER'
+              ? 'ring-2 ring-offset-2 ring-indigo-500/60 dark:ring-indigo-400/60'
+              : ''
+          }
         />
         <StatCard
           title="Veliler"
@@ -136,6 +164,12 @@ export function TeamPage(): JSX.Element {
           subtitle="Öğrenci Velisi"
           icon={HeartHandshake}
           variant="amber"
+          onClick={() => setActiveRoleFilter('PARENT')}
+          className={
+            activeRoleFilter === 'PARENT'
+              ? 'ring-2 ring-offset-2 ring-amber-500/60 dark:ring-amber-400/60'
+              : ''
+          }
         />
         <StatCard
           title="Yöneticiler"
@@ -143,6 +177,12 @@ export function TeamPage(): JSX.Element {
           subtitle="Admin & Süper Admin"
           icon={Shield}
           variant="rose"
+          onClick={() => setActiveRoleFilter('ADMIN')}
+          className={
+            activeRoleFilter === 'ADMIN'
+              ? 'ring-2 ring-offset-2 ring-rose-500/60 dark:ring-rose-400/60'
+              : ''
+          }
         />
       </div>
 
@@ -218,9 +258,9 @@ export function TeamPage(): JSX.Element {
               <Users className="w-4 h-4 text-teal-900 dark:text-teal-300" />
               <span>Aktif Kullanıcılar</span>
             </div>
-            {users.length > 0 && (
+            {filteredUsers.length > 0 && (
               <span className="text-xs font-semibold text-slate-500 dark:text-slate-300">
-                {users.length} Kayıt
+                {filteredUsers.length} Kayıt
               </span>
             )}
           </div>
@@ -242,9 +282,18 @@ export function TeamPage(): JSX.Element {
               />
             </div>
           )}
-          {status === 'ready' && users.length > 0 && (
+          {status === 'ready' && users.length > 0 && filteredUsers.length === 0 && (
+            <div className="p-6">
+              <EmptyState
+                icon={Users}
+                title="Bu filtreye uygun kullanıcı yok."
+                description="Başka bir KPI kartına tıklayarak filtreyi değiştirebilirsiniz."
+              />
+            </div>
+          )}
+          {status === 'ready' && filteredUsers.length > 0 && (
             <ul className="divide-y divide-slate-100 dark:divide-slate-700">
-              {users.map((u) => {
+              {filteredUsers.map((u) => {
                 const variant = roleVariants[u.role] ?? 'neutral';
                 const initial = (u.email.charAt(0) || 'U').toUpperCase();
 

@@ -16,12 +16,14 @@ Bu şartname, KidsCare Yönetim Paneli'nde yer alan **Yönetim & Operasyon ➔ E
 
 ### 3.1. Dokunsal KPI Kartları (`StatCard`)
 
-Kullanıcı tablosunu özetleyen 4 adet interaktif dokunsal kart:
+Kullanıcı tablosunu özetleyen 4 adet **tıklanabilir** ve listede filtre uygulayan dokunsal kart:
 
-1. **Toplam Kullanıcı:** Tüm aktif hesapların sayısı (teal vurgu, `Users` ikonu).
-2. **Öğretmenler:** `TEACHER` rolündeki kullanıcı sayısı (info/mavi vurgu, `GraduationCap` ikonu).
-3. **Veliler:** `PARENT` rolündeki kullanıcı sayısı (amber vurgu, `HeartHandshake` ikonu).
-4. **Yöneticiler:** `ADMIN` + `SUPER_ADMIN` rol sayısı (rose vurgu, `Shield` ikonu).
+1. **Toplam Kullanıcı:** Tüm aktif hesapların sayısı (teal vurgu, `Users` ikonu). Tıklayınca filtre temizlenir.
+2. **Öğretmenler:** `TEACHER` rolündeki kullanıcı sayısı (indigo vurgu, `GraduationCap` ikonu). Tıklayınca liste yalnız öğretmenlere filtrelenir.
+3. **Veliler:** `PARENT` rolündeki kullanıcı sayısı (amber vurgu, `HeartHandshake` ikonu). Tıklayınca liste yalnız velilere filtrelenir.
+4. **Yöneticiler:** `ADMIN` + `SUPER_ADMIN` rol sayısı (rose vurgu, `Shield` ikonu). Tıklayınca liste yalnız yöneticilere filtrelenir.
+
+**Aktif filtre:** seçili KPI `ring-2 ring-offset-2 ring-teal-500/60 dark:ring-teal-400/60` ile vurgulanır.
 
 ### 3.2. Header & Yenile Butonu
 
