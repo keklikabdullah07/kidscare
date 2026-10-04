@@ -22,6 +22,8 @@ import { CheckOutModal } from './CheckOutModal';
 import { useToast } from '../../components/Toast';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { TactileButton } from '../../components/ui/TactileButton';
 
 const STATUS_CONFIG: Record<
   AttendanceStatus,
@@ -240,74 +242,63 @@ export function AttendancePage(): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Header & Date Toolbar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-teal-900 dark:text-teal-300 flex items-center justify-center font-bold">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-                Giriş-Çıkış, Güvenlik & Yoklama
-              </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
-                Öğrenci yoklama durumlarını kaydedin, pasaport yetkilisi doğrulamasıyla güvenli
-                teslimatı sağlayın.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Date Selector & Fast Actions */}
-        <div className="flex items-center gap-3 flex-wrap">
-          {/* Date Picker Control */}
-          <div className="flex items-center gap-1.5 bg-white dark:bg-[#131B2E] border border-[#DDD4C4] dark:border-slate-800 p-1.5 rounded-2xl shadow-2xs">
-            <button
-              type="button"
-              onClick={() => changeDay(-1)}
-              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#FAF8F5] dark:hover:bg-slate-800 transition"
-              title="Önceki Gün"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="text-xs font-bold text-slate-800 dark:text-slate-100 bg-transparent px-2.5 py-1 outline-none cursor-pointer"
-            />
-            <button
-              type="button"
-              onClick={() => changeDay(1)}
-              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#FAF8F5] dark:hover:bg-slate-800 transition"
-              title="Sonraki Gün"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-            {!isToday && (
+      <PageHeader
+        title="Giriş-Çıkış, Güvenlik & Yoklama"
+        description="Öğrenci yoklama durumlarını kaydedin, pasaport yetkilisi doğrulamasıyla güvenli teslimatı sağlayın."
+        icon={ShieldCheck}
+        actions={
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Date Picker Control */}
+            <div className="flex items-center gap-1.5 bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 p-1.5 rounded-2xl shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)]">
               <button
                 type="button"
-                onClick={() => setSelectedDate(todayStr)}
-                className="btn-tactile-secondary text-xs px-3 py-1 font-bold text-teal-900 dark:text-teal-300 ml-1"
+                onClick={() => changeDay(-1)}
+                className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#FAF8F5] dark:hover:bg-slate-800 transition cursor-pointer"
+                title="Önceki Gün"
+                aria-label="Önceki Gün"
               >
-                Bugün
+                <ChevronLeft className="w-4 h-4" />
               </button>
-            )}
-          </div>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="text-xs font-bold text-slate-800 dark:text-slate-100 bg-transparent px-2.5 py-1 outline-none cursor-pointer rounded-xl"
+              />
+              <button
+                type="button"
+                onClick={() => changeDay(1)}
+                className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#FAF8F5] dark:hover:bg-slate-800 transition cursor-pointer"
+                title="Sonraki Gün"
+                aria-label="Sonraki Gün"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              {!isToday && (
+                <TactileButton
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setSelectedDate(todayStr)}
+                  className="ml-1"
+                >
+                  Bugün
+                </TactileButton>
+              )}
+            </div>
 
-          {/* Quick Action: Mark All Present */}
-          <button
-            type="button"
-            disabled={bulkLoading || absentCount === 0}
-            onClick={() => void handleMarkAllPresent()}
-            className="btn-tactile-teal px-4 py-2.5 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Sınıftaki henüz gelmedi durumundaki tüm öğrencileri tek tıkla sınıfa al"
-          >
-            <CheckCheck className="w-4 h-4" />
-            <span>{bulkLoading ? 'İşleniyor…' : 'Tüm Sınıfı Geldi İşaretle'}</span>
-          </button>
-        </div>
-      </div>
+            <TactileButton
+              variant="teal"
+              size="md"
+              disabled={bulkLoading || absentCount === 0}
+              onClick={() => void handleMarkAllPresent()}
+              title="Sınıftaki henüz gelmedi durumundaki tüm öğrencileri tek tıkla sınıfa al"
+            >
+              <CheckCheck className="w-4 h-4" />
+              <span>{bulkLoading ? 'İşleniyor…' : 'Tüm Sınıfı Geldi İşaretle'}</span>
+            </TactileButton>
+          </div>
+        }
+      />
 
       {error && (
         <div className="rounded-2xl bg-rose-50 dark:bg-rose-950/30 p-4 text-sm text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 flex items-center justify-between shadow-2xs">
