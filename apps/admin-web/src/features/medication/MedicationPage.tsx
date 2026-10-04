@@ -28,6 +28,7 @@ import { PromptModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { StatCard } from '../../components/ui/StatCard';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
 
 type TabKey = 'ALL' | 'REQUESTED' | 'TODAY' | 'GIVEN' | 'ARCHIVED';
 
@@ -307,6 +308,28 @@ export function MedicationPage(): JSX.Element {
     }
   }
 
+  const medicationTabs = useMemo<TactileTabItem<TabKey>[]>(
+    () => [
+      { id: 'ALL', label: 'Tümü', count: records.length, activeVariant: 'teal' },
+      {
+        id: 'REQUESTED',
+        label: 'Onay Bekleyenler',
+        count: pendingCount,
+        activeVariant: 'amber',
+        badgeCls: 'bg-amber-100 text-amber-900 font-black',
+      },
+      { id: 'TODAY', label: 'Günün İlaçları', count: todayPlanCount, activeVariant: 'teal' },
+      { id: 'GIVEN', label: 'Verilenler', count: givenCount, activeVariant: 'teal' },
+      {
+        id: 'ARCHIVED',
+        label: 'Atlanan & Reddedilenler',
+        count: archivedCount,
+        activeVariant: 'purple',
+      },
+    ],
+    [records.length, pendingCount, todayPlanCount, givenCount, archivedCount],
+  );
+
   return (
     <div className="space-y-6">
       {/* Sayfa Başlığı ve Aksiyonlar */}
@@ -390,86 +413,14 @@ export function MedicationPage(): JSX.Element {
 
       {/* Arama, Filtreleme ve Sekmeler */}
       <div className="bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl p-4 shadow-xs space-y-3.5">
-        {/* Sekmeler */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-slate-100 dark:border-slate-800">
-          <button
-            type="button"
-            onClick={() => setActiveTab('ALL')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'ALL'
-                ? 'bg-teal-700 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Tümü</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 text-white">
-              {records.length}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('REQUESTED')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'REQUESTED'
-                ? 'bg-amber-600 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Onay Bekleyenler</span>
-            {pendingCount > 0 && (
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white text-amber-900 font-extrabold">
-                {pendingCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('TODAY')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'TODAY'
-                ? 'bg-teal-700 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Günün İlaçları</span>
-            {todayPlanCount > 0 && (
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white text-teal-900 font-extrabold">
-                {todayPlanCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('GIVEN')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'GIVEN'
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Verilenler</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 text-white">
-              {givenCount}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('ARCHIVED')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'ARCHIVED'
-                ? 'bg-slate-700 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Atlanan & Reddedilenler</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 text-white">
-              {archivedCount}
-            </span>
-          </button>
+        {/* Dokunsal Sekmeler (Kapsayıcı Ray & Tıklanabilir 3D Butonlar) */}
+        <div className="overflow-x-auto pb-1 border-b border-slate-100 dark:border-slate-800">
+          <TactileTabs
+            tabs={medicationTabs}
+            activeId={activeTab}
+            onChange={setActiveTab}
+            ariaLabel="İlaç Durumu Sekmeleri"
+          />
         </div>
 
         {/* Arama ve Dropdown Filtreleri */}

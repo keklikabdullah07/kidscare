@@ -21,6 +21,7 @@ import { useToast } from '../../components/Toast';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { StatCard } from '../../components/ui/StatCard';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
 
 type TabKey = 'ALL' | 'PENDING_PARENT' | 'INJURIES' | 'ILLNESS' | 'BEHAVIOR';
 
@@ -246,6 +247,28 @@ export function IncidentsPage(): JSX.Element {
     }
   }
 
+  const incidentTabs = useMemo<TactileTabItem<TabKey>[]>(
+    () => [
+      { id: 'ALL', label: 'Tüm Tutanaklar', count: totalCount, activeVariant: 'teal' },
+      {
+        id: 'PENDING_PARENT',
+        label: 'Bildirim Bekleyenler',
+        count: pendingNotificationCount,
+        activeVariant: 'amber',
+        badgeCls: 'bg-amber-100 text-amber-900 font-extrabold',
+      },
+      {
+        id: 'INJURIES',
+        label: 'Düşme & Yaralanma',
+        count: injuryCount,
+        activeVariant: 'rose',
+      },
+      { id: 'ILLNESS', label: 'Hastalık & Revir', activeVariant: 'sky' },
+      { id: 'BEHAVIOR', label: 'Davranış & Diğer', activeVariant: 'purple' },
+    ],
+    [totalCount, pendingNotificationCount, injuryCount],
+  );
+
   return (
     <div className="space-y-6">
       {/* Sayfa Başlığı ve Dokunsal Aksiyonlar */}
@@ -327,78 +350,14 @@ export function IncidentsPage(): JSX.Element {
 
       {/* Arama, Filtreleme ve Sekmeler */}
       <div className="bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl p-4 shadow-xs space-y-3.5">
-        {/* Sekmeler */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-slate-100 dark:border-slate-800">
-          <button
-            type="button"
-            onClick={() => setActiveTab('ALL')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'ALL'
-                ? 'bg-teal-700 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Tüm Tutanaklar</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 text-white">
-              {totalCount}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('PENDING_PARENT')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'PENDING_PARENT'
-                ? 'bg-amber-600 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Bildirim Bekleyenler</span>
-            {pendingNotificationCount > 0 && (
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white text-amber-900 font-black">
-                {pendingNotificationCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('INJURIES')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'INJURIES'
-                ? 'bg-rose-700 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Düşme & Yaralanma</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 text-white">
-              {injuryCount}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('ILLNESS')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'ILLNESS'
-                ? 'bg-sky-700 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Hastalık & Revir</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('BEHAVIOR')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-              activeTab === 'BEHAVIOR'
-                ? 'bg-purple-700 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <span>Davranış & Diğer</span>
-          </button>
+        {/* Dokunsal Sekmeler (Kapsayıcı Ray & Tıklanabilir 3D Butonlar) */}
+        <div className="overflow-x-auto pb-1 border-b border-slate-100 dark:border-slate-800">
+          <TactileTabs
+            tabs={incidentTabs}
+            activeId={activeTab}
+            onChange={setActiveTab}
+            ariaLabel="Olay Kategorisi Sekmeleri"
+          />
         </div>
 
         {/* Arama & Öğrenci Filtresi */}

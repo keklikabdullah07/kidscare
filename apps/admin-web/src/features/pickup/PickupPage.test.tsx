@@ -143,7 +143,7 @@ describe('PickupPage', () => {
       expect(screen.getByText('Güvenlik & Teslimat Kontrolü')).toBeInTheDocument();
     });
 
-    const eventsTab = screen.getByRole('button', { name: /Teslimat Günlüğü & Kütük/i });
+    const eventsTab = screen.getByRole('tab', { name: /Teslimat Günlüğü & Kütük/i });
     await userEvent.click(eventsTab);
 
     expect(await screen.findByText('Günün Resmi Teslimat Kayıtları')).toBeInTheDocument();

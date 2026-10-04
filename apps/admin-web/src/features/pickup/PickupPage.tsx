@@ -35,7 +35,7 @@ import { listStudents } from '../../api/students';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
-import { EmptyState } from '../../components/ui/EmptyState';
+import { TactileTabs } from '../../components/ui/TactileTabs';
 
 const STATUS_LABEL: Record<PickupAuthorizationStatus, string> = {
   PENDING: 'Onay Bekliyor',
@@ -309,51 +309,51 @@ export function PickupPage(): JSX.Element {
       </div>
 
       {/* Main Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
-        <button
-          type="button"
-          onClick={() => setActiveTab('AUTHORIZATIONS')}
-          className={`px-4 py-2 text-xs font-bold rounded-2xl transition flex items-center gap-2 ${
-            activeTab === 'AUTHORIZATIONS'
-              ? 'btn-tactile-teal'
-              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <Lock className="w-3.5 h-3.5" />
-          <span>Teslimat Yetkileri ({items.length})</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('EVENTS')}
-          className={`px-4 py-2 text-xs font-bold rounded-2xl transition flex items-center gap-2 ${
-            activeTab === 'EVENTS'
-              ? 'btn-tactile-teal'
-              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <History className="w-3.5 h-3.5" />
-          <span>Teslimat Günlüğü & Kütük ({events.length})</span>
-        </button>
+      <div className="pb-3 border-b border-[#DDD4C4]/60 dark:border-slate-800">
+        <TactileTabs<'AUTHORIZATIONS' | 'EVENTS'>
+          tabs={[
+            {
+              id: 'AUTHORIZATIONS',
+              label: 'Teslimat Yetkileri',
+              count: items.length,
+              icon: Lock,
+              activeVariant: 'teal',
+            },
+            {
+              id: 'EVENTS',
+              label: 'Teslimat Günlüğü & Kütük',
+              count: events.length,
+              icon: History,
+              activeVariant: 'teal',
+            },
+          ]}
+          activeId={activeTab}
+          onChange={setActiveTab}
+          ariaLabel="Teslimat Ana Sekmeleri"
+        />
       </div>
 
       {/* TAB 1: AUTHORIZATIONS */}
       {activeTab === 'AUTHORIZATIONS' && (
         <div className="space-y-4">
           {/* Status Filter Bar */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1">
-            {(['PENDING', 'APPROVED', 'REJECTED', 'ALL'] as const).map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setFilter(s)}
-                className={`px-3 py-1.5 text-xs font-bold shrink-0 ${
-                  filter === s ? 'btn-tactile-teal' : 'btn-tactile-secondary'
-                }`}
-              >
-                {s === 'ALL' ? 'Tümü' : STATUS_LABEL[s]}
-              </button>
-            ))}
+          <div className="overflow-x-auto pb-1">
+            <TactileTabs<'ALL' | PickupAuthorizationStatus>
+              tabs={[
+                { id: 'ALL', label: 'Tümü' },
+                {
+                  id: 'PENDING',
+                  label: STATUS_LABEL['PENDING'],
+                  activeVariant: 'amber',
+                  badgeCls: 'bg-amber-100 text-amber-900 font-bold',
+                },
+                { id: 'APPROVED', label: STATUS_LABEL['APPROVED'], activeVariant: 'teal' },
+                { id: 'REJECTED', label: STATUS_LABEL['REJECTED'], activeVariant: 'rose' },
+              ]}
+              activeId={filter}
+              onChange={setFilter}
+              ariaLabel="Yetki Durumu Filtresi"
+            />
           </div>
 
           {loading ? (

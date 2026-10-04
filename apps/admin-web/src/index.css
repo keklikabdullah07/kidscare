@@ -504,3 +504,140 @@ html.dark [class*="dark:divide-slate-800"] > :not([hidden]) ~ :not([hidden]) {
   border-color: #2b3846 !important;
 }
 
+/* ========================================================
+   KidsCare Global Tactile Tabs & Segmented Button Affordance
+   ======================================================== */
+
+.tactile-tab-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem;
+  background-color: #F4EFE6;
+  border: 1.5px solid #DDD4C4;
+  border-radius: 1.25rem;
+  box-shadow: inset 0 2px 4px rgba(45, 38, 30, 0.05);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+html.dark .tactile-tab-track {
+  background-color: #0c121f;
+  border-color: #1e293b;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.tactile-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.12s ease;
+}
+
+/* Inactive State: Explicit Button Look */
+.tactile-tab-btn-inactive {
+  background-color: #ffffff;
+  border: 1.5px solid #DDD4C4;
+  color: #334155;
+  box-shadow: 0 2.5px 0 0 #D5CBB9, 0 2px 5px rgba(45, 38, 30, 0.04);
+}
+
+.tactile-tab-btn-inactive:hover {
+  background-color: #FAF8F5;
+  color: #0f172a;
+  border-color: #C8BDAB;
+  transform: translateY(-1px);
+  box-shadow: 0 3.5px 0 0 #D5CBB9, 0 4px 8px rgba(45, 38, 30, 0.07);
+}
+
+.tactile-tab-btn-inactive:active {
+  transform: translateY(2.5px);
+  box-shadow: 0 0 0 0 #D5CBB9;
+}
+
+html.dark .tactile-tab-btn-inactive {
+  background-color: #162036;
+  border-color: #2b3952;
+  color: #cbd5e1;
+  box-shadow: 0 2.5px 0 0 #0d1525, 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .tactile-tab-btn-inactive:hover {
+  background-color: #1e2c4a;
+  color: #ffffff;
+  border-color: #3b4e70;
+  box-shadow: 0 3.5px 0 0 #0d1525, 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+html.dark .tactile-tab-btn-inactive:active {
+  transform: translateY(2.5px);
+  box-shadow: 0 0 0 0 #0d1525;
+}
+
+/* Active State: Elevated Brand Accent */
+.tactile-tab-btn-active-teal {
+  background-color: #115e59;
+  border: 1.5px solid #0f766e;
+  color: #ffffff;
+  box-shadow: 0 3px 0 0 #042f2e, 0 4px 10px rgba(17, 94, 89, 0.25);
+}
+
+.tactile-tab-btn-active-teal:hover {
+  background-color: #0f766e;
+  transform: translateY(-0.5px);
+  box-shadow: 0 3.5px 0 0 #042f2e, 0 6px 12px rgba(17, 94, 89, 0.30);
+}
+
+.tactile-tab-btn-active-teal:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 0 #042f2e;
+}
+
+.tactile-tab-btn-active-amber {
+  background-color: #d97706;
+  border: 1.5px solid #b45309;
+  color: #ffffff;
+  box-shadow: 0 3px 0 0 #78350f, 0 4px 10px rgba(217, 119, 6, 0.25);
+}
+
+.tactile-tab-btn-active-amber:hover {
+  background-color: #b45309;
+  transform: translateY(-0.5px);
+  box-shadow: 0 3.5px 0 0 #78350f, 0 6px 12px rgba(217, 119, 6, 0.30);
+}
+
+.tactile-tab-btn-active-amber:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 0 #78350f;
+}
+
+.tactile-tab-btn-active-rose {
+  background-color: #e11d48;
+  border: 1.5px solid #be123c;
+  color: #ffffff;
+  box-shadow: 0 3px 0 0 #881337, 0 4px 10px rgba(225, 29, 72, 0.25);
+}
+
+.tactile-tab-btn-active-sky {
+  background-color: #0284c7;
+  border: 1.5px solid #0369a1;
+  color: #ffffff;
+  box-shadow: 0 3px 0 0 #0c4a6e, 0 4px 10px rgba(2, 132, 199, 0.25);
+}
+
+.tactile-tab-btn-active-purple {
+  background-color: #7c3aed;
+  border: 1.5px solid #6d28d9;
+  color: #ffffff;
+  box-shadow: 0 3px 0 0 #4c1d95, 0 4px 10px rgba(124, 58, 237, 0.25);
+}
+
+

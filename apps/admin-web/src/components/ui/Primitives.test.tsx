@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { PageHeader, EmptyState, StatCard } from './index';
+import { PageHeader, EmptyState, StatCard, TactileTabs } from './index';
 import { Sparkles, Inbox, Users } from 'lucide-react';
 
 describe('UI Primitives', () => {
@@ -53,6 +53,51 @@ describe('UI Primitives', () => {
       expect(screen.getByText('Toplam Öğrenci')).toBeInTheDocument();
       expect(screen.getByText('42')).toBeInTheDocument();
       expect(screen.getByText('/ 50 Kontenjan')).toBeInTheDocument();
+    });
+  });
+
+  describe('TactileTabs', () => {
+    it('renders tabs with active/inactive affordance and fires onChange', () => {
+      const onChange = vi.fn();
+      const { rerender } = render(
+        <TactileTabs
+          tabs={[
+            { id: 'tab1', label: 'Tüm Tutanaklar', count: 12 },
+            { id: 'tab2', label: 'Bildirim Bekleyenler', count: 3, activeVariant: 'amber' },
+          ]}
+          activeId="tab1"
+          onChange={onChange}
+        />,
+      );
+
+      const tab1 = screen.getByRole('tab', { name: /Tüm Tutanaklar/i });
+      const tab2 = screen.getByRole('tab', { name: /Bildirim Bekleyenler/i });
+
+      expect(tab1).toHaveAttribute('aria-selected', 'true');
+      expect(tab2).toHaveAttribute('aria-selected', 'false');
+      expect(tab1).toHaveClass('tactile-tab-btn-active-teal');
+      expect(tab2).toHaveClass('tactile-tab-btn-inactive');
+
+      tab2.click();
+      expect(onChange).toHaveBeenCalledWith('tab2');
+
+      rerender(
+        <TactileTabs
+          tabs={[
+            { id: 'tab1', label: 'Tüm Tutanaklar', count: 12 },
+            { id: 'tab2', label: 'Bildirim Bekleyenler', count: 3, activeVariant: 'amber' },
+          ]}
+          activeId="tab2"
+          onChange={onChange}
+        />,
+      );
+
+      expect(screen.getByRole('tab', { name: /Bildirim Bekleyenler/i })).toHaveClass(
+        'tactile-tab-btn-active-amber',
+      );
+      expect(screen.getByRole('tab', { name: /Tüm Tutanaklar/i })).toHaveClass(
+        'tactile-tab-btn-inactive',
+      );
     });
   });
 });
