@@ -289,7 +289,7 @@ export function Layout(): JSX.Element {
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="overflow-y-auto flex-1">
+        <div className="overflow-y-auto flex-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Brand Header with Authentic Logo */}
           <div className="h-16 px-4 flex items-center justify-between border-b border-[#E8E2D5]/70 dark:border-slate-800 sticky top-0 bg-[#FCFAF7]/95 dark:bg-[#0D1524]/95 backdrop-blur-md z-10">
             <NavLink
