@@ -80,7 +80,7 @@ export class MediaController {
   }
 
   @Get()
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async list(
     @Req() req: AuthenticatedRequest,
     @Query('category') categoryQuery?: string,

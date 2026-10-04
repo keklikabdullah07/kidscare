@@ -77,7 +77,7 @@ describe('MediaController', () => {
     await expect(controller.upload(req, undefined)).rejects.toThrow(BadRequestException);
   });
 
-  it('should call mediaService.listFiles on GET /media', async () => {
+  it('should call mediaService.listFiles on GET /media for TEACHER role', async () => {
     const req = {
       user: {
         userId: 'user-1',
@@ -89,6 +89,20 @@ describe('MediaController', () => {
     await controller.list(req, 'ACTIVITY', '10');
 
     expect(serviceMock.listFiles).toHaveBeenCalledWith('tenant-1', 'ACTIVITY', 10);
+  });
+
+  it('should call mediaService.listFiles on GET /media for PARENT role', async () => {
+    const req = {
+      user: {
+        userId: 'parent-1',
+        tenantId: 'tenant-1',
+        role: 'PARENT',
+      },
+    } as unknown as Parameters<typeof controller.upload>[0];
+
+    await controller.list(req, 'ACTIVITY', '20');
+
+    expect(serviceMock.listFiles).toHaveBeenCalledWith('tenant-1', 'ACTIVITY', 20);
   });
 
   it('should call mediaService.deleteFile on DELETE /media/:id', async () => {
