@@ -5,6 +5,7 @@ import type {
   DailyMenuUpdateInput,
 } from '@kidscare/shared-types';
 import { StudentsRepository } from '../../students/repositories/students.repository';
+import { AllergenMatcher } from '../../allergens/allergen-matcher';
 import { DailyMenu } from '../entities/daily-menu.entity';
 import { DailyMenusRepository } from '../repositories/daily-menus.repository';
 
@@ -18,6 +19,7 @@ export class DailyMenusService {
   constructor(
     @Inject(DailyMenusRepository) private readonly repository: DailyMenusRepository,
     @Inject(StudentsRepository) private readonly studentsRepository: StudentsRepository,
+    private readonly allergenMatcher: AllergenMatcher,
   ) {}
 
   private parseDate(dateStr: string): Date {
@@ -33,7 +35,7 @@ export class DailyMenusService {
     const row = await this.repository.findByDate(tenantId, date);
     const menu = row ? DailyMenu.fromPrisma(row) : null;
 
-    const warnings = await this.computeAllergenWarnings(tenantId, menu ? menu.allergens : []);
+    const warnings = menu ? await this.computeAllergenWarnings(tenantId, menu) : [];
 
     return { menu, allergenWarnings: warnings };
   }
@@ -60,7 +62,7 @@ export class DailyMenusService {
 
     const saved = await this.repository.upsert(tenantId, date, data);
     const menu = DailyMenu.fromPrisma(saved);
-    const warnings = await this.computeAllergenWarnings(tenantId, menu.allergens);
+    const warnings = await this.computeAllergenWarnings(tenantId, menu);
 
     return { menu, allergenWarnings: warnings };
   }
@@ -81,7 +83,7 @@ export class DailyMenusService {
 
     const saved = await this.repository.upsert(tenantId, date, data);
     const menu = DailyMenu.fromPrisma(saved);
-    const warnings = await this.computeAllergenWarnings(tenantId, menu.allergens);
+    const warnings = await this.computeAllergenWarnings(tenantId, menu);
 
     return { menu, allergenWarnings: warnings };
   }
@@ -97,16 +99,21 @@ export class DailyMenusService {
 
   private async computeAllergenWarnings(
     tenantId: string,
-    menuAllergens: string[],
+    menu: DailyMenu,
   ): Promise<AllergenWarningSummary[]> {
-    if (!menuAllergens || menuAllergens.length === 0) {
+    const menuItems = [
+      ...(Array.isArray(menu.breakfast) ? menu.breakfast : []),
+      ...(Array.isArray(menu.lunch) ? menu.lunch : []),
+      ...(Array.isArray(menu.snack) ? menu.snack : []),
+      ...(Array.isArray(menu.allergens) ? menu.allergens : []),
+    ].filter((item) => typeof item === 'string' && item.trim().length > 0);
+
+    if (menuItems.length === 0) {
       return [];
     }
 
     const students = await this.studentsRepository.findMany(tenantId);
     const warnings: AllergenWarningSummary[] = [];
-
-    const normalizedMenuAllergens = menuAllergens.map((a) => a.trim().toLocaleLowerCase('tr'));
 
     for (const student of students) {
       if (!student.isActive) continue;
@@ -117,27 +124,14 @@ export class DailyMenusService {
         continue;
       }
 
-      const matched: string[] = [];
-
-      for (const sa of studentAllergies) {
-        const normSa = sa.trim().toLocaleLowerCase('tr');
-        if (!normSa) continue;
-
-        // Check exact match or substring in menu allergens
-        const hasMatch = normalizedMenuAllergens.some(
-          (ma) => ma.includes(normSa) || normSa.includes(ma),
-        );
-
-        if (hasMatch) {
-          matched.push(sa);
-        }
-      }
-
-      if (matched.length > 0) {
+      const matches = this.allergenMatcher.match(menuItems, studentAllergies);
+      if (matches.length > 0) {
+        // Preserve user's original allergy casing
+        const matchedAllergens = Array.from(new Set(matches.map((m) => m.allergen)));
         warnings.push({
           studentId: student.id,
           studentName: `${student.firstName} ${student.lastName}`,
-          matchedAllergens: matched,
+          matchedAllergens,
         });
       }
     }

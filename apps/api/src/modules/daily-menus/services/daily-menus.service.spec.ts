@@ -2,6 +2,7 @@ import type { DailyMenu as PrismaDailyMenu, Student as PrismaStudent } from '@ki
 import { DailyMenusService } from './daily-menus.service';
 import type { DailyMenusRepository } from '../repositories/daily-menus.repository';
 import type { StudentsRepository } from '../../students/repositories/students.repository';
+import { AllergenMatcher } from '../../allergens/allergen-matcher';
 
 const mockMenu: PrismaDailyMenu = {
   id: 'menu-1',
@@ -73,7 +74,7 @@ describe('DailyMenusService', () => {
       findMany: jest.fn(),
     } as unknown as jest.Mocked<StudentsRepository>;
 
-    service = new DailyMenusService(menuRepo, studentsRepo);
+    service = new DailyMenusService(menuRepo, studentsRepo, new AllergenMatcher());
   });
 
   describe('getByDate', () => {
