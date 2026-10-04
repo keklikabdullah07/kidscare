@@ -1,14 +1,15 @@
-import { useState, useEffect, useRef, type JSX, type ChangeEvent } from 'react';
+import { useState, useEffect, type JSX } from 'react';
 import type { ActivityPost, MediaFileItem } from '@kidscare/shared-types';
-import { Camera, Plus, Trash2, Calendar, X, Sparkles, School, Upload, Check } from 'lucide-react';
+import { Camera, Plus, Trash2, Calendar, X, Sparkles, School, Check } from 'lucide-react';
 import { getActivities, createActivity, deleteActivity } from '../../api/activities';
-import { listMediaFiles, uploadMediaFile } from '../../api/media';
+import { listMediaFiles } from '../../api/media';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { MediaUrlField } from '../../components/ui/MediaUrlField';
 import { LightboxModal } from '../gallery/LightboxModal';
 
 const PRESET_PHOTOS = [
@@ -56,13 +57,10 @@ export function ActivityGalleryPage(): JSX.Element {
   const [description, setDescription] = useState('');
   const [classroom, setClassroom] = useState('Papatyalar Sınıfı');
   const [selectedUrls, setSelectedUrls] = useState<string[]>([PRESET_PHOTOS[0]?.url || '']);
-  const [customUrl, setCustomUrl] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>(['Sanat', 'Etkinlik']);
   const [submitting, setSubmitting] = useState(false);
-  const [uploadingFiles, setUploadingFiles] = useState(false);
   const [tenantMediaFiles, setTenantMediaFiles] = useState<MediaFileItem[]>([]);
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { showToast } = useToast();
 
   function loadPosts(): void {
@@ -118,54 +116,6 @@ export function ActivityGalleryPage(): JSX.Element {
 
   function removeSelectedUrl(url: string): void {
     setSelectedUrls(selectedUrls.filter((u) => u !== url));
-  }
-
-  async function handleFileUpload(e: ChangeEvent<HTMLInputElement>): Promise<void> {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    setUploadingFiles(true);
-    const uploadedUrls: string[] = [];
-
-    try {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!file) continue;
-
-        if (file.size > 10 * 1024 * 1024) {
-          showToast(`"${file.name}" 10MB sınırını aşıyor.`, 'error');
-          continue;
-        }
-
-        const res = await uploadMediaFile(file, 'ACTIVITY');
-        if (res.success && res.file.url) {
-          uploadedUrls.push(res.file.url);
-          setTenantMediaFiles((prev) => [res.file, ...prev.filter((f) => f.id !== res.file.id)]);
-        }
-      }
-
-      if (uploadedUrls.length > 0) {
-        setSelectedUrls((prev) => {
-          const isOnlyDefaultPreset = prev.length === 1 && prev[0] === PRESET_PHOTOS[0]?.url;
-          return isOnlyDefaultPreset ? [...uploadedUrls] : [...uploadedUrls, ...prev];
-        });
-        showToast(`${uploadedUrls.length} fotoğraf başarıyla yüklendi! 📸`, 'success');
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Fotoğraf yüklenirken hata oluştu.';
-      showToast(msg, 'error');
-    } finally {
-      setUploadingFiles(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
-  }
-
-  function addCustomUrl(): void {
-    if (!customUrl.trim()) return;
-    if (!selectedUrls.includes(customUrl.trim())) {
-      setSelectedUrls([...selectedUrls, customUrl.trim()]);
-      setCustomUrl('');
-    }
   }
 
   function toggleTag(t: string): void {
@@ -462,17 +412,6 @@ export function ActivityGalleryPage(): JSX.Element {
               }}
               className="p-6 overflow-y-auto space-y-4.5 flex-1"
             >
-              {/* Hidden file input — Dosfa butonu (URL satirinda) tetikler */}
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={(e) => void handleFileUpload(e)}
-                accept="image/jpeg,image/png,image/webp,image/gif,image/heic"
-                multiple
-                className="hidden"
-                id="activity-file-upload"
-              />
-
               {/* Title */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
@@ -519,48 +458,17 @@ export function ActivityGalleryPage(): JSX.Element {
                 />
               </div>
 
-              {/* Custom Photo URL — "Paylaşılacak Fotoğraflar" preview'dan hemen önce */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
-                  Veya Doğrudan Görsel URL'si Ekle
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="url"
-                    placeholder="https://..."
-                    value={customUrl}
-                    onChange={(e) => setCustomUrl(e.target.value)}
-                    className="flex-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploadingFiles}
-                    className="btn-tactile-secondary px-3 py-2 text-xs font-bold shrink-0 inline-flex items-center gap-1.5 disabled:opacity-50"
-                    title="Cihazınızdan fotoğraf yükle"
-                  >
-                    <Upload className="w-3.5 h-3.5" />
-                    Dosya
-                  </button>
-                  <button
-                    type="button"
-                    onClick={addCustomUrl}
-                    className="btn-tactile-secondary px-4 py-2 text-xs font-bold shrink-0"
-                  >
-                    Ekle
-                  </button>
-                </div>
-              </div>
-
-              {/* Hidden file input — Dosfa butonu (URL satırında) tetikler */}
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={(e) => void handleFileUpload(e)}
-                accept="image/jpeg,image/png,image/webp,image/gif,image/heic"
-                multiple
-                className="hidden"
-                id="activity-file-upload"
+              {/* Custom Photo URL — paylasilan MediaUrlField (coklu mod) */}
+              <MediaUrlField
+                value=""
+                onChange={() => {}}
+                values={selectedUrls}
+                onValuesChange={setSelectedUrls}
+                category="ACTIVITY"
+                label="Veya Doğrudan Görsel URL'si Ekle"
+                placeholder="https://..."
+                showMultiplePreview={false}
+                multipleFiles
               />
 
               {/* Selected Photos Gallery (Prominent Preview) */}

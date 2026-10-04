@@ -130,7 +130,7 @@ describe('ActivityGalleryPage', () => {
     });
   });
 
-  it('Dosya butonu URL satırında file picker tetikler', async () => {
+  it('Dosfa butonu URL satirinda file picker tetikler', async () => {
     mockFetchByUrl({
       '/activities': () => new Response(JSON.stringify([]), { status: 200 }),
     });
@@ -144,12 +144,9 @@ describe('ActivityGalleryPage', () => {
     });
     await userEvent.click(openBtn);
 
-    // URL satırındaki "Dosfa" butonu (üst zone "Dosya Seç" diye geçiyor)
-    const urlFileBtn = screen
-      .getAllByRole('button', { name: /Dosya/i })
-      .find((b) => b.title === 'Cihazınızdan fotoğraf yükle');
-    expect(urlFileBtn).toBeDefined();
-    await userEvent.click(urlFileBtn!);
+    // MediaUrlField icindeki Dosya butonu
+    const fileBtn = await screen.findByRole('button', { name: /Dosya/i });
+    await userEvent.click(fileBtn);
 
     expect(clickSpy).toHaveBeenCalled();
     clickSpy.mockRestore();

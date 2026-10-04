@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, type FormEvent, type JSX } from 'react';
+import { useState, useEffect, useMemo, type FormEvent, type JSX } from 'react';
 import {
   Award,
   BookOpen,
@@ -18,12 +18,10 @@ import {
   RotateCw,
   X,
   User,
-  Upload,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { useToast } from '../../components/Toast';
 import { listStudents } from '../../api/students';
-import { uploadMediaFile } from '../../api/media';
 import {
   listObservations,
   createObservation,
@@ -42,6 +40,7 @@ import type {
 import {
   Badge,
   EmptyState,
+  MediaUrlField,
   StatCard,
   TactileButton,
   TactileTabs,
@@ -52,6 +51,13 @@ interface DomainMeta {
   label: string;
   badgeCls: string;
   icon: typeof Award;
+}
+
+interface PortfolioFormState {
+  studentId: string;
+  title: string;
+  description: string;
+  isParentVisible: boolean;
 }
 
 const DOMAIN_LABELS: Record<DevelopmentDomain, DomainMeta> = {
@@ -122,31 +128,13 @@ export function DevelopmentPage(): JSX.Element {
   });
 
   const [showPortModal, setShowPortModal] = useState(false);
-  const [portForm, setPortForm] = useState({
+  const [portForm, setPortForm] = useState<PortfolioFormState>({
     studentId: '',
     title: '',
     description: '',
-    mediaUrl: '',
     isParentVisible: true,
   });
-  const [portUploading, setPortUploading] = useState(false);
-  const portFileInputRef = useRef<HTMLInputElement | null>(null);
-
-  async function handlePortFileUpload(e: React.ChangeEvent<HTMLInputElement>): Promise<void> {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setPortUploading(true);
-    try {
-      const res = await uploadMediaFile(file, 'PORTFOLIO');
-      setPortForm((prev) => ({ ...prev, mediaUrl: res.file.url }));
-      showToast('Fotoğraf yüklendi', 'success');
-    } catch (err) {
-      showToast(err instanceof Error ? err.message : 'Yükleme başarısız', 'error');
-    } finally {
-      setPortUploading(false);
-      if (portFileInputRef.current) portFileInputRef.current.value = '';
-    }
-  }
+  const [portMediaUrl, setPortMediaUrl] = useState<string>('');
 
   const [showActModal, setShowActModal] = useState(false);
   const [actForm, setActForm] = useState({
@@ -232,15 +220,15 @@ export function DevelopmentPage(): JSX.Element {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await createPortfolioItem(portForm);
+      await createPortfolioItem({ ...portForm, mediaUrl: portMediaUrl });
       setShowPortModal(false);
       setPortForm({
         studentId: selectedStudentId || (students[0]?.id ?? ''),
         title: '',
         description: '',
-        mediaUrl: '',
         isParentVisible: true,
       });
+      setPortMediaUrl('');
       const res = await listPortfolio(selectedStudentId || undefined);
       setPortfolioItems(res);
       showToast('Portfolyo çalışması başarıyla eklendi! 🎨', 'success');
@@ -913,60 +901,16 @@ export function DevelopmentPage(): JSX.Element {
                 />
               </div>
 
-              {/* Medya / Fotoğraf URL + Dosya butonu + preview — "Veli Portalı" checkbox'ından önce */}
-              <input
-                type="hidden"
-                ref={portFileInputRef}
-                onChange={(e) => void handlePortFileUpload(e)}
-                accept="image/jpeg,image/png,image/webp,image/gif,image/heic"
+              {/* Medya / Fotoğraf URL + Dosya butonu + preview — paylaşılan MediaUrlField */}
+              <MediaUrlField
+                value={portMediaUrl}
+                onChange={(url: string) => {
+                  setPortMediaUrl(url);
+                }}
+                category="PORTFOLIO"
+                label="Medya / Fotoğraf URL"
+                placeholder="https://images.unsplash.com/..."
               />
-              <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
-                  Medya / Fotoğraf URL
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="url"
-                    placeholder="https://images.unsplash.com/..."
-                    value={portForm.mediaUrl}
-                    onChange={(e) => setPortForm({ ...portForm, mediaUrl: e.target.value })}
-                    required
-                    className="flex-1 text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-amber-700"
-                  />
-                  <TactileButton
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => portFileInputRef.current?.click()}
-                    disabled={portUploading}
-                  >
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>{portUploading ? 'Yükleniyor…' : 'Dosya'}</span>
-                  </TactileButton>
-                </div>
-
-                {portForm.mediaUrl && (
-                  <div className="mt-2 relative inline-block">
-                    <img
-                      src={portForm.mediaUrl}
-                      alt="Önizleme"
-                      onError={(e) => {
-                        e.currentTarget.src =
-                          'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
-                      }}
-                      className="h-24 w-32 object-cover rounded-2xl border-2 border-[#DDD4C4] dark:border-slate-700 shadow-2xs"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setPortForm({ ...portForm, mediaUrl: '' })}
-                      className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800/60 hover:bg-rose-100 dark:hover:bg-rose-900/80 flex items-center justify-center transition cursor-pointer"
-                      title="Görseli kaldır"
-                    >
-                      <X className="w-3 h-3 stroke-[3]" />
-                    </button>
-                  </div>
-                )}
-              </div>
 
               <div className="flex items-center gap-2.5 p-2 bg-[#FCFAF7] dark:bg-slate-900/60 rounded-xl border border-[#DDD4C4] dark:border-slate-800">
                 <input
