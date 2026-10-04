@@ -1,8 +1,5 @@
 import type { IncidentCategory, IncidentRecord } from '@kidscare/shared-types';
-import type {
-  IncidentRecordCreate,
-  IncidentRecordUpdate,
-} from '@kidscare/shared-schemas';
+import type { IncidentRecordCreate } from '@kidscare/shared-schemas';
 import { apiFetch } from './client';
 
 export async function listIncidents(
@@ -24,10 +21,13 @@ export async function createIncident(input: IncidentRecordCreate): Promise<Incid
 
 export async function updateIncident(
   id: string,
-  input: IncidentRecordUpdate,
+  input: { actionTaken?: string | undefined; parentNotified?: boolean | undefined },
 ): Promise<IncidentRecord> {
+  const payload: Record<string, unknown> = {};
+  if (typeof input.parentNotified === 'boolean') payload.parentNotified = input.parentNotified;
+  if (input.actionTaken !== undefined) payload.actionTaken = input.actionTaken;
   return apiFetch<IncidentRecord>(`/incidents/${encodeURIComponent(id)}`, {
     method: 'PATCH',
-    body: JSON.stringify(input),
+    body: JSON.stringify(payload),
   });
 }
