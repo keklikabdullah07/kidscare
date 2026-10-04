@@ -462,6 +462,50 @@ export function ActivityGalleryPage(): JSX.Element {
               }}
               className="p-6 overflow-y-auto space-y-4.5 flex-1"
             >
+              {/* Hidden file input — Dosfa butonu (URL satirinda) tetikler */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={(e) => void handleFileUpload(e)}
+                accept="image/jpeg,image/png,image/webp,image/gif,image/heic"
+                multiple
+                className="hidden"
+                id="activity-file-upload"
+              />
+
+              {/* Custom Photo URL — formun en ust sirasinda (gorsel akis ilk) */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                  Veya Doğrudan Görsel URL'si Ekle
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    placeholder="https://..."
+                    value={customUrl}
+                    onChange={(e) => setCustomUrl(e.target.value)}
+                    className="flex-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingFiles}
+                    className="btn-tactile-secondary px-3 py-2 text-xs font-bold shrink-0 inline-flex items-center gap-1.5 disabled:opacity-50"
+                    title="Cihazınızdan fotoğraf yükle"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    Dosya
+                  </button>
+                  <button
+                    type="button"
+                    onClick={addCustomUrl}
+                    className="btn-tactile-secondary px-4 py-2 text-xs font-bold shrink-0"
+                  >
+                    Ekle
+                  </button>
+                </div>
+              </div>
+
               {/* Title */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
@@ -663,39 +707,6 @@ export function ActivityGalleryPage(): JSX.Element {
                       </div>
                     );
                   })}
-                </div>
-              </div>
-
-              {/* Custom Photo URL */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
-                  Veya Doğrudan Görsel URL'si Ekle
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="url"
-                    placeholder="https://..."
-                    value={customUrl}
-                    onChange={(e) => setCustomUrl(e.target.value)}
-                    className="flex-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploadingFiles}
-                    className="btn-tactile-secondary px-3 py-2 text-xs font-bold shrink-0 inline-flex items-center gap-1.5 disabled:opacity-50"
-                    title="Cihazınızdan fotoğraf yükle"
-                  >
-                    <Upload className="w-3.5 h-3.5" />
-                    Dosya
-                  </button>
-                  <button
-                    type="button"
-                    onClick={addCustomUrl}
-                    className="btn-tactile-secondary px-4 py-2 text-xs font-bold shrink-0"
-                  >
-                    Ekle
-                  </button>
                 </div>
               </div>
 

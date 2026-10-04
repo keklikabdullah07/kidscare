@@ -35,8 +35,9 @@ Mevcut iki yükleme yeri:
 3. Her iki sayfada buton tıklayınca file picker açılır.
 4. Yükleme sonrası dönen URL ilgili state'e yazılır.
 5. `ActivityGalleryPage` üst upload zone kaldırılır.
-6. Vitest testleri geçer.
-7. ESLint + check.ps1 0 hata.
+6. **Form sıralaması:** Medya / Fotoğraf URL bölümü (input + Dosya butonu + seçili görseller preview) formun **en üst sırasında** olmalı — başlık/açıklama alanlarından önce. Akış: önce görsel, sonra metin.
+7. Vitest testleri geçer.
+8. ESLint + check.ps1 0 hata.
 
 ## 4. Kapsam Dışı
 
