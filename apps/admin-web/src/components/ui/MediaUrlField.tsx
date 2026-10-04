@@ -57,14 +57,30 @@ export function MediaUrlField({
   const isMultiple = Array.isArray(values) && Boolean(onValuesChange);
 
   function handleAddUrl(): void {
-    const trimmed = inputUrl.trim();
-    if (!trimmed) return;
+    const raw = inputUrl.trim();
+    if (!raw) return;
+    // Virgül, yeni satır veya boşluk ile ayrılmış URL'leri ayrıştır.
+    const parsed = raw
+      .split(/[,\n]/)
+      .map((u) => u.trim())
+      .filter((u) => u.length > 0);
+    if (parsed.length === 0) return;
+
     if (isMultiple && onValuesChange) {
-      if (!values?.includes(trimmed)) {
-        onValuesChange([...(values ?? []), trimmed]);
+      const next = [...(values ?? [])];
+      for (const url of parsed) {
+        if (!next.includes(url)) next.push(url);
       }
+      onValuesChange(next);
     } else {
-      onChange(trimmed);
+      // Tekil modda yalnız ilk URL kullanılır; geri kalanı kullanıcıya bilgi verilir.
+      onChange(parsed[0] as string);
+      if (parsed.length > 1) {
+        showToast(
+          `Yalnızca ilk URL eklendi (${parsed.length} URL yapıştırıldı). Çoklu ekleme için çoklu mod gerekir.`,
+          'info',
+        );
+      }
     }
     setInputUrl('');
   }

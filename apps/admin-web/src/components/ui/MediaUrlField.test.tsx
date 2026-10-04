@@ -35,6 +35,29 @@ describe('MediaUrlField', () => {
     expect(onValuesChange).toHaveBeenCalledWith(['https://a/1.jpg', 'https://a/2.jpg']);
   });
 
+  it('parses comma-separated URLs in coklu mod (Ekle)', () => {
+    const onValuesChange = vi.fn();
+    render(
+      <MediaUrlField
+        value=""
+        onChange={() => {}}
+        values={['https://a/1.jpg']}
+        onValuesChange={onValuesChange}
+      />,
+    );
+    const input = screen.getByPlaceholderText('https://...');
+    fireEvent.change(input, {
+      target: { value: 'https://a/2.jpg, https://a/3.jpg, https://a/4.jpg' },
+    });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(onValuesChange).toHaveBeenCalledWith([
+      'https://a/1.jpg',
+      'https://a/2.jpg',
+      'https://a/3.jpg',
+      'https://a/4.jpg',
+    ]);
+  });
+
   it('Ekle button is disabled when input is empty', () => {
     render(<MediaUrlField value="" onChange={() => {}} />);
     expect(screen.getByRole('button', { name: /^Ekle$/ })).toBeDisabled();
