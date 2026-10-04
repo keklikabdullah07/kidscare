@@ -50,33 +50,6 @@ import {
   type TactileTabItem,
 } from '../../components/ui';
 
-export const PRESET_PORTFOLIO_PHOTOS = [
-  {
-    name: 'Sulu Boya Çalışması',
-    url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Parmak Boyası & Baskı',
-    url: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Oyun Hamuru & Kil',
-    url: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Renkli Kağıt Kolajı',
-    url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80',
-  },
-  {
-    name: 'Ahşap Blok Kule',
-    url: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Doğal Yaprak & Dal Sanatı',
-    url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop',
-  },
-];
-
 interface DomainMeta {
   label: string;
   badgeCls: string;
@@ -196,14 +169,6 @@ export function DevelopmentPage(): JSX.Element {
         });
     }
   }, [showPortModal, canEdit]);
-
-  function togglePortPreset(url: string): void {
-    if (portMediaUrls.includes(url)) {
-      setPortMediaUrls(portMediaUrls.filter((u) => u !== url));
-    } else {
-      setPortMediaUrls([...portMediaUrls, url]);
-    }
-  }
 
   function togglePortPhotoUrl(url: string): void {
     if (portMediaUrls.includes(url)) {
@@ -1031,41 +996,36 @@ export function DevelopmentPage(): JSX.Element {
                   </div>
                 ) : (
                   <div className="grid grid-cols-3 gap-2.5">
-                    {portMediaUrls.map((url, idx) => {
-                      const isPreset = PRESET_PORTFOLIO_PHOTOS.some((p) => p.url === url);
-                      return (
-                        <div
-                          key={`${url}-${idx}`}
-                          className="group relative rounded-2xl overflow-hidden border-2 border-amber-600 shadow-[0_2px_0_0_#d97706] bg-white dark:bg-[#131B2E]"
-                        >
-                          <img
-                            src={url}
-                            alt={`Seçilen görsel ${idx + 1}`}
-                            onError={(e) => {
-                              e.currentTarget.src =
-                                'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
-                            }}
-                            className="h-24 w-full object-cover"
-                          />
-                          <div className="p-1.5 flex items-center justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300">
-                            <span className="truncate max-w-[85px]">
-                              {isPreset ? 'Örnek Görsel' : 'Yüklenen Foto'}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => removePortMediaUrl(url)}
-                              className="w-5 h-5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/80 flex items-center justify-center transition cursor-pointer"
-                              title="Fotoğrafı Kaldır"
-                            >
-                              <X className="w-3 h-3 stroke-[3]" />
-                            </button>
-                          </div>
-                          <div className="absolute top-1.5 left-1.5 bg-amber-800/90 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs">
-                            #{idx + 1}
-                          </div>
+                    {portMediaUrls.map((url, idx) => (
+                      <div
+                        key={`${url}-${idx}`}
+                        className="group relative rounded-2xl overflow-hidden border-2 border-amber-600 shadow-[0_2px_0_0_#d97706] bg-white dark:bg-[#131B2E]"
+                      >
+                        <img
+                          src={url}
+                          alt={`Seçilen görsel ${idx + 1}`}
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                          }}
+                          className="h-24 w-full object-cover"
+                        />
+                        <div className="p-1.5 flex items-center justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300">
+                          <span className="truncate max-w-[85px]">Yüklenen Foto</span>
+                          <button
+                            type="button"
+                            onClick={() => removePortMediaUrl(url)}
+                            className="w-5 h-5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/80 flex items-center justify-center transition cursor-pointer"
+                            title="Fotoğrafı Kaldır"
+                          >
+                            <X className="w-3 h-3 stroke-[3]" />
+                          </button>
                         </div>
-                      );
-                    })}
+                        <div className="absolute top-1.5 left-1.5 bg-amber-800/90 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs">
+                          #{idx + 1}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -1109,47 +1069,6 @@ export function DevelopmentPage(): JSX.Element {
                   </div>
                 </div>
               )}
-
-              {/* Preset Photos Selection */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-2">
-                  Veya Hazır Örnek Eserlerden Ekleyin
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {PRESET_PORTFOLIO_PHOTOS.map((item) => {
-                    const isSelected = portMediaUrls.includes(item.url);
-                    return (
-                      <div
-                        key={item.url}
-                        onClick={() => togglePortPreset(item.url)}
-                        className={`relative rounded-2xl overflow-hidden border-2 cursor-pointer transition ${
-                          isSelected
-                            ? 'border-amber-600 shadow-[0_2px_0_0_#d97706]'
-                            : 'border-[#DDD4C4] dark:border-slate-700 hover:border-amber-500/60 shadow-2xs'
-                        }`}
-                      >
-                        <img
-                          src={item.url}
-                          alt={item.name}
-                          onError={(e) => {
-                            e.currentTarget.src =
-                              'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
-                          }}
-                          className="h-20 w-full object-cover"
-                        />
-                        <div className="p-1.5 bg-white dark:bg-[#131B2E] text-[10px] font-bold text-slate-800 dark:text-slate-200 truncate text-center">
-                          {item.name}
-                        </div>
-                        {isSelected && (
-                          <div className="absolute top-1.5 right-1.5 bg-amber-600 text-white rounded-full w-5 h-5 flex items-center justify-center shadow-xs">
-                            <Check className="w-3 h-3 stroke-[3]" />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
 
               <div className="flex items-center gap-2.5 p-2 bg-[#FCFAF7] dark:bg-slate-900/60 rounded-xl border border-[#DDD4C4] dark:border-slate-800">
                 <input

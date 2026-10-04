@@ -33,15 +33,8 @@ Bu şartnamenin amacı, **Portfolyo Eseri Ekle** modalını da Etkinlik Galerisi
 3. **"Kreş Arşivinden Seçin ({tenantMediaFiles.length} fotoğraf)":**
    - Modal açıldığında `listMediaFiles('PORTFOLIO')` ve gerekirse genel kreş arşivi çekilir (`tenantMediaFiles`).
    - 4 kolonlu kaydırılabilir ızgara; tıklandığında `portMediaUrls` listesine ekleme/çıkarma yapar, seçili olanlarda yeşil onay rozeti (`Check`) gösterilir.
-4. **"Veya Hazır Örnek Eserlerden Ekleyin":**
-   - Okul öncesi portfolyo sanat çalışmalarına uygun 6 hazır görsel (`PRESET_PORTFOLIO_PHOTOS`):
-     - Sulu Boya Çalışması
-     - Parmak Boyası & Baskı
-     - Oyun Hamuru & Kil
-     - Renkli Kağıt Kolajı
-     - Ahşap Blok Kule
-     - Doğal Yaprak & Dal Sanatı
-   - 3 kolonlu kart ızgarası, tek tıkla seç/kaldır (`togglePortPreset`), seçili olanda yeşil onay ikonu.
+4. **Hazır Örnek Fotoğrafların Kaldırılması:**
+   - Kullanıcı talebi doğrultusunda hem Etkinlik Galerisi hem de Portfolyo modallarından yapay/stok hazır örnek fotoğraflar kaldırılmış; yalnızca gerçek yüklenen/URL girilen fotoğraflar ve kreş arşivi bırakılmıştır.
 5. **Kayıt Mantığı (`handleCreatePortfolio`):**
    - Sıfır görsel kontrolü: Görsel seçilmemişse kullanıcı uyarılır (`Lütfen en az bir portfolyo görseli seçin veya yükleyin.`).
    - Çoklu görsel desteği: Seçilen her bir görsel için `createPortfolioItem` çağrılır (birden fazla ise `Başlık (1/N)` şeklinde), böylece hiçbir seçilen/yüklenen görsel kaybolmaz.

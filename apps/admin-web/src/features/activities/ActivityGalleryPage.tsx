@@ -12,33 +12,6 @@ import { TactileButton } from '../../components/ui/TactileButton';
 import { MediaUrlField } from '../../components/ui/MediaUrlField';
 import { LightboxModal } from '../gallery/LightboxModal';
 
-const PRESET_PHOTOS = [
-  {
-    name: 'Sanat & Boyama',
-    url: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Bahçe & Doğa',
-    url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Ritim & Müzik',
-    url: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Zeka Oyunları',
-    url: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Masal Saati',
-    url: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&auto=format&fit=crop',
-  },
-  {
-    name: 'Minik Bilim',
-    url: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?w=800&auto=format&fit=crop',
-  },
-];
-
 const FILTER_TAGS = ['Hepsi', 'Sanat', 'Oyun', 'Bahçe', 'Müzik', 'Resim', 'Gelişim'];
 
 export function ActivityGalleryPage(): JSX.Element {
@@ -56,7 +29,7 @@ export function ActivityGalleryPage(): JSX.Element {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [classroom, setClassroom] = useState('Papatyalar Sınıfı');
-  const [selectedUrls, setSelectedUrls] = useState<string[]>([PRESET_PHOTOS[0]?.url || '']);
+  const [selectedUrls, setSelectedUrls] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>(['Sanat', 'Etkinlik']);
   const [submitting, setSubmitting] = useState(false);
   const [tenantMediaFiles, setTenantMediaFiles] = useState<MediaFileItem[]>([]);
@@ -97,14 +70,6 @@ export function ActivityGalleryPage(): JSX.Element {
       loadTenantMedia();
     }
   }, [isCreateOpen]);
-
-  function togglePreset(url: string): void {
-    if (selectedUrls.includes(url)) {
-      setSelectedUrls(selectedUrls.filter((u) => u !== url));
-    } else {
-      setSelectedUrls([...selectedUrls, url]);
-    }
-  }
 
   function togglePhotoUrl(url: string): void {
     if (selectedUrls.includes(url)) {
@@ -150,7 +115,7 @@ export function ActivityGalleryPage(): JSX.Element {
       setIsCreateOpen(false);
       setTitle('');
       setDescription('');
-      setSelectedUrls([PRESET_PHOTOS[0]?.url || '']);
+      setSelectedUrls([]);
       showToast('Yeni etkinlik ve fotoğraflar paylaşıldı! 📸', 'success');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Paylaşılamadı';
@@ -498,41 +463,36 @@ export function ActivityGalleryPage(): JSX.Element {
                   </div>
                 ) : (
                   <div className="grid grid-cols-3 gap-2.5">
-                    {selectedUrls.map((url, idx) => {
-                      const isPreset = PRESET_PHOTOS.some((p) => p.url === url);
-                      return (
-                        <div
-                          key={`${url}-${idx}`}
-                          className="group relative rounded-2xl overflow-hidden border-2 border-teal-700 shadow-[0_2px_0_0_#0f766e] bg-white dark:bg-[#131B2E]"
-                        >
-                          <img
-                            src={url}
-                            alt={`Seçilen görsel ${idx + 1}`}
-                            onError={(e) => {
-                              e.currentTarget.src =
-                                'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
-                            }}
-                            className="h-24 w-full object-cover"
-                          />
-                          <div className="p-1.5 flex items-center justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300">
-                            <span className="truncate max-w-[85px]">
-                              {isPreset ? 'Örnek Görsel' : 'Yüklenen Foto'}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => removeSelectedUrl(url)}
-                              className="w-5 h-5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/80 flex items-center justify-center transition cursor-pointer"
-                              title="Fotoğrafı Kaldır"
-                            >
-                              <X className="w-3 h-3 stroke-[3]" />
-                            </button>
-                          </div>
-                          <div className="absolute top-1.5 left-1.5 bg-teal-800/90 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs">
-                            #{idx + 1}
-                          </div>
+                    {selectedUrls.map((url, idx) => (
+                      <div
+                        key={`${url}-${idx}`}
+                        className="group relative rounded-2xl overflow-hidden border-2 border-teal-700 shadow-[0_2px_0_0_#0f766e] bg-white dark:bg-[#131B2E]"
+                      >
+                        <img
+                          src={url}
+                          alt={`Seçilen görsel ${idx + 1}`}
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                          }}
+                          className="h-24 w-full object-cover"
+                        />
+                        <div className="p-1.5 flex items-center justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300">
+                          <span className="truncate max-w-[85px]">Yüklenen Foto</span>
+                          <button
+                            type="button"
+                            onClick={() => removeSelectedUrl(url)}
+                            className="w-5 h-5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/80 flex items-center justify-center transition cursor-pointer"
+                            title="Fotoğrafı Kaldır"
+                          >
+                            <X className="w-3 h-3 stroke-[3]" />
+                          </button>
                         </div>
-                      );
-                    })}
+                        <div className="absolute top-1.5 left-1.5 bg-teal-800/90 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs">
+                          #{idx + 1}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -576,47 +536,6 @@ export function ActivityGalleryPage(): JSX.Element {
                   </div>
                 </div>
               )}
-
-              {/* Preset Photos Selection */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-2">
-                  Veya Hazır Örnek Fotoğraflardan Ekleyin
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {PRESET_PHOTOS.map((item) => {
-                    const isSelected = selectedUrls.includes(item.url);
-                    return (
-                      <div
-                        key={item.url}
-                        onClick={() => togglePreset(item.url)}
-                        className={`relative rounded-2xl overflow-hidden border-2 cursor-pointer transition ${
-                          isSelected
-                            ? 'border-teal-700 shadow-[0_2px_0_0_#0f766e]'
-                            : 'border-[#DDD4C4] dark:border-slate-700 hover:border-teal-500/60 shadow-2xs'
-                        }`}
-                      >
-                        <img
-                          src={item.url}
-                          alt={item.name}
-                          onError={(e) => {
-                            e.currentTarget.src =
-                              'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
-                          }}
-                          className="h-20 w-full object-cover"
-                        />
-                        <div className="p-1.5 bg-white dark:bg-[#131B2E] text-[10px] font-bold text-slate-800 dark:text-slate-200 truncate text-center">
-                          {item.name}
-                        </div>
-                        {isSelected && (
-                          <div className="absolute top-1.5 right-1.5 bg-teal-700 text-white rounded-full w-5 h-5 flex items-center justify-center shadow-xs">
-                            <Check className="w-3 h-3 stroke-[3]" />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
 
               {/* Tags */}
               <div>

@@ -98,7 +98,7 @@ describe('DevelopmentPage', () => {
     });
   });
 
-  it('opens portfolio modal and displays harmonized photo selection sections', async () => {
+  it('opens portfolio modal and displays harmonized photo selection and tenant archive sections', async () => {
     const user = userEvent.setup();
     render(
       <BrowserRouter>
@@ -116,16 +116,15 @@ describe('DevelopmentPage', () => {
     expect(screen.getByText("Veya Doğrudan Görsel URL'si Ekle")).toBeInTheDocument();
     expect(screen.getByText('Paylaşılacak Fotoğraflar')).toBeInTheDocument();
     expect(screen.getByText(/Henüz fotoğraf seçilmedi/i)).toBeInTheDocument();
-    expect(screen.getByText('Veya Hazır Örnek Eserlerden Ekleyin')).toBeInTheDocument();
-    expect(screen.getByText('Sulu Boya Çalışması')).toBeInTheDocument();
-    expect(screen.getByText('Parmak Boyası & Baskı')).toBeInTheDocument();
+    expect(screen.queryByText(/Hazır Örnek/i)).not.toBeInTheDocument();
 
-    // Select a preset photo
-    const presetCard = screen.getByText('Sulu Boya Çalışması');
-    await user.click(presetCard);
+    // Select photo from tenant archive
+    expect(await screen.findByText(/Kreş Arşivinden Seçin/i)).toBeInTheDocument();
+    const archiveImg = await screen.findByAltText('arsiv-calisma-1.jpg');
+    await user.click(archiveImg);
 
     expect(await screen.findByText('1 seçildi')).toBeInTheDocument();
     expect(screen.getByText('Tümünü Temizle')).toBeInTheDocument();
-    expect(screen.getByText('Örnek Görsel')).toBeInTheDocument();
+    expect(screen.getByText('Yüklenen Foto')).toBeInTheDocument();
   });
 });
