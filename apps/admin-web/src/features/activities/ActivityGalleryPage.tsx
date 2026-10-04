@@ -1,17 +1,6 @@
 import { useState, useEffect, useRef, type JSX, type ChangeEvent } from 'react';
 import type { ActivityPost, MediaFileItem } from '@kidscare/shared-types';
-import {
-  Camera,
-  Plus,
-  Trash2,
-  Calendar,
-  X,
-  Sparkles,
-  School,
-  Upload,
-  Check,
-  Loader2,
-} from 'lucide-react';
+import { Camera, Plus, Trash2, Calendar, X, Sparkles, School, Upload, Check } from 'lucide-react';
 import { getActivities, createActivity, deleteActivity } from '../../api/activities';
 import { listMediaFiles, uploadMediaFile } from '../../api/media';
 import { useToast } from '../../components/Toast';
@@ -519,41 +508,16 @@ export function ActivityGalleryPage(): JSX.Element {
                 />
               </div>
 
-              {/* File Upload Zone */}
-              <div className="bg-[#FCFAF7] dark:bg-slate-900/60 p-4.5 rounded-2xl border-2 border-dashed border-[#DDD4C4] dark:border-slate-700 text-center">
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={(e) => void handleFileUpload(e)}
-                  accept="image/jpeg,image/png,image/webp,image/gif,image/heic"
-                  multiple
-                  className="hidden"
-                  id="activity-file-upload"
-                />
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center mb-2 shadow-2xs border border-teal-200/70">
-                    {uploadingFiles ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <Upload className="w-5 h-5" />
-                    )}
-                  </div>
-                  <p className="text-xs font-bold text-slate-800 dark:text-slate-100">
-                    Cihazınızdan Fotoğraf Yükleyin
-                  </p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                    JPEG, PNG, WEBP, HEIC (Maksimum 10MB)
-                  </p>
-                  <button
-                    type="button"
-                    disabled={uploadingFiles}
-                    onClick={() => fileInputRef.current?.click()}
-                    className="btn-tactile-secondary px-4 py-1.5 text-xs font-bold mt-2.5 disabled:opacity-50"
-                  >
-                    {uploadingFiles ? 'Yükleniyor…' : 'Dosya Seç'}
-                  </button>
-                </div>
-              </div>
+              {/* Hidden file input — Dosya butonu (URL satırı) tetikler */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={(e) => void handleFileUpload(e)}
+                accept="image/jpeg,image/png,image/webp,image/gif,image/heic"
+                multiple
+                className="hidden"
+                id="activity-file-upload"
+              />
 
               {/* Selected Photos Gallery (Prominent Preview) */}
               <div>

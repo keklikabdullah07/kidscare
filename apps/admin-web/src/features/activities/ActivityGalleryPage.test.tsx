@@ -92,7 +92,9 @@ describe('ActivityGalleryPage', () => {
     await userEvent.click(openBtn);
 
     expect(screen.getByText('Etkinlik Başlığı *')).toBeInTheDocument();
-    expect(screen.getByText('Cihazınızdan Fotoğraf Yükleyin')).toBeInTheDocument();
+    // Eski üst upload zone kaldırıldı; tek yükleme noktası URL satırındaki Dosya butonu.
+    expect(screen.queryByText('Cihazınızdan Fotoğraf Yükleyin')).not.toBeInTheDocument();
+    expect(screen.getByText("Veya Doğrudan Görsel URL'si Ekle")).toBeInTheDocument();
 
     const cancelBtn = screen.getByRole('button', { name: /İptal/i });
     await userEvent.click(cancelBtn);
