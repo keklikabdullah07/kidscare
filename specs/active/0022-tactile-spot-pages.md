@@ -16,7 +16,7 @@ Bu şartname, KidsCare Yönetim Paneli'ndeki `PickupPage`, `ActivityGalleryPage`
 | `/attendance` | `AttendancePage.tsx`      | 0022.4 | ✅ Uygulandı                                   |
 | `/tracking`   | `DailyTrackingPage.tsx`   | 0022.5 | ⏳ Uygulanacak                                 |
 
-**DashboardPage istisnası:** Sayfanın başında özel hero header (gradient + kişiselleştirilmiş selamlama + animasyonlu ping) mevcut. `<PageHeader>` standardı bu hero tasarımına uymadığı için bilinçli olarak dönüşüm uygulanmadı. Mevcut haliyle korunur. İleride ayrı bir spec ile hero header'ın standartlaştırılması değerlendirilebilir.
+**DashboardPage istisnası (çözüldü):** Hero header `<DashboardHero />` bileşenine çıkarıldı (spec 0023). Sayfa artık standart bileşen + özelleştirilmiş hero bileşeni hibrit yapıda.
 
 ## 3. Spot Harmonizasyon Kuralları
 
