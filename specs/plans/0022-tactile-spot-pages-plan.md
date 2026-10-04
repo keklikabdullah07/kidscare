@@ -21,8 +21,7 @@ Bu plan, dört sayfada spot harmonizasyon uygular. Her sayfa bağımsız commit 
 
 ### Adım 3 — `apps/admin-web/src/features/dashboard/DashboardPage.tsx`
 
-- Header bloğu → `<PageHeader>`.
-- Sayfadaki ana CTA'lar → `<TactileButton>`.
+- **Atlandı.** Sayfanın başındaki hero header (gradient + kişiselleştirilmiş selamlama + animasyonlu ping) özel tasarım kasıtlıdır; `<PageHeader>` standardına uymadığı için bilinçli olarak dönüştürülmedi.
 
 ### Adım 4 — `apps/admin-web/src/features/attendance/AttendancePage.tsx`
 
@@ -40,3 +39,4 @@ pwsh -File ./scripts/check.ps1
 ## Commitler
 
 - 1 commit her sayfa için (`feat(<h>): spot tactile harmonization`).
+- **DashboardPage** atlandı; 3 commit (pickup, gallery, attendance) uygulandı.

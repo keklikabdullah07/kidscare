@@ -8,12 +8,14 @@ Bu şartname, KidsCare Yönetim Paneli'ndeki `PickupPage`, `ActivityGalleryPage`
 
 ## 2. Hedeflenen Sayfalar
 
-| Route         | Sayfa                     | Spec   |
-| ------------- | ------------------------- | ------ |
-| `/pickup`     | `PickupPage.tsx`          | 0022.1 |
-| `/gallery`    | `ActivityGalleryPage.tsx` | 0022.2 |
-| `/dashboard`  | `DashboardPage.tsx`       | 0022.3 |
-| `/attendance` | `AttendancePage.tsx`      | 0022.4 |
+| Route         | Sayfa                     | Spec   | Durum                         |
+| ------------- | ------------------------- | ------ | ----------------------------- |
+| `/pickup`     | `PickupPage.tsx`          | 0022.1 | ✅ Uygulandı                  |
+| `/gallery`    | `ActivityGalleryPage.tsx` | 0022.2 | ✅ Uygulandı                  |
+| `/dashboard`  | `DashboardPage.tsx`       | 0022.3 | ⚠️ Atlandı (özel hero header) |
+| `/attendance` | `AttendancePage.tsx`      | 0022.4 | ✅ Uygulandı                  |
+
+**DashboardPage istisnası:** Sayfanın başında özel hero header (gradient + kişiselleştirilmiş selamlama + animasyonlu ping) mevcut. `<PageHeader>` standardı bu hero tasarımına uymadığı için bilinçli olarak dönüşüm uygulanmadı. Mevcut haliyle korunur. İleride ayrı bir spec ile hero header'ın standartlaştırılması değerlendirilebilir.
 
 ## 3. Spot Harmonizasyon Kuralları
 
