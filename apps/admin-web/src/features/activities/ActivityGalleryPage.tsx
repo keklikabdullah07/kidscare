@@ -13,7 +13,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { getActivities, createActivity, deleteActivity } from '../../api/activities';
-import { uploadMediaFile } from '../../api/media';
+import { listMediaFiles, uploadMediaFile } from '../../api/media';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
@@ -69,6 +69,7 @@ export function ActivityGalleryPage(): JSX.Element {
   const [selectedTags, setSelectedTags] = useState<string[]>(['Sanat', 'Etkinlik']);
   const [submitting, setSubmitting] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState(false);
+  const [tenantMediaFiles, setTenantMediaFiles] = useState<MediaFileItem[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { showToast } = useToast();
@@ -87,20 +88,45 @@ export function ActivityGalleryPage(): JSX.Element {
       });
   }
 
+  function loadTenantMedia(): void {
+    if (!canEdit) return;
+    listMediaFiles('ACTIVITY', 30)
+      .then((items) => {
+        setTenantMediaFiles(items);
+      })
+      .catch(() => {
+        // silent fallback
+      });
+  }
+
   useEffect(() => {
     loadPosts();
   }, [selectedTag]);
 
+  useEffect(() => {
+    if (isCreateOpen) {
+      loadTenantMedia();
+    }
+  }, [isCreateOpen]);
+
   function togglePreset(url: string): void {
     if (selectedUrls.includes(url)) {
-      if (selectedUrls.length > 1) {
-        setSelectedUrls(selectedUrls.filter((u) => u !== url));
-      } else {
-        showToast('En az 1 fotoğraf seçmelisiniz.', 'info');
-      }
+      setSelectedUrls(selectedUrls.filter((u) => u !== url));
     } else {
       setSelectedUrls([...selectedUrls, url]);
     }
+  }
+
+  function togglePhotoUrl(url: string): void {
+    if (selectedUrls.includes(url)) {
+      setSelectedUrls(selectedUrls.filter((u) => u !== url));
+    } else {
+      setSelectedUrls([...selectedUrls, url]);
+    }
+  }
+
+  function removeSelectedUrl(url: string): void {
+    setSelectedUrls(selectedUrls.filter((u) => u !== url));
   }
 
   async function handleFileUpload(e: ChangeEvent<HTMLInputElement>): Promise<void> {
@@ -123,11 +149,15 @@ export function ActivityGalleryPage(): JSX.Element {
         const res = await uploadMediaFile(file, 'ACTIVITY');
         if (res.success && res.file.url) {
           uploadedUrls.push(res.file.url);
+          setTenantMediaFiles((prev) => [res.file, ...prev.filter((f) => f.id !== res.file.id)]);
         }
       }
 
       if (uploadedUrls.length > 0) {
-        setSelectedUrls((prev) => [...uploadedUrls, ...prev]);
+        setSelectedUrls((prev) => {
+          const isOnlyDefaultPreset = prev.length === 1 && prev[0] === PRESET_PHOTOS[0]?.url;
+          return isOnlyDefaultPreset ? [...uploadedUrls] : [...uploadedUrls, ...prev];
+        });
         showToast(`${uploadedUrls.length} fotoğraf başarıyla yüklendi! 📸`, 'success');
       }
     } catch (err: unknown) {
@@ -506,7 +536,7 @@ export function ActivityGalleryPage(): JSX.Element {
                   type="file"
                   ref={fileInputRef}
                   onChange={(e) => void handleFileUpload(e)}
-                  accept="image/jpeg,image/png,image/webp,image/heic"
+                  accept="image/jpeg,image/png,image/webp,image/gif,image/heic"
                   multiple
                   className="hidden"
                   id="activity-file-upload"
@@ -523,7 +553,7 @@ export function ActivityGalleryPage(): JSX.Element {
                     Cihazınızdan Fotoğraf Yükleyin
                   </p>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                    JPEG, PNG, WEBP (Maksimum 10MB)
+                    JPEG, PNG, WEBP, HEIC (Maksimum 10MB)
                   </p>
                   <button
                     type="button"
@@ -536,10 +566,116 @@ export function ActivityGalleryPage(): JSX.Element {
                 </div>
               </div>
 
+              {/* Selected Photos Gallery (Prominent Preview) */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                    <span>Paylaşılacak Fotoğraflar</span>
+                    <span className="px-2 py-0.5 text-[11px] font-bold rounded-full bg-teal-100 dark:bg-teal-900/80 text-teal-800 dark:text-teal-200">
+                      {selectedUrls.length} seçildi
+                    </span>
+                  </label>
+                  {selectedUrls.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedUrls([])}
+                      className="text-[11px] font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer"
+                    >
+                      Tümünü Temizle
+                    </button>
+                  )}
+                </div>
+
+                {selectedUrls.length === 0 ? (
+                  <div className="p-4 rounded-2xl border border-dashed border-[#DDD4C4] dark:border-slate-700 text-center text-xs text-slate-400 dark:text-slate-500 bg-[#FCFAF7] dark:bg-slate-900/40">
+                    Henüz fotoğraf seçilmedi. Cihazınızdan fotoğraf yükleyin veya aşağıdaki
+                    galeriden seçin.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2.5">
+                    {selectedUrls.map((url, idx) => {
+                      const isPreset = PRESET_PHOTOS.some((p) => p.url === url);
+                      return (
+                        <div
+                          key={`${url}-${idx}`}
+                          className="group relative rounded-2xl overflow-hidden border-2 border-teal-700 shadow-[0_2px_0_0_#0f766e] bg-white dark:bg-[#131B2E]"
+                        >
+                          <img
+                            src={url}
+                            alt={`Seçilen görsel ${idx + 1}`}
+                            onError={(e) => {
+                              e.currentTarget.src =
+                                'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                            }}
+                            className="h-24 w-full object-cover"
+                          />
+                          <div className="p-1.5 flex items-center justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300">
+                            <span className="truncate max-w-[85px]">
+                              {isPreset ? 'Örnek Görsel' : 'Yüklenen Foto'}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => removeSelectedUrl(url)}
+                              className="w-5 h-5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/80 flex items-center justify-center transition cursor-pointer"
+                              title="Fotoğrafı Kaldır"
+                            >
+                              <X className="w-3 h-3 stroke-[3]" />
+                            </button>
+                          </div>
+                          <div className="absolute top-1.5 left-1.5 bg-teal-800/90 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs">
+                            #{idx + 1}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Previously Uploaded Activity Photos from Tenant */}
+              {tenantMediaFiles.length > 0 && (
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-2">
+                    Kreş Arşivinden Seçin ({tenantMediaFiles.length} fotoğraf)
+                  </label>
+                  <div className="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto p-1">
+                    {tenantMediaFiles.map((file) => {
+                      const isSelected = selectedUrls.includes(file.url);
+                      return (
+                        <div
+                          key={file.id}
+                          onClick={() => togglePhotoUrl(file.url)}
+                          className={`relative rounded-xl overflow-hidden border-2 cursor-pointer transition ${
+                            isSelected
+                              ? 'border-teal-700 shadow-[0_2px_0_0_#0f766e]'
+                              : 'border-[#DDD4C4] dark:border-slate-700 hover:border-teal-500/60 shadow-2xs'
+                          }`}
+                        >
+                          <img
+                            src={file.url}
+                            alt={file.fileName}
+                            className="h-16 w-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src =
+                                'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                            }}
+                          />
+                          {isSelected && (
+                            <div className="absolute top-1 right-1 bg-teal-700 text-white rounded-full w-4 h-4 flex items-center justify-center shadow-xs">
+                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* Preset Photos Selection */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-2">
-                  Veya Hazır Örnek Fotoğraflardan Seçin ({selectedUrls.length} seçildi)
+                  Veya Hazır Örnek Fotoğraflardan Ekleyin
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {PRESET_PHOTOS.map((item) => {
