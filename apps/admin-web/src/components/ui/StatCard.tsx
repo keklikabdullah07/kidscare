@@ -5,10 +5,12 @@ export interface StatCardProps {
   value: string | number;
   subtitle?: string;
   icon?: ElementType<{ className?: string }>;
-  variant?: 'blue' | 'amber' | 'emerald' | 'rose' | 'indigo';
+  variant?: 'blue' | 'amber' | 'emerald' | 'rose' | 'indigo' | 'teal';
   badge?: ReactNode;
   progressPercent?: number;
   footer?: ReactNode;
+  onClick?: () => void;
+  className?: string;
 }
 
 export function StatCard({
@@ -20,6 +22,8 @@ export function StatCard({
   badge,
   progressPercent,
   footer,
+  onClick,
+  className = '',
 }: StatCardProps): JSX.Element {
   const variantStyles = {
     teal: {
@@ -62,7 +66,8 @@ export function StatCard({
 
   return (
     <div
-      className={`bg-white dark:bg-[#131B2E] p-6 rounded-3xl border-2 border-[#DCD4C6] dark:border-slate-800/90 ${variantStyles.borderHover} shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1 active:translate-y-[3px] active:shadow-none transition-all duration-150 ease-out flex flex-col justify-between group cursor-pointer`}
+      onClick={onClick}
+      className={`bg-white dark:bg-[#131B2E] p-6 rounded-3xl border-2 border-[#DCD4C6] dark:border-slate-800/90 ${variantStyles.borderHover} shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1 active:translate-y-[3px] active:shadow-none transition-all duration-150 ease-out flex flex-col justify-between group cursor-pointer ${className}`}
     >
       <div className="flex items-center justify-between">
         <span
