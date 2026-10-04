@@ -41,6 +41,8 @@ export function TactileButton({
   return (
     <button
       {...props}
+      disabled={props.disabled}
+      aria-disabled={props.disabled}
       className={`inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all duration-100 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none ${TACTILE_VARIANT_CLASSES[variant]} ${TACTILE_SIZE_CLASSES[size]} ${className}`}
     >
       {children}

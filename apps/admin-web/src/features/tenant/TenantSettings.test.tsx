@@ -126,4 +126,29 @@ describe('TenantSettings', () => {
       expect(screen.getByDisplayValue('Yenilenen Kreş')).toBeInTheDocument();
     });
   });
+
+  it('disables Kaydet when name has no changes, enables when edited', async () => {
+    mockFetchByUrl({
+      '/tenants/me': () => new Response(JSON.stringify(fakeTenant), { status: 200 }),
+    });
+
+    const user = userEvent.setup();
+    render(<TenantSettings />);
+
+    const input = await screen.findByDisplayValue('Demo Kreş');
+    const saveBtn = await screen.findByRole('button', { name: /kaydet/i });
+
+    // Initially disabled (no changes)
+    expect(saveBtn).toBeDisabled();
+
+    // Edit → enabled
+    await user.clear(input);
+    await user.type(input, 'Yeni Kreş Adı');
+    expect(saveBtn).not.toBeDisabled();
+
+    // Revert → disabled again
+    await user.clear(input);
+    await user.type(input, 'Demo Kreş');
+    expect(saveBtn).toBeDisabled();
+  });
 });
