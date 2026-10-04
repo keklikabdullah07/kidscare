@@ -7,6 +7,7 @@ import {
   Plus,
   Calendar,
   CheckCircle,
+  Check,
   MessageSquare,
   Activity,
   Heart,
@@ -22,6 +23,7 @@ import {
 import { useAuth } from '../auth/AuthContext';
 import { useToast } from '../../components/Toast';
 import { listStudents } from '../../api/students';
+import { listMediaFiles } from '../../api/media';
 import {
   listObservations,
   createObservation,
@@ -34,6 +36,7 @@ import type {
   DevelopmentDomain,
   DevelopmentObservationDto,
   HomeActivitySuggestionDto,
+  MediaFileItem,
   PortfolioItemDto,
   Student,
 } from '@kidscare/shared-types';
@@ -46,6 +49,33 @@ import {
   TactileTabs,
   type TactileTabItem,
 } from '../../components/ui';
+
+export const PRESET_PORTFOLIO_PHOTOS = [
+  {
+    name: 'Sulu Boya Çalışması',
+    url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&auto=format&fit=crop',
+  },
+  {
+    name: 'Parmak Boyası & Baskı',
+    url: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&auto=format&fit=crop',
+  },
+  {
+    name: 'Oyun Hamuru & Kil',
+    url: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800&auto=format&fit=crop',
+  },
+  {
+    name: 'Renkli Kağıt Kolajı',
+    url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80',
+  },
+  {
+    name: 'Ahşap Blok Kule',
+    url: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=800&auto=format&fit=crop',
+  },
+  {
+    name: 'Doğal Yaprak & Dal Sanatı',
+    url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop',
+  },
+];
 
 interface DomainMeta {
   label: string;
@@ -135,6 +165,7 @@ export function DevelopmentPage(): JSX.Element {
     isParentVisible: true,
   });
   const [portMediaUrls, setPortMediaUrls] = useState<string[]>([]);
+  const [tenantMediaFiles, setTenantMediaFiles] = useState<MediaFileItem[]>([]);
 
   const [showActModal, setShowActModal] = useState(false);
   const [actForm, setActForm] = useState({
@@ -149,6 +180,42 @@ export function DevelopmentPage(): JSX.Element {
     (state.user.role === 'ADMIN' ||
       state.user.role === 'SUPER_ADMIN' ||
       state.user.role === 'TEACHER');
+
+  useEffect(() => {
+    if (showPortModal && canEdit) {
+      listMediaFiles('PORTFOLIO', 30)
+        .then((items) => {
+          if (items.length > 0) {
+            setTenantMediaFiles(items);
+          } else {
+            void listMediaFiles(undefined, 30).then(setTenantMediaFiles);
+          }
+        })
+        .catch(() => {
+          // silent fallback
+        });
+    }
+  }, [showPortModal, canEdit]);
+
+  function togglePortPreset(url: string): void {
+    if (portMediaUrls.includes(url)) {
+      setPortMediaUrls(portMediaUrls.filter((u) => u !== url));
+    } else {
+      setPortMediaUrls([...portMediaUrls, url]);
+    }
+  }
+
+  function togglePortPhotoUrl(url: string): void {
+    if (portMediaUrls.includes(url)) {
+      setPortMediaUrls(portMediaUrls.filter((u) => u !== url));
+    } else {
+      setPortMediaUrls([...portMediaUrls, url]);
+    }
+  }
+
+  function removePortMediaUrl(url: string): void {
+    setPortMediaUrls(portMediaUrls.filter((u) => u !== url));
+  }
 
   useEffect(() => {
     async function init() {
@@ -218,12 +285,29 @@ export function DevelopmentPage(): JSX.Element {
 
   async function handleCreatePortfolio(e: FormEvent) {
     e.preventDefault();
+    if (portMediaUrls.length === 0) {
+      showToast('Lütfen en az bir portfolyo görseli seçin veya yükleyin.', 'error');
+      return;
+    }
     setSubmitting(true);
     try {
-      await createPortfolioItem({
-        ...portForm,
-        mediaUrl: portMediaUrls[0] ?? '',
-      });
+      if (portMediaUrls.length === 1) {
+        await createPortfolioItem({
+          ...portForm,
+          mediaUrl: portMediaUrls[0] as string,
+        });
+      } else {
+        // Çoklu görsel seçildiğinde her biri ardışık olarak portfolyoya kaydedilir
+        for (let i = 0; i < portMediaUrls.length; i++) {
+          const url = portMediaUrls[i] as string;
+          const multiTitle = `${portForm.title} (${i + 1}/${portMediaUrls.length})`;
+          await createPortfolioItem({
+            ...portForm,
+            title: multiTitle,
+            mediaUrl: url,
+          });
+        }
+      }
       setShowPortModal(false);
       setPortForm({
         studentId: selectedStudentId || (students[0]?.id ?? ''),
@@ -234,7 +318,12 @@ export function DevelopmentPage(): JSX.Element {
       setPortMediaUrls([]);
       const res = await listPortfolio(selectedStudentId || undefined);
       setPortfolioItems(res);
-      showToast('Portfolyo çalışması başarıyla eklendi! 🎨', 'success');
+      showToast(
+        portMediaUrls.length > 1
+          ? `${portMediaUrls.length} portfolyo çalışması başarıyla eklendi! 🎨`
+          : 'Portfolyo çalışması başarıyla eklendi! 🎨',
+        'success',
+      );
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Portfolyo çalışması kaydedilemedi', 'error');
     } finally {
@@ -834,21 +923,19 @@ export function DevelopmentPage(): JSX.Element {
 
       {/* Portfolyo Çalışması Ekle Modalı */}
       {showPortModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-[#DDD4C4] dark:border-slate-800">
-              <div className="flex items-center gap-2">
-                <ImageIcon className="w-5 h-5 text-amber-700 dark:text-amber-400" />
-                <h3 className="text-base font-black text-slate-900 dark:text-white">
-                  Portfolyoya Çalışma Ekle
-                </h3>
-              </div>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+          <div className="bg-white dark:bg-[#131B2E] rounded-3xl shadow-2xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden border-2 border-[#DDD4C4] dark:border-slate-800">
+            <div className="p-5 border-b border-[#DDD4C4]/70 dark:border-slate-800 flex items-center justify-between bg-[#FCFAF7] dark:bg-slate-900/60">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Palette className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                <span>Portfolyoya Yeni Eser Ekle</span>
+              </h2>
               <button
                 type="button"
                 onClick={() => setShowPortModal(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+                className="w-8 h-8 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center justify-center cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
@@ -856,17 +943,17 @@ export function DevelopmentPage(): JSX.Element {
               onSubmit={(e) => {
                 void handleCreatePortfolio(e);
               }}
-              className="space-y-3.5"
+              className="p-6 overflow-y-auto space-y-4 flex-1"
             >
               <div>
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
-                  Öğrenci
+                  Öğrenci *
                 </label>
                 <select
                   value={portForm.studentId}
                   onChange={(e) => setPortForm({ ...portForm, studentId: e.target.value })}
                   required
-                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-amber-700"
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 p-3 text-xs font-semibold text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-900 focus:border-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 shadow-2xs cursor-pointer"
                 >
                   <option value="">Öğrenci Seçiniz</option>
                   {students.map((s) => (
@@ -879,7 +966,7 @@ export function DevelopmentPage(): JSX.Element {
 
               <div>
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
-                  Çalışma Başlığı
+                  Çalışma Başlığı *
                 </label>
                 <input
                   type="text"
@@ -887,34 +974,182 @@ export function DevelopmentPage(): JSX.Element {
                   value={portForm.title}
                   onChange={(e) => setPortForm({ ...portForm, title: e.target.value })}
                   required
-                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-amber-700"
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 p-3 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 shadow-2xs"
                 />
               </div>
 
               <div>
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
-                  Açıklama
+                  Açıklama / Pedagojik Notlar
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Kullanılan teknik, öğrencinin ifade ettiği fikir..."
+                  placeholder="Kullanılan teknik, öğrencinin ifade ettiği fikir, gelişim alanı..."
                   value={portForm.description}
                   onChange={(e) => setPortForm({ ...portForm, description: e.target.value })}
-                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-amber-700"
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 p-3 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 shadow-2xs leading-relaxed"
                 />
               </div>
 
-              {/* Paylaşılacak Fotoğraflar (coklu) — paylaşılan MediaUrlField */}
+              {/* Custom Photo URL — paylasilan MediaUrlField */}
               <MediaUrlField
                 value=""
                 onChange={() => {}}
                 values={portMediaUrls}
                 onValuesChange={setPortMediaUrls}
                 category="PORTFOLIO"
-                label="Paylaşılacak Fotoğraflar"
-                placeholder="https://images.unsplash.com/..."
+                label="Veya Doğrudan Görsel URL'si Ekle"
+                placeholder="https://..."
+                showMultiplePreview={false}
                 multipleFiles
               />
+
+              {/* Selected Photos Gallery (Prominent Preview) */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                    <span>Paylaşılacak Fotoğraflar</span>
+                    <span className="px-2 py-0.5 text-[11px] font-bold rounded-full bg-amber-100 dark:bg-amber-900/80 text-amber-800 dark:text-amber-200">
+                      {portMediaUrls.length} seçildi
+                    </span>
+                  </label>
+                  {portMediaUrls.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setPortMediaUrls([])}
+                      className="text-[11px] font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer"
+                    >
+                      Tümünü Temizle
+                    </button>
+                  )}
+                </div>
+
+                {portMediaUrls.length === 0 ? (
+                  <div className="p-4 rounded-2xl border border-dashed border-[#DDD4C4] dark:border-slate-700 text-center text-xs text-slate-400 dark:text-slate-500 bg-[#FCFAF7] dark:bg-slate-900/40">
+                    Henüz fotoğraf seçilmedi. Cihazınızdan fotoğraf yükleyin veya aşağıdaki
+                    galeriden seçin.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2.5">
+                    {portMediaUrls.map((url, idx) => {
+                      const isPreset = PRESET_PORTFOLIO_PHOTOS.some((p) => p.url === url);
+                      return (
+                        <div
+                          key={`${url}-${idx}`}
+                          className="group relative rounded-2xl overflow-hidden border-2 border-amber-600 shadow-[0_2px_0_0_#d97706] bg-white dark:bg-[#131B2E]"
+                        >
+                          <img
+                            src={url}
+                            alt={`Seçilen görsel ${idx + 1}`}
+                            onError={(e) => {
+                              e.currentTarget.src =
+                                'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                            }}
+                            className="h-24 w-full object-cover"
+                          />
+                          <div className="p-1.5 flex items-center justify-between text-[10px] font-bold text-slate-700 dark:text-slate-300">
+                            <span className="truncate max-w-[85px]">
+                              {isPreset ? 'Örnek Görsel' : 'Yüklenen Foto'}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => removePortMediaUrl(url)}
+                              className="w-5 h-5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/80 flex items-center justify-center transition cursor-pointer"
+                              title="Fotoğrafı Kaldır"
+                            >
+                              <X className="w-3 h-3 stroke-[3]" />
+                            </button>
+                          </div>
+                          <div className="absolute top-1.5 left-1.5 bg-amber-800/90 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs">
+                            #{idx + 1}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Previously Uploaded Portfolio Photos from Tenant */}
+              {tenantMediaFiles.length > 0 && (
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-2">
+                    Kreş Arşivinden Seçin ({tenantMediaFiles.length} fotoğraf)
+                  </label>
+                  <div className="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto p-1">
+                    {tenantMediaFiles.map((file) => {
+                      const isSelected = portMediaUrls.includes(file.url);
+                      return (
+                        <div
+                          key={file.id}
+                          onClick={() => togglePortPhotoUrl(file.url)}
+                          className={`relative rounded-xl overflow-hidden border-2 cursor-pointer transition ${
+                            isSelected
+                              ? 'border-amber-600 shadow-[0_2px_0_0_#d97706]'
+                              : 'border-[#DDD4C4] dark:border-slate-700 hover:border-amber-500/60 shadow-2xs'
+                          }`}
+                        >
+                          <img
+                            src={file.url}
+                            alt={file.fileName}
+                            className="h-16 w-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src =
+                                'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                            }}
+                          />
+                          {isSelected && (
+                            <div className="absolute top-1 right-1 bg-amber-600 text-white rounded-full w-4 h-4 flex items-center justify-center shadow-xs">
+                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Preset Photos Selection */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-2">
+                  Veya Hazır Örnek Eserlerden Ekleyin
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {PRESET_PORTFOLIO_PHOTOS.map((item) => {
+                    const isSelected = portMediaUrls.includes(item.url);
+                    return (
+                      <div
+                        key={item.url}
+                        onClick={() => togglePortPreset(item.url)}
+                        className={`relative rounded-2xl overflow-hidden border-2 cursor-pointer transition ${
+                          isSelected
+                            ? 'border-amber-600 shadow-[0_2px_0_0_#d97706]'
+                            : 'border-[#DDD4C4] dark:border-slate-700 hover:border-amber-500/60 shadow-2xs'
+                        }`}
+                      >
+                        <img
+                          src={item.url}
+                          alt={item.name}
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                          }}
+                          className="h-20 w-full object-cover"
+                        />
+                        <div className="p-1.5 bg-white dark:bg-[#131B2E] text-[10px] font-bold text-slate-800 dark:text-slate-200 truncate text-center">
+                          {item.name}
+                        </div>
+                        {isSelected && (
+                          <div className="absolute top-1.5 right-1.5 bg-amber-600 text-white rounded-full w-5 h-5 flex items-center justify-center shadow-xs">
+                            <Check className="w-3 h-3 stroke-[3]" />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
 
               <div className="flex items-center gap-2.5 p-2 bg-[#FCFAF7] dark:bg-slate-900/60 rounded-xl border border-[#DDD4C4] dark:border-slate-800">
                 <input
@@ -922,7 +1157,7 @@ export function DevelopmentPage(): JSX.Element {
                   id="portParentVisible"
                   checked={portForm.isParentVisible}
                   onChange={(e) => setPortForm({ ...portForm, isParentVisible: e.target.checked })}
-                  className="w-4 h-4 rounded border-[#DDD4C4] text-amber-700 focus:ring-amber-700 cursor-pointer"
+                  className="w-4 h-4 rounded border-[#DDD4C4] text-amber-600 focus:ring-amber-600 cursor-pointer"
                 />
                 <label
                   htmlFor="portParentVisible"

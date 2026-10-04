@@ -18,6 +18,20 @@ vi.mock('../auth/AuthContext', () => ({
   }),
 }));
 
+vi.mock('../../api/media', () => ({
+  listMediaFiles: vi.fn().mockResolvedValue([
+    {
+      id: 'med-1',
+      url: 'https://images.unsplash.com/photo-archive-1.jpg',
+      fileName: 'arsiv-calisma-1.jpg',
+      category: 'PORTFOLIO',
+    },
+  ]),
+  uploadMediaFile: vi.fn().mockResolvedValue({
+    url: 'https://images.unsplash.com/photo-uploaded-1.jpg',
+  }),
+}));
+
 vi.mock('../../api/students', () => ({
   listStudents: vi.fn().mockResolvedValue([{ id: 'st-1', firstName: 'Ali', lastName: 'Yılmaz' }]),
 }));
@@ -82,5 +96,36 @@ describe('DevelopmentPage', () => {
         screen.getByText(/Henüz portfolyoya eklenmiş çalışma bulunmuyor/i),
       ).toBeInTheDocument();
     });
+  });
+
+  it('opens portfolio modal and displays harmonized photo selection sections', async () => {
+    const user = userEvent.setup();
+    render(
+      <BrowserRouter>
+        <DevelopmentPage />
+      </BrowserRouter>,
+    );
+
+    const portfolioTab = screen.getByRole('tab', { name: /Öğrenci Portfolyosu/i });
+    await user.click(portfolioTab);
+
+    const addBtn = await screen.findByRole('button', { name: /Çalışma Ekle/i });
+    await user.click(addBtn);
+
+    expect(await screen.findByText('Portfolyoya Yeni Eser Ekle')).toBeInTheDocument();
+    expect(screen.getByText("Veya Doğrudan Görsel URL'si Ekle")).toBeInTheDocument();
+    expect(screen.getByText('Paylaşılacak Fotoğraflar')).toBeInTheDocument();
+    expect(screen.getByText(/Henüz fotoğraf seçilmedi/i)).toBeInTheDocument();
+    expect(screen.getByText('Veya Hazır Örnek Eserlerden Ekleyin')).toBeInTheDocument();
+    expect(screen.getByText('Sulu Boya Çalışması')).toBeInTheDocument();
+    expect(screen.getByText('Parmak Boyası & Baskı')).toBeInTheDocument();
+
+    // Select a preset photo
+    const presetCard = screen.getByText('Sulu Boya Çalışması');
+    await user.click(presetCard);
+
+    expect(await screen.findByText('1 seçildi')).toBeInTheDocument();
+    expect(screen.getByText('Tümünü Temizle')).toBeInTheDocument();
+    expect(screen.getByText('Örnek Görsel')).toBeInTheDocument();
   });
 });

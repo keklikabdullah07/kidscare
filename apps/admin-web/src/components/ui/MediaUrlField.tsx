@@ -1,11 +1,12 @@
 import { useRef, useState, type JSX } from 'react';
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import { Upload, X } from 'lucide-react';
+import type { MediaCategory } from '@kidscare/shared-types';
 import { uploadMediaFile } from '../../api/media';
 import { useToast } from '../Toast';
 import { TactileButton } from './TactileButton';
 
-export type MediaCategory = 'PORTFOLIO' | 'ACTIVITY' | 'STUDENT' | 'OTHER';
+export type { MediaCategory };
 
 export interface MediaUrlFieldProps {
   /** Tekil modda URL değeri. */
@@ -22,7 +23,7 @@ export interface MediaUrlFieldProps {
   label?: string;
   /** URL input placeholder. */
   placeholder?: string;
-  /** Dosfa butonu + file input render. */
+  /** Dosya butonu + file input render. */
   allowFileUpload?: boolean;
   /** Tekil modda preview img göster. */
   showPreview?: boolean;
@@ -30,6 +31,8 @@ export interface MediaUrlFieldProps {
   showMultiplePreview?: boolean;
   /** Çoklu dosya kabul et (multiple). */
   multipleFiles?: boolean;
+  /** Ekle butonunu göster/gizle. */
+  showAddButton?: boolean;
 }
 
 const FALLBACK_IMAGE =
@@ -40,7 +43,7 @@ export function MediaUrlField({
   onChange,
   values,
   onValuesChange,
-  category = 'OTHER',
+  category = 'GENERAL',
   label = 'Medya / Fotoğraf URL',
   placeholder = 'https://...',
   allowFileUpload = true,

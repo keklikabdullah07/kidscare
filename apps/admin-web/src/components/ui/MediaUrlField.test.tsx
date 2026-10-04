@@ -66,7 +66,7 @@ describe('MediaUrlField', () => {
   it('shows preview img when value is set and showPreview=true', () => {
     render(<MediaUrlField value="https://example.com/x.jpg" onChange={() => {}} showPreview />);
     const img = screen.getByAltText('Önizleme');
-    expect(img.src).toBe('https://example.com/x.jpg');
+    expect(img.getAttribute('src')).toBe('https://example.com/x.jpg');
   });
 
   it('hides preview when showPreview=false', () => {

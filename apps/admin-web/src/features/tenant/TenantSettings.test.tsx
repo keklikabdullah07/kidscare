@@ -104,14 +104,12 @@ describe('TenantSettings', () => {
     mockFetchByUrl({
       '/tenants/me': () => {
         callCount += 1;
-        return Promise.resolve(
-          new Response(
-            JSON.stringify({
-              ...fakeTenant,
-              name: callCount === 1 ? 'Demo Kreş' : 'Yenilenen Kreş',
-            }),
-            { status: 200 },
-          ),
+        return new Response(
+          JSON.stringify({
+            ...fakeTenant,
+            name: callCount === 1 ? 'Demo Kreş' : 'Yenilenen Kreş',
+          }),
+          { status: 200 },
         );
       },
     });
