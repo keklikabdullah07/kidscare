@@ -18,6 +18,8 @@ import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { TactileButton } from '../../components/ui/TactileButton';
 import { LightboxModal } from '../gallery/LightboxModal';
 
 const PRESET_PHOTOS = [
@@ -257,33 +259,20 @@ export function ActivityGalleryPage(): JSX.Element {
 
   return (
     <div className="space-y-6">
-      {/* Top Header Card */}
-      <div className="bg-white dark:bg-[#131B2E] p-5.5 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
-            <Camera className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-              Fotoğraf & Etkinlik Galerisi
-            </h1>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
-              Kreşte gerçekleşen günlük etkinlik ve aktiviteleri fotoğraflarla velilerle paylaşın.
-            </p>
-          </div>
-        </div>
-
-        {canEdit && (
-          <button
-            type="button"
-            onClick={() => setIsCreateOpen(true)}
-            className="btn-tactile-teal px-4.5 py-2.5 text-xs font-bold flex items-center gap-2 self-start md:self-auto"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Yeni Etkinlik & Fotoğraf Paylaş</span>
-          </button>
-        )}
-      </div>
+      {/* Top Header */}
+      <PageHeader
+        title="Fotoğraf & Etkinlik Galerisi"
+        description="Kreşte gerçekleşen günlük etkinlik ve aktiviteleri fotoğraflarla velilerle paylaşın."
+        icon={Camera}
+        actions={
+          canEdit ? (
+            <TactileButton variant="teal" size="md" onClick={() => setIsCreateOpen(true)}>
+              <Plus className="w-4 h-4" />
+              <span>Yeni Etkinlik & Fotoğraf Paylaş</span>
+            </TactileButton>
+          ) : null
+        }
+      />
 
       {/* Filter Tags Toolbar */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 py-1">
