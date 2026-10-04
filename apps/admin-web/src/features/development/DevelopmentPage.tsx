@@ -147,15 +147,12 @@ export function DevelopmentPage(): JSX.Element {
       try {
         const studentList = await listStudents();
         setStudents(studentList);
-        if (studentList.length > 0 && !selectedStudentId) {
-          setSelectedStudentId(studentList[0]?.id || '');
-        }
       } catch (err) {
         console.error(err);
       }
     }
     void init();
-  }, [selectedStudentId]);
+  }, []);
 
   async function loadData() {
     setLoading(true);
@@ -191,17 +188,17 @@ export function DevelopmentPage(): JSX.Element {
     try {
       await createObservation(obsForm);
       setShowObsModal(false);
+      const createdStudentId = obsForm.studentId;
       setObsForm({
-        studentId: selectedStudentId || (students[0]?.id ?? ''),
+        studentId: createdStudentId || (students[0]?.id ?? ''),
         domain: 'DIL',
         skillName: '',
         observation: '',
         isParentVisible: true,
       });
-      const res = await listObservations(
-        selectedStudentId || undefined,
-        (selectedDomain as DevelopmentDomain) || undefined,
-      );
+      setSelectedStudentId(createdStudentId);
+      setSelectedDomain('');
+      const res = await listObservations(createdStudentId || undefined, undefined);
       setObservations(res);
       showToast('Gözlem kaydı başarıyla eklendi! ✨', 'success');
     } catch (err) {
@@ -362,36 +359,78 @@ export function DevelopmentPage(): JSX.Element {
         </div>
       </div>
 
-      {/* Dokunsal KPI Özet Sayaçları */}
+      {/* Dokunsal KPI Özet Sayaçları (Tıklanabilir Sekme Geçişi) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
-        <StatCard
-          title="Toplam Gözlem"
-          value={observations.length}
-          subtitle="Pedagojik kayıt"
-          variant="blue"
-          icon={BookOpen}
-        />
-        <StatCard
-          title="Portfolyo Eseri"
-          value={portfolioItems.length}
-          subtitle="Görsel & proje ürünü"
-          variant="amber"
-          icon={ImageIcon}
-        />
-        <StatCard
-          title="Ev Etkinlikleri"
-          value={activities.length}
-          subtitle="Aile etkinlik havuzu"
-          variant="indigo"
-          icon={Lightbulb}
-        />
-        <StatCard
-          title="Veli Paylaşımı"
-          value={parentVisibleCount}
-          subtitle="Veli portalında açık"
-          variant="emerald"
-          icon={Eye}
-        />
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('observations');
+            setSelectedStudentId('');
+            setSelectedDomain('');
+          }}
+          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+          aria-label="Toplam Gözlemler sekmesine geç ve filtreleri sıfırla"
+        >
+          <StatCard
+            title="Toplam Gözlem"
+            value={observations.length}
+            subtitle="Pedagojik kayıt"
+            variant="blue"
+            icon={BookOpen}
+          />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('portfolio');
+            setSelectedStudentId('');
+          }}
+          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+          aria-label="Öğrenci Portfolyosu sekmesine geç"
+        >
+          <StatCard
+            title="Portfolyo Eseri"
+            value={portfolioItems.length}
+            subtitle="Görsel & proje ürünü"
+            variant="amber"
+            icon={ImageIcon}
+          />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('activities');
+            setSelectedDomain('');
+          }}
+          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+          aria-label="Ev Etkinlikleri sekmesine geç"
+        >
+          <StatCard
+            title="Ev Etkinlikleri"
+            value={activities.length}
+            subtitle="Aile etkinlik havuzu"
+            variant="indigo"
+            icon={Lightbulb}
+          />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('observations');
+            setSelectedStudentId('');
+            setSelectedDomain('');
+          }}
+          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+          aria-label="Veli Paylaşımları görünümüne geç"
+        >
+          <StatCard
+            title="Veli Paylaşımı"
+            value={parentVisibleCount}
+            subtitle="Veli portalında açık"
+            variant="emerald"
+            icon={Eye}
+          />
+        </button>
       </div>
 
       {/* Evrensel Dokunsal Sekmeler & Filtre Çubuğu */}
