@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MedicationPage } from './MedicationPage';
 import { ToastProvider } from '../../components/Toast';
 
@@ -31,19 +31,58 @@ function mockFetchByUrl(handlers: Record<string, (init?: RequestInit) => Respons
   });
 }
 
+const fakeStudents = [
+  {
+    id: 's-1',
+    tenantId: 't-1',
+    firstName: 'Ada',
+    lastName: 'Yılmaz',
+    dateOfBirth: '2021-05-10',
+    gender: 'FEMALE',
+    enrollmentStatus: 'ACTIVE',
+    enrollmentDate: '2023-09-01',
+    bloodType: 'A_POSITIVE',
+    allergies: [],
+    dietaryRestrictions: null,
+    emergencyNotes: null,
+    classroomId: null,
+    createdAt: '2023-09-01T00:00:00.000Z',
+    updatedAt: '2023-09-01T00:00:00.000Z',
+  },
+];
+
 const fakeRecords = [
   {
     id: 'med-1',
     tenantId: 't-1',
     studentId: 's-1',
-    medicationName: 'Parol',
+    medicationName: 'Calpol Şurup',
     dosage: '5ml',
-    instructions: 'Yemekten sonra',
+    instructions: 'Yemekten sonra tok karnına',
     scheduledAt: '2026-09-15T13:00:00.000Z',
     givenAt: null,
     status: 'REQUESTED',
     requestedById: 'parent-1',
     approvedById: null,
+    administeredById: null,
+    parentApprovalNote: null,
+    rejectionReason: null,
+    skipReason: null,
+    createdAt: '2026-09-15T10:00:00.000Z',
+    updatedAt: '2026-09-15T10:00:00.000Z',
+  },
+  {
+    id: 'med-2',
+    tenantId: 't-1',
+    studentId: 's-1',
+    medicationName: 'Ventolin İnhaler',
+    dosage: '2 fıs',
+    instructions: 'Nefes darlığı durumunda',
+    scheduledAt: '2026-09-15T14:00:00.000Z',
+    givenAt: null,
+    status: 'APPROVED',
+    requestedById: 'parent-1',
+    approvedById: 'admin-1',
     administeredById: null,
     parentApprovalNote: null,
     rejectionReason: null,
@@ -73,16 +112,43 @@ describe('MedicationPage', () => {
 
   it('renders records with approve/reject buttons for admin', async () => {
     mockFetchByUrl({
-      '/medication/records': () =>
-        new Response(JSON.stringify(fakeRecords), { status: 200 }),
-      '/students': () => new Response(JSON.stringify([]), { status: 200 }),
+      '/medication/records': () => new Response(JSON.stringify(fakeRecords), { status: 200 }),
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
     });
+
     renderPage();
+
     await waitFor(() => {
-      expect(screen.getByText('İlaç Takibi')).toBeInTheDocument();
+      expect(screen.getByText(/İlaç Takibi & Sağlık Kütüğü/i)).toBeInTheDocument();
     });
-    expect(screen.getAllByText('Parol').length).toBeGreaterThan(0);
+
+    expect(screen.getByText('Calpol Şurup')).toBeInTheDocument();
+    expect(screen.getByText('Ventolin İnhaler')).toBeInTheDocument();
     expect(screen.getByText('Onayla')).toBeInTheDocument();
     expect(screen.getByText('Reddet')).toBeInTheDocument();
+    expect(screen.getByText('İlacı Ver')).toBeInTheDocument();
+  });
+
+  it('renders KPI cards and search filter', async () => {
+    mockFetchByUrl({
+      '/medication/records': () => new Response(JSON.stringify(fakeRecords), { status: 200 }),
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+    });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getAllByText('Onay Bekleyenler').length).toBeGreaterThan(0);
+    });
+
+    expect(screen.getByText('Günün Planları')).toBeInTheDocument();
+    expect(screen.getByText('Tamamlanan / Verilen')).toBeInTheDocument();
+
+    const searchInput = screen.getByPlaceholderText('İlaç adı, talimat veya öğrenci ara...');
+    expect(searchInput).toBeInTheDocument();
+
+    fireEvent.change(searchInput, { target: { value: 'Ventolin' } });
+    expect(screen.getByText('Ventolin İnhaler')).toBeInTheDocument();
+    expect(screen.queryByText('Calpol Şurup')).not.toBeInTheDocument();
   });
 });
