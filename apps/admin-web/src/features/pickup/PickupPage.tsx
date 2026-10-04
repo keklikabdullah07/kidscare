@@ -35,6 +35,7 @@ import { listStudents } from '../../api/students';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
+import { EmptyState } from '../../components/ui/EmptyState';
 import { TactileTabs } from '../../components/ui/TactileTabs';
 
 const STATUS_LABEL: Record<PickupAuthorizationStatus, string> = {

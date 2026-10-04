@@ -48,7 +48,7 @@ vi.mock('../../api/development', () => ({
 }));
 
 describe('DevelopmentPage', () => {
-  it('renders development page with observation data', async () => {
+  it('renders development page with observation data and KPI stats', async () => {
     render(
       <BrowserRouter>
         <DevelopmentPage />
@@ -59,10 +59,14 @@ describe('DevelopmentPage', () => {
       expect(screen.getByText(/Gelişim Hikâyesi & Öğrenci Portfolyosu/i)).toBeInTheDocument();
       expect(screen.getByText(/Cümle kurma/i)).toBeInTheDocument();
       expect(screen.getByText(/3-4 kelimelik tam cümleler kurabiliyor/i)).toBeInTheDocument();
+      expect(screen.getByText(/Toplam Gözlem/i)).toBeInTheDocument();
+      expect(screen.getByText(/Portfolyo Eseri/i)).toBeInTheDocument();
+      expect(screen.getByText(/Ev Etkinlikleri/i)).toBeInTheDocument();
+      expect(screen.getByText(/Veli Paylaşımı/i)).toBeInTheDocument();
     });
   });
 
-  it('switches between tabs', async () => {
+  it('switches between tactile tabs', async () => {
     const user = userEvent.setup();
     render(
       <BrowserRouter>
@@ -70,7 +74,7 @@ describe('DevelopmentPage', () => {
       </BrowserRouter>,
     );
 
-    const portfolioTab = screen.getByRole('button', { name: /Öğrenci Portfolyosu/i });
+    const portfolioTab = screen.getByRole('tab', { name: /Öğrenci Portfolyosu/i });
     await user.click(portfolioTab);
 
     await waitFor(() => {

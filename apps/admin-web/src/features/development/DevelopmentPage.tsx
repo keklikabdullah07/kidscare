@@ -1,8 +1,8 @@
-import { useState, useEffect, type JSX } from 'react';
+import { useState, useEffect, useMemo, type FormEvent, type JSX } from 'react';
 import {
   Award,
   BookOpen,
-  Image,
+  Image as ImageIcon,
   Lightbulb,
   Plus,
   Calendar,
@@ -15,6 +15,9 @@ import {
   Palette,
   Eye,
   Lock,
+  RotateCw,
+  X,
+  User,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { useToast } from '../../components/Toast';
@@ -34,6 +37,14 @@ import type {
   PortfolioItemDto,
   Student,
 } from '@kidscare/shared-types';
+import {
+  Badge,
+  EmptyState,
+  StatCard,
+  TactileButton,
+  TactileTabs,
+  type TactileTabItem,
+} from '../../components/ui';
 
 interface DomainMeta {
   label: string;
@@ -45,47 +56,47 @@ const DOMAIN_LABELS: Record<DevelopmentDomain, DomainMeta> = {
   DIL: {
     label: 'Dil & Konuşma',
     badgeCls:
-      'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800/60',
+      'bg-sky-50 text-sky-800 border-sky-300 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800/60',
     icon: MessageSquare,
   },
   MOTOR: {
     label: 'Motor Beceriler',
     badgeCls:
-      'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60',
+      'bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60',
     icon: Activity,
   },
   SOSYAL_DUYGUSAL: {
     label: 'Sosyal & Duygusal',
     badgeCls:
-      'bg-purple-50 text-purple-800 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800/60',
+      'bg-purple-50 text-purple-800 border-purple-300 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800/60',
     icon: Heart,
   },
   BILISSEL: {
     label: 'Bilişsel Gelişim',
     badgeCls:
-      'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/60',
+      'bg-amber-50 text-amber-900 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/60',
     icon: Sparkles,
   },
   OZ_BAKIM: {
     label: 'Öz Bakım & Yaşam',
     badgeCls:
-      'bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/60',
+      'bg-rose-50 text-rose-800 border-rose-300 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/60',
     icon: Smile,
   },
   SANAT: {
     label: 'Sanat & Yaratıcılık',
     badgeCls:
-      'bg-pink-50 text-pink-800 border-pink-200 dark:bg-pink-950/60 dark:text-pink-300 dark:border-pink-800/60',
+      'bg-pink-50 text-pink-800 border-pink-300 dark:bg-pink-950/60 dark:text-pink-300 dark:border-pink-800/60',
     icon: Palette,
   },
 };
 
+type TabKey = 'observations' | 'portfolio' | 'activities';
+
 export function DevelopmentPage(): JSX.Element {
   const { state } = useAuth();
   const { showToast } = useToast();
-  const [activeTab, setActiveTab] = useState<'observations' | 'portfolio' | 'activities'>(
-    'observations',
-  );
+  const [activeTab, setActiveTab] = useState<TabKey>('observations');
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedStudentId, setSelectedStudentId] = useState<string>('');
   const [selectedDomain, setSelectedDomain] = useState<DevelopmentDomain | ''>('');
@@ -96,6 +107,7 @@ export function DevelopmentPage(): JSX.Element {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   // Modal states
   const [showObsModal, setShowObsModal] = useState(false);
@@ -145,35 +157,37 @@ export function DevelopmentPage(): JSX.Element {
     void init();
   }, [selectedStudentId]);
 
-  useEffect(() => {
-    async function loadTabData() {
-      setLoading(true);
-      setError(null);
-      try {
-        if (activeTab === 'observations') {
-          const res = await listObservations(
-            selectedStudentId || undefined,
-            (selectedDomain as DevelopmentDomain) || undefined,
-          );
-          setObservations(res);
-        } else if (activeTab === 'portfolio') {
-          const res = await listPortfolio(selectedStudentId || undefined);
-          setPortfolioItems(res);
-        } else if (activeTab === 'activities') {
-          const res = await listHomeActivities((selectedDomain as DevelopmentDomain) || undefined);
-          setActivities(res);
-        }
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Veriler yüklenirken hata oluştu');
-      } finally {
-        setLoading(false);
+  async function loadData() {
+    setLoading(true);
+    setError(null);
+    try {
+      if (activeTab === 'observations') {
+        const res = await listObservations(
+          selectedStudentId || undefined,
+          (selectedDomain as DevelopmentDomain) || undefined,
+        );
+        setObservations(res);
+      } else if (activeTab === 'portfolio') {
+        const res = await listPortfolio(selectedStudentId || undefined);
+        setPortfolioItems(res);
+      } else if (activeTab === 'activities') {
+        const res = await listHomeActivities((selectedDomain as DevelopmentDomain) || undefined);
+        setActivities(res);
       }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Veriler yüklenirken hata oluştu');
+    } finally {
+      setLoading(false);
     }
-    void loadTabData();
+  }
+
+  useEffect(() => {
+    void loadData();
   }, [activeTab, selectedStudentId, selectedDomain]);
 
-  async function handleCreateObservation(e: React.FormEvent) {
+  async function handleCreateObservation(e: FormEvent) {
     e.preventDefault();
+    setSubmitting(true);
     try {
       await createObservation(obsForm);
       setShowObsModal(false);
@@ -189,14 +203,17 @@ export function DevelopmentPage(): JSX.Element {
         (selectedDomain as DevelopmentDomain) || undefined,
       );
       setObservations(res);
-      showToast('Gözlem kaydı başarıyla eklendi.', 'success');
+      showToast('Gözlem kaydı başarıyla eklendi! ✨', 'success');
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Gözlem kaydedilemedi', 'error');
+    } finally {
+      setSubmitting(false);
     }
   }
 
-  async function handleCreatePortfolio(e: React.FormEvent) {
+  async function handleCreatePortfolio(e: FormEvent) {
     e.preventDefault();
+    setSubmitting(true);
     try {
       await createPortfolioItem(portForm);
       setShowPortModal(false);
@@ -209,14 +226,17 @@ export function DevelopmentPage(): JSX.Element {
       });
       const res = await listPortfolio(selectedStudentId || undefined);
       setPortfolioItems(res);
-      showToast('Portfolyo çalışması başarıyla eklendi.', 'success');
+      showToast('Portfolyo çalışması başarıyla eklendi! 🎨', 'success');
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Portfolyo çalışması kaydedilemedi', 'error');
+    } finally {
+      setSubmitting(false);
     }
   }
 
-  async function handleCreateActivity(e: React.FormEvent) {
+  async function handleCreateActivity(e: FormEvent) {
     e.preventDefault();
+    setSubmitting(true);
     try {
       await createHomeActivity(actForm);
       setShowActModal(false);
@@ -228,153 +248,187 @@ export function DevelopmentPage(): JSX.Element {
       });
       const res = await listHomeActivities((selectedDomain as DevelopmentDomain) || undefined);
       setActivities(res);
-      showToast('Ev aktivitesi önerisi başarıyla eklendi.', 'success');
+      showToast('Ev etkinliği önerisi başarıyla eklendi! 💡', 'success');
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Aktivite kaydedilemedi', 'error');
+    } finally {
+      setSubmitting(false);
     }
   }
 
+  const tabs = useMemo<TactileTabItem<TabKey>[]>(
+    () => [
+      {
+        id: 'observations',
+        label: 'Pedagojik Gözlemler',
+        icon: BookOpen,
+        count: observations.length,
+        activeVariant: 'teal',
+      },
+      {
+        id: 'portfolio',
+        label: 'Öğrenci Portfolyosu',
+        icon: ImageIcon,
+        count: portfolioItems.length,
+        activeVariant: 'amber',
+      },
+      {
+        id: 'activities',
+        label: 'Ev Etkinlik Havuzu',
+        icon: Lightbulb,
+        count: activities.length,
+        activeVariant: 'sky',
+      },
+    ],
+    [observations.length, portfolioItems.length, activities.length],
+  );
+
+  const parentVisibleCount = useMemo(() => {
+    return (
+      observations.filter((o) => o.isParentVisible).length +
+      portfolioItems.filter((p) => p.isParentVisible).length
+    );
+  }, [observations, portfolioItems]);
+
   return (
     <div className="space-y-6">
-      {/* Top Header */}
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-teal-700 text-white dark:bg-slate-800 dark:text-teal-300 dark:border dark:border-slate-700 flex items-center justify-center font-bold shadow-xs">
-            <Award className="w-5 h-5" />
+      {/* Üst Başlık ve Dokunsal Aksiyonlar */}
+      <div className="flex items-center justify-between gap-4 flex-wrap pb-1">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-slate-800 border-2 border-teal-700/30 dark:border-teal-500/30 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold shadow-[0_3px_0_0_#0f766e]">
+            <Award className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               Gelişim Hikâyesi & Öğrenci Portfolyosu
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
-              Pedagojik gözlem kayıtları, dijital ürün portfolyosu ve ev etkinlik önerileri
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              Pedagojik gözlem tutanakları, dijital ürün portfolyosu ve ev etkinlik önerileri
             </p>
           </div>
         </div>
 
-        {canEdit && (
-          <div className="flex items-center gap-2">
-            {activeTab === 'observations' && (
-              <button
-                type="button"
-                onClick={() => {
-                  setObsForm((prev) => ({
-                    ...prev,
-                    studentId: selectedStudentId || (students[0]?.id ?? ''),
-                  }));
-                  setShowObsModal(true);
-                }}
-                className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition active:scale-98"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Gözlem Ekle
-              </button>
-            )}
-            {activeTab === 'portfolio' && (
-              <button
-                type="button"
-                onClick={() => {
-                  setPortForm((prev) => ({
-                    ...prev,
-                    studentId: selectedStudentId || (students[0]?.id ?? ''),
-                  }));
-                  setShowPortModal(true);
-                }}
-                className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition active:scale-98"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Çalışma Ekle
-              </button>
-            )}
-            {activeTab === 'activities' && (
-              <button
-                type="button"
-                onClick={() => setShowActModal(true)}
-                className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition active:scale-98"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Etkinlik Önerisi Ekle
-              </button>
-            )}
-          </div>
-        )}
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <TactileButton
+            variant="secondary"
+            size="sm"
+            onClick={() => void loadData()}
+            disabled={loading}
+          >
+            <RotateCw className="w-3.5 h-3.5" />
+            Yenile
+          </TactileButton>
+
+          {canEdit && activeTab === 'observations' && (
+            <TactileButton
+              variant="teal"
+              size="sm"
+              onClick={() => {
+                setObsForm((prev) => ({
+                  ...prev,
+                  studentId: selectedStudentId || (students[0]?.id ?? ''),
+                }));
+                setShowObsModal(true);
+              }}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Gözlem Ekle
+            </TactileButton>
+          )}
+
+          {canEdit && activeTab === 'portfolio' && (
+            <TactileButton
+              variant="amber"
+              size="sm"
+              onClick={() => {
+                setPortForm((prev) => ({
+                  ...prev,
+                  studentId: selectedStudentId || (students[0]?.id ?? ''),
+                }));
+                setShowPortModal(true);
+              }}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Çalışma Ekle
+            </TactileButton>
+          )}
+
+          {canEdit && activeTab === 'activities' && (
+            <TactileButton variant="teal" size="sm" onClick={() => setShowActModal(true)}>
+              <Plus className="w-3.5 h-3.5" />
+              Etkinlik Önerisi Ekle
+            </TactileButton>
+          )}
+        </div>
       </div>
 
-      {/* Tabs and Filters */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 dark:border-slate-700/80 pb-3">
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setActiveTab('observations')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition active:scale-98 ${
-              activeTab === 'observations'
-                ? 'bg-teal-700 text-white dark:bg-teal-600 dark:text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            Pedagojik Gözlemler
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('portfolio')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition active:scale-98 ${
-              activeTab === 'portfolio'
-                ? 'bg-teal-700 text-white dark:bg-teal-600 dark:text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
-            }`}
-          >
-            <Image className="w-3.5 h-3.5" />
-            Öğrenci Portfolyosu
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('activities')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition active:scale-98 ${
-              activeTab === 'activities'
-                ? 'bg-teal-700 text-white dark:bg-teal-600 dark:text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
-            }`}
-          >
-            <Lightbulb className="w-3.5 h-3.5" />
-            Ev Etkinlik Havuzu
-          </button>
-        </div>
+      {/* Dokunsal KPI Özet Sayaçları */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+        <StatCard
+          title="Toplam Gözlem"
+          value={observations.length}
+          subtitle="Pedagojik kayıt"
+          variant="blue"
+          icon={BookOpen}
+        />
+        <StatCard
+          title="Portfolyo Eseri"
+          value={portfolioItems.length}
+          subtitle="Görsel & proje ürünü"
+          variant="amber"
+          icon={ImageIcon}
+        />
+        <StatCard
+          title="Ev Etkinlikleri"
+          value={activities.length}
+          subtitle="Aile etkinlik havuzu"
+          variant="indigo"
+          icon={Lightbulb}
+        />
+        <StatCard
+          title="Veli Paylaşımı"
+          value={parentVisibleCount}
+          subtitle="Veli portalında açık"
+          variant="emerald"
+          icon={Eye}
+        />
+      </div>
 
-        {/* Filters */}
-        <div className="flex items-center gap-3">
+      {/* Evrensel Dokunsal Sekmeler & Filtre Çubuğu */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <TactileTabs<TabKey> tabs={tabs} activeId={activeTab} onChange={setActiveTab} />
+
+        {/* Filtre Kontrolleri */}
+        <div className="flex items-center gap-2.5 flex-wrap">
           {activeTab !== 'activities' && (
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-300">
-                Öğrenci:
-              </span>
-              <select
-                aria-label="Öğrenci Seç"
-                value={selectedStudentId}
-                onChange={(e) => setSelectedStudentId(e.target.value)}
-                className="text-xs font-semibold border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
-              >
-                <option value="">Tüm Öğrenciler</option>
-                {students.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.firstName} {s.lastName}
-                  </option>
-                ))}
-              </select>
+              <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Öğrenci:</span>
+              <div className="relative">
+                <select
+                  aria-label="Öğrenci Seç"
+                  value={selectedStudentId}
+                  onChange={(e) => setSelectedStudentId(e.target.value)}
+                  className="bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl text-xs font-bold px-3 py-2 text-slate-800 dark:text-white shadow-2xs focus:border-teal-700 focus:outline-none transition"
+                >
+                  <option value="">Tüm Öğrenciler</option>
+                  {students.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.firstName} {s.lastName}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           )}
 
           {activeTab !== 'portfolio' && (
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-300">
-                Alan:
-              </span>
+              <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Alan:</span>
               <select
                 aria-label="Alan Seç"
                 value={selectedDomain}
                 onChange={(e) => setSelectedDomain(e.target.value as DevelopmentDomain | '')}
-                className="text-xs font-semibold border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                className="bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl text-xs font-bold px-3 py-2 text-slate-800 dark:text-white shadow-2xs focus:border-teal-700 focus:outline-none transition"
               >
                 <option value="">Tüm Gelişim Alanları</option>
                 {Object.entries(DOMAIN_LABELS).map(([k, v]) => (
@@ -388,27 +442,29 @@ export function DevelopmentPage(): JSX.Element {
         </div>
       </div>
 
-      {/* Main Content Area */}
+      {/* Ana İçerik Bölümü */}
       {loading ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+        <div className="text-center py-16 bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs">
           <div className="inline-block w-8 h-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent rounded-full animate-spin mb-3" />
-          <p className="text-slate-500 dark:text-slate-300 text-sm font-medium">
+          <p className="text-slate-500 dark:text-slate-300 text-xs font-bold">
             Veriler yükleniyor…
           </p>
         </div>
       ) : error ? (
-        <div className="p-4 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 rounded-xl text-rose-700 dark:text-rose-200 text-xs font-semibold">
+        <div className="p-4 bg-rose-50 dark:bg-rose-950/50 border-2 border-rose-300 dark:border-rose-800 rounded-2xl text-rose-700 dark:text-rose-200 text-xs font-bold shadow-2xs">
           {error}
         </div>
       ) : (
         <>
-          {/* TAB 1: Observations */}
+          {/* TAB 1: Pedagojik Gözlemler */}
           {activeTab === 'observations' && (
             <div className="space-y-4">
               {observations.length === 0 ? (
-                <div className="bg-white dark:bg-slate-800 p-12 text-center rounded-2xl border border-dashed border-slate-200/80 dark:border-slate-700/80 text-slate-500 dark:text-slate-300 text-sm">
-                  Henüz kayıtlı gelişim gözlemi bulunmuyor.
-                </div>
+                <EmptyState
+                  icon={BookOpen}
+                  title="Henüz kayıtlı gelişim gözlemi bulunmuyor"
+                  description="Öğrencilerin pedagojik kazanımlarını belgelemek için yukarıdaki 'Gözlem Ekle' butonunu kullanabilirsiniz."
+                />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {observations.map((obs) => {
@@ -418,50 +474,51 @@ export function DevelopmentPage(): JSX.Element {
                     return (
                       <div
                         key={obs.id}
-                        className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex flex-col justify-between space-y-4 hover:border-slate-300 dark:hover:border-slate-600 transition-all"
+                        className="bg-white dark:bg-[#131B2E] p-5 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs flex flex-col justify-between space-y-4 hover:border-teal-700/50 dark:hover:border-teal-500/50 transition-all"
                       >
                         <div className="space-y-2.5">
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
                             <span
-                              className={`text-xs font-bold px-2.5 py-1 rounded-xl border flex items-center gap-1.5 ${domainInfo.badgeCls}`}
+                              className={`text-xs font-extrabold px-2.5 py-1 rounded-xl border-2 flex items-center gap-1.5 ${domainInfo.badgeCls}`}
                             >
                               <DomainIcon className="w-3.5 h-3.5" />
                               {domainInfo.label}
                             </span>
-                            <span className="text-[11px] text-slate-400 dark:text-slate-300 flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
+                            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                              <Calendar className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
                               {new Date(obs.observedAt).toLocaleDateString('tr-TR')}
                             </span>
                           </div>
 
-                          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                          <h3 className="text-sm font-black text-slate-900 dark:text-white">
                             {obs.skillName}
                           </h3>
 
-                          <div className="bg-slate-50/80 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-100 dark:border-slate-700/60">
+                          <div className="bg-[#FCFAF7] dark:bg-slate-900/60 p-3.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-800">
                             <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
                               {obs.observation}
                             </p>
                           </div>
                         </div>
 
-                        <div className="pt-2 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-300">
-                          <div>
-                            <span className="font-bold text-slate-800 dark:text-white">
+                        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <User className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400 shrink-0" />
+                            <span className="font-bold text-slate-800 dark:text-white truncate">
                               {obs.student
                                 ? `${obs.student.firstName} ${obs.student.lastName}`
                                 : 'Öğrenci'}
                             </span>
-                            {obs.teacher && ` · ${obs.teacher.email}`}
                           </div>
+
                           {obs.isParentVisible ? (
-                            <span className="text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1 text-[11px]">
-                              <CheckCircle className="w-3.5 h-3.5" /> Veli Görür
-                            </span>
+                            <Badge variant="success" size="sm">
+                              <CheckCircle className="w-3 h-3 mr-1 inline" /> Veli Görür
+                            </Badge>
                           ) : (
-                            <span className="text-slate-400 dark:text-slate-300 flex items-center gap-1 text-[11px]">
-                              <Lock className="w-3 h-3" /> Yalnızca Kurum
-                            </span>
+                            <Badge variant="neutral" size="sm">
+                              <Lock className="w-3 h-3 mr-1 inline" /> Sadece Kurum
+                            </Badge>
                           )}
                         </div>
                       </div>
@@ -472,21 +529,23 @@ export function DevelopmentPage(): JSX.Element {
             </div>
           )}
 
-          {/* TAB 2: Portfolio */}
+          {/* TAB 2: Öğrenci Portfolyosu */}
           {activeTab === 'portfolio' && (
             <div className="space-y-4">
               {portfolioItems.length === 0 ? (
-                <div className="bg-white dark:bg-slate-800 p-12 text-center rounded-2xl border border-dashed border-slate-200/80 dark:border-slate-700/80 text-slate-500 dark:text-slate-300 text-sm">
-                  Henüz portfolyoya eklenmiş çalışma bulunmuyor.
-                </div>
+                <EmptyState
+                  icon={ImageIcon}
+                  title="Henüz portfolyoya eklenmiş çalışma bulunmuyor"
+                  description="Öğrencilerin yaptığı boyama, heykel veya projeleri eklemek için yukarıdaki 'Çalışma Ekle' butonuna basabilirsiniz."
+                />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                   {portfolioItems.map((item) => (
                     <div
                       key={item.id}
-                      className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 overflow-hidden shadow-xs flex flex-col group hover:border-slate-300 dark:hover:border-slate-600 transition-all"
+                      className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 overflow-hidden shadow-2xs flex flex-col group hover:border-amber-600/50 dark:hover:border-amber-500/50 transition-all"
                     >
-                      <div className="h-44 bg-slate-100 dark:bg-slate-900 relative overflow-hidden flex items-center justify-center">
+                      <div className="h-44 bg-[#FCFAF7] dark:bg-slate-900 relative overflow-hidden flex items-center justify-center border-b border-[#DDD4C4] dark:border-slate-800">
                         <img
                           src={item.mediaUrl}
                           alt={item.title}
@@ -495,34 +554,40 @@ export function DevelopmentPage(): JSX.Element {
                             (e.target as HTMLElement).style.display = 'none';
                           }}
                         />
-                        <div className="absolute top-2 right-2">
-                          {item.isParentVisible && (
-                            <span className="bg-emerald-600/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-2xs backdrop-blur-xs flex items-center gap-1">
+                        <div className="absolute top-2.5 right-2.5">
+                          {item.isParentVisible ? (
+                            <span className="bg-emerald-600/90 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-xs backdrop-blur-xs flex items-center gap-1 border border-emerald-400/40">
                               <Eye className="w-3 h-3" /> Veli Açık
+                            </span>
+                          ) : (
+                            <span className="bg-slate-800/90 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-xs backdrop-blur-xs flex items-center gap-1 border border-slate-600/40">
+                              <Lock className="w-3 h-3" /> Kurum İçi
                             </span>
                           )}
                         </div>
                       </div>
 
-                      <div className="p-4 flex-1 flex flex-col justify-between space-y-2">
+                      <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                         <div>
                           <h4 className="font-bold text-slate-900 dark:text-white text-sm">
                             {item.title}
                           </h4>
                           {item.description && (
-                            <p className="text-xs text-slate-500 dark:text-slate-300 mt-1 line-clamp-2">
+                            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">
                               {item.description}
                             </p>
                           )}
                         </div>
 
-                        <div className="pt-2 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-300">
-                          <span className="font-semibold text-slate-700 dark:text-slate-200">
+                        <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                          <span className="font-bold text-slate-800 dark:text-white">
                             {item.student
                               ? `${item.student.firstName} ${item.student.lastName}`
                               : 'Öğrenci'}
                           </span>
-                          <span>{new Date(item.createdAt).toLocaleDateString('tr-TR')}</span>
+                          <span className="text-[11px]">
+                            {new Date(item.createdAt).toLocaleDateString('tr-TR')}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -532,13 +597,15 @@ export function DevelopmentPage(): JSX.Element {
             </div>
           )}
 
-          {/* TAB 3: Home Activities */}
+          {/* TAB 3: Ev Etkinlik Havuzu */}
           {activeTab === 'activities' && (
             <div className="space-y-4">
               {activities.length === 0 ? (
-                <div className="bg-white dark:bg-slate-800 p-12 text-center rounded-2xl border border-dashed border-slate-200/80 dark:border-slate-700/80 text-slate-500 dark:text-slate-300 text-sm">
-                  Henüz ev etkinliği önerisi eklenmemiş.
-                </div>
+                <EmptyState
+                  icon={Lightbulb}
+                  title="Henüz ev etkinliği önerisi eklenmemiş"
+                  description="Velilerin evde çocuklarıyla yapabileceği gelişimsel aktiviteler eklemek için 'Etkinlik Önerisi Ekle' butonunu kullanabilirsiniz."
+                />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {activities.map((act) => {
@@ -548,34 +615,36 @@ export function DevelopmentPage(): JSX.Element {
                     return (
                       <div
                         key={act.id}
-                        className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex flex-col justify-between space-y-3 hover:border-slate-300 dark:hover:border-slate-600 transition-all"
+                        className="bg-white dark:bg-[#131B2E] p-5 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs flex flex-col justify-between space-y-3.5 hover:border-sky-600/50 dark:hover:border-sky-500/50 transition-all"
                       >
                         <div className="space-y-2.5">
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
                             <span
-                              className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 ${domainInfo.badgeCls}`}
+                              className={`text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 ${domainInfo.badgeCls}`}
                             >
                               <DomainIcon className="w-3 h-3" />
                               {domainInfo.label}
                             </span>
                             {act.ageGroup && (
-                              <span className="text-[10px] font-bold bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 px-2 py-0.5 rounded-full border border-slate-200/60 dark:border-slate-700/80">
+                              <span className="text-[10px] font-extrabold bg-[#FCFAF7] dark:bg-slate-900 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-full border border-[#DDD4C4] dark:border-slate-700">
                                 {act.ageGroup}
                               </span>
                             )}
                           </div>
+
                           <h4 className="font-bold text-slate-900 dark:text-white text-sm">
                             {act.title}
                           </h4>
-                          <div className="bg-amber-50/50 dark:bg-slate-900/60 p-3 rounded-xl border border-amber-100/50 dark:border-slate-700/60">
+
+                          <div className="bg-[#FCFAF7] dark:bg-slate-900/60 p-3.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-800">
                             <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
                               {act.description}
                             </p>
                           </div>
                         </div>
 
-                        <div className="text-[10px] text-slate-400 dark:text-slate-300 pt-2 border-t border-slate-100 dark:border-slate-700/80">
-                          Eklenme: {new Date(act.createdAt).toLocaleDateString('tr-TR')}
+                        <div className="text-[11px] text-slate-400 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
+                          Öneri Tarihi: {new Date(act.createdAt).toLocaleDateString('tr-TR')}
                         </div>
                       </div>
                     );
@@ -587,28 +656,41 @@ export function DevelopmentPage(): JSX.Element {
         </>
       )}
 
-      {/* Observation Modal */}
+      {/* Gözlem Ekle Modalı */}
       {showObsModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 max-w-md w-full p-6 shadow-2xl space-y-4">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Yeni Gelişim Gözlemi Ekle
-            </h3>
+          <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-[#DDD4C4] dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-teal-700 dark:text-teal-400" />
+                <h3 className="text-base font-black text-slate-900 dark:text-white">
+                  Yeni Gelişim Gözlemi Ekle
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowObsModal(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
             <form
               onSubmit={(e) => {
                 void handleCreateObservation(e);
               }}
-              className="space-y-3"
+              className="space-y-3.5"
             >
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Öğrenci
                 </label>
                 <select
                   value={obsForm.studentId}
                   onChange={(e) => setObsForm({ ...obsForm, studentId: e.target.value })}
                   required
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700"
                 >
                   <option value="">Öğrenci Seçiniz</option>
                   {students.map((s) => (
@@ -620,7 +702,7 @@ export function DevelopmentPage(): JSX.Element {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Gelişim Alanı
                 </label>
                 <select
@@ -628,7 +710,7 @@ export function DevelopmentPage(): JSX.Element {
                   onChange={(e) =>
                     setObsForm({ ...obsForm, domain: e.target.value as DevelopmentDomain })
                   }
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700"
                 >
                   {Object.entries(DOMAIN_LABELS).map(([k, v]) => (
                     <option key={k} value={k}>
@@ -639,8 +721,8 @@ export function DevelopmentPage(): JSX.Element {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
-                  Kazanım / Becerinin Adı
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
+                  Kazanım / Beceri Adı
                 </label>
                 <input
                   type="text"
@@ -648,12 +730,12 @@ export function DevelopmentPage(): JSX.Element {
                   value={obsForm.skillName}
                   onChange={(e) => setObsForm({ ...obsForm, skillName: e.target.value })}
                   required
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-teal-700"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Öğretmen Gözlemi & Değerlendirme
                 </label>
                 <textarea
@@ -662,68 +744,79 @@ export function DevelopmentPage(): JSX.Element {
                   value={obsForm.observation}
                   onChange={(e) => setObsForm({ ...obsForm, observation: e.target.value })}
                   required
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-teal-700"
                 />
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5 p-2 bg-[#FCFAF7] dark:bg-slate-900/60 rounded-xl border border-[#DDD4C4] dark:border-slate-800">
                 <input
                   type="checkbox"
                   id="obsParentVisible"
                   checked={obsForm.isParentVisible}
                   onChange={(e) => setObsForm({ ...obsForm, isParentVisible: e.target.checked })}
-                  className="rounded border-slate-300 dark:border-slate-700 text-teal-900 dark:text-amber-500"
+                  className="w-4 h-4 rounded border-[#DDD4C4] text-teal-700 focus:ring-teal-700 cursor-pointer"
                 />
                 <label
                   htmlFor="obsParentVisible"
-                  className="text-xs font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
+                  className="text-xs font-bold text-slate-700 dark:text-slate-200 cursor-pointer"
                 >
                   Veli Portalı'nda ve gelişim karnesinde gösterilsin
                 </label>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/80">
-                <button
-                  type="button"
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#DDD4C4] dark:border-slate-800">
+                <TactileButton
+                  variant="secondary"
+                  size="sm"
                   onClick={() => setShowObsModal(false)}
-                  className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+                  disabled={submitting}
                 >
                   İptal
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl shadow-xs transition active:scale-98"
-                >
-                  Gözlemi Kaydet
-                </button>
+                </TactileButton>
+                <TactileButton variant="teal" size="sm" type="submit" disabled={submitting}>
+                  {submitting ? 'Kaydediliyor…' : 'Gözlemi Kaydet'}
+                </TactileButton>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Portfolio Modal */}
+      {/* Portfolyo Çalışması Ekle Modalı */}
       {showPortModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 max-w-md w-full p-6 shadow-2xl space-y-4">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Portfolyoya Çalışma Ekle
-            </h3>
+          <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-[#DDD4C4] dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="w-5 h-5 text-amber-700 dark:text-amber-400" />
+                <h3 className="text-base font-black text-slate-900 dark:text-white">
+                  Portfolyoya Çalışma Ekle
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPortModal(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
             <form
               onSubmit={(e) => {
                 void handleCreatePortfolio(e);
               }}
-              className="space-y-3"
+              className="space-y-3.5"
             >
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Öğrenci
                 </label>
                 <select
                   value={portForm.studentId}
                   onChange={(e) => setPortForm({ ...portForm, studentId: e.target.value })}
                   required
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-amber-700"
                 >
                   <option value="">Öğrenci Seçiniz</option>
                   {students.map((s) => (
@@ -735,7 +828,7 @@ export function DevelopmentPage(): JSX.Element {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Çalışma Başlığı
                 </label>
                 <input
@@ -744,12 +837,12 @@ export function DevelopmentPage(): JSX.Element {
                   value={portForm.title}
                   onChange={(e) => setPortForm({ ...portForm, title: e.target.value })}
                   required
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-amber-700"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Açıklama
                 </label>
                 <textarea
@@ -757,12 +850,12 @@ export function DevelopmentPage(): JSX.Element {
                   placeholder="Kullanılan teknik, öğrencinin ifade ettiği fikir..."
                   value={portForm.description}
                   onChange={(e) => setPortForm({ ...portForm, description: e.target.value })}
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-amber-700"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Medya / Fotoğraf URL
                 </label>
                 <input
@@ -771,61 +864,72 @@ export function DevelopmentPage(): JSX.Element {
                   value={portForm.mediaUrl}
                   onChange={(e) => setPortForm({ ...portForm, mediaUrl: e.target.value })}
                   required
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-amber-700"
                 />
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5 p-2 bg-[#FCFAF7] dark:bg-slate-900/60 rounded-xl border border-[#DDD4C4] dark:border-slate-800">
                 <input
                   type="checkbox"
                   id="portParentVisible"
                   checked={portForm.isParentVisible}
                   onChange={(e) => setPortForm({ ...portForm, isParentVisible: e.target.checked })}
-                  className="rounded border-slate-300 dark:border-slate-700 text-teal-900 dark:text-amber-500"
+                  className="w-4 h-4 rounded border-[#DDD4C4] text-amber-700 focus:ring-amber-700 cursor-pointer"
                 />
                 <label
                   htmlFor="portParentVisible"
-                  className="text-xs font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
+                  className="text-xs font-bold text-slate-700 dark:text-slate-200 cursor-pointer"
                 >
                   Veli Portalı'nda sergilensin
                 </label>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/80">
-                <button
-                  type="button"
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#DDD4C4] dark:border-slate-800">
+                <TactileButton
+                  variant="secondary"
+                  size="sm"
                   onClick={() => setShowPortModal(false)}
-                  className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+                  disabled={submitting}
                 >
                   İptal
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl shadow-xs transition active:scale-98"
-                >
-                  Portfolyoya Ekle
-                </button>
+                </TactileButton>
+                <TactileButton variant="amber" size="sm" type="submit" disabled={submitting}>
+                  {submitting ? 'Kaydediliyor…' : 'Portfolyoya Ekle'}
+                </TactileButton>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Activity Suggestion Modal */}
+      {/* Ev Etkinlik Önerisi Ekle Modalı */}
       {showActModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 max-w-md w-full p-6 shadow-2xl space-y-4">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Ev Etkinlik Önerisi Ekle
-            </h3>
+          <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-[#DDD4C4] dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <Lightbulb className="w-5 h-5 text-sky-700 dark:text-sky-400" />
+                <h3 className="text-base font-black text-slate-900 dark:text-white">
+                  Ev Etkinlik Önerisi Ekle
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowActModal(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
             <form
               onSubmit={(e) => {
                 void handleCreateActivity(e);
               }}
-              className="space-y-3"
+              className="space-y-3.5"
             >
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Gelişim Alanı
                 </label>
                 <select
@@ -833,7 +937,7 @@ export function DevelopmentPage(): JSX.Element {
                   onChange={(e) =>
                     setActForm({ ...actForm, domain: e.target.value as DevelopmentDomain })
                   }
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-sky-700"
                 >
                   {Object.entries(DOMAIN_LABELS).map(([k, v]) => (
                     <option key={k} value={k}>
@@ -844,7 +948,7 @@ export function DevelopmentPage(): JSX.Element {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Yaş Grubu
                 </label>
                 <input
@@ -852,12 +956,12 @@ export function DevelopmentPage(): JSX.Element {
                   placeholder="Örn: 3-4 Yaş veya 4-6 Yaş"
                   value={actForm.ageGroup}
                   onChange={(e) => setActForm({ ...actForm, ageGroup: e.target.value })}
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-sky-700"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Etkinlik Başlığı
                 </label>
                 <input
@@ -866,12 +970,12 @@ export function DevelopmentPage(): JSX.Element {
                   value={actForm.title}
                   onChange={(e) => setActForm({ ...actForm, title: e.target.value })}
                   required
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-sky-700"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Uygulama Adımları & Veliye Not
                 </label>
                 <textarea
@@ -880,24 +984,22 @@ export function DevelopmentPage(): JSX.Element {
                   value={actForm.description}
                   onChange={(e) => setActForm({ ...actForm, description: e.target.value })}
                   required
-                  className="w-full text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-sky-700"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/80">
-                <button
-                  type="button"
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#DDD4C4] dark:border-slate-800">
+                <TactileButton
+                  variant="secondary"
+                  size="sm"
                   onClick={() => setShowActModal(false)}
-                  className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+                  disabled={submitting}
                 >
                   İptal
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl shadow-xs transition active:scale-98"
-                >
-                  Öneriyi Kaydet
-                </button>
+                </TactileButton>
+                <TactileButton variant="teal" size="sm" type="submit" disabled={submitting}>
+                  {submitting ? 'Kaydediliyor…' : 'Öneriyi Kaydet'}
+                </TactileButton>
               </div>
             </form>
           </div>
