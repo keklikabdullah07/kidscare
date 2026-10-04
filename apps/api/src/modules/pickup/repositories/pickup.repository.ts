@@ -23,6 +23,7 @@ export type PickupAuthorizationRow = Prisma.PickupAuthorizationGetPayload<{
     tenantId: true;
     studentId: true;
     pickupContactId: true;
+    pickupContact: { select: typeof CONTACT_SELECT };
     requestedById: true;
     reviewedById: true;
     status: true;
@@ -68,6 +69,7 @@ const AUTH_SELECT = {
   tenantId: true,
   studentId: true,
   pickupContactId: true,
+  pickupContact: { select: CONTACT_SELECT },
   requestedById: true,
   reviewedById: true,
   status: true,

@@ -24,6 +24,7 @@ const baseAuth: PickupAuthorizationRow = {
   tenantId: 't-1',
   studentId: 's-1',
   pickupContactId: null,
+  pickupContact: null,
   requestedById: 'parent-1',
   reviewedById: null,
   status: 'PENDING',
@@ -135,12 +136,10 @@ describe('PickupService', () => {
     it('approves authorization with reviewer id', async () => {
       repo.findAuthorization.mockResolvedValue(baseAuth);
       repo.reviewAuthorization.mockResolvedValue({ ...baseAuth, status: 'APPROVED' });
-      const res = await service.reviewAuthorization(
-        't-1',
-        'pa-1',
-        'admin-1',
-        { status: 'APPROVED', validFrom: new Date('2026-09-16') },
-      );
+      const res = await service.reviewAuthorization('t-1', 'pa-1', 'admin-1', {
+        status: 'APPROVED',
+        validFrom: new Date('2026-09-16'),
+      });
       expect(res.status).toBe('APPROVED');
       expect(repo.reviewAuthorization).toHaveBeenCalledWith(
         't-1',

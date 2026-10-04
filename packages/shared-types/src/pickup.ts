@@ -11,18 +11,14 @@ export type PickupContact = {
   updatedAt: string;
 };
 
-export type PickupAuthorizationStatus =
-  | 'PENDING'
-  | 'APPROVED'
-  | 'REJECTED'
-  | 'EXPIRED'
-  | 'REVOKED';
+export type PickupAuthorizationStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXPIRED' | 'REVOKED';
 
 export type PickupAuthorization = {
   id: string;
   tenantId: string;
   studentId: string;
   pickupContactId?: string | null;
+  pickupContact?: PickupContact | null;
   requestedById: string;
   reviewedById?: string | null;
   status: PickupAuthorizationStatus;
@@ -34,11 +30,7 @@ export type PickupAuthorization = {
 };
 
 export type PickupVerificationMethod =
-  | 'ID_CHECK'
-  | 'PHONE_CONFIRM'
-  | 'PASSWORD'
-  | 'KNOWN_FACE'
-  | 'OTHER';
+  'ID_CHECK' | 'PHONE_CONFIRM' | 'PASSWORD' | 'KNOWN_FACE' | 'OTHER';
 
 export type PickupEvent = {
   id: string;

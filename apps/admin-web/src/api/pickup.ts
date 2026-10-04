@@ -67,10 +67,10 @@ export async function reviewPickupAuthorization(
   id: string,
   input: PickupAuthorizationReview,
 ): Promise<PickupAuthorization> {
-  return apiFetch<PickupAuthorization>(
-    `/pickup/authorizations/${encodeURIComponent(id)}/review`,
-    { method: 'PATCH', body: JSON.stringify(input) },
-  );
+  return apiFetch<PickupAuthorization>(`/pickup/authorizations/${encodeURIComponent(id)}/review`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
 }
 
 // ===== Events =====
@@ -91,10 +91,10 @@ export async function createPickupEvent(
   pickupPersonName: string,
   verificationMethod: PickupVerificationMethod,
   opts?: {
-    pickupContactId?: string;
-    authorizationId?: string;
-    pickupPersonPhone?: string;
-    note?: string;
+    pickupContactId?: string | undefined;
+    authorizationId?: string | undefined;
+    pickupPersonPhone?: string | undefined;
+    note?: string | undefined;
   },
 ): Promise<PickupEvent> {
   const payload: PickupEventCreate = {

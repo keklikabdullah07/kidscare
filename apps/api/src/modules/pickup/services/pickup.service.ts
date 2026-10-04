@@ -6,11 +6,7 @@ import type {
   PickupContactUpdate,
   PickupEventCreate,
 } from '@kidscare/shared-schemas';
-import type {
-  PickupAuthorization,
-  PickupContact,
-  PickupEvent,
-} from '@kidscare/shared-types';
+import type { PickupAuthorization, PickupContact, PickupEvent } from '@kidscare/shared-types';
 import type {
   IPickupRepository,
   PickupAuthorizationRow,
@@ -30,10 +26,7 @@ export class PickupService {
     return rows.map((row) => this.contactToResponse(row));
   }
 
-  async createContact(
-    tenantId: string,
-    input: PickupContactCreate,
-  ): Promise<PickupContact> {
+  async createContact(tenantId: string, input: PickupContactCreate): Promise<PickupContact> {
     const row = await this.repo.createContact(tenantId, {
       studentId: input.studentId,
       fullName: input.fullName,
@@ -158,6 +151,7 @@ export class PickupService {
       tenantId: row.tenantId,
       studentId: row.studentId,
       pickupContactId: row.pickupContactId,
+      pickupContact: row.pickupContact ? this.contactToResponse(row.pickupContact) : null,
       requestedById: row.requestedById,
       reviewedById: row.reviewedById,
       status: row.status,
