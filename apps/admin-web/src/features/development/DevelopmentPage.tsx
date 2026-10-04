@@ -134,7 +134,7 @@ export function DevelopmentPage(): JSX.Element {
     description: '',
     isParentVisible: true,
   });
-  const [portMediaUrl, setPortMediaUrl] = useState<string>('');
+  const [portMediaUrls, setPortMediaUrls] = useState<string[]>([]);
 
   const [showActModal, setShowActModal] = useState(false);
   const [actForm, setActForm] = useState({
@@ -220,7 +220,10 @@ export function DevelopmentPage(): JSX.Element {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await createPortfolioItem({ ...portForm, mediaUrl: portMediaUrl });
+      await createPortfolioItem({
+        ...portForm,
+        mediaUrl: portMediaUrls[0] ?? '',
+      });
       setShowPortModal(false);
       setPortForm({
         studentId: selectedStudentId || (students[0]?.id ?? ''),
@@ -228,7 +231,7 @@ export function DevelopmentPage(): JSX.Element {
         description: '',
         isParentVisible: true,
       });
-      setPortMediaUrl('');
+      setPortMediaUrls([]);
       const res = await listPortfolio(selectedStudentId || undefined);
       setPortfolioItems(res);
       showToast('Portfolyo çalışması başarıyla eklendi! 🎨', 'success');
@@ -901,15 +904,16 @@ export function DevelopmentPage(): JSX.Element {
                 />
               </div>
 
-              {/* Medya / Fotoğraf URL + Dosya butonu + preview — paylaşılan MediaUrlField */}
+              {/* Paylaşılacak Fotoğraflar (coklu) — paylaşılan MediaUrlField */}
               <MediaUrlField
-                value={portMediaUrl}
-                onChange={(url: string) => {
-                  setPortMediaUrl(url);
-                }}
+                value=""
+                onChange={() => {}}
+                values={portMediaUrls}
+                onValuesChange={setPortMediaUrls}
                 category="PORTFOLIO"
-                label="Medya / Fotoğraf URL"
+                label="Paylaşılacak Fotoğraflar"
                 placeholder="https://images.unsplash.com/..."
+                multipleFiles
               />
 
               <div className="flex items-center gap-2.5 p-2 bg-[#FCFAF7] dark:bg-slate-900/60 rounded-xl border border-[#DDD4C4] dark:border-slate-800">
