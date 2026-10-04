@@ -1,10 +1,23 @@
-import { useEffect, useState, type FormEvent, type JSX } from 'react';
-import { MessageSquare, Send, Plus, AlertCircle, RotateCw } from 'lucide-react';
+import { useEffect, useState, useMemo, type FormEvent, type JSX } from 'react';
+import {
+  MessageSquare,
+  Send,
+  Plus,
+  AlertCircle,
+  RotateCw,
+  Search,
+  CheckCircle2,
+  X,
+  Clock,
+  User,
+  Inbox,
+} from 'lucide-react';
 import type {
   Conversation,
   ConversationCategory,
   ConversationStatus,
   Message,
+  Student,
 } from '@kidscare/shared-types';
 import {
   createConversation,
@@ -15,9 +28,16 @@ import {
   updateConversationStatus,
 } from '../../api/messaging';
 import { listStudents } from '../../api/students';
-import type { Student } from '@kidscare/shared-types';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
+import {
+  Badge,
+  EmptyState,
+  StatCard,
+  TactileButton,
+  TactileTabs,
+  type TactileTabItem,
+} from '../../components/ui';
 
 const CATEGORY_LABEL: Record<ConversationCategory, string> = {
   ACIL: '🚨 Acil',
@@ -36,6 +56,8 @@ const STATUS_LABEL: Record<ConversationStatus, string> = {
   ARCHIVED: 'Arşivlendi',
 };
 
+type TabKey = 'ALL' | 'UNREAD' | 'CRITICAL' | 'CLOSED';
+
 export function MessagesPage(): JSX.Element {
   const { state } = useAuth();
   const meId = state.status === 'authenticated' ? state.user.id : '';
@@ -48,13 +70,16 @@ export function MessagesPage(): JSX.Element {
   const [showCompose, setShowCompose] = useState(false);
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<TabKey>('ALL');
   const { showToast } = useToast();
 
-  // compose form
+  // Compose form states
   const [cSubject, setCSubject] = useState('');
   const [cCategory, setCCategory] = useState<ConversationCategory>('GUNLUK_BILGI');
   const [cStudentId, setCStudentId] = useState('');
   const [cBody, setCBody] = useState('');
+  const [submittingCompose, setSubmittingCompose] = useState(false);
 
   async function refreshList(): Promise<void> {
     setLoading(true);
@@ -74,6 +99,8 @@ export function MessagesPage(): JSX.Element {
       const msgs = await listMessages(id);
       setMessages(msgs);
       await markConversationRead(id);
+      // Yerel olarak okunmamış sayısını sıfırla
+      setConversations((prev) => prev.map((c) => (c.id === id ? { ...c, unreadCount: 0 } : c)));
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Mesajlar yüklenemedi', 'error');
     }
@@ -123,6 +150,7 @@ export function MessagesPage(): JSX.Element {
       showToast('Konu ve mesaj zorunlu.', 'error');
       return;
     }
+    setSubmittingCompose(true);
     try {
       const created = await createConversation({
         subject: cSubject.trim(),
@@ -131,7 +159,7 @@ export function MessagesPage(): JSX.Element {
         ...(cStudentId ? { studentId: cStudentId } : {}),
         initialMessage: cBody.trim(),
       });
-      showToast('Sohbet oluşturuldu.', 'success');
+      showToast('Yeni sohbet başarıyla oluşturuldu! 💬', 'success');
       setShowCompose(false);
       setCSubject('');
       setCBody('');
@@ -140,275 +168,534 @@ export function MessagesPage(): JSX.Element {
       setActiveId(created.id);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Sohbet oluşturulamadı', 'error');
+    } finally {
+      setSubmittingCompose(false);
     }
   }
+
+  // KPI Metrikleri
+  const totalCount = conversations.length;
+  const unreadTotal = useMemo(
+    () => conversations.reduce((acc, c) => acc + (c.unreadCount || 0), 0),
+    [conversations],
+  );
+  const criticalCount = useMemo(
+    () =>
+      conversations.filter((c) => c.isCritical || c.category === 'ACIL' || c.category === 'SAGLIK')
+        .length,
+    [conversations],
+  );
+  const closedCount = useMemo(
+    () => conversations.filter((c) => c.status === 'CLOSED' || c.status === 'ARCHIVED').length,
+    [conversations],
+  );
+
+  // Sekmeler
+  const filterTabs = useMemo<TactileTabItem<TabKey>[]>(
+    () => [
+      { id: 'ALL', label: 'Tüm Sohbetler', count: totalCount, activeVariant: 'teal' },
+      {
+        id: 'UNREAD',
+        label: 'Okunmamış',
+        count: unreadTotal,
+        activeVariant: 'amber',
+        badgeCls: 'bg-amber-200 text-amber-950 font-black',
+      },
+      {
+        id: 'CRITICAL',
+        label: 'Acil & Sağlık',
+        count: criticalCount,
+        activeVariant: 'rose',
+      },
+      { id: 'CLOSED', label: 'Kapananlar', count: closedCount, activeVariant: 'purple' },
+    ],
+    [totalCount, unreadTotal, criticalCount, closedCount],
+  );
+
+  // Filtrelenmiş Sohbetler
+  const filteredConversations = useMemo(() => {
+    return conversations.filter((c) => {
+      // Sekme filtresi
+      if (activeTab === 'UNREAD' && c.unreadCount <= 0) return false;
+      if (
+        activeTab === 'CRITICAL' &&
+        !(c.isCritical || c.category === 'ACIL' || c.category === 'SAGLIK')
+      )
+        return false;
+      if (activeTab === 'CLOSED' && c.status !== 'CLOSED' && c.status !== 'ARCHIVED') return false;
+
+      // Arama filtresi
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesSubject = c.subject.toLowerCase().includes(q);
+        const matchesCategory = (CATEGORY_LABEL[c.category] || '').toLowerCase().includes(q);
+        return matchesSubject || matchesCategory;
+      }
+
+      return true;
+    });
+  }, [conversations, activeTab, searchQuery]);
 
   const active = conversations.find((c) => c.id === activeId);
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-teal-700 dark:bg-teal-600 flex items-center justify-center text-white shadow-xs">
-            <MessageSquare className="w-5 h-5 text-amber-300 dark:text-amber-200" />
+    <div className="space-y-6">
+      {/* Üst Başlık ve Dokunsal Butonlar */}
+      <div className="flex items-center justify-between gap-4 flex-wrap pb-1">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-slate-800 border-2 border-teal-700/30 dark:border-teal-500/30 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold shadow-[0_3px_0_0_#0f766e]">
+            <MessageSquare className="w-6 h-6 text-amber-500 dark:text-amber-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               Mesajlar
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Veli, öğretmen ve admin arası güvenli iletişim.
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              Veli, öğretmen ve admin arası güvenli iletişim ve anlık mesajlaşma
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
+
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <TactileButton
+            variant="secondary"
+            size="sm"
             onClick={() => void refreshList()}
-            className="text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition active:scale-98"
+            disabled={loading}
           >
-            <RotateCw className="w-3.5 h-3.5" /> Yenile
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowCompose((v) => !v)}
-            className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-3.5 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-xs active:scale-98"
-          >
-            <Plus className="w-3.5 h-3.5" /> Yeni Sohbet
-          </button>
+            <RotateCw className="w-3.5 h-3.5" />
+            Yenile
+          </TactileButton>
+
+          <TactileButton variant="teal" size="sm" onClick={() => setShowCompose(true)}>
+            <Plus className="w-3.5 h-3.5" />
+            Yeni Sohbet
+          </TactileButton>
         </div>
       </div>
 
-      {showCompose && (
-        <form
-          onSubmit={(e) => void submitCompose(e)}
-          className="bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-4 shadow-xs space-y-3"
+      {/* Dokunsal KPI Özet Sayaçları (Tıklanabilir Sekme Geçişi) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('ALL');
+            setSearchQuery('');
+          }}
+          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+          aria-label="Tüm sohbetler sekmesine geç"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
-                Konu
-              </label>
-              <input
-                type="text"
-                value={cSubject}
-                onChange={(e) => setCSubject(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
-              />
-            </div>
-            <div>
-              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
-                Kategori
-              </label>
-              <select
-                value={cCategory}
-                onChange={(e) => setCCategory(e.target.value as ConversationCategory)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
-              >
-                {Object.entries(CATEGORY_LABEL).map(([k, v]) => (
-                  <option key={k} value={k}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="sm:col-span-2">
-              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
-                Öğrenci (opsiyonel)
-              </label>
-              <select
-                value={cStudentId}
-                onChange={(e) => setCStudentId(e.target.value)}
-                className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
-              >
-                <option value="">—</option>
-                {students.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.firstName} {s.lastName}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div>
-            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider block mb-1">
-              İlk mesaj
-            </label>
-            <textarea
-              value={cBody}
-              onChange={(e) => setCBody(e.target.value)}
-              rows={3}
-              className="w-full text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
-            />
-          </div>
-          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/80">
+          <StatCard
+            title="Toplam Sohbet"
+            value={totalCount}
+            subtitle="Tüm diyaloglar"
+            variant="blue"
+            icon={MessageSquare}
+          />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('UNREAD');
+            setSearchQuery('');
+          }}
+          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+          aria-label="Okunmamış mesajlar sekmesine geç"
+        >
+          <StatCard
+            title="Okunmamış"
+            value={unreadTotal}
+            subtitle="Yanıt bekleyen"
+            variant="amber"
+            icon={Inbox}
+          />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('CRITICAL');
+            setSearchQuery('');
+          }}
+          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+          aria-label="Acil ve sağlık mesajları sekmesine geç"
+        >
+          <StatCard
+            title="Acil & Sağlık"
+            value={criticalCount}
+            subtitle="Öncelikli konular"
+            variant="rose"
+            icon={AlertCircle}
+          />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('CLOSED');
+            setSearchQuery('');
+          }}
+          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+          aria-label="Kapanan sohbetler sekmesine geç"
+        >
+          <StatCard
+            title="Kapananlar"
+            value={closedCount}
+            subtitle="Tamamlanan görüşmeler"
+            variant="emerald"
+            icon={CheckCircle2}
+          />
+        </button>
+      </div>
+
+      {/* Evrensel Dokunsal Sekmeler & Arama */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <TactileTabs<TabKey> tabs={filterTabs} activeId={activeTab} onChange={setActiveTab} />
+
+        <div className="relative min-w-[240px]">
+          <Search className="w-4 h-4 text-slate-400 dark:text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Sohbet veya konu ara..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl pl-10 pr-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-white placeholder-slate-400 shadow-2xs focus:border-teal-700 focus:outline-none transition"
+          />
+          {searchQuery && (
             <button
               type="button"
-              onClick={() => setShowCompose(false)}
-              className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white px-3 py-1.5"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
             >
-              İptal
+              <X className="w-3.5 h-3.5" />
             </button>
-            <button
-              type="submit"
-              className="text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white px-3.5 py-1.5 rounded-xl transition-colors shadow-xs active:scale-98"
-            >
-              Aç
-            </button>
-          </div>
-        </form>
-      )}
+          )}
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Conversation List */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs lg:col-span-1 overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center text-slate-400 dark:text-slate-300 text-sm">
-              Yükleniyor…
-            </div>
-          ) : conversations.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 dark:text-slate-300 text-sm">
-              Henüz sohbet yok. "Yeni Sohbet" ile başla.
-            </div>
-          ) : (
-            <ul className="divide-y divide-slate-100 dark:divide-slate-700 max-h-[60vh] overflow-y-auto">
-              {conversations.map((c) => (
-                <li key={c.id}>
+      {/* Dokunsal Çift Panelli Mesajlaşma Arayüzü */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* SOL PANEL: Sohbet Listesi */}
+        <div className="lg:col-span-5 bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs overflow-hidden flex flex-col min-h-[500px]">
+          <div className="p-4 border-b border-[#DDD4C4] dark:border-slate-800 bg-[#FCFAF7]/50 dark:bg-slate-900/40 flex items-center justify-between">
+            <span className="text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+              Sohbet Listesi ({filteredConversations.length})
+            </span>
+          </div>
+
+          <div className="flex-1 overflow-y-auto max-h-[65vh] p-3 space-y-2">
+            {loading ? (
+              <div className="text-center py-16 text-slate-400 dark:text-slate-400 text-xs font-bold">
+                <div className="inline-block w-6 h-6 border-2 border-teal-700 border-t-transparent rounded-full animate-spin mb-2" />
+                <p>Sohbetler yükleniyor…</p>
+              </div>
+            ) : filteredConversations.length === 0 ? (
+              <div className="py-12 px-4">
+                <EmptyState
+                  icon={MessageSquare}
+                  title="Henüz sohbet yok"
+                  description='Yukarıdaki "Yeni Sohbet" butonu ile ilk mesajınızı başlatabilirsiniz.'
+                />
+              </div>
+            ) : (
+              filteredConversations.map((c) => {
+                const isSelected = activeId === c.id;
+                return (
                   <button
+                    key={c.id}
                     type="button"
                     onClick={() => setActiveId(c.id)}
-                    className={`w-full text-left p-3.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition ${
-                      activeId === c.id
-                        ? 'bg-teal-50 dark:bg-slate-700/70 text-teal-900 dark:text-teal-200'
-                        : ''
+                    className={`w-full text-left p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
+                      isSelected
+                        ? 'border-teal-700 bg-teal-50/60 dark:bg-teal-950/40 shadow-xs'
+                        : 'border-[#DDD4C4] dark:border-slate-800/80 bg-[#FCFAF7] dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {c.isCritical && (
+                            <span className="text-[10px] font-black bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-200 px-2 py-0.5 rounded-full border border-rose-300">
+                              <AlertCircle className="w-3 h-3 inline mr-0.5" /> Acil
+                            </span>
+                          )}
+                          <span className="text-[10px] font-extrabold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-[#DDD4C4] dark:border-slate-700 px-2 py-0.5 rounded-full">
+                            {CATEGORY_LABEL[c.category]}
+                          </span>
+                        </div>
+
                         <p
-                          className={`text-sm font-semibold truncate ${
-                            c.unreadCount > 0
-                              ? 'text-slate-900 dark:text-white'
-                              : 'text-slate-700 dark:text-slate-200'
+                          className={`text-sm font-black truncate mt-1.5 ${
+                            isSelected
+                              ? 'text-teal-950 dark:text-teal-200'
+                              : c.unreadCount > 0
+                                ? 'text-slate-900 dark:text-white'
+                                : 'text-slate-700 dark:text-slate-300'
                           }`}
                         >
-                          {c.isCritical && (
-                            <AlertCircle className="w-3.5 h-3.5 inline mr-1 text-rose-600" />
-                          )}
                           {c.subject}
                         </p>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-300 mt-0.5">
-                          {CATEGORY_LABEL[c.category]}
-                        </p>
                       </div>
+
                       {c.unreadCount > 0 && (
-                        <span className="text-[10px] font-bold bg-amber-500 text-amber-950 px-2 py-0.5 rounded-full shadow-xs">
-                          {c.unreadCount}
+                        <span className="text-[11px] font-black bg-amber-500 text-amber-950 px-2.5 py-0.5 rounded-full shadow-xs shrink-0 border border-amber-600">
+                          {c.unreadCount} yeni
                         </span>
                       )}
                     </div>
+
+                    <div className="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-400 pt-1 border-t border-slate-200/50 dark:border-slate-800">
+                      <span className="flex items-center gap-1 font-medium">
+                        <Clock className="w-3 h-3" />
+                        {new Date(c.lastMessageAt || c.createdAt).toLocaleTimeString('tr-TR', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
+                      <span className="font-semibold text-slate-600 dark:text-slate-300">
+                        {STATUS_LABEL[c.status]}
+                      </span>
+                    </div>
                   </button>
-                </li>
-              ))}
-            </ul>
-          )}
+                );
+              })
+            )}
+          </div>
         </div>
 
-        {/* Thread */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs lg:col-span-2 flex flex-col min-h-[60vh]">
+        {/* SAĞ PANEL: Yazışma Akışı & Gönderim Alanı */}
+        <div className="lg:col-span-7 bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs flex flex-col min-h-[500px]">
           {!active ? (
-            <div className="flex-1 flex items-center justify-center text-slate-400 dark:text-slate-300 text-sm p-8">
-              Bir sohbet seçin veya yeni oluşturun.
+            <div className="flex-1 flex items-center justify-center p-8">
+              <EmptyState
+                icon={MessageSquare}
+                title="Bir sohbet seçin"
+                description="Detayları görüntülemek ve mesaj yazmak için sol listeden bir görüşmeye tıklayın veya yeni bir sohbet başlatın."
+              />
             </div>
           ) : (
             <>
-              <div className="border-b border-slate-100 dark:border-slate-700/80 p-4 flex items-center justify-between gap-2">
+              {/* Thread Header */}
+              <div className="p-4 border-b border-[#DDD4C4] dark:border-slate-800 flex items-center justify-between gap-3 bg-[#FCFAF7]/50 dark:bg-slate-900/40">
                 <div className="min-w-0">
-                  <h2 className="font-bold text-slate-900 dark:text-white truncate">
+                  <div className="flex items-center gap-2 flex-wrap">
                     {active.isCritical && (
-                      <AlertCircle className="w-4 h-4 inline mr-1 text-rose-600" />
+                      <span className="text-[10px] font-black bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-200 px-2 py-0.5 rounded-full border border-rose-300">
+                        <AlertCircle className="w-3 h-3 inline mr-0.5" /> Acil Konu
+                      </span>
                     )}
+                    <span className="text-[11px] font-extrabold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-[#DDD4C4] dark:border-slate-700 px-2.5 py-0.5 rounded-full">
+                      {CATEGORY_LABEL[active.category]}
+                    </span>
+                    <Badge variant={active.status === 'OPEN' ? 'success' : 'neutral'} size="sm">
+                      {STATUS_LABEL[active.status]}
+                    </Badge>
+                  </div>
+
+                  <h2 className="font-black text-base text-slate-900 dark:text-white truncate mt-1">
                     {active.subject}
                   </h2>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-300 mt-0.5">
-                    {CATEGORY_LABEL[active.category]} · {STATUS_LABEL[active.status]}
-                  </p>
                 </div>
+
                 {active.status === 'OPEN' && (
-                  <button
-                    type="button"
+                  <TactileButton
+                    variant="secondary"
+                    size="sm"
                     onClick={() => void closeConversation()}
-                    className="text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-700/80 px-2.5 py-1 rounded-lg transition"
                   >
-                    Kapat
-                  </button>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                    Sohbeti Kapat
+                  </TactileButton>
                 )}
               </div>
-              <div className="flex-1 overflow-y-auto p-4 space-y-2 max-h-[50vh]">
+
+              {/* Message List */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3.5 max-h-[50vh]">
                 {messages.length === 0 ? (
-                  <div className="text-center text-slate-400 dark:text-slate-300 text-xs py-8">
-                    Henüz mesaj yok.
+                  <div className="text-center text-slate-400 dark:text-slate-400 text-xs font-semibold py-12">
+                    Henüz mesaj bulunmuyor. İlk mesajınızı aşağıdan gönderebilirsiniz.
                   </div>
                 ) : (
                   messages.map((m) => {
                     const isMine = m.senderId === meId;
+
                     return (
                       <div
                         key={m.id}
-                        className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}
+                        className={`flex flex-col ${isMine ? 'items-end' : 'items-start'}`}
                       >
-                        <div
-                          className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-xs ${
-                            isMine
-                              ? 'bg-teal-700 text-white dark:bg-teal-600 dark:text-white font-medium'
-                              : 'bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-transparent dark:border-slate-700/60'
-                          }`}
-                        >
-                          <p className="whitespace-pre-wrap">{m.content}</p>
-                          <p
-                            className={`text-[10px] mt-1 ${
-                              isMine
-                                ? 'text-teal-100 dark:text-teal-100'
-                                : 'text-slate-400 dark:text-slate-400'
-                            }`}
-                          >
+                        <div className="flex items-center gap-1.5 text-[10px] text-slate-400 mb-1 px-1">
+                          <User className="w-3 h-3" />
+                          <span className="font-bold">{isMine ? 'Siz' : 'Karşı Taraf'}</span>
+                          <span>·</span>
+                          <span>
                             {new Date(m.createdAt).toLocaleTimeString('tr-TR', {
                               hour: '2-digit',
                               minute: '2-digit',
                             })}
-                          </p>
+                          </span>
+                        </div>
+
+                        <div
+                          className={`max-w-[85%] sm:max-w-[75%] p-3.5 text-xs font-medium leading-relaxed ${
+                            isMine
+                              ? 'bg-teal-700 text-white rounded-2xl rounded-tr-xs shadow-[0_3px_0_0_#0f766e]'
+                              : 'bg-[#FCFAF7] dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl rounded-tl-xs border-2 border-[#DDD4C4] dark:border-slate-700 shadow-2xs'
+                          }`}
+                        >
+                          {m.content}
                         </div>
                       </div>
                     );
                   })
                 )}
               </div>
-              {active.status === 'OPEN' && (
+
+              {/* Message Reply Form */}
+              {active.status === 'OPEN' ? (
                 <form
                   onSubmit={(e) => void sendDraft(e)}
-                  className="border-t border-slate-100 dark:border-slate-700/80 p-3 flex items-center gap-2"
+                  className="p-3.5 border-t border-[#DDD4C4] dark:border-slate-800 bg-[#FCFAF7]/40 dark:bg-slate-900/40 flex items-center gap-2.5"
                 >
-                  <input
-                    type="text"
+                  <textarea
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
-                    placeholder="Mesaj yaz…"
-                    className="flex-1 text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/70 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-amber-500/20"
+                    placeholder="Mesajınızı buraya yazın..."
+                    rows={1}
+                    className="flex-1 bg-white dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-teal-700 transition resize-none"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        void sendDraft(e);
+                      }
+                    }}
                   />
-                  <button
+
+                  <TactileButton
+                    variant="teal"
+                    size="md"
                     type="submit"
                     disabled={sending || !draft.trim()}
-                    className="px-3.5 py-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl text-xs font-bold inline-flex items-center gap-1 disabled:opacity-50 transition-colors shadow-xs active:scale-98"
                   >
-                    <Send className="w-3.5 h-3.5" />
-                    {sending ? '…' : 'Gönder'}
-                  </button>
+                    <Send className="w-4 h-4" />
+                    Gönder
+                  </TactileButton>
                 </form>
+              ) : (
+                <div className="p-3.5 border-t border-[#DDD4C4] dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-center text-xs text-slate-500 dark:text-slate-400 font-bold">
+                  Bu sohbet kapatılmıştır. Yeni bir görüşme başlatmak için "Yeni Sohbet" butonunu
+                  kullanabilirsiniz.
+                </div>
               )}
             </>
           )}
         </div>
       </div>
+
+      {/* Yeni Sohbet Modalı */}
+      {showCompose && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-[#DDD4C4] dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-teal-700 dark:text-teal-400" />
+                <h3 className="text-base font-black text-slate-900 dark:text-white">
+                  Yeni Sohbet Başlat
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowCompose(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={(e) => void submitCompose(e)} className="space-y-3.5">
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
+                  Konu Başlığı
+                </label>
+                <input
+                  type="text"
+                  placeholder="Örn: Servis saatleri hakkında bilgi talebi"
+                  value={cSubject}
+                  onChange={(e) => setCSubject(e.target.value)}
+                  required
+                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-teal-700"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
+                    Kategori
+                  </label>
+                  <select
+                    value={cCategory}
+                    onChange={(e) => setCCategory(e.target.value as ConversationCategory)}
+                    className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700"
+                  >
+                    {Object.entries(CATEGORY_LABEL).map(([k, v]) => (
+                      <option key={k} value={k}>
+                        {v}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
+                    İlgili Öğrenci (Opsiyonel)
+                  </label>
+                  <select
+                    value={cStudentId}
+                    onChange={(e) => setCStudentId(e.target.value)}
+                    className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700"
+                  >
+                    <option value="">— Genel Konu —</option>
+                    {students.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.firstName} {s.lastName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
+                  İlk Mesajınız
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="İletmek istediğiniz konuyu detaylıca açıklayın..."
+                  value={cBody}
+                  onChange={(e) => setCBody(e.target.value)}
+                  required
+                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-teal-700"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#DDD4C4] dark:border-slate-800">
+                <TactileButton
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setShowCompose(false)}
+                  disabled={submittingCompose}
+                >
+                  İptal
+                </TactileButton>
+                <TactileButton variant="teal" size="sm" type="submit" disabled={submittingCompose}>
+                  {submittingCompose ? 'Başlatılıyor…' : 'Sohbeti Başlat'}
+                </TactileButton>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

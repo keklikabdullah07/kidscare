@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MessagesPage } from './MessagesPage';
 import { ToastProvider } from '../../components/Toast';
 
@@ -51,7 +52,7 @@ describe('MessagesPage', () => {
     localStorage.clear();
   });
 
-  it('renders conversation list', async () => {
+  it('renders conversation list and KPI stats', async () => {
     mockFetchByUrl({
       '/messaging/conversations': () => new Response(JSON.stringify(fakeConvos), { status: 200 }),
       '/students': () => new Response(JSON.stringify([]), { status: 200 }),
@@ -63,6 +64,10 @@ describe('MessagesPage', () => {
     );
     await waitFor(() => {
       expect(screen.getByText('Yemek bildirimi')).toBeInTheDocument();
+      expect(screen.getByText('Toplam Sohbet')).toBeInTheDocument();
+      expect(screen.getAllByText('Okunmamış').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText('Acil & Sağlık').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText('Kapananlar').length).toBeGreaterThanOrEqual(1);
     });
     expect(screen.getByText('Mesajlar')).toBeInTheDocument();
   });
@@ -77,6 +82,26 @@ describe('MessagesPage', () => {
         <MessagesPage />
       </ToastProvider>,
     );
+    await waitFor(() => {
+      expect(screen.getByText(/henüz sohbet yok/i)).toBeInTheDocument();
+    });
+  });
+
+  it('switches between tactile tabs', async () => {
+    const user = userEvent.setup();
+    mockFetchByUrl({
+      '/messaging/conversations': () => new Response(JSON.stringify(fakeConvos), { status: 200 }),
+      '/students': () => new Response(JSON.stringify([]), { status: 200 }),
+    });
+    render(
+      <ToastProvider>
+        <MessagesPage />
+      </ToastProvider>,
+    );
+
+    const closedTab = screen.getByRole('tab', { name: /Kapananlar/i });
+    await user.click(closedTab);
+
     await waitFor(() => {
       expect(screen.getByText(/henüz sohbet yok/i)).toBeInTheDocument();
     });
