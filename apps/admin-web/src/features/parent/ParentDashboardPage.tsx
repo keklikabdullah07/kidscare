@@ -1,4 +1,5 @@
 import { useState, useEffect, type JSX } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Heart,
   Calendar,
@@ -12,17 +13,22 @@ import {
   Cookie,
   Award,
   Sparkles,
+  Camera,
 } from 'lucide-react';
 import { getParentChildrenOverview } from '../../api/parent';
 import { getDailyMenu } from '../../api/daily-menus';
 import { listObservations, listPortfolio } from '../../api/development';
+import { getActivities } from '../../api/activities';
 import type {
   DailyMenu,
   DevelopmentObservationDto,
   ParentChildOverview,
   PortfolioItemDto,
+  ActivityPost,
+  MediaFileItem,
 } from '@kidscare/shared-types';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { LightboxModal } from '../gallery/LightboxModal';
 
 export function ParentDashboardPage(): JSX.Element {
   const [childrenData, setChildrenData] = useState<ParentChildOverview[]>([]);
@@ -33,6 +39,8 @@ export function ParentDashboardPage(): JSX.Element {
   const [dailyMenu, setDailyMenu] = useState<DailyMenu | null>(null);
   const [devObservations, setDevObservations] = useState<DevelopmentObservationDto[]>([]);
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItemDto[]>([]);
+  const [activities, setActivities] = useState<ActivityPost[]>([]);
+  const [activeLightboxFile, setActiveLightboxFile] = useState<MediaFileItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,11 +50,12 @@ export function ParentDashboardPage(): JSX.Element {
       setLoading(true);
       setError(null);
       try {
-        const [data, menuRes, obsRes, portRes] = await Promise.all([
+        const [data, menuRes, obsRes, portRes, actRes] = await Promise.all([
           getParentChildrenOverview(selectedDate),
           getDailyMenu(selectedDate).catch(() => ({ menu: null, allergenWarnings: [] })),
           listObservations(selectedChildId || undefined).catch(() => []),
           listPortfolio(selectedChildId || undefined).catch(() => []),
+          getActivities().catch(() => []),
         ]);
         if (isMounted) {
           const safe = Array.isArray(data) ? data : [];
@@ -54,6 +63,7 @@ export function ParentDashboardPage(): JSX.Element {
           setDailyMenu(menuRes.menu);
           setDevObservations(Array.isArray(obsRes) ? obsRes : []);
           setPortfolioItems(Array.isArray(portRes) ? portRes : []);
+          setActivities(Array.isArray(actRes) ? actRes : []);
           if (
             safe.length > 0 &&
             (!selectedChildId || !safe.some((c) => c.student.id === selectedChildId))
@@ -131,6 +141,22 @@ export function ParentDashboardPage(): JSX.Element {
         m.toLowerCase().includes(alg.toLowerCase()) || alg.toLowerCase().includes(m.toLowerCase()),
     ),
   );
+
+  function openLightboxForActivity(url: string, titleText: string, dateStr?: string): void {
+    setActiveLightboxFile({
+      id: url,
+      tenantId: '',
+      uploadedById: '',
+      category: 'ACTIVITY',
+      fileName: titleText,
+      fileKey: url,
+      mimeType: 'image/jpeg',
+      fileSize: 1024 * 1024,
+      url,
+      createdAt: dateStr || new Date().toISOString(),
+      updatedAt: dateStr || new Date().toISOString(),
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -752,6 +778,74 @@ export function ParentDashboardPage(): JSX.Element {
               </div>
             </div>
           </div>
+
+          {/* Activity Photo Showcase for Parents */}
+          {activities.length > 0 && (
+            <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
+                    <Camera className="w-4.5 h-4.5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      Günün Etkinlik Fotoğrafları & Sınıf Galerisi
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                      Öğretmenlerin paylaştığı güncel sınıf aktiviteleri ve atölye fotoğrafları
+                    </p>
+                  </div>
+                </div>
+
+                <Link
+                  to="/gallery"
+                  className="btn-tactile-secondary px-3.5 py-1.5 text-xs font-bold shrink-0 flex items-center gap-1.5 self-start sm:self-auto"
+                >
+                  <span>Tüm Galeriyi Gör</span>
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {activities
+                  .flatMap((act) =>
+                    act.mediaUrls.map((url) => ({
+                      url,
+                      title: act.title,
+                      date: act.activityDate,
+                      classroom: act.classroom,
+                    })),
+                  )
+                  .slice(0, 6)
+                  .map((photo, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => openLightboxForActivity(photo.url, photo.title, photo.date)}
+                      className="group cursor-pointer rounded-2xl overflow-hidden border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-[#FCFAF7] dark:bg-slate-900 shadow-2xs relative aspect-square"
+                    >
+                      <img
+                        src={photo.url}
+                        alt={photo.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                        onError={(e) => {
+                          e.currentTarget.src =
+                            'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 text-white">
+                        <span className="text-[10px] font-bold truncate">{photo.title}</span>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {/* Lightbox Modal */}
+          <LightboxModal
+            isOpen={Boolean(activeLightboxFile)}
+            file={activeLightboxFile}
+            onClose={() => setActiveLightboxFile(null)}
+          />
         </>
       )}
     </div>
