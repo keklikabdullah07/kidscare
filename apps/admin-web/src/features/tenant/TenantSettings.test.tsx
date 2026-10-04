@@ -84,4 +84,46 @@ describe('TenantSettings', () => {
     const patchInit = patchCall?.[1];
     expect(JSON.parse(patchInit?.body as string)).toEqual({ name: 'Yeni Ad' });
   });
+
+  it('renders 4 KPI stat cards from tenant data', async () => {
+    mockFetchByUrl({
+      '/tenants/me': () => new Response(JSON.stringify(fakeTenant), { status: 200 }),
+    });
+
+    render(<TenantSettings />);
+    await screen.findByDisplayValue('Demo Kreş');
+
+    expect(screen.getByText('Kurum Durumu')).toBeInTheDocument();
+    expect(screen.getByText('Kreş Kodu (Slug)')).toBeInTheDocument();
+    expect(screen.getByText('Kapasite')).toBeInTheDocument();
+    expect(screen.getByText('Kayıt Tarihi')).toBeInTheDocument();
+  });
+
+  it('reloads tenant data when Yenile tactile button is clicked', async () => {
+    let callCount = 0;
+    mockFetchByUrl({
+      '/tenants/me': () => {
+        callCount += 1;
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              ...fakeTenant,
+              name: callCount === 1 ? 'Demo Kreş' : 'Yenilenen Kreş',
+            }),
+            { status: 200 },
+          ),
+        );
+      },
+    });
+
+    const user = userEvent.setup();
+    render(<TenantSettings />);
+
+    await screen.findByDisplayValue('Demo Kreş');
+    await user.click(screen.getByRole('button', { name: /yenile/i }));
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Yenilenen Kreş')).toBeInTheDocument();
+    });
+  });
 });

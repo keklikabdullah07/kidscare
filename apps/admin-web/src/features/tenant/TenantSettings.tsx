@@ -20,6 +20,9 @@ import type { Tenant } from '@kidscare/shared-types';
 import { ApiError } from '../../api/client';
 import { getTenantMe, updateTenantMe } from '../../api/tenants';
 import { useToast } from '../../components/Toast';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { StatCard } from '../../components/ui/StatCard';
+import { TactileButton } from '../../components/ui/TactileButton';
 
 type Status = 'loading' | 'ready' | 'error';
 
@@ -108,14 +111,10 @@ export function TenantSettings(): JSX.Element {
           )
         </p>
         <div>
-          <button
-            type="button"
-            onClick={fetchTenantData}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-sm font-semibold shadow-xs transition-colors"
-          >
+          <TactileButton variant="secondary" size="md" onClick={fetchTenantData}>
             <RefreshCw className="w-4 h-4" />
             Yeniden Dene
-          </button>
+          </TactileButton>
         </div>
       </div>
     );
@@ -128,116 +127,65 @@ export function TenantSettings(): JSX.Element {
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-teal-700 text-white dark:bg-slate-800 dark:text-teal-300 dark:border dark:border-slate-700 flex items-center justify-center shadow-xs shrink-0">
-            <School className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-                Kreş & Kurum Ayarları
-              </h1>
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-teal-900 dark:text-teal-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-full border border-teal-200/60 dark:border-slate-700">
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-800 dark:text-amber-400" />
-                Kurumsal Lisans
-              </span>
-            </div>
-            <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
-              Kurum kimliği, şube bilgileri, kapasite ve sistem güvenlik ayarlarını yönetin.
-            </p>
-          </div>
-        </div>
+      <PageHeader
+        title="Kreş & Kurum Ayarları"
+        description="Kurum kimliği, şube bilgileri, kapasite ve sistem güvenlik ayarlarını yönetin."
+        icon={School}
+        actions={
+          <TactileButton variant="secondary" size="sm" onClick={fetchTenantData}>
+            <RefreshCw className="w-3.5 h-3.5" />
+            Yenile
+          </TactileButton>
+        }
+      />
 
-        <button
-          type="button"
-          onClick={fetchTenantData}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-700/80 hover:bg-slate-200/80 dark:hover:bg-slate-700 border border-transparent dark:border-slate-600 rounded-xl transition-colors shrink-0 active:scale-98"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          Yenile
-        </button>
+      {/* License badge */}
+      <div className="flex items-center gap-1.5 text-[11px] font-bold text-teal-900 dark:text-teal-300 bg-blue-50 dark:bg-blue-950/60 px-3 py-1.5 rounded-full border border-teal-200/60 dark:border-slate-700 w-fit shadow-2xs">
+        <ShieldCheck className="w-3.5 h-3.5 text-blue-800 dark:text-amber-400" />
+        Kurumsal Lisans
       </div>
 
-      {/* KPI / Overview Summary Cards */}
+      {/* KPI Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Status Card */}
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider block">
-              Kurum Durumu
-            </span>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-sm font-bold text-emerald-700 dark:text-emerald-400">
-                {tenant.status}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Slug Card */}
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-teal-900 dark:text-teal-300 flex items-center justify-center shrink-0">
-            <Hash className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider block">
-              Kreş Kodu (Slug)
-            </span>
-            <span className="text-sm font-bold text-slate-800 dark:text-white font-mono mt-0.5 block">
-              {tenant.slug}
-            </span>
-          </div>
-        </div>
-
-        {/* Capacity / Students Card */}
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-            <Users className="w-5 h-5" />
-          </div>
-          <div className="flex-1">
-            <div className="flex justify-between items-center">
-              <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
-                Kapasite
-              </span>
-              <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300 font-mono">
-                1 / 50
-              </span>
-            </div>
-            <div className="w-full bg-slate-100 dark:bg-slate-900 h-1.5 rounded-full mt-1.5 overflow-hidden">
-              <div className="bg-amber-500 h-full rounded-full" style={{ width: '4%' }} />
-            </div>
-          </div>
-        </div>
-
-        {/* Created Date Card */}
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-teal-900 dark:text-teal-300 flex items-center justify-center shrink-0">
-            <Calendar className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider block">
-              Kayıt Tarihi
-            </span>
-            <span className="text-xs font-bold text-slate-700 dark:text-slate-200 mt-0.5 block">
-              {new Date(tenant.createdAt).toLocaleDateString('tr-TR', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })}
-            </span>
-          </div>
-        </div>
+        <StatCard
+          title="Kurum Durumu"
+          value={tenant.status}
+          subtitle="Aktif"
+          icon={ShieldCheck}
+          variant="emerald"
+        />
+        <StatCard
+          title="Kreş Kodu (Slug)"
+          value={tenant.slug}
+          subtitle="Sistem Tanımlayıcı"
+          icon={Hash}
+          variant="teal"
+        />
+        <StatCard
+          title="Kapasite"
+          value="1 / 50"
+          subtitle="Öğrenci Doluluğu"
+          icon={Users}
+          variant="amber"
+          progressPercent={4}
+        />
+        <StatCard
+          title="Kayıt Tarihi"
+          value={new Date(tenant.createdAt).toLocaleDateString('tr-TR', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })}
+          subtitle="Kuruluş"
+          icon={Calendar}
+          variant="indigo"
+        />
       </div>
 
       {/* Main Settings Form */}
       <form onSubmit={(e) => void handleSave(e)} className="space-y-6">
         {/* Institutional Information Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs p-6 space-y-6">
+        <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] p-6 space-y-6">
           <div className="flex items-center gap-2.5 pb-4 border-b border-slate-100 dark:border-slate-700/80">
             <Building2 className="w-5 h-5 text-teal-900 dark:text-teal-300" />
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
@@ -265,7 +213,7 @@ export function TenantSettings(): JSX.Element {
                   maxLength={128}
                   required
                   placeholder="Örn: KidsCare Demo Kreş"
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 hover:bg-slate-50 focus:bg-white dark:bg-slate-900 dark:hover:bg-slate-850 dark:focus:bg-slate-900 px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20 transition-all disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:opacity-75"
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-700 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:opacity-75 shadow-2xs"
                 />
               </div>
               <p className="text-[11px] text-slate-400 dark:text-slate-300 mt-1">
@@ -292,7 +240,7 @@ export function TenantSettings(): JSX.Element {
                     value={tenant.slug}
                     readOnly
                     disabled
-                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-100/70 dark:bg-slate-900/60 pl-7 pr-4 py-2.5 text-sm font-mono text-slate-600 dark:text-slate-300 cursor-not-allowed select-all"
+                    className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-slate-100/70 dark:bg-slate-900/60 pl-7 pr-4 py-2.5 text-sm font-mono text-slate-600 dark:text-slate-300 cursor-not-allowed select-all shadow-2xs"
                   />
                 </div>
               </div>
@@ -316,7 +264,7 @@ export function TenantSettings(): JSX.Element {
                   type="text"
                   readOnly
                   defaultValue="Merkez Kampüs — Ana Hizmet Binası"
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-100/70 dark:bg-slate-900/60 pl-9 pr-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-not-allowed"
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-slate-100/70 dark:bg-slate-900/60 pl-9 pr-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-not-allowed shadow-2xs"
                 />
               </div>
               <p className="text-[11px] text-slate-400 dark:text-slate-300 mt-1">
@@ -339,7 +287,7 @@ export function TenantSettings(): JSX.Element {
                   type="text"
                   readOnly
                   defaultValue="+90 (212) 555 01 23"
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-100/70 dark:bg-slate-900/60 pl-9 pr-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-not-allowed"
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-slate-100/70 dark:bg-slate-900/60 pl-9 pr-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-not-allowed shadow-2xs"
                 />
               </div>
             </div>
@@ -359,7 +307,7 @@ export function TenantSettings(): JSX.Element {
                   type="text"
                   readOnly
                   defaultValue={`iletisim@${tenant.slug}.test`}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-100/70 dark:bg-slate-900/60 pl-9 pr-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-not-allowed"
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-slate-100/70 dark:bg-slate-900/60 pl-9 pr-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-not-allowed shadow-2xs"
                 />
               </div>
             </div>
@@ -367,7 +315,7 @@ export function TenantSettings(): JSX.Element {
         </div>
 
         {/* System & Operational Preferences */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs p-6 space-y-5">
+        <div className="rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] p-6 space-y-5">
           <div className="flex items-center gap-2.5 pb-4 border-b border-slate-100 dark:border-slate-700/80">
             <BellRing className="w-5 h-5 text-teal-900 dark:text-teal-300" />
             <div>
@@ -493,7 +441,7 @@ export function TenantSettings(): JSX.Element {
         )}
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#131B2E] p-4 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)]">
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-300">
             {hasChanges ? (
               <span className="inline-flex items-center gap-1 text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-800/60 font-semibold">
@@ -508,14 +456,10 @@ export function TenantSettings(): JSX.Element {
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              type="submit"
-              disabled={saving || !hasChanges}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl text-sm font-bold shadow-xs hover:shadow transition-all disabled:opacity-50 disabled:pointer-events-none active:scale-98"
-            >
+            <TactileButton type="submit" variant="teal" size="md" disabled={saving || !hasChanges}>
               <Save className="w-4 h-4" />
               {saving ? 'Kaydediliyor…' : 'Kaydet'}
-            </button>
+            </TactileButton>
           </div>
         </div>
       </form>
