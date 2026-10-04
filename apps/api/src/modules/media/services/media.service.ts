@@ -17,11 +17,13 @@ const ALLOWED_MIME_TYPES = new Set([
   'image/png',
   'image/webp',
   'image/gif',
+  'image/heic',
+  'image/heif',
   'application/pdf',
 ]);
 
 const MAX_SIZE_AVATAR = 2 * 1024 * 1024; // 2 MB
-const MAX_SIZE_IMAGE = 5 * 1024 * 1024; // 5 MB
+const MAX_SIZE_IMAGE = 10 * 1024 * 1024; // 10 MB
 const MAX_SIZE_DOCUMENT = 10 * 1024 * 1024; // 10 MB
 
 @Injectable()
@@ -93,7 +95,7 @@ export class MediaService {
 
   async listFiles(
     tenantId: string,
-    category?: MediaCategory  ,
+    category?: MediaCategory,
     limit = 50,
   ): Promise<MediaFileItem[]> {
     const records = await this.repo.findMediaFilesByTenant(tenantId, category, limit);

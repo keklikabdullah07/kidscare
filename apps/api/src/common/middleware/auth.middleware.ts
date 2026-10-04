@@ -27,6 +27,7 @@ export class AuthMiddleware implements NestMiddleware {
     try {
       const claims = this.jwt.verify(token);
       value = { tenantId: claims.tenantId, userId: claims.sub, role: claims.role };
+      (req as unknown as { user?: TenantContextValue }).user = value;
     } catch {
       // Surface a 401 so clients with a stale/malformed token know
       // to re-login rather than silently falling back to dev headers.

@@ -32,13 +32,11 @@ describe('MediaController', () => {
   });
 
   it('should call mediaService.uploadFile on valid file upload', async () => {
-    const req = {
-      user: {
-        userId: 'user-1',
-        tenantId: 'tenant-1',
-        role: 'ADMIN',
-      },
-    } as unknown as Parameters<typeof controller.upload>[0];
+    const user = {
+      userId: 'user-1',
+      tenantId: 'tenant-1',
+      role: 'ADMIN' as const,
+    };
 
     const file = {
       buffer: Buffer.from('test-content'),
@@ -49,7 +47,7 @@ describe('MediaController', () => {
       encoding: '7bit',
     };
 
-    const res = await controller.upload(req, file, 'GENERAL');
+    const res = await controller.upload(user, file, 'GENERAL');
 
     expect(res.success).toBe(true);
     expect(serviceMock.uploadFile).toHaveBeenCalledWith(
@@ -66,55 +64,29 @@ describe('MediaController', () => {
   });
 
   it('should throw BadRequestException if file is missing in upload request', async () => {
-    const req = {
-      user: {
-        userId: 'user-1',
-        tenantId: 'tenant-1',
-        role: 'ADMIN',
-      },
-    } as unknown as Parameters<typeof controller.upload>[0];
+    const user = {
+      userId: 'user-1',
+      tenantId: 'tenant-1',
+      role: 'ADMIN' as const,
+    };
 
-    await expect(controller.upload(req, undefined)).rejects.toThrow(BadRequestException);
+    await expect(controller.upload(user, undefined)).rejects.toThrow(BadRequestException);
   });
 
   it('should call mediaService.listFiles on GET /media for TEACHER role', async () => {
-    const req = {
-      user: {
-        userId: 'user-1',
-        tenantId: 'tenant-1',
-        role: 'TEACHER',
-      },
-    } as unknown as Parameters<typeof controller.upload>[0];
-
-    await controller.list(req, 'ACTIVITY', '10');
+    await controller.list('tenant-1', 'ACTIVITY', '10');
 
     expect(serviceMock.listFiles).toHaveBeenCalledWith('tenant-1', 'ACTIVITY', 10);
   });
 
   it('should call mediaService.listFiles on GET /media for PARENT role', async () => {
-    const req = {
-      user: {
-        userId: 'parent-1',
-        tenantId: 'tenant-1',
-        role: 'PARENT',
-      },
-    } as unknown as Parameters<typeof controller.upload>[0];
-
-    await controller.list(req, 'ACTIVITY', '20');
+    await controller.list('tenant-1', 'ACTIVITY', '20');
 
     expect(serviceMock.listFiles).toHaveBeenCalledWith('tenant-1', 'ACTIVITY', 20);
   });
 
   it('should call mediaService.deleteFile on DELETE /media/:id', async () => {
-    const req = {
-      user: {
-        userId: 'user-1',
-        tenantId: 'tenant-1',
-        role: 'ADMIN',
-      },
-    } as unknown as Parameters<typeof controller.upload>[0];
-
-    const res = await controller.delete(req, 'media-1');
+    const res = await controller.delete('tenant-1', 'media-1');
 
     expect(res.success).toBe(true);
     expect(serviceMock.deleteFile).toHaveBeenCalledWith('tenant-1', 'media-1');
