@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, type FormEvent, type JSX } from 'react';
+import { useState, useEffect, useMemo, useRef, type FormEvent, type JSX } from 'react';
 import {
   Award,
   BookOpen,
@@ -18,10 +18,12 @@ import {
   RotateCw,
   X,
   User,
+  Upload,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { useToast } from '../../components/Toast';
 import { listStudents } from '../../api/students';
+import { uploadMediaFile } from '../../api/media';
 import {
   listObservations,
   createObservation,
@@ -127,6 +129,24 @@ export function DevelopmentPage(): JSX.Element {
     mediaUrl: '',
     isParentVisible: true,
   });
+  const [portUploading, setPortUploading] = useState(false);
+  const portFileInputRef = useRef<HTMLInputElement | null>(null);
+
+  async function handlePortFileUpload(e: React.ChangeEvent<HTMLInputElement>): Promise<void> {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPortUploading(true);
+    try {
+      const res = await uploadMediaFile(file, 'PORTFOLIO');
+      setPortForm((prev) => ({ ...prev, mediaUrl: res.file.url }));
+      showToast('Fotoğraf yüklendi', 'success');
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'Yükleme başarısız', 'error');
+    } finally {
+      setPortUploading(false);
+      if (portFileInputRef.current) portFileInputRef.current.value = '';
+    }
+  }
 
   const [showActModal, setShowActModal] = useState(false);
   const [actForm, setActForm] = useState({
@@ -897,14 +917,32 @@ export function DevelopmentPage(): JSX.Element {
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
                   Medya / Fotoğraf URL
                 </label>
-                <input
-                  type="url"
-                  placeholder="https://images.unsplash.com/..."
-                  value={portForm.mediaUrl}
-                  onChange={(e) => setPortForm({ ...portForm, mediaUrl: e.target.value })}
-                  required
-                  className="w-full text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-amber-700"
-                />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="hidden"
+                    ref={portFileInputRef}
+                    onChange={(e) => void handlePortFileUpload(e)}
+                    accept="image/jpeg,image/png,image/webp,image/gif,image/heic"
+                  />
+                  <input
+                    type="url"
+                    placeholder="https://images.unsplash.com/..."
+                    value={portForm.mediaUrl}
+                    onChange={(e) => setPortForm({ ...portForm, mediaUrl: e.target.value })}
+                    required
+                    className="flex-1 text-xs border-2 border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 rounded-2xl p-2.5 focus:outline-none focus:border-amber-700"
+                  />
+                  <TactileButton
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => portFileInputRef.current?.click()}
+                    disabled={portUploading}
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>{portUploading ? 'Yükleniyor…' : 'Dosya'}</span>
+                  </TactileButton>
+                </div>
               </div>
 
               <div className="flex items-center gap-2.5 p-2 bg-[#FCFAF7] dark:bg-slate-900/60 rounded-xl border border-[#DDD4C4] dark:border-slate-800">
