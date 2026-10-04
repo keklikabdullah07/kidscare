@@ -21,7 +21,12 @@ function forTenant(tenantId: string): any {
 
 const tracked: Set<string> = new Set();
 
-async function seedTenant(): Promise<{ tenantId: string; userId: string; studentId: string; teacherId: string }> {
+async function seedTenant(): Promise<{
+  tenantId: string;
+  userId: string;
+  studentId: string;
+  teacherId: string;
+}> {
   const tenantId = `med-int-${Math.random().toString(36).slice(2, 10)}`;
   const nonce = `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
   const userId = `${tenantId}-admin-${nonce}`;
@@ -31,13 +36,31 @@ async function seedTenant(): Promise<{ tenantId: string; userId: string; student
     await tx.$executeRawUnsafe(`SET LOCAL app.tenant_id = '${tenantId}'`);
     await tx.tenant.create({ data: { id: tenantId, slug: `med-${nonce}`, name: tenantId } });
     await tx.user.create({
-      data: { id: userId, tenantId, email: `${tenantId}-a-${nonce}@x`, passwordHash: 'x', role: 'ADMIN' },
+      data: {
+        id: userId,
+        tenantId,
+        email: `${tenantId}-a-${nonce}@x`,
+        passwordHash: 'x',
+        role: 'ADMIN',
+      },
     });
     await tx.user.create({
-      data: { id: teacherId, tenantId, email: `${tenantId}-t-${nonce}@x`, passwordHash: 'x', role: 'TEACHER' },
+      data: {
+        id: teacherId,
+        tenantId,
+        email: `${tenantId}-t-${nonce}@x`,
+        passwordHash: 'x',
+        role: 'TEACHER',
+      },
     });
     await tx.student.create({
-      data: { id: studentId, tenantId, firstName: 'Test', lastName: 'Kid', dateOfBirth: new Date('2020-01-01') },
+      data: {
+        id: studentId,
+        tenantId,
+        firstName: 'Test',
+        lastName: 'Kid',
+        dateOfBirth: new Date('2020-01-01'),
+      },
     });
   });
   tracked.add(tenantId);
@@ -61,7 +84,10 @@ function buildRepo(overrides: Partial<IMedicationRepository> = {}): IMedicationR
   return {
     list: async (tid: string) => {
       const tx = forTenant(tid);
-      return tx.medicationRecord.findMany({ where: { tenantId: tid }, orderBy: { createdAt: 'asc' } });
+      return tx.medicationRecord.findMany({
+        where: { tenantId: tid },
+        orderBy: { createdAt: 'asc' },
+      });
     },
     find: async (tid: string, id: string) => {
       const tx = forTenant(tid);
@@ -76,6 +102,11 @@ function buildRepo(overrides: Partial<IMedicationRepository> = {}): IMedicationR
       const existing = await tx.medicationRecord.findFirst({ where: { id, tenantId: tid } });
       if (!existing) throw new Error('not found');
       return tx.medicationRecord.update({ where: { id: existing.id }, data });
+    },
+    delete: async (tid: string, id: string) => {
+      const tx = forTenant(tid);
+      const res = await tx.medicationRecord.deleteMany({ where: { id, tenantId: tid } });
+      return res.count > 0;
     },
     ...overrides,
   };
@@ -133,7 +164,11 @@ describe('MedicationService (integration)', () => {
 
     let recordId: string;
     await runWithTenant({ tenantId, userId, role: 'PARENT' }, async () => {
-      const created = await svc.create(tenantId, userId, { studentId, medicationName: 'X', dosage: '1' });
+      const created = await svc.create(tenantId, userId, {
+        studentId,
+        medicationName: 'X',
+        dosage: '1',
+      });
       recordId = created.id;
     });
     await runWithTenant({ tenantId, userId, role: 'ADMIN' }, async () => {
@@ -149,11 +184,17 @@ describe('MedicationService (integration)', () => {
 
     let recordId: string;
     await runWithTenant({ tenantId, userId, role: 'PARENT' }, async () => {
-      const created = await svc.create(tenantId, userId, { studentId, medicationName: 'X', dosage: '1' });
+      const created = await svc.create(tenantId, userId, {
+        studentId,
+        medicationName: 'X',
+        dosage: '1',
+      });
       recordId = created.id;
     });
     await runWithTenant({ tenantId, userId: teacherId, role: 'TEACHER' }, async () => {
-      await expect(svc.markGiven(tenantId, recordId!, teacherId, {})).rejects.toThrow(/Onaylanmamış/);
+      await expect(svc.markGiven(tenantId, recordId!, teacherId, {})).rejects.toThrow(
+        /Onaylanmamış/,
+      );
     });
   });
 
@@ -164,7 +205,11 @@ describe('MedicationService (integration)', () => {
 
     let recordId: string;
     await runWithTenant({ tenantId, userId, role: 'PARENT' }, async () => {
-      const created = await svc.create(tenantId, userId, { studentId, medicationName: 'X', dosage: '1' });
+      const created = await svc.create(tenantId, userId, {
+        studentId,
+        medicationName: 'X',
+        dosage: '1',
+      });
       recordId = created.id;
     });
     await runWithTenant({ tenantId, userId, role: 'ADMIN' }, async () => {
@@ -172,5 +217,29 @@ describe('MedicationService (integration)', () => {
       expect(rejected.status).toBe('REJECTED');
       expect(rejected.rejectionReason).toBe('Yanlış doz');
     });
+  });
+
+  it('allows parent to delete requested record and removes from db', async () => {
+    const { tenantId, userId, studentId } = await seedTenant();
+    const repo = buildRepo();
+    const svc = new MedicationService(repo);
+
+    let recordId: string;
+    await runWithTenant({ tenantId, userId, role: 'PARENT' }, async () => {
+      const created = await svc.create(tenantId, userId, {
+        studentId,
+        medicationName: 'X',
+        dosage: '1',
+      });
+      recordId = created.id;
+    });
+
+    await runWithTenant({ tenantId, userId, role: 'PARENT' }, async () => {
+      await svc.delete(tenantId, recordId!, { userId, role: 'PARENT', tenantId });
+    });
+
+    const tx = forTenant(tenantId);
+    const persisted = await tx.medicationRecord.findUnique({ where: { id: recordId! } });
+    expect(persisted).toBeNull();
   });
 });

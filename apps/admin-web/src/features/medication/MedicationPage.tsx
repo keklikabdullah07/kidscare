@@ -11,6 +11,7 @@ import {
   AlertCircle,
   FileText,
   Check,
+  Trash2,
 } from 'lucide-react';
 import type { MedicationRecord, StandaloneMedicationStatus, Student } from '@kidscare/shared-types';
 import {
@@ -20,6 +21,7 @@ import {
   rejectMedicationRecord,
   markMedicationGiven,
   markMedicationSkipped,
+  deleteMedicationRecord,
 } from '../../api/medication';
 import { listStudents } from '../../api/students';
 import { useToast } from '../../components/Toast';
@@ -69,6 +71,7 @@ function toLocalDatetimeInput(d: Date = new Date()): string {
 export function MedicationPage(): JSX.Element {
   const { state } = useAuth();
   const role = state.status === 'authenticated' ? state.user.role : 'PARENT';
+  const currentUserId = state.status === 'authenticated' ? state.user.id : '';
 
   const [records, setRecords] = useState<MedicationRecord[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
@@ -87,6 +90,10 @@ export function MedicationPage(): JSX.Element {
   const [administerTime, setAdministerTime] = useState(toLocalDatetimeInput());
   const [administerNote, setAdministerNote] = useState('');
   const [administerSubmitting, setAdministerSubmitting] = useState(false);
+
+  // Delete modal state
+  const [deleteRecord, setDeleteRecord] = useState<MedicationRecord | null>(null);
+  const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
   // Create form state
   const [formStudentId, setFormStudentId] = useState('');
@@ -237,6 +244,21 @@ export function MedicationPage(): JSX.Element {
       showToast(err instanceof Error ? err.message : 'İşlem başarısız', 'error');
     } finally {
       setBusyId(null);
+    }
+  }
+
+  async function handleConfirmDelete(): Promise<void> {
+    if (!deleteRecord) return;
+    setDeleteSubmitting(true);
+    try {
+      await deleteMedicationRecord(deleteRecord.id);
+      showToast(`${deleteRecord.medicationName} ilaç kaydı başarıyla silindi.`, 'success');
+      setDeleteRecord(null);
+      await refresh();
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : 'İlaç kaydı silinemedi', 'error');
+    } finally {
+      setDeleteSubmitting(false);
     }
   }
 
@@ -646,6 +668,25 @@ export function MedicationPage(): JSX.Element {
                         </TactileButton>
                       </>
                     )}
+
+                  {/* Silme Butonu (Admin/SuperAdmin veya kendi henüz verilmemiş talebini silebilen Veli) */}
+                  {(role === 'ADMIN' ||
+                    role === 'SUPER_ADMIN' ||
+                    (role === 'PARENT' &&
+                      r.requestedById === currentUserId &&
+                      r.status !== 'GIVEN')) && (
+                    <TactileButton
+                      type="button"
+                      variant="danger"
+                      size="sm"
+                      onClick={() => setDeleteRecord(r)}
+                      disabled={busyId === r.id}
+                      title="İlaç kaydını sistemden silin"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Sil</span>
+                    </TactileButton>
+                  )}
                 </div>
               </div>
             );
@@ -889,6 +930,61 @@ export function MedicationPage(): JSX.Element {
           onConfirm={(val) => void handlePromptConfirm(val)}
           onCancel={() => setPromptDialog(null)}
         />
+      )}
+
+      {/* MODAL 4: İlaç Kaydı Silme Onayı */}
+      {deleteRecord && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#131B2E] border-2 border-rose-300 dark:border-rose-900/80 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-10 h-10 rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center font-bold">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-base font-black text-slate-900 dark:text-white">
+                  İlaç Kaydını Sil
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Bu işlem geri alınamaz.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 text-xs text-slate-700 dark:text-slate-300 space-y-1.5">
+              <p>
+                <strong className="text-rose-950 dark:text-rose-200">
+                  {deleteRecord.medicationName}
+                </strong>{' '}
+                ({deleteRecord.dosage}) isimli ilaç kaydını sistemden silmek istediğinize emin
+                misiniz?
+              </p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Öğrenci: <strong>{studentFullName(deleteRecord.studentId)}</strong>
+              </p>
+            </div>
+
+            <div className="flex justify-end gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <TactileButton
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => setDeleteRecord(null)}
+                disabled={deleteSubmitting}
+              >
+                Vazgeç
+              </TactileButton>
+              <TactileButton
+                type="button"
+                variant="danger"
+                size="sm"
+                onClick={() => void handleConfirmDelete()}
+                disabled={deleteSubmitting}
+              >
+                {deleteSubmitting ? 'Siliniyor…' : 'Evet, Sil'}
+              </TactileButton>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -64,6 +64,7 @@ export interface IMedicationRepository {
     id: string,
     data: Prisma.MedicationRecordUpdateInput,
   ): Promise<MedicationRecordRow>;
+  delete(tenantId: string, id: string): Promise<boolean>;
 }
 
 @Injectable()
@@ -134,6 +135,15 @@ export class MedicationRepository implements IMedicationRepository {
         data,
         select: MEDICATION_SELECT,
       });
+    });
+  }
+
+  async delete(tenantId: string, id: string): Promise<boolean> {
+    return this.prisma.withTenant(async (client) => {
+      const result = await client.medicationRecord.deleteMany({
+        where: { tenantId, id },
+      });
+      return result.count > 0;
     });
   }
 }

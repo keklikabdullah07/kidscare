@@ -69,3 +69,9 @@ export async function markMedicationSkipped(
     body: JSON.stringify(input),
   });
 }
+
+export async function deleteMedicationRecord(id: string): Promise<void> {
+  await apiFetch<void>(`/medication/records/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  });
+}

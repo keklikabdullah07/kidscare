@@ -151,4 +151,59 @@ describe('MedicationPage', () => {
     expect(screen.getByText('Ventolin İnhaler')).toBeInTheDocument();
     expect(screen.queryByText('Calpol Şurup')).not.toBeInTheDocument();
   });
+
+  it('opens delete confirmation modal and deletes record when confirmed', async () => {
+    let deletedId: string | null = null;
+    let listCallCount = 0;
+
+    mockFetchByUrl({
+      '/medication/records': () => {
+        listCallCount++;
+        return new Response(JSON.stringify(listCallCount === 1 ? fakeRecords : [fakeRecords[1]]), {
+          status: 200,
+        });
+      },
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+      '/medication/records/med-1': (init) => {
+        if (init?.method === 'DELETE') {
+          deletedId = 'med-1';
+          return new Response(null, { status: 204 });
+        }
+        return new Response(null, { status: 404 });
+      },
+    });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Calpol Şurup')).toBeInTheDocument();
+    });
+
+    // Her iki kayıt için de "Sil" butonu bulunmalıdır (Admin rolünde)
+    const deleteButtons = screen.getAllByRole('button', { name: /Sil/i });
+    expect(deleteButtons.length).toBeGreaterThan(0);
+
+    // İlk kaydın Sil butonuna tıkla
+    const firstDeleteBtn = deleteButtons[0];
+    expect(firstDeleteBtn).toBeDefined();
+    fireEvent.click(firstDeleteBtn!);
+
+    // Silme onay modalının açıldığını doğrula
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'İlaç Kaydını Sil' })).toBeInTheDocument();
+      expect(
+        screen.getByText(/isimli ilaç kaydını sistemden silmek istediğinize emin misiniz/i),
+      ).toBeInTheDocument();
+    });
+
+    // "Evet, Sil" butonuna tıkla
+    const confirmButton = screen.getByRole('button', { name: 'Evet, Sil' });
+    fireEvent.click(confirmButton);
+
+    // DELETE API çağrısının yapıldığını ve modalın kapandığını doğrula
+    await waitFor(() => {
+      expect(deletedId).toBe('med-1');
+      expect(screen.queryByRole('heading', { name: 'İlaç Kaydını Sil' })).not.toBeInTheDocument();
+    });
+  });
 });

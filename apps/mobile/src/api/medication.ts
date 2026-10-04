@@ -32,38 +32,44 @@ export async function approveMedicationRecord(
   id: string,
   input: MedicationRecordApprove,
 ): Promise<MedicationRecord> {
-  return apiFetch<MedicationRecord>(
-    `/medication/records/${encodeURIComponent(id)}/approve`,
-    { method: 'PATCH', body: JSON.stringify(input) },
-  );
+  return apiFetch<MedicationRecord>(`/medication/records/${encodeURIComponent(id)}/approve`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
 }
 
 export async function rejectMedicationRecord(
   id: string,
   input: MedicationRecordReject,
 ): Promise<MedicationRecord> {
-  return apiFetch<MedicationRecord>(
-    `/medication/records/${encodeURIComponent(id)}/reject`,
-    { method: 'PATCH', body: JSON.stringify(input) },
-  );
+  return apiFetch<MedicationRecord>(`/medication/records/${encodeURIComponent(id)}/reject`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
 }
 
 export async function markMedicationGiven(
   id: string,
   input: MedicationRecordGiven,
 ): Promise<MedicationRecord> {
-  return apiFetch<MedicationRecord>(
-    `/medication/records/${encodeURIComponent(id)}/given`,
-    { method: 'PATCH', body: JSON.stringify(input) },
-  );
+  return apiFetch<MedicationRecord>(`/medication/records/${encodeURIComponent(id)}/given`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
 }
 
 export async function markMedicationSkipped(
   id: string,
   input: MedicationRecordSkip,
 ): Promise<MedicationRecord> {
-  return apiFetch<MedicationRecord>(
-    `/medication/records/${encodeURIComponent(id)}/skip`,
-    { method: 'PATCH', body: JSON.stringify(input) },
-  );
+  return apiFetch<MedicationRecord>(`/medication/records/${encodeURIComponent(id)}/skip`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
+}
+
+export async function deleteMedicationRecord(id: string): Promise<void> {
+  await apiFetch<void>(`/medication/records/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  });
 }

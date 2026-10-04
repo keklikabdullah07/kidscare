@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Inject,
@@ -108,5 +109,16 @@ export class MedicationController {
     @Body(new ZodValidationPipe(medicationRecordSkipSchema)) body: MedicationRecordSkip,
   ): Promise<MedicationRecord> {
     return this.service.markSkipped(tenantId, id, user.userId, body);
+  }
+
+  @Delete('records/:id')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'PARENT')
+  @HttpCode(204)
+  async delete(
+    @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.service.delete(tenantId, id, user);
   }
 }

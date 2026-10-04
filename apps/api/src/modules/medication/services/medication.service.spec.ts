@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { MedicationRecordRow } from '../repositories/medication.repository';
 import { MedicationService } from './medication.service';
 import type { IMedicationRepository } from '../repositories/medication.repository';
@@ -37,6 +33,7 @@ describe('MedicationService', () => {
       find: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      delete: jest.fn(),
     };
     service = new MedicationService(repo);
   });
@@ -76,7 +73,11 @@ describe('MedicationService', () => {
 
   it('rejects medication record with rejection reason', async () => {
     repo.find.mockResolvedValue(baseRow);
-    repo.update.mockResolvedValue({ ...baseRow, status: 'REJECTED', rejectionReason: 'Yanlış doz' });
+    repo.update.mockResolvedValue({
+      ...baseRow,
+      status: 'REJECTED',
+      rejectionReason: 'Yanlış doz',
+    });
     const res = await service.reject('t-1', 'med-1', 'admin-1', { reason: 'Yanlış doz' });
     expect(res.status).toBe('REJECTED');
     expect(res.rejectionReason).toBe('Yanlış doz');
@@ -124,5 +125,65 @@ describe('MedicationService', () => {
     });
     expect(res.status).toBe('SKIPPED');
     expect(res.skipReason).toBe('Çocuk reddetti');
+  });
+
+  describe('delete', () => {
+    it('allows ADMIN to delete any medication record', async () => {
+      repo.find.mockResolvedValue(baseRow);
+      repo.delete.mockResolvedValue(true);
+      await service.delete('t-1', 'med-1', {
+        userId: 'admin-1',
+        role: 'ADMIN',
+        tenantId: 't-1',
+      });
+      expect(repo.delete).toHaveBeenCalledWith('t-1', 'med-1');
+    });
+
+    it('allows PARENT to delete their own requested record', async () => {
+      repo.find.mockResolvedValue({ ...baseRow, requestedById: 'parent-1', status: 'REQUESTED' });
+      repo.delete.mockResolvedValue(true);
+      await service.delete('t-1', 'med-1', {
+        userId: 'parent-1',
+        role: 'PARENT',
+        tenantId: 't-1',
+      });
+      expect(repo.delete).toHaveBeenCalledWith('t-1', 'med-1');
+    });
+
+    it('prevents PARENT from deleting another user record', async () => {
+      repo.find.mockResolvedValue({ ...baseRow, requestedById: 'parent-other' });
+      await expect(
+        service.delete('t-1', 'med-1', {
+          userId: 'parent-1',
+          role: 'PARENT',
+          tenantId: 't-1',
+        }),
+      ).rejects.toThrow(ForbiddenException);
+      expect(repo.delete).not.toHaveBeenCalled();
+    });
+
+    it('prevents PARENT from deleting GIVEN record', async () => {
+      repo.find.mockResolvedValue({ ...baseRow, requestedById: 'parent-1', status: 'GIVEN' });
+      await expect(
+        service.delete('t-1', 'med-1', {
+          userId: 'parent-1',
+          role: 'PARENT',
+          tenantId: 't-1',
+        }),
+      ).rejects.toThrow(BadRequestException);
+      expect(repo.delete).not.toHaveBeenCalled();
+    });
+
+    it('throws NotFoundException if record does not exist', async () => {
+      repo.find.mockResolvedValue(null);
+      await expect(
+        service.delete('t-1', 'non-existent', {
+          userId: 'admin-1',
+          role: 'ADMIN',
+          tenantId: 't-1',
+        }),
+      ).rejects.toThrow(NotFoundException);
+      expect(repo.delete).not.toHaveBeenCalled();
+    });
   });
 });

@@ -14,6 +14,7 @@ import type {
   MedicationRecordSkip,
 } from '@kidscare/shared-schemas';
 import type { MedicationRecord, MedicationStatus } from '@kidscare/shared-types';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import type {
   IMedicationRepository,
   MedicationRecordRow,
@@ -150,6 +151,22 @@ export class MedicationService {
       skipReason: input.reason,
     });
     return this.toResponse(row);
+  }
+
+  async delete(tenantId: string, id: string, user: CurrentUserPayload): Promise<void> {
+    const existing = await this.repo.find(tenantId, id);
+    if (!existing) throw new NotFoundException('MedicationRecord not found');
+
+    if (user.role === 'PARENT') {
+      if (existing.requestedById !== user.userId) {
+        throw new ForbiddenException('Sadece kendi oluşturduğunuz talepleri silebilirsiniz');
+      }
+      if (existing.status === 'GIVEN') {
+        throw new BadRequestException('Uygulanmış (verilmiş) ilaç kaydı silinemez');
+      }
+    }
+
+    await this.repo.delete(tenantId, id);
   }
 
   private toResponse(row: MedicationRecordRow): MedicationRecord {
