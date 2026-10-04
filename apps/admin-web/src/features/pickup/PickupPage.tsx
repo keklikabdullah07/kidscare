@@ -36,6 +36,8 @@ import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs } from '../../components/ui/TactileTabs';
 
 const STATUS_LABEL: Record<PickupAuthorizationStatus, string> = {
@@ -253,61 +255,54 @@ export function PickupPage(): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold shadow-2xs border border-teal-200/70">
-            <ShieldCheck className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-              Güvenlik & Teslimat Kontrolü
-            </h1>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
-              Öğrenci teslim alma yetkileri, veli talepleri ve gün sonu kapı teslimat günlüğü.
-            </p>
-          </div>
-        </div>
+      <PageHeader
+        title="Güvenlik & Teslimat Kontrolü"
+        description="Öğrenci teslim alma yetkileri, veli talepleri ve gün sonu kapı teslimat günlüğü."
+        icon={ShieldCheck}
+        actions={
+          <>
+            {canOperate && (
+              <>
+                <TactileButton
+                  variant="teal"
+                  size="md"
+                  onClick={() => {
+                    setHandoverPersonName('');
+                    setHandoverPersonPhone('');
+                    setHandoverContactId(undefined);
+                    setHandoverAuthId(undefined);
+                    setHandoverNote('');
+                    setIsHandoverOpen(true);
+                  }}
+                >
+                  <UserCheck className="w-4 h-4" />
+                  <span>Öğrenciyi Teslim Et</span>
+                </TactileButton>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {canOperate && (
-            <>
-              <button
-                type="button"
-                onClick={() => {
-                  setHandoverPersonName('');
-                  setHandoverPersonPhone('');
-                  setHandoverContactId(undefined);
-                  setHandoverAuthId(undefined);
-                  setHandoverNote('');
-                  setIsHandoverOpen(true);
-                }}
-                className="btn-tactile-teal px-4 py-2 text-xs font-bold flex items-center gap-1.5"
-              >
-                <UserCheck className="w-4 h-4" />
-                <span>Öğrenciyi Teslim Et</span>
-              </button>
+                <TactileButton
+                  variant="secondary"
+                  size="md"
+                  onClick={() => setIsAddContactOpen(true)}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Yeni Yetkili Ekle</span>
+                </TactileButton>
+              </>
+            )}
 
-              <button
-                type="button"
-                onClick={() => setIsAddContactOpen(true)}
-                className="btn-tactile-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-1.5"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Yeni Yetkili Ekle</span>
-              </button>
-            </>
-          )}
-
-          <button
-            type="button"
-            onClick={() => void refresh()}
-            className="btn-tactile-secondary p-2 text-xs font-bold"
-            title="Yenile"
-          >
-            <RotateCw className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+            <TactileButton
+              variant="secondary"
+              size="sm"
+              onClick={() => void refresh()}
+              aria-label="Yenile"
+              title="Yenile"
+              className="px-2.5"
+            >
+              <RotateCw className="w-4 h-4" />
+            </TactileButton>
+          </>
+        }
+      />
 
       {/* Main Tabs */}
       <div className="pb-3 border-b border-[#DDD4C4]/60 dark:border-slate-800">
@@ -468,34 +463,37 @@ export function PickupPage(): JSX.Element {
                     <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center gap-2">
                       {isAdmin && item.status === 'PENDING' ? (
                         <>
-                          <button
-                            type="button"
+                          <TactileButton
+                            variant="teal"
+                            size="sm"
                             onClick={() => void review(item.id, 'APPROVED')}
                             disabled={busyId === item.id}
-                            className="btn-tactile-teal flex-1 py-1.5 text-xs font-bold flex items-center justify-center gap-1.5"
+                            className="flex-1"
                           >
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>Onayla</span>
-                          </button>
-                          <button
-                            type="button"
+                          </TactileButton>
+                          <TactileButton
+                            variant="danger"
+                            size="sm"
                             onClick={() => setRejectTargetId(item.id)}
                             disabled={busyId === item.id}
-                            className="btn-tactile-danger flex-1 py-1.5 text-xs font-bold flex items-center justify-center gap-1.5"
+                            className="flex-1"
                           >
                             <XCircle className="w-3.5 h-3.5" />
                             <span>Reddet</span>
-                          </button>
+                          </TactileButton>
                         </>
                       ) : item.status === 'APPROVED' ? (
-                        <button
-                          type="button"
+                        <TactileButton
+                          variant="secondary"
+                          size="sm"
                           onClick={() => startHandoverFromAuth(item)}
-                          className="btn-tactile-secondary w-full py-1.5 text-xs font-bold flex items-center justify-center gap-1.5 text-teal-800 dark:text-teal-300"
+                          className="w-full"
                         >
                           <UserCheck className="w-3.5 h-3.5" />
                           <span>Öğrenciyi Teslim Et</span>
-                        </button>
+                        </TactileButton>
                       ) : (
                         <div className="w-full text-center text-[11px] font-semibold text-slate-400 py-1">
                           Talep sonlandı
@@ -726,21 +724,18 @@ export function PickupPage(): JSX.Element {
               </div>
 
               <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5">
-                <button
+                <TactileButton
                   type="button"
+                  variant="secondary"
+                  size="md"
                   onClick={() => setIsHandoverOpen(false)}
-                  className="btn-tactile-secondary px-4 py-2 text-xs font-bold"
                 >
                   İptal
-                </button>
-                <button
-                  type="submit"
-                  disabled={handoverSubmitting}
-                  className="btn-tactile-teal px-5 py-2 text-xs font-bold flex items-center gap-1.5 disabled:opacity-50"
-                >
+                </TactileButton>
+                <TactileButton type="submit" variant="teal" size="md" disabled={handoverSubmitting}>
                   <Check className="w-3.5 h-3.5 stroke-[3]" />
                   <span>{handoverSubmitting ? 'Kaydediliyor…' : 'Teslimatı Onayla ve Kaydet'}</span>
-                </button>
+                </TactileButton>
               </div>
             </form>
           </div>
@@ -858,21 +853,23 @@ export function PickupPage(): JSX.Element {
               </div>
 
               <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5">
-                <button
+                <TactileButton
                   type="button"
+                  variant="secondary"
+                  size="md"
                   onClick={() => setIsAddContactOpen(false)}
-                  className="btn-tactile-secondary px-4 py-2 text-xs font-bold"
                 >
                   İptal
-                </button>
-                <button
+                </TactileButton>
+                <TactileButton
                   type="submit"
+                  variant="teal"
+                  size="md"
                   disabled={addContactSubmitting}
-                  className="btn-tactile-teal px-5 py-2 text-xs font-bold flex items-center gap-1.5 disabled:opacity-50"
                 >
                   <Check className="w-3.5 h-3.5 stroke-[3]" />
                   <span>{addContactSubmitting ? 'Kaydediliyor…' : 'Yetkiliyi Kaydet'}</span>
-                </button>
+                </TactileButton>
               </div>
             </form>
           </div>
