@@ -16,7 +16,7 @@ export const conversationCreateSchema = z
   .object({
     subject: z.string().min(1).max(200),
     category: conversationCategorySchema,
-    participantIds: z.array(z.string().min(1)).min(1),
+    participantIds: z.array(z.string().min(1)).default([]),
     studentId: z.string().min(1).optional(),
     isCritical: z.boolean().optional(),
     initialMessage: z.string().min(1).max(2000),
@@ -36,12 +36,7 @@ export const conversationStatusUpdateSchema = z
   })
   .strict();
 
-export const parentRequestTypeSchema = z.enum([
-  'IZIN',
-  'BILGI_TALEP',
-  'DEGISIKLIK',
-  'DIGER',
-]);
+export const parentRequestTypeSchema = z.enum(['IZIN', 'BILGI_TALEP', 'DEGISIKLIK', 'DIGER']);
 
 export const parentRequestCreateSchema = z
   .object({

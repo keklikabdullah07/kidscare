@@ -23,6 +23,8 @@ function mockFetchByUrl(handlers: Record<string, () => Response>) {
     const path = new URL(url, 'http://localhost').pathname;
     const handler = handlers[path];
     if (handler) return Promise.resolve(handler());
+    if (path === '/users')
+      return Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
     return Promise.resolve(new Response(JSON.stringify({ message: 'unhandled' }), { status: 500 }));
   });
 }

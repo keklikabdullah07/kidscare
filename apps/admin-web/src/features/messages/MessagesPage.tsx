@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, type FormEvent, type JSX } from 'react';
+import { useEffect, useState, useMemo, useRef, type FormEvent, type JSX } from 'react';
 import {
   MessageSquare,
   Send,
@@ -9,7 +9,7 @@ import {
   CheckCircle2,
   X,
   Clock,
-  User,
+  User as UserIcon,
   Inbox,
 } from 'lucide-react';
 import type {
@@ -18,6 +18,7 @@ import type {
   ConversationStatus,
   Message,
   Student,
+  User,
 } from '@kidscare/shared-types';
 import {
   createConversation,
@@ -28,6 +29,7 @@ import {
   updateConversationStatus,
 } from '../../api/messaging';
 import { listStudents } from '../../api/students';
+import { listUsers } from '../../api/users';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import {
@@ -64,6 +66,7 @@ export function MessagesPage(): JSX.Element {
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,19 +77,27 @@ export function MessagesPage(): JSX.Element {
   const [activeTab, setActiveTab] = useState<TabKey>('ALL');
   const { showToast } = useToast();
 
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   // Compose form states
   const [cSubject, setCSubject] = useState('');
   const [cCategory, setCCategory] = useState<ConversationCategory>('GUNLUK_BILGI');
   const [cStudentId, setCStudentId] = useState('');
+  const [cRecipientId, setCRecipientId] = useState('');
   const [cBody, setCBody] = useState('');
   const [submittingCompose, setSubmittingCompose] = useState(false);
 
   async function refreshList(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes] = await Promise.all([listConversations(), listStudents()]);
+      const [list, studentsRes, usersRes] = await Promise.all([
+        listConversations(),
+        listStudents(),
+        listUsers().catch(() => []),
+      ]);
       setConversations(list);
       setStudents(studentsRes);
+      setUsers(usersRes);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Sohbetler yüklenemedi', 'error');
     } finally {
@@ -118,6 +129,20 @@ export function MessagesPage(): JSX.Element {
     }
   }, [activeId]);
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  function handleStudentChange(studentId: string): void {
+    setCStudentId(studentId);
+    if (studentId) {
+      const selectedStudent = students.find((s) => s.id === studentId);
+      if (selectedStudent?.parentId) {
+        setCRecipientId(selectedStudent.parentId);
+      }
+    }
+  }
+
   async function sendDraft(e: FormEvent): Promise<void> {
     e.preventDefault();
     if (!activeId || !draft.trim()) return;
@@ -126,6 +151,10 @@ export function MessagesPage(): JSX.Element {
       const msg = await sendMessage(activeId, { content: draft.trim() });
       setMessages((prev) => [...prev, msg]);
       setDraft('');
+      // Sol listedeki son mesaj tarihi ve özetini yenile
+      void listConversations()
+        .then(setConversations)
+        .catch(() => {});
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Mesaj gönderilemedi', 'error');
     } finally {
@@ -152,10 +181,19 @@ export function MessagesPage(): JSX.Element {
     }
     setSubmittingCompose(true);
     try {
+      const resolvedParticipantIds = new Set<string>();
+      const selectedStudent = students.find((s) => s.id === cStudentId);
+      if (selectedStudent?.parentId) {
+        resolvedParticipantIds.add(selectedStudent.parentId);
+      }
+      if (cRecipientId) {
+        resolvedParticipantIds.add(cRecipientId);
+      }
+
       const created = await createConversation({
         subject: cSubject.trim(),
         category: cCategory,
-        participantIds: [],
+        participantIds: Array.from(resolvedParticipantIds),
         ...(cStudentId ? { studentId: cStudentId } : {}),
         initialMessage: cBody.trim(),
       });
@@ -164,6 +202,7 @@ export function MessagesPage(): JSX.Element {
       setCSubject('');
       setCBody('');
       setCStudentId('');
+      setCRecipientId('');
       await refreshList();
       setActiveId(created.id);
     } catch (err: unknown) {
@@ -526,7 +565,7 @@ export function MessagesPage(): JSX.Element {
                         className={`flex flex-col ${isMine ? 'items-end' : 'items-start'}`}
                       >
                         <div className="flex items-center gap-1.5 text-[10px] text-slate-400 mb-1 px-1">
-                          <User className="w-3 h-3" />
+                          <UserIcon className="w-3 h-3" />
                           <span className="font-bold">{isMine ? 'Siz' : 'Karşı Taraf'}</span>
                           <span>·</span>
                           <span>
@@ -550,6 +589,7 @@ export function MessagesPage(): JSX.Element {
                     );
                   })
                 )}
+                <div ref={messagesEndRef} />
               </div>
 
               {/* Message Reply Form */}
@@ -652,7 +692,7 @@ export function MessagesPage(): JSX.Element {
                   </label>
                   <select
                     value={cStudentId}
-                    onChange={(e) => setCStudentId(e.target.value)}
+                    onChange={(e) => handleStudentChange(e.target.value)}
                     className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700"
                   >
                     <option value="">— Genel Konu —</option>
@@ -663,6 +703,36 @@ export function MessagesPage(): JSX.Element {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
+                  Alıcı / Muhatap
+                </label>
+                <select
+                  value={cRecipientId}
+                  onChange={(e) => setCRecipientId(e.target.value)}
+                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700"
+                >
+                  <option value="">
+                    {cStudentId
+                      ? '— Öğrencinin Velisi (Otomatik Belirlenir) —'
+                      : '— Otomatik (Kreş Yönetimi / İlgili Kişi) —'}
+                  </option>
+                  {users
+                    .filter((u) => u.id !== meId)
+                    .map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.email} (
+                        {u.role === 'PARENT'
+                          ? 'Veli'
+                          : u.role === 'TEACHER'
+                            ? 'Öğretmen'
+                            : 'Yönetici'}
+                        )
+                      </option>
+                    ))}
+                </select>
               </div>
 
               <div>
