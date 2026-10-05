@@ -27,6 +27,22 @@ coverage
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
+.turbo
+**/.turbo
+.cache
+**/.cache
+*.tsbuildinfo
+.eslintcache
+
+# Tests and Test Artifacts (never needed in Docker production build)
+**/*.spec.ts
+**/*.spec.js
+**/*.test.ts
+**/*.test.tsx
+**/*.test.js
+**/tests/**
+**/__tests__/**
+**/test/**
 
 # Mobile app (not built inside API/Web docker containers)
 apps/mobile
@@ -44,15 +60,24 @@ prompts
 workflows
 scripts
 scratch
+*.md
+!packages/**/package.json
+!apps/**/package.json
 
-# Local uploads and media storage
+# Local uploads, temp media and storage
 uploads
 **/uploads
+.tempmediaStorage
+.user_uploaded
+.system_generated
+artifacts
+*.mp4
+*.mov
+*.webm
 
 # Storybook artifacts
 storybook-static
 **/storybook-static
-
 
 # Local environment variables
 .env

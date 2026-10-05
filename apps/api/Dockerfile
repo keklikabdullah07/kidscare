@@ -19,14 +19,14 @@ RUN pnpm install --frozen-lockfile
 # Generate Prisma Client
 RUN pnpm --filter @kidscare/database prisma generate
 
-# Prune devDependencies to keep only production packages in node_modules
-RUN pnpm prune --prod
+# Prune devDependencies to keep only production packages in node_modules and purge store
+RUN pnpm prune --prod && pnpm store prune && rm -rf /root/.local/share/pnpm/store /root/.cache /tmp/*
 
 # Stage 2: Production Lightweight Runner
 FROM node:20-alpine AS runner
 
 # Install openssl and libc6-compat for Prisma runtime engine on Alpine
-RUN apk add --no-cache openssl libc6-compat
+RUN apk add --no-cache openssl libc6-compat && rm -rf /var/cache/apk/* /tmp/*
 
 # Enable pnpm
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
