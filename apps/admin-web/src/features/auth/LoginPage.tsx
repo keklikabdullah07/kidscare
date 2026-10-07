@@ -44,19 +44,19 @@ const DEMO_PRESETS: Record<
   ADMIN: {
     label: 'Müdür (Admin)',
     email: 'admin@demo.test',
-    pass: 'demo1234',
+    pass: 'KidsCare.2026!',
     roleDesc: 'Tüm kreş operasyonu, finans & ayarlar',
   },
   TEACHER: {
     label: 'Öğretmen',
     email: 'teacher@demo.test',
-    pass: 'demo1234',
+    pass: 'KidsCare.2026!',
     roleDesc: 'Sınıf yoklaması & günlük aktivite bülteni',
   },
   PARENT: {
     label: 'Veli',
     email: 'parent@demo.test',
-    pass: 'demo1234',
+    pass: 'KidsCare.2026!',
     roleDesc: 'Öğrenci karnesi, ilaç onayı & teslimat takibi',
   },
 };
@@ -255,43 +255,47 @@ export function LoginPage(): JSX.Element {
               </p>
             </div>
 
-            {/* Quick Demo Credentials Assistant (Tactile Pills) */}
-            <div className="bg-[#FCFAF7] dark:bg-slate-900/60 border border-[#DDD4C4] dark:border-slate-800 rounded-2xl p-3.5 space-y-2.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold flex items-center gap-1.5 text-slate-800 dark:text-slate-200">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  Hızlı Demo Girişi:
-                </span>
-                <button
-                  type="button"
-                  onClick={() => applyPreset(activePreset)}
-                  className="text-teal-800 dark:text-teal-400 hover:text-teal-900 dark:hover:text-teal-300 font-bold text-[11px] hover:underline cursor-pointer"
-                >
-                  Bilgileri Doldur
-                </button>
-              </div>
+            {/* Quick Demo Credentials Assistant (Tactile Pills) - Sadece yerel geliştirmede aktif */}
+            {import.meta.env.DEV && (
+              <div className="bg-[#FCFAF7] dark:bg-slate-900/60 border border-[#DDD4C4] dark:border-slate-800 rounded-2xl p-3.5 space-y-2.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold flex items-center gap-1.5 text-slate-800 dark:text-slate-200">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                    Hızlı Demo Girişi (Geliştirici):
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => applyPreset(activePreset)}
+                    className="text-teal-800 dark:text-teal-400 hover:text-teal-900 dark:hover:text-teal-300 font-bold text-[11px] hover:underline cursor-pointer"
+                  >
+                    Bilgileri Doldur
+                  </button>
+                </div>
 
-              <div className="grid grid-cols-3 gap-2 py-0.5">
-                {(Object.keys(DEMO_PRESETS) as DemoRole[]).map((r) => {
-                  const isSelected = activePreset === r;
-                  return (
-                    <TactileButton
-                      key={r}
-                      type="button"
-                      variant={isSelected ? 'teal' : 'secondary'}
-                      onClick={() => applyPreset(r)}
-                      className="py-1.5 px-2 text-[11px]"
-                    >
-                      {isSelected && <CheckCircle2 className="w-3 h-3 shrink-0" />}
-                      <span>{r === 'ADMIN' ? 'Müdür' : r === 'TEACHER' ? 'Öğretmen' : 'Veli'}</span>
-                    </TactileButton>
-                  );
-                })}
+                <div className="grid grid-cols-3 gap-2 py-0.5">
+                  {(Object.keys(DEMO_PRESETS) as DemoRole[]).map((r) => {
+                    const isSelected = activePreset === r;
+                    return (
+                      <TactileButton
+                        key={r}
+                        type="button"
+                        variant={isSelected ? 'teal' : 'secondary'}
+                        onClick={() => applyPreset(r)}
+                        className="py-1.5 px-2 text-[11px]"
+                      >
+                        {isSelected && <CheckCircle2 className="w-3 h-3 shrink-0" />}
+                        <span>
+                          {r === 'ADMIN' ? 'Müdür' : r === 'TEACHER' ? 'Öğretmen' : 'Veli'}
+                        </span>
+                      </TactileButton>
+                    );
+                  })}
+                </div>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 text-center font-medium">
+                  {DEMO_PRESETS[activePreset].roleDesc}
+                </p>
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 text-center font-medium">
-                {DEMO_PRESETS[activePreset].roleDesc}
-              </p>
-            </div>
+            )}
 
             {/* Form */}
             <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
@@ -317,7 +321,7 @@ export function LoginPage(): JSX.Element {
                     autoComplete="off"
                     disabled={submitting}
                     className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] hover:bg-white focus:bg-white dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-teal-700 dark:focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20 focus:outline-none transition-all shadow-2xs disabled:opacity-50"
-                    placeholder="demo"
+                    placeholder="kres-kodu"
                   />
                 </div>
               </div>
@@ -341,7 +345,7 @@ export function LoginPage(): JSX.Element {
                     autoComplete="username"
                     disabled={submitting}
                     className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] hover:bg-white focus:bg-white dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-teal-700 dark:focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20 focus:outline-none transition-all shadow-2xs disabled:opacity-50"
-                    placeholder="admin@demo.test"
+                    placeholder="adiniz@kres.com"
                   />
                 </div>
               </div>
@@ -421,18 +425,20 @@ export function LoginPage(): JSX.Element {
               )}
             </form>
 
-            {/* Footer Navigation */}
-            <div className="pt-2 border-t border-[#EFEAE0] dark:border-slate-800 text-center">
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                Kreşiniz sisteme kayıtlı değil mi?{' '}
-                <Link
-                  to="/signup"
-                  className="text-teal-800 dark:text-teal-400 font-bold hover:underline ml-1 inline-flex items-center gap-0.5"
-                >
-                  Kayıt ol
-                </Link>
-              </p>
-            </div>
+            {/* Footer Navigation - Sadece yerel geliştirmede aktif */}
+            {import.meta.env.DEV && (
+              <div className="pt-2 border-t border-[#EFEAE0] dark:border-slate-800 text-center">
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                  Kreşiniz sisteme kayıtlı değil mi?{' '}
+                  <Link
+                    to="/signup"
+                    className="text-teal-800 dark:text-teal-400 font-bold hover:underline ml-1 inline-flex items-center gap-0.5"
+                  >
+                    Kayıt ol
+                  </Link>
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Security & KVKK Footnote */}

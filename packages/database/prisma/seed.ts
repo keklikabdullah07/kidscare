@@ -16,7 +16,7 @@ async function main() {
         create: { id: DEMO_TENANT_ID, slug: 'demo', name: 'Demo Kreş' },
       });
 
-      const passwordHash = await bcrypt.hash('demo1234', 10);
+      const passwordHash = await bcrypt.hash('KidsCare.2026!', 10);
 
       await tx.user.upsert({
         where: { tenantId_email: { tenantId: tenant.id, email: 'superadmin@demo.test' } },

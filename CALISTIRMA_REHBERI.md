@@ -70,16 +70,16 @@ Sistemde hazır tanımlı test hesapları:
 - **Kreş Kodu (Slug):** `demo`
 - **Yönetici (Admin):**
   - E-posta: `admin@demo.test`
-  - Şifre: `demo1234`
+  - Şifre: `KidsCare.2026!`
 - **Öğretmen:**
   - E-posta: `teacher@demo.test`
-  - Şifre: `demo1234`
+  - Şifre: `KidsCare.2026!`
 - **Veli (Ada Yılmaz'ın Velisi):**
   - E-posta: `parent@demo.test`
-  - Şifre: `demo1234`
+  - Şifre: `KidsCare.2026!`
 - **Süper Admin (Tüm Kreşleri Yöneten):**
   - E-posta: `superadmin@demo.test`
-  - Şifre: `demo1234`
+  - Şifre: `KidsCare.2026!`
 
 ---
 

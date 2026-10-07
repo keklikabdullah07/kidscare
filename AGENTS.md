@@ -88,10 +88,10 @@ constructor(private readonly prisma: PrismaService) {}
 Varsayılan Seed Kullanıcıları:
 
 - **Kreş Slug:** `demo` (Demo Kreş)
-- **Süper Admin:** `superadmin@demo.test` / `demo1234`
-- **Admin:** `admin@demo.test` / `demo1234`
-- **Öğretmen:** `teacher@demo.test` / `demo1234`
-- **Veli:** `parent@demo.test` / `demo1234` (Öğrenci: Ada Yılmaz)
+- **Süper Admin:** `superadmin@demo.test` / `KidsCare.2026!`
+- **Admin:** `admin@demo.test` / `KidsCare.2026!`
+- **Öğretmen:** `teacher@demo.test` / `KidsCare.2026!`
+- **Veli:** `parent@demo.test` / `KidsCare.2026!` (Öğrenci: Ada Yılmaz)
 
 ---
 
