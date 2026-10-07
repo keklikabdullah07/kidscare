@@ -101,6 +101,17 @@ Varsayılan Seed Kullanıcıları:
 - ❌ Asla aynı DTO veya tipi `shared-types` dışına kopyalayıp mükerrer tanımlamayın.
 - ❌ Asla Controller içinde doğrudan Prisma sorgusu yazmayın (Repository üzerinden geçilmelidir).
 - ❌ Asla onaylanmamış harici kütüphaneler eklemeyin.
+- ❌ Asla sunucu diskini şişirecek gereksiz log, derleme artığı veya kontrolsüz büyük dosya bırakmayın. Sunucu emanettir ("İyi Misafir Protokolü").
+
+---
+
+## 8. Dokploy VPS ve Sunucu Diski Koruması ("İyi Misafir Protokolü")
+
+> **HAYATİ VE DEĞİŞTİRİLEMEZ KURAL:** Canlı ortam (Dokploy VPS) emanet bir sunucudur. Kendi bağımsız sunucumuza geçene kadar sunucu diskini, belleğini ve kaynaklarını şişirmemek en yüksek önceliktir.
+
+1. **Docker İmajı ve Build Hafifliği:** [`.dockerignore`](file:///c:/Users/Partridge/Desktop/KidsCare/.dockerignore), API ve Web Dockerfile'larında pnpm/nx geçici cache'leri, test dosyaları ve gereksiz bağımlılıklar imaj içine ASLA alınamaz; build sonrasında `pnpm store prune` ve geçici dizin temizliği şarttır.
+2. **Kontrolsüz Veri/Medya Girişini Önleme:** Canlı ortamda dışarıdan yabancıların girip veri veya dosya basmasını önlemek için prodüksiyon login ekranında "Hızlı Demo Girişi" ve "Açık Kayıt Ol" özellikleri kapalı tutulmalıdır.
+3. **Log Rotasyonu:** Disk üzerinde kontrolsüz büyüyen dosya logları tutulamaz.
 
 ---
 
