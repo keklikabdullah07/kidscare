@@ -18,7 +18,7 @@ describe('UsersService', () => {
     password = {
       hash: jest.fn().mockResolvedValue('hashed'),
       verify: jest.fn(),
-    } as unknown as jest.Mocked<PasswordService>;
+    };
     service = new UsersService(repo, password);
   });
 

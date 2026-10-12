@@ -90,11 +90,7 @@ describe('DailyReportsRepository', () => {
     const upsert = jest
       .fn()
       .mockImplementation(
-        async ({
-          where,
-        }: {
-          where: { tenantId_studentId_date: { studentId: string } };
-        }) => ({
+        ({ where }: { where: { tenantId_studentId_date: { studentId: string } } }) => ({
           ...mockPrismaReport,
           studentId: where.tenantId_studentId_date.studentId,
         }),

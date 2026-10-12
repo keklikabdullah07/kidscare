@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { tenantContext } from '@kidscare/tenant-context';
 import { AuthController } from './auth.controller';
 import type { AuthService } from '../services/auth.service';

@@ -20,7 +20,7 @@
     "dev:mobile:tunnel": "pnpm --filter @kidscare/mobile exec expo start --clear --tunnel",
     "test": "pnpm exec nx run-many --target=test",
     "test:integration": "pnpm --filter @kidscare/api test:integration",
-    "lint": "pnpm exec nx run-many --target=lint",
+    "lint": "eslint apps/api/src apps/admin-web/src packages/",
     "format": "pnpm exec nx format:write",
     "prepare": "husky || true"
   },

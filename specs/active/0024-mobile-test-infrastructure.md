@@ -1,5 +1,7 @@
 # Şartname 0024: Mobile Uygulama Test Altyapısı Kurulumu
 
+Status: Active
+
 ## 1. Amaç ve Kapsam
 
 Bu şartname, `@kidscare/mobile` (Expo SDK 57 + React Native 0.86) için test altyapısının kurulmasını hedefler. Bugün mobile projede **hiç test dosyası yok**, `test` scripti tanımlı değil, vitest/jest config mevcut değil.
