@@ -51,16 +51,16 @@ Piyasa ve ürün analizi: `docs/product/market-research-and-differentiation.md`
 
 ## Sıradaki İş (Handoff Noktası)
 
-- **Faz 1: V1 Fonksiyonel Stabilizasyon & Sıfır Hata Turu** ➡️ **%100 TAMAMLANDI**
-  - Tüm menüler (Dashboard, Öğrenciler, Sınıflar, Ekip, Günlük Akış, Yoklama, Günlük Rapor, Veli Portalı, Mesajlar, Talepler, Teslimat, İlaç, Olay Kayıtları, Yemek Menüsü, Galeri, Ayarlar) uçtan uca çalışır durumda.
-  - Canlı bulut veritabanı (Render PostgreSQL) güncellendi, tüm migration'lar ve seed verileri yüklendi (200 OK).
-  - Testler: 162/162 (%100) yeşil, TypeScript derleme 0 hata.
-  - Git: `developer` ve `main` dalları tam senkronize.
-
-- **Faz 2: Tasarım & UI/UX Yenileme (Başlama Noktası)** ➡️ **YENİ OTURUMDA BAŞLAYACAK**
-  - Kullanıcı yeni oturumda kendi hazırladığı **Tasarım Planı**'nı paylaşacaktır.
-  - Yeni oturumda bu plan doğrultusunda web paneli (`apps/admin-web`) arayüzü modern, premium ve kullanıcı dostu bir tasarıma kavuşturulacaktır.
-  - Yeni oturum başladığında ilk olarak kullanıcının tasarım planı dinlenmeli ve `brainstorming` kuralı uygulanmalıdır.
+> **KULLANICI "DİREKT DEVAM ET" DEDİĞİNDE YAPILACAKLAR:**
+>
+> 1. Son Durum: ANEW %100 disipline alındı, 112 mükerrer JS dosyası temizlendi, `scripts/check.ps1` tavizsiz yeşil, Specs 0025-0029 arşivlendi.
+> 2. Projenin eksiksiz test edilmesi için `docs/qa-matrix.md` canlı test rehberi hazırlandı.
+> 3. **Hemen Başlanacak Eylem:** Kullanıcı "devam et" dediğinde doğrudan `docs/qa-matrix.md` içerisindeki **"5. Canlı Manuel Test Koşu Listesi (Checklist)"** adımlarını sırayla işlet:
+>    - **Faz A: Yönetici & Kurulum Testleri (ADMIN - admin@demo.test)**
+>    - **Faz B: Öğretmen & Sınıf İçi Operasyon (TEACHER - teacher@demo.test)**
+>    - **Faz C: Veli & Tüketim Testleri (PARENT - parent@demo.test)**
+>      Her adımda olası hataları, rol kaçaklarını ve çapraz veri tutarsızlıklarını yakalayıp düzelt.
+> 4. Test turu bitince `specs/active/0024-mobile-test-infrastructure.md` tamamlanacak.
 
 ## Mimari Kurallar
 
