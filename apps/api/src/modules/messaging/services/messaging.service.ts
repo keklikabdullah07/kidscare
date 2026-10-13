@@ -194,6 +194,20 @@ export class MessagingService {
       unreadCount,
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
+      student: row.student
+        ? {
+            id: row.student.id,
+            firstName: row.student.firstName,
+            lastName: row.student.lastName,
+          }
+        : null,
+      createdBy: row.createdBy
+        ? {
+            id: row.createdBy.id,
+            email: row.createdBy.email,
+            role: row.createdBy.role,
+          }
+        : null,
     };
   }
 
@@ -207,6 +221,13 @@ export class MessagingService {
       isCritical: row.isCritical,
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
+      sender: row.sender
+        ? {
+            id: row.sender.id,
+            email: row.sender.email,
+            role: row.sender.role,
+          }
+        : null,
     };
   }
 
@@ -225,6 +246,20 @@ export class MessagingService {
       resolutionNote: row.resolutionNote,
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
+      student: row.student
+        ? {
+            id: row.student.id,
+            firstName: row.student.firstName,
+            lastName: row.student.lastName,
+          }
+        : null,
+      parent: row.parent
+        ? {
+            id: row.parent.id,
+            email: row.parent.email,
+            role: row.parent.role,
+          }
+        : null,
     };
   }
 }

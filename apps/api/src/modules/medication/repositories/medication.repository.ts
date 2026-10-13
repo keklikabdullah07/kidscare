@@ -21,6 +21,13 @@ export type MedicationRecordRow = Prisma.MedicationRecordGetPayload<{
     skipReason: true;
     createdAt: true;
     updatedAt: true;
+    student: {
+      select: {
+        id: true;
+        firstName: true;
+        lastName: true;
+      };
+    };
   };
 }>;
 
@@ -42,6 +49,13 @@ const MEDICATION_SELECT = {
   skipReason: true,
   createdAt: true,
   updatedAt: true,
+  student: {
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+    },
+  },
 } as const;
 
 export interface IMedicationRepository {

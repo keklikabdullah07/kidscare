@@ -17,6 +17,8 @@ export type ConversationRow = Prisma.ConversationGetPayload<{
     createdAt: true;
     updatedAt: true;
     participants: { select: { userId: true } };
+    student: { select: { id: true; firstName: true; lastName: true } };
+    createdBy: { select: { id: true; email: true; role: true } };
   };
 }>;
 
@@ -30,6 +32,7 @@ export type MessageRow = Prisma.MessageGetPayload<{
     isCritical: true;
     createdAt: true;
     updatedAt: true;
+    sender: { select: { id: true; email: true; role: true } };
   };
 }>;
 
@@ -48,6 +51,8 @@ export type ParentRequestRow = Prisma.ParentRequestGetPayload<{
     resolutionNote: true;
     createdAt: true;
     updatedAt: true;
+    student: { select: { id: true; firstName: true; lastName: true } };
+    parent: { select: { id: true; email: true; role: true } };
   };
 }>;
 
@@ -64,6 +69,8 @@ const CONVERSATION_SELECT = {
   createdAt: true,
   updatedAt: true,
   participants: { select: { userId: true } },
+  student: { select: { id: true, firstName: true, lastName: true } },
+  createdBy: { select: { id: true, email: true, role: true } },
 } as const;
 
 const MESSAGE_SELECT = {
@@ -75,6 +82,7 @@ const MESSAGE_SELECT = {
   isCritical: true,
   createdAt: true,
   updatedAt: true,
+  sender: { select: { id: true, email: true, role: true } },
 } as const;
 
 const PARENT_REQUEST_SELECT = {
@@ -91,6 +99,8 @@ const PARENT_REQUEST_SELECT = {
   resolutionNote: true,
   createdAt: true,
   updatedAt: true,
+  student: { select: { id: true, firstName: true, lastName: true } },
+  parent: { select: { id: true, email: true, role: true } },
 } as const;
 
 export interface IMessagingRepository {

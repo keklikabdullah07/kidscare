@@ -72,7 +72,6 @@ function toLocalDatetimeInput(d: Date = new Date()): string {
 export function MedicationPage(): JSX.Element {
   const { state } = useAuth();
   const role = state.status === 'authenticated' ? state.user.role : 'PARENT';
-  const currentUserId = state.status === 'authenticated' ? state.user.id : '';
 
   const [records, setRecords] = useState<MedicationRecord[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
@@ -104,6 +103,12 @@ export function MedicationPage(): JSX.Element {
   const [formScheduledAt, setFormScheduledAt] = useState('');
   const [formParentNote, setFormParentNote] = useState('');
   const [createSubmitting, setCreateSubmitting] = useState(false);
+
+  function setQuickTime(hours: number, minutes: number = 0) {
+    const d = new Date();
+    d.setHours(hours, minutes, 0, 0);
+    setFormScheduledAt(toLocalDatetimeInput(d));
+  }
 
   // Prompt dialog for Reject or Skip
   const [promptDialog, setPromptDialog] = useState<{
@@ -530,9 +535,19 @@ export function MedicationPage(): JSX.Element {
                 className="bg-white dark:bg-[#131B2E] rounded-2xl border-2 border-[#DDD4C4] dark:border-slate-700/80 p-5 shadow-xs flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
-                  {/* Üst Satır: İlaç İsmi & Durum */}
+                  {/* Üst Satır: Öğrenci Rozeti & Durum */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
+                      {/* Belirgin Öğrenci Rozeti */}
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-100/90 dark:bg-teal-900/60 text-teal-950 dark:text-teal-200 border border-teal-300 dark:border-teal-700 text-xs font-black mb-2 shadow-2xs">
+                        <span>👶</span>
+                        <span>
+                          {r.student
+                            ? `${r.student.firstName} ${r.student.lastName}`
+                            : studentFullName(r.studentId)}
+                        </span>
+                      </div>
+
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="text-base font-black text-slate-900 dark:text-white truncate">
                           {r.medicationName}
@@ -542,14 +557,8 @@ export function MedicationPage(): JSX.Element {
                         </span>
                       </div>
 
-                      {/* Öğrenci Etiketi */}
-                      <div className="flex items-center gap-1.5 mt-1.5">
-                        <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-200">
-                          {student ? student.firstName.charAt(0) : 'Ö'}
-                        </div>
-                        <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
-                          {studentFullName(r.studentId)}
-                        </span>
+                      {/* Alerji & Ekstra Bilgi */}
+                      <div className="flex items-center gap-1.5 mt-1">
                         {(() => {
                           const allergies = getStudentAllergies(student);
                           if (allergies.length === 0) return null;
@@ -696,12 +705,10 @@ export function MedicationPage(): JSX.Element {
                       </>
                     )}
 
-                  {/* Silme Butonu (Admin/SuperAdmin veya kendi henüz verilmemiş talebini silebilen Veli) */}
+                  {/* Silme Butonu (Admin/SuperAdmin veya henüz verilmemiş talebi olan Veli) */}
                   {(role === 'ADMIN' ||
                     role === 'SUPER_ADMIN' ||
-                    (role === 'PARENT' &&
-                      r.requestedById === currentUserId &&
-                      r.status !== 'GIVEN')) && (
+                    (role === 'PARENT' && r.status !== 'GIVEN')) && (
                     <TactileButton
                       type="button"
                       variant="danger"
@@ -809,9 +816,34 @@ export function MedicationPage(): JSX.Element {
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1">
-                  Planlanan Uygulama Saati
-                </label>
+                <div className="flex items-center justify-between gap-2 mb-1 flex-wrap">
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+                    Planlanan Uygulama Saati
+                  </label>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setQuickTime(9, 0)}
+                      className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-teal-50 dark:bg-teal-950 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-100"
+                    >
+                      Sabah (09:00)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setQuickTime(13, 0)}
+                      className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-100"
+                    >
+                      Öğle (13:00)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setQuickTime(16, 0)}
+                      className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-indigo-50 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100"
+                    >
+                      İkindi (16:00)
+                    </button>
+                  </div>
+                </div>
                 <input
                   type="datetime-local"
                   value={formScheduledAt}

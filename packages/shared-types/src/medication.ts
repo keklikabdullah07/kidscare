@@ -1,10 +1,5 @@
 export type StandaloneMedicationStatus =
-  | 'REQUESTED'
-  | 'APPROVED'
-  | 'SCHEDULED'
-  | 'GIVEN'
-  | 'SKIPPED'
-  | 'REJECTED';
+  'REQUESTED' | 'APPROVED' | 'SCHEDULED' | 'GIVEN' | 'SKIPPED' | 'REJECTED';
 
 export type MedicationRecord = {
   id: string;
@@ -24,4 +19,9 @@ export type MedicationRecord = {
   skipReason?: string | null;
   createdAt: string;
   updatedAt: string;
+  student?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  } | null;
 };

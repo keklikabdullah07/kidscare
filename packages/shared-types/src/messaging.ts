@@ -1,14 +1,7 @@
 export type ConversationStatus = 'OPEN' | 'CLOSED' | 'ARCHIVED';
 
 export type ConversationCategory =
-  | 'ACIL'
-  | 'SAGLIK'
-  | 'IZIN'
-  | 'TESLIM'
-  | 'GUNLUK_BILGI'
-  | 'DUYURU'
-  | 'ODEME'
-  | 'RANDEVU';
+  'ACIL' | 'SAGLIK' | 'IZIN' | 'TESLIM' | 'GUNLUK_BILGI' | 'DUYURU' | 'ODEME' | 'RANDEVU';
 
 export type Conversation = {
   id: string;
@@ -24,6 +17,8 @@ export type Conversation = {
   unreadCount: number;
   createdAt: string;
   updatedAt: string;
+  student?: { id: string; firstName: string; lastName: string } | null;
+  createdBy?: { id: string; email: string; role: string } | null;
 };
 
 export type Message = {
@@ -35,6 +30,7 @@ export type Message = {
   isCritical: boolean;
   createdAt: string;
   updatedAt: string;
+  sender?: { id: string; email: string; role: string } | null;
 };
 
 export type ParentRequestType = 'IZIN' | 'BILGI_TALEP' | 'DEGISIKLIK' | 'DIGER';
@@ -54,4 +50,6 @@ export type ParentRequest = {
   resolutionNote?: string | null;
   createdAt: string;
   updatedAt: string;
+  student?: { id: string; firstName: string; lastName: string } | null;
+  parent?: { id: string; email: string; role: string } | null;
 };

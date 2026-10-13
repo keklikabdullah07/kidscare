@@ -475,6 +475,22 @@ export function MessagesPage(): JSX.Element {
                         >
                           {c.subject}
                         </p>
+
+                        {(c.student || c.createdBy) && (
+                          <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate mt-0.5">
+                            {c.student && (
+                              <span className="text-teal-700 dark:text-teal-300 font-bold">
+                                👶 {c.student.firstName} {c.student.lastName}
+                              </span>
+                            )}
+                            {c.createdBy && (
+                              <span>
+                                · {c.createdBy.email} (
+                                {c.createdBy.role === 'PARENT' ? 'Veli' : 'Öğretmen'})
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       {c.unreadCount > 0 && (
@@ -535,6 +551,21 @@ export function MessagesPage(): JSX.Element {
                   <h2 className="font-black text-base text-slate-900 dark:text-white truncate mt-1">
                     {active.subject}
                   </h2>
+                  {(active.student || active.createdBy) && (
+                    <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                      {active.student && (
+                        <span className="text-teal-700 dark:text-teal-300 font-bold">
+                          👶 {active.student.firstName} {active.student.lastName}
+                        </span>
+                      )}
+                      {active.createdBy && (
+                        <span>
+                          · {active.createdBy.email} (
+                          {active.createdBy.role === 'PARENT' ? 'Veli' : 'Öğretmen'})
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {active.status === 'OPEN' && (
@@ -558,6 +589,11 @@ export function MessagesPage(): JSX.Element {
                 ) : (
                   messages.map((m) => {
                     const isMine = m.senderId === meId;
+                    const senderLabel = isMine
+                      ? 'Siz'
+                      : m.sender
+                        ? `${m.sender.role === 'PARENT' ? 'Veli' : m.sender.role === 'TEACHER' ? 'Öğretmen' : 'Yönetici'} (${m.sender.email})`
+                        : 'Karşı Taraf';
 
                     return (
                       <div
@@ -566,7 +602,7 @@ export function MessagesPage(): JSX.Element {
                       >
                         <div className="flex items-center gap-1.5 text-[10px] text-slate-400 mb-1 px-1">
                           <UserIcon className="w-3 h-3" />
-                          <span className="font-bold">{isMine ? 'Siz' : 'Karşı Taraf'}</span>
+                          <span className="font-bold">{senderLabel}</span>
                           <span>·</span>
                           <span>
                             {new Date(m.createdAt).toLocaleTimeString('tr-TR', {

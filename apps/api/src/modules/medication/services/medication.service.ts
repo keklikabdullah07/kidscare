@@ -188,6 +188,13 @@ export class MedicationService {
       skipReason: row.skipReason,
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
+      student: row.student
+        ? {
+            id: row.student.id,
+            firstName: row.student.firstName,
+            lastName: row.student.lastName,
+          }
+        : null,
     };
   }
 }

@@ -20,6 +20,8 @@ const baseConversation: ConversationRow = {
   createdAt: new Date('2026-09-15T10:00:00Z'),
   updatedAt: new Date('2026-09-15T10:00:00Z'),
   participants: [{ userId: 'parent-1' }, { userId: 'admin-1' }],
+  student: { id: 's-1', firstName: 'Ada', lastName: 'Yılmaz' },
+  createdBy: { id: 'parent-1', email: 'parent@demo.test', role: 'PARENT' },
 };
 
 const baseMessage: MessageRow = {
@@ -31,6 +33,7 @@ const baseMessage: MessageRow = {
   isCritical: false,
   createdAt: new Date('2026-09-15T10:00:00Z'),
   updatedAt: new Date('2026-09-15T10:00:00Z'),
+  sender: { id: 'parent-1', email: 'parent@demo.test', role: 'PARENT' },
 };
 
 const baseParentRequest: ParentRequestRow = {
@@ -47,6 +50,8 @@ const baseParentRequest: ParentRequestRow = {
   resolutionNote: null,
   createdAt: new Date('2026-09-15T10:00:00Z'),
   updatedAt: new Date('2026-09-15T10:00:00Z'),
+  student: { id: 's-1', firstName: 'Ada', lastName: 'Yılmaz' },
+  parent: { id: 'parent-1', email: 'parent@demo.test', role: 'PARENT' },
 };
 
 describe('MessagingService', () => {

@@ -656,7 +656,13 @@ export function PickupPage(): JSX.Element {
                 </label>
                 <select
                   value={handoverStudentId}
-                  onChange={(e) => setHandoverStudentId(e.target.value)}
+                  onChange={(e) => {
+                    setHandoverStudentId(e.target.value);
+                    setHandoverPersonName('');
+                    setHandoverPersonPhone('');
+                    setHandoverContactId(undefined);
+                    setHandoverAuthId(undefined);
+                  }}
                   required
                   className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 p-3 text-xs font-medium text-slate-900 dark:text-slate-100 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
                 >
@@ -668,7 +674,7 @@ export function PickupPage(): JSX.Element {
                 </select>
               </div>
 
-              {/* Approved Contacts Quick Selection */}
+              {/* Approved Contacts & Passport Emergency Contacts Quick Selection */}
               {(() => {
                 const approvedContacts = items
                   .filter(
@@ -682,12 +688,22 @@ export function PickupPage(): JSX.Element {
                     authId: i.id,
                   }));
 
-                if (approvedContacts.length === 0) return null;
+                const currentStudent = students.find((s) => s.id === handoverStudentId);
+                const passportContacts = (currentStudent?.passport?.emergencyContacts || [])
+                  .filter((c) => c.isAuthorizedPickup || c.phone)
+                  .filter(
+                    (pc) =>
+                      !approvedContacts.some(
+                        (ac) => ac.fullName.toLowerCase() === pc.name.toLowerCase(),
+                      ),
+                  );
+
+                if (approvedContacts.length === 0 && passportContacts.length === 0) return null;
 
                 return (
-                  <div className="space-y-1.5 p-3 rounded-2xl bg-teal-50/60 dark:bg-slate-900/60 border border-teal-200/70 dark:border-teal-800/40">
+                  <div className="space-y-2 p-3 rounded-2xl bg-teal-50/60 dark:bg-slate-900/60 border border-teal-200/70 dark:border-teal-800/40">
                     <span className="text-[11px] font-bold text-teal-950 dark:text-teal-200 block">
-                      Onaylı Yetkili Kişiler (Hızlı Seçim):
+                      Hızlı Yetkili Seçimi (Onaylı & Pasaport):
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {approvedContacts.map((c) => (
@@ -705,6 +721,27 @@ export function PickupPage(): JSX.Element {
                           <UserCheck className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
                           <span>
                             {c.fullName} ({c.relation})
+                          </span>
+                        </button>
+                      ))}
+                      {passportContacts.map((c, idx) => (
+                        <button
+                          key={`pass-${idx}`}
+                          type="button"
+                          onClick={() => {
+                            setHandoverPersonName(c.name);
+                            setHandoverPersonPhone(c.phone || '');
+                            setHandoverContactId(undefined);
+                            setHandoverAuthId(undefined);
+                            setHandoverNote(
+                              'Öğrenci sağlık ve acil durum pasaportundaki yetkiliye teslim edildi.',
+                            );
+                          }}
+                          className="px-2.5 py-1 rounded-xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40 text-amber-950 dark:text-amber-200 text-xs font-bold hover:bg-amber-100 transition shadow-2xs cursor-pointer flex items-center gap-1.5"
+                        >
+                          <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                          <span>
+                            {c.name} (Pasaport: {c.relationship || 'Yetkili'})
                           </span>
                         </button>
                       ))}
@@ -879,6 +916,46 @@ export function PickupPage(): JSX.Element {
                   ))}
                 </select>
               </div>
+
+              {/* Pasaporttan Hızlı Aktarım */}
+              {(() => {
+                const sel = students.find((s) => s.id === newStudentId);
+                const passportContacts = (sel?.passport?.emergencyContacts || []).filter(
+                  (c) => c.isAuthorizedPickup || c.phone,
+                );
+                if (passportContacts.length === 0) return null;
+
+                return (
+                  <div className="p-3 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800/60 space-y-1.5">
+                    <span className="text-[11px] font-bold text-amber-950 dark:text-amber-200 block">
+                      📋 Pasaporttaki Yetkili Kişilerden Doldur:
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {passportContacts.map((c, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setNewName(c.name);
+                            setNewPhone(c.phone);
+                            if (c.relationship && RELATIONS_LIST.includes(c.relationship)) {
+                              setNewRelation(c.relationship);
+                            } else {
+                              setNewRelation('Diğer');
+                            }
+                            setNewIdentityNote(
+                              'Öğrenci sağlık ve acil durum pasaportundan aktarıldı.',
+                            );
+                          }}
+                          className="px-2.5 py-1 rounded-xl border border-amber-300 dark:border-amber-700 bg-white dark:bg-slate-800 text-amber-900 dark:text-amber-200 text-xs font-bold hover:bg-amber-100 dark:hover:bg-slate-700 transition shadow-2xs cursor-pointer"
+                        >
+                          + {c.name} ({c.relationship || 'Yetkili'})
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Full Name */}
               <div>
