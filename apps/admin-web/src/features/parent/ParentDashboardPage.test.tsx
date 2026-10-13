@@ -296,4 +296,112 @@ describe('ParentDashboardPage', () => {
       instructions: 'Öksürük olursa',
     });
   });
+
+  it('allows parent to view authorized pickup contacts and add a new authorized person', async () => {
+    const fakeAuthorizations = [
+      {
+        id: 'auth-1',
+        tenantId: 't-1',
+        studentId: 's-1',
+        pickupContactId: 'cnt-1',
+        pickupContact: {
+          id: 'cnt-1',
+          tenantId: 't-1',
+          studentId: 's-1',
+          fullName: 'Ahmet Yılmaz',
+          relation: 'Dede',
+          phone: '0555 111 2233',
+          identityNote: null,
+          isActive: true,
+          createdAt: '2026-09-15T08:00:00.000Z',
+          updatedAt: '2026-09-15T08:00:00.000Z',
+        },
+        requestedById: 'u-parent',
+        reviewedById: null,
+        status: 'APPROVED',
+        validFrom: null,
+        validUntil: null,
+        note: null,
+        createdAt: '2026-09-15T08:00:00.000Z',
+        updatedAt: '2026-09-15T08:00:00.000Z',
+      },
+    ];
+
+    let contactCreated = false;
+
+    mockFetchByUrl({
+      '/parent/children': () =>
+        new Response(JSON.stringify({ data: fakeOverview }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/daily-menus': () =>
+        new Response(JSON.stringify(fakeMenu), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/pickup/authorizations': () =>
+        new Response(JSON.stringify(fakeAuthorizations), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/pickup/contacts': () => {
+        contactCreated = true;
+        return new Response(
+          JSON.stringify({
+            id: 'cnt-2',
+            tenantId: 't-1',
+            studentId: 's-1',
+            fullName: 'Ayşe Demir',
+            relation: 'Teyze',
+            phone: '0555 123 4567',
+            identityNote: null,
+            isActive: true,
+            createdAt: '2026-09-15T10:00:00.000Z',
+            updatedAt: '2026-09-15T10:00:00.000Z',
+          }),
+          { status: 201, headers: { 'Content-Type': 'application/json' } },
+        );
+      },
+    });
+
+    render(<ParentDashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ada Yılmaz')).toBeInTheDocument();
+    });
+
+    // Yetkili Teslim Alıcılar kartı ve mevcut kişi
+    expect(screen.getByText('Yetkili Teslim Alıcılar')).toBeInTheDocument();
+    expect(screen.getByText('Ahmet Yılmaz')).toBeInTheDocument();
+    expect(screen.getByText('Dede')).toBeInTheDocument();
+
+    // + Teslim Alıcı Ekle butonuna tıkla
+    const addBtn = screen.getByRole('button', { name: /\+ Teslim Alıcı Ekle/i });
+    expect(addBtn).toBeInTheDocument();
+    addBtn.click();
+
+    // Modal açıldığını doğrula
+    await waitFor(() => {
+      expect(screen.getByText('Yeni Teslim Yetkilisi Ekle')).toBeInTheDocument();
+    });
+
+    // Formu doldur
+    const { fireEvent } = await import('@testing-library/react');
+    const nameInput = screen.getByLabelText(/Ad Soyad/i);
+    const phoneInput = screen.getByLabelText(/Telefon Numarası/i);
+    const relationSelect = screen.getByLabelText(/Yakınlık Derecesi/i);
+
+    fireEvent.change(nameInput, { target: { value: 'Ayşe Demir' } });
+    fireEvent.change(phoneInput, { target: { value: '0555 123 4567' } });
+    fireEvent.change(relationSelect, { target: { value: 'Teyze' } });
+
+    // Kaydet ve Yetkilendir butonuna tıkla
+    const submitBtn = screen.getByRole('button', { name: /Yetkilendir ve Kaydet/i });
+    submitBtn.click();
+
+    await waitFor(() => {
+      expect(contactCreated).toBe(true);
+    });
+  });
 });

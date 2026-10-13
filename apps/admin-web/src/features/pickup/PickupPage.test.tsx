@@ -174,4 +174,51 @@ describe('PickupPage', () => {
       expect(screen.queryByText('Doğrulama Yöntemi *')).not.toBeInTheDocument();
     });
   });
+
+  it('displays warning banner when an unauthorized pickup person is entered in handover modal', async () => {
+    const approvedAuth = [
+      {
+        ...fakeAuthorizations[0],
+        status: 'APPROVED',
+      },
+    ];
+
+    mockFetchByUrl({
+      '/pickup/authorizations': () => new Response(JSON.stringify(approvedAuth), { status: 200 }),
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+      '/pickup/events': () => new Response(JSON.stringify([]), { status: 200 }),
+    });
+
+    renderPage();
+
+    const handoverBtn = await screen.findByRole('button', { name: /Öğrenciyi Teslim Et/i });
+    await userEvent.click(handoverBtn);
+
+    // Modal açıldı
+    expect(screen.getByText('Öğrenciyi Güvenle Teslim Et')).toBeInTheDocument();
+
+    // Onaylı yetkili kişi rozetinin hızlı seçimde olduğunu doğrula
+    expect(screen.getByText(/Ahmet Yılmaz \(Dede\)/i)).toBeInTheDocument();
+
+    // Teslim alan kişi alanına yabancı bir isim yaz
+    const nameInput = screen.getByPlaceholderText(/Örn: Ayşe Yılmaz/i);
+    await userEvent.type(nameInput, 'Mehmet Yabancı');
+
+    // Yetkisiz kişi uyarı kalkanının çıktığını doğrula
+    await waitFor(() => {
+      const warn = screen.getByTestId('unauthorized-pickup-warning');
+      expect(warn).toBeInTheDocument();
+      expect(warn).toHaveTextContent(/onaylı teslim alıcı listesinde kayıtlı değildir/i);
+    });
+
+    // Şimdi hızlı seçimle onaylı yetkiliye tıkla
+    const quickSelectBtn = screen.getByRole('button', { name: /Ahmet Yılmaz \(Dede\)/i });
+    await userEvent.click(quickSelectBtn);
+
+    // İsim alanının Ahmet Yılmaz olduğunu ve uyarının kaybolduğunu doğrula
+    expect(nameInput).toHaveValue('Ahmet Yılmaz');
+    await waitFor(() => {
+      expect(screen.queryByTestId('unauthorized-pickup-warning')).not.toBeInTheDocument();
+    });
+  });
 });

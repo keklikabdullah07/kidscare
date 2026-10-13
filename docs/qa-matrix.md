@@ -94,9 +94,9 @@ Bu bölüm, bir veride değişiklik yapıldığında sistemin diğer kılcal dam
 
 - **Aksiyon:** Veli (`parent@demo.test`), _"Teyzesi: Ayşe Demir, Tel: 555-123-4567"_ kişisini teslim yetkilisi olarak ekler.
 - **Kontrol Noktaları:**
-  - [ ] **Öğretmen Teslimat Ekranı (`/pickup`):** Okul çıkış saatinde öğretmenin listesinde Ada Yılmaz'ın yetkili teslim alıcılarında Ayşe Demir görünmeli.
-  - [ ] **Yetkisiz Kişi Engeli:** Listede olmayan bir isim girildiğinde öğretmen uyarılmalı.
-  - [ ] **Teslim Edildi Onayı:** Öğretmen teslimi tamamladığında kayıt kilitlenmeli ve veliye bildirim gitmeli.
+  - [x] **Öğretmen Teslimat Ekranı (`/pickup`):** Okul çıkış saatinde öğretmenin listesinde Ada Yılmaz'ın yetkili teslim alıcılarında Ayşe Demir görünmeli (Doğrulandı: `ParentDashboardPage` üzerinde `+ Teslim Alıcı Ekle` modalı, `PickupPage` üzerinde öğrenciye ait onaylı yetkililer hızlı seçimle bağlandı).
+  - [x] **Yetkisiz Kişi Engeli:** Listede olmayan bir isim girildiğinde öğretmen uyarılmalı (Doğrulandı: `PickupPage` modalında tanımsız kişi girildiğinde anlık `unauthorized-pickup-warning` güvenlik uyarısı veriliyor).
+  - [x] **Teslim Edildi Onayı:** Öğretmen teslimi tamamladığında kayıt kilitlenmeli ve veliye bildirim gitmeli (Doğrulandı: `POST /pickup/events` ve resmi teslimat günlüğü arşivi doğrulandı).
 
 ---
 

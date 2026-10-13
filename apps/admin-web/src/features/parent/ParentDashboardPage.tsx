@@ -18,12 +18,19 @@ import {
   Plus,
   Clock,
   X,
+  ShieldCheck,
+  Phone,
 } from 'lucide-react';
 import { getParentChildrenOverview } from '../../api/parent';
 import { getDailyMenu } from '../../api/daily-menus';
 import { listObservations, listPortfolio } from '../../api/development';
 import { getActivities } from '../../api/activities';
 import { listMedicationRecords, createMedicationRecord } from '../../api/medication';
+import {
+  listPickupAuthorizations,
+  createPickupContact,
+  createPickupAuthorization,
+} from '../../api/pickup';
 import type {
   DailyMenu,
   DevelopmentObservationDto,
@@ -32,6 +39,7 @@ import type {
   ActivityPost,
   MediaFileItem,
   MedicationRecord,
+  PickupAuthorization,
 } from '@kidscare/shared-types';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { LightboxModal } from '../gallery/LightboxModal';
@@ -57,6 +65,18 @@ export function ParentDashboardPage(): JSX.Element {
   });
   const [isSubmittingMed, setIsSubmittingMed] = useState<boolean>(false);
   const [medError, setMedError] = useState<string | null>(null);
+
+  const [pickupAuthorizations, setPickupAuthorizations] = useState<PickupAuthorization[]>([]);
+  const [isPickupModalOpen, setIsPickupModalOpen] = useState<boolean>(false);
+  const [pickupForm, setPickupForm] = useState({
+    fullName: '',
+    phone: '',
+    relation: 'Anneanne',
+    identityNote: '',
+  });
+  const [isSubmittingPickup, setIsSubmittingPickup] = useState<boolean>(false);
+  const [pickupError, setPickupError] = useState<string | null>(null);
+
   const [activeLightboxFile, setActiveLightboxFile] = useState<MediaFileItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -92,10 +112,19 @@ export function ParentDashboardPage(): JSX.Element {
 
           if (currentChildId) {
             try {
-              const meds = await listMedicationRecords(currentChildId);
-              if (isMounted) setMedications(Array.isArray(meds) ? meds : []);
+              const [meds, auths] = await Promise.all([
+                listMedicationRecords(currentChildId).catch(() => []),
+                listPickupAuthorizations(currentChildId).catch(() => []),
+              ]);
+              if (isMounted) {
+                setMedications(Array.isArray(meds) ? meds : []);
+                setPickupAuthorizations(Array.isArray(auths) ? auths : []);
+              }
             } catch {
-              if (isMounted) setMedications([]);
+              if (isMounted) {
+                setMedications([]);
+                setPickupAuthorizations([]);
+              }
             }
           }
         }
@@ -252,6 +281,40 @@ export function ParentDashboardPage(): JSX.Element {
         );
     }
   };
+
+  async function handleCreatePickupContact(e: React.FormEvent) {
+    e.preventDefault();
+    if (!activeChildOverview?.student.id) return;
+    setIsSubmittingPickup(true);
+    setPickupError(null);
+    try {
+      const contact = await createPickupContact({
+        studentId: activeChildOverview.student.id,
+        fullName: pickupForm.fullName,
+        relation: pickupForm.relation,
+        phone: pickupForm.phone,
+        identityNote: pickupForm.identityNote || undefined,
+      });
+      const auth = await createPickupAuthorization({
+        studentId: activeChildOverview.student.id,
+        pickupContactId: contact.id,
+      });
+      setPickupAuthorizations((prev) => [{ ...auth, pickupContact: contact }, ...prev]);
+      setIsPickupModalOpen(false);
+      setPickupForm({
+        fullName: '',
+        phone: '',
+        relation: 'Anneanne',
+        identityNote: '',
+      });
+    } catch (err: unknown) {
+      setPickupError(
+        err instanceof Error ? err.message : 'Teslim yetkilisi eklenirken hata oluştu.',
+      );
+    } finally {
+      setIsSubmittingPickup(false);
+    }
+  }
 
   function openLightboxForActivity(url: string, titleText: string, dateStr?: string): void {
     setActiveLightboxFile({
@@ -891,6 +954,87 @@ export function ParentDashboardPage(): JSX.Element {
                 )}
               </div>
 
+              {/* Authorized Pickup Contacts Card */}
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                        Yetkili Teslim Alıcılar
+                      </h3>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                        Çocuğunuzu kreşten teslim alabilecek onaylı kişiler
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPickupError(null);
+                      setIsPickupModalOpen(true);
+                    }}
+                    className="btn-tactile-teal px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>+ Teslim Alıcı Ekle</span>
+                  </button>
+                </div>
+
+                {pickupAuthorizations.length === 0 ? (
+                  <div className="py-6 text-center text-slate-400 dark:text-slate-300">
+                    <p className="text-xs">Kayıtlı teslimat yetkilisi bulunmuyor.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {pickupAuthorizations.map((auth, idx) => {
+                      const contact = auth.pickupContact;
+                      return (
+                        <div
+                          key={auth.id || idx}
+                          className="p-3.5 rounded-2xl border border-[#DDD4C4]/70 dark:border-slate-700/60 bg-[#FCFAF7] dark:bg-slate-900/60 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs"
+                        >
+                          <div className="space-y-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-bold text-slate-900 dark:text-white text-sm">
+                                {contact?.fullName || 'İsimsiz Yetkili'}
+                              </span>
+                              {contact?.relation && (
+                                <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60">
+                                  {contact.relation}
+                                </span>
+                              )}
+                              {contact?.phone && (
+                                <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1 text-[11px]">
+                                  <Phone className="w-3 h-3" />
+                                  {contact.phone}
+                                </span>
+                              )}
+                            </div>
+                            {contact?.identityNote && (
+                              <p className="text-slate-500 dark:text-slate-400 text-[11px]">
+                                Not: {contact.identityNote}
+                              </p>
+                            )}
+                          </div>
+                          <div className="shrink-0 self-start sm:self-auto">
+                            <span
+                              className={`px-2.5 py-1 text-xs font-bold rounded-full border shadow-2xs ${
+                                auth.status === 'APPROVED'
+                                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/60'
+                                  : 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800/60'
+                              }`}
+                            >
+                              {auth.status === 'APPROVED' ? '✓ Onaylı Yetkili' : 'Onay Bekliyor'}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
               {/* Development & Portfolio Section */}
               <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
@@ -1186,6 +1330,148 @@ export function ParentDashboardPage(): JSX.Element {
                       className="btn-tactile-teal px-5 py-2 text-xs font-bold"
                     >
                       {isSubmittingMed ? 'Kaydediliyor...' : 'Talebi Kaydet ve İlet'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Pickup Contact Modal */}
+          {isPickupModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+              <div className="bg-white dark:bg-[#131B2E] w-full max-w-lg rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700 shadow-2xl p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
+                      <ShieldCheck className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                        Yeni Teslim Yetkilisi Ekle
+                      </h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {activeChildOverview?.student.firstName} için okuldan teslim alma yetkisi
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsPickupModalOpen(false)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {pickupError && (
+                  <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-200 text-xs rounded-2xl">
+                    {pickupError}
+                  </div>
+                )}
+
+                <form
+                  onSubmit={(e) => void handleCreatePickupContact(e)}
+                  className="space-y-4 text-xs"
+                >
+                  <div>
+                    <label
+                      htmlFor="pickupFullName"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      Ad Soyad *
+                    </label>
+                    <input
+                      id="pickupFullName"
+                      type="text"
+                      required
+                      value={pickupForm.fullName}
+                      onChange={(e) => setPickupForm({ ...pickupForm, fullName: e.target.value })}
+                      placeholder="Örn: Ayşe Demir"
+                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="pickupPhone"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      Telefon Numarası *
+                    </label>
+                    <input
+                      id="pickupPhone"
+                      type="tel"
+                      required
+                      value={pickupForm.phone}
+                      onChange={(e) => setPickupForm({ ...pickupForm, phone: e.target.value })}
+                      placeholder="Örn: 0555 123 4567"
+                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600 font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="pickupRelation"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      Yakınlık Derecesi *
+                    </label>
+                    <select
+                      id="pickupRelation"
+                      value={pickupForm.relation}
+                      onChange={(e) => setPickupForm({ ...pickupForm, relation: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600"
+                    >
+                      <option value="Anne">Anne</option>
+                      <option value="Baba">Baba</option>
+                      <option value="Anneanne">Anneanne</option>
+                      <option value="Babaanne">Babaanne</option>
+                      <option value="Dede">Dede</option>
+                      <option value="Teyze">Teyze</option>
+                      <option value="Hala">Hala</option>
+                      <option value="Dayı">Dayı</option>
+                      <option value="Amca">Amca</option>
+                      <option value="Servis Şoförü">Servis Şoförü</option>
+                      <option value="Servis Hostesi">Servis Hostesi</option>
+                      <option value="Komşu / Aile Dostu">Komşu / Aile Dostu</option>
+                      <option value="Diğer">Diğer</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="pickupIdentityNote"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      Kimlik / Güvenlik Notu (Opsiyonel)
+                    </label>
+                    <input
+                      id="pickupIdentityNote"
+                      type="text"
+                      value={pickupForm.identityNote}
+                      onChange={(e) =>
+                        setPickupForm({ ...pickupForm, identityNote: e.target.value })
+                      }
+                      placeholder="Örn: TC son 4 hane: 1234, Araç Plaka: 34 AB 123"
+                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setIsPickupModalOpen(false)}
+                      className="btn-tactile-secondary px-4 py-2 text-xs font-bold"
+                    >
+                      Vazgeç
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingPickup}
+                      className="btn-tactile-teal px-5 py-2 text-xs font-bold"
+                    >
+                      {isSubmittingPickup ? 'Kaydediliyor...' : 'Yetkilendir ve Kaydet'}
                     </button>
                   </div>
                 </form>

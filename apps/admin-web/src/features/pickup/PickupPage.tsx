@@ -15,6 +15,7 @@ import {
   UserCheck,
   History,
   Lock,
+  AlertTriangle,
 } from 'lucide-react';
 import type {
   PickupAuthorization,
@@ -661,6 +662,51 @@ export function PickupPage(): JSX.Element {
                 </select>
               </div>
 
+              {/* Approved Contacts Quick Selection */}
+              {(() => {
+                const approvedContacts = items
+                  .filter(
+                    (i) =>
+                      i.studentId === handoverStudentId &&
+                      i.status === 'APPROVED' &&
+                      i.pickupContact,
+                  )
+                  .map((i) => ({
+                    ...i.pickupContact!,
+                    authId: i.id,
+                  }));
+
+                if (approvedContacts.length === 0) return null;
+
+                return (
+                  <div className="space-y-1.5 p-3 rounded-2xl bg-teal-50/60 dark:bg-slate-900/60 border border-teal-200/70 dark:border-teal-800/40">
+                    <span className="text-[11px] font-bold text-teal-950 dark:text-teal-200 block">
+                      Onaylı Yetkili Kişiler (Hızlı Seçim):
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {approvedContacts.map((c) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => {
+                            setHandoverPersonName(c.fullName);
+                            setHandoverPersonPhone(c.phone || '');
+                            setHandoverContactId(c.id);
+                            setHandoverAuthId(c.authId);
+                          }}
+                          className="px-2.5 py-1 rounded-xl border border-teal-300 dark:border-teal-700 bg-white dark:bg-slate-800 text-teal-900 dark:text-teal-200 text-xs font-bold hover:bg-teal-50 dark:hover:bg-slate-700 transition shadow-2xs cursor-pointer flex items-center gap-1.5"
+                        >
+                          <UserCheck className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                          <span>
+                            {c.fullName} ({c.relation})
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
               {/* Pickup Person Name */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
@@ -675,6 +721,45 @@ export function PickupPage(): JSX.Element {
                   className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs"
                 />
               </div>
+
+              {/* Unauthorized Person Warning Banner */}
+              {(() => {
+                if (!handoverPersonName.trim()) return null;
+                const approvedContacts = items
+                  .filter(
+                    (i) =>
+                      i.studentId === handoverStudentId &&
+                      i.status === 'APPROVED' &&
+                      i.pickupContact,
+                  )
+                  .map((i) => i.pickupContact!);
+
+                const isApproved = approvedContacts.some(
+                  (c) =>
+                    c.fullName.toLowerCase().trim() === handoverPersonName.toLowerCase().trim(),
+                );
+
+                if (isApproved) return null;
+
+                return (
+                  <div
+                    data-testid="unauthorized-pickup-warning"
+                    className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/60 rounded-2xl flex items-start gap-2.5 text-xs text-amber-900 dark:text-amber-200 shadow-2xs"
+                  >
+                    <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold">
+                        ⚠️ Yetkisiz / Tanımsız Teslim Alıcı Uyarısı:
+                      </span>
+                      <p className="text-[11px] mt-0.5 leading-relaxed">
+                        "{handoverPersonName}" öğrencinin onaylı teslim alıcı listesinde kayıtlı
+                        değildir. Lütfen veli telefon teyidi veya kimlik kontrolü yapmadan teslimatı
+                        tamamlamayınız.
+                      </p>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Pickup Person Phone */}
               <div>
