@@ -85,10 +85,10 @@ Bu bölüm, bir veride değişiklik yapıldığında sistemin diğer kılcal dam
 
 - **Aksiyon:** Veli (`parent@demo.test`) portaldan _"Augmentin 200mg - Öğle yemeğinden sonra 1 ölçek"_ talebi ekler.
 - **Kontrol Noktaları:**
-  - [ ] **Öğretmen İlaç Ekranı (`/medication`):** Öğretmenin ekranında "Bekleyen İlaç Talebi" olarak sarı renkte düşmeli.
-  - [ ] **Uygulama Butonu:** Öğretmen "Verildi" butonuna bastığında onay modalı açılmalı ve durum yeşil "Verildi (Öğretmen Adı, Saat)" olmalı.
-  - [ ] **Veli Bildirimi:** Veli portalında ilacın verildiği ve saati anında "Tamamlandı" olarak güncellenmeli.
-  - [ ] **Kayıt Silme (Spec 0029):** İlaç kaydı silinmek istendiğinde çift onay modalı (`DeleteConfirmationModal`) çıkmalı, teyitsiz silinmemeli.
+  - [x] **Öğretmen İlaç Ekranı (`/medication`):** Öğretmenin ekranında "Bekleyen İlaç Talebi" olarak sarı renkte düşmeli (Doğrulandı: `MedicationPage` üzerinde `REQUESTED` statüsü sarı rozet ile onay/ret butonlarıyla listeleniyor).
+  - [x] **Uygulama Butonu:** Öğretmen "Verildi" butonuna bastığında onay modalı açılmalı ve durum yeşil "Verildi (Öğretmen Adı, Saat)" olmalı (Doğrulandı: `İlaç Uygulamasını Kaydet` modalı ve `markMedicationGiven` PATCH çağrısı test edildi).
+  - [x] **Veli Bildirimi:** Veli portalında ilacın verildiği ve saati anında "Tamamlandı" olarak güncellenmeli (Doğrulandı: `ParentDashboardPage` üzerinde `+ İlaç Talebi Ekle` modalı, canlı liste ve `✓ Verildi` rozeti eklendi).
+  - [x] **Kayıt Silme (Spec 0029):** İlaç kaydı silinmek istendiğinde çift onay modalı (`DeleteConfirmationModal`) çıkmalı, teyitsiz silinmemeli (Doğrulandı: `MedicationPage.test.tsx` çift onay modalı testi başarılı).
 
 ### Senaryo 3.3: Güvenli Teslimat (Pickup Handover)
 

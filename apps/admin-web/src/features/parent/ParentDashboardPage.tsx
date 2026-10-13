@@ -14,11 +14,16 @@ import {
   Award,
   Sparkles,
   Camera,
+  Pill,
+  Plus,
+  Clock,
+  X,
 } from 'lucide-react';
 import { getParentChildrenOverview } from '../../api/parent';
 import { getDailyMenu } from '../../api/daily-menus';
 import { listObservations, listPortfolio } from '../../api/development';
 import { getActivities } from '../../api/activities';
+import { listMedicationRecords, createMedicationRecord } from '../../api/medication';
 import type {
   DailyMenu,
   DevelopmentObservationDto,
@@ -26,6 +31,7 @@ import type {
   PortfolioItemDto,
   ActivityPost,
   MediaFileItem,
+  MedicationRecord,
 } from '@kidscare/shared-types';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { LightboxModal } from '../gallery/LightboxModal';
@@ -40,6 +46,17 @@ export function ParentDashboardPage(): JSX.Element {
   const [devObservations, setDevObservations] = useState<DevelopmentObservationDto[]>([]);
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItemDto[]>([]);
   const [activities, setActivities] = useState<ActivityPost[]>([]);
+  const [medications, setMedications] = useState<MedicationRecord[]>([]);
+  const [isMedModalOpen, setIsMedModalOpen] = useState<boolean>(false);
+  const [medForm, setMedForm] = useState({
+    medicationName: '',
+    dosage: '',
+    scheduledAt: '',
+    instructions: '',
+    parentApprovalNote: '',
+  });
+  const [isSubmittingMed, setIsSubmittingMed] = useState<boolean>(false);
+  const [medError, setMedError] = useState<string | null>(null);
   const [activeLightboxFile, setActiveLightboxFile] = useState<MediaFileItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,11 +81,22 @@ export function ParentDashboardPage(): JSX.Element {
           setDevObservations(Array.isArray(obsRes) ? obsRes : []);
           setPortfolioItems(Array.isArray(portRes) ? portRes : []);
           setActivities(Array.isArray(actRes) ? actRes : []);
+          const currentChildId =
+            selectedChildId || (safe.length > 0 ? (safe[0]?.student.id ?? null) : null);
           if (
             safe.length > 0 &&
             (!selectedChildId || !safe.some((c) => c.student.id === selectedChildId))
           ) {
-            setSelectedChildId(safe[0]?.student.id ?? null);
+            setSelectedChildId(currentChildId);
+          }
+
+          if (currentChildId) {
+            try {
+              const meds = await listMedicationRecords(currentChildId);
+              if (isMounted) setMedications(Array.isArray(meds) ? meds : []);
+            } catch {
+              if (isMounted) setMedications([]);
+            }
           }
         }
       } catch (err: unknown) {
@@ -152,6 +180,78 @@ export function ParentDashboardPage(): JSX.Element {
         m.toLowerCase().includes(alg.toLowerCase()) || alg.toLowerCase().includes(m.toLowerCase()),
     ),
   );
+
+  async function handleCreateMedication(e: React.FormEvent) {
+    e.preventDefault();
+    if (!activeChildOverview?.student.id) return;
+    setIsSubmittingMed(true);
+    setMedError(null);
+    try {
+      const newRecord = await createMedicationRecord({
+        studentId: activeChildOverview.student.id,
+        medicationName: medForm.medicationName,
+        dosage: medForm.dosage,
+        instructions: medForm.instructions || undefined,
+        scheduledAt: medForm.scheduledAt ? new Date(medForm.scheduledAt) : undefined,
+        parentApprovalNote: medForm.parentApprovalNote || undefined,
+      });
+      setMedications((prev) => [newRecord, ...prev]);
+      setIsMedModalOpen(false);
+      setMedForm({
+        medicationName: '',
+        dosage: '',
+        scheduledAt: '',
+        instructions: '',
+        parentApprovalNote: '',
+      });
+    } catch (err: unknown) {
+      setMedError(err instanceof Error ? err.message : 'İlaç talebi iletilirken bir hata oluştu.');
+    } finally {
+      setIsSubmittingMed(false);
+    }
+  }
+
+  const renderMedicationStatusBadge = (status: string) => {
+    switch (status) {
+      case 'REQUESTED':
+        return (
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800/60 shadow-2xs">
+            Onay Bekliyor
+          </span>
+        );
+      case 'APPROVED':
+      case 'SCHEDULED':
+        return (
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-sky-50 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 border border-sky-300 dark:border-sky-800/60 shadow-2xs">
+            Planlandı / Onaylandı
+          </span>
+        );
+      case 'GIVEN':
+        return (
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800/60 shadow-2xs">
+            ✓ Verildi
+          </span>
+        );
+      case 'SKIPPED':
+        return (
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 shadow-2xs">
+            Atlandı
+          </span>
+        );
+      case 'REJECTED':
+        return (
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-800/60 shadow-2xs">
+            Reddedildi
+          </span>
+        );
+      default:
+        return (
+          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 shadow-2xs">
+            {status}
+          </span>
+        );
+    }
+  };
 
   function openLightboxForActivity(url: string, titleText: string, dateStr?: string): void {
     setActiveLightboxFile({
@@ -714,6 +814,83 @@ export function ParentDashboardPage(): JSX.Element {
                 </div>
               </div>
 
+              {/* Standalone Medication Request & Treatment Card */}
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
+                  <div className="flex items-center gap-2">
+                    <Pill className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                        İlaç & Tedavi Talepleri
+                      </h3>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                        Kreşte verilmesi gereken ilaçlar için resmi veli talepleri
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMedError(null);
+                      setIsMedModalOpen(true);
+                    }}
+                    className="btn-tactile-teal px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>+ İlaç Talebi Ekle</span>
+                  </button>
+                </div>
+
+                {medications.length === 0 ? (
+                  <div className="py-6 text-center text-slate-400 dark:text-slate-300">
+                    <p className="text-xs">Aktif kayıtlı ilaç verme talebi bulunmuyor.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {medications.map((med) => (
+                      <div
+                        key={med.id}
+                        className="p-3.5 rounded-2xl border border-[#DDD4C4]/70 dark:border-slate-700/60 bg-[#FCFAF7] dark:bg-slate-900/60 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs"
+                      >
+                        <div className="space-y-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-slate-900 dark:text-white text-sm">
+                              {med.medicationName}
+                            </span>
+                            <span className="text-slate-400">·</span>
+                            <span className="font-semibold text-teal-800 dark:text-teal-300">
+                              {med.dosage}
+                            </span>
+                            {med.scheduledAt && (
+                              <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1 text-[11px]">
+                                <Clock className="w-3 h-3" />
+                                {new Date(med.scheduledAt).toLocaleTimeString('tr-TR', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </span>
+                            )}
+                          </div>
+                          {med.instructions && (
+                            <p className="text-slate-600 dark:text-slate-300 italic text-[11px]">
+                              Talimat: {med.instructions}
+                            </p>
+                          )}
+                          {med.parentApprovalNote && (
+                            <p className="text-slate-500 dark:text-slate-400 text-[11px]">
+                              Veli Onayı: {med.parentApprovalNote}
+                            </p>
+                          )}
+                        </div>
+                        <div className="shrink-0 self-start sm:self-auto">
+                          {renderMedicationStatusBadge(med.status)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Development & Portfolio Section */}
               <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
@@ -854,6 +1031,167 @@ export function ParentDashboardPage(): JSX.Element {
             file={activeLightboxFile}
             onClose={() => setActiveLightboxFile(null)}
           />
+
+          {/* Medication Request Modal */}
+          {isMedModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+              <div className="bg-white dark:bg-[#131B2E] w-full max-w-lg rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700 shadow-2xl p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 flex items-center justify-center font-bold shadow-2xs">
+                      <Pill className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                        Yeni İlaç Verme Talebi
+                      </h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {activeChildOverview?.student.firstName} için okul yönetimine ve öğretmene
+                        iletilecek
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsMedModalOpen(false)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {childAllergies.length > 0 && (
+                  <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/60 rounded-2xl flex items-start gap-2.5 text-xs text-amber-900 dark:text-amber-200">
+                    <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold">Önemli Sağlık Hatırlatması:</span>
+                      <p className="text-[11px] mt-0.5">
+                        Çocuğunuzun kayıtlı alerjileri:{' '}
+                        <span className="font-bold">{childAllergies.join(', ')}</span>. Lütfen
+                        ilacın etken maddelerini kontrol ediniz.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {medError && (
+                  <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-200 text-xs rounded-2xl">
+                    {medError}
+                  </div>
+                )}
+
+                <form
+                  onSubmit={(e) => void handleCreateMedication(e)}
+                  className="space-y-4 text-xs"
+                >
+                  <div>
+                    <label
+                      htmlFor="medicationName"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      İlaç Adı *
+                    </label>
+                    <input
+                      id="medicationName"
+                      type="text"
+                      required
+                      value={medForm.medicationName}
+                      onChange={(e) => setMedForm({ ...medForm, medicationName: e.target.value })}
+                      placeholder="Örn: Calpol, Ventolin, Augmentin"
+                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="dosage"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      Dozaj (Örn: 1 ölçek, 5ml) *
+                    </label>
+                    <input
+                      id="dosage"
+                      type="text"
+                      required
+                      value={medForm.dosage}
+                      onChange={(e) => setMedForm({ ...medForm, dosage: e.target.value })}
+                      placeholder="Örn: 1 Ölçek (5ml), 1 Tablet"
+                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="scheduledAt"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      Verilme Zamanı / Saati
+                    </label>
+                    <input
+                      id="scheduledAt"
+                      type="datetime-local"
+                      value={medForm.scheduledAt}
+                      onChange={(e) => setMedForm({ ...medForm, scheduledAt: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="instructions"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      Kullanım Talimatı (Aç/Tok vb.)
+                    </label>
+                    <input
+                      id="instructions"
+                      type="text"
+                      value={medForm.instructions}
+                      onChange={(e) => setMedForm({ ...medForm, instructions: e.target.value })}
+                      placeholder="Örn: Öğle yemeğinden hemen sonra tok karnına"
+                      className="w-full px-3.5 py-2.5 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="parentApprovalNote"
+                      className="block font-bold text-slate-700 dark:text-slate-200 mb-1"
+                    >
+                      Veli Onay Notu
+                    </label>
+                    <textarea
+                      id="parentApprovalNote"
+                      rows={2}
+                      value={medForm.parentApprovalNote}
+                      onChange={(e) =>
+                        setMedForm({ ...medForm, parentApprovalNote: e.target.value })
+                      }
+                      placeholder="İlacın verilmesine veli olarak onay veriyorum."
+                      className="w-full px-3.5 py-2 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-teal-600"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setIsMedModalOpen(false)}
+                      className="btn-tactile-secondary px-4 py-2 text-xs font-bold"
+                    >
+                      Vazgeç
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingMed}
+                      className="btn-tactile-teal px-5 py-2 text-xs font-bold"
+                    >
+                      {isSubmittingMed ? 'Kaydediliyor...' : 'Talebi Kaydet ve İlet'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

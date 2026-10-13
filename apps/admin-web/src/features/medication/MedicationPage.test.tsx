@@ -262,4 +262,68 @@ describe('MedicationPage', () => {
       expect(alert).toHaveTextContent(/Fıstık, Laktoz/i);
     });
   });
+
+  it('allows teacher or admin to administer medication and mark as given', async () => {
+    let givenCalled = false;
+    let givenPayload: Record<string, unknown> | null = null;
+
+    mockFetchByUrl({
+      '/medication/records': () => {
+        return new Response(JSON.stringify(fakeRecords), { status: 200 });
+      },
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+      '/medication/records/med-2/given': (init) => {
+        givenCalled = true;
+        if (init?.body) {
+          givenPayload = JSON.parse(init.body as string);
+        }
+        return new Response(
+          JSON.stringify({
+            ...fakeRecords[1],
+            status: 'GIVEN',
+            givenAt: '2026-09-15T14:05:00.000Z',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } },
+        );
+      },
+    });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Ventolin İnhaler')).toBeInTheDocument();
+    });
+
+    // İlacı Ver butonuna tıkla
+    const giveBtn = screen.getByRole('button', { name: /İlacı Ver/i });
+    expect(giveBtn).toBeInTheDocument();
+    fireEvent.click(giveBtn);
+
+    // Uygulama modalının açıldığını doğrula
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', { name: /İlaç Uygulamasını Kaydet/i }),
+      ).toBeInTheDocument();
+    });
+
+    // İsteğe bağlı not alanını doldur
+    const noteInput = screen.getByPlaceholderText(/Örn: Tok karnına 5 ml verildi/i);
+    fireEvent.change(noteInput, { target: { value: 'Öğle arası 2 fıs verildi.' } });
+
+    // Verildi Olarak Kaydet butonuna tıkla
+    const submitBtn = screen.getByRole('button', { name: /Verildi Olarak Kaydet/i });
+    fireEvent.click(submitBtn);
+
+    // API çağrısının yapıldığını ve modalın kapandığını doğrula
+    await waitFor(() => {
+      expect(givenCalled).toBe(true);
+      expect(
+        screen.queryByRole('heading', { name: /İlaç Uygulamasını Kaydet/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    expect(givenPayload).toMatchObject({
+      note: 'Öğle arası 2 fıs verildi.',
+    });
+  });
 });

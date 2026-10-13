@@ -185,4 +185,115 @@ describe('ParentDashboardPage', () => {
     expect(screen.getByText('Kan Grubu: 0+')).toBeInTheDocument();
     expect(screen.getByText('Kayıtlı alerji bulunmuyor.')).toBeInTheDocument();
   });
+
+  it('allows parent to open medication modal, submit medication request, and see it in the list', async () => {
+    const fakeMedications = [
+      {
+        id: 'med-rec-1',
+        tenantId: 't-1',
+        studentId: 's-1',
+        medicationName: 'Calpol',
+        dosage: '1 Ölçek (5ml)',
+        instructions: 'Öğle yemeğinden sonra tok karnına',
+        scheduledAt: '2026-09-15T12:30:00.000Z',
+        givenAt: null,
+        status: 'REQUESTED',
+        requestedById: 'u-parent',
+        createdAt: '2026-09-15T08:00:00.000Z',
+        updatedAt: '2026-09-15T08:00:00.000Z',
+      },
+    ];
+
+    let postCalled = false;
+    let postBody: Record<string, unknown> | null = null;
+
+    mockFetchByUrl({
+      '/parent/children': () =>
+        new Response(JSON.stringify({ data: fakeOverview }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/daily-menus': () =>
+        new Response(JSON.stringify(fakeMenu), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/medication/records': (init) => {
+        if (init?.method === 'POST') {
+          postCalled = true;
+          if (init?.body) {
+            postBody = JSON.parse(init.body as string);
+          }
+          return new Response(
+            JSON.stringify({
+              id: 'med-rec-2',
+              tenantId: 't-1',
+              studentId: 's-1',
+              medicationName: 'Ventolin',
+              dosage: '1 Fıs',
+              instructions: 'Öksürük olursa',
+              scheduledAt: '2026-09-15T14:00:00.000Z',
+              givenAt: null,
+              status: 'REQUESTED',
+              requestedById: 'u-parent',
+              createdAt: '2026-09-15T09:00:00.000Z',
+              updatedAt: '2026-09-15T09:00:00.000Z',
+            }),
+            { status: 201, headers: { 'Content-Type': 'application/json' } },
+          );
+        }
+        return new Response(JSON.stringify(fakeMedications), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      },
+    });
+
+    render(<ParentDashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ada Yılmaz')).toBeInTheDocument();
+    });
+
+    // İlaç takip bölümü ve mevcut ilaç listesi
+    expect(screen.getByText('İlaç & Tedavi Talepleri')).toBeInTheDocument();
+    expect(screen.getByText('Calpol')).toBeInTheDocument();
+    expect(screen.getByText('1 Ölçek (5ml)')).toBeInTheDocument();
+    expect(screen.getByText(/Onay Bekliyor/i)).toBeInTheDocument();
+
+    // + İlaç Talebi Ekle butonuna tıkla
+    const addBtn = screen.getByRole('button', { name: /\+ İlaç Talebi Ekle/i });
+    expect(addBtn).toBeInTheDocument();
+    addBtn.click();
+
+    // Modalın açıldığını doğrula
+    await waitFor(() => {
+      expect(screen.getByText('Yeni İlaç Verme Talebi')).toBeInTheDocument();
+    });
+
+    // Form alanlarını doldur
+    const nameInput = screen.getByLabelText(/İlaç Adı/i);
+    const dosageInput = screen.getByLabelText(/Dozaj/i);
+    const instructionsInput = screen.getByLabelText(/Kullanım Talimatı/i);
+
+    const { fireEvent } = await import('@testing-library/react');
+    fireEvent.change(nameInput, { target: { value: 'Ventolin' } });
+    fireEvent.change(dosageInput, { target: { value: '1 Fıs' } });
+    fireEvent.change(instructionsInput, { target: { value: 'Öksürük olursa' } });
+
+    // Gönder butonuna tıkla
+    const submitBtn = screen.getByRole('button', { name: /Talebi Kaydet ve İlet/i });
+    submitBtn.click();
+
+    await waitFor(() => {
+      expect(postCalled).toBe(true);
+    });
+
+    expect(postBody).toMatchObject({
+      studentId: 's-1',
+      medicationName: 'Ventolin',
+      dosage: '1 Fıs',
+      instructions: 'Öksürük olursa',
+    });
+  });
 });
