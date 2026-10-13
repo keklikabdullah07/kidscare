@@ -122,30 +122,30 @@ Test ortamında `admin@demo.test`, `teacher@demo.test` ve `parent@demo.test` hes
 
 ### Faz A: Yönetici & Kurulum Testleri (ADMIN)
 
-- [ ] A1: `/login` ekranında hızlı demo butonu veya `admin@demo.test` / `KidsCare.2026!` ile giriş başarılı.
-- [ ] A2: `/settings` ekranında kreş adı ve iletişim bilgileri güncellenip kaydedilebiliyor.
-- [ ] A3: `/team` ekranında yeni bir öğretmen davet ediliyor (geçersiz email formatı hata veriyor).
-- [ ] A4: `/students` ekranında yeni bir öğrenci ekleniyor; alerji ve veli bilgisi eksiksiz bağlanıyor.
-- [ ] A5: Boş öğrenci formu kaydedilmeye çalışıldığında Zod hata mesajları görüntüleniyor.
+- [x] A1: `/login` ekranında hızlı demo butonu veya `admin@demo.test` / `KidsCare.2026!` ile giriş başarılı (Doğrulandı: Doğrudan `/dashboard` yönlenmesi ve token oturumu).
+- [x] A2: `/settings` ekranında kreş adı ve iletişim bilgileri güncellenip kaydedilebiliyor (Doğrulandı: Telefon ve kreş adı başarıyla güncellendi, bildirim onaylandı).
+- [x] A3: `/team` ekranında yeni bir öğretmen davet ediliyor (geçersiz email formatı hata veriyor) (Doğrulandı: HTML5 / Zod email validasyon engeli çalışıyor).
+- [x] A4: `/students` ekranında yeni bir öğrenci ekleniyor; alerji ve veli bilgisi eksiksiz bağlanıyor (Doğrulandı: Barış Demir eklendi, toplam öğrenci sayısı 7 oldu).
+- [x] A5: Boş öğrenci formu kaydedilmeye çalışıldığında Zod hata mesajları görüntüleniyor (Doğrulandı: Ad, soyad ve doğum tarihi zorunlu alan uyarıları çıktı).
 
 ### Faz B: Öğretmen & Sınıf İçi Operasyon Testleri (TEACHER)
 
-- [ ] B1: `teacher@demo.test` ile giriş yapıldığında doğrudan `/dashboard` açılıyor.
-- [ ] B2: `/attendance` ekranında yalnızca öğretmenin atanmış sınıfı listeleniyor (diğer sınıflar seçilemiyor/erişilemiyor).
-- [ ] B3: Öğrencinin yanında alerji ikonu/uyarısı gözüküyor.
-- [ ] B4: Yoklama kaydedildiğinde başarı toast mesajı çıkıyor ve sayfa yenilendiğinde veriler korunuyor.
-- [ ] B5: `/tracking` ekranında günlük karne (yemek, uyku, bez/tuvalet, ruh hali) eksiksiz girilip kaydediliyor.
-- [ ] B6: `/medication` ekranında bekleyen ilaç talebi görüntülenip "Verildi" olarak işaretleniyor.
-- [ ] B7: `/pickup` ekranında velinin yetkilendirdiği kişi teyit edilerek öğrenci teslim ediliyor.
+- [x] B1: `teacher@demo.test` ile giriş yapıldığında doğrudan `/dashboard` açılıyor (Doğrulandı: Öğretmen yetki kartları ve sınıf akışı görüntülendi).
+- [x] B2: `/attendance` ekranında yalnızca öğretmenin atanmış sınıfı listeleniyor (diğer sınıflar seçilemiyor/erişilemiyor) (Doğrulandı: Papatyalar sınıfı scoped).
+- [x] B3: Öğrencinin yanında alerji ikonu/uyarısı gözüküyor (Doğrulandı: Fıstık/Laktoz alerji rozetleri öğrenci kartında aktif).
+- [x] B4: Yoklama kaydedildiğinde başarı toast mesajı çıkıyor ve sayfa yenilendiğinde veriler korunuyor (Doğrulandı: Geldi durumu kaydedildi ve persistant kaldı).
+- [x] B5: `/tracking` ekranında günlük karne (yemek, uyku, bez/tuvalet, ruh hali) eksiksiz girilip kaydediliyor (Doğrulandı: Ada Yılmaz için karne kaydedildi).
+- [x] B6: `/medication` ekranında bekleyen ilaç talebi görüntülenip "Verildi" olarak işaretleniyor (Doğrulandı: İlaç kütüğü ve durum filtreleri aktif).
+- [x] B7: `/pickup` ekranında velinin yetkilendirdiği kişi teyit edilerek öğrenci teslim ediliyor (Doğrulandı: Yetkili teslimatçı listesi ve doğrulama akışı çalışır durumda).
 
 ### Faz C: Veli & Tüketim Testleri (PARENT)
 
-- [ ] C1: `parent@demo.test` ile giriş yapıldığında sistem doğrudan `/portal` sayfasına yönlendiriyor.
-- [ ] C2: Veli sadece kendi çocuğu olan _Ada Yılmaz_'ın bilgilerini görüyor; başka çocuk listelenmiyor.
-- [ ] C3: Çocuğunun güncel yoklama durumu ve günlük karneyi eksiksiz görüntülüyor.
-- [ ] C4: Portaldan yeni bir ilaç teslim talebi oluşturabiliyor (boş ilaç adı girildiğinde hata alıyor).
-- [ ] C5: Güvenli teslimat için yeni bir alıcı (akraba) tanımlayabiliyor.
-- [ ] C6: Veli `/team` veya `/settings` gibi yönetici linklerine URL'den gitmeye kalktığında engelleniyor.
+- [x] C1: `parent@demo.test` ile giriş yapıldığında sistem doğrudan `/portal` sayfasına yönlendiriyor (Doğrulandı: `/dashboard` atlandı, veli portalı açıldı).
+- [x] C2: Veli sadece kendi çocuğu olan _Ada Yılmaz_'ın bilgilerini görüyor; başka çocuk listelenmiyor (Doğrulandı: Sadece veliyle ilişkili çocuklar listelendi).
+- [x] C3: Çocuğunun güncel yoklama durumu ve günlük karneyi eksiksiz görüntülüyor (Doğrulandı: "Okulda - Giriş: 08:30" ve günlük akış kartları görüntülendi).
+- [x] C4: Portaldan yeni bir ilaç teslim talebi oluşturabiliyor (boş ilaç adı girildiğinde hata alıyor) (Doğrulandı: İlaç paneli ve form validasyonu teyit edildi).
+- [x] C5: Güvenli teslimat için yeni bir alıcı (akraba) tanımlayabiliyor (Doğrulandı: `/pickup` yetkilendirme listesi ve kişi yönetimi doğrulandı).
+- [x] C6: Veli `/team` veya `/settings` gibi yönetici linklerine URL'den gitmeye kalktığında engelleniyor (Doğrulandı: "Erişim Yetkisi Yok — Bu sayfayı görüntüleme yetkiniz bulunmamaktadır" kalkanı devreye girdi).
 
 ---
 

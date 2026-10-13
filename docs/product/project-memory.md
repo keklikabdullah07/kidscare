@@ -51,16 +51,14 @@ Piyasa ve ürün analizi: `docs/product/market-research-and-differentiation.md`
 
 ## Sıradaki İş (Handoff Noktası)
 
-> **KULLANICI "DİREKT DEVAM ET" DEDİĞİNDE YAPILACAKLAR:**
+> **GÜNCEL DURUM VE SIRADAKİ EYLEM:**
 >
-> 1. Son Durum: ANEW %100 disipline alındı, 112 mükerrer JS dosyası temizlendi, `scripts/check.ps1` tavizsiz yeşil, Specs 0025-0029 arşivlendi.
-> 2. Projenin eksiksiz test edilmesi için `docs/qa-matrix.md` canlı test rehberi hazırlandı.
-> 3. **Hemen Başlanacak Eylem:** Kullanıcı "devam et" dediğinde doğrudan `docs/qa-matrix.md` içerisindeki **"5. Canlı Manuel Test Koşu Listesi (Checklist)"** adımlarını sırayla işlet:
->    - **Faz A: Yönetici & Kurulum Testleri (ADMIN - admin@demo.test)**
->    - **Faz B: Öğretmen & Sınıf İçi Operasyon (TEACHER - teacher@demo.test)**
->    - **Faz C: Veli & Tüketim Testleri (PARENT - parent@demo.test)**
->      Her adımda olası hataları, rol kaçaklarını ve çapraz veri tutarsızlıklarını yakalayıp düzelt.
-> 4. Test turu bitince `specs/active/0024-mobile-test-infrastructure.md` tamamlanacak.
+> 1. Son Durum: ANEW %100 disiplinde, 112 mükerrer JS dosyası temizlendi, `scripts/check.ps1` tavizsiz yeşil.
+> 2. **Canlı Manuel Test Koşu Listesi (`docs/qa-matrix.md`):**
+>    - **Faz A: Yönetici & Kurulum Testleri (ADMIN)**: %100 BAŞARILI (A1-A5 Doğrulandı) ✅
+>    - **Faz B: Öğretmen & Sınıf İçi Operasyon (TEACHER)**: %100 BAŞARILI (B1-B7 Doğrulandı) ✅
+>    - **Faz C: Veli & Tüketim Testleri (PARENT)**: %100 BAŞARILI (C1-C6 Doğrulandı, URL İzolasyon Kalkanı aktif) ✅
+> 3. **Sıradaki Adım:** `specs/active/0024-mobile-test-infrastructure.md` için planlama (`specs/plans/0024-plan.md`) hazırlığı ve onay süreci.
 
 ## Mimari Kurallar
 
