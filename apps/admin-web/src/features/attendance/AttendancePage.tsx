@@ -731,7 +731,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => void handleQuickCheckIn(student)}
-                      className="btn-tactile-teal flex-1 py-2 text-xs font-bold"
+                      className="btn-tactile-teal flex-1 min-h-[44px] py-2 text-xs font-bold"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Giriş Yap</span>
@@ -742,7 +742,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => setCheckoutStudent(student)}
-                      className="btn-tactile-amber flex-1 py-2 text-xs font-bold"
+                      className="btn-tactile-amber flex-1 min-h-[44px] py-2 text-xs font-bold"
                     >
                       <ShieldCheck className="w-3.5 h-3.5" />
                       <span>Teslim Et</span>
@@ -753,7 +753,7 @@ export function AttendancePage(): JSX.Element {
                     <button
                       type="button"
                       onClick={() => setCheckoutStudent(student)}
-                      className="btn-tactile-secondary flex-1 py-2 text-xs font-bold"
+                      className="btn-tactile-secondary flex-1 min-h-[44px] py-2 text-xs font-bold"
                     >
                       Düzenle
                     </button>
@@ -762,7 +762,7 @@ export function AttendancePage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => void handleSetStatus(student, 'EXCUSED')}
-                    className="btn-tactile-secondary px-3 py-2 text-xs font-bold text-amber-900 dark:text-amber-300"
+                    className="btn-tactile-secondary min-h-[44px] px-3 py-2 text-xs font-bold text-amber-900 dark:text-amber-300"
                     title="İzinli"
                   >
                     İzinli
@@ -771,7 +771,7 @@ export function AttendancePage(): JSX.Element {
                   <button
                     type="button"
                     onClick={() => void handleSetStatus(student, 'ABSENT')}
-                    className="btn-tactile-secondary px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-200"
+                    className="btn-tactile-secondary min-h-[44px] px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-200"
                     title="Gelmedi"
                   >
                     Gelmedi
