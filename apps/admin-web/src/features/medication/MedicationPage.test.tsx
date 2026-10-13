@@ -206,4 +206,60 @@ describe('MedicationPage', () => {
       expect(screen.queryByRole('heading', { name: 'İlaç Kaydını Sil' })).not.toBeInTheDocument();
     });
   });
+
+  it('displays allergy warning in modal when selecting an allergic student, and shows allergy badge on medication card', async () => {
+    const studentWithAllergy = {
+      ...fakeStudents[0],
+      id: 's-allergy',
+      firstName: 'Barış',
+      lastName: 'Demir',
+      passport: {
+        bloodType: '0_POSITIVE',
+        allergies: ['Fıstık', 'Laktoz'],
+      },
+    };
+
+    const allergyRecord = {
+      ...fakeRecords[0],
+      id: 'med-allergy',
+      studentId: 's-allergy',
+      medicationName: 'Ventolin Şurup',
+    };
+
+    mockFetchByUrl({
+      '/medication/records': () => new Response(JSON.stringify([allergyRecord]), { status: 200 }),
+      '/students': () => new Response(JSON.stringify([studentWithAllergy]), { status: 200 }),
+    });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Ventolin Şurup')).toBeInTheDocument();
+    });
+
+    // Check card renders allergy badge for student with allergy
+    expect(screen.getByText('Fıstık, Laktoz')).toBeInTheDocument();
+
+    // Open new medication modal
+    const addBtn = screen.getByRole('button', { name: /Yeni İlaç/i });
+    fireEvent.click(addBtn);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', { name: 'Yeni İlaç Kullanım Talebi' }),
+      ).toBeInTheDocument();
+    });
+
+    // Select the student with allergy in modal
+    const select = screen.getByTestId('modal-student-select');
+    fireEvent.change(select, { target: { value: 's-allergy' } });
+
+    // Expect allergy warning alert to appear
+    await waitFor(() => {
+      const alert = screen.getByTestId('medication-allergy-alert');
+      expect(alert).toBeInTheDocument();
+      expect(alert).toHaveTextContent(/Bu öğrencinin kayıtlı alerjisi bulunmaktadır/i);
+      expect(alert).toHaveTextContent(/Fıstık, Laktoz/i);
+    });
+  });
 });

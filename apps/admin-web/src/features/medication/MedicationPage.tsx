@@ -12,6 +12,7 @@ import {
   FileText,
   Check,
   Trash2,
+  AlertTriangle,
 } from 'lucide-react';
 import type { MedicationRecord, StandaloneMedicationStatus, Student } from '@kidscare/shared-types';
 import {
@@ -137,6 +138,18 @@ export function MedicationPage(): JSX.Element {
   function studentFullName(id: string): string {
     const s = getStudent(id);
     return s ? `${s.firstName} ${s.lastName}` : `#${id.slice(0, 8)}`;
+  }
+
+  function getStudentAllergies(s: Student | undefined): string[] {
+    if (!s) return [];
+    if (s.passport?.allergies && s.passport.allergies.length > 0) {
+      return s.passport.allergies;
+    }
+    const flat = (s as unknown as { allergies?: string[] }).allergies;
+    if (Array.isArray(flat) && flat.length > 0) {
+      return flat;
+    }
+    return [];
   }
 
   // Summary Metrics
@@ -536,6 +549,19 @@ export function MedicationPage(): JSX.Element {
                         <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
                           {studentFullName(r.studentId)}
                         </span>
+                        {(() => {
+                          const allergies = getStudentAllergies(student);
+                          if (allergies.length === 0) return null;
+                          return (
+                            <span
+                              title={`Alerji: ${allergies.join(', ')}`}
+                              className="inline-flex items-center gap-1 bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 px-1.5 py-0.5 rounded text-[10px] font-semibold border border-rose-200/60 dark:border-rose-800/60 shrink-0"
+                            >
+                              <AlertTriangle className="w-2.5 h-2.5 text-rose-600 dark:text-rose-400" />
+                              <span>{allergies.join(', ')}</span>
+                            </span>
+                          );
+                        })()}
                       </div>
                     </div>
 
@@ -720,6 +746,7 @@ export function MedicationPage(): JSX.Element {
                   Öğrenci *
                 </label>
                 <select
+                  data-testid="modal-student-select"
                   value={formStudentId}
                   onChange={(e) => setFormStudentId(e.target.value)}
                   className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20"
@@ -732,6 +759,23 @@ export function MedicationPage(): JSX.Element {
                     </option>
                   ))}
                 </select>
+                {(() => {
+                  const sel = students.find((s) => s.id === formStudentId);
+                  const allergies = getStudentAllergies(sel);
+                  if (allergies.length === 0) return null;
+                  return (
+                    <div
+                      data-testid="medication-allergy-alert"
+                      className="mt-2 p-2.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/60 rounded-xl flex items-start gap-2 text-xs text-amber-900 dark:text-amber-200"
+                    >
+                      <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold">Alerji Uyarısı:</span> Bu öğrencinin kayıtlı
+                        alerjisi bulunmaktadır: <strong>{allergies.join(', ')}</strong>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

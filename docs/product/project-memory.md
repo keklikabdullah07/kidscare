@@ -58,9 +58,11 @@ Piyasa ve ürün analizi: `docs/product/market-research-and-differentiation.md`
 >    - **Faz A: Yönetici & Kurulum Testleri (ADMIN)**: %100 BAŞARILI (A1-A5 Doğrulandı) ✅
 >    - **Faz B: Öğretmen & Sınıf İçi Operasyon (TEACHER)**: %100 BAŞARILI (B1-B7 Doğrulandı) ✅
 >    - **Faz C: Veli & Tüketim Testleri (PARENT)**: %100 BAŞARILI (C1-C6 Doğrulandı, URL İzolasyon Kalkanı aktif) ✅
+>    - **Bölüm 3: Çapraz Varlık & Reaktivite (Senaryo 3.1)**: %100 BAŞARILI (Alerji senkronizasyonu yoklama, ilaç ve veli portalına bağlandı) ✅
 > 3. **Tamamlanan Özellikler:**
 >    - `specs/done/0030-admin-web-mobile-responsive-experience.md`: Akıllı telefon tarayıcıları için rol bazlı alt navigasyon barı (`MobileBottomNav`), responsive kart blokları ve taşma koruması. ✅
 >    - `specs/done/0031-web-notifications-center.md`: Web Paneli Bildirim Merkezi (`NotificationBell`, `NotificationPopover`, `useNotifications`, API istemcisi, rozet, polling ve tarayıcı masaüstü bildirimi). ✅
+>    - `specs/done/0032-cross-entity-allergen-and-health-sync.md`: Çapraz Varlık Alerji & Sağlık Güvenliği Senkronizasyonu (Yoklama tooltip & kart rozetleri, İlaç modalı anlık alerji uyarı kalkanı, Veli portalı sağlık kartı). ✅
 >    - Tüm monorepo testleri (`./scripts/check.ps1`) %100 yeşil tamamlandı. ✅
 
 ## Mimari Kurallar

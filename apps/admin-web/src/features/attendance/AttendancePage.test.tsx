@@ -75,7 +75,9 @@ function mockFetchByUrl(handlers: Record<string, (init?: RequestInit) => Respons
     // First try exact path, then any pattern handler (key starts with '*')
     const exact = handlers[path];
     if (exact) return Promise.resolve(exact(init));
-    const patternKey = Object.keys(handlers).find((k) => k.startsWith('*') && path.includes(k.slice(1)));
+    const patternKey = Object.keys(handlers).find(
+      (k) => k.startsWith('*') && path.includes(k.slice(1)),
+    );
     if (patternKey) return Promise.resolve(handlers[patternKey]!(init));
     return Promise.resolve(new Response(JSON.stringify({ message: 'unhandled' }), { status: 500 }));
   });
@@ -188,5 +190,32 @@ describe('AttendancePage', () => {
       expect(screen.getByText(/Güvenli Teslim & Çıkış/i)).toBeInTheDocument();
       expect(screen.getByText('Zeynep Yılmaz')).toBeInTheDocument();
     });
+  });
+
+  it('displays allergy badge with tooltip in table view and in grid view', async () => {
+    mockFetchByUrl({
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+      '/attendance': () => new Response(JSON.stringify(fakeAttendance), { status: 200 }),
+    });
+
+    const user = userEvent.setup();
+    render(<AttendancePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ada Yılmaz')).toBeInTheDocument();
+    });
+
+    // In table view, Ada should have an allergy badge with tooltip 'Fıstık'
+    const allergyBadge = screen.getByTitle('Fıstık');
+    expect(allergyBadge).toBeInTheDocument();
+    expect(allergyBadge).toHaveTextContent('1 Alerji');
+
+    // Switch to Grid view
+    const gridBtn = screen.getByTitle('Kart Görünümü');
+    await user.click(gridBtn);
+
+    // In grid view, allergy badge should still be present with tooltip 'Fıstık'
+    const gridAllergyBadge = screen.getByTitle('Fıstık');
+    expect(gridAllergyBadge).toBeInTheDocument();
   });
 });

@@ -132,8 +132,19 @@ export function ParentDashboardPage(): JSX.Element {
     }
   };
 
-  // Check matching allergens for active child
-  const childAllergies = activeChildOverview?.student.passport?.allergies ?? [];
+  // Check matching allergens and health passport for active child
+  const childPassport = activeChildOverview?.student.passport;
+  const childAllergies =
+    childPassport?.allergies && childPassport.allergies.length > 0
+      ? childPassport.allergies
+      : Array.isArray(
+            (activeChildOverview?.student as unknown as { allergies?: string[] })?.allergies,
+          )
+        ? (activeChildOverview?.student as unknown as { allergies: string[] }).allergies
+        : [];
+  const childBloodType =
+    childPassport?.bloodType ||
+    (activeChildOverview?.student as unknown as { bloodType?: string })?.bloodType;
   const menuAllergens = dailyMenu?.allergens ?? [];
   const matchedAllergies = childAllergies.filter((alg) =>
     menuAllergens.some(
@@ -650,9 +661,7 @@ export function ParentDashboardPage(): JSX.Element {
                     <span>Gelişim & Sağlık Pasaportu</span>
                   </h3>
                   <span className="text-xs font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-900/60 px-3 py-1 rounded-full shadow-2xs">
-                    {activeChildOverview.student.passport?.bloodType
-                      ? `Kan Grubu: ${activeChildOverview.student.passport.bloodType}`
-                      : 'Kan Grubu: -'}
+                    {childBloodType ? `Kan Grubu: ${childBloodType}` : 'Kan Grubu: -'}
                   </span>
                 </div>
 
@@ -662,10 +671,9 @@ export function ParentDashboardPage(): JSX.Element {
                     <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
                       Bilinen Alerjiler
                     </span>
-                    {activeChildOverview.student.passport?.allergies &&
-                    activeChildOverview.student.passport.allergies.length > 0 ? (
+                    {childAllergies.length > 0 ? (
                       <div className="flex flex-wrap gap-1.5">
-                        {activeChildOverview.student.passport.allergies.map((alg, idx) => (
+                        {childAllergies.map((alg, idx) => (
                           <span
                             key={idx}
                             className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 border border-rose-300 dark:border-rose-900/60 rounded-xl text-xs font-bold shadow-2xs"

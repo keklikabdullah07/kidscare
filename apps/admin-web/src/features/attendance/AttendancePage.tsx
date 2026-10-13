@@ -539,7 +539,10 @@ export function AttendancePage(): JSX.Element {
                                 )}
                               {student.passport?.allergies &&
                                 student.passport.allergies.length > 0 && (
-                                  <span className="inline-flex items-center gap-1 bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 px-1.5 py-0.5 rounded text-[10px] font-semibold border border-rose-200/60 dark:border-rose-800/60 shrink-0">
+                                  <span
+                                    title={student.passport.allergies.join(', ')}
+                                    className="inline-flex items-center gap-1 bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 px-1.5 py-0.5 rounded text-[10px] font-semibold border border-rose-200/60 dark:border-rose-800/60 shrink-0"
+                                  >
                                     <AlertTriangle className="w-2.5 h-2.5 text-rose-600 dark:text-rose-400" />
                                     <span>{student.passport.allergies.length} Alerji</span>
                                   </span>
@@ -692,9 +695,20 @@ export function AttendancePage(): JSX.Element {
                         >
                           {student.firstName} {student.lastName}
                         </h4>
-                        <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
-                          {student.dateOfBirth}
-                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
+                            {student.dateOfBirth}
+                          </p>
+                          {student.passport?.allergies && student.passport.allergies.length > 0 && (
+                            <span
+                              title={student.passport.allergies.join(', ')}
+                              className="inline-flex items-center gap-1 bg-rose-100 dark:bg-rose-900/50 text-rose-900 dark:text-rose-200 px-1.5 py-0.5 rounded text-[10px] font-semibold border border-rose-200/60 dark:border-rose-800/60 shrink-0"
+                            >
+                              <AlertTriangle className="w-2.5 h-2.5 text-rose-600 dark:text-rose-400" />
+                              <span>{student.passport.allergies.length} Alerji</span>
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <span

@@ -136,5 +136,53 @@ describe('ParentDashboardPage', () => {
 
     // Check Menu
     expect(screen.getByText(/Fıstıklı Kurabiye/i)).toBeInTheDocument();
+
+    // Check Health & Allergy Passport Card
+    expect(screen.getByText('Gelişim & Sağlık Pasaportu')).toBeInTheDocument();
+    expect(screen.getByText('Kan Grubu: A+')).toBeInTheDocument();
+    expect(screen.getByText('Bilinen Alerjiler')).toBeInTheDocument();
+    expect(screen.getAllByText('Fıstık').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('renders "Kayıtlı alerji bulunmuyor" when child has no allergies', async () => {
+    const fakeOverviewNoAllergy = [
+      {
+        ...fakeOverview[0],
+        student: {
+          ...fakeOverview[0]!.student,
+          passport: {
+            bloodType: '0+',
+            allergies: [],
+            dietaryRestrictions: [],
+            chronicConditions: [],
+            regularMedications: [],
+            emergencyContacts: [],
+          },
+        },
+      },
+    ];
+
+    mockFetchByUrl({
+      '/parent/children': () =>
+        new Response(JSON.stringify({ data: fakeOverviewNoAllergy }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/daily-menus': () =>
+        new Response(JSON.stringify({ menu: null, allergenWarnings: [] }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    });
+
+    render(<ParentDashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ada Yılmaz')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Gelişim & Sağlık Pasaportu')).toBeInTheDocument();
+    expect(screen.getByText('Kan Grubu: 0+')).toBeInTheDocument();
+    expect(screen.getByText('Kayıtlı alerji bulunmuyor.')).toBeInTheDocument();
   });
 });

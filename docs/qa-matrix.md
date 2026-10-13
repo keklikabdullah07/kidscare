@@ -76,10 +76,10 @@ Bu bölüm, bir veride değişiklik yapıldığında sistemin diğer kılcal dam
 
 - **Aksiyon:** Admin veya Öğretmen, öğrenci detayında (Örn: `Ada Yılmaz`) yeni bir alerji tanımlar: `Fıstık` ve `Laktoz`.
 - **Kontrol Noktaları:**
-  - [ ] **Yoklama Ekranı (`/attendance`):** Ada'nın adının yanında sarı/kırmızı **Alerji Rozeti** ve üzerine gelince tooltip'te `Fıstık, Laktoz` belirmeli.
-  - [ ] **Yemek Menüsü (`/daily-menus`):** O günkü menüde fıstık veya süt türevi içeren bir yemek varsa sistem sınıfta alerjisi olan öğrenci uyarısı göstermeli.
-  - [ ] **İlaç Ekranı (`/medication`):** Ada için yeni bir ilaç girilirken "Dikkat: Öğrencinin laktoz/fıstık alerjisi var" bilgisi referans olarak görünmeli.
-  - [ ] **Veli Portalı (`/portal`):** Veli çocuğunun sağlık kartına baktığında eklenen alerjiyi anında görmeli.
+  - [x] **Yoklama Ekranı (`/attendance`):** Ada'nın adının yanında sarı/kırmızı **Alerji Rozeti** ve üzerine gelince tooltip'te `Fıstık, Laktoz` belirmeli (Doğrulandı: Tablo ve Grid modlarında `title` ve `AlertTriangle` rozeti bağlandı).
+  - [x] **Yemek Menüsü (`/daily-menus`):** O günkü menüde fıstık veya süt türevi içeren bir yemek varsa sistem sınıfta alerjisi olan öğrenci uyarısı göstermeli (Doğrulandı: `AllergenWarningBanner` ve çapraz eşleştirici devrede).
+  - [x] **İlaç Ekranı (`/medication`):** Ada için yeni bir ilaç girilirken "Dikkat: Öğrencinin laktoz/fıstık alerjisi var" bilgisi referans olarak görünmeli (Doğrulandı: Modalda anlık `medication-allergy-alert` ve kart rozetleri eklendi).
+  - [x] **Veli Portalı (`/portal`):** Veli çocuğunun sağlık kartına baktığında eklenen alerjiyi anında görmeli (Doğrulandı: `Gelişim & Sağlık Pasaportu` kartında alerjiler ve kan grubu listelendi).
 
 ### Senaryo 3.2: İlaç Verme Talebi & Doz Takibi
 
