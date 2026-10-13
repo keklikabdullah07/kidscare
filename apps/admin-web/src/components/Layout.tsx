@@ -28,6 +28,7 @@ import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
 import { KidsCareLogo } from './KidsCareLogo';
 import { Badge, type BadgeVariant } from './ui/Badge';
+import { MobileBottomNav } from './navigation/MobileBottomNav';
 
 type NavItem = {
   to: string;
@@ -435,10 +436,13 @@ export function Layout(): JSX.Element {
         </header>
 
         {/* Body Outlet */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-24 md:pb-8 max-w-7xl w-full mx-auto">
           <Outlet />
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <MobileBottomNav role={userRole} onOpenMenu={() => setMobileOpen(true)} />
     </div>
   );
 }
