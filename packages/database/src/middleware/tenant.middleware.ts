@@ -43,10 +43,16 @@ export function withTenantContext(ctx: Ctx) {
       name: 'tenantContext',
       query: {
         $allOperations: async ({ model, operation, args }: any) => {
-          return parent.$transaction(async (tx: any) => {
-            await tx.$executeRawUnsafe(`SET LOCAL app.tenant_id = '${ctx.tenantId}'`);
-            return tx[model][operation](args);
-          });
+          return parent.$transaction(
+            async (tx: any) => {
+              await tx.$executeRawUnsafe(`SET LOCAL app.tenant_id = '${ctx.tenantId}'`);
+              return tx[model][operation](args);
+            },
+            {
+              maxWait: 10000,
+              timeout: 15000,
+            },
+          );
         },
       },
     }),
