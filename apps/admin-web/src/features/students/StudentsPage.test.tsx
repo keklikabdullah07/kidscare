@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { StudentsPage } from './StudentsPage';
 
@@ -128,5 +128,34 @@ describe('StudentsPage', () => {
     await waitFor(() => {
       expect(screen.queryByText('Yeni Öğrenci Ekle')).not.toBeInTheDocument();
     });
+  });
+
+  it('rejects submit and displays error if dateOfBirth is in the future', async () => {
+    const fetchSpy = mockFetchByUrl({
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+    });
+
+    const user = userEvent.setup();
+    render(<StudentsPage />);
+
+    expect(await screen.findByText('Ada Yılmaz')).toBeInTheDocument();
+
+    const addBtn = screen.getByRole('button', { name: /yeni öğrenci/i });
+    await user.click(addBtn);
+
+    expect(await screen.findByText('Yeni Öğrenci Ekle')).toBeInTheDocument();
+
+    await user.type(screen.getByLabelText(/^ad$/i), 'Gelecek');
+    await user.type(screen.getByLabelText(/^soyad$/i), 'Bebek');
+    fireEvent.change(screen.getByLabelText(/doğum tarihi/i), { target: { value: '2099-01-01' } });
+    const form = screen.getByRole('dialog').querySelector('form')!;
+    fireEvent.submit(form);
+
+    expect(
+      await screen.findByText('Doğum tarihi bugünden ileri bir tarih olamaz'),
+    ).toBeInTheDocument();
+
+    const postCall = fetchSpy.mock.calls.find(([, init]) => init?.method === 'POST');
+    expect(postCall).toBeUndefined();
   });
 });

@@ -31,16 +31,37 @@ describe('studentCreateSchema', () => {
     ).toThrow();
   });
 
-  it('accepts optional gender and notes', () => {
+  it('rejects a future date of birth', () => {
+    const futureDate = new Date();
+    futureDate.setFullYear(futureDate.getFullYear() + 1);
+    const dateStr = futureDate.toISOString().slice(0, 10);
+    expect(() =>
+      studentCreateSchema.parse({
+        firstName: 'Ada',
+        lastName: 'Yılmaz',
+        dateOfBirth: dateStr,
+      }),
+    ).toThrow('Doğum tarihi bugünden ileri bir tarih olamaz');
+  });
+
+  it('rejects emergency contact with empty or blank phone', () => {
     expect(() =>
       studentCreateSchema.parse({
         firstName: 'Ada',
         lastName: 'Yılmaz',
         dateOfBirth: '2020-05-12',
-        gender: 'female',
-        notes: 'Alerji: fıstık',
+        passport: {
+          emergencyContacts: [
+            {
+              id: 'c1',
+              name: 'Veli',
+              relationship: 'Anne',
+              phone: '',
+            },
+          ],
+        },
       }),
-    ).not.toThrow();
+    ).toThrow();
   });
 });
 

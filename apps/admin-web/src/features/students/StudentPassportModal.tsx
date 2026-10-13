@@ -112,7 +112,15 @@ export function StudentPassportModal({
   }
 
   function addContact() {
-    if (!cName.trim() || !cPhone.trim()) return;
+    if (!cName.trim()) {
+      setError('Kişi adı boş bırakılamaz');
+      return;
+    }
+    if (!cPhone.trim() || cPhone.trim().length < 3) {
+      setError('Telefon numarası en az 3 karakter olmalıdır');
+      return;
+    }
+    setError(null);
     const newContact: EmergencyContact = {
       id: `ec-${Date.now()}`,
       name: cName.trim(),
@@ -133,6 +141,7 @@ export function StudentPassportModal({
 
   async function handleSave(e: FormEvent) {
     e.preventDefault();
+    if (saving) return;
     setSaving(true);
     setError(null);
     try {

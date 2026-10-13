@@ -49,8 +49,13 @@ export function PickupContactsModal({
 
   async function submitAdd(e: FormEvent): Promise<void> {
     e.preventDefault();
+    if (submitting) return;
     if (!fullName.trim() || !relation.trim() || !phone.trim()) {
       showToast('Ad, yakınlık ve telefon zorunlu.', 'error');
+      return;
+    }
+    if (phone.trim().length < 3) {
+      showToast('Telefon numarası en az 3 karakter olmalıdır.', 'error');
       return;
     }
     setSubmitting(true);

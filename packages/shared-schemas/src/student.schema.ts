@@ -12,11 +12,26 @@ export const bloodTypeSchema = z.enum([
   'UNKNOWN',
 ]);
 
+export const dateOfBirthSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-AA-GG formatında olmalı')
+  .refine(
+    (val) => {
+      const today = new Date().toISOString().slice(0, 10);
+      return val <= today;
+    },
+    { message: 'Doğum tarihi bugünden ileri bir tarih olamaz' },
+  );
+
 export const emergencyContactSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1).max(100),
   relationship: z.string().min(1).max(50),
-  phone: z.string().min(3).max(30),
+  phone: z
+    .string()
+    .trim()
+    .min(3, 'Telefon numarası en az 3 karakter olmalıdır')
+    .max(30, 'Telefon numarası en fazla 30 karakter olabilir'),
   isAuthorizedPickup: z.boolean().default(false),
 });
 
@@ -37,7 +52,7 @@ export const studentCreateSchema = z.object({
   classroomId: z.string().nullable().optional(),
   firstName: z.string().min(1).max(64),
   lastName: z.string().min(1).max(64),
-  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-AA-GG formatında olmalı'),
+  dateOfBirth: dateOfBirthSchema,
   gender: z.string().max(16).optional(),
   notes: z.string().max(2000).optional(),
   passport: studentPassportSchema.optional(),
@@ -49,10 +64,7 @@ export const studentUpdateSchema = z
     classroomId: z.string().nullable().optional(),
     firstName: z.string().min(1).max(64).optional(),
     lastName: z.string().min(1).max(64).optional(),
-    dateOfBirth: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-AA-GG formatında olmalı')
-      .optional(),
+    dateOfBirth: dateOfBirthSchema.optional(),
     gender: z.string().max(16).nullable().optional(),
     notes: z.string().max(2000).nullable().optional(),
     passport: studentPassportSchema.nullable().optional(),

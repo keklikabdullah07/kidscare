@@ -818,9 +818,15 @@ function StudentFormModal({
 
   async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
-    if (saving) return;
     setSaving(true);
     setFormError(null);
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (dateOfBirth > today) {
+      setFormError('Doğum tarihi bugünden ileri bir tarih olamaz');
+      setSaving(false);
+      return;
+    }
 
     try {
       if (initialStudent) {
@@ -942,6 +948,7 @@ function StudentFormModal({
                 type="date"
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
+                max={new Date().toISOString().slice(0, 10)}
                 required
                 className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-white px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
               />

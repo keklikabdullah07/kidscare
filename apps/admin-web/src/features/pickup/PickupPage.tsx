@@ -175,6 +175,7 @@ export function PickupPage(): JSX.Element {
 
   async function submitHandover(e: React.FormEvent): Promise<void> {
     e.preventDefault();
+    if (handoverSubmitting) return;
     if (!handoverStudentId) {
       showToast('Lütfen teslim edilecek öğrenciyi seçin.', 'error');
       return;
@@ -211,6 +212,7 @@ export function PickupPage(): JSX.Element {
 
   async function submitAddContact(e: React.FormEvent): Promise<void> {
     e.preventDefault();
+    if (addContactSubmitting) return;
     if (!newStudentId) {
       showToast('Lütfen öğrenci seçin.', 'error');
       return;
@@ -221,6 +223,10 @@ export function PickupPage(): JSX.Element {
     }
     if (!newPhone.trim()) {
       showToast('Lütfen iletişim telefonunu girin.', 'error');
+      return;
+    }
+    if (newPhone.trim().length < 3) {
+      showToast('Telefon numarası en az 3 karakter olmalıdır.', 'error');
       return;
     }
 

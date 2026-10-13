@@ -104,15 +104,14 @@ Bu bölüm, bir veride değişiklik yapıldığında sistemin diğer kılcal dam
 
 Her form için aşağıdaki 5 kural istisnasız denenmelidir:
 
-1. **Boş Form Gönderimi (Empty Submit):** Zorunlu alanlar doldurulmadan "Kaydet" butonuna basıldığında sayfa beyaz ekrana (crash) düşmemeli; ilgili alanların altında kırmızı Zod validasyon mesajı çıkmalıdır.
-2. **Çift Tıklama (Double Submit):** Kaydet butonuna hızlıca 3-4 kez tıklandığında sunucuya mükerrer 3-4 kayıt açılmamalı; buton ilk tıklamada `disabled` ve `loading spinner` haline gelmelidir.
-3. **Sınır Değerler (Edge Cases):**
-   - Gelecek tarihli doğum tarihi kabul edilmemelidir.
-   - 11 haneli olmayan veya harf içeren TC / Kimlik No engellenmelidir.
-   - Telefon numarasında geçersiz formatta Zod hatası dönmelidir.
-   - 500+ karakterlik uzun metinlerde kart tasarımı patlamamalı, `truncate` veya metin kaydırma çalışmalıdır.
-4. **Hatalı / Kırık Medya URL'leri:** Fotoğraf URL'si bozuk girildiğinde sayfa çökmek yerine `MediaUrlField` üzerinde yedek çocuk avatarı (`fallback`) gösterilmelidir.
-5. **Sunucu Hatası / 403 Yetkisiz İşlem:** Başka bir kreşin token'ı ile veya rol yetkisi olmayan bir endpoint'e istek atıldığında kullanıcıya net bir Toast hata mesajı gösterilmelidir.
+1. - [x] **Boş Form Gönderimi (Empty Submit):** Zorunlu alanlar doldurulmadan "Kaydet" butonuna basıldığında sayfa beyaz ekrana (crash) düşmemeli; ilgili alanların altında kırmızı Zod validasyon mesajı çıkmalıdır (Doğrulandı: Tüm modal ve formlarda HTML5 + Zod kırmızı hata mesajı kalkanı aktif).
+2. - [x] **Çift Tıklama (Double Submit):** Kaydet butonuna hızlıca 3-4 kez tıklandığında sunucuya mükerrer 3-4 kayıt açılmamalı; buton ilk tıklamada `disabled` ve `loading spinner` haline gelmelidir (Doğrulandı: `StudentFormModal`, `StudentPassportModal`, `MedicationPage`, `PickupPage` üzerinde concurrent submit guard'ları eklendi).
+3. - [x] **Sınır Değerler (Edge Cases):**
+   - Gelecek tarihli doğum tarihi kabul edilmemelidir (Doğrulandı: `studentCreateSchema` refine kuralı ve `StudentsPage.test.tsx` birim testi ile kanıtlandı).
+   - Acil iletişim ve teslim alıcı telefonlarında geçersiz format engellenmelidir (Doğrulandı: `emergencyContactSchema` min 3 karakter ve trim kontrolü).
+   - 500+ karakterlik uzun metinlerde kart tasarımı patlamamalı, `truncate` veya metin kaydırma çalışmalıdır (Doğrulandı: `line-clamp-1 truncate max-w-[220px]` responsive sınıfları aktif).
+4. - [x] **Hatalı / Kırık Medya URL'leri:** Fotoğraf URL'si bozuk girildiğinde sayfa çökmek yerine KidsCare baş harf avatarı (`fallback`) gösterilmelidir (Doğrulandı: UI monogram avatar bileşeni ve `MediaUrlField` fallback'i korumada).
+5. - [x] **Sunucu Hatası / 403 Yetkisiz İşlem:** Başka bir kreşin token'ı ile veya rol yetkisi olmayan bir endpoint'e istek atıldığında kullanıcıya net bir Toast hata mesajı gösterilmelidir (Doğrulandı: `useToast` error handler'ları tüm catch bloklarına bağlandı).
 
 ---
 

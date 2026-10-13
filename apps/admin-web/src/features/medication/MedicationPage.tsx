@@ -261,7 +261,7 @@ export function MedicationPage(): JSX.Element {
   }
 
   async function handleConfirmDelete(): Promise<void> {
-    if (!deleteRecord) return;
+    if (!deleteRecord || deleteSubmitting) return;
     setDeleteSubmitting(true);
     try {
       await deleteMedicationRecord(deleteRecord.id);
@@ -283,7 +283,7 @@ export function MedicationPage(): JSX.Element {
 
   async function handleSubmitAdminister(e: FormEvent): Promise<void> {
     e.preventDefault();
-    if (!administerRecord) return;
+    if (!administerRecord || administerSubmitting) return;
     setAdministerSubmitting(true);
     try {
       await markMedicationGiven(administerRecord.id, {
@@ -306,6 +306,7 @@ export function MedicationPage(): JSX.Element {
 
   async function handleSubmitCreate(e: FormEvent): Promise<void> {
     e.preventDefault();
+    if (createSubmitting) return;
     if (!formStudentId) {
       showToast('Lütfen öğrenci seçin.', 'error');
       return;
