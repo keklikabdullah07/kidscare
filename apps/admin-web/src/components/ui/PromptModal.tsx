@@ -95,7 +95,7 @@ export function PromptModal({
       }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
     >
-      <div className="relative w-full max-w-md bg-white dark:bg-[#131B2E] rounded-3xl shadow-2xl border-2 border-[#DDD4C4] dark:border-slate-800 overflow-hidden transform transition-all">
+      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto flex flex-col bg-white dark:bg-[#131B2E] rounded-3xl shadow-2xl border-2 border-[#DDD4C4] dark:border-slate-800 transform transition-all">
         {/* Header */}
         <div className="flex items-start justify-between p-5 pb-4 border-b border-[#DDD4C4]/80 dark:border-slate-800 bg-[#FCFAF7]/90 dark:bg-slate-900/50">
           <div className="flex items-center gap-3">

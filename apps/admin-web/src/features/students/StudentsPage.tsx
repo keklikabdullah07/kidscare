@@ -879,7 +879,7 @@ function StudentFormModal({
       }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-150"
     >
-      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-800 shadow-2xl border border-slate-200 dark:border-slate-700/80 overflow-hidden flex flex-col">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-slate-800 shadow-2xl border border-slate-200 dark:border-slate-700/80 flex flex-col">
         <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/80 bg-slate-50/80 dark:bg-slate-800/90 px-6 py-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-teal-100 dark:bg-teal-950/80 text-teal-900 dark:text-teal-300 flex items-center justify-center">
