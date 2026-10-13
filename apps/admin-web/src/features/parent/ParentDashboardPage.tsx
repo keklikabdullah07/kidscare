@@ -1,4 +1,4 @@
-import { useState, useEffect, type JSX } from 'react';
+import { useState, useEffect, useMemo, type JSX } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Heart,
@@ -239,6 +239,29 @@ export function ParentDashboardPage(): JSX.Element {
       setIsSubmittingMed(false);
     }
   }
+
+  // Filter medications for the selected date:
+  // - Pending requests (REQUESTED) or Scheduled (SCHEDULED, APPROVED) remain visible if not yet processed or scheduled for selectedDate
+  // - Given (GIVEN) or Skipped (SKIPPED) records only display if givenAt or scheduledAt falls on selectedDate
+  const visibleMedications = useMemo(() => {
+    return medications.filter((med: MedicationRecord) => {
+      if (med.status === 'GIVEN') {
+        const givenDateStr = med.givenAt
+          ? new Date(med.givenAt).toISOString().slice(0, 10)
+          : med.scheduledAt
+            ? new Date(med.scheduledAt).toISOString().slice(0, 10)
+            : '';
+        return givenDateStr === selectedDate;
+      }
+      if (med.status === 'SKIPPED' || med.status === 'REJECTED') {
+        const schedDateStr = med.scheduledAt
+          ? new Date(med.scheduledAt).toISOString().slice(0, 10)
+          : '';
+        return schedDateStr === selectedDate;
+      }
+      return true;
+    });
+  }, [medications, selectedDate]);
 
   const renderMedicationStatusBadge = (status: string) => {
     switch (status) {
@@ -904,13 +927,13 @@ export function ParentDashboardPage(): JSX.Element {
                   </button>
                 </div>
 
-                {medications.length === 0 ? (
+                {visibleMedications.length === 0 ? (
                   <div className="py-6 text-center text-slate-400 dark:text-slate-300">
                     <p className="text-xs">Aktif kayıtlı ilaç verme talebi bulunmuyor.</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {medications.map((med) => (
+                    {visibleMedications.map((med: MedicationRecord) => (
                       <div
                         key={med.id}
                         className="p-3.5 rounded-2xl border border-[#DDD4C4]/70 dark:border-slate-700/60 bg-[#FCFAF7] dark:bg-slate-900/60 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs"

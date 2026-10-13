@@ -37,6 +37,7 @@ export class StudentsService {
       notes: input.notes ?? null,
       passport: (input.passport as unknown as Prisma.InputJsonValue) ?? {},
       parentId: input.parentId ?? null,
+      classroomId: input.classroomId ?? null,
     });
     return Student.fromPrisma(created);
   }
@@ -55,6 +56,13 @@ export class StudentsService {
     if (input.passport !== undefined)
       data.passport = input.passport as unknown as Prisma.InputJsonValue;
     if (input.isActive !== undefined) data.isActive = input.isActive;
+    if (input.classroomId !== undefined) {
+      if (input.classroomId) {
+        data.classroom = { connect: { id: input.classroomId } };
+      } else {
+        data.classroom = { disconnect: true };
+      }
+    }
     if (input.parentId !== undefined) {
       if (input.parentId) {
         await this.usersService.assertParentUser(tenantId, input.parentId);

@@ -9,10 +9,13 @@ import { apiFetch } from './client';
 export async function listMedicationRecords(
   studentId?: string,
   status?: StandaloneMedicationStatus,
+  opts?: { from?: string; to?: string },
 ): Promise<MedicationRecord[]> {
   const qs = new URLSearchParams();
   if (studentId) qs.set('studentId', studentId);
   if (status) qs.set('status', status);
+  if (opts?.from) qs.set('from', opts.from);
+  if (opts?.to) qs.set('to', opts.to);
   return apiFetch<MedicationRecord[]>(`/medication/records?${qs.toString()}`);
 }
 

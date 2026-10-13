@@ -19,7 +19,7 @@ export class DailyMenusService {
   constructor(
     @Inject(DailyMenusRepository) private readonly repository: DailyMenusRepository,
     @Inject(StudentsRepository) private readonly studentsRepository: StudentsRepository,
-    private readonly allergenMatcher: AllergenMatcher,
+    @Inject(AllergenMatcher) private readonly allergenMatcher: AllergenMatcher,
   ) {}
 
   private parseDate(dateStr: string): Date {

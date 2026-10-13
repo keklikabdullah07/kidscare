@@ -138,4 +138,23 @@ describe('ParentRequestsPage', () => {
       expect(screen.getByText(/kayıtlı talep bulunmuyor/i)).toBeInTheDocument();
     });
   });
+
+  it('renders resolve buttons for pending request', async () => {
+    mockFetchByUrl({
+      '/messaging/parent-requests': () =>
+        new Response(JSON.stringify(fakeRequests), { status: 200 }),
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+    });
+
+    render(
+      <ToastProvider>
+        <ParentRequestsPage />
+      </ToastProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Onayla/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Reddet/i })).toBeInTheDocument();
+    });
+  });
 });

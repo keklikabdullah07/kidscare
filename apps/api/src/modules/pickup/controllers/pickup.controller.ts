@@ -83,7 +83,7 @@ export class PickupController {
 
   // ===== Authorizations =====
   @Get('authorizations')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async listAuthorizations(
     @CurrentTenantId() tenantId: string,
     @Query('studentId') studentId?: string,

@@ -11,6 +11,7 @@ import type {
   MedicationEntry,
 } from '@kidscare/shared-types';
 import { getStudentDailyReport, saveStudentDailyReport } from '../../api/daily-reports';
+import { listMedicationRecords } from '../../api/medication';
 
 const MOODS: { key: StudentMood; label: string; emoji: string; color: string }[] = [
   {
@@ -142,7 +143,7 @@ export function DailyReportEditorModal({
           setTeacherNote(report.teacherNote ?? '');
           setMedications(report.medications ?? []);
         } else {
-          // Reset for new
+          // Reset for new & automatically pre-fill active/regular medications
           setMood(undefined);
           setBreakfast(undefined);
           setLunch(undefined);
@@ -155,12 +156,64 @@ export function DailyReportEditorModal({
           setPottyEntries([]);
           setActivities([]);
           setTeacherNote('');
-          setMedications([]);
           setMedName('');
           setMedTime('13:00');
           setMedDosage('');
           setMedTemperature('');
           setMedNotes('');
+
+          // Pre-populate medications from regularMedications or approved records
+          const initialMeds: MedicationEntry[] = [];
+          if (
+            student.passport?.regularMedications &&
+            student.passport.regularMedications.length > 0
+          ) {
+            student.passport.regularMedications.forEach((medName, idx) => {
+              initialMeds.push({
+                id: `regular-${idx}-${Date.now()}`,
+                name: medName,
+                time: '13:00',
+                dosage: 'Düzenli Doz',
+                givenBy: 'Öğretmen',
+                status: 'SCHEDULED',
+                notes: 'Öğrenci sağlık pasaportu düzenli ilacı',
+              });
+            });
+          }
+          setMedications(initialMeds);
+
+          listMedicationRecords(student.id)
+            .then((records) => {
+              if (cancelled) return;
+              const activeRecords = records.filter(
+                (r) =>
+                  r.status === 'APPROVED' || r.status === 'SCHEDULED' || r.status === 'REQUESTED',
+              );
+              if (activeRecords.length > 0) {
+                const mapped: MedicationEntry[] = activeRecords.map((r, idx) => ({
+                  id: r.id || `rec-${idx}`,
+                  name: r.medicationName,
+                  time: r.scheduledAt
+                    ? new Date(r.scheduledAt).toLocaleTimeString('tr-TR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    : '13:00',
+                  dosage: r.dosage,
+                  givenBy: 'Öğretmen',
+                  status: 'SCHEDULED',
+                  notes: r.instructions || r.parentApprovalNote || undefined,
+                }));
+                setMedications((prev) => {
+                  const existingNames = new Set(prev.map((m) => m.name.toLowerCase()));
+                  const uniqueNew = mapped.filter((m) => !existingNames.has(m.name.toLowerCase()));
+                  return [...prev, ...uniqueNew];
+                });
+              }
+            })
+            .catch(() => {
+              // Silently fallback to passport regular medications
+            });
         }
         setLoading(false);
       })

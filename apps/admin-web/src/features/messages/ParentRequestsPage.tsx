@@ -425,32 +425,33 @@ export function ParentRequestsPage(): JSX.Element {
                 </div>
               )}
 
-              {/* Yönetici Aksiyon Butonları (Tek Etkileşimli Varlık İlkesi) */}
-              {(role === 'ADMIN' || role === 'SUPER_ADMIN') && r.status === 'PENDING' && (
-                <div className="flex items-center gap-2.5 pt-3 border-t border-[#DDD4C4] dark:border-slate-800">
-                  <TactileButton
-                    variant="teal"
-                    size="sm"
-                    className="flex-1"
-                    disabled={busyId === r.id}
-                    onClick={() => void resolve(r.id, 'APPROVED')}
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                    Onayla
-                  </TactileButton>
+              {/* Yönetici & Öğretmen Aksiyon Butonları (Tek Etkileşimli Varlık İlkesi) */}
+              {(role === 'ADMIN' || role === 'SUPER_ADMIN' || role === 'TEACHER') &&
+                r.status === 'PENDING' && (
+                  <div className="flex items-center gap-2.5 pt-3 border-t border-[#DDD4C4] dark:border-slate-800">
+                    <TactileButton
+                      variant="teal"
+                      size="sm"
+                      className="flex-1"
+                      disabled={busyId === r.id}
+                      onClick={() => void resolve(r.id, 'APPROVED')}
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                      Onayla
+                    </TactileButton>
 
-                  <TactileButton
-                    variant="danger"
-                    size="sm"
-                    className="flex-1"
-                    disabled={busyId === r.id}
-                    onClick={() => void resolve(r.id, 'REJECTED')}
-                  >
-                    <XCircle className="w-4 h-4 text-rose-200" />
-                    Reddet
-                  </TactileButton>
-                </div>
-              )}
+                    <TactileButton
+                      variant="danger"
+                      size="sm"
+                      className="flex-1"
+                      disabled={busyId === r.id}
+                      onClick={() => void resolve(r.id, 'REJECTED')}
+                    >
+                      <XCircle className="w-4 h-4 text-rose-200" />
+                      Reddet
+                    </TactileButton>
+                  </div>
+                )}
             </div>
           ))}
         </div>

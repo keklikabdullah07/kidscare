@@ -123,6 +123,7 @@ describe('StudentsService', () => {
         notes: null,
         passport: {},
         parentId: null,
+        classroomId: null,
       });
     });
   });
@@ -133,6 +134,22 @@ describe('StudentsService', () => {
       repo.update.mockResolvedValue({ ...mockStudent, firstName: 'Yeni' });
       const result = await service.update('t-1', 's-1', { firstName: 'Yeni' });
       expect(result.firstName).toBe('Yeni');
+    });
+
+    it('connects classroom when classroomId is provided', async () => {
+      repo.findById.mockResolvedValue(mockStudent);
+      repo.update.mockResolvedValue({ ...mockStudent, classroomId: 'c-1' });
+      await service.update('t-1', 's-1', { classroomId: 'c-1' });
+      const updateCall = repo.update.mock.calls[0];
+      expect(updateCall?.[2]).toEqual({ classroom: { connect: { id: 'c-1' } } });
+    });
+
+    it('disconnects classroom when classroomId is null', async () => {
+      repo.findById.mockResolvedValue({ ...mockStudent, classroomId: 'c-1' });
+      repo.update.mockResolvedValue({ ...mockStudent, classroomId: null });
+      await service.update('t-1', 's-1', { classroomId: null });
+      const updateCall = repo.update.mock.calls[0];
+      expect(updateCall?.[2]).toEqual({ classroom: { disconnect: true } });
     });
 
     it('throws NotFoundException when missing', async () => {

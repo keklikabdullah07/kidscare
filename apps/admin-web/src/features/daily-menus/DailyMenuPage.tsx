@@ -61,7 +61,9 @@ export function DailyMenuPage(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  const canEdit = authState.status === 'authenticated' && authState.user.role !== 'PARENT';
+  const canEdit =
+    authState.status === 'authenticated' &&
+    (authState.user.role === 'ADMIN' || authState.user.role === 'SUPER_ADMIN');
 
   // Form states
   const [breakfastInput, setBreakfastInput] = useState('');
