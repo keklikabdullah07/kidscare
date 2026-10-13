@@ -37,7 +37,8 @@ Detaylı dağıtım, ortam değişkenleri ve APK derleme rehberi için: **[docs/
 
 ```bash
 pnpm install
-pnpm db:up                  # Postgres + Redis ayağa kalkar
+pnpm db:up                  # Postgres + Redis ayağa kalkar (Docker Desktop)
+pnpm db:wsl                 # Docker Desktop açılmıyorsa WSL üzerinden direkt ayağa kaldırır
 cp .env.example .env        # gerekirse düzenle
 pnpm db:migrate             # tabloları ve RLS politikalarını uygular
 pnpm db:seed                # demo tenant + 2 kullanıcı

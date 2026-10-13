@@ -19,7 +19,9 @@ DB ve Redis'i ayağa kaldır, backend ve admin-web'i başlat.
 
 ```bash
 # Terminal 1 — bir kez (DB zaten ayakta ise atlayabilirsin)
-pnpm db:up
+pnpm db:up            # Docker Desktop acik ise
+# VEYA Docker Desktop acilmiyorsa / acmak istemiyorsan:
+pnpm db:wsl           # Docker Desktop OLMADAN, dogrudan WSL uzerinden Postgres & Redis'i ayaga kaldirir
 
 # Terminal 1 — backend
 pnpm dev:api
@@ -27,10 +29,10 @@ pnpm dev:api
 
 # Terminal 2 — admin-web
 pnpm dev:admin
-# → http://localhost:5173
+# → http://localhost:5174
 ```
 
-**Tarayıcıda**: http://localhost:5173 → `demo` + `admin@demo.test` + `demo1234`
+**Tarayıcıda**: http://localhost:5174 → `demo` + `admin@demo.test` + `KidsCare.2026!`
 
 ---
 

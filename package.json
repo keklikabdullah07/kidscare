@@ -8,6 +8,7 @@
   },
   "scripts": {
     "db:up": "docker compose up -d",
+    "db:wsl": "powershell -ExecutionPolicy Bypass -File ./scripts/start-wsl-db.ps1",
     "db:down": "docker compose down",
     "db:migrate": "pnpm --filter @kidscare/database prisma migrate deploy",
     "db:migrate:dev": "pnpm --filter @kidscare/database prisma migrate dev",
