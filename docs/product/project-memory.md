@@ -58,10 +58,9 @@ Piyasa ve ürün analizi: `docs/product/market-research-and-differentiation.md`
 >    - **Faz A: Yönetici & Kurulum Testleri (ADMIN)**: %100 BAŞARILI (A1-A5 Doğrulandı) ✅
 >    - **Faz B: Öğretmen & Sınıf İçi Operasyon (TEACHER)**: %100 BAŞARILI (B1-B7 Doğrulandı) ✅
 >    - **Faz C: Veli & Tüketim Testleri (PARENT)**: %100 BAŞARILI (C1-C6 Doğrulandı, URL İzolasyon Kalkanı aktif) ✅
-> 3. **Tamamlanan Özellik:** `specs/done/0030-admin-web-mobile-responsive-experience.md`
->    - Akıllı telefon tarayıcıları için rol bazlı alt navigasyon barı (`MobileBottomNav`),
->    - Öğrenciler ve Yoklama ekranlarında dokunsal kart blokları ve 44px dokunma hedefleri,
->    - Modalların küçük ekranlarda taşmasını önleyen `max-h-[90vh]` ve `overflow-y-auto` sınırları,
+> 3. **Tamamlanan Özellikler:**
+>    - `specs/done/0030-admin-web-mobile-responsive-experience.md`: Akıllı telefon tarayıcıları için rol bazlı alt navigasyon barı (`MobileBottomNav`), responsive kart blokları ve taşma koruması. ✅
+>    - `specs/done/0031-web-notifications-center.md`: Web Paneli Bildirim Merkezi (`NotificationBell`, `NotificationPopover`, `useNotifications`, API istemcisi, rozet, polling ve tarayıcı masaüstü bildirimi). ✅
 >    - Tüm monorepo testleri (`./scripts/check.ps1`) %100 yeşil tamamlandı. ✅
 
 ## Mimari Kurallar

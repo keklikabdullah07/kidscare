@@ -29,6 +29,7 @@ import { useTheme } from './ThemeContext';
 import { KidsCareLogo } from './KidsCareLogo';
 import { Badge, type BadgeVariant } from './ui/Badge';
 import { MobileBottomNav } from './navigation/MobileBottomNav';
+import { NotificationBell } from './notifications/NotificationBell';
 
 type NavItem = {
   to: string;
@@ -419,6 +420,7 @@ export function Layout(): JSX.Element {
               <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
               Kreş Aktif & Güvenli
             </div>
+            <NotificationBell />
             <button
               type="button"
               onClick={toggleTheme}
