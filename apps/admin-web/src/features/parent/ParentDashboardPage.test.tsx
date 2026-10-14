@@ -404,4 +404,122 @@ describe('ParentDashboardPage', () => {
       expect(contactCreated).toBe(true);
     });
   });
+
+  it('allows parent to submit attendance excuse', async () => {
+    let excuseCreated = false;
+    mockFetchByUrl({
+      '/parent/children': () =>
+        new Response(JSON.stringify({ data: fakeOverview }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/daily-menus': () =>
+        new Response(JSON.stringify(fakeMenu), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/events/consents': () =>
+        new Response(JSON.stringify([]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/attendance/excuses': (init) => {
+        if (init?.method === 'POST') {
+          excuseCreated = true;
+          return new Response(JSON.stringify({ id: 'exc-1', status: 'PENDING' }), {
+            status: 201,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        return new Response(JSON.stringify([]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      },
+    });
+
+    render(<ParentDashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ada Yılmaz')).toBeInTheDocument();
+    });
+
+    const excuseBtn = screen.getByRole('button', { name: /Gelemeyeceğimizi Bildir/i });
+    expect(excuseBtn).toBeInTheDocument();
+    excuseBtn.click();
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Gelemeyeceğimizi Bildir' })).toBeInTheDocument();
+    });
+
+    const { fireEvent } = await import('@testing-library/react');
+    const submitBtn = screen.getByRole('button', { name: /Bildirimi Gönder/i });
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(excuseCreated).toBe(true);
+    });
+  });
+
+  it('renders active event consents and allows parent to respond', async () => {
+    let consentResponded = false;
+    mockFetchByUrl({
+      '/parent/children': () =>
+        new Response(JSON.stringify({ data: fakeOverview }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/daily-menus': () =>
+        new Response(JSON.stringify(fakeMenu), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/events/consents': () =>
+        new Response(
+          JSON.stringify([
+            {
+              id: 'consent-1',
+              title: 'AKM Çocuk Tiyatrosu',
+              eventDate: '2026-10-25T10:00:00Z',
+              location: 'AKM Büyük Salon',
+              price: 150,
+              description: 'Kırmızı Başlıklı Kız oyunu',
+              status: 'ACTIVE',
+              myResponse: null,
+            },
+          ]),
+          {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          },
+        ),
+      '/events/consents/consent-1/respond': (init) => {
+        if (init?.method === 'POST') {
+          consentResponded = true;
+          return new Response(JSON.stringify({ id: 'resp-1', decision: 'APPROVED' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        return new Response(JSON.stringify({ message: 'ok' }), { status: 200 });
+      },
+    });
+
+    render(<ParentDashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('AKM Çocuk Tiyatrosu')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('AKM Büyük Salon')).toBeInTheDocument();
+    expect(screen.getByText('150 TL')).toBeInTheDocument();
+
+    const approveBtn = screen.getByRole('button', { name: /İzin Veriyorum/i });
+    expect(approveBtn).toBeInTheDocument();
+    approveBtn.click();
+
+    await waitFor(() => {
+      expect(consentResponded).toBe(true);
+    });
+  });
 });

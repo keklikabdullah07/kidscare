@@ -41,3 +41,32 @@ export type AttendanceUpdateInput = {
   pickupNote?: string | null | undefined;
   note?: string | null | undefined;
 };
+
+export type AttendanceExcuseReason = 'SICKNESS' | 'FAMILY_LEAVE' | 'TRAVEL' | 'DOCTOR' | 'OTHER';
+
+export type AttendanceExcuse = {
+  id: string;
+  tenantId: string;
+  studentId: string;
+  date: string; // YYYY-MM-DD
+  reason: AttendanceExcuseReason;
+  notes?: string | null | undefined;
+  status: 'PENDING' | 'ACKNOWLEDGED';
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+  student?:
+    | {
+        id: string;
+        firstName: string;
+        lastName: string;
+      }
+    | undefined;
+};
+
+export type CreateAttendanceExcuseInput = {
+  studentId: string;
+  date: string; // YYYY-MM-DD
+  reason: AttendanceExcuseReason;
+  notes?: string | undefined;
+};

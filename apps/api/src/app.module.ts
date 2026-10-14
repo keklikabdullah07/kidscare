@@ -25,6 +25,7 @@ import { IncidentsModule } from './modules/incidents/incidents.module';
 import { DevelopmentModule } from './modules/development/development.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { MediaModule } from './modules/media/media.module';
+import { ConsentsModule } from './modules/consents/consents.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { MediaModule } from './modules/media/media.module';
     DevelopmentModule,
     NotificationsModule,
     MediaModule,
+    ConsentsModule,
   ],
 
   providers: [

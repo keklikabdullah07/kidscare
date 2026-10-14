@@ -448,6 +448,46 @@ exports.Prisma.MediaFileScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.AttendanceExcuseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  date: 'date',
+  reason: 'reason',
+  notes: 'notes',
+  status: 'status',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.EventConsentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  classroomId: 'classroomId',
+  title: 'title',
+  eventDate: 'eventDate',
+  location: 'location',
+  price: 'price',
+  description: 'description',
+  deadline: 'deadline',
+  status: 'status',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.EventConsentResponseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  consentId: 'consentId',
+  studentId: 'studentId',
+  parentUserId: 'parentUserId',
+  decision: 'decision',
+  notes: 'notes',
+  respondedAt: 'respondedAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -607,6 +647,9 @@ exports.Prisma.ModelName = {
   UserPushToken: 'UserPushToken',
   Notification: 'Notification',
   MediaFile: 'MediaFile',
+  AttendanceExcuse: 'AttendanceExcuse',
+  EventConsent: 'EventConsent',
+  EventConsentResponse: 'EventConsentResponse',
 };
 
 /**

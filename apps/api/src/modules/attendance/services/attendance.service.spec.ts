@@ -28,6 +28,8 @@ describe('AttendanceService', () => {
       findByDate: jest.fn(),
       findByStudentAndDate: jest.fn(),
       upsert: jest.fn(),
+      createExcuse: jest.fn(),
+      findExcuses: jest.fn(),
     };
     service = new AttendanceService(repo);
   });
@@ -116,6 +118,78 @@ describe('AttendanceService', () => {
         note: 'İzinli',
       });
       expect(res.status).toBe('EXCUSED');
+    });
+  });
+
+  describe('createExcuse', () => {
+    it('saves excuse and marks attendance as EXCUSED', async () => {
+      repo.createExcuse.mockResolvedValue({
+        id: 'exc-1',
+        tenantId: 't-1',
+        studentId: 's-1',
+        date: new Date('2026-09-15'),
+        reason: 'SICKNESS',
+        notes: 'Grip',
+        status: 'PENDING',
+        createdById: 'u-1',
+        createdAt: new Date('2026-09-15T08:00:00Z'),
+        updatedAt: new Date('2026-09-15T08:00:00Z'),
+        student: { id: 's-1', firstName: 'Ada', lastName: 'Yılmaz' },
+      });
+      repo.upsert.mockResolvedValue(mockAttendance);
+
+      const res = await service.createExcuse('t-1', 'u-1', {
+        studentId: 's-1',
+        date: '2026-09-15',
+        reason: 'SICKNESS',
+        notes: 'Grip',
+      });
+
+      expect(res.id).toBe('exc-1');
+      expect(repo.createExcuse).toHaveBeenCalledWith(
+        't-1',
+        expect.objectContaining({
+          studentId: 's-1',
+          reason: 'SICKNESS',
+        }),
+      );
+      expect(repo.upsert).toHaveBeenCalledWith(
+        't-1',
+        's-1',
+        expect.any(Date),
+        expect.objectContaining({
+          status: 'EXCUSED',
+          note: expect.stringContaining('Hastalık'),
+        }),
+      );
+    });
+  });
+
+  describe('findExcuses', () => {
+    it('calls repo.findExcuses with parsed date', async () => {
+      repo.findExcuses.mockResolvedValue([
+        {
+          id: 'exc-1',
+          tenantId: 't-1',
+          studentId: 's-1',
+          date: new Date('2026-09-15'),
+          reason: 'SICKNESS',
+          notes: 'Grip',
+          status: 'PENDING',
+          createdById: 'u-1',
+          createdAt: new Date('2026-09-15T08:00:00Z'),
+          updatedAt: new Date('2026-09-15T08:00:00Z'),
+          student: { id: 's-1', firstName: 'Ada', lastName: 'Yılmaz' },
+        },
+      ]);
+      const res = await service.findExcuses('t-1', { dateStr: '2026-09-15' });
+      expect(res).toHaveLength(1);
+      expect(repo.findExcuses).toHaveBeenCalledWith(
+        't-1',
+        expect.objectContaining({
+          date: expect.any(Date),
+        }),
+      );
     });
   });
 });

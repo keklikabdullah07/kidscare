@@ -139,6 +139,21 @@ export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
  *
  */
 export type MediaFile = $Result.DefaultSelection<Prisma.$MediaFilePayload>;
+/**
+ * Model AttendanceExcuse
+ *
+ */
+export type AttendanceExcuse = $Result.DefaultSelection<Prisma.$AttendanceExcusePayload>;
+/**
+ * Model EventConsent
+ *
+ */
+export type EventConsent = $Result.DefaultSelection<Prisma.$EventConsentPayload>;
+/**
+ * Model EventConsentResponse
+ *
+ */
+export type EventConsentResponse = $Result.DefaultSelection<Prisma.$EventConsentResponsePayload>;
 
 /**
  * Enums
@@ -723,6 +738,36 @@ export class PrismaClient<
    * ```
    */
   get mediaFile(): Prisma.MediaFileDelegate<ExtArgs>;
+
+  /**
+   * `prisma.attendanceExcuse`: Exposes CRUD operations for the **AttendanceExcuse** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more AttendanceExcuses
+   * const attendanceExcuses = await prisma.attendanceExcuse.findMany()
+   * ```
+   */
+  get attendanceExcuse(): Prisma.AttendanceExcuseDelegate<ExtArgs>;
+
+  /**
+   * `prisma.eventConsent`: Exposes CRUD operations for the **EventConsent** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more EventConsents
+   * const eventConsents = await prisma.eventConsent.findMany()
+   * ```
+   */
+  get eventConsent(): Prisma.EventConsentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.eventConsentResponse`: Exposes CRUD operations for the **EventConsentResponse** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more EventConsentResponses
+   * const eventConsentResponses = await prisma.eventConsentResponse.findMany()
+   * ```
+   */
+  get eventConsentResponse(): Prisma.EventConsentResponseDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1182,6 +1227,9 @@ export namespace Prisma {
     UserPushToken: 'UserPushToken';
     Notification: 'Notification';
     MediaFile: 'MediaFile';
+    AttendanceExcuse: 'AttendanceExcuse';
+    EventConsent: 'EventConsent';
+    EventConsentResponse: 'EventConsentResponse';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -1227,7 +1275,10 @@ export namespace Prisma {
         | 'homeActivitySuggestion'
         | 'userPushToken'
         | 'notification'
-        | 'mediaFile';
+        | 'mediaFile'
+        | 'attendanceExcuse'
+        | 'eventConsent'
+        | 'eventConsentResponse';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -2981,6 +3032,216 @@ export namespace Prisma {
           };
         };
       };
+      AttendanceExcuse: {
+        payload: Prisma.$AttendanceExcusePayload<ExtArgs>;
+        fields: Prisma.AttendanceExcuseFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.AttendanceExcuseFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.AttendanceExcuseFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload>;
+          };
+          findFirst: {
+            args: Prisma.AttendanceExcuseFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.AttendanceExcuseFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload>;
+          };
+          findMany: {
+            args: Prisma.AttendanceExcuseFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload>[];
+          };
+          create: {
+            args: Prisma.AttendanceExcuseCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload>;
+          };
+          createMany: {
+            args: Prisma.AttendanceExcuseCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.AttendanceExcuseCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload>[];
+          };
+          delete: {
+            args: Prisma.AttendanceExcuseDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload>;
+          };
+          update: {
+            args: Prisma.AttendanceExcuseUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload>;
+          };
+          deleteMany: {
+            args: Prisma.AttendanceExcuseDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.AttendanceExcuseUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.AttendanceExcuseUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$AttendanceExcusePayload>;
+          };
+          aggregate: {
+            args: Prisma.AttendanceExcuseAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateAttendanceExcuse>;
+          };
+          groupBy: {
+            args: Prisma.AttendanceExcuseGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<AttendanceExcuseGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.AttendanceExcuseCountArgs<ExtArgs>;
+            result: $Utils.Optional<AttendanceExcuseCountAggregateOutputType> | number;
+          };
+        };
+      };
+      EventConsent: {
+        payload: Prisma.$EventConsentPayload<ExtArgs>;
+        fields: Prisma.EventConsentFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.EventConsentFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.EventConsentFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload>;
+          };
+          findFirst: {
+            args: Prisma.EventConsentFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.EventConsentFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload>;
+          };
+          findMany: {
+            args: Prisma.EventConsentFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload>[];
+          };
+          create: {
+            args: Prisma.EventConsentCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload>;
+          };
+          createMany: {
+            args: Prisma.EventConsentCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.EventConsentCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload>[];
+          };
+          delete: {
+            args: Prisma.EventConsentDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload>;
+          };
+          update: {
+            args: Prisma.EventConsentUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload>;
+          };
+          deleteMany: {
+            args: Prisma.EventConsentDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.EventConsentUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.EventConsentUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentPayload>;
+          };
+          aggregate: {
+            args: Prisma.EventConsentAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateEventConsent>;
+          };
+          groupBy: {
+            args: Prisma.EventConsentGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<EventConsentGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.EventConsentCountArgs<ExtArgs>;
+            result: $Utils.Optional<EventConsentCountAggregateOutputType> | number;
+          };
+        };
+      };
+      EventConsentResponse: {
+        payload: Prisma.$EventConsentResponsePayload<ExtArgs>;
+        fields: Prisma.EventConsentResponseFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.EventConsentResponseFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.EventConsentResponseFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload>;
+          };
+          findFirst: {
+            args: Prisma.EventConsentResponseFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.EventConsentResponseFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload>;
+          };
+          findMany: {
+            args: Prisma.EventConsentResponseFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload>[];
+          };
+          create: {
+            args: Prisma.EventConsentResponseCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload>;
+          };
+          createMany: {
+            args: Prisma.EventConsentResponseCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.EventConsentResponseCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload>[];
+          };
+          delete: {
+            args: Prisma.EventConsentResponseDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload>;
+          };
+          update: {
+            args: Prisma.EventConsentResponseUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload>;
+          };
+          deleteMany: {
+            args: Prisma.EventConsentResponseDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.EventConsentResponseUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.EventConsentResponseUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EventConsentResponsePayload>;
+          };
+          aggregate: {
+            args: Prisma.EventConsentResponseAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateEventConsentResponse>;
+          };
+          groupBy: {
+            args: Prisma.EventConsentResponseGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<EventConsentResponseGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.EventConsentResponseCountArgs<ExtArgs>;
+            result: $Utils.Optional<EventConsentResponseCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -3172,6 +3433,9 @@ export namespace Prisma {
     pushTokens: number;
     notifications: number;
     mediaFiles: number;
+    attendanceExcuses: number;
+    eventConsents: number;
+    eventConsentResponses: number;
   };
 
   export type TenantCountOutputTypeSelect<
@@ -3201,6 +3465,9 @@ export namespace Prisma {
     pushTokens?: boolean | TenantCountOutputTypeCountPushTokensArgs;
     notifications?: boolean | TenantCountOutputTypeCountNotificationsArgs;
     mediaFiles?: boolean | TenantCountOutputTypeCountMediaFilesArgs;
+    attendanceExcuses?: boolean | TenantCountOutputTypeCountAttendanceExcusesArgs;
+    eventConsents?: boolean | TenantCountOutputTypeCountEventConsentsArgs;
+    eventConsentResponses?: boolean | TenantCountOutputTypeCountEventConsentResponsesArgs;
   };
 
   // Custom InputTypes
@@ -3433,6 +3700,33 @@ export namespace Prisma {
   };
 
   /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountAttendanceExcusesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: AttendanceExcuseWhereInput;
+  };
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountEventConsentsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentWhereInput;
+  };
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountEventConsentResponsesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentResponseWhereInput;
+  };
+
+  /**
    * Count Type UserCountOutputType
    */
 
@@ -3457,6 +3751,9 @@ export namespace Prisma {
     pushTokens: number;
     notifications: number;
     uploadedMedia: number;
+    attendanceExcusesCreated: number;
+    eventConsentsCreated: number;
+    eventConsentResponses: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -3483,6 +3780,9 @@ export namespace Prisma {
     pushTokens?: boolean | UserCountOutputTypeCountPushTokensArgs;
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
     uploadedMedia?: boolean | UserCountOutputTypeCountUploadedMediaArgs;
+    attendanceExcusesCreated?: boolean | UserCountOutputTypeCountAttendanceExcusesCreatedArgs;
+    eventConsentsCreated?: boolean | UserCountOutputTypeCountEventConsentsCreatedArgs;
+    eventConsentResponses?: boolean | UserCountOutputTypeCountEventConsentResponsesArgs;
   };
 
   // Custom InputTypes
@@ -3679,6 +3979,33 @@ export namespace Prisma {
   };
 
   /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAttendanceExcusesCreatedArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: AttendanceExcuseWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventConsentsCreatedArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventConsentResponsesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentResponseWhereInput;
+  };
+
+  /**
    * Count Type StudentCountOutputType
    */
 
@@ -3694,6 +4021,8 @@ export namespace Prisma {
     incidentRecords: number;
     developmentObservations: number;
     portfolioItems: number;
+    attendanceExcuses: number;
+    eventConsentResponses: number;
   };
 
   export type StudentCountOutputTypeSelect<
@@ -3710,6 +4039,8 @@ export namespace Prisma {
     incidentRecords?: boolean | StudentCountOutputTypeCountIncidentRecordsArgs;
     developmentObservations?: boolean | StudentCountOutputTypeCountDevelopmentObservationsArgs;
     portfolioItems?: boolean | StudentCountOutputTypeCountPortfolioItemsArgs;
+    attendanceExcuses?: boolean | StudentCountOutputTypeCountAttendanceExcusesArgs;
+    eventConsentResponses?: boolean | StudentCountOutputTypeCountEventConsentResponsesArgs;
   };
 
   // Custom InputTypes
@@ -3825,12 +4156,31 @@ export namespace Prisma {
   };
 
   /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountAttendanceExcusesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: AttendanceExcuseWhereInput;
+  };
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountEventConsentResponsesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentResponseWhereInput;
+  };
+
+  /**
    * Count Type ClassroomCountOutputType
    */
 
   export type ClassroomCountOutputType = {
     students: number;
     teacherAssignments: number;
+    eventConsents: number;
   };
 
   export type ClassroomCountOutputTypeSelect<
@@ -3838,6 +4188,7 @@ export namespace Prisma {
   > = {
     students?: boolean | ClassroomCountOutputTypeCountStudentsArgs;
     teacherAssignments?: boolean | ClassroomCountOutputTypeCountTeacherAssignmentsArgs;
+    eventConsents?: boolean | ClassroomCountOutputTypeCountEventConsentsArgs;
   };
 
   // Custom InputTypes
@@ -3869,6 +4220,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: ClassroomTeacherWhereInput;
+  };
+
+  /**
+   * ClassroomCountOutputType without action
+   */
+  export type ClassroomCountOutputTypeCountEventConsentsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentWhereInput;
   };
 
   /**
@@ -4074,6 +4434,42 @@ export namespace Prisma {
   };
 
   /**
+   * Count Type EventConsentCountOutputType
+   */
+
+  export type EventConsentCountOutputType = {
+    responses: number;
+  };
+
+  export type EventConsentCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    responses?: boolean | EventConsentCountOutputTypeCountResponsesArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * EventConsentCountOutputType without action
+   */
+  export type EventConsentCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentCountOutputType
+     */
+    select?: EventConsentCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * EventConsentCountOutputType without action
+   */
+  export type EventConsentCountOutputTypeCountResponsesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentResponseWhereInput;
+  };
+
+  /**
    * Models
    */
 
@@ -4273,6 +4669,9 @@ export namespace Prisma {
         pushTokens?: boolean | Tenant$pushTokensArgs<ExtArgs>;
         notifications?: boolean | Tenant$notificationsArgs<ExtArgs>;
         mediaFiles?: boolean | Tenant$mediaFilesArgs<ExtArgs>;
+        attendanceExcuses?: boolean | Tenant$attendanceExcusesArgs<ExtArgs>;
+        eventConsents?: boolean | Tenant$eventConsentsArgs<ExtArgs>;
+        eventConsentResponses?: boolean | Tenant$eventConsentResponsesArgs<ExtArgs>;
         _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['tenant']
@@ -4326,6 +4725,9 @@ export namespace Prisma {
     pushTokens?: boolean | Tenant$pushTokensArgs<ExtArgs>;
     notifications?: boolean | Tenant$notificationsArgs<ExtArgs>;
     mediaFiles?: boolean | Tenant$mediaFilesArgs<ExtArgs>;
+    attendanceExcuses?: boolean | Tenant$attendanceExcusesArgs<ExtArgs>;
+    eventConsents?: boolean | Tenant$eventConsentsArgs<ExtArgs>;
+    eventConsentResponses?: boolean | Tenant$eventConsentResponsesArgs<ExtArgs>;
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TenantIncludeCreateManyAndReturn<
@@ -4359,6 +4761,9 @@ export namespace Prisma {
       pushTokens: Prisma.$UserPushTokenPayload<ExtArgs>[];
       notifications: Prisma.$NotificationPayload<ExtArgs>[];
       mediaFiles: Prisma.$MediaFilePayload<ExtArgs>[];
+      attendanceExcuses: Prisma.$AttendanceExcusePayload<ExtArgs>[];
+      eventConsents: Prisma.$EventConsentPayload<ExtArgs>[];
+      eventConsentResponses: Prisma.$EventConsentResponsePayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -4915,6 +5320,21 @@ export namespace Prisma {
       args?: Subset<T, Tenant$mediaFilesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    attendanceExcuses<T extends Tenant$attendanceExcusesArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$attendanceExcusesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    eventConsents<T extends Tenant$eventConsentsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$eventConsentsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    eventConsentResponses<T extends Tenant$eventConsentResponsesArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$eventConsentResponsesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5823,6 +6243,73 @@ export namespace Prisma {
   };
 
   /**
+   * Tenant.attendanceExcuses
+   */
+  export type Tenant$attendanceExcusesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    where?: AttendanceExcuseWhereInput;
+    orderBy?: AttendanceExcuseOrderByWithRelationInput | AttendanceExcuseOrderByWithRelationInput[];
+    cursor?: AttendanceExcuseWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: AttendanceExcuseScalarFieldEnum | AttendanceExcuseScalarFieldEnum[];
+  };
+
+  /**
+   * Tenant.eventConsents
+   */
+  export type Tenant$eventConsentsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    where?: EventConsentWhereInput;
+    orderBy?: EventConsentOrderByWithRelationInput | EventConsentOrderByWithRelationInput[];
+    cursor?: EventConsentWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: EventConsentScalarFieldEnum | EventConsentScalarFieldEnum[];
+  };
+
+  /**
+   * Tenant.eventConsentResponses
+   */
+  export type Tenant$eventConsentResponsesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    where?: EventConsentResponseWhereInput;
+    orderBy?:
+      EventConsentResponseOrderByWithRelationInput | EventConsentResponseOrderByWithRelationInput[];
+    cursor?: EventConsentResponseWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: EventConsentResponseScalarFieldEnum | EventConsentResponseScalarFieldEnum[];
+  };
+
+  /**
    * Tenant without action
    */
   export type TenantDefaultArgs<
@@ -6055,6 +6542,9 @@ export namespace Prisma {
         pushTokens?: boolean | User$pushTokensArgs<ExtArgs>;
         notifications?: boolean | User$notificationsArgs<ExtArgs>;
         uploadedMedia?: boolean | User$uploadedMediaArgs<ExtArgs>;
+        attendanceExcusesCreated?: boolean | User$attendanceExcusesCreatedArgs<ExtArgs>;
+        eventConsentsCreated?: boolean | User$eventConsentsCreatedArgs<ExtArgs>;
+        eventConsentResponses?: boolean | User$eventConsentResponsesArgs<ExtArgs>;
         _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['user']
@@ -6112,6 +6602,9 @@ export namespace Prisma {
     pushTokens?: boolean | User$pushTokensArgs<ExtArgs>;
     notifications?: boolean | User$notificationsArgs<ExtArgs>;
     uploadedMedia?: boolean | User$uploadedMediaArgs<ExtArgs>;
+    attendanceExcusesCreated?: boolean | User$attendanceExcusesCreatedArgs<ExtArgs>;
+    eventConsentsCreated?: boolean | User$eventConsentsCreatedArgs<ExtArgs>;
+    eventConsentResponses?: boolean | User$eventConsentResponsesArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -6144,6 +6637,9 @@ export namespace Prisma {
       pushTokens: Prisma.$UserPushTokenPayload<ExtArgs>[];
       notifications: Prisma.$NotificationPayload<ExtArgs>[];
       uploadedMedia: Prisma.$MediaFilePayload<ExtArgs>[];
+      attendanceExcusesCreated: Prisma.$AttendanceExcusePayload<ExtArgs>[];
+      eventConsentsCreated: Prisma.$EventConsentPayload<ExtArgs>[];
+      eventConsentResponses: Prisma.$EventConsentResponsePayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -6696,6 +7192,21 @@ export namespace Prisma {
       args?: Subset<T, User$uploadedMediaArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$MediaFilePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    attendanceExcusesCreated<T extends User$attendanceExcusesCreatedArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$attendanceExcusesCreatedArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    eventConsentsCreated<T extends User$eventConsentsCreatedArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$eventConsentsCreatedArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    eventConsentResponses<T extends User$eventConsentResponsesArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$eventConsentResponsesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7518,6 +8029,73 @@ export namespace Prisma {
   };
 
   /**
+   * User.attendanceExcusesCreated
+   */
+  export type User$attendanceExcusesCreatedArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    where?: AttendanceExcuseWhereInput;
+    orderBy?: AttendanceExcuseOrderByWithRelationInput | AttendanceExcuseOrderByWithRelationInput[];
+    cursor?: AttendanceExcuseWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: AttendanceExcuseScalarFieldEnum | AttendanceExcuseScalarFieldEnum[];
+  };
+
+  /**
+   * User.eventConsentsCreated
+   */
+  export type User$eventConsentsCreatedArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    where?: EventConsentWhereInput;
+    orderBy?: EventConsentOrderByWithRelationInput | EventConsentOrderByWithRelationInput[];
+    cursor?: EventConsentWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: EventConsentScalarFieldEnum | EventConsentScalarFieldEnum[];
+  };
+
+  /**
+   * User.eventConsentResponses
+   */
+  export type User$eventConsentResponsesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    where?: EventConsentResponseWhereInput;
+    orderBy?:
+      EventConsentResponseOrderByWithRelationInput | EventConsentResponseOrderByWithRelationInput[];
+    cursor?: EventConsentResponseWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: EventConsentResponseScalarFieldEnum | EventConsentResponseScalarFieldEnum[];
+  };
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
@@ -7778,6 +8356,8 @@ export namespace Prisma {
         incidentRecords?: boolean | Student$incidentRecordsArgs<ExtArgs>;
         developmentObservations?: boolean | Student$developmentObservationsArgs<ExtArgs>;
         portfolioItems?: boolean | Student$portfolioItemsArgs<ExtArgs>;
+        attendanceExcuses?: boolean | Student$attendanceExcusesArgs<ExtArgs>;
+        eventConsentResponses?: boolean | Student$eventConsentResponsesArgs<ExtArgs>;
         _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['student']
@@ -7840,6 +8420,8 @@ export namespace Prisma {
     incidentRecords?: boolean | Student$incidentRecordsArgs<ExtArgs>;
     developmentObservations?: boolean | Student$developmentObservationsArgs<ExtArgs>;
     portfolioItems?: boolean | Student$portfolioItemsArgs<ExtArgs>;
+    attendanceExcuses?: boolean | Student$attendanceExcusesArgs<ExtArgs>;
+    eventConsentResponses?: boolean | Student$eventConsentResponsesArgs<ExtArgs>;
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type StudentIncludeCreateManyAndReturn<
@@ -7868,6 +8450,8 @@ export namespace Prisma {
         incidentRecords: Prisma.$IncidentRecordPayload<ExtArgs>[];
         developmentObservations: Prisma.$DevelopmentObservationPayload<ExtArgs>[];
         portfolioItems: Prisma.$PortfolioItemPayload<ExtArgs>[];
+        attendanceExcuses: Prisma.$AttendanceExcusePayload<ExtArgs>[];
+        eventConsentResponses: Prisma.$EventConsentResponsePayload<ExtArgs>[];
       };
       scalars: $Extensions.GetPayloadResult<
         {
@@ -8390,6 +8974,16 @@ export namespace Prisma {
       args?: Subset<T, Student$portfolioItemsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$PortfolioItemPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    attendanceExcuses<T extends Student$attendanceExcusesArgs<ExtArgs> = {}>(
+      args?: Subset<T, Student$attendanceExcusesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    eventConsentResponses<T extends Student$eventConsentResponsesArgs<ExtArgs> = {}>(
+      args?: Subset<T, Student$eventConsentResponsesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9058,6 +9652,51 @@ export namespace Prisma {
   };
 
   /**
+   * Student.attendanceExcuses
+   */
+  export type Student$attendanceExcusesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    where?: AttendanceExcuseWhereInput;
+    orderBy?: AttendanceExcuseOrderByWithRelationInput | AttendanceExcuseOrderByWithRelationInput[];
+    cursor?: AttendanceExcuseWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: AttendanceExcuseScalarFieldEnum | AttendanceExcuseScalarFieldEnum[];
+  };
+
+  /**
+   * Student.eventConsentResponses
+   */
+  export type Student$eventConsentResponsesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    where?: EventConsentResponseWhereInput;
+    orderBy?:
+      EventConsentResponseOrderByWithRelationInput | EventConsentResponseOrderByWithRelationInput[];
+    cursor?: EventConsentResponseWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: EventConsentResponseScalarFieldEnum | EventConsentResponseScalarFieldEnum[];
+  };
+
+  /**
    * Student without action
    */
   export type StudentDefaultArgs<
@@ -9256,6 +9895,7 @@ export namespace Prisma {
         tenant?: boolean | TenantDefaultArgs<ExtArgs>;
         students?: boolean | Classroom$studentsArgs<ExtArgs>;
         teacherAssignments?: boolean | Classroom$teacherAssignmentsArgs<ExtArgs>;
+        eventConsents?: boolean | Classroom$eventConsentsArgs<ExtArgs>;
         _count?: boolean | ClassroomCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['classroom']
@@ -9292,6 +9932,7 @@ export namespace Prisma {
       tenant?: boolean | TenantDefaultArgs<ExtArgs>;
       students?: boolean | Classroom$studentsArgs<ExtArgs>;
       teacherAssignments?: boolean | Classroom$teacherAssignmentsArgs<ExtArgs>;
+      eventConsents?: boolean | Classroom$eventConsentsArgs<ExtArgs>;
       _count?: boolean | ClassroomCountOutputTypeDefaultArgs<ExtArgs>;
     };
   export type ClassroomIncludeCreateManyAndReturn<
@@ -9308,6 +9949,7 @@ export namespace Prisma {
       tenant: Prisma.$TenantPayload<ExtArgs>;
       students: Prisma.$StudentPayload<ExtArgs>[];
       teacherAssignments: Prisma.$ClassroomTeacherPayload<ExtArgs>[];
+      eventConsents: Prisma.$EventConsentPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -9766,6 +10408,11 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$ClassroomTeacherPayload<ExtArgs>, T, 'findMany'> | Null
     >;
+    eventConsents<T extends Classroom$eventConsentsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Classroom$eventConsentsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10188,6 +10835,28 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: ClassroomTeacherScalarFieldEnum | ClassroomTeacherScalarFieldEnum[];
+  };
+
+  /**
+   * Classroom.eventConsents
+   */
+  export type Classroom$eventConsentsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    where?: EventConsentWhereInput;
+    orderBy?: EventConsentOrderByWithRelationInput | EventConsentOrderByWithRelationInput[];
+    cursor?: EventConsentWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: EventConsentScalarFieldEnum | EventConsentScalarFieldEnum[];
   };
 
   /**
@@ -34622,6 +35291,3539 @@ export namespace Prisma {
   };
 
   /**
+   * Model AttendanceExcuse
+   */
+
+  export type AggregateAttendanceExcuse = {
+    _count: AttendanceExcuseCountAggregateOutputType | null;
+    _min: AttendanceExcuseMinAggregateOutputType | null;
+    _max: AttendanceExcuseMaxAggregateOutputType | null;
+  };
+
+  export type AttendanceExcuseMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    studentId: string | null;
+    date: Date | null;
+    reason: string | null;
+    notes: string | null;
+    status: string | null;
+    createdById: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type AttendanceExcuseMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    studentId: string | null;
+    date: Date | null;
+    reason: string | null;
+    notes: string | null;
+    status: string | null;
+    createdById: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type AttendanceExcuseCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    studentId: number;
+    date: number;
+    reason: number;
+    notes: number;
+    status: number;
+    createdById: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type AttendanceExcuseMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    date?: true;
+    reason?: true;
+    notes?: true;
+    status?: true;
+    createdById?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type AttendanceExcuseMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    date?: true;
+    reason?: true;
+    notes?: true;
+    status?: true;
+    createdById?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type AttendanceExcuseCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    date?: true;
+    reason?: true;
+    notes?: true;
+    status?: true;
+    createdById?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type AttendanceExcuseAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which AttendanceExcuse to aggregate.
+     */
+    where?: AttendanceExcuseWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of AttendanceExcuses to fetch.
+     */
+    orderBy?: AttendanceExcuseOrderByWithRelationInput | AttendanceExcuseOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: AttendanceExcuseWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` AttendanceExcuses from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` AttendanceExcuses.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned AttendanceExcuses
+     **/
+    _count?: true | AttendanceExcuseCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: AttendanceExcuseMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: AttendanceExcuseMaxAggregateInputType;
+  };
+
+  export type GetAttendanceExcuseAggregateType<T extends AttendanceExcuseAggregateArgs> = {
+    [P in keyof T & keyof AggregateAttendanceExcuse]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAttendanceExcuse[P]>
+      : GetScalarType<T[P], AggregateAttendanceExcuse[P]>;
+  };
+
+  export type AttendanceExcuseGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: AttendanceExcuseWhereInput;
+    orderBy?:
+      AttendanceExcuseOrderByWithAggregationInput | AttendanceExcuseOrderByWithAggregationInput[];
+    by: AttendanceExcuseScalarFieldEnum[] | AttendanceExcuseScalarFieldEnum;
+    having?: AttendanceExcuseScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: AttendanceExcuseCountAggregateInputType | true;
+    _min?: AttendanceExcuseMinAggregateInputType;
+    _max?: AttendanceExcuseMaxAggregateInputType;
+  };
+
+  export type AttendanceExcuseGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    studentId: string;
+    date: Date;
+    reason: string;
+    notes: string | null;
+    status: string;
+    createdById: string;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: AttendanceExcuseCountAggregateOutputType | null;
+    _min: AttendanceExcuseMinAggregateOutputType | null;
+    _max: AttendanceExcuseMaxAggregateOutputType | null;
+  };
+
+  type GetAttendanceExcuseGroupByPayload<T extends AttendanceExcuseGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<AttendanceExcuseGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof AttendanceExcuseGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AttendanceExcuseGroupByOutputType[P]>
+            : GetScalarType<T[P], AttendanceExcuseGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type AttendanceExcuseSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      studentId?: boolean;
+      date?: boolean;
+      reason?: boolean;
+      notes?: boolean;
+      status?: boolean;
+      createdById?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+      createdBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['attendanceExcuse']
+  >;
+
+  export type AttendanceExcuseSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      studentId?: boolean;
+      date?: boolean;
+      reason?: boolean;
+      notes?: boolean;
+      status?: boolean;
+      createdById?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+      createdBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['attendanceExcuse']
+  >;
+
+  export type AttendanceExcuseSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    studentId?: boolean;
+    date?: boolean;
+    reason?: boolean;
+    notes?: boolean;
+    status?: boolean;
+    createdById?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type AttendanceExcuseInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type AttendanceExcuseIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $AttendanceExcusePayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'AttendanceExcuse';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      student: Prisma.$StudentPayload<ExtArgs>;
+      createdBy: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        studentId: string;
+        date: Date;
+        reason: string;
+        notes: string | null;
+        status: string;
+        createdById: string;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['attendanceExcuse']
+    >;
+    composites: {};
+  };
+
+  type AttendanceExcuseGetPayload<
+    S extends boolean | null | undefined | AttendanceExcuseDefaultArgs,
+  > = $Result.GetResult<Prisma.$AttendanceExcusePayload, S>;
+
+  type AttendanceExcuseCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<AttendanceExcuseFindManyArgs, 'select' | 'include' | 'distinct'> & {
+    select?: AttendanceExcuseCountAggregateInputType | true;
+  };
+
+  export interface AttendanceExcuseDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['AttendanceExcuse'];
+      meta: { name: 'AttendanceExcuse' };
+    };
+    /**
+     * Find zero or one AttendanceExcuse that matches the filter.
+     * @param {AttendanceExcuseFindUniqueArgs} args - Arguments to find a AttendanceExcuse
+     * @example
+     * // Get one AttendanceExcuse
+     * const attendanceExcuse = await prisma.attendanceExcuse.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AttendanceExcuseFindUniqueArgs>(
+      args: SelectSubset<T, AttendanceExcuseFindUniqueArgs<ExtArgs>>,
+    ): Prisma__AttendanceExcuseClient<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one AttendanceExcuse that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AttendanceExcuseFindUniqueOrThrowArgs} args - Arguments to find a AttendanceExcuse
+     * @example
+     * // Get one AttendanceExcuse
+     * const attendanceExcuse = await prisma.attendanceExcuse.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AttendanceExcuseFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, AttendanceExcuseFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__AttendanceExcuseClient<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first AttendanceExcuse that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceExcuseFindFirstArgs} args - Arguments to find a AttendanceExcuse
+     * @example
+     * // Get one AttendanceExcuse
+     * const attendanceExcuse = await prisma.attendanceExcuse.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AttendanceExcuseFindFirstArgs>(
+      args?: SelectSubset<T, AttendanceExcuseFindFirstArgs<ExtArgs>>,
+    ): Prisma__AttendanceExcuseClient<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first AttendanceExcuse that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceExcuseFindFirstOrThrowArgs} args - Arguments to find a AttendanceExcuse
+     * @example
+     * // Get one AttendanceExcuse
+     * const attendanceExcuse = await prisma.attendanceExcuse.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AttendanceExcuseFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, AttendanceExcuseFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__AttendanceExcuseClient<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more AttendanceExcuses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceExcuseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AttendanceExcuses
+     * const attendanceExcuses = await prisma.attendanceExcuse.findMany()
+     *
+     * // Get first 10 AttendanceExcuses
+     * const attendanceExcuses = await prisma.attendanceExcuse.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const attendanceExcuseWithIdOnly = await prisma.attendanceExcuse.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends AttendanceExcuseFindManyArgs>(
+      args?: SelectSubset<T, AttendanceExcuseFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'findMany'>
+    >;
+
+    /**
+     * Create a AttendanceExcuse.
+     * @param {AttendanceExcuseCreateArgs} args - Arguments to create a AttendanceExcuse.
+     * @example
+     * // Create one AttendanceExcuse
+     * const AttendanceExcuse = await prisma.attendanceExcuse.create({
+     *   data: {
+     *     // ... data to create a AttendanceExcuse
+     *   }
+     * })
+     *
+     */
+    create<T extends AttendanceExcuseCreateArgs>(
+      args: SelectSubset<T, AttendanceExcuseCreateArgs<ExtArgs>>,
+    ): Prisma__AttendanceExcuseClient<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many AttendanceExcuses.
+     * @param {AttendanceExcuseCreateManyArgs} args - Arguments to create many AttendanceExcuses.
+     * @example
+     * // Create many AttendanceExcuses
+     * const attendanceExcuse = await prisma.attendanceExcuse.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends AttendanceExcuseCreateManyArgs>(
+      args?: SelectSubset<T, AttendanceExcuseCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many AttendanceExcuses and returns the data saved in the database.
+     * @param {AttendanceExcuseCreateManyAndReturnArgs} args - Arguments to create many AttendanceExcuses.
+     * @example
+     * // Create many AttendanceExcuses
+     * const attendanceExcuse = await prisma.attendanceExcuse.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many AttendanceExcuses and only return the `id`
+     * const attendanceExcuseWithIdOnly = await prisma.attendanceExcuse.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends AttendanceExcuseCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, AttendanceExcuseCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a AttendanceExcuse.
+     * @param {AttendanceExcuseDeleteArgs} args - Arguments to delete one AttendanceExcuse.
+     * @example
+     * // Delete one AttendanceExcuse
+     * const AttendanceExcuse = await prisma.attendanceExcuse.delete({
+     *   where: {
+     *     // ... filter to delete one AttendanceExcuse
+     *   }
+     * })
+     *
+     */
+    delete<T extends AttendanceExcuseDeleteArgs>(
+      args: SelectSubset<T, AttendanceExcuseDeleteArgs<ExtArgs>>,
+    ): Prisma__AttendanceExcuseClient<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one AttendanceExcuse.
+     * @param {AttendanceExcuseUpdateArgs} args - Arguments to update one AttendanceExcuse.
+     * @example
+     * // Update one AttendanceExcuse
+     * const attendanceExcuse = await prisma.attendanceExcuse.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends AttendanceExcuseUpdateArgs>(
+      args: SelectSubset<T, AttendanceExcuseUpdateArgs<ExtArgs>>,
+    ): Prisma__AttendanceExcuseClient<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more AttendanceExcuses.
+     * @param {AttendanceExcuseDeleteManyArgs} args - Arguments to filter AttendanceExcuses to delete.
+     * @example
+     * // Delete a few AttendanceExcuses
+     * const { count } = await prisma.attendanceExcuse.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends AttendanceExcuseDeleteManyArgs>(
+      args?: SelectSubset<T, AttendanceExcuseDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more AttendanceExcuses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceExcuseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AttendanceExcuses
+     * const attendanceExcuse = await prisma.attendanceExcuse.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends AttendanceExcuseUpdateManyArgs>(
+      args: SelectSubset<T, AttendanceExcuseUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one AttendanceExcuse.
+     * @param {AttendanceExcuseUpsertArgs} args - Arguments to update or create a AttendanceExcuse.
+     * @example
+     * // Update or create a AttendanceExcuse
+     * const attendanceExcuse = await prisma.attendanceExcuse.upsert({
+     *   create: {
+     *     // ... data to create a AttendanceExcuse
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AttendanceExcuse we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AttendanceExcuseUpsertArgs>(
+      args: SelectSubset<T, AttendanceExcuseUpsertArgs<ExtArgs>>,
+    ): Prisma__AttendanceExcuseClient<
+      $Result.GetResult<Prisma.$AttendanceExcusePayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of AttendanceExcuses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceExcuseCountArgs} args - Arguments to filter AttendanceExcuses to count.
+     * @example
+     * // Count the number of AttendanceExcuses
+     * const count = await prisma.attendanceExcuse.count({
+     *   where: {
+     *     // ... the filter for the AttendanceExcuses we want to count
+     *   }
+     * })
+     **/
+    count<T extends AttendanceExcuseCountArgs>(
+      args?: Subset<T, AttendanceExcuseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AttendanceExcuseCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a AttendanceExcuse.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceExcuseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends AttendanceExcuseAggregateArgs>(
+      args: Subset<T, AttendanceExcuseAggregateArgs>,
+    ): Prisma.PrismaPromise<GetAttendanceExcuseAggregateType<T>>;
+
+    /**
+     * Group by AttendanceExcuse.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceExcuseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends AttendanceExcuseGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: AttendanceExcuseGroupByArgs['orderBy'] }
+        : { orderBy?: AttendanceExcuseGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, AttendanceExcuseGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetAttendanceExcuseGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the AttendanceExcuse model
+     */
+    readonly fields: AttendanceExcuseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AttendanceExcuse.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AttendanceExcuseClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, StudentDefaultArgs<ExtArgs>>,
+    ): Prisma__StudentClient<
+      $Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the AttendanceExcuse model
+   */
+  interface AttendanceExcuseFieldRefs {
+    readonly id: FieldRef<'AttendanceExcuse', 'String'>;
+    readonly tenantId: FieldRef<'AttendanceExcuse', 'String'>;
+    readonly studentId: FieldRef<'AttendanceExcuse', 'String'>;
+    readonly date: FieldRef<'AttendanceExcuse', 'DateTime'>;
+    readonly reason: FieldRef<'AttendanceExcuse', 'String'>;
+    readonly notes: FieldRef<'AttendanceExcuse', 'String'>;
+    readonly status: FieldRef<'AttendanceExcuse', 'String'>;
+    readonly createdById: FieldRef<'AttendanceExcuse', 'String'>;
+    readonly createdAt: FieldRef<'AttendanceExcuse', 'DateTime'>;
+    readonly updatedAt: FieldRef<'AttendanceExcuse', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * AttendanceExcuse findUnique
+   */
+  export type AttendanceExcuseFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * Filter, which AttendanceExcuse to fetch.
+     */
+    where: AttendanceExcuseWhereUniqueInput;
+  };
+
+  /**
+   * AttendanceExcuse findUniqueOrThrow
+   */
+  export type AttendanceExcuseFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * Filter, which AttendanceExcuse to fetch.
+     */
+    where: AttendanceExcuseWhereUniqueInput;
+  };
+
+  /**
+   * AttendanceExcuse findFirst
+   */
+  export type AttendanceExcuseFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * Filter, which AttendanceExcuse to fetch.
+     */
+    where?: AttendanceExcuseWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of AttendanceExcuses to fetch.
+     */
+    orderBy?: AttendanceExcuseOrderByWithRelationInput | AttendanceExcuseOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for AttendanceExcuses.
+     */
+    cursor?: AttendanceExcuseWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` AttendanceExcuses from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` AttendanceExcuses.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of AttendanceExcuses.
+     */
+    distinct?: AttendanceExcuseScalarFieldEnum | AttendanceExcuseScalarFieldEnum[];
+  };
+
+  /**
+   * AttendanceExcuse findFirstOrThrow
+   */
+  export type AttendanceExcuseFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * Filter, which AttendanceExcuse to fetch.
+     */
+    where?: AttendanceExcuseWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of AttendanceExcuses to fetch.
+     */
+    orderBy?: AttendanceExcuseOrderByWithRelationInput | AttendanceExcuseOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for AttendanceExcuses.
+     */
+    cursor?: AttendanceExcuseWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` AttendanceExcuses from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` AttendanceExcuses.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of AttendanceExcuses.
+     */
+    distinct?: AttendanceExcuseScalarFieldEnum | AttendanceExcuseScalarFieldEnum[];
+  };
+
+  /**
+   * AttendanceExcuse findMany
+   */
+  export type AttendanceExcuseFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * Filter, which AttendanceExcuses to fetch.
+     */
+    where?: AttendanceExcuseWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of AttendanceExcuses to fetch.
+     */
+    orderBy?: AttendanceExcuseOrderByWithRelationInput | AttendanceExcuseOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing AttendanceExcuses.
+     */
+    cursor?: AttendanceExcuseWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` AttendanceExcuses from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` AttendanceExcuses.
+     */
+    skip?: number;
+    distinct?: AttendanceExcuseScalarFieldEnum | AttendanceExcuseScalarFieldEnum[];
+  };
+
+  /**
+   * AttendanceExcuse create
+   */
+  export type AttendanceExcuseCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a AttendanceExcuse.
+     */
+    data: XOR<AttendanceExcuseCreateInput, AttendanceExcuseUncheckedCreateInput>;
+  };
+
+  /**
+   * AttendanceExcuse createMany
+   */
+  export type AttendanceExcuseCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many AttendanceExcuses.
+     */
+    data: AttendanceExcuseCreateManyInput | AttendanceExcuseCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * AttendanceExcuse createManyAndReturn
+   */
+  export type AttendanceExcuseCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many AttendanceExcuses.
+     */
+    data: AttendanceExcuseCreateManyInput | AttendanceExcuseCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * AttendanceExcuse update
+   */
+  export type AttendanceExcuseUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a AttendanceExcuse.
+     */
+    data: XOR<AttendanceExcuseUpdateInput, AttendanceExcuseUncheckedUpdateInput>;
+    /**
+     * Choose, which AttendanceExcuse to update.
+     */
+    where: AttendanceExcuseWhereUniqueInput;
+  };
+
+  /**
+   * AttendanceExcuse updateMany
+   */
+  export type AttendanceExcuseUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update AttendanceExcuses.
+     */
+    data: XOR<AttendanceExcuseUpdateManyMutationInput, AttendanceExcuseUncheckedUpdateManyInput>;
+    /**
+     * Filter which AttendanceExcuses to update
+     */
+    where?: AttendanceExcuseWhereInput;
+  };
+
+  /**
+   * AttendanceExcuse upsert
+   */
+  export type AttendanceExcuseUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the AttendanceExcuse to update in case it exists.
+     */
+    where: AttendanceExcuseWhereUniqueInput;
+    /**
+     * In case the AttendanceExcuse found by the `where` argument doesn't exist, create a new AttendanceExcuse with this data.
+     */
+    create: XOR<AttendanceExcuseCreateInput, AttendanceExcuseUncheckedCreateInput>;
+    /**
+     * In case the AttendanceExcuse was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AttendanceExcuseUpdateInput, AttendanceExcuseUncheckedUpdateInput>;
+  };
+
+  /**
+   * AttendanceExcuse delete
+   */
+  export type AttendanceExcuseDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+    /**
+     * Filter which AttendanceExcuse to delete.
+     */
+    where: AttendanceExcuseWhereUniqueInput;
+  };
+
+  /**
+   * AttendanceExcuse deleteMany
+   */
+  export type AttendanceExcuseDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which AttendanceExcuses to delete
+     */
+    where?: AttendanceExcuseWhereInput;
+  };
+
+  /**
+   * AttendanceExcuse without action
+   */
+  export type AttendanceExcuseDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the AttendanceExcuse
+     */
+    select?: AttendanceExcuseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceExcuseInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model EventConsent
+   */
+
+  export type AggregateEventConsent = {
+    _count: EventConsentCountAggregateOutputType | null;
+    _avg: EventConsentAvgAggregateOutputType | null;
+    _sum: EventConsentSumAggregateOutputType | null;
+    _min: EventConsentMinAggregateOutputType | null;
+    _max: EventConsentMaxAggregateOutputType | null;
+  };
+
+  export type EventConsentAvgAggregateOutputType = {
+    price: Decimal | null;
+  };
+
+  export type EventConsentSumAggregateOutputType = {
+    price: Decimal | null;
+  };
+
+  export type EventConsentMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    classroomId: string | null;
+    title: string | null;
+    eventDate: Date | null;
+    location: string | null;
+    price: Decimal | null;
+    description: string | null;
+    deadline: Date | null;
+    status: string | null;
+    createdById: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type EventConsentMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    classroomId: string | null;
+    title: string | null;
+    eventDate: Date | null;
+    location: string | null;
+    price: Decimal | null;
+    description: string | null;
+    deadline: Date | null;
+    status: string | null;
+    createdById: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type EventConsentCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    classroomId: number;
+    title: number;
+    eventDate: number;
+    location: number;
+    price: number;
+    description: number;
+    deadline: number;
+    status: number;
+    createdById: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type EventConsentAvgAggregateInputType = {
+    price?: true;
+  };
+
+  export type EventConsentSumAggregateInputType = {
+    price?: true;
+  };
+
+  export type EventConsentMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    classroomId?: true;
+    title?: true;
+    eventDate?: true;
+    location?: true;
+    price?: true;
+    description?: true;
+    deadline?: true;
+    status?: true;
+    createdById?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type EventConsentMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    classroomId?: true;
+    title?: true;
+    eventDate?: true;
+    location?: true;
+    price?: true;
+    description?: true;
+    deadline?: true;
+    status?: true;
+    createdById?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type EventConsentCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    classroomId?: true;
+    title?: true;
+    eventDate?: true;
+    location?: true;
+    price?: true;
+    description?: true;
+    deadline?: true;
+    status?: true;
+    createdById?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type EventConsentAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which EventConsent to aggregate.
+     */
+    where?: EventConsentWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EventConsents to fetch.
+     */
+    orderBy?: EventConsentOrderByWithRelationInput | EventConsentOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: EventConsentWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EventConsents from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EventConsents.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned EventConsents
+     **/
+    _count?: true | EventConsentCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: EventConsentAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: EventConsentSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: EventConsentMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: EventConsentMaxAggregateInputType;
+  };
+
+  export type GetEventConsentAggregateType<T extends EventConsentAggregateArgs> = {
+    [P in keyof T & keyof AggregateEventConsent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEventConsent[P]>
+      : GetScalarType<T[P], AggregateEventConsent[P]>;
+  };
+
+  export type EventConsentGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentWhereInput;
+    orderBy?: EventConsentOrderByWithAggregationInput | EventConsentOrderByWithAggregationInput[];
+    by: EventConsentScalarFieldEnum[] | EventConsentScalarFieldEnum;
+    having?: EventConsentScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: EventConsentCountAggregateInputType | true;
+    _avg?: EventConsentAvgAggregateInputType;
+    _sum?: EventConsentSumAggregateInputType;
+    _min?: EventConsentMinAggregateInputType;
+    _max?: EventConsentMaxAggregateInputType;
+  };
+
+  export type EventConsentGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    classroomId: string | null;
+    title: string;
+    eventDate: Date;
+    location: string | null;
+    price: Decimal | null;
+    description: string | null;
+    deadline: Date | null;
+    status: string;
+    createdById: string;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: EventConsentCountAggregateOutputType | null;
+    _avg: EventConsentAvgAggregateOutputType | null;
+    _sum: EventConsentSumAggregateOutputType | null;
+    _min: EventConsentMinAggregateOutputType | null;
+    _max: EventConsentMaxAggregateOutputType | null;
+  };
+
+  type GetEventConsentGroupByPayload<T extends EventConsentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EventConsentGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof EventConsentGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], EventConsentGroupByOutputType[P]>
+          : GetScalarType<T[P], EventConsentGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type EventConsentSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      classroomId?: boolean;
+      title?: boolean;
+      eventDate?: boolean;
+      location?: boolean;
+      price?: boolean;
+      description?: boolean;
+      deadline?: boolean;
+      status?: boolean;
+      createdById?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      classroom?: boolean | EventConsent$classroomArgs<ExtArgs>;
+      createdBy?: boolean | UserDefaultArgs<ExtArgs>;
+      responses?: boolean | EventConsent$responsesArgs<ExtArgs>;
+      _count?: boolean | EventConsentCountOutputTypeDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['eventConsent']
+  >;
+
+  export type EventConsentSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      classroomId?: boolean;
+      title?: boolean;
+      eventDate?: boolean;
+      location?: boolean;
+      price?: boolean;
+      description?: boolean;
+      deadline?: boolean;
+      status?: boolean;
+      createdById?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      classroom?: boolean | EventConsent$classroomArgs<ExtArgs>;
+      createdBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['eventConsent']
+  >;
+
+  export type EventConsentSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    classroomId?: boolean;
+    title?: boolean;
+    eventDate?: boolean;
+    location?: boolean;
+    price?: boolean;
+    description?: boolean;
+    deadline?: boolean;
+    status?: boolean;
+    createdById?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type EventConsentInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    classroom?: boolean | EventConsent$classroomArgs<ExtArgs>;
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>;
+    responses?: boolean | EventConsent$responsesArgs<ExtArgs>;
+    _count?: boolean | EventConsentCountOutputTypeDefaultArgs<ExtArgs>;
+  };
+  export type EventConsentIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    classroom?: boolean | EventConsent$classroomArgs<ExtArgs>;
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $EventConsentPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'EventConsent';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      classroom: Prisma.$ClassroomPayload<ExtArgs> | null;
+      createdBy: Prisma.$UserPayload<ExtArgs>;
+      responses: Prisma.$EventConsentResponsePayload<ExtArgs>[];
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        classroomId: string | null;
+        title: string;
+        eventDate: Date;
+        location: string | null;
+        price: Prisma.Decimal | null;
+        description: string | null;
+        deadline: Date | null;
+        status: string;
+        createdById: string;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['eventConsent']
+    >;
+    composites: {};
+  };
+
+  type EventConsentGetPayload<S extends boolean | null | undefined | EventConsentDefaultArgs> =
+    $Result.GetResult<Prisma.$EventConsentPayload, S>;
+
+  type EventConsentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EventConsentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: EventConsentCountAggregateInputType | true;
+    };
+
+  export interface EventConsentDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['EventConsent'];
+      meta: { name: 'EventConsent' };
+    };
+    /**
+     * Find zero or one EventConsent that matches the filter.
+     * @param {EventConsentFindUniqueArgs} args - Arguments to find a EventConsent
+     * @example
+     * // Get one EventConsent
+     * const eventConsent = await prisma.eventConsent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EventConsentFindUniqueArgs>(
+      args: SelectSubset<T, EventConsentFindUniqueArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one EventConsent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EventConsentFindUniqueOrThrowArgs} args - Arguments to find a EventConsent
+     * @example
+     * // Get one EventConsent
+     * const eventConsent = await prisma.eventConsent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EventConsentFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, EventConsentFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first EventConsent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentFindFirstArgs} args - Arguments to find a EventConsent
+     * @example
+     * // Get one EventConsent
+     * const eventConsent = await prisma.eventConsent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EventConsentFindFirstArgs>(
+      args?: SelectSubset<T, EventConsentFindFirstArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first EventConsent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentFindFirstOrThrowArgs} args - Arguments to find a EventConsent
+     * @example
+     * // Get one EventConsent
+     * const eventConsent = await prisma.eventConsent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EventConsentFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, EventConsentFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more EventConsents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EventConsents
+     * const eventConsents = await prisma.eventConsent.findMany()
+     *
+     * // Get first 10 EventConsents
+     * const eventConsents = await prisma.eventConsent.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const eventConsentWithIdOnly = await prisma.eventConsent.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends EventConsentFindManyArgs>(
+      args?: SelectSubset<T, EventConsentFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findMany'>>;
+
+    /**
+     * Create a EventConsent.
+     * @param {EventConsentCreateArgs} args - Arguments to create a EventConsent.
+     * @example
+     * // Create one EventConsent
+     * const EventConsent = await prisma.eventConsent.create({
+     *   data: {
+     *     // ... data to create a EventConsent
+     *   }
+     * })
+     *
+     */
+    create<T extends EventConsentCreateArgs>(
+      args: SelectSubset<T, EventConsentCreateArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many EventConsents.
+     * @param {EventConsentCreateManyArgs} args - Arguments to create many EventConsents.
+     * @example
+     * // Create many EventConsents
+     * const eventConsent = await prisma.eventConsent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends EventConsentCreateManyArgs>(
+      args?: SelectSubset<T, EventConsentCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many EventConsents and returns the data saved in the database.
+     * @param {EventConsentCreateManyAndReturnArgs} args - Arguments to create many EventConsents.
+     * @example
+     * // Create many EventConsents
+     * const eventConsent = await prisma.eventConsent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many EventConsents and only return the `id`
+     * const eventConsentWithIdOnly = await prisma.eventConsent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends EventConsentCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, EventConsentCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a EventConsent.
+     * @param {EventConsentDeleteArgs} args - Arguments to delete one EventConsent.
+     * @example
+     * // Delete one EventConsent
+     * const EventConsent = await prisma.eventConsent.delete({
+     *   where: {
+     *     // ... filter to delete one EventConsent
+     *   }
+     * })
+     *
+     */
+    delete<T extends EventConsentDeleteArgs>(
+      args: SelectSubset<T, EventConsentDeleteArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one EventConsent.
+     * @param {EventConsentUpdateArgs} args - Arguments to update one EventConsent.
+     * @example
+     * // Update one EventConsent
+     * const eventConsent = await prisma.eventConsent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends EventConsentUpdateArgs>(
+      args: SelectSubset<T, EventConsentUpdateArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more EventConsents.
+     * @param {EventConsentDeleteManyArgs} args - Arguments to filter EventConsents to delete.
+     * @example
+     * // Delete a few EventConsents
+     * const { count } = await prisma.eventConsent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends EventConsentDeleteManyArgs>(
+      args?: SelectSubset<T, EventConsentDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more EventConsents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EventConsents
+     * const eventConsent = await prisma.eventConsent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends EventConsentUpdateManyArgs>(
+      args: SelectSubset<T, EventConsentUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one EventConsent.
+     * @param {EventConsentUpsertArgs} args - Arguments to update or create a EventConsent.
+     * @example
+     * // Update or create a EventConsent
+     * const eventConsent = await prisma.eventConsent.upsert({
+     *   create: {
+     *     // ... data to create a EventConsent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EventConsent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EventConsentUpsertArgs>(
+      args: SelectSubset<T, EventConsentUpsertArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of EventConsents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentCountArgs} args - Arguments to filter EventConsents to count.
+     * @example
+     * // Count the number of EventConsents
+     * const count = await prisma.eventConsent.count({
+     *   where: {
+     *     // ... the filter for the EventConsents we want to count
+     *   }
+     * })
+     **/
+    count<T extends EventConsentCountArgs>(
+      args?: Subset<T, EventConsentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EventConsentCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a EventConsent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends EventConsentAggregateArgs>(
+      args: Subset<T, EventConsentAggregateArgs>,
+    ): Prisma.PrismaPromise<GetEventConsentAggregateType<T>>;
+
+    /**
+     * Group by EventConsent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends EventConsentGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: EventConsentGroupByArgs['orderBy'] }
+        : { orderBy?: EventConsentGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, EventConsentGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetEventConsentGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the EventConsent model
+     */
+    readonly fields: EventConsentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EventConsent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EventConsentClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    classroom<T extends EventConsent$classroomArgs<ExtArgs> = {}>(
+      args?: Subset<T, EventConsent$classroomArgs<ExtArgs>>,
+    ): Prisma__ClassroomClient<
+      $Result.GetResult<Prisma.$ClassroomPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null,
+      null,
+      ExtArgs
+    >;
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    responses<T extends EventConsent$responsesArgs<ExtArgs> = {}>(
+      args?: Subset<T, EventConsent$responsesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the EventConsent model
+   */
+  interface EventConsentFieldRefs {
+    readonly id: FieldRef<'EventConsent', 'String'>;
+    readonly tenantId: FieldRef<'EventConsent', 'String'>;
+    readonly classroomId: FieldRef<'EventConsent', 'String'>;
+    readonly title: FieldRef<'EventConsent', 'String'>;
+    readonly eventDate: FieldRef<'EventConsent', 'DateTime'>;
+    readonly location: FieldRef<'EventConsent', 'String'>;
+    readonly price: FieldRef<'EventConsent', 'Decimal'>;
+    readonly description: FieldRef<'EventConsent', 'String'>;
+    readonly deadline: FieldRef<'EventConsent', 'DateTime'>;
+    readonly status: FieldRef<'EventConsent', 'String'>;
+    readonly createdById: FieldRef<'EventConsent', 'String'>;
+    readonly createdAt: FieldRef<'EventConsent', 'DateTime'>;
+    readonly updatedAt: FieldRef<'EventConsent', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * EventConsent findUnique
+   */
+  export type EventConsentFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsent to fetch.
+     */
+    where: EventConsentWhereUniqueInput;
+  };
+
+  /**
+   * EventConsent findUniqueOrThrow
+   */
+  export type EventConsentFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsent to fetch.
+     */
+    where: EventConsentWhereUniqueInput;
+  };
+
+  /**
+   * EventConsent findFirst
+   */
+  export type EventConsentFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsent to fetch.
+     */
+    where?: EventConsentWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EventConsents to fetch.
+     */
+    orderBy?: EventConsentOrderByWithRelationInput | EventConsentOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for EventConsents.
+     */
+    cursor?: EventConsentWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EventConsents from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EventConsents.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EventConsents.
+     */
+    distinct?: EventConsentScalarFieldEnum | EventConsentScalarFieldEnum[];
+  };
+
+  /**
+   * EventConsent findFirstOrThrow
+   */
+  export type EventConsentFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsent to fetch.
+     */
+    where?: EventConsentWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EventConsents to fetch.
+     */
+    orderBy?: EventConsentOrderByWithRelationInput | EventConsentOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for EventConsents.
+     */
+    cursor?: EventConsentWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EventConsents from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EventConsents.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EventConsents.
+     */
+    distinct?: EventConsentScalarFieldEnum | EventConsentScalarFieldEnum[];
+  };
+
+  /**
+   * EventConsent findMany
+   */
+  export type EventConsentFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsents to fetch.
+     */
+    where?: EventConsentWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EventConsents to fetch.
+     */
+    orderBy?: EventConsentOrderByWithRelationInput | EventConsentOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing EventConsents.
+     */
+    cursor?: EventConsentWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EventConsents from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EventConsents.
+     */
+    skip?: number;
+    distinct?: EventConsentScalarFieldEnum | EventConsentScalarFieldEnum[];
+  };
+
+  /**
+   * EventConsent create
+   */
+  export type EventConsentCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a EventConsent.
+     */
+    data: XOR<EventConsentCreateInput, EventConsentUncheckedCreateInput>;
+  };
+
+  /**
+   * EventConsent createMany
+   */
+  export type EventConsentCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many EventConsents.
+     */
+    data: EventConsentCreateManyInput | EventConsentCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * EventConsent createManyAndReturn
+   */
+  export type EventConsentCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many EventConsents.
+     */
+    data: EventConsentCreateManyInput | EventConsentCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * EventConsent update
+   */
+  export type EventConsentUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a EventConsent.
+     */
+    data: XOR<EventConsentUpdateInput, EventConsentUncheckedUpdateInput>;
+    /**
+     * Choose, which EventConsent to update.
+     */
+    where: EventConsentWhereUniqueInput;
+  };
+
+  /**
+   * EventConsent updateMany
+   */
+  export type EventConsentUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update EventConsents.
+     */
+    data: XOR<EventConsentUpdateManyMutationInput, EventConsentUncheckedUpdateManyInput>;
+    /**
+     * Filter which EventConsents to update
+     */
+    where?: EventConsentWhereInput;
+  };
+
+  /**
+   * EventConsent upsert
+   */
+  export type EventConsentUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the EventConsent to update in case it exists.
+     */
+    where: EventConsentWhereUniqueInput;
+    /**
+     * In case the EventConsent found by the `where` argument doesn't exist, create a new EventConsent with this data.
+     */
+    create: XOR<EventConsentCreateInput, EventConsentUncheckedCreateInput>;
+    /**
+     * In case the EventConsent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EventConsentUpdateInput, EventConsentUncheckedUpdateInput>;
+  };
+
+  /**
+   * EventConsent delete
+   */
+  export type EventConsentDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+    /**
+     * Filter which EventConsent to delete.
+     */
+    where: EventConsentWhereUniqueInput;
+  };
+
+  /**
+   * EventConsent deleteMany
+   */
+  export type EventConsentDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which EventConsents to delete
+     */
+    where?: EventConsentWhereInput;
+  };
+
+  /**
+   * EventConsent.classroom
+   */
+  export type EventConsent$classroomArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Classroom
+     */
+    select?: ClassroomSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassroomInclude<ExtArgs> | null;
+    where?: ClassroomWhereInput;
+  };
+
+  /**
+   * EventConsent.responses
+   */
+  export type EventConsent$responsesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    where?: EventConsentResponseWhereInput;
+    orderBy?:
+      EventConsentResponseOrderByWithRelationInput | EventConsentResponseOrderByWithRelationInput[];
+    cursor?: EventConsentResponseWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: EventConsentResponseScalarFieldEnum | EventConsentResponseScalarFieldEnum[];
+  };
+
+  /**
+   * EventConsent without action
+   */
+  export type EventConsentDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsent
+     */
+    select?: EventConsentSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model EventConsentResponse
+   */
+
+  export type AggregateEventConsentResponse = {
+    _count: EventConsentResponseCountAggregateOutputType | null;
+    _min: EventConsentResponseMinAggregateOutputType | null;
+    _max: EventConsentResponseMaxAggregateOutputType | null;
+  };
+
+  export type EventConsentResponseMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    consentId: string | null;
+    studentId: string | null;
+    parentUserId: string | null;
+    decision: string | null;
+    notes: string | null;
+    respondedAt: Date | null;
+  };
+
+  export type EventConsentResponseMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    consentId: string | null;
+    studentId: string | null;
+    parentUserId: string | null;
+    decision: string | null;
+    notes: string | null;
+    respondedAt: Date | null;
+  };
+
+  export type EventConsentResponseCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    consentId: number;
+    studentId: number;
+    parentUserId: number;
+    decision: number;
+    notes: number;
+    respondedAt: number;
+    _all: number;
+  };
+
+  export type EventConsentResponseMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    consentId?: true;
+    studentId?: true;
+    parentUserId?: true;
+    decision?: true;
+    notes?: true;
+    respondedAt?: true;
+  };
+
+  export type EventConsentResponseMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    consentId?: true;
+    studentId?: true;
+    parentUserId?: true;
+    decision?: true;
+    notes?: true;
+    respondedAt?: true;
+  };
+
+  export type EventConsentResponseCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    consentId?: true;
+    studentId?: true;
+    parentUserId?: true;
+    decision?: true;
+    notes?: true;
+    respondedAt?: true;
+    _all?: true;
+  };
+
+  export type EventConsentResponseAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which EventConsentResponse to aggregate.
+     */
+    where?: EventConsentResponseWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EventConsentResponses to fetch.
+     */
+    orderBy?:
+      EventConsentResponseOrderByWithRelationInput | EventConsentResponseOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: EventConsentResponseWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EventConsentResponses from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EventConsentResponses.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned EventConsentResponses
+     **/
+    _count?: true | EventConsentResponseCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: EventConsentResponseMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: EventConsentResponseMaxAggregateInputType;
+  };
+
+  export type GetEventConsentResponseAggregateType<T extends EventConsentResponseAggregateArgs> = {
+    [P in keyof T & keyof AggregateEventConsentResponse]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEventConsentResponse[P]>
+      : GetScalarType<T[P], AggregateEventConsentResponse[P]>;
+  };
+
+  export type EventConsentResponseGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EventConsentResponseWhereInput;
+    orderBy?:
+      | EventConsentResponseOrderByWithAggregationInput
+      | EventConsentResponseOrderByWithAggregationInput[];
+    by: EventConsentResponseScalarFieldEnum[] | EventConsentResponseScalarFieldEnum;
+    having?: EventConsentResponseScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: EventConsentResponseCountAggregateInputType | true;
+    _min?: EventConsentResponseMinAggregateInputType;
+    _max?: EventConsentResponseMaxAggregateInputType;
+  };
+
+  export type EventConsentResponseGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    consentId: string;
+    studentId: string;
+    parentUserId: string;
+    decision: string;
+    notes: string | null;
+    respondedAt: Date;
+    _count: EventConsentResponseCountAggregateOutputType | null;
+    _min: EventConsentResponseMinAggregateOutputType | null;
+    _max: EventConsentResponseMaxAggregateOutputType | null;
+  };
+
+  type GetEventConsentResponseGroupByPayload<T extends EventConsentResponseGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<EventConsentResponseGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof EventConsentResponseGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EventConsentResponseGroupByOutputType[P]>
+            : GetScalarType<T[P], EventConsentResponseGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type EventConsentResponseSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      consentId?: boolean;
+      studentId?: boolean;
+      parentUserId?: boolean;
+      decision?: boolean;
+      notes?: boolean;
+      respondedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      consent?: boolean | EventConsentDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+      parentUser?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['eventConsentResponse']
+  >;
+
+  export type EventConsentResponseSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      consentId?: boolean;
+      studentId?: boolean;
+      parentUserId?: boolean;
+      decision?: boolean;
+      notes?: boolean;
+      respondedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      consent?: boolean | EventConsentDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+      parentUser?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['eventConsentResponse']
+  >;
+
+  export type EventConsentResponseSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    consentId?: boolean;
+    studentId?: boolean;
+    parentUserId?: boolean;
+    decision?: boolean;
+    notes?: boolean;
+    respondedAt?: boolean;
+  };
+
+  export type EventConsentResponseInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    consent?: boolean | EventConsentDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+    parentUser?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type EventConsentResponseIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    consent?: boolean | EventConsentDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+    parentUser?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $EventConsentResponsePayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'EventConsentResponse';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      consent: Prisma.$EventConsentPayload<ExtArgs>;
+      student: Prisma.$StudentPayload<ExtArgs>;
+      parentUser: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        consentId: string;
+        studentId: string;
+        parentUserId: string;
+        decision: string;
+        notes: string | null;
+        respondedAt: Date;
+      },
+      ExtArgs['result']['eventConsentResponse']
+    >;
+    composites: {};
+  };
+
+  type EventConsentResponseGetPayload<
+    S extends boolean | null | undefined | EventConsentResponseDefaultArgs,
+  > = $Result.GetResult<Prisma.$EventConsentResponsePayload, S>;
+
+  type EventConsentResponseCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<EventConsentResponseFindManyArgs, 'select' | 'include' | 'distinct'> & {
+    select?: EventConsentResponseCountAggregateInputType | true;
+  };
+
+  export interface EventConsentResponseDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['EventConsentResponse'];
+      meta: { name: 'EventConsentResponse' };
+    };
+    /**
+     * Find zero or one EventConsentResponse that matches the filter.
+     * @param {EventConsentResponseFindUniqueArgs} args - Arguments to find a EventConsentResponse
+     * @example
+     * // Get one EventConsentResponse
+     * const eventConsentResponse = await prisma.eventConsentResponse.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EventConsentResponseFindUniqueArgs>(
+      args: SelectSubset<T, EventConsentResponseFindUniqueArgs<ExtArgs>>,
+    ): Prisma__EventConsentResponseClient<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one EventConsentResponse that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EventConsentResponseFindUniqueOrThrowArgs} args - Arguments to find a EventConsentResponse
+     * @example
+     * // Get one EventConsentResponse
+     * const eventConsentResponse = await prisma.eventConsentResponse.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EventConsentResponseFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, EventConsentResponseFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__EventConsentResponseClient<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first EventConsentResponse that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentResponseFindFirstArgs} args - Arguments to find a EventConsentResponse
+     * @example
+     * // Get one EventConsentResponse
+     * const eventConsentResponse = await prisma.eventConsentResponse.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EventConsentResponseFindFirstArgs>(
+      args?: SelectSubset<T, EventConsentResponseFindFirstArgs<ExtArgs>>,
+    ): Prisma__EventConsentResponseClient<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first EventConsentResponse that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentResponseFindFirstOrThrowArgs} args - Arguments to find a EventConsentResponse
+     * @example
+     * // Get one EventConsentResponse
+     * const eventConsentResponse = await prisma.eventConsentResponse.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EventConsentResponseFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, EventConsentResponseFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__EventConsentResponseClient<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more EventConsentResponses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentResponseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EventConsentResponses
+     * const eventConsentResponses = await prisma.eventConsentResponse.findMany()
+     *
+     * // Get first 10 EventConsentResponses
+     * const eventConsentResponses = await prisma.eventConsentResponse.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const eventConsentResponseWithIdOnly = await prisma.eventConsentResponse.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends EventConsentResponseFindManyArgs>(
+      args?: SelectSubset<T, EventConsentResponseFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findMany'>
+    >;
+
+    /**
+     * Create a EventConsentResponse.
+     * @param {EventConsentResponseCreateArgs} args - Arguments to create a EventConsentResponse.
+     * @example
+     * // Create one EventConsentResponse
+     * const EventConsentResponse = await prisma.eventConsentResponse.create({
+     *   data: {
+     *     // ... data to create a EventConsentResponse
+     *   }
+     * })
+     *
+     */
+    create<T extends EventConsentResponseCreateArgs>(
+      args: SelectSubset<T, EventConsentResponseCreateArgs<ExtArgs>>,
+    ): Prisma__EventConsentResponseClient<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many EventConsentResponses.
+     * @param {EventConsentResponseCreateManyArgs} args - Arguments to create many EventConsentResponses.
+     * @example
+     * // Create many EventConsentResponses
+     * const eventConsentResponse = await prisma.eventConsentResponse.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends EventConsentResponseCreateManyArgs>(
+      args?: SelectSubset<T, EventConsentResponseCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many EventConsentResponses and returns the data saved in the database.
+     * @param {EventConsentResponseCreateManyAndReturnArgs} args - Arguments to create many EventConsentResponses.
+     * @example
+     * // Create many EventConsentResponses
+     * const eventConsentResponse = await prisma.eventConsentResponse.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many EventConsentResponses and only return the `id`
+     * const eventConsentResponseWithIdOnly = await prisma.eventConsentResponse.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends EventConsentResponseCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, EventConsentResponseCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a EventConsentResponse.
+     * @param {EventConsentResponseDeleteArgs} args - Arguments to delete one EventConsentResponse.
+     * @example
+     * // Delete one EventConsentResponse
+     * const EventConsentResponse = await prisma.eventConsentResponse.delete({
+     *   where: {
+     *     // ... filter to delete one EventConsentResponse
+     *   }
+     * })
+     *
+     */
+    delete<T extends EventConsentResponseDeleteArgs>(
+      args: SelectSubset<T, EventConsentResponseDeleteArgs<ExtArgs>>,
+    ): Prisma__EventConsentResponseClient<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one EventConsentResponse.
+     * @param {EventConsentResponseUpdateArgs} args - Arguments to update one EventConsentResponse.
+     * @example
+     * // Update one EventConsentResponse
+     * const eventConsentResponse = await prisma.eventConsentResponse.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends EventConsentResponseUpdateArgs>(
+      args: SelectSubset<T, EventConsentResponseUpdateArgs<ExtArgs>>,
+    ): Prisma__EventConsentResponseClient<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more EventConsentResponses.
+     * @param {EventConsentResponseDeleteManyArgs} args - Arguments to filter EventConsentResponses to delete.
+     * @example
+     * // Delete a few EventConsentResponses
+     * const { count } = await prisma.eventConsentResponse.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends EventConsentResponseDeleteManyArgs>(
+      args?: SelectSubset<T, EventConsentResponseDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more EventConsentResponses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentResponseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EventConsentResponses
+     * const eventConsentResponse = await prisma.eventConsentResponse.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends EventConsentResponseUpdateManyArgs>(
+      args: SelectSubset<T, EventConsentResponseUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one EventConsentResponse.
+     * @param {EventConsentResponseUpsertArgs} args - Arguments to update or create a EventConsentResponse.
+     * @example
+     * // Update or create a EventConsentResponse
+     * const eventConsentResponse = await prisma.eventConsentResponse.upsert({
+     *   create: {
+     *     // ... data to create a EventConsentResponse
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EventConsentResponse we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EventConsentResponseUpsertArgs>(
+      args: SelectSubset<T, EventConsentResponseUpsertArgs<ExtArgs>>,
+    ): Prisma__EventConsentResponseClient<
+      $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of EventConsentResponses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentResponseCountArgs} args - Arguments to filter EventConsentResponses to count.
+     * @example
+     * // Count the number of EventConsentResponses
+     * const count = await prisma.eventConsentResponse.count({
+     *   where: {
+     *     // ... the filter for the EventConsentResponses we want to count
+     *   }
+     * })
+     **/
+    count<T extends EventConsentResponseCountArgs>(
+      args?: Subset<T, EventConsentResponseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EventConsentResponseCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a EventConsentResponse.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentResponseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends EventConsentResponseAggregateArgs>(
+      args: Subset<T, EventConsentResponseAggregateArgs>,
+    ): Prisma.PrismaPromise<GetEventConsentResponseAggregateType<T>>;
+
+    /**
+     * Group by EventConsentResponse.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventConsentResponseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends EventConsentResponseGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: EventConsentResponseGroupByArgs['orderBy'] }
+        : { orderBy?: EventConsentResponseGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, EventConsentResponseGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetEventConsentResponseGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the EventConsentResponse model
+     */
+    readonly fields: EventConsentResponseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EventConsentResponse.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EventConsentResponseClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    consent<T extends EventConsentDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, EventConsentDefaultArgs<ExtArgs>>,
+    ): Prisma__EventConsentClient<
+      $Result.GetResult<Prisma.$EventConsentPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, StudentDefaultArgs<ExtArgs>>,
+    ): Prisma__StudentClient<
+      $Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    parentUser<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the EventConsentResponse model
+   */
+  interface EventConsentResponseFieldRefs {
+    readonly id: FieldRef<'EventConsentResponse', 'String'>;
+    readonly tenantId: FieldRef<'EventConsentResponse', 'String'>;
+    readonly consentId: FieldRef<'EventConsentResponse', 'String'>;
+    readonly studentId: FieldRef<'EventConsentResponse', 'String'>;
+    readonly parentUserId: FieldRef<'EventConsentResponse', 'String'>;
+    readonly decision: FieldRef<'EventConsentResponse', 'String'>;
+    readonly notes: FieldRef<'EventConsentResponse', 'String'>;
+    readonly respondedAt: FieldRef<'EventConsentResponse', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * EventConsentResponse findUnique
+   */
+  export type EventConsentResponseFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsentResponse to fetch.
+     */
+    where: EventConsentResponseWhereUniqueInput;
+  };
+
+  /**
+   * EventConsentResponse findUniqueOrThrow
+   */
+  export type EventConsentResponseFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsentResponse to fetch.
+     */
+    where: EventConsentResponseWhereUniqueInput;
+  };
+
+  /**
+   * EventConsentResponse findFirst
+   */
+  export type EventConsentResponseFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsentResponse to fetch.
+     */
+    where?: EventConsentResponseWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EventConsentResponses to fetch.
+     */
+    orderBy?:
+      EventConsentResponseOrderByWithRelationInput | EventConsentResponseOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for EventConsentResponses.
+     */
+    cursor?: EventConsentResponseWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EventConsentResponses from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EventConsentResponses.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EventConsentResponses.
+     */
+    distinct?: EventConsentResponseScalarFieldEnum | EventConsentResponseScalarFieldEnum[];
+  };
+
+  /**
+   * EventConsentResponse findFirstOrThrow
+   */
+  export type EventConsentResponseFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsentResponse to fetch.
+     */
+    where?: EventConsentResponseWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EventConsentResponses to fetch.
+     */
+    orderBy?:
+      EventConsentResponseOrderByWithRelationInput | EventConsentResponseOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for EventConsentResponses.
+     */
+    cursor?: EventConsentResponseWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EventConsentResponses from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EventConsentResponses.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EventConsentResponses.
+     */
+    distinct?: EventConsentResponseScalarFieldEnum | EventConsentResponseScalarFieldEnum[];
+  };
+
+  /**
+   * EventConsentResponse findMany
+   */
+  export type EventConsentResponseFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * Filter, which EventConsentResponses to fetch.
+     */
+    where?: EventConsentResponseWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EventConsentResponses to fetch.
+     */
+    orderBy?:
+      EventConsentResponseOrderByWithRelationInput | EventConsentResponseOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing EventConsentResponses.
+     */
+    cursor?: EventConsentResponseWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EventConsentResponses from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EventConsentResponses.
+     */
+    skip?: number;
+    distinct?: EventConsentResponseScalarFieldEnum | EventConsentResponseScalarFieldEnum[];
+  };
+
+  /**
+   * EventConsentResponse create
+   */
+  export type EventConsentResponseCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a EventConsentResponse.
+     */
+    data: XOR<EventConsentResponseCreateInput, EventConsentResponseUncheckedCreateInput>;
+  };
+
+  /**
+   * EventConsentResponse createMany
+   */
+  export type EventConsentResponseCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many EventConsentResponses.
+     */
+    data: EventConsentResponseCreateManyInput | EventConsentResponseCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * EventConsentResponse createManyAndReturn
+   */
+  export type EventConsentResponseCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many EventConsentResponses.
+     */
+    data: EventConsentResponseCreateManyInput | EventConsentResponseCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * EventConsentResponse update
+   */
+  export type EventConsentResponseUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a EventConsentResponse.
+     */
+    data: XOR<EventConsentResponseUpdateInput, EventConsentResponseUncheckedUpdateInput>;
+    /**
+     * Choose, which EventConsentResponse to update.
+     */
+    where: EventConsentResponseWhereUniqueInput;
+  };
+
+  /**
+   * EventConsentResponse updateMany
+   */
+  export type EventConsentResponseUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update EventConsentResponses.
+     */
+    data: XOR<
+      EventConsentResponseUpdateManyMutationInput,
+      EventConsentResponseUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which EventConsentResponses to update
+     */
+    where?: EventConsentResponseWhereInput;
+  };
+
+  /**
+   * EventConsentResponse upsert
+   */
+  export type EventConsentResponseUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the EventConsentResponse to update in case it exists.
+     */
+    where: EventConsentResponseWhereUniqueInput;
+    /**
+     * In case the EventConsentResponse found by the `where` argument doesn't exist, create a new EventConsentResponse with this data.
+     */
+    create: XOR<EventConsentResponseCreateInput, EventConsentResponseUncheckedCreateInput>;
+    /**
+     * In case the EventConsentResponse was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EventConsentResponseUpdateInput, EventConsentResponseUncheckedUpdateInput>;
+  };
+
+  /**
+   * EventConsentResponse delete
+   */
+  export type EventConsentResponseDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+    /**
+     * Filter which EventConsentResponse to delete.
+     */
+    where: EventConsentResponseWhereUniqueInput;
+  };
+
+  /**
+   * EventConsentResponse deleteMany
+   */
+  export type EventConsentResponseDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which EventConsentResponses to delete
+     */
+    where?: EventConsentResponseWhereInput;
+  };
+
+  /**
+   * EventConsentResponse without action
+   */
+  export type EventConsentResponseDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EventConsentResponse
+     */
+    select?: EventConsentResponseSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventConsentResponseInclude<ExtArgs> | null;
+  };
+
+  /**
    * Enums
    */
 
@@ -35039,6 +39241,55 @@ export namespace Prisma {
   export type MediaFileScalarFieldEnum =
     (typeof MediaFileScalarFieldEnum)[keyof typeof MediaFileScalarFieldEnum];
 
+  export const AttendanceExcuseScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    studentId: 'studentId';
+    date: 'date';
+    reason: 'reason';
+    notes: 'notes';
+    status: 'status';
+    createdById: 'createdById';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type AttendanceExcuseScalarFieldEnum =
+    (typeof AttendanceExcuseScalarFieldEnum)[keyof typeof AttendanceExcuseScalarFieldEnum];
+
+  export const EventConsentScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    classroomId: 'classroomId';
+    title: 'title';
+    eventDate: 'eventDate';
+    location: 'location';
+    price: 'price';
+    description: 'description';
+    deadline: 'deadline';
+    status: 'status';
+    createdById: 'createdById';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type EventConsentScalarFieldEnum =
+    (typeof EventConsentScalarFieldEnum)[keyof typeof EventConsentScalarFieldEnum];
+
+  export const EventConsentResponseScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    consentId: 'consentId';
+    studentId: 'studentId';
+    parentUserId: 'parentUserId';
+    decision: 'decision';
+    notes: 'notes';
+    respondedAt: 'respondedAt';
+  };
+
+  export type EventConsentResponseScalarFieldEnum =
+    (typeof EventConsentResponseScalarFieldEnum)[keyof typeof EventConsentResponseScalarFieldEnum];
+
   export const SortOrder: {
     asc: 'asc';
     desc: 'desc';
@@ -35335,6 +39586,16 @@ export namespace Prisma {
   >;
 
   /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>;
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>;
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>;
@@ -35382,6 +39643,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenListRelationFilter;
     notifications?: NotificationListRelationFilter;
     mediaFiles?: MediaFileListRelationFilter;
+    attendanceExcuses?: AttendanceExcuseListRelationFilter;
+    eventConsents?: EventConsentListRelationFilter;
+    eventConsentResponses?: EventConsentResponseListRelationFilter;
   };
 
   export type TenantOrderByWithRelationInput = {
@@ -35415,6 +39679,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenOrderByRelationAggregateInput;
     notifications?: NotificationOrderByRelationAggregateInput;
     mediaFiles?: MediaFileOrderByRelationAggregateInput;
+    attendanceExcuses?: AttendanceExcuseOrderByRelationAggregateInput;
+    eventConsents?: EventConsentOrderByRelationAggregateInput;
+    eventConsentResponses?: EventConsentResponseOrderByRelationAggregateInput;
   };
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<
@@ -35452,6 +39719,9 @@ export namespace Prisma {
       pushTokens?: UserPushTokenListRelationFilter;
       notifications?: NotificationListRelationFilter;
       mediaFiles?: MediaFileListRelationFilter;
+      attendanceExcuses?: AttendanceExcuseListRelationFilter;
+      eventConsents?: EventConsentListRelationFilter;
+      eventConsentResponses?: EventConsentResponseListRelationFilter;
     },
     'id' | 'slug'
   >;
@@ -35514,6 +39784,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenListRelationFilter;
     notifications?: NotificationListRelationFilter;
     uploadedMedia?: MediaFileListRelationFilter;
+    attendanceExcusesCreated?: AttendanceExcuseListRelationFilter;
+    eventConsentsCreated?: EventConsentListRelationFilter;
+    eventConsentResponses?: EventConsentResponseListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -35547,6 +39820,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenOrderByRelationAggregateInput;
     notifications?: NotificationOrderByRelationAggregateInput;
     uploadedMedia?: MediaFileOrderByRelationAggregateInput;
+    attendanceExcusesCreated?: AttendanceExcuseOrderByRelationAggregateInput;
+    eventConsentsCreated?: EventConsentOrderByRelationAggregateInput;
+    eventConsentResponses?: EventConsentResponseOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -35585,6 +39861,9 @@ export namespace Prisma {
       pushTokens?: UserPushTokenListRelationFilter;
       notifications?: NotificationListRelationFilter;
       uploadedMedia?: MediaFileListRelationFilter;
+      attendanceExcusesCreated?: AttendanceExcuseListRelationFilter;
+      eventConsentsCreated?: EventConsentListRelationFilter;
+      eventConsentResponses?: EventConsentResponseListRelationFilter;
     },
     'id' | 'tenantId_email'
   >;
@@ -35651,6 +39930,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordListRelationFilter;
     developmentObservations?: DevelopmentObservationListRelationFilter;
     portfolioItems?: PortfolioItemListRelationFilter;
+    attendanceExcuses?: AttendanceExcuseListRelationFilter;
+    eventConsentResponses?: EventConsentResponseListRelationFilter;
   };
 
   export type StudentOrderByWithRelationInput = {
@@ -35682,6 +39963,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordOrderByRelationAggregateInput;
     developmentObservations?: DevelopmentObservationOrderByRelationAggregateInput;
     portfolioItems?: PortfolioItemOrderByRelationAggregateInput;
+    attendanceExcuses?: AttendanceExcuseOrderByRelationAggregateInput;
+    eventConsentResponses?: EventConsentResponseOrderByRelationAggregateInput;
   };
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<
@@ -35717,6 +40000,8 @@ export namespace Prisma {
       incidentRecords?: IncidentRecordListRelationFilter;
       developmentObservations?: DevelopmentObservationListRelationFilter;
       portfolioItems?: PortfolioItemListRelationFilter;
+      attendanceExcuses?: AttendanceExcuseListRelationFilter;
+      eventConsentResponses?: EventConsentResponseListRelationFilter;
     },
     'id'
   >;
@@ -35775,6 +40060,7 @@ export namespace Prisma {
     tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
     students?: StudentListRelationFilter;
     teacherAssignments?: ClassroomTeacherListRelationFilter;
+    eventConsents?: EventConsentListRelationFilter;
   };
 
   export type ClassroomOrderByWithRelationInput = {
@@ -35788,6 +40074,7 @@ export namespace Prisma {
     tenant?: TenantOrderByWithRelationInput;
     students?: StudentOrderByRelationAggregateInput;
     teacherAssignments?: ClassroomTeacherOrderByRelationAggregateInput;
+    eventConsents?: EventConsentOrderByRelationAggregateInput;
   };
 
   export type ClassroomWhereUniqueInput = Prisma.AtLeast<
@@ -35806,6 +40093,7 @@ export namespace Prisma {
       tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
       students?: StudentListRelationFilter;
       teacherAssignments?: ClassroomTeacherListRelationFilter;
+      eventConsents?: EventConsentListRelationFilter;
     },
     'id' | 'tenantId_name'
   >;
@@ -37836,6 +42124,304 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<'MediaFile'> | Date | string;
   };
 
+  export type AttendanceExcuseWhereInput = {
+    AND?: AttendanceExcuseWhereInput | AttendanceExcuseWhereInput[];
+    OR?: AttendanceExcuseWhereInput[];
+    NOT?: AttendanceExcuseWhereInput | AttendanceExcuseWhereInput[];
+    id?: StringFilter<'AttendanceExcuse'> | string;
+    tenantId?: StringFilter<'AttendanceExcuse'> | string;
+    studentId?: StringFilter<'AttendanceExcuse'> | string;
+    date?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+    reason?: StringFilter<'AttendanceExcuse'> | string;
+    notes?: StringNullableFilter<'AttendanceExcuse'> | string | null;
+    status?: StringFilter<'AttendanceExcuse'> | string;
+    createdById?: StringFilter<'AttendanceExcuse'> | string;
+    createdAt?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+    updatedAt?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    student?: XOR<StudentRelationFilter, StudentWhereInput>;
+    createdBy?: XOR<UserRelationFilter, UserWhereInput>;
+  };
+
+  export type AttendanceExcuseOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    reason?: SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    student?: StudentOrderByWithRelationInput;
+    createdBy?: UserOrderByWithRelationInput;
+  };
+
+  export type AttendanceExcuseWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      tenantId_studentId_date?: AttendanceExcuseTenantIdStudentIdDateCompoundUniqueInput;
+      AND?: AttendanceExcuseWhereInput | AttendanceExcuseWhereInput[];
+      OR?: AttendanceExcuseWhereInput[];
+      NOT?: AttendanceExcuseWhereInput | AttendanceExcuseWhereInput[];
+      tenantId?: StringFilter<'AttendanceExcuse'> | string;
+      studentId?: StringFilter<'AttendanceExcuse'> | string;
+      date?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+      reason?: StringFilter<'AttendanceExcuse'> | string;
+      notes?: StringNullableFilter<'AttendanceExcuse'> | string | null;
+      status?: StringFilter<'AttendanceExcuse'> | string;
+      createdById?: StringFilter<'AttendanceExcuse'> | string;
+      createdAt?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+      updatedAt?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      student?: XOR<StudentRelationFilter, StudentWhereInput>;
+      createdBy?: XOR<UserRelationFilter, UserWhereInput>;
+    },
+    'id' | 'tenantId_studentId_date'
+  >;
+
+  export type AttendanceExcuseOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    reason?: SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: AttendanceExcuseCountOrderByAggregateInput;
+    _max?: AttendanceExcuseMaxOrderByAggregateInput;
+    _min?: AttendanceExcuseMinOrderByAggregateInput;
+  };
+
+  export type AttendanceExcuseScalarWhereWithAggregatesInput = {
+    AND?:
+      | AttendanceExcuseScalarWhereWithAggregatesInput
+      | AttendanceExcuseScalarWhereWithAggregatesInput[];
+    OR?: AttendanceExcuseScalarWhereWithAggregatesInput[];
+    NOT?:
+      | AttendanceExcuseScalarWhereWithAggregatesInput
+      | AttendanceExcuseScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'AttendanceExcuse'> | string;
+    tenantId?: StringWithAggregatesFilter<'AttendanceExcuse'> | string;
+    studentId?: StringWithAggregatesFilter<'AttendanceExcuse'> | string;
+    date?: DateTimeWithAggregatesFilter<'AttendanceExcuse'> | Date | string;
+    reason?: StringWithAggregatesFilter<'AttendanceExcuse'> | string;
+    notes?: StringNullableWithAggregatesFilter<'AttendanceExcuse'> | string | null;
+    status?: StringWithAggregatesFilter<'AttendanceExcuse'> | string;
+    createdById?: StringWithAggregatesFilter<'AttendanceExcuse'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'AttendanceExcuse'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'AttendanceExcuse'> | Date | string;
+  };
+
+  export type EventConsentWhereInput = {
+    AND?: EventConsentWhereInput | EventConsentWhereInput[];
+    OR?: EventConsentWhereInput[];
+    NOT?: EventConsentWhereInput | EventConsentWhereInput[];
+    id?: StringFilter<'EventConsent'> | string;
+    tenantId?: StringFilter<'EventConsent'> | string;
+    classroomId?: StringNullableFilter<'EventConsent'> | string | null;
+    title?: StringFilter<'EventConsent'> | string;
+    eventDate?: DateTimeFilter<'EventConsent'> | Date | string;
+    location?: StringNullableFilter<'EventConsent'> | string | null;
+    price?:
+      DecimalNullableFilter<'EventConsent'> | Decimal | DecimalJsLike | number | string | null;
+    description?: StringNullableFilter<'EventConsent'> | string | null;
+    deadline?: DateTimeNullableFilter<'EventConsent'> | Date | string | null;
+    status?: StringFilter<'EventConsent'> | string;
+    createdById?: StringFilter<'EventConsent'> | string;
+    createdAt?: DateTimeFilter<'EventConsent'> | Date | string;
+    updatedAt?: DateTimeFilter<'EventConsent'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    classroom?: XOR<ClassroomNullableRelationFilter, ClassroomWhereInput> | null;
+    createdBy?: XOR<UserRelationFilter, UserWhereInput>;
+    responses?: EventConsentResponseListRelationFilter;
+  };
+
+  export type EventConsentOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    classroomId?: SortOrderInput | SortOrder;
+    title?: SortOrder;
+    eventDate?: SortOrder;
+    location?: SortOrderInput | SortOrder;
+    price?: SortOrderInput | SortOrder;
+    description?: SortOrderInput | SortOrder;
+    deadline?: SortOrderInput | SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    classroom?: ClassroomOrderByWithRelationInput;
+    createdBy?: UserOrderByWithRelationInput;
+    responses?: EventConsentResponseOrderByRelationAggregateInput;
+  };
+
+  export type EventConsentWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: EventConsentWhereInput | EventConsentWhereInput[];
+      OR?: EventConsentWhereInput[];
+      NOT?: EventConsentWhereInput | EventConsentWhereInput[];
+      tenantId?: StringFilter<'EventConsent'> | string;
+      classroomId?: StringNullableFilter<'EventConsent'> | string | null;
+      title?: StringFilter<'EventConsent'> | string;
+      eventDate?: DateTimeFilter<'EventConsent'> | Date | string;
+      location?: StringNullableFilter<'EventConsent'> | string | null;
+      price?:
+        DecimalNullableFilter<'EventConsent'> | Decimal | DecimalJsLike | number | string | null;
+      description?: StringNullableFilter<'EventConsent'> | string | null;
+      deadline?: DateTimeNullableFilter<'EventConsent'> | Date | string | null;
+      status?: StringFilter<'EventConsent'> | string;
+      createdById?: StringFilter<'EventConsent'> | string;
+      createdAt?: DateTimeFilter<'EventConsent'> | Date | string;
+      updatedAt?: DateTimeFilter<'EventConsent'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      classroom?: XOR<ClassroomNullableRelationFilter, ClassroomWhereInput> | null;
+      createdBy?: XOR<UserRelationFilter, UserWhereInput>;
+      responses?: EventConsentResponseListRelationFilter;
+    },
+    'id'
+  >;
+
+  export type EventConsentOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    classroomId?: SortOrderInput | SortOrder;
+    title?: SortOrder;
+    eventDate?: SortOrder;
+    location?: SortOrderInput | SortOrder;
+    price?: SortOrderInput | SortOrder;
+    description?: SortOrderInput | SortOrder;
+    deadline?: SortOrderInput | SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: EventConsentCountOrderByAggregateInput;
+    _avg?: EventConsentAvgOrderByAggregateInput;
+    _max?: EventConsentMaxOrderByAggregateInput;
+    _min?: EventConsentMinOrderByAggregateInput;
+    _sum?: EventConsentSumOrderByAggregateInput;
+  };
+
+  export type EventConsentScalarWhereWithAggregatesInput = {
+    AND?: EventConsentScalarWhereWithAggregatesInput | EventConsentScalarWhereWithAggregatesInput[];
+    OR?: EventConsentScalarWhereWithAggregatesInput[];
+    NOT?: EventConsentScalarWhereWithAggregatesInput | EventConsentScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'EventConsent'> | string;
+    tenantId?: StringWithAggregatesFilter<'EventConsent'> | string;
+    classroomId?: StringNullableWithAggregatesFilter<'EventConsent'> | string | null;
+    title?: StringWithAggregatesFilter<'EventConsent'> | string;
+    eventDate?: DateTimeWithAggregatesFilter<'EventConsent'> | Date | string;
+    location?: StringNullableWithAggregatesFilter<'EventConsent'> | string | null;
+    price?:
+      | DecimalNullableWithAggregatesFilter<'EventConsent'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    description?: StringNullableWithAggregatesFilter<'EventConsent'> | string | null;
+    deadline?: DateTimeNullableWithAggregatesFilter<'EventConsent'> | Date | string | null;
+    status?: StringWithAggregatesFilter<'EventConsent'> | string;
+    createdById?: StringWithAggregatesFilter<'EventConsent'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'EventConsent'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'EventConsent'> | Date | string;
+  };
+
+  export type EventConsentResponseWhereInput = {
+    AND?: EventConsentResponseWhereInput | EventConsentResponseWhereInput[];
+    OR?: EventConsentResponseWhereInput[];
+    NOT?: EventConsentResponseWhereInput | EventConsentResponseWhereInput[];
+    id?: StringFilter<'EventConsentResponse'> | string;
+    tenantId?: StringFilter<'EventConsentResponse'> | string;
+    consentId?: StringFilter<'EventConsentResponse'> | string;
+    studentId?: StringFilter<'EventConsentResponse'> | string;
+    parentUserId?: StringFilter<'EventConsentResponse'> | string;
+    decision?: StringFilter<'EventConsentResponse'> | string;
+    notes?: StringNullableFilter<'EventConsentResponse'> | string | null;
+    respondedAt?: DateTimeFilter<'EventConsentResponse'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    consent?: XOR<EventConsentRelationFilter, EventConsentWhereInput>;
+    student?: XOR<StudentRelationFilter, StudentWhereInput>;
+    parentUser?: XOR<UserRelationFilter, UserWhereInput>;
+  };
+
+  export type EventConsentResponseOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    consentId?: SortOrder;
+    studentId?: SortOrder;
+    parentUserId?: SortOrder;
+    decision?: SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    respondedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    consent?: EventConsentOrderByWithRelationInput;
+    student?: StudentOrderByWithRelationInput;
+    parentUser?: UserOrderByWithRelationInput;
+  };
+
+  export type EventConsentResponseWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      consentId_studentId?: EventConsentResponseConsentIdStudentIdCompoundUniqueInput;
+      AND?: EventConsentResponseWhereInput | EventConsentResponseWhereInput[];
+      OR?: EventConsentResponseWhereInput[];
+      NOT?: EventConsentResponseWhereInput | EventConsentResponseWhereInput[];
+      tenantId?: StringFilter<'EventConsentResponse'> | string;
+      consentId?: StringFilter<'EventConsentResponse'> | string;
+      studentId?: StringFilter<'EventConsentResponse'> | string;
+      parentUserId?: StringFilter<'EventConsentResponse'> | string;
+      decision?: StringFilter<'EventConsentResponse'> | string;
+      notes?: StringNullableFilter<'EventConsentResponse'> | string | null;
+      respondedAt?: DateTimeFilter<'EventConsentResponse'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      consent?: XOR<EventConsentRelationFilter, EventConsentWhereInput>;
+      student?: XOR<StudentRelationFilter, StudentWhereInput>;
+      parentUser?: XOR<UserRelationFilter, UserWhereInput>;
+    },
+    'id' | 'consentId_studentId'
+  >;
+
+  export type EventConsentResponseOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    consentId?: SortOrder;
+    studentId?: SortOrder;
+    parentUserId?: SortOrder;
+    decision?: SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    respondedAt?: SortOrder;
+    _count?: EventConsentResponseCountOrderByAggregateInput;
+    _max?: EventConsentResponseMaxOrderByAggregateInput;
+    _min?: EventConsentResponseMinOrderByAggregateInput;
+  };
+
+  export type EventConsentResponseScalarWhereWithAggregatesInput = {
+    AND?:
+      | EventConsentResponseScalarWhereWithAggregatesInput
+      | EventConsentResponseScalarWhereWithAggregatesInput[];
+    OR?: EventConsentResponseScalarWhereWithAggregatesInput[];
+    NOT?:
+      | EventConsentResponseScalarWhereWithAggregatesInput
+      | EventConsentResponseScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'EventConsentResponse'> | string;
+    tenantId?: StringWithAggregatesFilter<'EventConsentResponse'> | string;
+    consentId?: StringWithAggregatesFilter<'EventConsentResponse'> | string;
+    studentId?: StringWithAggregatesFilter<'EventConsentResponse'> | string;
+    parentUserId?: StringWithAggregatesFilter<'EventConsentResponse'> | string;
+    decision?: StringWithAggregatesFilter<'EventConsentResponse'> | string;
+    notes?: StringNullableWithAggregatesFilter<'EventConsentResponse'> | string | null;
+    respondedAt?: DateTimeWithAggregatesFilter<'EventConsentResponse'> | Date | string;
+  };
+
   export type TenantCreateInput = {
     id?: string;
     slug: string;
@@ -37867,6 +42453,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateInput = {
@@ -37900,6 +42489,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUpdateInput = {
@@ -37933,6 +42525,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateInput = {
@@ -37966,6 +42561,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateManyInput = {
@@ -38025,6 +42623,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -38057,6 +42658,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUpdateInput = {
@@ -38089,6 +42693,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -38121,6 +42728,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -38184,6 +42794,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateInput = {
@@ -38212,6 +42824,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUpdateInput = {
@@ -38240,6 +42854,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateInput = {
@@ -38268,6 +42884,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentCreateManyInput = {
@@ -38328,6 +42946,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutClassroomsInput;
     students?: StudentCreateNestedManyWithoutClassroomInput;
     teacherAssignments?: ClassroomTeacherCreateNestedManyWithoutClassroomInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutClassroomInput;
   };
 
   export type ClassroomUncheckedCreateInput = {
@@ -38340,6 +42959,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     students?: StudentUncheckedCreateNestedManyWithoutClassroomInput;
     teacherAssignments?: ClassroomTeacherUncheckedCreateNestedManyWithoutClassroomInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutClassroomInput;
   };
 
   export type ClassroomUpdateInput = {
@@ -38352,6 +42972,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutClassroomsNestedInput;
     students?: StudentUpdateManyWithoutClassroomNestedInput;
     teacherAssignments?: ClassroomTeacherUpdateManyWithoutClassroomNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutClassroomNestedInput;
   };
 
   export type ClassroomUncheckedUpdateInput = {
@@ -38364,6 +42985,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     students?: StudentUncheckedUpdateManyWithoutClassroomNestedInput;
     teacherAssignments?: ClassroomTeacherUncheckedUpdateManyWithoutClassroomNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutClassroomNestedInput;
   };
 
   export type ClassroomCreateManyInput = {
@@ -40346,6 +44968,284 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type AttendanceExcuseCreateInput = {
+    id?: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutAttendanceExcusesInput;
+    student: StudentCreateNestedOneWithoutAttendanceExcusesInput;
+    createdBy: UserCreateNestedOneWithoutAttendanceExcusesCreatedInput;
+  };
+
+  export type AttendanceExcuseUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type AttendanceExcuseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutAttendanceExcusesNestedInput;
+    student?: StudentUpdateOneRequiredWithoutAttendanceExcusesNestedInput;
+    createdBy?: UserUpdateOneRequiredWithoutAttendanceExcusesCreatedNestedInput;
+  };
+
+  export type AttendanceExcuseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type AttendanceExcuseCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type AttendanceExcuseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type AttendanceExcuseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentCreateInput = {
+    id?: string;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutEventConsentsInput;
+    classroom?: ClassroomCreateNestedOneWithoutEventConsentsInput;
+    createdBy: UserCreateNestedOneWithoutEventConsentsCreatedInput;
+    responses?: EventConsentResponseCreateNestedManyWithoutConsentInput;
+  };
+
+  export type EventConsentUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    classroomId?: string | null;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    responses?: EventConsentResponseUncheckedCreateNestedManyWithoutConsentInput;
+  };
+
+  export type EventConsentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutEventConsentsNestedInput;
+    classroom?: ClassroomUpdateOneWithoutEventConsentsNestedInput;
+    createdBy?: UserUpdateOneRequiredWithoutEventConsentsCreatedNestedInput;
+    responses?: EventConsentResponseUpdateManyWithoutConsentNestedInput;
+  };
+
+  export type EventConsentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    responses?: EventConsentResponseUncheckedUpdateManyWithoutConsentNestedInput;
+  };
+
+  export type EventConsentCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    classroomId?: string | null;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type EventConsentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseCreateInput = {
+    id?: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutEventConsentResponsesInput;
+    consent: EventConsentCreateNestedOneWithoutResponsesInput;
+    student: StudentCreateNestedOneWithoutEventConsentResponsesInput;
+    parentUser: UserCreateNestedOneWithoutEventConsentResponsesInput;
+  };
+
+  export type EventConsentResponseUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    consentId: string;
+    studentId: string;
+    parentUserId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
+  export type EventConsentResponseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+    consent?: EventConsentUpdateOneRequiredWithoutResponsesNestedInput;
+    student?: StudentUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+    parentUser?: UserUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+  };
+
+  export type EventConsentResponseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    consentId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    parentUserId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    consentId: string;
+    studentId: string;
+    parentUserId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
+  export type EventConsentResponseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    consentId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    parentUserId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -40523,6 +45423,24 @@ export namespace Prisma {
     none?: MediaFileWhereInput;
   };
 
+  export type AttendanceExcuseListRelationFilter = {
+    every?: AttendanceExcuseWhereInput;
+    some?: AttendanceExcuseWhereInput;
+    none?: AttendanceExcuseWhereInput;
+  };
+
+  export type EventConsentListRelationFilter = {
+    every?: EventConsentWhereInput;
+    some?: EventConsentWhereInput;
+    none?: EventConsentWhereInput;
+  };
+
+  export type EventConsentResponseListRelationFilter = {
+    every?: EventConsentResponseWhereInput;
+    some?: EventConsentResponseWhereInput;
+    none?: EventConsentResponseWhereInput;
+  };
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -40616,6 +45534,18 @@ export namespace Prisma {
   };
 
   export type MediaFileOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type AttendanceExcuseOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type EventConsentOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type EventConsentResponseOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -42216,6 +47146,208 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>;
   };
 
+  export type AttendanceExcuseTenantIdStudentIdDateCompoundUniqueInput = {
+    tenantId: string;
+    studentId: string;
+    date: Date | string;
+  };
+
+  export type AttendanceExcuseCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    reason?: SortOrder;
+    notes?: SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type AttendanceExcuseMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    reason?: SortOrder;
+    notes?: SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type AttendanceExcuseMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    date?: SortOrder;
+    reason?: SortOrder;
+    notes?: SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null;
+    in?:
+      | Decimal[]
+      | DecimalJsLike[]
+      | number[]
+      | string[]
+      | ListDecimalFieldRefInput<$PrismaModel>
+      | null;
+    notIn?:
+      | Decimal[]
+      | DecimalJsLike[]
+      | number[]
+      | string[]
+      | ListDecimalFieldRefInput<$PrismaModel>
+      | null;
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    not?:
+      NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null;
+  };
+
+  export type EventConsentCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    classroomId?: SortOrder;
+    title?: SortOrder;
+    eventDate?: SortOrder;
+    location?: SortOrder;
+    price?: SortOrder;
+    description?: SortOrder;
+    deadline?: SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type EventConsentAvgOrderByAggregateInput = {
+    price?: SortOrder;
+  };
+
+  export type EventConsentMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    classroomId?: SortOrder;
+    title?: SortOrder;
+    eventDate?: SortOrder;
+    location?: SortOrder;
+    price?: SortOrder;
+    description?: SortOrder;
+    deadline?: SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type EventConsentMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    classroomId?: SortOrder;
+    title?: SortOrder;
+    eventDate?: SortOrder;
+    location?: SortOrder;
+    price?: SortOrder;
+    description?: SortOrder;
+    deadline?: SortOrder;
+    status?: SortOrder;
+    createdById?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type EventConsentSumOrderByAggregateInput = {
+    price?: SortOrder;
+  };
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null;
+    in?:
+      | Decimal[]
+      | DecimalJsLike[]
+      | number[]
+      | string[]
+      | ListDecimalFieldRefInput<$PrismaModel>
+      | null;
+    notIn?:
+      | Decimal[]
+      | DecimalJsLike[]
+      | number[]
+      | string[]
+      | ListDecimalFieldRefInput<$PrismaModel>
+      | null;
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedDecimalNullableWithAggregatesFilter<$PrismaModel>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>;
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>;
+    _min?: NestedDecimalNullableFilter<$PrismaModel>;
+    _max?: NestedDecimalNullableFilter<$PrismaModel>;
+  };
+
+  export type EventConsentRelationFilter = {
+    is?: EventConsentWhereInput;
+    isNot?: EventConsentWhereInput;
+  };
+
+  export type EventConsentResponseConsentIdStudentIdCompoundUniqueInput = {
+    consentId: string;
+    studentId: string;
+  };
+
+  export type EventConsentResponseCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    consentId?: SortOrder;
+    studentId?: SortOrder;
+    parentUserId?: SortOrder;
+    decision?: SortOrder;
+    notes?: SortOrder;
+    respondedAt?: SortOrder;
+  };
+
+  export type EventConsentResponseMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    consentId?: SortOrder;
+    studentId?: SortOrder;
+    parentUserId?: SortOrder;
+    decision?: SortOrder;
+    notes?: SortOrder;
+    respondedAt?: SortOrder;
+  };
+
+  export type EventConsentResponseMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    consentId?: SortOrder;
+    studentId?: SortOrder;
+    parentUserId?: SortOrder;
+    decision?: SortOrder;
+    notes?: SortOrder;
+    respondedAt?: SortOrder;
+  };
+
   export type UserCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -42516,6 +47648,48 @@ export namespace Prisma {
     connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
   };
 
+  export type AttendanceExcuseCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutTenantInput,
+          AttendanceExcuseUncheckedCreateWithoutTenantInput
+        >
+      | AttendanceExcuseCreateWithoutTenantInput[]
+      | AttendanceExcuseUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutTenantInput
+      | AttendanceExcuseCreateOrConnectWithoutTenantInput[];
+    createMany?: AttendanceExcuseCreateManyTenantInputEnvelope;
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+  };
+
+  export type EventConsentCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<EventConsentCreateWithoutTenantInput, EventConsentUncheckedCreateWithoutTenantInput>
+      | EventConsentCreateWithoutTenantInput[]
+      | EventConsentUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutTenantInput
+      | EventConsentCreateOrConnectWithoutTenantInput[];
+    createMany?: EventConsentCreateManyTenantInputEnvelope;
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+  };
+
+  export type EventConsentResponseCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutTenantInput,
+          EventConsentResponseUncheckedCreateWithoutTenantInput
+        >
+      | EventConsentResponseCreateWithoutTenantInput[]
+      | EventConsentResponseUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutTenantInput
+      | EventConsentResponseCreateOrConnectWithoutTenantInput[];
+    createMany?: EventConsentResponseCreateManyTenantInputEnvelope;
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+  };
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -42814,6 +47988,48 @@ export namespace Prisma {
       MediaFileCreateOrConnectWithoutTenantInput | MediaFileCreateOrConnectWithoutTenantInput[];
     createMany?: MediaFileCreateManyTenantInputEnvelope;
     connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+  };
+
+  export type AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutTenantInput,
+          AttendanceExcuseUncheckedCreateWithoutTenantInput
+        >
+      | AttendanceExcuseCreateWithoutTenantInput[]
+      | AttendanceExcuseUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutTenantInput
+      | AttendanceExcuseCreateOrConnectWithoutTenantInput[];
+    createMany?: AttendanceExcuseCreateManyTenantInputEnvelope;
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+  };
+
+  export type EventConsentUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<EventConsentCreateWithoutTenantInput, EventConsentUncheckedCreateWithoutTenantInput>
+      | EventConsentCreateWithoutTenantInput[]
+      | EventConsentUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutTenantInput
+      | EventConsentCreateOrConnectWithoutTenantInput[];
+    createMany?: EventConsentCreateManyTenantInputEnvelope;
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+  };
+
+  export type EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutTenantInput,
+          EventConsentResponseUncheckedCreateWithoutTenantInput
+        >
+      | EventConsentResponseCreateWithoutTenantInput[]
+      | EventConsentResponseUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutTenantInput
+      | EventConsentResponseCreateOrConnectWithoutTenantInput[];
+    createMany?: EventConsentResponseCreateManyTenantInputEnvelope;
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -43437,6 +48653,87 @@ export namespace Prisma {
     deleteMany?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
   };
 
+  export type AttendanceExcuseUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutTenantInput,
+          AttendanceExcuseUncheckedCreateWithoutTenantInput
+        >
+      | AttendanceExcuseCreateWithoutTenantInput[]
+      | AttendanceExcuseUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutTenantInput
+      | AttendanceExcuseCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutTenantInput
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: AttendanceExcuseCreateManyTenantInputEnvelope;
+    set?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    disconnect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    delete?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    update?:
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutTenantInput
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | AttendanceExcuseUpdateManyWithWhereWithoutTenantInput
+      | AttendanceExcuseUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: AttendanceExcuseScalarWhereInput | AttendanceExcuseScalarWhereInput[];
+  };
+
+  export type EventConsentUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<EventConsentCreateWithoutTenantInput, EventConsentUncheckedCreateWithoutTenantInput>
+      | EventConsentCreateWithoutTenantInput[]
+      | EventConsentUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutTenantInput
+      | EventConsentCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | EventConsentUpsertWithWhereUniqueWithoutTenantInput
+      | EventConsentUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: EventConsentCreateManyTenantInputEnvelope;
+    set?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    disconnect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    delete?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    update?:
+      | EventConsentUpdateWithWhereUniqueWithoutTenantInput
+      | EventConsentUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | EventConsentUpdateManyWithWhereWithoutTenantInput
+      | EventConsentUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: EventConsentScalarWhereInput | EventConsentScalarWhereInput[];
+  };
+
+  export type EventConsentResponseUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutTenantInput,
+          EventConsentResponseUncheckedCreateWithoutTenantInput
+        >
+      | EventConsentResponseCreateWithoutTenantInput[]
+      | EventConsentResponseUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutTenantInput
+      | EventConsentResponseCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | EventConsentResponseUpsertWithWhereUniqueWithoutTenantInput
+      | EventConsentResponseUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: EventConsentResponseCreateManyTenantInputEnvelope;
+    set?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    disconnect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    delete?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    update?:
+      | EventConsentResponseUpdateWithWhereUniqueWithoutTenantInput
+      | EventConsentResponseUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | EventConsentResponseUpdateManyWithWhereWithoutTenantInput
+      | EventConsentResponseUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -44046,6 +49343,87 @@ export namespace Prisma {
     deleteMany?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
   };
 
+  export type AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutTenantInput,
+          AttendanceExcuseUncheckedCreateWithoutTenantInput
+        >
+      | AttendanceExcuseCreateWithoutTenantInput[]
+      | AttendanceExcuseUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutTenantInput
+      | AttendanceExcuseCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutTenantInput
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: AttendanceExcuseCreateManyTenantInputEnvelope;
+    set?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    disconnect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    delete?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    update?:
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutTenantInput
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | AttendanceExcuseUpdateManyWithWhereWithoutTenantInput
+      | AttendanceExcuseUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: AttendanceExcuseScalarWhereInput | AttendanceExcuseScalarWhereInput[];
+  };
+
+  export type EventConsentUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<EventConsentCreateWithoutTenantInput, EventConsentUncheckedCreateWithoutTenantInput>
+      | EventConsentCreateWithoutTenantInput[]
+      | EventConsentUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutTenantInput
+      | EventConsentCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | EventConsentUpsertWithWhereUniqueWithoutTenantInput
+      | EventConsentUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: EventConsentCreateManyTenantInputEnvelope;
+    set?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    disconnect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    delete?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    update?:
+      | EventConsentUpdateWithWhereUniqueWithoutTenantInput
+      | EventConsentUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | EventConsentUpdateManyWithWhereWithoutTenantInput
+      | EventConsentUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: EventConsentScalarWhereInput | EventConsentScalarWhereInput[];
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutTenantInput,
+          EventConsentResponseUncheckedCreateWithoutTenantInput
+        >
+      | EventConsentResponseCreateWithoutTenantInput[]
+      | EventConsentResponseUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutTenantInput
+      | EventConsentResponseCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | EventConsentResponseUpsertWithWhereUniqueWithoutTenantInput
+      | EventConsentResponseUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: EventConsentResponseCreateManyTenantInputEnvelope;
+    set?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    disconnect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    delete?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    update?:
+      | EventConsentResponseUpdateWithWhereUniqueWithoutTenantInput
+      | EventConsentResponseUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | EventConsentResponseUpdateManyWithWhereWithoutTenantInput
+      | EventConsentResponseUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutUsersInput = {
     create?: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutUsersInput;
@@ -44330,6 +49708,51 @@ export namespace Prisma {
     connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
   };
 
+  export type AttendanceExcuseCreateNestedManyWithoutCreatedByInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutCreatedByInput,
+          AttendanceExcuseUncheckedCreateWithoutCreatedByInput
+        >
+      | AttendanceExcuseCreateWithoutCreatedByInput[]
+      | AttendanceExcuseUncheckedCreateWithoutCreatedByInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutCreatedByInput
+      | AttendanceExcuseCreateOrConnectWithoutCreatedByInput[];
+    createMany?: AttendanceExcuseCreateManyCreatedByInputEnvelope;
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+  };
+
+  export type EventConsentCreateNestedManyWithoutCreatedByInput = {
+    create?:
+      | XOR<
+          EventConsentCreateWithoutCreatedByInput,
+          EventConsentUncheckedCreateWithoutCreatedByInput
+        >
+      | EventConsentCreateWithoutCreatedByInput[]
+      | EventConsentUncheckedCreateWithoutCreatedByInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutCreatedByInput
+      | EventConsentCreateOrConnectWithoutCreatedByInput[];
+    createMany?: EventConsentCreateManyCreatedByInputEnvelope;
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+  };
+
+  export type EventConsentResponseCreateNestedManyWithoutParentUserInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutParentUserInput,
+          EventConsentResponseUncheckedCreateWithoutParentUserInput
+        >
+      | EventConsentResponseCreateWithoutParentUserInput[]
+      | EventConsentResponseUncheckedCreateWithoutParentUserInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutParentUserInput
+      | EventConsentResponseCreateOrConnectWithoutParentUserInput[];
+    createMany?: EventConsentResponseCreateManyParentUserInputEnvelope;
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+  };
+
   export type StudentUncheckedCreateNestedManyWithoutParentInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -44606,6 +50029,51 @@ export namespace Prisma {
       | MediaFileCreateOrConnectWithoutUploadedByInput[];
     createMany?: MediaFileCreateManyUploadedByInputEnvelope;
     connect?: MediaFileWhereUniqueInput | MediaFileWhereUniqueInput[];
+  };
+
+  export type AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutCreatedByInput,
+          AttendanceExcuseUncheckedCreateWithoutCreatedByInput
+        >
+      | AttendanceExcuseCreateWithoutCreatedByInput[]
+      | AttendanceExcuseUncheckedCreateWithoutCreatedByInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutCreatedByInput
+      | AttendanceExcuseCreateOrConnectWithoutCreatedByInput[];
+    createMany?: AttendanceExcuseCreateManyCreatedByInputEnvelope;
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+  };
+
+  export type EventConsentUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?:
+      | XOR<
+          EventConsentCreateWithoutCreatedByInput,
+          EventConsentUncheckedCreateWithoutCreatedByInput
+        >
+      | EventConsentCreateWithoutCreatedByInput[]
+      | EventConsentUncheckedCreateWithoutCreatedByInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutCreatedByInput
+      | EventConsentCreateOrConnectWithoutCreatedByInput[];
+    createMany?: EventConsentCreateManyCreatedByInputEnvelope;
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+  };
+
+  export type EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutParentUserInput,
+          EventConsentResponseUncheckedCreateWithoutParentUserInput
+        >
+      | EventConsentResponseCreateWithoutParentUserInput[]
+      | EventConsentResponseUncheckedCreateWithoutParentUserInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutParentUserInput
+      | EventConsentResponseCreateOrConnectWithoutParentUserInput[];
+    createMany?: EventConsentResponseCreateManyParentUserInputEnvelope;
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
   };
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -45169,6 +50637,90 @@ export namespace Prisma {
     deleteMany?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
   };
 
+  export type AttendanceExcuseUpdateManyWithoutCreatedByNestedInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutCreatedByInput,
+          AttendanceExcuseUncheckedCreateWithoutCreatedByInput
+        >
+      | AttendanceExcuseCreateWithoutCreatedByInput[]
+      | AttendanceExcuseUncheckedCreateWithoutCreatedByInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutCreatedByInput
+      | AttendanceExcuseCreateOrConnectWithoutCreatedByInput[];
+    upsert?:
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutCreatedByInput
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutCreatedByInput[];
+    createMany?: AttendanceExcuseCreateManyCreatedByInputEnvelope;
+    set?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    disconnect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    delete?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    update?:
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutCreatedByInput
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutCreatedByInput[];
+    updateMany?:
+      | AttendanceExcuseUpdateManyWithWhereWithoutCreatedByInput
+      | AttendanceExcuseUpdateManyWithWhereWithoutCreatedByInput[];
+    deleteMany?: AttendanceExcuseScalarWhereInput | AttendanceExcuseScalarWhereInput[];
+  };
+
+  export type EventConsentUpdateManyWithoutCreatedByNestedInput = {
+    create?:
+      | XOR<
+          EventConsentCreateWithoutCreatedByInput,
+          EventConsentUncheckedCreateWithoutCreatedByInput
+        >
+      | EventConsentCreateWithoutCreatedByInput[]
+      | EventConsentUncheckedCreateWithoutCreatedByInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutCreatedByInput
+      | EventConsentCreateOrConnectWithoutCreatedByInput[];
+    upsert?:
+      | EventConsentUpsertWithWhereUniqueWithoutCreatedByInput
+      | EventConsentUpsertWithWhereUniqueWithoutCreatedByInput[];
+    createMany?: EventConsentCreateManyCreatedByInputEnvelope;
+    set?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    disconnect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    delete?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    update?:
+      | EventConsentUpdateWithWhereUniqueWithoutCreatedByInput
+      | EventConsentUpdateWithWhereUniqueWithoutCreatedByInput[];
+    updateMany?:
+      | EventConsentUpdateManyWithWhereWithoutCreatedByInput
+      | EventConsentUpdateManyWithWhereWithoutCreatedByInput[];
+    deleteMany?: EventConsentScalarWhereInput | EventConsentScalarWhereInput[];
+  };
+
+  export type EventConsentResponseUpdateManyWithoutParentUserNestedInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutParentUserInput,
+          EventConsentResponseUncheckedCreateWithoutParentUserInput
+        >
+      | EventConsentResponseCreateWithoutParentUserInput[]
+      | EventConsentResponseUncheckedCreateWithoutParentUserInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutParentUserInput
+      | EventConsentResponseCreateOrConnectWithoutParentUserInput[];
+    upsert?:
+      | EventConsentResponseUpsertWithWhereUniqueWithoutParentUserInput
+      | EventConsentResponseUpsertWithWhereUniqueWithoutParentUserInput[];
+    createMany?: EventConsentResponseCreateManyParentUserInputEnvelope;
+    set?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    disconnect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    delete?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    update?:
+      | EventConsentResponseUpdateWithWhereUniqueWithoutParentUserInput
+      | EventConsentResponseUpdateWithWhereUniqueWithoutParentUserInput[];
+    updateMany?:
+      | EventConsentResponseUpdateManyWithWhereWithoutParentUserInput
+      | EventConsentResponseUpdateManyWithWhereWithoutParentUserInput[];
+    deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
   export type StudentUncheckedUpdateManyWithoutParentNestedInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -45707,6 +51259,90 @@ export namespace Prisma {
     deleteMany?: MediaFileScalarWhereInput | MediaFileScalarWhereInput[];
   };
 
+  export type AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutCreatedByInput,
+          AttendanceExcuseUncheckedCreateWithoutCreatedByInput
+        >
+      | AttendanceExcuseCreateWithoutCreatedByInput[]
+      | AttendanceExcuseUncheckedCreateWithoutCreatedByInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutCreatedByInput
+      | AttendanceExcuseCreateOrConnectWithoutCreatedByInput[];
+    upsert?:
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutCreatedByInput
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutCreatedByInput[];
+    createMany?: AttendanceExcuseCreateManyCreatedByInputEnvelope;
+    set?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    disconnect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    delete?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    update?:
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutCreatedByInput
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutCreatedByInput[];
+    updateMany?:
+      | AttendanceExcuseUpdateManyWithWhereWithoutCreatedByInput
+      | AttendanceExcuseUpdateManyWithWhereWithoutCreatedByInput[];
+    deleteMany?: AttendanceExcuseScalarWhereInput | AttendanceExcuseScalarWhereInput[];
+  };
+
+  export type EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?:
+      | XOR<
+          EventConsentCreateWithoutCreatedByInput,
+          EventConsentUncheckedCreateWithoutCreatedByInput
+        >
+      | EventConsentCreateWithoutCreatedByInput[]
+      | EventConsentUncheckedCreateWithoutCreatedByInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutCreatedByInput
+      | EventConsentCreateOrConnectWithoutCreatedByInput[];
+    upsert?:
+      | EventConsentUpsertWithWhereUniqueWithoutCreatedByInput
+      | EventConsentUpsertWithWhereUniqueWithoutCreatedByInput[];
+    createMany?: EventConsentCreateManyCreatedByInputEnvelope;
+    set?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    disconnect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    delete?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    update?:
+      | EventConsentUpdateWithWhereUniqueWithoutCreatedByInput
+      | EventConsentUpdateWithWhereUniqueWithoutCreatedByInput[];
+    updateMany?:
+      | EventConsentUpdateManyWithWhereWithoutCreatedByInput
+      | EventConsentUpdateManyWithWhereWithoutCreatedByInput[];
+    deleteMany?: EventConsentScalarWhereInput | EventConsentScalarWhereInput[];
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutParentUserInput,
+          EventConsentResponseUncheckedCreateWithoutParentUserInput
+        >
+      | EventConsentResponseCreateWithoutParentUserInput[]
+      | EventConsentResponseUncheckedCreateWithoutParentUserInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutParentUserInput
+      | EventConsentResponseCreateOrConnectWithoutParentUserInput[];
+    upsert?:
+      | EventConsentResponseUpsertWithWhereUniqueWithoutParentUserInput
+      | EventConsentResponseUpsertWithWhereUniqueWithoutParentUserInput[];
+    createMany?: EventConsentResponseCreateManyParentUserInputEnvelope;
+    set?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    disconnect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    delete?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    update?:
+      | EventConsentResponseUpdateWithWhereUniqueWithoutParentUserInput
+      | EventConsentResponseUpdateWithWhereUniqueWithoutParentUserInput[];
+    updateMany?:
+      | EventConsentResponseUpdateManyWithWhereWithoutParentUserInput
+      | EventConsentResponseUpdateManyWithWhereWithoutParentUserInput[];
+    deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutStudentsInput = {
     create?: XOR<TenantCreateWithoutStudentsInput, TenantUncheckedCreateWithoutStudentsInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutStudentsInput;
@@ -45868,6 +51504,36 @@ export namespace Prisma {
     connect?: PortfolioItemWhereUniqueInput | PortfolioItemWhereUniqueInput[];
   };
 
+  export type AttendanceExcuseCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutStudentInput,
+          AttendanceExcuseUncheckedCreateWithoutStudentInput
+        >
+      | AttendanceExcuseCreateWithoutStudentInput[]
+      | AttendanceExcuseUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutStudentInput
+      | AttendanceExcuseCreateOrConnectWithoutStudentInput[];
+    createMany?: AttendanceExcuseCreateManyStudentInputEnvelope;
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+  };
+
+  export type EventConsentResponseCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutStudentInput,
+          EventConsentResponseUncheckedCreateWithoutStudentInput
+        >
+      | EventConsentResponseCreateWithoutStudentInput[]
+      | EventConsentResponseUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutStudentInput
+      | EventConsentResponseCreateOrConnectWithoutStudentInput[];
+    createMany?: EventConsentResponseCreateManyStudentInputEnvelope;
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+  };
+
   export type DailyReportUncheckedCreateNestedManyWithoutStudentInput = {
     create?:
       | XOR<DailyReportCreateWithoutStudentInput, DailyReportUncheckedCreateWithoutStudentInput>
@@ -46009,6 +51675,36 @@ export namespace Prisma {
       | PortfolioItemCreateOrConnectWithoutStudentInput[];
     createMany?: PortfolioItemCreateManyStudentInputEnvelope;
     connect?: PortfolioItemWhereUniqueInput | PortfolioItemWhereUniqueInput[];
+  };
+
+  export type AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutStudentInput,
+          AttendanceExcuseUncheckedCreateWithoutStudentInput
+        >
+      | AttendanceExcuseCreateWithoutStudentInput[]
+      | AttendanceExcuseUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutStudentInput
+      | AttendanceExcuseCreateOrConnectWithoutStudentInput[];
+    createMany?: AttendanceExcuseCreateManyStudentInputEnvelope;
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+  };
+
+  export type EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutStudentInput,
+          EventConsentResponseUncheckedCreateWithoutStudentInput
+        >
+      | EventConsentResponseCreateWithoutStudentInput[]
+      | EventConsentResponseUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutStudentInput
+      | EventConsentResponseCreateOrConnectWithoutStudentInput[];
+    createMany?: EventConsentResponseCreateManyStudentInputEnvelope;
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
   };
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -46338,6 +52034,62 @@ export namespace Prisma {
     deleteMany?: PortfolioItemScalarWhereInput | PortfolioItemScalarWhereInput[];
   };
 
+  export type AttendanceExcuseUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutStudentInput,
+          AttendanceExcuseUncheckedCreateWithoutStudentInput
+        >
+      | AttendanceExcuseCreateWithoutStudentInput[]
+      | AttendanceExcuseUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutStudentInput
+      | AttendanceExcuseCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutStudentInput
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: AttendanceExcuseCreateManyStudentInputEnvelope;
+    set?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    disconnect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    delete?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    update?:
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutStudentInput
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | AttendanceExcuseUpdateManyWithWhereWithoutStudentInput
+      | AttendanceExcuseUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: AttendanceExcuseScalarWhereInput | AttendanceExcuseScalarWhereInput[];
+  };
+
+  export type EventConsentResponseUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutStudentInput,
+          EventConsentResponseUncheckedCreateWithoutStudentInput
+        >
+      | EventConsentResponseCreateWithoutStudentInput[]
+      | EventConsentResponseUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutStudentInput
+      | EventConsentResponseCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | EventConsentResponseUpsertWithWhereUniqueWithoutStudentInput
+      | EventConsentResponseUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: EventConsentResponseCreateManyStudentInputEnvelope;
+    set?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    disconnect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    delete?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    update?:
+      | EventConsentResponseUpdateWithWhereUniqueWithoutStudentInput
+      | EventConsentResponseUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | EventConsentResponseUpdateManyWithWhereWithoutStudentInput
+      | EventConsentResponseUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
   export type DailyReportUncheckedUpdateManyWithoutStudentNestedInput = {
     create?:
       | XOR<DailyReportCreateWithoutStudentInput, DailyReportUncheckedCreateWithoutStudentInput>
@@ -46624,6 +52376,62 @@ export namespace Prisma {
     deleteMany?: PortfolioItemScalarWhereInput | PortfolioItemScalarWhereInput[];
   };
 
+  export type AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          AttendanceExcuseCreateWithoutStudentInput,
+          AttendanceExcuseUncheckedCreateWithoutStudentInput
+        >
+      | AttendanceExcuseCreateWithoutStudentInput[]
+      | AttendanceExcuseUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | AttendanceExcuseCreateOrConnectWithoutStudentInput
+      | AttendanceExcuseCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutStudentInput
+      | AttendanceExcuseUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: AttendanceExcuseCreateManyStudentInputEnvelope;
+    set?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    disconnect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    delete?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    connect?: AttendanceExcuseWhereUniqueInput | AttendanceExcuseWhereUniqueInput[];
+    update?:
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutStudentInput
+      | AttendanceExcuseUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | AttendanceExcuseUpdateManyWithWhereWithoutStudentInput
+      | AttendanceExcuseUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: AttendanceExcuseScalarWhereInput | AttendanceExcuseScalarWhereInput[];
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutStudentInput,
+          EventConsentResponseUncheckedCreateWithoutStudentInput
+        >
+      | EventConsentResponseCreateWithoutStudentInput[]
+      | EventConsentResponseUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutStudentInput
+      | EventConsentResponseCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | EventConsentResponseUpsertWithWhereUniqueWithoutStudentInput
+      | EventConsentResponseUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: EventConsentResponseCreateManyStudentInputEnvelope;
+    set?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    disconnect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    delete?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    update?:
+      | EventConsentResponseUpdateWithWhereUniqueWithoutStudentInput
+      | EventConsentResponseUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | EventConsentResponseUpdateManyWithWhereWithoutStudentInput
+      | EventConsentResponseUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutClassroomsInput = {
     create?: XOR<TenantCreateWithoutClassroomsInput, TenantUncheckedCreateWithoutClassroomsInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutClassroomsInput;
@@ -46656,6 +52464,21 @@ export namespace Prisma {
     connect?: ClassroomTeacherWhereUniqueInput | ClassroomTeacherWhereUniqueInput[];
   };
 
+  export type EventConsentCreateNestedManyWithoutClassroomInput = {
+    create?:
+      | XOR<
+          EventConsentCreateWithoutClassroomInput,
+          EventConsentUncheckedCreateWithoutClassroomInput
+        >
+      | EventConsentCreateWithoutClassroomInput[]
+      | EventConsentUncheckedCreateWithoutClassroomInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutClassroomInput
+      | EventConsentCreateOrConnectWithoutClassroomInput[];
+    createMany?: EventConsentCreateManyClassroomInputEnvelope;
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+  };
+
   export type StudentUncheckedCreateNestedManyWithoutClassroomInput = {
     create?:
       | XOR<StudentCreateWithoutClassroomInput, StudentUncheckedCreateWithoutClassroomInput>
@@ -46680,6 +52503,21 @@ export namespace Prisma {
       | ClassroomTeacherCreateOrConnectWithoutClassroomInput[];
     createMany?: ClassroomTeacherCreateManyClassroomInputEnvelope;
     connect?: ClassroomTeacherWhereUniqueInput | ClassroomTeacherWhereUniqueInput[];
+  };
+
+  export type EventConsentUncheckedCreateNestedManyWithoutClassroomInput = {
+    create?:
+      | XOR<
+          EventConsentCreateWithoutClassroomInput,
+          EventConsentUncheckedCreateWithoutClassroomInput
+        >
+      | EventConsentCreateWithoutClassroomInput[]
+      | EventConsentUncheckedCreateWithoutClassroomInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutClassroomInput
+      | EventConsentCreateOrConnectWithoutClassroomInput[];
+    createMany?: EventConsentCreateManyClassroomInputEnvelope;
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
   };
 
   export type TenantUpdateOneRequiredWithoutClassroomsNestedInput = {
@@ -46745,6 +52583,34 @@ export namespace Prisma {
     deleteMany?: ClassroomTeacherScalarWhereInput | ClassroomTeacherScalarWhereInput[];
   };
 
+  export type EventConsentUpdateManyWithoutClassroomNestedInput = {
+    create?:
+      | XOR<
+          EventConsentCreateWithoutClassroomInput,
+          EventConsentUncheckedCreateWithoutClassroomInput
+        >
+      | EventConsentCreateWithoutClassroomInput[]
+      | EventConsentUncheckedCreateWithoutClassroomInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutClassroomInput
+      | EventConsentCreateOrConnectWithoutClassroomInput[];
+    upsert?:
+      | EventConsentUpsertWithWhereUniqueWithoutClassroomInput
+      | EventConsentUpsertWithWhereUniqueWithoutClassroomInput[];
+    createMany?: EventConsentCreateManyClassroomInputEnvelope;
+    set?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    disconnect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    delete?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    update?:
+      | EventConsentUpdateWithWhereUniqueWithoutClassroomInput
+      | EventConsentUpdateWithWhereUniqueWithoutClassroomInput[];
+    updateMany?:
+      | EventConsentUpdateManyWithWhereWithoutClassroomInput
+      | EventConsentUpdateManyWithWhereWithoutClassroomInput[];
+    deleteMany?: EventConsentScalarWhereInput | EventConsentScalarWhereInput[];
+  };
+
   export type StudentUncheckedUpdateManyWithoutClassroomNestedInput = {
     create?:
       | XOR<StudentCreateWithoutClassroomInput, StudentUncheckedCreateWithoutClassroomInput>
@@ -46795,6 +52661,34 @@ export namespace Prisma {
       | ClassroomTeacherUpdateManyWithWhereWithoutClassroomInput
       | ClassroomTeacherUpdateManyWithWhereWithoutClassroomInput[];
     deleteMany?: ClassroomTeacherScalarWhereInput | ClassroomTeacherScalarWhereInput[];
+  };
+
+  export type EventConsentUncheckedUpdateManyWithoutClassroomNestedInput = {
+    create?:
+      | XOR<
+          EventConsentCreateWithoutClassroomInput,
+          EventConsentUncheckedCreateWithoutClassroomInput
+        >
+      | EventConsentCreateWithoutClassroomInput[]
+      | EventConsentUncheckedCreateWithoutClassroomInput[];
+    connectOrCreate?:
+      | EventConsentCreateOrConnectWithoutClassroomInput
+      | EventConsentCreateOrConnectWithoutClassroomInput[];
+    upsert?:
+      | EventConsentUpsertWithWhereUniqueWithoutClassroomInput
+      | EventConsentUpsertWithWhereUniqueWithoutClassroomInput[];
+    createMany?: EventConsentCreateManyClassroomInputEnvelope;
+    set?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    disconnect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    delete?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    connect?: EventConsentWhereUniqueInput | EventConsentWhereUniqueInput[];
+    update?:
+      | EventConsentUpdateWithWhereUniqueWithoutClassroomInput
+      | EventConsentUpdateWithWhereUniqueWithoutClassroomInput[];
+    updateMany?:
+      | EventConsentUpdateManyWithWhereWithoutClassroomInput
+      | EventConsentUpdateManyWithWhereWithoutClassroomInput[];
+    deleteMany?: EventConsentScalarWhereInput | EventConsentScalarWhereInput[];
   };
 
   export type TenantCreateNestedOneWithoutClassroomTeachersInput = {
@@ -48908,6 +54802,362 @@ export namespace Prisma {
     >;
   };
 
+  export type TenantCreateNestedOneWithoutAttendanceExcusesInput = {
+    create?: XOR<
+      TenantCreateWithoutAttendanceExcusesInput,
+      TenantUncheckedCreateWithoutAttendanceExcusesInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutAttendanceExcusesInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type StudentCreateNestedOneWithoutAttendanceExcusesInput = {
+    create?: XOR<
+      StudentCreateWithoutAttendanceExcusesInput,
+      StudentUncheckedCreateWithoutAttendanceExcusesInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutAttendanceExcusesInput;
+    connect?: StudentWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutAttendanceExcusesCreatedInput = {
+    create?: XOR<
+      UserCreateWithoutAttendanceExcusesCreatedInput,
+      UserUncheckedCreateWithoutAttendanceExcusesCreatedInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutAttendanceExcusesCreatedInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type TenantUpdateOneRequiredWithoutAttendanceExcusesNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutAttendanceExcusesInput,
+      TenantUncheckedCreateWithoutAttendanceExcusesInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutAttendanceExcusesInput;
+    upsert?: TenantUpsertWithoutAttendanceExcusesInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TenantUpdateToOneWithWhereWithoutAttendanceExcusesInput,
+        TenantUpdateWithoutAttendanceExcusesInput
+      >,
+      TenantUncheckedUpdateWithoutAttendanceExcusesInput
+    >;
+  };
+
+  export type StudentUpdateOneRequiredWithoutAttendanceExcusesNestedInput = {
+    create?: XOR<
+      StudentCreateWithoutAttendanceExcusesInput,
+      StudentUncheckedCreateWithoutAttendanceExcusesInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutAttendanceExcusesInput;
+    upsert?: StudentUpsertWithoutAttendanceExcusesInput;
+    connect?: StudentWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        StudentUpdateToOneWithWhereWithoutAttendanceExcusesInput,
+        StudentUpdateWithoutAttendanceExcusesInput
+      >,
+      StudentUncheckedUpdateWithoutAttendanceExcusesInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutAttendanceExcusesCreatedNestedInput = {
+    create?: XOR<
+      UserCreateWithoutAttendanceExcusesCreatedInput,
+      UserUncheckedCreateWithoutAttendanceExcusesCreatedInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutAttendanceExcusesCreatedInput;
+    upsert?: UserUpsertWithoutAttendanceExcusesCreatedInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutAttendanceExcusesCreatedInput,
+        UserUpdateWithoutAttendanceExcusesCreatedInput
+      >,
+      UserUncheckedUpdateWithoutAttendanceExcusesCreatedInput
+    >;
+  };
+
+  export type TenantCreateNestedOneWithoutEventConsentsInput = {
+    create?: XOR<
+      TenantCreateWithoutEventConsentsInput,
+      TenantUncheckedCreateWithoutEventConsentsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutEventConsentsInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type ClassroomCreateNestedOneWithoutEventConsentsInput = {
+    create?: XOR<
+      ClassroomCreateWithoutEventConsentsInput,
+      ClassroomUncheckedCreateWithoutEventConsentsInput
+    >;
+    connectOrCreate?: ClassroomCreateOrConnectWithoutEventConsentsInput;
+    connect?: ClassroomWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutEventConsentsCreatedInput = {
+    create?: XOR<
+      UserCreateWithoutEventConsentsCreatedInput,
+      UserUncheckedCreateWithoutEventConsentsCreatedInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEventConsentsCreatedInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EventConsentResponseCreateNestedManyWithoutConsentInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutConsentInput,
+          EventConsentResponseUncheckedCreateWithoutConsentInput
+        >
+      | EventConsentResponseCreateWithoutConsentInput[]
+      | EventConsentResponseUncheckedCreateWithoutConsentInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutConsentInput
+      | EventConsentResponseCreateOrConnectWithoutConsentInput[];
+    createMany?: EventConsentResponseCreateManyConsentInputEnvelope;
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+  };
+
+  export type EventConsentResponseUncheckedCreateNestedManyWithoutConsentInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutConsentInput,
+          EventConsentResponseUncheckedCreateWithoutConsentInput
+        >
+      | EventConsentResponseCreateWithoutConsentInput[]
+      | EventConsentResponseUncheckedCreateWithoutConsentInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutConsentInput
+      | EventConsentResponseCreateOrConnectWithoutConsentInput[];
+    createMany?: EventConsentResponseCreateManyConsentInputEnvelope;
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+  };
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null;
+    increment?: Decimal | DecimalJsLike | number | string;
+    decrement?: Decimal | DecimalJsLike | number | string;
+    multiply?: Decimal | DecimalJsLike | number | string;
+    divide?: Decimal | DecimalJsLike | number | string;
+  };
+
+  export type TenantUpdateOneRequiredWithoutEventConsentsNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutEventConsentsInput,
+      TenantUncheckedCreateWithoutEventConsentsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutEventConsentsInput;
+    upsert?: TenantUpsertWithoutEventConsentsInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TenantUpdateToOneWithWhereWithoutEventConsentsInput,
+        TenantUpdateWithoutEventConsentsInput
+      >,
+      TenantUncheckedUpdateWithoutEventConsentsInput
+    >;
+  };
+
+  export type ClassroomUpdateOneWithoutEventConsentsNestedInput = {
+    create?: XOR<
+      ClassroomCreateWithoutEventConsentsInput,
+      ClassroomUncheckedCreateWithoutEventConsentsInput
+    >;
+    connectOrCreate?: ClassroomCreateOrConnectWithoutEventConsentsInput;
+    upsert?: ClassroomUpsertWithoutEventConsentsInput;
+    disconnect?: ClassroomWhereInput | boolean;
+    delete?: ClassroomWhereInput | boolean;
+    connect?: ClassroomWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        ClassroomUpdateToOneWithWhereWithoutEventConsentsInput,
+        ClassroomUpdateWithoutEventConsentsInput
+      >,
+      ClassroomUncheckedUpdateWithoutEventConsentsInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutEventConsentsCreatedNestedInput = {
+    create?: XOR<
+      UserCreateWithoutEventConsentsCreatedInput,
+      UserUncheckedCreateWithoutEventConsentsCreatedInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEventConsentsCreatedInput;
+    upsert?: UserUpsertWithoutEventConsentsCreatedInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutEventConsentsCreatedInput,
+        UserUpdateWithoutEventConsentsCreatedInput
+      >,
+      UserUncheckedUpdateWithoutEventConsentsCreatedInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateManyWithoutConsentNestedInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutConsentInput,
+          EventConsentResponseUncheckedCreateWithoutConsentInput
+        >
+      | EventConsentResponseCreateWithoutConsentInput[]
+      | EventConsentResponseUncheckedCreateWithoutConsentInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutConsentInput
+      | EventConsentResponseCreateOrConnectWithoutConsentInput[];
+    upsert?:
+      | EventConsentResponseUpsertWithWhereUniqueWithoutConsentInput
+      | EventConsentResponseUpsertWithWhereUniqueWithoutConsentInput[];
+    createMany?: EventConsentResponseCreateManyConsentInputEnvelope;
+    set?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    disconnect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    delete?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    update?:
+      | EventConsentResponseUpdateWithWhereUniqueWithoutConsentInput
+      | EventConsentResponseUpdateWithWhereUniqueWithoutConsentInput[];
+    updateMany?:
+      | EventConsentResponseUpdateManyWithWhereWithoutConsentInput
+      | EventConsentResponseUpdateManyWithWhereWithoutConsentInput[];
+    deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyWithoutConsentNestedInput = {
+    create?:
+      | XOR<
+          EventConsentResponseCreateWithoutConsentInput,
+          EventConsentResponseUncheckedCreateWithoutConsentInput
+        >
+      | EventConsentResponseCreateWithoutConsentInput[]
+      | EventConsentResponseUncheckedCreateWithoutConsentInput[];
+    connectOrCreate?:
+      | EventConsentResponseCreateOrConnectWithoutConsentInput
+      | EventConsentResponseCreateOrConnectWithoutConsentInput[];
+    upsert?:
+      | EventConsentResponseUpsertWithWhereUniqueWithoutConsentInput
+      | EventConsentResponseUpsertWithWhereUniqueWithoutConsentInput[];
+    createMany?: EventConsentResponseCreateManyConsentInputEnvelope;
+    set?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    disconnect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    delete?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+    update?:
+      | EventConsentResponseUpdateWithWhereUniqueWithoutConsentInput
+      | EventConsentResponseUpdateWithWhereUniqueWithoutConsentInput[];
+    updateMany?:
+      | EventConsentResponseUpdateManyWithWhereWithoutConsentInput
+      | EventConsentResponseUpdateManyWithWhereWithoutConsentInput[];
+    deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
+  export type TenantCreateNestedOneWithoutEventConsentResponsesInput = {
+    create?: XOR<
+      TenantCreateWithoutEventConsentResponsesInput,
+      TenantUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutEventConsentResponsesInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type EventConsentCreateNestedOneWithoutResponsesInput = {
+    create?: XOR<
+      EventConsentCreateWithoutResponsesInput,
+      EventConsentUncheckedCreateWithoutResponsesInput
+    >;
+    connectOrCreate?: EventConsentCreateOrConnectWithoutResponsesInput;
+    connect?: EventConsentWhereUniqueInput;
+  };
+
+  export type StudentCreateNestedOneWithoutEventConsentResponsesInput = {
+    create?: XOR<
+      StudentCreateWithoutEventConsentResponsesInput,
+      StudentUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutEventConsentResponsesInput;
+    connect?: StudentWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutEventConsentResponsesInput = {
+    create?: XOR<
+      UserCreateWithoutEventConsentResponsesInput,
+      UserUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEventConsentResponsesInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type TenantUpdateOneRequiredWithoutEventConsentResponsesNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutEventConsentResponsesInput,
+      TenantUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutEventConsentResponsesInput;
+    upsert?: TenantUpsertWithoutEventConsentResponsesInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TenantUpdateToOneWithWhereWithoutEventConsentResponsesInput,
+        TenantUpdateWithoutEventConsentResponsesInput
+      >,
+      TenantUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+  };
+
+  export type EventConsentUpdateOneRequiredWithoutResponsesNestedInput = {
+    create?: XOR<
+      EventConsentCreateWithoutResponsesInput,
+      EventConsentUncheckedCreateWithoutResponsesInput
+    >;
+    connectOrCreate?: EventConsentCreateOrConnectWithoutResponsesInput;
+    upsert?: EventConsentUpsertWithoutResponsesInput;
+    connect?: EventConsentWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        EventConsentUpdateToOneWithWhereWithoutResponsesInput,
+        EventConsentUpdateWithoutResponsesInput
+      >,
+      EventConsentUncheckedUpdateWithoutResponsesInput
+    >;
+  };
+
+  export type StudentUpdateOneRequiredWithoutEventConsentResponsesNestedInput = {
+    create?: XOR<
+      StudentCreateWithoutEventConsentResponsesInput,
+      StudentUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutEventConsentResponsesInput;
+    upsert?: StudentUpsertWithoutEventConsentResponsesInput;
+    connect?: StudentWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        StudentUpdateToOneWithWhereWithoutEventConsentResponsesInput,
+        StudentUpdateWithoutEventConsentResponsesInput
+      >,
+      StudentUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutEventConsentResponsesNestedInput = {
+    create?: XOR<
+      UserCreateWithoutEventConsentResponsesInput,
+      UserUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEventConsentResponsesInput;
+    upsert?: UserUpsertWithoutEventConsentResponsesInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutEventConsentResponsesInput,
+        UserUpdateWithoutEventConsentResponsesInput
+      >,
+      UserUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+  };
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -49409,6 +55659,64 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number;
   };
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null;
+    in?:
+      | Decimal[]
+      | DecimalJsLike[]
+      | number[]
+      | string[]
+      | ListDecimalFieldRefInput<$PrismaModel>
+      | null;
+    notIn?:
+      | Decimal[]
+      | DecimalJsLike[]
+      | number[]
+      | string[]
+      | ListDecimalFieldRefInput<$PrismaModel>
+      | null;
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    not?:
+      NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null;
+  };
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null;
+    in?:
+      | Decimal[]
+      | DecimalJsLike[]
+      | number[]
+      | string[]
+      | ListDecimalFieldRefInput<$PrismaModel>
+      | null;
+    notIn?:
+      | Decimal[]
+      | DecimalJsLike[]
+      | number[]
+      | string[]
+      | ListDecimalFieldRefInput<$PrismaModel>
+      | null;
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedDecimalNullableWithAggregatesFilter<$PrismaModel>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>;
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>;
+    _min?: NestedDecimalNullableFilter<$PrismaModel>;
+    _max?: NestedDecimalNullableFilter<$PrismaModel>;
+  };
+
   export type UserCreateWithoutTenantInput = {
     id?: string;
     email: string;
@@ -49438,6 +55746,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutTenantInput = {
@@ -49469,6 +55780,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -49506,6 +55820,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutTenantInput = {
@@ -49533,6 +55849,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutTenantInput = {
@@ -49715,6 +56033,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     students?: StudentCreateNestedManyWithoutClassroomInput;
     teacherAssignments?: ClassroomTeacherCreateNestedManyWithoutClassroomInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutClassroomInput;
   };
 
   export type ClassroomUncheckedCreateWithoutTenantInput = {
@@ -49726,6 +56045,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     students?: StudentUncheckedCreateNestedManyWithoutClassroomInput;
     teacherAssignments?: ClassroomTeacherUncheckedCreateNestedManyWithoutClassroomInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutClassroomInput;
   };
 
   export type ClassroomCreateOrConnectWithoutTenantInput = {
@@ -50368,6 +56688,121 @@ export namespace Prisma {
 
   export type MediaFileCreateManyTenantInputEnvelope = {
     data: MediaFileCreateManyTenantInput | MediaFileCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type AttendanceExcuseCreateWithoutTenantInput = {
+    id?: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    student: StudentCreateNestedOneWithoutAttendanceExcusesInput;
+    createdBy: UserCreateNestedOneWithoutAttendanceExcusesCreatedInput;
+  };
+
+  export type AttendanceExcuseUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    studentId: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type AttendanceExcuseCreateOrConnectWithoutTenantInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    create: XOR<
+      AttendanceExcuseCreateWithoutTenantInput,
+      AttendanceExcuseUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type AttendanceExcuseCreateManyTenantInputEnvelope = {
+    data: AttendanceExcuseCreateManyTenantInput | AttendanceExcuseCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type EventConsentCreateWithoutTenantInput = {
+    id?: string;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    classroom?: ClassroomCreateNestedOneWithoutEventConsentsInput;
+    createdBy: UserCreateNestedOneWithoutEventConsentsCreatedInput;
+    responses?: EventConsentResponseCreateNestedManyWithoutConsentInput;
+  };
+
+  export type EventConsentUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    classroomId?: string | null;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    responses?: EventConsentResponseUncheckedCreateNestedManyWithoutConsentInput;
+  };
+
+  export type EventConsentCreateOrConnectWithoutTenantInput = {
+    where: EventConsentWhereUniqueInput;
+    create: XOR<
+      EventConsentCreateWithoutTenantInput,
+      EventConsentUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type EventConsentCreateManyTenantInputEnvelope = {
+    data: EventConsentCreateManyTenantInput | EventConsentCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type EventConsentResponseCreateWithoutTenantInput = {
+    id?: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+    consent: EventConsentCreateNestedOneWithoutResponsesInput;
+    student: StudentCreateNestedOneWithoutEventConsentResponsesInput;
+    parentUser: UserCreateNestedOneWithoutEventConsentResponsesInput;
+  };
+
+  export type EventConsentResponseUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    consentId: string;
+    studentId: string;
+    parentUserId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
+  export type EventConsentResponseCreateOrConnectWithoutTenantInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    create: XOR<
+      EventConsentResponseCreateWithoutTenantInput,
+      EventConsentResponseUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type EventConsentResponseCreateManyTenantInputEnvelope = {
+    data: EventConsentResponseCreateManyTenantInput | EventConsentResponseCreateManyTenantInput[];
     skipDuplicates?: boolean;
   };
 
@@ -51321,6 +57756,137 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'MediaFile'> | Date | string;
   };
 
+  export type AttendanceExcuseUpsertWithWhereUniqueWithoutTenantInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    update: XOR<
+      AttendanceExcuseUpdateWithoutTenantInput,
+      AttendanceExcuseUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      AttendanceExcuseCreateWithoutTenantInput,
+      AttendanceExcuseUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type AttendanceExcuseUpdateWithWhereUniqueWithoutTenantInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    data: XOR<
+      AttendanceExcuseUpdateWithoutTenantInput,
+      AttendanceExcuseUncheckedUpdateWithoutTenantInput
+    >;
+  };
+
+  export type AttendanceExcuseUpdateManyWithWhereWithoutTenantInput = {
+    where: AttendanceExcuseScalarWhereInput;
+    data: XOR<
+      AttendanceExcuseUpdateManyMutationInput,
+      AttendanceExcuseUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type AttendanceExcuseScalarWhereInput = {
+    AND?: AttendanceExcuseScalarWhereInput | AttendanceExcuseScalarWhereInput[];
+    OR?: AttendanceExcuseScalarWhereInput[];
+    NOT?: AttendanceExcuseScalarWhereInput | AttendanceExcuseScalarWhereInput[];
+    id?: StringFilter<'AttendanceExcuse'> | string;
+    tenantId?: StringFilter<'AttendanceExcuse'> | string;
+    studentId?: StringFilter<'AttendanceExcuse'> | string;
+    date?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+    reason?: StringFilter<'AttendanceExcuse'> | string;
+    notes?: StringNullableFilter<'AttendanceExcuse'> | string | null;
+    status?: StringFilter<'AttendanceExcuse'> | string;
+    createdById?: StringFilter<'AttendanceExcuse'> | string;
+    createdAt?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+    updatedAt?: DateTimeFilter<'AttendanceExcuse'> | Date | string;
+  };
+
+  export type EventConsentUpsertWithWhereUniqueWithoutTenantInput = {
+    where: EventConsentWhereUniqueInput;
+    update: XOR<
+      EventConsentUpdateWithoutTenantInput,
+      EventConsentUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      EventConsentCreateWithoutTenantInput,
+      EventConsentUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type EventConsentUpdateWithWhereUniqueWithoutTenantInput = {
+    where: EventConsentWhereUniqueInput;
+    data: XOR<EventConsentUpdateWithoutTenantInput, EventConsentUncheckedUpdateWithoutTenantInput>;
+  };
+
+  export type EventConsentUpdateManyWithWhereWithoutTenantInput = {
+    where: EventConsentScalarWhereInput;
+    data: XOR<
+      EventConsentUpdateManyMutationInput,
+      EventConsentUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type EventConsentScalarWhereInput = {
+    AND?: EventConsentScalarWhereInput | EventConsentScalarWhereInput[];
+    OR?: EventConsentScalarWhereInput[];
+    NOT?: EventConsentScalarWhereInput | EventConsentScalarWhereInput[];
+    id?: StringFilter<'EventConsent'> | string;
+    tenantId?: StringFilter<'EventConsent'> | string;
+    classroomId?: StringNullableFilter<'EventConsent'> | string | null;
+    title?: StringFilter<'EventConsent'> | string;
+    eventDate?: DateTimeFilter<'EventConsent'> | Date | string;
+    location?: StringNullableFilter<'EventConsent'> | string | null;
+    price?:
+      DecimalNullableFilter<'EventConsent'> | Decimal | DecimalJsLike | number | string | null;
+    description?: StringNullableFilter<'EventConsent'> | string | null;
+    deadline?: DateTimeNullableFilter<'EventConsent'> | Date | string | null;
+    status?: StringFilter<'EventConsent'> | string;
+    createdById?: StringFilter<'EventConsent'> | string;
+    createdAt?: DateTimeFilter<'EventConsent'> | Date | string;
+    updatedAt?: DateTimeFilter<'EventConsent'> | Date | string;
+  };
+
+  export type EventConsentResponseUpsertWithWhereUniqueWithoutTenantInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    update: XOR<
+      EventConsentResponseUpdateWithoutTenantInput,
+      EventConsentResponseUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      EventConsentResponseCreateWithoutTenantInput,
+      EventConsentResponseUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateWithWhereUniqueWithoutTenantInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    data: XOR<
+      EventConsentResponseUpdateWithoutTenantInput,
+      EventConsentResponseUncheckedUpdateWithoutTenantInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateManyWithWhereWithoutTenantInput = {
+    where: EventConsentResponseScalarWhereInput;
+    data: XOR<
+      EventConsentResponseUpdateManyMutationInput,
+      EventConsentResponseUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type EventConsentResponseScalarWhereInput = {
+    AND?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+    OR?: EventConsentResponseScalarWhereInput[];
+    NOT?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+    id?: StringFilter<'EventConsentResponse'> | string;
+    tenantId?: StringFilter<'EventConsentResponse'> | string;
+    consentId?: StringFilter<'EventConsentResponse'> | string;
+    studentId?: StringFilter<'EventConsentResponse'> | string;
+    parentUserId?: StringFilter<'EventConsentResponse'> | string;
+    decision?: StringFilter<'EventConsentResponse'> | string;
+    notes?: StringNullableFilter<'EventConsentResponse'> | string | null;
+    respondedAt?: DateTimeFilter<'EventConsentResponse'> | Date | string;
+  };
+
   export type TenantCreateWithoutUsersInput = {
     id?: string;
     slug: string;
@@ -51351,6 +57917,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -51383,6 +57952,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -51415,6 +57987,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutParentInput = {
@@ -51442,6 +58016,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutParentInput = {
@@ -52212,6 +58788,123 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type AttendanceExcuseCreateWithoutCreatedByInput = {
+    id?: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutAttendanceExcusesInput;
+    student: StudentCreateNestedOneWithoutAttendanceExcusesInput;
+  };
+
+  export type AttendanceExcuseUncheckedCreateWithoutCreatedByInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type AttendanceExcuseCreateOrConnectWithoutCreatedByInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    create: XOR<
+      AttendanceExcuseCreateWithoutCreatedByInput,
+      AttendanceExcuseUncheckedCreateWithoutCreatedByInput
+    >;
+  };
+
+  export type AttendanceExcuseCreateManyCreatedByInputEnvelope = {
+    data: AttendanceExcuseCreateManyCreatedByInput | AttendanceExcuseCreateManyCreatedByInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type EventConsentCreateWithoutCreatedByInput = {
+    id?: string;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutEventConsentsInput;
+    classroom?: ClassroomCreateNestedOneWithoutEventConsentsInput;
+    responses?: EventConsentResponseCreateNestedManyWithoutConsentInput;
+  };
+
+  export type EventConsentUncheckedCreateWithoutCreatedByInput = {
+    id?: string;
+    tenantId: string;
+    classroomId?: string | null;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    responses?: EventConsentResponseUncheckedCreateNestedManyWithoutConsentInput;
+  };
+
+  export type EventConsentCreateOrConnectWithoutCreatedByInput = {
+    where: EventConsentWhereUniqueInput;
+    create: XOR<
+      EventConsentCreateWithoutCreatedByInput,
+      EventConsentUncheckedCreateWithoutCreatedByInput
+    >;
+  };
+
+  export type EventConsentCreateManyCreatedByInputEnvelope = {
+    data: EventConsentCreateManyCreatedByInput | EventConsentCreateManyCreatedByInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type EventConsentResponseCreateWithoutParentUserInput = {
+    id?: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutEventConsentResponsesInput;
+    consent: EventConsentCreateNestedOneWithoutResponsesInput;
+    student: StudentCreateNestedOneWithoutEventConsentResponsesInput;
+  };
+
+  export type EventConsentResponseUncheckedCreateWithoutParentUserInput = {
+    id?: string;
+    tenantId: string;
+    consentId: string;
+    studentId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
+  export type EventConsentResponseCreateOrConnectWithoutParentUserInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    create: XOR<
+      EventConsentResponseCreateWithoutParentUserInput,
+      EventConsentResponseUncheckedCreateWithoutParentUserInput
+    >;
+  };
+
+  export type EventConsentResponseCreateManyParentUserInputEnvelope = {
+    data:
+      | EventConsentResponseCreateManyParentUserInput
+      | EventConsentResponseCreateManyParentUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>;
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
@@ -52253,6 +58946,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -52285,6 +58981,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutParentInput = {
@@ -52799,6 +59498,90 @@ export namespace Prisma {
     data: XOR<MediaFileUpdateManyMutationInput, MediaFileUncheckedUpdateManyWithoutUploadedByInput>;
   };
 
+  export type AttendanceExcuseUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    update: XOR<
+      AttendanceExcuseUpdateWithoutCreatedByInput,
+      AttendanceExcuseUncheckedUpdateWithoutCreatedByInput
+    >;
+    create: XOR<
+      AttendanceExcuseCreateWithoutCreatedByInput,
+      AttendanceExcuseUncheckedCreateWithoutCreatedByInput
+    >;
+  };
+
+  export type AttendanceExcuseUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    data: XOR<
+      AttendanceExcuseUpdateWithoutCreatedByInput,
+      AttendanceExcuseUncheckedUpdateWithoutCreatedByInput
+    >;
+  };
+
+  export type AttendanceExcuseUpdateManyWithWhereWithoutCreatedByInput = {
+    where: AttendanceExcuseScalarWhereInput;
+    data: XOR<
+      AttendanceExcuseUpdateManyMutationInput,
+      AttendanceExcuseUncheckedUpdateManyWithoutCreatedByInput
+    >;
+  };
+
+  export type EventConsentUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: EventConsentWhereUniqueInput;
+    update: XOR<
+      EventConsentUpdateWithoutCreatedByInput,
+      EventConsentUncheckedUpdateWithoutCreatedByInput
+    >;
+    create: XOR<
+      EventConsentCreateWithoutCreatedByInput,
+      EventConsentUncheckedCreateWithoutCreatedByInput
+    >;
+  };
+
+  export type EventConsentUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: EventConsentWhereUniqueInput;
+    data: XOR<
+      EventConsentUpdateWithoutCreatedByInput,
+      EventConsentUncheckedUpdateWithoutCreatedByInput
+    >;
+  };
+
+  export type EventConsentUpdateManyWithWhereWithoutCreatedByInput = {
+    where: EventConsentScalarWhereInput;
+    data: XOR<
+      EventConsentUpdateManyMutationInput,
+      EventConsentUncheckedUpdateManyWithoutCreatedByInput
+    >;
+  };
+
+  export type EventConsentResponseUpsertWithWhereUniqueWithoutParentUserInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    update: XOR<
+      EventConsentResponseUpdateWithoutParentUserInput,
+      EventConsentResponseUncheckedUpdateWithoutParentUserInput
+    >;
+    create: XOR<
+      EventConsentResponseCreateWithoutParentUserInput,
+      EventConsentResponseUncheckedCreateWithoutParentUserInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateWithWhereUniqueWithoutParentUserInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    data: XOR<
+      EventConsentResponseUpdateWithoutParentUserInput,
+      EventConsentResponseUncheckedUpdateWithoutParentUserInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateManyWithWhereWithoutParentUserInput = {
+    where: EventConsentResponseScalarWhereInput;
+    data: XOR<
+      EventConsentResponseUpdateManyMutationInput,
+      EventConsentResponseUncheckedUpdateManyWithoutParentUserInput
+    >;
+  };
+
   export type TenantCreateWithoutStudentsInput = {
     id?: string;
     slug: string;
@@ -52829,6 +59612,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -52861,6 +59647,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -52897,6 +59686,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutChildrenInput = {
@@ -52928,6 +59720,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutChildrenInput = {
@@ -52944,6 +59739,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     tenant: TenantCreateNestedOneWithoutClassroomsInput;
     teacherAssignments?: ClassroomTeacherCreateNestedManyWithoutClassroomInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutClassroomInput;
   };
 
   export type ClassroomUncheckedCreateWithoutStudentsInput = {
@@ -52955,6 +59751,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     teacherAssignments?: ClassroomTeacherUncheckedCreateNestedManyWithoutClassroomInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutClassroomInput;
   };
 
   export type ClassroomCreateOrConnectWithoutStudentsInput = {
@@ -53429,6 +60226,76 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type AttendanceExcuseCreateWithoutStudentInput = {
+    id?: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutAttendanceExcusesInput;
+    createdBy: UserCreateNestedOneWithoutAttendanceExcusesCreatedInput;
+  };
+
+  export type AttendanceExcuseUncheckedCreateWithoutStudentInput = {
+    id?: string;
+    tenantId: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type AttendanceExcuseCreateOrConnectWithoutStudentInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    create: XOR<
+      AttendanceExcuseCreateWithoutStudentInput,
+      AttendanceExcuseUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type AttendanceExcuseCreateManyStudentInputEnvelope = {
+    data: AttendanceExcuseCreateManyStudentInput | AttendanceExcuseCreateManyStudentInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type EventConsentResponseCreateWithoutStudentInput = {
+    id?: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutEventConsentResponsesInput;
+    consent: EventConsentCreateNestedOneWithoutResponsesInput;
+    parentUser: UserCreateNestedOneWithoutEventConsentResponsesInput;
+  };
+
+  export type EventConsentResponseUncheckedCreateWithoutStudentInput = {
+    id?: string;
+    tenantId: string;
+    consentId: string;
+    parentUserId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
+  export type EventConsentResponseCreateOrConnectWithoutStudentInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    create: XOR<
+      EventConsentResponseCreateWithoutStudentInput,
+      EventConsentResponseUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type EventConsentResponseCreateManyStudentInputEnvelope = {
+    data: EventConsentResponseCreateManyStudentInput | EventConsentResponseCreateManyStudentInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type TenantUpsertWithoutStudentsInput = {
     update: XOR<TenantUpdateWithoutStudentsInput, TenantUncheckedUpdateWithoutStudentsInput>;
     create: XOR<TenantCreateWithoutStudentsInput, TenantUncheckedCreateWithoutStudentsInput>;
@@ -53470,6 +60337,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -53502,6 +60372,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutChildrenInput = {
@@ -53544,6 +60417,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutChildrenInput = {
@@ -53575,6 +60451,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type ClassroomUpsertWithoutStudentsInput = {
@@ -53597,6 +60476,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     tenant?: TenantUpdateOneRequiredWithoutClassroomsNestedInput;
     teacherAssignments?: ClassroomTeacherUpdateManyWithoutClassroomNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutClassroomNestedInput;
   };
 
   export type ClassroomUncheckedUpdateWithoutStudentsInput = {
@@ -53608,6 +60488,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     teacherAssignments?: ClassroomTeacherUncheckedUpdateManyWithoutClassroomNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutClassroomNestedInput;
   };
 
   export type DailyReportUpsertWithWhereUniqueWithoutStudentInput = {
@@ -53900,6 +60781,62 @@ export namespace Prisma {
     >;
   };
 
+  export type AttendanceExcuseUpsertWithWhereUniqueWithoutStudentInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    update: XOR<
+      AttendanceExcuseUpdateWithoutStudentInput,
+      AttendanceExcuseUncheckedUpdateWithoutStudentInput
+    >;
+    create: XOR<
+      AttendanceExcuseCreateWithoutStudentInput,
+      AttendanceExcuseUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type AttendanceExcuseUpdateWithWhereUniqueWithoutStudentInput = {
+    where: AttendanceExcuseWhereUniqueInput;
+    data: XOR<
+      AttendanceExcuseUpdateWithoutStudentInput,
+      AttendanceExcuseUncheckedUpdateWithoutStudentInput
+    >;
+  };
+
+  export type AttendanceExcuseUpdateManyWithWhereWithoutStudentInput = {
+    where: AttendanceExcuseScalarWhereInput;
+    data: XOR<
+      AttendanceExcuseUpdateManyMutationInput,
+      AttendanceExcuseUncheckedUpdateManyWithoutStudentInput
+    >;
+  };
+
+  export type EventConsentResponseUpsertWithWhereUniqueWithoutStudentInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    update: XOR<
+      EventConsentResponseUpdateWithoutStudentInput,
+      EventConsentResponseUncheckedUpdateWithoutStudentInput
+    >;
+    create: XOR<
+      EventConsentResponseCreateWithoutStudentInput,
+      EventConsentResponseUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateWithWhereUniqueWithoutStudentInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    data: XOR<
+      EventConsentResponseUpdateWithoutStudentInput,
+      EventConsentResponseUncheckedUpdateWithoutStudentInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateManyWithWhereWithoutStudentInput = {
+    where: EventConsentResponseScalarWhereInput;
+    data: XOR<
+      EventConsentResponseUpdateManyMutationInput,
+      EventConsentResponseUncheckedUpdateManyWithoutStudentInput
+    >;
+  };
+
   export type TenantCreateWithoutClassroomsInput = {
     id?: string;
     slug: string;
@@ -53930,6 +60867,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomsInput = {
@@ -53962,6 +60902,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomsInput = {
@@ -53994,6 +60937,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutClassroomInput = {
@@ -54021,6 +60966,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutClassroomInput = {
@@ -54059,6 +61006,51 @@ export namespace Prisma {
 
   export type ClassroomTeacherCreateManyClassroomInputEnvelope = {
     data: ClassroomTeacherCreateManyClassroomInput | ClassroomTeacherCreateManyClassroomInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type EventConsentCreateWithoutClassroomInput = {
+    id?: string;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutEventConsentsInput;
+    createdBy: UserCreateNestedOneWithoutEventConsentsCreatedInput;
+    responses?: EventConsentResponseCreateNestedManyWithoutConsentInput;
+  };
+
+  export type EventConsentUncheckedCreateWithoutClassroomInput = {
+    id?: string;
+    tenantId: string;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    responses?: EventConsentResponseUncheckedCreateNestedManyWithoutConsentInput;
+  };
+
+  export type EventConsentCreateOrConnectWithoutClassroomInput = {
+    where: EventConsentWhereUniqueInput;
+    create: XOR<
+      EventConsentCreateWithoutClassroomInput,
+      EventConsentUncheckedCreateWithoutClassroomInput
+    >;
+  };
+
+  export type EventConsentCreateManyClassroomInputEnvelope = {
+    data: EventConsentCreateManyClassroomInput | EventConsentCreateManyClassroomInput[];
     skipDuplicates?: boolean;
   };
 
@@ -54103,6 +61095,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomsInput = {
@@ -54135,6 +61130,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutClassroomInput = {
@@ -54181,6 +61179,34 @@ export namespace Prisma {
     >;
   };
 
+  export type EventConsentUpsertWithWhereUniqueWithoutClassroomInput = {
+    where: EventConsentWhereUniqueInput;
+    update: XOR<
+      EventConsentUpdateWithoutClassroomInput,
+      EventConsentUncheckedUpdateWithoutClassroomInput
+    >;
+    create: XOR<
+      EventConsentCreateWithoutClassroomInput,
+      EventConsentUncheckedCreateWithoutClassroomInput
+    >;
+  };
+
+  export type EventConsentUpdateWithWhereUniqueWithoutClassroomInput = {
+    where: EventConsentWhereUniqueInput;
+    data: XOR<
+      EventConsentUpdateWithoutClassroomInput,
+      EventConsentUncheckedUpdateWithoutClassroomInput
+    >;
+  };
+
+  export type EventConsentUpdateManyWithWhereWithoutClassroomInput = {
+    where: EventConsentScalarWhereInput;
+    data: XOR<
+      EventConsentUpdateManyMutationInput,
+      EventConsentUncheckedUpdateManyWithoutClassroomInput
+    >;
+  };
+
   export type TenantCreateWithoutClassroomTeachersInput = {
     id?: string;
     slug: string;
@@ -54211,6 +61237,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomTeachersInput = {
@@ -54243,6 +61272,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomTeachersInput = {
@@ -54262,6 +61294,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     tenant: TenantCreateNestedOneWithoutClassroomsInput;
     students?: StudentCreateNestedManyWithoutClassroomInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutClassroomInput;
   };
 
   export type ClassroomUncheckedCreateWithoutTeacherAssignmentsInput = {
@@ -54273,6 +61306,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     students?: StudentUncheckedCreateNestedManyWithoutClassroomInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutClassroomInput;
   };
 
   export type ClassroomCreateOrConnectWithoutTeacherAssignmentsInput = {
@@ -54312,6 +61346,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutClassroomTeachersInput = {
@@ -54343,6 +61380,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutClassroomTeachersInput = {
@@ -54403,6 +61443,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -54435,6 +61478,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ClassroomUpsertWithoutTeacherAssignmentsInput = {
@@ -54466,6 +61512,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     tenant?: TenantUpdateOneRequiredWithoutClassroomsNestedInput;
     students?: StudentUpdateManyWithoutClassroomNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutClassroomNestedInput;
   };
 
   export type ClassroomUncheckedUpdateWithoutTeacherAssignmentsInput = {
@@ -54477,6 +61524,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     students?: StudentUncheckedUpdateManyWithoutClassroomNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutClassroomNestedInput;
   };
 
   export type UserUpsertWithoutClassroomTeachersInput = {
@@ -54528,6 +61576,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -54559,6 +61610,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutDailyReportsInput = {
@@ -54591,6 +61645,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyReportsInput = {
@@ -54623,6 +61680,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyReportsInput = {
@@ -54658,6 +61718,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutDailyReportsInput = {
@@ -54685,6 +61747,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutDailyReportsInput = {
@@ -54742,6 +61806,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyReportsInput = {
@@ -54774,6 +61841,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDailyReportsInput = {
@@ -54821,6 +61891,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutDailyReportsInput = {
@@ -54848,6 +61920,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type TenantCreateWithoutAttendancesInput = {
@@ -54880,6 +61954,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendancesInput = {
@@ -54912,6 +61989,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendancesInput = {
@@ -54944,6 +62024,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutAttendancesInput = {
@@ -54971,6 +62053,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutAttendancesInput = {
@@ -55022,6 +62106,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendancesInput = {
@@ -55054,6 +62141,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendancesInput = {
@@ -55098,6 +62188,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutAttendancesInput = {
@@ -55125,6 +62217,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type TenantCreateWithoutDailyMenusInput = {
@@ -55157,6 +62251,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyMenusInput = {
@@ -55189,6 +62286,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyMenusInput = {
@@ -55237,6 +62337,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyMenusInput = {
@@ -55269,6 +62372,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutActivityPostsInput = {
@@ -55301,6 +62407,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutActivityPostsInput = {
@@ -55333,6 +62442,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutActivityPostsInput = {
@@ -55393,6 +62505,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutActivityPostsInput = {
@@ -55425,6 +62540,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPickupContactsInput = {
@@ -55457,6 +62575,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupContactsInput = {
@@ -55489,6 +62610,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupContactsInput = {
@@ -55524,6 +62648,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutPickupContactsInput = {
@@ -55551,6 +62677,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutPickupContactsInput = {
@@ -55695,6 +62823,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupContactsInput = {
@@ -55727,6 +62858,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupContactsInput = {
@@ -55774,6 +62908,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutPickupContactsInput = {
@@ -55801,6 +62937,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type PickupAuthorizationUpsertWithWhereUniqueWithoutPickupContactInput = {
@@ -55889,6 +63027,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupAuthorizationsInput = {
@@ -55921,6 +63062,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupAuthorizationsInput = {
@@ -55956,6 +63100,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutPickupAuthorizationsInput = {
@@ -55983,6 +63129,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutPickupAuthorizationsInput = {
@@ -56058,6 +63206,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthRequestedInput = {
@@ -56089,6 +63240,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthRequestedInput = {
@@ -56128,6 +63282,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthReviewedInput = {
@@ -56159,6 +63316,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthReviewedInput = {
@@ -56258,6 +63418,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupAuthorizationsInput = {
@@ -56290,6 +63453,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupAuthorizationsInput = {
@@ -56337,6 +63503,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutPickupAuthorizationsInput = {
@@ -56364,6 +63532,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type PickupContactUpsertWithoutAuthorizationsInput = {
@@ -56463,6 +63633,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthRequestedInput = {
@@ -56494,6 +63667,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUpsertWithoutPickupAuthReviewedInput = {
@@ -56545,6 +63721,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthReviewedInput = {
@@ -56576,6 +63755,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type PickupEventUpsertWithWhereUniqueWithoutAuthorizationInput = {
@@ -56636,6 +63818,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupEventsInput = {
@@ -56668,6 +63853,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupEventsInput = {
@@ -56703,6 +63891,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutPickupEventsInput = {
@@ -56730,6 +63920,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutPickupEventsInput = {
@@ -56843,6 +64035,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupEventsVerifiedInput = {
@@ -56874,6 +64069,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupEventsVerifiedInput = {
@@ -56931,6 +64129,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupEventsInput = {
@@ -56963,6 +64164,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupEventsInput = {
@@ -57010,6 +64214,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutPickupEventsInput = {
@@ -57037,6 +64243,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type PickupContactUpsertWithoutPickupEventsInput = {
@@ -57188,6 +64396,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupEventsVerifiedInput = {
@@ -57219,6 +64430,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutMedicationRecordsInput = {
@@ -57251,6 +64465,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMedicationRecordsInput = {
@@ -57283,6 +64500,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMedicationRecordsInput = {
@@ -57318,6 +64538,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutMedicationRecordsInput = {
@@ -57345,6 +64567,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutMedicationRecordsInput = {
@@ -57384,6 +64608,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsRequestedInput = {
@@ -57415,6 +64642,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsRequestedInput = {
@@ -57454,6 +64684,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsApprovedInput = {
@@ -57485,6 +64718,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsApprovedInput = {
@@ -57524,6 +64760,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsAdministeredInput = {
@@ -57555,6 +64794,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsAdministeredInput = {
@@ -57615,6 +64857,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMedicationRecordsInput = {
@@ -57647,6 +64892,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutMedicationRecordsInput = {
@@ -57694,6 +64942,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutMedicationRecordsInput = {
@@ -57721,6 +64971,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsRequestedInput = {
@@ -57772,6 +65024,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsRequestedInput = {
@@ -57803,6 +65058,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsApprovedInput = {
@@ -57854,6 +65112,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsApprovedInput = {
@@ -57885,6 +65146,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsAdministeredInput = {
@@ -57936,6 +65200,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsAdministeredInput = {
@@ -57967,6 +65234,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutConversationsInput = {
@@ -57999,6 +65269,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationsInput = {
@@ -58031,6 +65304,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationsInput = {
@@ -58066,6 +65342,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutConversationsInput = {
@@ -58093,6 +65371,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutConversationsInput = {
@@ -58132,6 +65412,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutConversationsCreatedInput = {
@@ -58163,6 +65446,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutConversationsCreatedInput = {
@@ -58287,6 +65573,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationsInput = {
@@ -58319,6 +65608,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutConversationsInput = {
@@ -58366,6 +65658,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutConversationsInput = {
@@ -58393,6 +65687,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutConversationsCreatedInput = {
@@ -58444,6 +65740,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationsCreatedInput = {
@@ -58475,6 +65774,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutConversationInput = {
@@ -58560,6 +65862,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationParticipantsInput = {
@@ -58592,6 +65897,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationParticipantsInput = {
@@ -58669,6 +65977,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutConversationParticipationsInput = {
@@ -58700,6 +66011,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutConversationParticipationsInput = {
@@ -58760,6 +66074,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationParticipantsInput = {
@@ -58792,6 +66109,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutParticipantsInput = {
@@ -58893,6 +66213,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationParticipationsInput = {
@@ -58924,6 +66247,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutMessagesInput = {
@@ -58956,6 +66282,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessagesInput = {
@@ -58988,6 +66317,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessagesInput = {
@@ -59062,6 +66394,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutMessagesSentInput = {
@@ -59093,6 +66428,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutMessagesSentInput = {
@@ -59168,6 +66506,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessagesInput = {
@@ -59200,6 +66541,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutMessagesInput = {
@@ -59292,6 +66636,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessagesSentInput = {
@@ -59323,6 +66670,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type MessageReadReceiptUpsertWithWhereUniqueWithoutMessageInput = {
@@ -59383,6 +66733,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessageReceiptsInput = {
@@ -59415,6 +66768,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessageReceiptsInput = {
@@ -59481,6 +66837,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutMessageReceiptsInput = {
@@ -59512,6 +66871,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutMessageReceiptsInput = {
@@ -59572,6 +66934,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -59604,6 +66969,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type MessageUpsertWithoutReceiptsInput = {
@@ -59688,6 +67056,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -59719,6 +67090,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutParentRequestsInput = {
@@ -59751,6 +67125,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutParentRequestsInput = {
@@ -59783,6 +67160,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutParentRequestsInput = {
@@ -59822,6 +67202,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsRaisedInput = {
@@ -59853,6 +67236,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsRaisedInput = {
@@ -59888,6 +67274,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutParentRequestsInput = {
@@ -59915,6 +67303,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutParentRequestsInput = {
@@ -59954,6 +67344,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsResolvedInput = {
@@ -59985,6 +67378,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsResolvedInput = {
@@ -60045,6 +67441,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutParentRequestsInput = {
@@ -60077,6 +67476,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutParentRequestsRaisedInput = {
@@ -60128,6 +67530,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsRaisedInput = {
@@ -60159,6 +67564,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type StudentUpsertWithoutParentRequestsInput = {
@@ -60206,6 +67614,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutParentRequestsInput = {
@@ -60233,6 +67643,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutParentRequestsResolvedInput = {
@@ -60284,6 +67696,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsResolvedInput = {
@@ -60315,6 +67730,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutIncidentRecordsInput = {
@@ -60347,6 +67765,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutIncidentRecordsInput = {
@@ -60379,6 +67800,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutIncidentRecordsInput = {
@@ -60414,6 +67838,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutIncidentRecordsInput = {
@@ -60441,6 +67867,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutIncidentRecordsInput = {
@@ -60480,6 +67908,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsReportedInput = {
@@ -60511,6 +67942,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsReportedInput = {
@@ -60550,6 +67984,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsNotifiedInput = {
@@ -60581,6 +68018,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsNotifiedInput = {
@@ -60641,6 +68081,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutIncidentRecordsInput = {
@@ -60673,6 +68116,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutIncidentRecordsInput = {
@@ -60720,6 +68166,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutIncidentRecordsInput = {
@@ -60747,6 +68195,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutIncidentsReportedInput = {
@@ -60798,6 +68248,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsReportedInput = {
@@ -60829,6 +68282,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUpsertWithoutIncidentsNotifiedInput = {
@@ -60880,6 +68336,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsNotifiedInput = {
@@ -60911,6 +68370,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutDevelopmentObservationsInput = {
@@ -60943,6 +68405,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDevelopmentObservationsInput = {
@@ -60975,6 +68440,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDevelopmentObservationsInput = {
@@ -61010,6 +68478,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestCreateNestedManyWithoutStudentInput;
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutDevelopmentObservationsInput = {
@@ -61037,6 +68507,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutStudentInput;
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutDevelopmentObservationsInput = {
@@ -61076,6 +68548,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutDevelopmentObservationsAuthoredInput = {
@@ -61107,6 +68582,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutDevelopmentObservationsAuthoredInput = {
@@ -61204,6 +68682,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDevelopmentObservationsInput = {
@@ -61236,6 +68717,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDevelopmentObservationsInput = {
@@ -61283,6 +68767,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUpdateManyWithoutStudentNestedInput;
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutDevelopmentObservationsInput = {
@@ -61310,6 +68796,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUncheckedUpdateManyWithoutStudentNestedInput;
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutDevelopmentObservationsAuthoredInput = {
@@ -61361,6 +68849,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutDevelopmentObservationsAuthoredInput = {
@@ -61392,6 +68883,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type PortfolioItemUpsertWithWhereUniqueWithoutObservationInput = {
@@ -61452,6 +68946,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPortfolioItemsInput = {
@@ -61484,6 +68981,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPortfolioItemsInput = {
@@ -61519,6 +69019,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestCreateNestedManyWithoutStudentInput;
     incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutPortfolioItemsInput = {
@@ -61546,6 +69048,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutStudentInput;
     incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutPortfolioItemsInput = {
@@ -61642,6 +69146,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -61674,6 +69181,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPortfolioItemsInput = {
@@ -61721,6 +69231,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUpdateManyWithoutStudentNestedInput;
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -61748,6 +69260,8 @@ export namespace Prisma {
     parentRequests?: ParentRequestUncheckedUpdateManyWithoutStudentNestedInput;
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type DevelopmentObservationUpsertWithoutPortfolioItemsInput = {
@@ -61828,6 +69342,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutHomeActivitySuggestionsInput = {
@@ -61860,6 +69377,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutHomeActivitySuggestionsInput = {
@@ -61920,6 +69440,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutHomeActivitySuggestionsInput = {
@@ -61952,6 +69475,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPushTokensInput = {
@@ -61984,6 +69510,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPushTokensInput = {
@@ -62016,6 +69545,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPushTokensInput = {
@@ -62052,6 +69584,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutPushTokensInput = {
@@ -62083,6 +69618,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutPushTokensInput = {
@@ -62131,6 +69669,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPushTokensInput = {
@@ -62163,6 +69704,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutPushTokensInput = {
@@ -62205,6 +69749,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPushTokensInput = {
@@ -62236,6 +69783,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutNotificationsInput = {
@@ -62268,6 +69818,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutNotificationsInput = {
@@ -62300,6 +69853,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutNotificationsInput = {
@@ -62339,6 +69895,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -62370,6 +69929,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -62427,6 +69989,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutNotificationsInput = {
@@ -62459,6 +70024,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -62501,6 +70069,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -62532,6 +70103,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type TenantCreateWithoutMediaFilesInput = {
@@ -62564,6 +70138,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
     notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMediaFilesInput = {
@@ -62596,6 +70173,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMediaFilesInput = {
@@ -62632,6 +70212,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
     notifications?: NotificationCreateNestedManyWithoutUserInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserUncheckedCreateWithoutUploadedMediaInput = {
@@ -62663,6 +70246,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
     pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
   };
 
   export type UserCreateOrConnectWithoutUploadedMediaInput = {
@@ -62711,6 +70297,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMediaFilesInput = {
@@ -62743,6 +70332,9 @@ export namespace Prisma {
     homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutUploadedMediaInput = {
@@ -62785,6 +70377,9 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutUploadedMediaInput = {
@@ -62816,6 +70411,1524 @@ export namespace Prisma {
     developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+  };
+
+  export type TenantCreateWithoutAttendanceExcusesInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutAttendanceExcusesInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutAttendanceExcusesInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutAttendanceExcusesInput,
+      TenantUncheckedCreateWithoutAttendanceExcusesInput
+    >;
+  };
+
+  export type StudentCreateWithoutAttendanceExcusesInput = {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    tenant: TenantCreateNestedOneWithoutStudentsInput;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
+    classroom?: ClassroomCreateNestedOneWithoutStudentsInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentUncheckedCreateWithoutAttendanceExcusesInput = {
+    id?: string;
+    tenantId: string;
+    parentId?: string | null;
+    classroomId?: string | null;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentCreateOrConnectWithoutAttendanceExcusesInput = {
+    where: StudentWhereUniqueInput;
+    create: XOR<
+      StudentCreateWithoutAttendanceExcusesInput,
+      StudentUncheckedCreateWithoutAttendanceExcusesInput
+    >;
+  };
+
+  export type UserCreateWithoutAttendanceExcusesCreatedInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutAttendanceExcusesCreatedInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventUncheckedCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordUncheckedCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordUncheckedCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordUncheckedCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationUncheckedCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestUncheckedCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutAttendanceExcusesCreatedInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutAttendanceExcusesCreatedInput,
+      UserUncheckedCreateWithoutAttendanceExcusesCreatedInput
+    >;
+  };
+
+  export type TenantUpsertWithoutAttendanceExcusesInput = {
+    update: XOR<
+      TenantUpdateWithoutAttendanceExcusesInput,
+      TenantUncheckedUpdateWithoutAttendanceExcusesInput
+    >;
+    create: XOR<
+      TenantCreateWithoutAttendanceExcusesInput,
+      TenantUncheckedCreateWithoutAttendanceExcusesInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutAttendanceExcusesInput = {
+    where?: TenantWhereInput;
+    data: XOR<
+      TenantUpdateWithoutAttendanceExcusesInput,
+      TenantUncheckedUpdateWithoutAttendanceExcusesInput
+    >;
+  };
+
+  export type TenantUpdateWithoutAttendanceExcusesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutAttendanceExcusesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type StudentUpsertWithoutAttendanceExcusesInput = {
+    update: XOR<
+      StudentUpdateWithoutAttendanceExcusesInput,
+      StudentUncheckedUpdateWithoutAttendanceExcusesInput
+    >;
+    create: XOR<
+      StudentCreateWithoutAttendanceExcusesInput,
+      StudentUncheckedCreateWithoutAttendanceExcusesInput
+    >;
+    where?: StudentWhereInput;
+  };
+
+  export type StudentUpdateToOneWithWhereWithoutAttendanceExcusesInput = {
+    where?: StudentWhereInput;
+    data: XOR<
+      StudentUpdateWithoutAttendanceExcusesInput,
+      StudentUncheckedUpdateWithoutAttendanceExcusesInput
+    >;
+  };
+
+  export type StudentUpdateWithoutAttendanceExcusesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
+    classroom?: ClassroomUpdateOneWithoutStudentsNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type StudentUncheckedUpdateWithoutAttendanceExcusesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type UserUpsertWithoutAttendanceExcusesCreatedInput = {
+    update: XOR<
+      UserUpdateWithoutAttendanceExcusesCreatedInput,
+      UserUncheckedUpdateWithoutAttendanceExcusesCreatedInput
+    >;
+    create: XOR<
+      UserCreateWithoutAttendanceExcusesCreatedInput,
+      UserUncheckedCreateWithoutAttendanceExcusesCreatedInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutAttendanceExcusesCreatedInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutAttendanceExcusesCreatedInput,
+      UserUncheckedUpdateWithoutAttendanceExcusesCreatedInput
+    >;
+  };
+
+  export type UserUpdateWithoutAttendanceExcusesCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutAttendanceExcusesCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUncheckedUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUncheckedUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUncheckedUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUncheckedUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUncheckedUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUncheckedUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+  };
+
+  export type TenantCreateWithoutEventConsentsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutEventConsentsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutEventConsentsInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutEventConsentsInput,
+      TenantUncheckedCreateWithoutEventConsentsInput
+    >;
+  };
+
+  export type ClassroomCreateWithoutEventConsentsInput = {
+    id?: string;
+    name: string;
+    ageGroup?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutClassroomsInput;
+    students?: StudentCreateNestedManyWithoutClassroomInput;
+    teacherAssignments?: ClassroomTeacherCreateNestedManyWithoutClassroomInput;
+  };
+
+  export type ClassroomUncheckedCreateWithoutEventConsentsInput = {
+    id?: string;
+    tenantId: string;
+    name: string;
+    ageGroup?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    students?: StudentUncheckedCreateNestedManyWithoutClassroomInput;
+    teacherAssignments?: ClassroomTeacherUncheckedCreateNestedManyWithoutClassroomInput;
+  };
+
+  export type ClassroomCreateOrConnectWithoutEventConsentsInput = {
+    where: ClassroomWhereUniqueInput;
+    create: XOR<
+      ClassroomCreateWithoutEventConsentsInput,
+      ClassroomUncheckedCreateWithoutEventConsentsInput
+    >;
+  };
+
+  export type UserCreateWithoutEventConsentsCreatedInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutEventConsentsCreatedInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventUncheckedCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordUncheckedCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordUncheckedCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordUncheckedCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationUncheckedCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestUncheckedCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutEventConsentsCreatedInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutEventConsentsCreatedInput,
+      UserUncheckedCreateWithoutEventConsentsCreatedInput
+    >;
+  };
+
+  export type EventConsentResponseCreateWithoutConsentInput = {
+    id?: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutEventConsentResponsesInput;
+    student: StudentCreateNestedOneWithoutEventConsentResponsesInput;
+    parentUser: UserCreateNestedOneWithoutEventConsentResponsesInput;
+  };
+
+  export type EventConsentResponseUncheckedCreateWithoutConsentInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    parentUserId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
+  export type EventConsentResponseCreateOrConnectWithoutConsentInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    create: XOR<
+      EventConsentResponseCreateWithoutConsentInput,
+      EventConsentResponseUncheckedCreateWithoutConsentInput
+    >;
+  };
+
+  export type EventConsentResponseCreateManyConsentInputEnvelope = {
+    data: EventConsentResponseCreateManyConsentInput | EventConsentResponseCreateManyConsentInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type TenantUpsertWithoutEventConsentsInput = {
+    update: XOR<
+      TenantUpdateWithoutEventConsentsInput,
+      TenantUncheckedUpdateWithoutEventConsentsInput
+    >;
+    create: XOR<
+      TenantCreateWithoutEventConsentsInput,
+      TenantUncheckedCreateWithoutEventConsentsInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutEventConsentsInput = {
+    where?: TenantWhereInput;
+    data: XOR<
+      TenantUpdateWithoutEventConsentsInput,
+      TenantUncheckedUpdateWithoutEventConsentsInput
+    >;
+  };
+
+  export type TenantUpdateWithoutEventConsentsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutEventConsentsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type ClassroomUpsertWithoutEventConsentsInput = {
+    update: XOR<
+      ClassroomUpdateWithoutEventConsentsInput,
+      ClassroomUncheckedUpdateWithoutEventConsentsInput
+    >;
+    create: XOR<
+      ClassroomCreateWithoutEventConsentsInput,
+      ClassroomUncheckedCreateWithoutEventConsentsInput
+    >;
+    where?: ClassroomWhereInput;
+  };
+
+  export type ClassroomUpdateToOneWithWhereWithoutEventConsentsInput = {
+    where?: ClassroomWhereInput;
+    data: XOR<
+      ClassroomUpdateWithoutEventConsentsInput,
+      ClassroomUncheckedUpdateWithoutEventConsentsInput
+    >;
+  };
+
+  export type ClassroomUpdateWithoutEventConsentsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutClassroomsNestedInput;
+    students?: StudentUpdateManyWithoutClassroomNestedInput;
+    teacherAssignments?: ClassroomTeacherUpdateManyWithoutClassroomNestedInput;
+  };
+
+  export type ClassroomUncheckedUpdateWithoutEventConsentsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    students?: StudentUncheckedUpdateManyWithoutClassroomNestedInput;
+    teacherAssignments?: ClassroomTeacherUncheckedUpdateManyWithoutClassroomNestedInput;
+  };
+
+  export type UserUpsertWithoutEventConsentsCreatedInput = {
+    update: XOR<
+      UserUpdateWithoutEventConsentsCreatedInput,
+      UserUncheckedUpdateWithoutEventConsentsCreatedInput
+    >;
+    create: XOR<
+      UserCreateWithoutEventConsentsCreatedInput,
+      UserUncheckedCreateWithoutEventConsentsCreatedInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutEventConsentsCreatedInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutEventConsentsCreatedInput,
+      UserUncheckedUpdateWithoutEventConsentsCreatedInput
+    >;
+  };
+
+  export type UserUpdateWithoutEventConsentsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutEventConsentsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUncheckedUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUncheckedUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUncheckedUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUncheckedUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUncheckedUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUncheckedUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+  };
+
+  export type EventConsentResponseUpsertWithWhereUniqueWithoutConsentInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    update: XOR<
+      EventConsentResponseUpdateWithoutConsentInput,
+      EventConsentResponseUncheckedUpdateWithoutConsentInput
+    >;
+    create: XOR<
+      EventConsentResponseCreateWithoutConsentInput,
+      EventConsentResponseUncheckedCreateWithoutConsentInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateWithWhereUniqueWithoutConsentInput = {
+    where: EventConsentResponseWhereUniqueInput;
+    data: XOR<
+      EventConsentResponseUpdateWithoutConsentInput,
+      EventConsentResponseUncheckedUpdateWithoutConsentInput
+    >;
+  };
+
+  export type EventConsentResponseUpdateManyWithWhereWithoutConsentInput = {
+    where: EventConsentResponseScalarWhereInput;
+    data: XOR<
+      EventConsentResponseUpdateManyMutationInput,
+      EventConsentResponseUncheckedUpdateManyWithoutConsentInput
+    >;
+  };
+
+  export type TenantCreateWithoutEventConsentResponsesInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutEventConsentResponsesInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutEventConsentResponsesInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutEventConsentResponsesInput,
+      TenantUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+  };
+
+  export type EventConsentCreateWithoutResponsesInput = {
+    id?: string;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutEventConsentsInput;
+    classroom?: ClassroomCreateNestedOneWithoutEventConsentsInput;
+    createdBy: UserCreateNestedOneWithoutEventConsentsCreatedInput;
+  };
+
+  export type EventConsentUncheckedCreateWithoutResponsesInput = {
+    id?: string;
+    tenantId: string;
+    classroomId?: string | null;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type EventConsentCreateOrConnectWithoutResponsesInput = {
+    where: EventConsentWhereUniqueInput;
+    create: XOR<
+      EventConsentCreateWithoutResponsesInput,
+      EventConsentUncheckedCreateWithoutResponsesInput
+    >;
+  };
+
+  export type StudentCreateWithoutEventConsentResponsesInput = {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    tenant: TenantCreateNestedOneWithoutStudentsInput;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
+    classroom?: ClassroomCreateNestedOneWithoutStudentsInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentUncheckedCreateWithoutEventConsentResponsesInput = {
+    id?: string;
+    tenantId: string;
+    parentId?: string | null;
+    classroomId?: string | null;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentCreateOrConnectWithoutEventConsentResponsesInput = {
+    where: StudentWhereUniqueInput;
+    create: XOR<
+      StudentCreateWithoutEventConsentResponsesInput,
+      StudentUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+  };
+
+  export type UserCreateWithoutEventConsentResponsesInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+  };
+
+  export type UserUncheckedCreateWithoutEventConsentResponsesInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventUncheckedCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordUncheckedCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordUncheckedCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordUncheckedCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationUncheckedCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestUncheckedCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+  };
+
+  export type UserCreateOrConnectWithoutEventConsentResponsesInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutEventConsentResponsesInput,
+      UserUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+  };
+
+  export type TenantUpsertWithoutEventConsentResponsesInput = {
+    update: XOR<
+      TenantUpdateWithoutEventConsentResponsesInput,
+      TenantUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+    create: XOR<
+      TenantCreateWithoutEventConsentResponsesInput,
+      TenantUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutEventConsentResponsesInput = {
+    where?: TenantWhereInput;
+    data: XOR<
+      TenantUpdateWithoutEventConsentResponsesInput,
+      TenantUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+  };
+
+  export type TenantUpdateWithoutEventConsentResponsesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutEventConsentResponsesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type EventConsentUpsertWithoutResponsesInput = {
+    update: XOR<
+      EventConsentUpdateWithoutResponsesInput,
+      EventConsentUncheckedUpdateWithoutResponsesInput
+    >;
+    create: XOR<
+      EventConsentCreateWithoutResponsesInput,
+      EventConsentUncheckedCreateWithoutResponsesInput
+    >;
+    where?: EventConsentWhereInput;
+  };
+
+  export type EventConsentUpdateToOneWithWhereWithoutResponsesInput = {
+    where?: EventConsentWhereInput;
+    data: XOR<
+      EventConsentUpdateWithoutResponsesInput,
+      EventConsentUncheckedUpdateWithoutResponsesInput
+    >;
+  };
+
+  export type EventConsentUpdateWithoutResponsesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutEventConsentsNestedInput;
+    classroom?: ClassroomUpdateOneWithoutEventConsentsNestedInput;
+    createdBy?: UserUpdateOneRequiredWithoutEventConsentsCreatedNestedInput;
+  };
+
+  export type EventConsentUncheckedUpdateWithoutResponsesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type StudentUpsertWithoutEventConsentResponsesInput = {
+    update: XOR<
+      StudentUpdateWithoutEventConsentResponsesInput,
+      StudentUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+    create: XOR<
+      StudentCreateWithoutEventConsentResponsesInput,
+      StudentUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    where?: StudentWhereInput;
+  };
+
+  export type StudentUpdateToOneWithWhereWithoutEventConsentResponsesInput = {
+    where?: StudentWhereInput;
+    data: XOR<
+      StudentUpdateWithoutEventConsentResponsesInput,
+      StudentUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+  };
+
+  export type StudentUpdateWithoutEventConsentResponsesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
+    classroom?: ClassroomUpdateOneWithoutStudentsNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type StudentUncheckedUpdateWithoutEventConsentResponsesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type UserUpsertWithoutEventConsentResponsesInput = {
+    update: XOR<
+      UserUpdateWithoutEventConsentResponsesInput,
+      UserUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+    create: XOR<
+      UserCreateWithoutEventConsentResponsesInput,
+      UserUncheckedCreateWithoutEventConsentResponsesInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutEventConsentResponsesInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutEventConsentResponsesInput,
+      UserUncheckedUpdateWithoutEventConsentResponsesInput
+    >;
+  };
+
+  export type UserUpdateWithoutEventConsentResponsesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutEventConsentResponsesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUncheckedUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUncheckedUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUncheckedUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUncheckedUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUncheckedUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUncheckedUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
   };
 
   export type UserCreateManyTenantInput = {
@@ -63115,6 +72228,43 @@ export namespace Prisma {
     updatedAt?: Date | string;
   };
 
+  export type AttendanceExcuseCreateManyTenantInput = {
+    id?: string;
+    studentId: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type EventConsentCreateManyTenantInput = {
+    id?: string;
+    classroomId?: string | null;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type EventConsentResponseCreateManyTenantInput = {
+    id?: string;
+    consentId: string;
+    studentId: string;
+    parentUserId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
   export type UserUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
@@ -63144,6 +72294,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTenantInput = {
@@ -63175,6 +72328,9 @@ export namespace Prisma {
     pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -63213,6 +72369,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutTenantInput = {
@@ -63240,6 +72398,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateManyWithoutTenantInput = {
@@ -63444,6 +72604,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     students?: StudentUpdateManyWithoutClassroomNestedInput;
     teacherAssignments?: ClassroomTeacherUpdateManyWithoutClassroomNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutClassroomNestedInput;
   };
 
   export type ClassroomUncheckedUpdateWithoutTenantInput = {
@@ -63455,6 +72616,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     students?: StudentUncheckedUpdateManyWithoutClassroomNestedInput;
     teacherAssignments?: ClassroomTeacherUncheckedUpdateManyWithoutClassroomNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutClassroomNestedInput;
   };
 
   export type ClassroomUncheckedUpdateManyWithoutTenantInput = {
@@ -64092,6 +73254,122 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type AttendanceExcuseUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    student?: StudentUpdateOneRequiredWithoutAttendanceExcusesNestedInput;
+    createdBy?: UserUpdateOneRequiredWithoutAttendanceExcusesCreatedNestedInput;
+  };
+
+  export type AttendanceExcuseUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type AttendanceExcuseUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    classroom?: ClassroomUpdateOneWithoutEventConsentsNestedInput;
+    createdBy?: UserUpdateOneRequiredWithoutEventConsentsCreatedNestedInput;
+    responses?: EventConsentResponseUpdateManyWithoutConsentNestedInput;
+  };
+
+  export type EventConsentUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    responses?: EventConsentResponseUncheckedUpdateManyWithoutConsentNestedInput;
+  };
+
+  export type EventConsentUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    consent?: EventConsentUpdateOneRequiredWithoutResponsesNestedInput;
+    student?: StudentUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+    parentUser?: UserUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+  };
+
+  export type EventConsentResponseUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    consentId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    parentUserId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    consentId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    parentUserId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StudentCreateManyParentInput = {
     id?: string;
     tenantId: string;
@@ -64358,6 +73636,43 @@ export namespace Prisma {
     updatedAt?: Date | string;
   };
 
+  export type AttendanceExcuseCreateManyCreatedByInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type EventConsentCreateManyCreatedByInput = {
+    id?: string;
+    tenantId: string;
+    classroomId?: string | null;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type EventConsentResponseCreateManyParentUserInput = {
+    id?: string;
+    tenantId: string;
+    consentId: string;
+    studentId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
   export type StudentUpdateWithoutParentInput = {
     id?: StringFieldUpdateOperationsInput | string;
     firstName?: StringFieldUpdateOperationsInput | string;
@@ -64383,6 +73698,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutParentInput = {
@@ -64410,6 +73727,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateManyWithoutParentInput = {
@@ -65199,6 +74518,122 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type AttendanceExcuseUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutAttendanceExcusesNestedInput;
+    student?: StudentUpdateOneRequiredWithoutAttendanceExcusesNestedInput;
+  };
+
+  export type AttendanceExcuseUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type AttendanceExcuseUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutEventConsentsNestedInput;
+    classroom?: ClassroomUpdateOneWithoutEventConsentsNestedInput;
+    responses?: EventConsentResponseUpdateManyWithoutConsentNestedInput;
+  };
+
+  export type EventConsentUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    responses?: EventConsentResponseUncheckedUpdateManyWithoutConsentNestedInput;
+  };
+
+  export type EventConsentUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseUpdateWithoutParentUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+    consent?: EventConsentUpdateOneRequiredWithoutResponsesNestedInput;
+    student?: StudentUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+  };
+
+  export type EventConsentResponseUncheckedUpdateWithoutParentUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    consentId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyWithoutParentUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    consentId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type DailyReportCreateManyStudentInput = {
     id?: string;
     tenantId: string;
@@ -65354,6 +74789,28 @@ export namespace Prisma {
     isParentVisible?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+  };
+
+  export type AttendanceExcuseCreateManyStudentInput = {
+    id?: string;
+    tenantId: string;
+    date: Date | string;
+    reason: string;
+    notes?: string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type EventConsentResponseCreateManyStudentInput = {
+    id?: string;
+    tenantId: string;
+    consentId: string;
+    parentUserId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
   };
 
   export type DailyReportUpdateWithoutStudentInput = {
@@ -65845,6 +75302,72 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type AttendanceExcuseUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutAttendanceExcusesNestedInput;
+    createdBy?: UserUpdateOneRequiredWithoutAttendanceExcusesCreatedNestedInput;
+  };
+
+  export type AttendanceExcuseUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type AttendanceExcuseUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    date?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reason?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+    consent?: EventConsentUpdateOneRequiredWithoutResponsesNestedInput;
+    parentUser?: UserUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+  };
+
+  export type EventConsentResponseUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    consentId?: StringFieldUpdateOperationsInput | string;
+    parentUserId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    consentId?: StringFieldUpdateOperationsInput | string;
+    parentUserId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StudentCreateManyClassroomInput = {
     id?: string;
     tenantId: string;
@@ -65867,6 +75390,21 @@ export namespace Prisma {
     teacherId: string;
     assignedAt?: Date | string;
     removedAt?: Date | string | null;
+  };
+
+  export type EventConsentCreateManyClassroomInput = {
+    id?: string;
+    tenantId: string;
+    title: string;
+    eventDate: Date | string;
+    location?: string | null;
+    price?: Decimal | DecimalJsLike | number | string | null;
+    description?: string | null;
+    deadline?: Date | string | null;
+    status?: string;
+    createdById: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
   };
 
   export type StudentUpdateWithoutClassroomInput = {
@@ -65894,6 +75432,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutClassroomInput = {
@@ -65921,6 +75461,8 @@ export namespace Prisma {
     incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateManyWithoutClassroomInput = {
@@ -65961,6 +75503,56 @@ export namespace Prisma {
     teacherId?: StringFieldUpdateOperationsInput | string;
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type EventConsentUpdateWithoutClassroomInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutEventConsentsNestedInput;
+    createdBy?: UserUpdateOneRequiredWithoutEventConsentsCreatedNestedInput;
+    responses?: EventConsentResponseUpdateManyWithoutConsentNestedInput;
+  };
+
+  export type EventConsentUncheckedUpdateWithoutClassroomInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    responses?: EventConsentResponseUncheckedUpdateManyWithoutConsentNestedInput;
+  };
+
+  export type EventConsentUncheckedUpdateManyWithoutClassroomInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: NullableStringFieldUpdateOperationsInput | string | null;
+    price?:
+      NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
+    description?: NullableStringFieldUpdateOperationsInput | string | null;
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    status?: StringFieldUpdateOperationsInput | string;
+    createdById?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type PickupAuthorizationCreateManyPickupContactInput = {
@@ -66280,6 +75872,46 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type EventConsentResponseCreateManyConsentInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    parentUserId: string;
+    decision: string;
+    notes?: string | null;
+    respondedAt?: Date | string;
+  };
+
+  export type EventConsentResponseUpdateWithoutConsentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+    student?: StudentUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+    parentUser?: UserUpdateOneRequiredWithoutEventConsentResponsesNestedInput;
+  };
+
+  export type EventConsentResponseUncheckedUpdateWithoutConsentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    parentUserId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EventConsentResponseUncheckedUpdateManyWithoutConsentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    parentUserId?: StringFieldUpdateOperationsInput | string;
+    decision?: StringFieldUpdateOperationsInput | string;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   /**
    * Aliases for legacy arg types
    */
@@ -66337,6 +75969,12 @@ export namespace Prisma {
   export type DevelopmentObservationCountOutputTypeArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = DevelopmentObservationCountOutputTypeDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use EventConsentCountOutputTypeDefaultArgs instead
+   */
+  export type EventConsentCountOutputTypeArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = EventConsentCountOutputTypeDefaultArgs<ExtArgs>;
   /**
    * @deprecated Use TenantDefaultArgs instead
    */
@@ -66474,6 +76112,23 @@ export namespace Prisma {
    */
   export type MediaFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     MediaFileDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use AttendanceExcuseDefaultArgs instead
+   */
+  export type AttendanceExcuseArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = AttendanceExcuseDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use EventConsentDefaultArgs instead
+   */
+  export type EventConsentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    EventConsentDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use EventConsentResponseDefaultArgs instead
+   */
+  export type EventConsentResponseArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = EventConsentResponseDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

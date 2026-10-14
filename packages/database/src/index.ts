@@ -21,6 +21,9 @@ export type {
   UserPushToken,
   Notification,
   MediaFile,
+  AttendanceExcuse,
+  EventConsent,
+  EventConsentResponse,
 } from './generated/client';
 
 export { NotificationType, MediaCategory } from './generated/client';

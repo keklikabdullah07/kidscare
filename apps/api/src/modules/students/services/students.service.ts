@@ -41,6 +41,13 @@ export class StudentsService {
     return Student.fromPrisma(found);
   }
 
+  async findByParent(tenantId: string, parentUserId: string): Promise<Student[]> {
+    const all = await this.repo.findMany(tenantId);
+    return all
+      .filter((s) => s.isActive && s.parentId === parentUserId)
+      .map((s) => Student.fromPrisma(s));
+  }
+
   async create(tenantId: string, input: StudentCreate): Promise<Student> {
     if (input.parentId) {
       await this.usersService.assertParentUser(tenantId, input.parentId);

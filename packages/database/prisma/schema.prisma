@@ -53,6 +53,9 @@ model Tenant {
   pushTokens UserPushToken[]
   notifications Notification[]
   mediaFiles MediaFile[]
+  attendanceExcuses AttendanceExcuse[]
+  eventConsents EventConsent[]
+  eventConsentResponses EventConsentResponse[]
 
   @@map("tenants")
 }
@@ -89,7 +92,9 @@ model User {
   pushTokens UserPushToken[]
   notifications Notification[]
   uploadedMedia MediaFile[] @relation("MediaUploader")
-
+  attendanceExcusesCreated AttendanceExcuse[]
+  eventConsentsCreated EventConsent[]
+  eventConsentResponses EventConsentResponse[]
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -127,6 +132,8 @@ model Student {
   incidentRecords IncidentRecord[]
   developmentObservations DevelopmentObservation[]
   portfolioItems PortfolioItem[]
+  attendanceExcuses AttendanceExcuse[]
+  eventConsentResponses EventConsentResponse[]
 
   @@index([tenantId])
   @@index([tenantId, parentId])
@@ -147,6 +154,7 @@ model Classroom {
   tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   students          Student[]
   teacherAssignments ClassroomTeacher[]
+  eventConsents     EventConsent[]
 
   @@unique([tenantId, name])
   @@index([tenantId, isActive])
@@ -700,5 +708,74 @@ model MediaFile {
   @@index([tenantId, createdAt])
   @@map("media_files")
 }
+
+model AttendanceExcuse {
+  id          String   @id @default(cuid())
+  tenantId    String
+  studentId   String
+  date        DateTime @db.Date
+  reason      String   // SICKNESS, FAMILY_LEAVE, TRAVEL, DOCTOR, OTHER
+  notes       String?
+  status      String   @default("PENDING") // PENDING, ACKNOWLEDGED
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  createdBy User    @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, studentId, date])
+  @@index([tenantId, date])
+  @@index([tenantId, studentId])
+  @@map("attendance_excuses")
+}
+
+model EventConsent {
+  id          String    @id @default(cuid())
+  tenantId    String
+  classroomId String?
+  title       String
+  eventDate   DateTime
+  location    String?
+  price       Decimal?  @db.Decimal(10, 2)
+  description String?
+  deadline    DateTime?
+  status      String    @default("ACTIVE") // ACTIVE, COMPLETED, CANCELLED
+  createdById String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant    Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  classroom Classroom?             @relation(fields: [classroomId], references: [id], onDelete: SetNull)
+  createdBy User                   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  responses EventConsentResponse[]
+
+  @@index([tenantId, eventDate])
+  @@index([tenantId, classroomId])
+  @@map("event_consents")
+}
+
+model EventConsentResponse {
+  id           String   @id @default(cuid())
+  tenantId     String
+  consentId    String
+  studentId    String
+  parentUserId String
+  decision     String   // APPROVED, DECLINED
+  notes        String?
+  respondedAt  DateTime @default(now())
+
+  tenant     Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  consent    EventConsent @relation(fields: [consentId], references: [id], onDelete: Cascade)
+  student    Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  parentUser User         @relation(fields: [parentUserId], references: [id], onDelete: Cascade)
+
+  @@unique([consentId, studentId])
+  @@index([tenantId, consentId])
+  @@index([tenantId, studentId])
+  @@map("event_consent_responses")
+}
+
 
 

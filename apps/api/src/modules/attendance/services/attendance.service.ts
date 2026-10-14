@@ -2,7 +2,10 @@ import { Inject, Injectable, Optional } from '@nestjs/common';
 import type { Prisma } from '@kidscare/database';
 import type { AttendanceUpdateInput, CheckInInput, CheckOutInput } from '@kidscare/shared-schemas';
 import { Attendance } from '../entities/attendance.entity';
-import type { IAttendanceRepository } from '../repositories/attendance.repository';
+import type {
+  AttendanceExcuseWithStudent,
+  IAttendanceRepository,
+} from '../repositories/attendance.repository';
 import { NotificationsService } from '../../notifications/services/notifications.service';
 
 @Injectable()
@@ -115,5 +118,77 @@ export class AttendanceService {
 
     const saved = await this.repo.upsert(tenantId, studentId, date, updateData);
     return Attendance.fromPrisma(saved);
+  }
+
+  async createExcuse(
+    tenantId: string,
+    userId: string,
+    input: {
+      studentId: string;
+      date: string;
+      reason: string;
+      notes?: string | undefined;
+    },
+  ): Promise<AttendanceExcuseWithStudent> {
+    const date = new Date(input.date);
+
+    const excuse = await this.repo.createExcuse(tenantId, {
+      studentId: input.studentId,
+      date,
+      reason: input.reason,
+      notes: input.notes ?? null,
+      createdById: userId,
+    });
+
+    // Otomatik olarak o günün yoklamasını EXCUSED olarak işaretle
+    const reasonLabels: Record<string, string> = {
+      SICKNESS: 'Hastalık',
+      FAMILY_LEAVE: 'Aile İzni',
+      TRAVEL: 'Seyahat',
+      DOCTOR: 'Doktor Randevusu',
+      OTHER: 'Mazeretli',
+    };
+    const reasonLabel = reasonLabels[input.reason] || input.reason;
+    const excuseNote = input.notes
+      ? `Mazeret: ${reasonLabel} - ${input.notes}`
+      : `Mazeret: ${reasonLabel}`;
+
+    await this.repo.upsert(tenantId, input.studentId, date, {
+      status: 'EXCUSED',
+      note: excuseNote,
+    });
+
+    if (this.notificationsService) {
+      void this.notificationsService.notifyStudentParents(tenantId, input.studentId, {
+        title: '📋 Mazeret Bildirimi Alındı',
+        body: `${excuse.student?.firstName || 'Öğrenciniz'} için ${input.date} tarihli mazeret (${reasonLabel}) başarıyla kaydedildi.`,
+        type: 'SYSTEM',
+        data: { studentId: input.studentId, date: input.date, excuseId: excuse.id },
+      });
+    }
+
+    return excuse;
+  }
+
+  async findExcuses(
+    tenantId: string,
+    params: {
+      dateStr?: string | undefined;
+      studentId?: string | undefined;
+      studentIds?: string[] | undefined;
+    },
+  ): Promise<AttendanceExcuseWithStudent[]> {
+    const repoParams: { date?: Date; studentId?: string; studentIds?: string[] } = {};
+    if (params.dateStr) {
+      repoParams.date = new Date(params.dateStr);
+    }
+    if (params.studentId) {
+      repoParams.studentId = params.studentId;
+    }
+    if (params.studentIds && params.studentIds.length > 0) {
+      repoParams.studentIds = params.studentIds;
+    }
+
+    return this.repo.findExcuses(tenantId, repoParams);
   }
 }

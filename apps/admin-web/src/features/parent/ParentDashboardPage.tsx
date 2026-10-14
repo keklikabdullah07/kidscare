@@ -21,6 +21,10 @@ import {
   ShieldCheck,
   ShieldAlert,
   Phone,
+  CheckCircle2,
+  XCircle,
+  MapPin,
+  Ticket,
 } from 'lucide-react';
 import { getParentChildrenOverview } from '../../api/parent';
 import { getDailyMenu } from '../../api/daily-menus';
@@ -33,6 +37,8 @@ import {
   createPickupContact,
   createPickupAuthorization,
 } from '../../api/pickup';
+import { createAttendanceExcuse, getAttendanceExcuses } from '../../api/attendance';
+import { getEventConsents, respondEventConsent } from '../../api/consents';
 import type {
   DailyMenu,
   DevelopmentObservationDto,
@@ -43,6 +49,8 @@ import type {
   MedicationRecord,
   PickupAuthorization,
   IncidentRecord,
+  EventConsent,
+  AttendanceExcuse,
 } from '@kidscare/shared-types';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { LightboxModal } from '../gallery/LightboxModal';
@@ -83,6 +91,20 @@ export function ParentDashboardPage(): JSX.Element {
   const [incidents, setIncidents] = useState<IncidentRecord[]>([]);
   const [showAllIncidents, setShowAllIncidents] = useState<boolean>(false);
 
+  const [isExcuseModalOpen, setIsExcuseModalOpen] = useState<boolean>(false);
+  const [excuseForm, setExcuseForm] = useState({
+    reason: 'SICKNESS' as 'SICKNESS' | 'FAMILY_LEAVE' | 'TRAVEL' | 'DOCTOR' | 'OTHER',
+    notes: '',
+    date: selectedDate,
+  });
+  const [isSubmittingExcuse, setIsSubmittingExcuse] = useState<boolean>(false);
+  const [excuseSuccess, setExcuseSuccess] = useState<string | null>(null);
+  const [excuseError, setExcuseError] = useState<string | null>(null);
+  const [todayExcuses, setTodayExcuses] = useState<AttendanceExcuse[]>([]);
+
+  const [eventConsents, setEventConsents] = useState<EventConsent[]>([]);
+  const [respondingConsentId, setRespondingConsentId] = useState<string | null>(null);
+
   const [activeLightboxFile, setActiveLightboxFile] = useState<MediaFileItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -93,12 +115,13 @@ export function ParentDashboardPage(): JSX.Element {
       setLoading(true);
       setError(null);
       try {
-        const [data, menuRes, obsRes, portRes, actRes] = await Promise.all([
+        const [data, menuRes, obsRes, portRes, actRes, consentsRes] = await Promise.all([
           getParentChildrenOverview(selectedDate),
           getDailyMenu(selectedDate).catch(() => ({ menu: null, allergenWarnings: [] })),
           listObservations(selectedChildId || undefined).catch(() => []),
           listPortfolio(selectedChildId || undefined).catch(() => []),
           getActivities().catch(() => []),
+          getEventConsents().catch(() => []),
         ]);
         if (isMounted) {
           const safe = Array.isArray(data) ? data : [];
@@ -107,6 +130,7 @@ export function ParentDashboardPage(): JSX.Element {
           setDevObservations(Array.isArray(obsRes) ? obsRes : []);
           setPortfolioItems(Array.isArray(portRes) ? portRes : []);
           setActivities(Array.isArray(actRes) ? actRes : []);
+          setEventConsents(Array.isArray(consentsRes) ? consentsRes : []);
           const currentChildId =
             selectedChildId || (safe.length > 0 ? (safe[0]?.student.id ?? null) : null);
           if (
@@ -118,21 +142,26 @@ export function ParentDashboardPage(): JSX.Element {
 
           if (currentChildId) {
             try {
-              const [meds, auths, incs] = await Promise.all([
+              const [meds, auths, incs, excusesRes] = await Promise.all([
                 listMedicationRecords(currentChildId).catch(() => []),
                 listPickupAuthorizations(currentChildId).catch(() => []),
                 listIncidents(currentChildId).catch(() => []),
+                getAttendanceExcuses({ studentId: currentChildId, date: selectedDate }).catch(
+                  () => [],
+                ),
               ]);
               if (isMounted) {
                 setMedications(Array.isArray(meds) ? meds : []);
                 setPickupAuthorizations(Array.isArray(auths) ? auths : []);
                 setIncidents(Array.isArray(incs) ? incs : []);
+                setTodayExcuses(Array.isArray(excusesRes) ? excusesRes : []);
               }
             } catch {
               if (isMounted) {
                 setMedications([]);
                 setPickupAuthorizations([]);
                 setIncidents([]);
+                setTodayExcuses([]);
               }
             }
           }
@@ -219,6 +248,8 @@ export function ParentDashboardPage(): JSX.Element {
     ),
   );
 
+  const activeExcuse = todayExcuses[0];
+
   async function handleCreateMedication(e: React.FormEvent) {
     e.preventDefault();
     if (!activeChildOverview?.student.id) return;
@@ -271,6 +302,62 @@ export function ParentDashboardPage(): JSX.Element {
       return true;
     });
   }, [medications, selectedDate]);
+
+  async function handleExcuseSubmit(e: React.FormEvent): Promise<void> {
+    e.preventDefault();
+    if (!selectedChildId) return;
+    setIsSubmittingExcuse(true);
+    setExcuseError(null);
+    setExcuseSuccess(null);
+    try {
+      const payload: {
+        studentId: string;
+        date: string;
+        reason: 'SICKNESS' | 'FAMILY_LEAVE' | 'TRAVEL' | 'DOCTOR' | 'OTHER';
+        notes?: string;
+      } = {
+        studentId: selectedChildId,
+        date: excuseForm.date,
+        reason: excuseForm.reason,
+      };
+      if (excuseForm.notes.trim()) {
+        payload.notes = excuseForm.notes.trim();
+      }
+      await createAttendanceExcuse(payload);
+      setExcuseSuccess('Mazeret bildiriminiz kreş yönetimine ve öğretmenine iletildi.');
+      setIsExcuseModalOpen(false);
+      setExcuseForm({ reason: 'SICKNESS', notes: '', date: selectedDate });
+      const excuses = await getAttendanceExcuses({
+        studentId: selectedChildId,
+        date: selectedDate,
+      });
+      setTodayExcuses(excuses);
+    } catch (err: unknown) {
+      setExcuseError(err instanceof Error ? err.message : 'Mazeret kaydedilirken hata oluştu.');
+    } finally {
+      setIsSubmittingExcuse(false);
+    }
+  }
+
+  async function handleConsentResponse(
+    consentId: string,
+    decision: 'APPROVED' | 'DECLINED',
+  ): Promise<void> {
+    if (!selectedChildId) return;
+    setRespondingConsentId(consentId);
+    try {
+      await respondEventConsent(consentId, {
+        studentId: selectedChildId,
+        decision,
+      });
+      const updated = await getEventConsents();
+      setEventConsents(updated);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Yanıt kaydedilirken hata oluştu.');
+    } finally {
+      setRespondingConsentId(null);
+    }
+  }
 
   const renderMedicationStatusBadge = (status: string) => {
     switch (status) {
@@ -382,38 +469,53 @@ export function ParentDashboardPage(): JSX.Element {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 p-1.5 rounded-2xl shadow-2xs">
-          <button
-            type="button"
-            onClick={() => changeDay(-1)}
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs active:scale-95 cursor-pointer"
-            title="Önceki Gün"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="text-xs font-bold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer"
-          />
-          <button
-            type="button"
-            onClick={() => changeDay(1)}
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs active:scale-95 cursor-pointer"
-            title="Sonraki Gün"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-          {!isToday && (
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 p-1.5 rounded-2xl shadow-2xs">
             <button
               type="button"
-              onClick={() => setSelectedDate(todayStr)}
-              className="btn-tactile-secondary px-3 py-1 text-xs font-bold ml-1"
+              onClick={() => changeDay(-1)}
+              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs active:scale-95 cursor-pointer"
+              title="Önceki Gün"
             >
-              Bugün
+              <ChevronLeft className="w-4 h-4" />
             </button>
-          )}
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="text-xs font-bold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer"
+            />
+            <button
+              type="button"
+              onClick={() => changeDay(1)}
+              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs active:scale-95 cursor-pointer"
+              title="Sonraki Gün"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            {!isToday && (
+              <button
+                type="button"
+                onClick={() => setSelectedDate(todayStr)}
+                className="btn-tactile-secondary px-3 py-1 text-xs font-bold ml-1 cursor-pointer"
+              >
+                Bugün
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setExcuseForm({ reason: 'SICKNESS', notes: '', date: selectedDate });
+              setExcuseError(null);
+              setExcuseSuccess(null);
+              setIsExcuseModalOpen(true);
+            }}
+            className="btn-tactile-amber px-3.5 py-2 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+          >
+            <Calendar className="w-4 h-4 text-amber-900 dark:text-amber-200" />
+            <span>Gelemeyeceğimizi Bildir</span>
+          </button>
         </div>
       </div>
 
@@ -546,6 +648,173 @@ export function ParentDashboardPage(): JSX.Element {
                     uyarılmıştır.
                   </p>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Active Excuse Alert Banner */}
+          {activeExcuse && (
+            <div className="bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-700/60 rounded-3xl p-5 shadow-2xs">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0 border border-amber-300 dark:border-amber-700 shadow-2xs">
+                  <Calendar className="w-5 h-5 text-amber-700 dark:text-amber-300" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-bold text-amber-950 dark:text-amber-200">
+                    Bugün İçin Mazeret Bildirildi
+                  </h4>
+                  <p className="text-xs text-amber-800 dark:text-amber-300 mt-0.5">
+                    Sebep:{' '}
+                    <strong>
+                      {activeExcuse.reason === 'SICKNESS'
+                        ? 'Hastalık'
+                        : activeExcuse.reason === 'FAMILY_LEAVE'
+                          ? 'Aile İzni'
+                          : activeExcuse.reason === 'DOCTOR'
+                            ? 'Doktor Randevusu'
+                            : activeExcuse.reason === 'TRAVEL'
+                              ? 'Seyahat'
+                              : 'Mazeretli'}
+                    </strong>{' '}
+                    {activeExcuse.notes && `(${activeExcuse.notes})`} — Kreş yönetimi ve sınıf
+                    öğretmeni bilgilendirildi.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Success message banner for newly submitted excuse */}
+          {excuseSuccess && (
+            <div className="bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-700/60 rounded-3xl p-4.5 shadow-2xs flex items-center gap-3 text-emerald-900 dark:text-emerald-200 text-xs font-bold">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span>{excuseSuccess}</span>
+            </div>
+          )}
+
+          {/* Event Consents Section */}
+          {eventConsents.length > 0 && (
+            <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 flex items-center justify-center border border-purple-200/60 dark:border-purple-800/60 shadow-2xs">
+                    <Ticket className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      Gezi & Etkinlik İzin Formları
+                    </h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-300">
+                      Okul dışı etkinlik ve geziler için dijital veli izin onayları
+                    </p>
+                  </div>
+                </div>
+                <span className="px-3 py-1 text-xs font-bold rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
+                  {eventConsents.length} Etkinlik
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {eventConsents.map((consent) => {
+                  const hasResponded = !!consent.myResponse;
+                  const isApproved = consent.myResponse?.decision === 'APPROVED';
+
+                  return (
+                    <div
+                      key={consent.id}
+                      className="p-4.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900/60 border border-[#DDD4C4] dark:border-slate-700/60 space-y-3"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                            {consent.title}
+                          </h4>
+                          {consent.location && (
+                            <p className="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1 mt-0.5">
+                              <MapPin className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+                              <span>{consent.location}</span>
+                            </p>
+                          )}
+                        </div>
+                        {hasResponded ? (
+                          <span
+                            className={`px-2.5 py-1 text-xs font-bold rounded-full flex items-center gap-1 border shadow-2xs ${
+                              isApproved
+                                ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+                                : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                            }`}
+                          >
+                            {isApproved ? (
+                              <>
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>İzin Verildi</span>
+                              </>
+                            ) : (
+                              <>
+                                <XCircle className="w-3.5 h-3.5" />
+                                <span>Katılmayacak</span>
+                              </>
+                            )}
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 shadow-2xs animate-pulse">
+                            Yanıt Bekleniyor
+                          </span>
+                        )}
+                      </div>
+
+                      {consent.description && (
+                        <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-2">
+                          {consent.description}
+                        </p>
+                      )}
+
+                      <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300 pt-1 border-t border-[#DDD4C4]/40 dark:border-slate-800">
+                        <span>
+                          📅{' '}
+                          {new Date(consent.eventDate).toLocaleDateString('tr-TR', {
+                            day: 'numeric',
+                            month: 'long',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </span>
+                        {consent.price !== null && consent.price !== undefined && (
+                          <span className="font-bold text-teal-800 dark:text-teal-300">
+                            {Number(consent.price) > 0 ? `${consent.price} TL` : 'Ücretsiz'}
+                          </span>
+                        )}
+                      </div>
+
+                      {!hasResponded && (
+                        <div className="flex items-center gap-2 pt-2">
+                          <button
+                            type="button"
+                            disabled={respondingConsentId === consent.id}
+                            onClick={() => {
+                              void handleConsentResponse(consent.id, 'APPROVED');
+                            }}
+                            className="btn-tactile-teal flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                            <span>İzin Veriyorum</span>
+                          </button>
+                          <button
+                            type="button"
+                            disabled={respondingConsentId === consent.id}
+                            onClick={() => {
+                              void handleConsentResponse(consent.id, 'DECLINED');
+                            }}
+                            className="btn-tactile-secondary py-2 px-3 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            <XCircle className="w-4 h-4 text-rose-600" />
+                            <span>Katılmayacak</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -1611,6 +1880,108 @@ export function ParentDashboardPage(): JSX.Element {
                       className="btn-tactile-teal px-5 py-2 text-xs font-bold"
                     >
                       {isSubmittingPickup ? 'Kaydediliyor...' : 'Yetkilendir ve Kaydet'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Attendance Excuse Modal */}
+          {isExcuseModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 max-w-md w-full shadow-xl space-y-4">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      Gelemeyeceğimizi Bildir
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsExcuseModalOpen(false)}
+                    className="p-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {excuseError && (
+                  <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-300 rounded-2xl text-xs text-rose-700 dark:text-rose-300 font-medium">
+                    {excuseError}
+                  </div>
+                )}
+
+                <form
+                  onSubmit={(e) => {
+                    void handleExcuseSubmit(e);
+                  }}
+                  className="space-y-4"
+                >
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Mazeret Tarihi
+                    </label>
+                    <input
+                      type="date"
+                      value={excuseForm.date}
+                      onChange={(e) => setExcuseForm({ ...excuseForm, date: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Mazeret Sebebi
+                    </label>
+                    <select
+                      value={excuseForm.reason}
+                      onChange={(e) =>
+                        setExcuseForm({
+                          ...excuseForm,
+                          reason: e.target.value as
+                            'SICKNESS' | 'FAMILY_LEAVE' | 'TRAVEL' | 'DOCTOR' | 'OTHER',
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+                    >
+                      <option value="SICKNESS">🤒 Hastalık / Rahatsızlık</option>
+                      <option value="FAMILY_LEAVE">👨‍👩‍👧 Ailevi İzin / Tatil</option>
+                      <option value="DOCTOR">🏥 Doktor / Hastane Randevusu</option>
+                      <option value="TRAVEL">✈️ Şehir Dışı / Seyahat</option>
+                      <option value="OTHER">📝 Diğer</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Açıklama / Not (Opsiyonel)
+                    </label>
+                    <textarea
+                      value={excuseForm.notes}
+                      onChange={(e) => setExcuseForm({ ...excuseForm, notes: e.target.value })}
+                      placeholder="Örn: Boğaz ağrısı ve hafif ateş var, evde dinlenecek."
+                      rows={3}
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs text-slate-800 dark:text-white placeholder:text-slate-400"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsExcuseModalOpen(false)}
+                      className="btn-tactile-secondary flex-1 py-2.5 text-xs font-bold cursor-pointer"
+                    >
+                      İptal
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingExcuse}
+                      className="btn-tactile-amber flex-1 py-2.5 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
+                    >
+                      {isSubmittingExcuse ? 'Gönderiliyor...' : 'Bildirimi Gönder'}
                     </button>
                   </div>
                 </form>

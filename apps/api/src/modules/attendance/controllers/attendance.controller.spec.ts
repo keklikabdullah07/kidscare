@@ -1,4 +1,5 @@
 import { AttendanceController } from './attendance.controller';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import type { AttendanceService } from '../services/attendance.service';
 import type { StudentsService } from '../../students/services/students.service';
 import { Student } from '../../students/entities/student.entity';
@@ -49,9 +50,12 @@ describe('AttendanceController', () => {
       checkIn: jest.fn(),
       checkOut: jest.fn(),
       update: jest.fn(),
+      createExcuse: jest.fn(),
+      findExcuses: jest.fn(),
     } as unknown as jest.Mocked<AttendanceService>;
     studentsService = {
       findOne: jest.fn().mockResolvedValue(studentEntity),
+      findByParent: jest.fn().mockResolvedValue([studentEntity]),
     } as unknown as jest.Mocked<StudentsService>;
     controller = new AttendanceController(service, studentsService);
   });
@@ -149,6 +153,86 @@ describe('AttendanceController', () => {
         note: 'İzinli',
       });
       expect(res.status).toBe('EXCUSED');
+    });
+  });
+
+  describe('createExcuse', () => {
+    it('creates excuse and returns result', async () => {
+      studentsService.findOne.mockResolvedValue(
+        new Student(
+          's-1',
+          't-1',
+          'parent-1',
+          'Ada',
+          'Yılmaz',
+          new Date('2020-05-12'),
+          null,
+          null,
+          null,
+          true,
+          new Date(),
+          new Date(),
+          null,
+        ),
+      );
+      service.createExcuse.mockResolvedValue({
+        id: 'exc-1',
+        tenantId: 't-1',
+        studentId: 's-1',
+        date: new Date('2026-09-15'),
+        reason: 'SICKNESS',
+        notes: 'Grip',
+        status: 'PENDING',
+        createdById: 'parent-1',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        student: { id: 's-1', firstName: 'Ada', lastName: 'Yılmaz' },
+      });
+      const user: CurrentUserPayload = { userId: 'parent-1', role: 'PARENT', tenantId: 't-1' };
+      const res = await controller.createExcuse('t-1', user, {
+        studentId: 's-1',
+        date: '2026-09-15',
+        reason: 'SICKNESS',
+        notes: 'Grip',
+      });
+      expect(res.id).toBe('exc-1');
+      expect(service.createExcuse).toHaveBeenCalledWith(
+        't-1',
+        'parent-1',
+        expect.objectContaining({
+          studentId: 's-1',
+          reason: 'SICKNESS',
+        }),
+      );
+    });
+  });
+
+  describe('findExcuses', () => {
+    it('returns excuses list', async () => {
+      service.findExcuses.mockResolvedValue([
+        {
+          id: 'exc-1',
+          tenantId: 't-1',
+          studentId: 's-1',
+          date: new Date('2026-09-15'),
+          reason: 'SICKNESS',
+          notes: 'Grip',
+          status: 'PENDING',
+          createdById: 'parent-1',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          student: { id: 's-1', firstName: 'Ada', lastName: 'Yılmaz' },
+        },
+      ]);
+      const user: CurrentUserPayload = { userId: 'parent-1', role: 'PARENT', tenantId: 't-1' };
+      const res = await controller.findExcuses('t-1', user, '2026-09-15');
+      expect(res).toHaveLength(1);
+      expect(service.findExcuses).toHaveBeenCalledWith(
+        't-1',
+        expect.objectContaining({
+          dateStr: '2026-09-15',
+        }),
+      );
     });
   });
 });

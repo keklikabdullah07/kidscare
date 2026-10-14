@@ -22,15 +22,18 @@ import {
   attendanceUpdateInputSchema,
   checkInInputSchema,
   checkOutInputSchema,
+  createAttendanceExcuseInputSchema,
   type AttendanceUpdateInput,
   type CheckInInput,
   type CheckOutInput,
+  type CreateAttendanceExcuseInput,
 } from '@kidscare/shared-schemas';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import type { Attendance } from '../entities/attendance.entity';
 import { AttendanceResponseDto } from '../dto/attendance-response.dto';
 import { AttendanceService } from '../services/attendance.service';
 import { StudentsService } from '../../students/services/students.service';
+import type { AttendanceExcuseWithStudent } from '../repositories/attendance.repository';
 
 @Controller()
 @UseGuards(TenantGuard)
@@ -100,6 +103,48 @@ export class AttendanceController {
   ): Promise<AttendanceResponseDto> {
     const saved = await this.service.update(tenantId, studentId, date, body);
     return this.toResponse(saved);
+  }
+
+  @Post('attendance/excuses')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
+  @HttpCode(201)
+  async createExcuse(
+    @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
+    @Body(new ZodValidationPipe(createAttendanceExcuseInputSchema))
+    body: CreateAttendanceExcuseInput,
+  ): Promise<AttendanceExcuseWithStudent> {
+    const student = await this.studentsService.findOne(tenantId, body.studentId);
+    assertStudentVisibleToUser(student, user.role, user.userId);
+    const excuseInput: { studentId: string; date: string; reason: string; notes?: string } = {
+      studentId: body.studentId,
+      date: body.date,
+      reason: body.reason,
+    };
+    if (body.notes) excuseInput.notes = body.notes;
+    return this.service.createExcuse(tenantId, user.userId, excuseInput);
+  }
+
+  @Get('attendance/excuses')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
+  async findExcuses(
+    @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
+    @Query('date') dateQuery?: string,
+    @Query('studentId') studentIdQuery?: string,
+  ): Promise<AttendanceExcuseWithStudent[]> {
+    let studentIds: string[] | undefined;
+    if (user.role === 'PARENT') {
+      const parentStudents = await this.studentsService.findByParent(tenantId, user.userId);
+      studentIds = parentStudents.map((s) => s.id);
+    }
+
+    const filterParams: { dateStr?: string; studentId?: string; studentIds?: string[] } = {};
+    if (dateQuery) filterParams.dateStr = dateQuery;
+    if (studentIdQuery) filterParams.studentId = studentIdQuery;
+    if (studentIds && studentIds.length > 0) filterParams.studentIds = studentIds;
+
+    return this.service.findExcuses(tenantId, filterParams);
   }
 
   private toResponse(entity: Attendance): AttendanceResponseDto {

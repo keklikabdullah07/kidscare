@@ -1,6 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { Attendance as PrismaAttendance, Prisma } from '@kidscare/database';
+import type {
+  Attendance as PrismaAttendance,
+  AttendanceExcuse as PrismaAttendanceExcuse,
+  Prisma,
+} from '@kidscare/database';
 import { PrismaService } from '../../../prisma/prisma.service';
+
+export type AttendanceExcuseWithStudent = PrismaAttendanceExcuse & {
+  student: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+};
 
 export interface IAttendanceRepository {
   findByDate(tenantId: string, date: Date): Promise<PrismaAttendance[]>;
@@ -15,6 +27,20 @@ export interface IAttendanceRepository {
     date: Date,
     data: Prisma.AttendanceUpdateInput,
   ): Promise<PrismaAttendance>;
+  createExcuse(
+    tenantId: string,
+    data: {
+      studentId: string;
+      date: Date;
+      reason: string;
+      notes?: string | null;
+      createdById: string;
+    },
+  ): Promise<AttendanceExcuseWithStudent>;
+  findExcuses(
+    tenantId: string,
+    params: { date?: Date; studentId?: string; studentIds?: string[] },
+  ): Promise<AttendanceExcuseWithStudent[]>;
 }
 
 @Injectable()
@@ -44,6 +70,81 @@ export class AttendanceRepository implements IAttendanceRepository {
             date,
           },
         },
+      }),
+    );
+  }
+
+  async createExcuse(
+    tenantId: string,
+    data: {
+      studentId: string;
+      date: Date;
+      reason: string;
+      notes?: string | null;
+      createdById: string;
+    },
+  ): Promise<AttendanceExcuseWithStudent> {
+    return this.prisma.withTenant((client) =>
+      client.attendanceExcuse.upsert({
+        where: {
+          tenantId_studentId_date: {
+            tenantId,
+            studentId: data.studentId,
+            date: data.date,
+          },
+        },
+        create: {
+          tenantId,
+          studentId: data.studentId,
+          date: data.date,
+          reason: data.reason,
+          notes: data.notes ?? null,
+          createdById: data.createdById,
+        },
+        update: {
+          reason: data.reason,
+          notes: data.notes ?? null,
+        },
+        include: {
+          student: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      }),
+    );
+  }
+
+  async findExcuses(
+    tenantId: string,
+    params: { date?: Date; studentId?: string; studentIds?: string[] },
+  ): Promise<AttendanceExcuseWithStudent[]> {
+    const where: Prisma.AttendanceExcuseWhereInput = { tenantId };
+    if (params.date) {
+      where.date = params.date;
+    }
+    if (params.studentId) {
+      where.studentId = params.studentId;
+    } else if (params.studentIds && params.studentIds.length > 0) {
+      where.studentId = { in: params.studentIds };
+    }
+
+    return this.prisma.withTenant((client) =>
+      client.attendanceExcuse.findMany({
+        where,
+        include: {
+          student: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
       }),
     );
   }

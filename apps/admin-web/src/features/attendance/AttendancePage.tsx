@@ -560,6 +560,14 @@ export function AttendancePage(): JSX.Element {
                           <StatusIcon className="w-3.5 h-3.5" />
                           <span>{statusInfo.label}</span>
                         </span>
+                        {status === 'EXCUSED' && att?.note && (
+                          <div
+                            className="text-[11px] text-amber-800 dark:text-amber-300 font-medium mt-1 max-w-[200px] truncate"
+                            title={att.note}
+                          >
+                            {att.note}
+                          </div>
+                        )}
                       </td>
 
                       {/* Check In Info */}
@@ -734,6 +742,12 @@ export function AttendancePage(): JSX.Element {
                           <span className="tabular-nums">{att.checkOutTime}</span> ({att.checkOutBy}
                           )
                         </strong>
+                      </div>
+                    )}
+                    {status === 'EXCUSED' && att?.note && (
+                      <div className="flex items-start justify-between text-amber-800 dark:text-amber-300">
+                        <span className="font-medium">Mazeret:</span>
+                        <strong className="font-bold text-right ml-2">{att.note}</strong>
                       </div>
                     )}
                   </div>

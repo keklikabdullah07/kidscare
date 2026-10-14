@@ -1,5 +1,6 @@
 import type {
   Attendance,
+  AttendanceExcuse,
   AttendanceUpdateInput,
   CheckInInput,
   CheckOutInput,
@@ -59,4 +60,27 @@ export async function updateStudentAttendance(
       body: JSON.stringify(payload),
     },
   );
+}
+
+export async function createAttendanceExcuse(payload: {
+  studentId: string;
+  date: string;
+  reason: 'SICKNESS' | 'FAMILY_LEAVE' | 'TRAVEL' | 'DOCTOR' | 'OTHER';
+  notes?: string;
+}): Promise<AttendanceExcuse> {
+  return apiFetch<AttendanceExcuse>('/attendance/excuses', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getAttendanceExcuses(params?: {
+  date?: string;
+  studentId?: string;
+}): Promise<AttendanceExcuse[]> {
+  const query = new URLSearchParams();
+  if (params?.date) query.set('date', params.date);
+  if (params?.studentId) query.set('studentId', params.studentId);
+  const qStr = query.toString();
+  return apiFetch<AttendanceExcuse[]>(`/attendance/excuses${qStr ? `?${qStr}` : ''}`);
 }

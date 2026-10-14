@@ -14,3 +14,4 @@ export * from './incident.schema';
 export * from './development.schema';
 export * from './notification.schema';
 export * from './media.schema';
+export * from './consent.schema';

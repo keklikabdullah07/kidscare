@@ -52,8 +52,42 @@ export const attendanceSchema = z.object({
   updatedAt: z.string(),
 });
 
+export const excuseReasonSchema = z.enum(['SICKNESS', 'FAMILY_LEAVE', 'TRAVEL', 'DOCTOR', 'OTHER']);
+
+export const createAttendanceExcuseInputSchema = z
+  .object({
+    studentId: z.string().min(1),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    reason: excuseReasonSchema,
+    notes: z.string().max(1000).optional(),
+  })
+  .strict();
+
+export const attendanceExcuseSchema = z.object({
+  id: z.string(),
+  tenantId: z.string(),
+  studentId: z.string(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  reason: excuseReasonSchema,
+  notes: z.string().nullable().optional(),
+  status: z.enum(['PENDING', 'ACKNOWLEDGED']),
+  createdById: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  student: z
+    .object({
+      id: z.string(),
+      firstName: z.string(),
+      lastName: z.string(),
+    })
+    .optional(),
+});
+
 export type AttendanceStatus = z.infer<typeof attendanceStatusSchema>;
 export type CheckInInput = z.infer<typeof checkInInputSchema>;
 export type CheckOutInput = z.infer<typeof checkOutInputSchema>;
 export type AttendanceUpdateInput = z.infer<typeof attendanceUpdateInputSchema>;
 export type Attendance = z.infer<typeof attendanceSchema>;
+export type ExcuseReason = z.infer<typeof excuseReasonSchema>;
+export type CreateAttendanceExcuseInput = z.infer<typeof createAttendanceExcuseInputSchema>;
+export type AttendanceExcuse = z.infer<typeof attendanceExcuseSchema>;
