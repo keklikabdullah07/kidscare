@@ -881,6 +881,39 @@ async function main() {
         },
       });
 
+      // Seed Demo Event Consent (Gezi & Etkinlik İzni)
+      const eventDate = new Date();
+      eventDate.setDate(eventDate.getDate() + 7);
+      eventDate.setHours(9, 30, 0, 0);
+
+      const deadline = new Date();
+      deadline.setDate(deadline.getDate() + 5);
+      deadline.setHours(17, 0, 0, 0);
+
+      const adminUserForConsent = await tx.user.findFirst({
+        where: { tenantId: tenant.id, email: 'admin@demo.test' },
+      });
+
+      if (adminUserForConsent) {
+        await tx.eventConsent.upsert({
+          where: { id: 'demo-consent-001' },
+          update: {},
+          create: {
+            id: 'demo-consent-001',
+            tenantId: tenant.id,
+            title: '🌳 Atatürk Arboretumu & Doğa Keşif Gezisi',
+            eventDate,
+            location: 'Atatürk Arboretumu, Sarıyer',
+            price: 150,
+            description:
+              'Sonbahar yapraklarını inceleyeceğimiz, doğa dedektifliği yapacağımız ve açık havada resim atölyesi gerçekleştireceğimiz doğa keşif gezimiz. Öğrencilerimizin rahat yürüyüş ayakkabıları giymesi önerilir.',
+            deadline,
+            status: 'ACTIVE',
+            createdById: adminUserForConsent.id,
+          },
+        });
+      }
+
       console.log(
         `Seeded demo tenant with users (superadmin, admin, 2 teachers, 2 parents) and 4 students!`,
       );

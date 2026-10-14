@@ -693,27 +693,35 @@ export function ParentDashboardPage(): JSX.Element {
           )}
 
           {/* Event Consents Section */}
-          {eventConsents.length > 0 && (
-            <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
-              <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 flex items-center justify-center border border-purple-200/60 dark:border-purple-800/60 shadow-2xs">
-                    <Ticket className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                      Gezi & Etkinlik İzin Formları
-                    </h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-300">
-                      Okul dışı etkinlik ve geziler için dijital veli izin onayları
-                    </p>
-                  </div>
+          <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
+            <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 flex items-center justify-center border border-purple-200/60 dark:border-purple-800/60 shadow-2xs">
+                  <Ticket className="w-4 h-4" />
                 </div>
-                <span className="px-3 py-1 text-xs font-bold rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
-                  {eventConsents.length} Etkinlik
-                </span>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    Gezi & Etkinlik İzin Formları
+                  </h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300">
+                    Okul dışı etkinlik ve geziler için dijital veli izin onayları
+                  </p>
+                </div>
               </div>
+              <span className="px-3 py-1 text-xs font-bold rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
+                {eventConsents.length} Etkinlik
+              </span>
+            </div>
 
+            {eventConsents.length === 0 ? (
+              <div className="py-6">
+                <EmptyState
+                  icon={Ticket}
+                  title="Onay Bekleyen Gezi Bulunmuyor"
+                  description="Şu anda çocuğunuz için onay bekleyen herhangi bir gezi veya okul dışı etkinlik formu bulunmamaktadır."
+                />
+              </div>
+            ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {eventConsents.map((consent) => {
                   const hasResponded = !!consent.myResponse;
@@ -816,8 +824,8 @@ export function ParentDashboardPage(): JSX.Element {
                   );
                 })}
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Grid of Report, Menu, and Health Passport */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
