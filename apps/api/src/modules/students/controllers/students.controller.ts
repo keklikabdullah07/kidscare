@@ -40,8 +40,11 @@ export class StudentsController {
   constructor(@Inject(StudentsService) private readonly studentsService: StudentsService) {}
 
   @Get()
-  async findAll(@CurrentTenantId() tenantId: string): Promise<StudentResponse[]> {
-    const rows = await this.studentsService.findAll(tenantId);
+  async findAll(
+    @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ): Promise<StudentResponse[]> {
+    const rows = await this.studentsService.findAll(tenantId, user);
     return rows.map((r) => this.toResponse(r));
   }
 

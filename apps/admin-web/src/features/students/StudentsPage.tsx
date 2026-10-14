@@ -40,6 +40,7 @@ export function StudentsPage(): JSX.Element {
   const isAdmin =
     authState.status === 'authenticated' &&
     (authState.user.role === 'ADMIN' || authState.user.role === 'SUPER_ADMIN');
+  const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
 
   const [status, setStatus] = useState<Status>('loading');
   const [students, setStudents] = useState<Student[]>([]);
@@ -60,6 +61,13 @@ export function StudentsPage(): JSX.Element {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   const { showToast } = useToast();
+
+  useEffect(() => {
+    if (isTeacher && classrooms.length > 0 && selectedClassroomId === 'ALL') {
+      const firstClass = classrooms[0];
+      if (firstClass) setSelectedClassroomId(firstClass.id);
+    }
+  }, [isTeacher, classrooms, selectedClassroomId]);
 
   function reload(): void {
     setStatus('loading');
@@ -259,31 +267,33 @@ export function StudentsPage(): JSX.Element {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {/* Tüm Sınıflar Kartı */}
-          <button
-            type="button"
-            onClick={() => setSelectedClassroomId('ALL')}
-            className={`p-3.5 rounded-2xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
-              selectedClassroomId === 'ALL'
-                ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-600 dark:border-teal-500 shadow-xs'
-                : 'bg-white dark:bg-[#131B2E] border-[#DDD4C4] dark:border-slate-800 hover:border-teal-300 dark:hover:border-slate-700'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-extrabold text-slate-900 dark:text-white">
-                Tüm Kreş
-              </span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-teal-100 dark:bg-teal-900/60 text-teal-900 dark:text-teal-200">
-                Hepsi
-              </span>
-            </div>
-            <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-              <strong className="text-base font-black text-slate-900 dark:text-white">
-                {students.length}
-              </strong>{' '}
-              Öğrenci
-            </div>
-          </button>
+          {/* Tüm Kreş Kartı (Yalnızca Admin) */}
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => setSelectedClassroomId('ALL')}
+              className={`p-3.5 rounded-2xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
+                selectedClassroomId === 'ALL'
+                  ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-600 dark:border-teal-500 shadow-xs'
+                  : 'bg-white dark:bg-[#131B2E] border-[#DDD4C4] dark:border-slate-800 hover:border-teal-300 dark:hover:border-slate-700'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-slate-900 dark:text-white">
+                  Tüm Kreş
+                </span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-teal-100 dark:bg-teal-900/60 text-teal-900 dark:text-teal-200">
+                  Hepsi
+                </span>
+              </div>
+              <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                <strong className="text-base font-black text-slate-900 dark:text-white">
+                  {students.length}
+                </strong>{' '}
+                Öğrenci
+              </div>
+            </button>
+          )}
 
           {/* Dinamik Sınıf Kartları */}
           {classrooms.map((cls) => {
@@ -320,8 +330,8 @@ export function StudentsPage(): JSX.Element {
             );
           })}
 
-          {/* Sınıfı Olmayanlar Kartı */}
-          {students.some((s) => !s.classroomId) && (
+          {/* Sınıfı Olmayanlar Kartı (Yalnızca Admin) */}
+          {isAdmin && students.some((s) => !s.classroomId) && (
             <button
               type="button"
               onClick={() => setSelectedClassroomId('UNASSIGNED')}

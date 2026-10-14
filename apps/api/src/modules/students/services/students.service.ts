@@ -2,6 +2,8 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type { Prisma } from '@kidscare/database';
 import type { StudentCreate, StudentPassportInput, StudentUpdate } from '@kidscare/shared-schemas';
 import type { StudentPassport } from '@kidscare/shared-types';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { UsersService } from '../../users/services/users.service';
 import { Student } from '../entities/student.entity';
 import type { IStudentsRepository } from '../repositories/students.repository';
@@ -11,9 +13,24 @@ export class StudentsService {
   constructor(
     @Inject('IStudentsRepository') private readonly repo: IStudentsRepository,
     @Inject(UsersService) private readonly usersService: UsersService,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
   ) {}
 
-  async findAll(tenantId: string): Promise<Student[]> {
+  async findAll(tenantId: string, user?: CurrentUserPayload): Promise<Student[]> {
+    // Madde 21: Öğretmen rolü için sadece atandığı sınıfların öğrencileri izole edilir
+    if (user?.role === 'TEACHER') {
+      const assignments = await this.prisma.withTenant((client) =>
+        client.classroomTeacher.findMany({
+          where: { tenantId, teacherId: user.userId, removedAt: null },
+          select: { classroomId: true },
+        }),
+      );
+      const classroomIds = assignments.map((a) => a.classroomId);
+      if (classroomIds.length === 0) return [];
+      const rows = await this.repo.findMany(tenantId, { classroomIds });
+      return rows.map((row) => Student.fromPrisma(row));
+    }
+
     const rows = await this.repo.findMany(tenantId);
     return rows.map((row) => Student.fromPrisma(row));
   }

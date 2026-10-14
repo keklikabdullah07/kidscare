@@ -30,6 +30,7 @@ const mockStudent: PrismaStudent = {
 describe('StudentsService', () => {
   let service: StudentsService;
   let repo: jest.Mocked<IStudentsRepository>;
+  let prisma: { withTenant: jest.Mock };
 
   beforeEach(() => {
     repo = {
@@ -42,7 +43,10 @@ describe('StudentsService', () => {
     const usersService = {
       assertParentUser: jest.fn().mockResolvedValue(undefined),
     };
-    service = new StudentsService(repo, usersService as never);
+    prisma = {
+      withTenant: jest.fn(),
+    };
+    service = new StudentsService(repo, usersService as never, prisma as never);
   });
 
   describe('findAll', () => {
@@ -52,6 +56,26 @@ describe('StudentsService', () => {
       expect(result).toHaveLength(1);
       expect(result[0]?.firstName).toBe('Ada');
       expect(result[0]?.fullName).toBe('Ada Yılmaz');
+    });
+
+    it('isolates students to teacher assigned classrooms when role is TEACHER', async () => {
+      prisma.withTenant.mockImplementation((callback: (client: unknown) => unknown) => {
+        return callback({
+          classroomTeacher: {
+            findMany: jest.fn().mockResolvedValue([{ classroomId: 'class-1' }]),
+          },
+        });
+      });
+      repo.findMany.mockResolvedValue([mockStudent]);
+
+      const result = await service.findAll('t-1', {
+        userId: 'teacher-1',
+        tenantId: 't-1',
+        role: 'TEACHER',
+      });
+
+      expect(result).toHaveLength(1);
+      expect(repo.findMany).toHaveBeenCalledWith('t-1', { classroomIds: ['class-1'] });
     });
   });
 

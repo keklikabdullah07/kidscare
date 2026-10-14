@@ -9,10 +9,14 @@ import type {
   PortfolioItemDto,
 } from '@kidscare/shared-types';
 import { DevelopmentRepository } from '../repositories/development.repository';
+import { NotificationsService } from '../../notifications/services/notifications.service';
 
 @Injectable()
 export class DevelopmentService {
-  constructor(@Inject(DevelopmentRepository) private readonly repository: DevelopmentRepository) {}
+  constructor(
+    @Inject(DevelopmentRepository) private readonly repository: DevelopmentRepository,
+    @Inject(NotificationsService) private readonly notificationsService: NotificationsService,
+  ) {}
 
   async listObservations(
     tenantId: string,
@@ -38,6 +42,17 @@ export class DevelopmentService {
     dto: CreateDevelopmentObservationDto,
   ): Promise<DevelopmentObservationDto> {
     const r = await this.repository.createObservation(tenantId, teacherId, dto);
+
+    // Madde 20: Veliye pedagojik gözlem eklendiğinde anlık sistem & push bildirimi gönder
+    if (r.isParentVisible) {
+      await this.notificationsService.notifyStudentParents(tenantId, dto.studentId, {
+        title: '🌱 Yeni Gelişim Gözlemi',
+        body: `${dto.skillName} alanında yeni bir pedagojik gelişim gözlemi paylaşıldı.`,
+        type: 'ANNOUNCEMENT',
+        data: { observationId: r.id, studentId: dto.studentId },
+      });
+    }
+
     return {
       ...r,
       observedAt: r.observedAt.toISOString(),

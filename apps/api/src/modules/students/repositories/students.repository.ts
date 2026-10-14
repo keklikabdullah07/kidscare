@@ -3,7 +3,10 @@ import type { Prisma, Student as PrismaStudent } from '@kidscare/database';
 import { PrismaService } from '../../../prisma/prisma.service';
 
 export interface IStudentsRepository {
-  findMany(tenantId: string, options?: { includeDeleted?: boolean }): Promise<PrismaStudent[]>;
+  findMany(
+    tenantId: string,
+    options?: { includeDeleted?: boolean; classroomIds?: string[] },
+  ): Promise<PrismaStudent[]>;
   findById(
     tenantId: string,
     id: string,
@@ -23,13 +26,14 @@ export class StudentsRepository implements IStudentsRepository {
 
   async findMany(
     tenantId: string,
-    options: { includeDeleted?: boolean } = {},
+    options: { includeDeleted?: boolean; classroomIds?: string[] } = {},
   ): Promise<PrismaStudent[]> {
     return this.prisma.withTenant((client) =>
       client.student.findMany({
         where: {
           tenantId,
           ...(options.includeDeleted ? {} : { deletedAt: null }),
+          ...(options.classroomIds ? { classroomId: { in: options.classroomIds } } : {}),
         },
         orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }],
       }),

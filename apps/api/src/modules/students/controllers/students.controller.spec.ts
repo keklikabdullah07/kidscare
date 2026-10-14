@@ -45,7 +45,11 @@ describe('StudentsController', () => {
   describe('findAll', () => {
     it('returns StudentResponse array', async () => {
       service.findAll.mockResolvedValue([entity]);
-      const result = await controller.findAll('t-1');
+      const result = await controller.findAll('t-1', {
+        userId: 'admin-1',
+        tenantId: 't-1',
+        role: 'ADMIN',
+      });
       expect(result).toHaveLength(1);
       expect(result[0]).toMatchObject({
         id: 's-1',
