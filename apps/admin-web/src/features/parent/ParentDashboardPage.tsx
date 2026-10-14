@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, type JSX } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Heart,
   Calendar,
@@ -708,9 +707,17 @@ export function ParentDashboardPage(): JSX.Element {
                   </p>
                 </div>
               </div>
-              <span className="px-3 py-1 text-xs font-bold rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
-                {eventConsents.length} Etkinlik
-              </span>
+              <div className="flex items-center gap-2.5">
+                <span className="px-3 py-1 text-xs font-bold rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
+                  {eventConsents.length} Etkinlik
+                </span>
+                <a
+                  href="/events"
+                  className="text-xs font-bold text-teal-800 dark:text-teal-300 hover:underline flex items-center gap-1"
+                >
+                  <span>Tüm Geziler →</span>
+                </a>
+              </div>
             </div>
 
             {eventConsents.length === 0 ? (
@@ -1542,12 +1549,12 @@ export function ParentDashboardPage(): JSX.Element {
                   </div>
                 </div>
 
-                <Link
-                  to="/gallery"
+                <a
+                  href="/gallery"
                   className="btn-tactile-secondary px-3.5 py-1.5 text-xs font-bold shrink-0 flex items-center gap-1.5 self-start sm:self-auto"
                 >
                   <span>Tüm Galeriyi Gör</span>
-                </Link>
+                </a>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">

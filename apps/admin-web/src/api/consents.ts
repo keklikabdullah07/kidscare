@@ -24,6 +24,10 @@ export async function createEventConsent(payload: CreateEventConsentInput): Prom
   });
 }
 
+export async function getEventConsent(id: string): Promise<EventConsent> {
+  return apiFetch<EventConsent>(`/events/consents/${encodeURIComponent(id)}`);
+}
+
 export async function respondEventConsent(
   consentId: string,
   payload: RespondEventConsentInput,

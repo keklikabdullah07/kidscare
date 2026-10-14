@@ -23,6 +23,7 @@ import {
   AlertTriangle,
   Award,
   Search,
+  Ticket,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
@@ -95,6 +96,12 @@ function getNavGroupsForRole(role: string): NavGroup[] {
             label: 'Yemek Menüsü',
             icon: Utensils,
             description: 'Haftalık yemek planı',
+          },
+          {
+            to: '/events',
+            label: 'Geziler & İzinler',
+            icon: Ticket,
+            description: 'Gezi izin onayları ve geçmişi',
           },
           {
             to: '/gallery',
@@ -188,6 +195,12 @@ function getNavGroupsForRole(role: string): NavGroup[] {
           label: 'Yemek Listesi',
           icon: Utensils,
           description: 'Öğünler ve alerjenler',
+        },
+        {
+          to: '/events',
+          label: 'Geziler & İzinler',
+          icon: Ticket,
+          description: 'Gezi izinleri ve katılımcı listesi',
         },
         {
           to: '/gallery',

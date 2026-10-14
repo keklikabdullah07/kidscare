@@ -23,6 +23,7 @@ import { MessagesPage } from './features/messages/MessagesPage';
 import { ParentRequestsPage } from './features/messages/ParentRequestsPage';
 import { IncidentsPage } from './features/incidents/IncidentsPage';
 import { DevelopmentPage } from './features/development/DevelopmentPage';
+import { EventsPage } from './features/events/EventsPage';
 import { onUnauthorized } from './api/client';
 
 /**
@@ -173,6 +174,14 @@ export function App(): JSX.Element {
                     element={
                       <RoleGuard allowed={[...ALL_ROLES]}>
                         <DevelopmentPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/events"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <EventsPage />
                       </RoleGuard>
                     }
                   />
