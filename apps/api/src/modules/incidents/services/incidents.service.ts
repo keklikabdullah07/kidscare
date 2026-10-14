@@ -1,9 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import type {
-  IncidentRecordCreate,
-  IncidentRecordUpdate,
-} from '@kidscare/shared-schemas';
+import type { IncidentRecordCreate, IncidentRecordUpdate } from '@kidscare/shared-schemas';
 import type { IncidentCategory, IncidentRecord } from '@kidscare/shared-types';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
+import { PrismaService } from '../../../prisma/prisma.service';
 import type { IIncidentsRepository, IncidentRow } from '../repositories/incidents.repository';
 
 @Injectable()
@@ -11,13 +10,42 @@ export class IncidentsService {
   constructor(
     @Inject('IIncidentsRepository')
     private readonly repo: IIncidentsRepository,
+    @Inject(PrismaService)
+    private readonly prisma: PrismaService,
   ) {}
 
   async list(
     tenantId: string,
-    filters?: { studentId?: string; category?: IncidentCategory; from?: Date; to?: Date },
+    filters?: {
+      studentId?: string;
+      studentIds?: string[];
+      category?: IncidentCategory;
+      from?: Date;
+      to?: Date;
+    },
+    user?: CurrentUserPayload,
   ): Promise<IncidentRecord[]> {
-    const rows = await this.repo.list(tenantId, filters);
+    const activeFilters = { ...filters };
+
+    // Veli (PARENT) rolü için sadece kendi çocuklarının olayları (Madde 19)
+    if (user?.role === 'PARENT') {
+      const children = await this.prisma.withTenant((client) =>
+        client.student.findMany({
+          where: { tenantId, parentId: user.userId, deletedAt: null },
+          select: { id: true },
+        }),
+      );
+      const childIds = children.map((c) => c.id);
+      if (childIds.length === 0) return [];
+
+      if (activeFilters.studentId) {
+        if (!childIds.includes(activeFilters.studentId)) return [];
+      } else {
+        activeFilters.studentIds = childIds;
+      }
+    }
+
+    const rows = await this.repo.list(tenantId, activeFilters);
     return rows.map((row) => this.toResponse(row));
   }
 

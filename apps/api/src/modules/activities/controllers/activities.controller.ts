@@ -35,9 +35,10 @@ export class ActivitiesController {
   @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async list(
     @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
     @Query(new ZodValidationPipe(activityFilterQuerySchema)) query: ActivityFilterQueryInput,
   ): Promise<ActivityPost[]> {
-    return this.activitiesService.list(tenantId, query);
+    return this.activitiesService.list(tenantId, query, user);
   }
 
   @Get(':id')

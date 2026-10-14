@@ -20,12 +20,13 @@ import {
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { createStudent, deleteStudent, listStudents, updateStudent } from '../../api/students';
-import { listClassrooms } from '../../api/classrooms';
+import { createClassroom, listClassrooms } from '../../api/classrooms';
 import { listUsers } from '../../api/users';
 import type { Classroom, User } from '@kidscare/shared-types';
 import { StudentPassportModal } from './StudentPassportModal';
 import { PickupContactsModal } from './PickupContactsModal';
 import { useToast } from '../../components/Toast';
+import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TactileButton } from '../../components/ui/TactileButton';
@@ -35,9 +36,20 @@ type ViewMode = 'grid' | 'table';
 type FilterType = 'all' | 'active' | 'allergy' | 'blood';
 
 export function StudentsPage(): JSX.Element {
+  const { state: authState } = useAuth();
+  const isAdmin =
+    authState.status === 'authenticated' &&
+    (authState.user.role === 'ADMIN' || authState.user.role === 'SUPER_ADMIN');
+
   const [status, setStatus] = useState<Status>('loading');
   const [students, setStudents] = useState<Student[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [selectedClassroomId, setSelectedClassroomId] = useState<string>('ALL');
+  const [showAddClassroomModal, setShowAddClassroomModal] = useState(false);
+  const [newClassName, setNewClassName] = useState('');
+  const [newClassAgeGroup, setNewClassAgeGroup] = useState('3-4 Yaş');
+  const [classroomSubmitting, setClassroomSubmitting] = useState(false);
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -93,10 +105,45 @@ export function StudentsPage(): JSX.Element {
     showToast('Öğrenci pasaportu ve sağlık bilgileri güncellendi.', 'success');
   }
 
+  async function handleCreateClassroom(e: FormEvent): Promise<void> {
+    e.preventDefault();
+    if (!newClassName.trim()) {
+      showToast('Lütfen sınıf adını girin.', 'error');
+      return;
+    }
+    setClassroomSubmitting(true);
+    try {
+      const payload: { name: string; ageGroup?: string } = {
+        name: newClassName.trim(),
+      };
+      if (newClassAgeGroup.trim()) {
+        payload.ageGroup = newClassAgeGroup.trim();
+      }
+      const created = await createClassroom(payload);
+      setClassrooms((prev) => [...prev, created]);
+      showToast(`"${created.name}" sınıfı başarıyla oluşturuldu! 🏫`, 'success');
+      setShowAddClassroomModal(false);
+      setNewClassName('');
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : 'Sınıf oluşturulamadı.', 'error');
+    } finally {
+      setClassroomSubmitting(false);
+    }
+  }
+
   // Filter & Search logic
   const filteredStudents = useMemo(() => {
     return students
       .filter((s) => {
+        // Sınıf Hiyerarşisi Filtresi (Madde 17)
+        if (selectedClassroomId !== 'ALL') {
+          if (selectedClassroomId === 'UNASSIGNED') {
+            if (s.classroomId) return false;
+          } else if (s.classroomId !== selectedClassroomId) {
+            return false;
+          }
+        }
+
         // Search filter
         if (searchQuery.trim()) {
           const q = searchQuery.toLowerCase();
@@ -120,7 +167,7 @@ export function StudentsPage(): JSX.Element {
         return true;
       })
       .sort(byLastName);
-  }, [students, searchQuery, filterType]);
+  }, [students, searchQuery, filterType, selectedClassroomId]);
 
   // Statistics
   const totalCount = students.length;
@@ -147,8 +194,8 @@ export function StudentsPage(): JSX.Element {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-2.5 bg-white dark:bg-[#131B2E] px-4 py-2 rounded-2xl border border-[#DDD4C4] dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 shadow-2xs font-medium">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="hidden lg:flex items-center gap-2.5 bg-white dark:bg-[#131B2E] px-4 py-2 rounded-2xl border border-[#DDD4C4] dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 shadow-2xs font-medium">
             <span>
               Toplam:{' '}
               <strong className="text-slate-900 dark:text-white font-bold">{totalCount}</strong>
@@ -168,15 +215,138 @@ export function StudentsPage(): JSX.Element {
             )}
           </div>
 
+          {isAdmin && (
+            <TactileButton
+              type="button"
+              variant="secondary"
+              onClick={() => setShowAddClassroomModal(true)}
+              className="px-3.5 py-2 text-xs sm:text-sm"
+              title="Yeni Sınıf Oluştur"
+            >
+              <School className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+              <span>+ Yeni Sınıf</span>
+            </TactileButton>
+          )}
+
           <TactileButton
             type="button"
             variant="teal"
             onClick={() => setShowAddModal(true)}
-            className="px-5 py-2.5 text-sm"
+            className="px-4 py-2 text-xs sm:text-sm"
           >
             <UserPlus className="w-4 h-4" />
             <span>+ Yeni Öğrenci</span>
           </TactileButton>
+        </div>
+      </div>
+
+      {/* Sınıf Hiyerarşisi Kartları (Madde 17: Admin öğrenci yönetiminde önce sınıfları görür) */}
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+            <span>Kreş Sınıfları & Gruplar</span>
+          </h2>
+          {selectedClassroomId !== 'ALL' && (
+            <button
+              type="button"
+              onClick={() => setSelectedClassroomId('ALL')}
+              className="text-[11px] font-bold text-teal-800 dark:text-teal-300 hover:underline cursor-pointer"
+            >
+              Tüm Öğrencileri Göster (Filtreyi Kaldır)
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {/* Tüm Sınıflar Kartı */}
+          <button
+            type="button"
+            onClick={() => setSelectedClassroomId('ALL')}
+            className={`p-3.5 rounded-2xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
+              selectedClassroomId === 'ALL'
+                ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-600 dark:border-teal-500 shadow-xs'
+                : 'bg-white dark:bg-[#131B2E] border-[#DDD4C4] dark:border-slate-800 hover:border-teal-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-extrabold text-slate-900 dark:text-white">
+                Tüm Kreş
+              </span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-teal-100 dark:bg-teal-900/60 text-teal-900 dark:text-teal-200">
+                Hepsi
+              </span>
+            </div>
+            <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+              <strong className="text-base font-black text-slate-900 dark:text-white">
+                {students.length}
+              </strong>{' '}
+              Öğrenci
+            </div>
+          </button>
+
+          {/* Dinamik Sınıf Kartları */}
+          {classrooms.map((cls) => {
+            const count = students.filter((s) => s.classroomId === cls.id).length;
+            const isSelected = selectedClassroomId === cls.id;
+            return (
+              <button
+                key={cls.id}
+                type="button"
+                onClick={() => setSelectedClassroomId(cls.id)}
+                className={`p-3.5 rounded-2xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
+                  isSelected
+                    ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-600 dark:border-teal-500 shadow-xs'
+                    : 'bg-white dark:bg-[#131B2E] border-[#DDD4C4] dark:border-slate-800 hover:border-teal-300 dark:hover:border-slate-700'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold text-slate-900 dark:text-white truncate">
+                    {cls.name}
+                  </span>
+                  {cls.ageGroup && (
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      {cls.ageGroup}
+                    </span>
+                  )}
+                </div>
+                <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                  <strong className="text-base font-black text-slate-900 dark:text-white">
+                    {count}
+                  </strong>{' '}
+                  Öğrenci
+                </div>
+              </button>
+            );
+          })}
+
+          {/* Sınıfı Olmayanlar Kartı */}
+          {students.some((s) => !s.classroomId) && (
+            <button
+              type="button"
+              onClick={() => setSelectedClassroomId('UNASSIGNED')}
+              className={`p-3.5 rounded-2xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
+                selectedClassroomId === 'UNASSIGNED'
+                  ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-600 dark:border-amber-500 shadow-xs'
+                  : 'bg-white dark:bg-[#131B2E] border-[#DDD4C4] dark:border-slate-800 hover:border-amber-300'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-slate-900 dark:text-white">
+                  Sınıfsız
+                </span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-rose-100 dark:bg-rose-950 text-rose-900 dark:text-rose-300">
+                  Bekleyen
+                </span>
+              </div>
+              <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                <strong className="text-base font-black text-slate-900 dark:text-white">
+                  {students.filter((s) => !s.classroomId).length}
+                </strong>{' '}
+                Öğrenci
+              </div>
+            </button>
+          )}
         </div>
       </div>
 
@@ -577,6 +747,84 @@ export function StudentsPage(): JSX.Element {
           onConfirm={() => void confirmDelete()}
           onCancel={() => setDeleteTarget(null)}
         />
+      )}
+
+      {/* Add New Classroom Modal (Madde 16: Mobilde ve Web'de Yeni Sınıf Ekleme) */}
+      {showAddClassroomModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-md rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-xl overflow-hidden animate-in fade-in zoom-in-95">
+            <div className="p-5 border-b border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold">
+                  <School className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                    Yeni Sınıf Oluştur
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Kreşinize yeni bir sınıf veya grup tanımlayın.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAddClassroomModal(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={(e) => void handleCreateClassroom(e)} className="p-5 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                  Sınıf Adı *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Örn: Papatyalar Sınıfı, Minikler Grubu"
+                  value={newClassName}
+                  onChange={(e) => setNewClassName(e.target.value)}
+                  required
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                  Yaş Grubu (İsteğe Bağlı)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Örn: 3-4 Yaş, 4-5 Yaş, 0-2 Yaş Bebek"
+                  value={newClassAgeGroup}
+                  onChange={(e) => setNewClassAgeGroup(e.target.value)}
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5">
+                <TactileButton
+                  type="button"
+                  variant="secondary"
+                  size="md"
+                  onClick={() => setShowAddClassroomModal(false)}
+                >
+                  İptal
+                </TactileButton>
+                <TactileButton
+                  type="submit"
+                  variant="teal"
+                  size="md"
+                  disabled={classroomSubmitting}
+                >
+                  <span>{classroomSubmitting ? 'Kaydediliyor…' : 'Sınıfı Oluştur'}</span>
+                </TactileButton>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

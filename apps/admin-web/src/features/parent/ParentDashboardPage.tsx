@@ -19,6 +19,7 @@ import {
   Clock,
   X,
   ShieldCheck,
+  ShieldAlert,
   Phone,
 } from 'lucide-react';
 import { getParentChildrenOverview } from '../../api/parent';
@@ -26,6 +27,7 @@ import { getDailyMenu } from '../../api/daily-menus';
 import { listObservations, listPortfolio } from '../../api/development';
 import { getActivities } from '../../api/activities';
 import { listMedicationRecords, createMedicationRecord } from '../../api/medication';
+import { listIncidents } from '../../api/incidents';
 import {
   listPickupAuthorizations,
   createPickupContact,
@@ -40,6 +42,7 @@ import type {
   MediaFileItem,
   MedicationRecord,
   PickupAuthorization,
+  IncidentRecord,
 } from '@kidscare/shared-types';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { LightboxModal } from '../gallery/LightboxModal';
@@ -77,6 +80,9 @@ export function ParentDashboardPage(): JSX.Element {
   const [isSubmittingPickup, setIsSubmittingPickup] = useState<boolean>(false);
   const [pickupError, setPickupError] = useState<string | null>(null);
 
+  const [incidents, setIncidents] = useState<IncidentRecord[]>([]);
+  const [showAllIncidents, setShowAllIncidents] = useState<boolean>(false);
+
   const [activeLightboxFile, setActiveLightboxFile] = useState<MediaFileItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -112,18 +118,21 @@ export function ParentDashboardPage(): JSX.Element {
 
           if (currentChildId) {
             try {
-              const [meds, auths] = await Promise.all([
+              const [meds, auths, incs] = await Promise.all([
                 listMedicationRecords(currentChildId).catch(() => []),
                 listPickupAuthorizations(currentChildId).catch(() => []),
+                listIncidents(currentChildId).catch(() => []),
               ]);
               if (isMounted) {
                 setMedications(Array.isArray(meds) ? meds : []);
                 setPickupAuthorizations(Array.isArray(auths) ? auths : []);
+                setIncidents(Array.isArray(incs) ? incs : []);
               }
             } catch {
               if (isMounted) {
                 setMedications([]);
                 setPickupAuthorizations([]);
+                setIncidents([]);
               }
             }
           }
@@ -1054,6 +1063,113 @@ export function ParentDashboardPage(): JSX.Element {
                         </div>
                       );
                     })}
+                  </div>
+                )}
+              </div>
+
+              {/* Incidents & Health Reports Section (Madde 19) */}
+              <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
+                <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3.5">
+                  <div className="flex items-center gap-2">
+                    <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400" />
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                        Olay & Sağlık Bildirimleri
+                      </h3>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                        Kreşte yaşanan ufak kaza, düşme veya ilk yardım müdahaleleri
+                      </p>
+                    </div>
+                  </div>
+                  {incidents.length > 0 && (
+                    <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60 shadow-2xs">
+                      {incidents.length} Kayıt
+                    </span>
+                  )}
+                </div>
+
+                {incidents.length === 0 ? (
+                  <div className="py-6 text-center text-slate-400 dark:text-slate-300">
+                    <p className="text-xs">
+                      Çocuğunuzla ilgili kayıtlı herhangi bir kaza veya olay bulunmuyor.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {(showAllIncidents ? incidents : incidents.slice(0, 2)).map((inc) => {
+                      const categoryLabels: Record<string, string> = {
+                        FALL: 'Düşme / Çarpma',
+                        BITE: 'Isırma',
+                        SCRATCH: 'Sıyrık / Çizik',
+                        BURN: 'Yanık',
+                        INGESTION: 'Yutma Tehlikesi',
+                        ALLERGIC_REACTION: 'Alerjik Reaksiyon',
+                        FIGHT: 'Akran Tartışması',
+                        OTHER: 'Diğer Olay',
+                      };
+                      return (
+                        <div
+                          key={inc.id}
+                          className="p-4 rounded-2xl border border-rose-200/80 dark:border-rose-900/60 bg-rose-50/40 dark:bg-rose-950/20 text-xs space-y-2 shadow-2xs"
+                        >
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                            <span className="font-bold text-rose-900 dark:text-rose-300 flex items-center gap-1.5">
+                              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+                              {categoryLabels[inc.category] || inc.category}
+                            </span>
+                            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                              {new Date(inc.occurredAt).toLocaleString('tr-TR', {
+                                day: 'numeric',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
+                          </div>
+
+                          <p className="text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+                            {inc.description}
+                          </p>
+
+                          {inc.actionTaken && (
+                            <div className="p-2.5 rounded-xl bg-white/80 dark:bg-slate-900/70 border border-rose-100 dark:border-rose-900/40 text-[11px]">
+                              <span className="font-bold text-teal-900 dark:text-teal-300 block mb-0.5">
+                                Yapılan Müdahale / Alınan Tedbir:
+                              </span>
+                              <span className="text-slate-700 dark:text-slate-300 font-medium">
+                                {inc.actionTaken}
+                              </span>
+                            </div>
+                          )}
+
+                          <div className="flex items-center justify-between pt-1 text-[11px]">
+                            {inc.parentNotified ? (
+                              <span className="text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
+                                ✓ Veli bilgilendirildi
+                              </span>
+                            ) : (
+                              <span className="text-slate-500 dark:text-slate-400 italic">
+                                Gözlem altında
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {incidents.length > 2 && (
+                      <div className="pt-1 text-center">
+                        <button
+                          type="button"
+                          onClick={() => setShowAllIncidents(!showAllIncidents)}
+                          className="text-xs font-bold text-teal-800 dark:text-teal-300 hover:underline cursor-pointer"
+                        >
+                          {showAllIncidents
+                            ? 'Daha Az Olay Göster'
+                            : `Tüm Geçmiş Olayları Gör (${incidents.length})`}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

@@ -1,4 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
+import type { PrismaService } from '../../../prisma/prisma.service';
 import type { IncidentRow } from '../repositories/incidents.repository';
 import { IncidentsService } from './incidents.service';
 import type { IIncidentsRepository } from '../repositories/incidents.repository';
@@ -22,6 +23,7 @@ const baseIncident: IncidentRow = {
 describe('IncidentsService', () => {
   let service: IncidentsService;
   let repo: jest.Mocked<IIncidentsRepository>;
+  let prisma: jest.Mocked<PrismaService>;
 
   beforeEach(() => {
     repo = {
@@ -30,7 +32,10 @@ describe('IncidentsService', () => {
       create: jest.fn(),
       update: jest.fn(),
     };
-    service = new IncidentsService(repo);
+    prisma = {
+      withTenant: jest.fn(),
+    } as unknown as jest.Mocked<PrismaService>;
+    service = new IncidentsService(repo, prisma);
   });
 
   it('lists incidents mapped to response', async () => {
@@ -38,6 +43,30 @@ describe('IncidentsService', () => {
     const res = await service.list('t-1', { studentId: 's-1' });
     expect(res[0]?.id).toBe('i-1');
     expect(res[0]?.category).toBe('DUSME');
+  });
+
+  it('filters by parent child ids when user is PARENT', async () => {
+    (prisma.withTenant as jest.Mock).mockImplementation((callback) => {
+      return callback({
+        student: {
+          findMany: jest.fn().mockResolvedValue([{ id: 's-1' }]),
+        },
+      });
+    });
+    repo.list.mockResolvedValue([baseIncident]);
+
+    const res = await service.list(
+      't-1',
+      {},
+      {
+        userId: 'parent-1',
+        tenantId: 't-1',
+        role: 'PARENT',
+      },
+    );
+
+    expect(res).toHaveLength(1);
+    expect(repo.list).toHaveBeenCalledWith('t-1', expect.objectContaining({ studentIds: ['s-1'] }));
   });
 
   it('creates incident with reporter id and default parentNotified=false', async () => {

@@ -2,6 +2,24 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { StudentsPage } from './StudentsPage';
 
+vi.mock('../auth/AuthContext', () => ({
+  useAuth: () => ({
+    state: {
+      status: 'authenticated',
+      user: {
+        id: 'admin-1',
+        tenantId: 't-1',
+        email: 'admin@demo.test',
+        role: 'ADMIN',
+      },
+      token: 'test-jwt',
+    },
+    login: async () => {},
+    signup: async () => {},
+    logout: () => {},
+  }),
+}));
+
 const fakeStudents = [
   {
     id: 's-1',
@@ -25,6 +43,9 @@ function mockFetchByUrl(handlers: Record<string, (init?: RequestInit) => Respons
     const path = new URL(url, 'http://localhost').pathname;
     const handler = handlers[path];
     if (handler) return Promise.resolve(handler(init));
+    if (path === '/classrooms') {
+      return Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
+    }
     return Promise.resolve(new Response(JSON.stringify({ message: 'unhandled' }), { status: 500 }));
   });
 }

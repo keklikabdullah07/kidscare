@@ -29,13 +29,14 @@ import { IncidentsService } from '../services/incidents.service';
 
 @Controller('incidents')
 @UseGuards(TenantGuard)
-@Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
 export class IncidentsController {
   constructor(@Inject(IncidentsService) private readonly service: IncidentsService) {}
 
   @Get()
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async list(
     @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
     @Query('studentId') studentId?: string,
     @Query('category') category?: IncidentCategory,
     @Query('from') from?: string,
@@ -46,10 +47,11 @@ export class IncidentsController {
     if (category) filters.category = category;
     if (from) filters.from = new Date(from);
     if (to) filters.to = new Date(to);
-    return this.service.list(tenantId, filters);
+    return this.service.list(tenantId, filters, user);
   }
 
   @Post()
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   @HttpCode(201)
   async create(
     @CurrentTenantId() tenantId: string,
@@ -60,6 +62,7 @@ export class IncidentsController {
   }
 
   @Patch(':id')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async update(
     @CurrentTenantId() tenantId: string,
     @CurrentUser() user: CurrentUserPayload,

@@ -29,3 +29,13 @@ export async function bulkSaveClassroomDailyReports(
     { method: 'PUT', body: JSON.stringify(payload) },
   );
 }
+
+export async function createClassroom(payload: {
+  name: string;
+  ageGroup?: string;
+}): Promise<Classroom> {
+  return apiFetch<Classroom>('/classrooms', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}

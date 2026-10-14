@@ -2,12 +2,15 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type { ActivityPost } from '@kidscare/shared-types';
 import type { ActivityPost as PrismaActivityPost } from '@kidscare/database';
 import type { CreateActivityPostInput, ActivityFilterQueryInput } from '@kidscare/shared-schemas';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { ActivitiesRepository } from '../repositories/activities.repository';
 
 @Injectable()
 export class ActivitiesService {
   constructor(
     @Inject(ActivitiesRepository) private readonly activitiesRepository: ActivitiesRepository,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
   ) {}
 
   private mapToDto(post: PrismaActivityPost): ActivityPost {
@@ -29,8 +32,63 @@ export class ActivitiesService {
     };
   }
 
-  async list(tenantId: string, filter?: ActivityFilterQueryInput): Promise<ActivityPost[]> {
+  async list(
+    tenantId: string,
+    filter?: ActivityFilterQueryInput,
+    user?: CurrentUserPayload,
+  ): Promise<ActivityPost[]> {
     const posts = await this.activitiesRepository.findMany(tenantId, filter);
+
+    // Veli (PARENT) rolü için sınıf ve öğrenci izolasyonu (Madde 18)
+    if (user?.role === 'PARENT') {
+      const children = await this.prisma.withTenant((client) =>
+        client.student.findMany({
+          where: {
+            tenantId,
+            parentId: user.userId,
+            deletedAt: null,
+          },
+          include: {
+            classroom: true,
+          },
+        }),
+      );
+
+      const childIds = new Set(children.map((c) => c.id));
+      const allowedClassrooms = new Set<string>();
+
+      for (const child of children) {
+        if (child.classroomId) allowedClassrooms.add(child.classroomId);
+        if (child.classroom?.name) allowedClassrooms.add(child.classroom.name.toLowerCase().trim());
+      }
+
+      return posts
+        .filter((post) => {
+          // 1. Genel kreş etkinliği (sınıf atanmamış)
+          if (!post.classroom || post.classroom.trim() === '') {
+            return true;
+          }
+
+          // 2. Çocuğun sınıfına ait gönderi
+          const postClassroomNorm = post.classroom.toLowerCase().trim();
+          if (allowedClassrooms.has(postClassroomNorm) || allowedClassrooms.has(post.classroom)) {
+            return true;
+          }
+
+          // 3. Etiketlenmiş öğrenciler arasında velinin çocuğu var mı?
+          const tagged = Array.isArray(post.taggedStudentIds)
+            ? (post.taggedStudentIds as string[])
+            : [];
+          if (tagged.some((id) => childIds.has(id))) {
+            return true;
+          }
+
+          // Diğer sınıfların özel gönderileri veliden izole edilir
+          return false;
+        })
+        .map((p) => this.mapToDto(p));
+    }
+
     return posts.map((p) => this.mapToDto(p));
   }
 

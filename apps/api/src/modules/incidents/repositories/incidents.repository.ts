@@ -39,7 +39,13 @@ const INCIDENT_SELECT = {
 export interface IIncidentsRepository {
   list(
     tenantId: string,
-    filters?: { studentId?: string; category?: Prisma.IncidentRecordWhereInput['category']; from?: Date; to?: Date },
+    filters?: {
+      studentId?: string;
+      studentIds?: string[];
+      category?: Prisma.IncidentRecordWhereInput['category'];
+      from?: Date;
+      to?: Date;
+    },
   ): Promise<IncidentRow[]>;
   find(tenantId: string, id: string): Promise<IncidentRow | null>;
   create(
@@ -59,13 +65,20 @@ export class IncidentsRepository implements IIncidentsRepository {
 
   async list(
     tenantId: string,
-    filters?: { studentId?: string; category?: Prisma.IncidentRecordWhereInput['category']; from?: Date; to?: Date },
+    filters?: {
+      studentId?: string;
+      studentIds?: string[];
+      category?: Prisma.IncidentRecordWhereInput['category'];
+      from?: Date;
+      to?: Date;
+    },
   ): Promise<IncidentRow[]> {
     return this.prisma.withTenant((client) =>
       client.incidentRecord.findMany({
         where: {
           tenantId,
           ...(filters?.studentId ? { studentId: filters.studentId } : {}),
+          ...(filters?.studentIds ? { studentId: { in: filters.studentIds } } : {}),
           ...(filters?.category ? { category: filters.category } : {}),
           ...(filters?.from || filters?.to
             ? {
