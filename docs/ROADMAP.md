@@ -20,9 +20,9 @@ Tek kişilik geliştirici disiplininde iki cephede birden (Web + Mobil) değişe
 [Faz 3: Gezi/İzin Merkezi & Öğrenci/Sınıf Senkronizasyonu] ✅ TAMAMLANDI (Spec 0040 - 0042)
         ↓
 [Faz 3.5: Web Ticari & Operasyonel Tamamlama] 🎯 AKTİF ÇALIŞILAN FAZ
-   ├── 💰 Spec 0043: Aidat, Tahsilat & Borç Takip Modülü (/finance)
-   ├── 📄 Spec 0044: PDF Belge Motoru (Dönem Sonu Karnesi & MEB Yoklama Çizelgesi)
-   ├── ☁️ Spec 0045: Gerçek Bulut Depolama (Cloudflare R2 / AWS S3 Sürücüsü)
+   ├── 💰 Spec 0043: Aidat, Tahsilat & Borç Takip Modülü (/finance) ✅ TAMAMLANDI
+   ├── 📄 Spec 0044: PDF Belge Motoru (Dönem Sonu Karnesi & MEB Yoklama Çizelgesi) ✅ TAMAMLANDI
+   ├── ☁️ Spec 0045: Gerçek Bulut Depolama (Cloudflare R2 / AWS S3 Sürücüsü) ⏳ SIRADAKİ
    ├── 🔑 Spec 0046: Şifremi Unuttum & E-posta Servisi (Resend / SMTP)
    └── 🌐 Spec 0047: Landing Page Demo Formunun Canlıya Bağlanması
         ↓

@@ -36,12 +36,20 @@
      - `./scripts/check.ps1` %100 yeşil tamamlandı (TypeScript tip kontrolü + ESLint sıfır hata + tüm testler başarılı).
      - `specs/active/0043` şartnamesi `specs/done/` klasörüne arşivlendi.
 
+3. **Spec 0044 (PDF Belge Motoru & Resmi Çıktılar):**
+   - **İstemci Taraflı Baskı Standartları ("İyi Misafir Protokolü"):** Sunucuya Puppeteer/Chromium yükü bindirilmeden CSS Paged Media (`@page`, `@media print`) ve `window.print()` ile sıfır sunucu yükü sağlandı.
+   - **Resmi Çıktı Şablonları:**
+     - `ReportCardPrint.tsx`: Dönem Sonu Renkli Pedagojik Karne (A4 Dikey, 6 gelişim alanı, boy/kilo/kan grubu, öğretmen tebrik mesajı, imza blokları).
+     - `AttendanceSheetPrint.tsx`: MEB Resmi Aylık Sınıf Yoklama Çizelgesi (A4 Yatay, 1-31 gün matrisi, hafta sonu ayrımı, katılım istatistikleri).
+     - `EmergencyRosterPrint.tsx`: Acil Durum & Alerjen Kapı/Gezi Güvenlik Listesi (A4 Dikey, kan grubu, kırmızı uyarı rozetli alerjenler, veli telefonları, 112 ambulans kutusu).
+   - **Web Entegrasyonları:** `PrintPreviewModal.tsx` canlı antetli önizleme modalı; `StudentsPage.tsx`, `AttendancePage.tsx`, `DevelopmentPage.tsx` butonları.
+   - **Kalite Kapısı:** 8 birim test (%100) ve `./scripts/check.ps1` yeşil tamamlandı; `specs/done/0044-pdf-document-engine-and-reports.md` arşivlendi.
+
 ---
 
-## 2. Sıradaki İş ve Yol Haritası
+## 2. Sıradaki İş ve Yol Haritası (Faz 3.5 Web Tamamlama)
 
-- Web panelinde planlanan tüm çekirdek kreş operasyon modülleri (Öğrenciler, Yoklama, Günlük Takip, İlaç, Teslimat, Mesajlaşma, Olaylar, Gelişim, Menüler, Geziler/İzinler ve Aidat/Finans) eksiksiz tamamlanmıştır.
-- Bir sonraki aşama için kullanıcı ile mutabık kalınacak sonraki odak alanı:
-  - **Opsiyon A:** Web Storybook UI & Görsel Tasarım Cilası (`apps/admin-web/.storybook`)
-  - **Opsiyon B:** Mobil Uygulama Fazına Geçiş (`apps/mobile` Expo SDK 57 — Öğretmen & Veli Akışları)
-  - **Opsiyon C:** Landing / Pazarlama Sayfası (`apps/marketing`)
+- Web operasyonel eksiklikleri sırasıyla giderilmektedir:
+  - **Sıradaki Adım (Spec 0045):** Gerçek Bulut Depolama (Cloudflare R2 / AWS S3 Sürücüsü) — sunucu diskini şişirmemek için.
+  - **Sonraki Adım (Spec 0046):** Şifremi Unuttum & E-posta Servisi (Resend / SMTP).
+  - **Sonraki Adım (Spec 0047):** Landing Page Demo Formunun Canlıya Bağlanması.
