@@ -1,81 +1,122 @@
 # 🗺️ KidsCare Ürün ve Mühendislik Yol Haritası (Product Roadmap)
 
-Bu belge, KidsCare platformunun geçmiş, mevcut ve geleceğe yönelik geliştirme fazlarını, mimari hedeflerini ve öncelik sıralamasını tanımlar.
+Bu belge, KidsCare platformunun geçmiş, mevcut ve geleceğe yönelik geliştirme fazlarını, mimari kararlarını ve öncelik sıralamasını tanımlar.
+
+---
+
+## 🧭 Ana Strateji: Önce Web (%100 Ticari & Operasyonel Yetkinlik), Sonra Mobil
+
+Tek kişilik geliştirici disiplininde iki cephede birden (Web + Mobil) değişen API sözleşmeleriyle boğuşmamak için **"Önce Web + API tam olgunluğa ulaştırılır, canlıya çıkabilir ve kreşlere satılabilir hale getirilir; ardından Mobil uygulama bu stabil API'lerin üzerine inşa edilir"** stratejisi benimsenmiştir.
 
 ---
 
 ## 📍 Faz Genel Bakışı
 
 ```
-[Faz 1: Web MVP & API] ✅ TAMAMLANDI
+[Faz 1: Web MVP & Çekirdek API] ✅ TAMAMLANDI
         ↓
-[Faz 2: Mobil Uygulama & Web V1 Stabilizasyonu & Docker Optimizasyonu] ✅ TAMAMLANDI
+[Faz 2: Web V1 Stabilizasyonu, Dokunsal Tasarım & Docker Optimizasyonu] ✅ TAMAMLANDI (Spec 0001 - 0039)
         ↓
-[Faz 3: Anlık Bildirimler (Push), Medya/Fotoğraf Depolama & Pazarlama Web] 🎯 AKTİF SIRADAKİ FAZ
+[Faz 3: Gezi/İzin Merkezi & Öğrenci/Sınıf Senkronizasyonu] ✅ TAMAMLANDI (Spec 0040 - 0042)
         ↓
-[Faz 4: AI Destekli Pedagojik Karne, Storybook & İleri Analitik] 🚀 GELECEK
+[Faz 3.5: Web Ticari & Operasyonel Tamamlama] 🎯 AKTİF ÇALIŞILAN FAZ
+   ├── 💰 Spec 0043: Aidat, Tahsilat & Borç Takip Modülü (/finance)
+   ├── 📄 Spec 0044: PDF Belge Motoru (Dönem Sonu Karnesi & MEB Yoklama Çizelgesi)
+   ├── ☁️ Spec 0045: Gerçek Bulut Depolama (Cloudflare R2 / AWS S3 Sürücüsü)
+   ├── 🔑 Spec 0046: Şifremi Unuttum & E-posta Servisi (Resend / SMTP)
+   └── 🌐 Spec 0047: Landing Page Demo Formunun Canlıya Bağlanması
+        ↓
+[Faz 4: Mobil Uygulama (Expo SDK 57) Eşitleme & Canlı Bildirimler] 📱 GELECEK
+   ├── 🔔 expo-notifications & Gerçek APNS/FCM Push Token Kaydı
+   ├── 📅 Veli Dijital Mazeret Bildirimi & Gezi Onay Formları (Mobilde Eşitleme)
+   ├── 👑 Yönetici (Admin) Mobil Dashboard Deneyimi
+   └── 🧪 Mobil Test Altyapısı (Vitest + React Native Testing Library)
+        ↓
+[Faz 5: İleri Kreş Operasyonları & AI Destekli Özellikler] 🚀 V2
+   ├── 🚌 Servis & Güzergah / Hostes Takip Modülü
+   ├── 🤖 AI Destekli Pedagojik Karne Özeti & Hikayeleştirme
+   ├── ⏰ Personel Nöbet & Vardiya Çizelgesi
+   └── 💬 Gerçek Zamanlı Mesajlaşma (WebSocket / SSE)
 ```
 
 ---
 
-## 📌 Faz 1: Çekirdek Altyapı ve Web MVP (Tamamlandı ✅)
+## 📌 Tamamlanan Fazlar
 
-- [x] Monorepo mimarisi (Nx + pnpm workspaces)
-- [x] Backend API: NestJS 10, Fastify/Express, Prisma ORM, otomatik testler
-- [x] Multi-tenancy: AsyncLocalStorage tabanlı tenant izolasyonu (`tenant-context`)
-- [x] Web Yönetim Paneli: React 19 + Vite 5 ile 14 temel yönetim sayfası
-- [x] Canlı Dağıtım: Ubuntu VPS + Dokploy + Cloudflare Full SSL + Nginx
+### ✅ Faz 1: Çekirdek Altyapı ve Web MVP
 
----
+- Monorepo mimarisi (Nx + pnpm workspaces).
+- Backend API: NestJS 10, Fastify/Express, Prisma ORM, PostgreSQL + Redis.
+- Multi-tenancy: `AsyncLocalStorage` tabanlı tenant izolasyonu (`tenant-context`).
+- Web Yönetim Paneli: React 19 + Vite 5 ile temel yönetim sayfaları.
+- Canlı Dağıtım: Ubuntu VPS + Dokploy + Cloudflare Full SSL.
 
-## 📌 Faz 2: Mobil Uygulama & Web V1 Stabilizasyonu (Tamamlandı ✅)
+### ✅ Faz 2: Web V1 Stabilizasyonu & Dokunsal Tasarım (Spec 0001 - 0039)
 
-- [x] Expo SDK 57 + React Native 0.86 mobil altyapısı ve standalone derleme uyumu
-- [x] ANEW (AI Native Engineering Workspace) disiplini ve kalite kapıları (`scripts/check.ps1`)
-- [x] **Web V1 Kalite Denetimi (`specs/done/0001-web-v1-stabilization-and-audit.md`):**
-  - 14 web sayfasının tümünde rol bazlı (Admin, Öğretmen, Veli) akış doğrulaması
-  - Boş veri durumlarında beyaz ekrana düşmeyi önleyen savunmacı `<EmptyState>` arayüzleri
-  - Modal erişilebilirliği (<kbd>Escape</kbd>, backdrop dismiss, `role="dialog"`)
-  - Vite SPA / API Proxy çakışmasının HTML bypass ile çözülmesi
-- [x] **Docker & DevOps İmaj Optimizasyonu (`specs/done/0003-docker-production-optimization.md`):**
-  - Kök dizine `.dockerignore` eklenmesi (context ve build cache şişmesinin önlenmesi)
-  - `apps/api/Dockerfile` multi-stage ve pnpm prune mimarisi (İmaj 1.43 GB'tan ~180 MB'a düşürüldü)
-- [x] **Mobil Veli & Öğretmen Temel Akışları (`specs/done/0002-mobile-core-features.md`):**
-  - Öğretmen yoklama alma (`check-in`) ve anlık API senkronizasyonu
-  - Günlük karne (yemek, uyku, tuvalet, ruh hali) kaydı
-  - Velinin çocuğuna ait güncel karne ve menüyü anında okuması (`/parent/children`)
-  - KidsCare Impeccable Design renk paleti ve `ErrorBoundary` entegrasyonu
+- Dokunsal (claymorphic) tasarım sistemi ve 3D buton standardı (`<TactileButton />`, `<TactileTabs />`).
+- 14 web sayfasının tümünde rol bazlı (Admin, Öğretmen, Veli) yetkilendirme.
+- Savunmacı UI ve `<EmptyState>` arayüzleri.
+- Akıllı alerjen eşleştirici (`AllergenMatcher`) ve reaktif karne uyarıları.
+- Docker imaj optimizasyonu (Multi-stage build ile imaj boyutu ~180 MB'a düşürüldü).
+- Google E-Tablo QA entegrasyonu (28 test maddesinin tamamı çözüldü).
+
+### ✅ Faz 3: Etkinlikler, İzinler & Sınıf Yönetimi (Spec 0040 - 0042)
+
+- **Spec 0040:** Veli dijital mazeret bildirimi (`AttendanceExcuse`) & etkinlik izinleri (`EventConsent`).
+- **Spec 0041:** 3 rol için kapsamlı `/events` yönetim merkezi (Dış Geziler, Okul İçi Etkinlikler, Genel İzinler).
+- **Spec 0042:** Sınıf açılışında sorumlu öğretmen ataması ve öğrenci-sınıf anlık reaktif senkronizasyonu.
+- Google E-Tablo'ya 29. satır olarak yeni özellik kaydı işlendi.
 
 ---
 
-## 📌 Faz 3: Anlık Bildirimler, Medya Depolama & Pazarlama (Aktif Sıradaki Faz 🎯)
+## 📌 Faz 3.5: Web Ticari & Operasyonel Tamamlama (Aktif Yol Haritası 🎯)
 
-> **Hedef:** Kullanıcı bağlılığını (engagement) zirveye taşımak, velilere gerçek zamanlı bildirimler sunmak ve kreşlerin sisteme katılımını sağlayacak vitrini oluşturmak.
+> **Amaç:** Web panelini bir kreş kurucusuna sunulduğunda _"Bu yazılım kreşimin tüm operasyonunu ve paramı yönetir"_ dedirtecek eksiksiz ticari seviyeye getirmek.
 
-### 1. 🔔 Anlık Bildirimler (Push Notifications — Expo & FCM)
+### 1. 💰 Spec 0043: Aidat, Tahsilat & Borç Takip Modülü (`/finance`)
 
-- [ ] **Token Yönetimi:** Kullanıcı cihaz token'larının veritabanında saklanması (`user_push_tokens` tablosu ve API endpoint'i).
-- [ ] **Yoklama Bildirimi:** Öğrenci kreşe geldiğinde veya teslim alındığında veliye anlık bildirim (_"Ada kreşe giriş yaptı ⏰"_ / _"Ada Mehmet Bey tarafından teslim alındı 🚗"_).
-- [ ] **Günlük Karne Bildirimi:** Öğretmen karne kaydını tamamladığında veliye uyarı (_"Ada'nın bugünkü karnesi paylaşıldı 🌟"_).
-- [ ] **İlaç & Acil Durum:** İlaç saati geldiğinde öğretmene, verildiğinde veliye anlık teyit bildirimi (_"Saat 14:00 antibiyotiği verildi ✓"_).
+- **Öğrenci Ücret Planı:** Aylık eğitim aidatı, servis/yemek ek ücretleri, kardeş indirimi, ödeme günü (vade).
+- **Aylık Otomatik Tahakkuk:** Her ay başında öğrenciye borç kaydı oluşturulması.
+- **Hızlı Tahsilat Girişi:** Nakit, Havale/EFT veya Kredi Kartı ile tek tıkla tahsilat ve durumun `PAID` olması.
+- **Gecikenler & Hatırlatma Paneli:** Vadesi geçmiş aidatların kırmızı rozetle listelenmesi, veliye tek tıkla nazik hatırlatma bildirimi gönderilmesi.
+- **Veli Portalı:** Velinin kendi çocuğunun aidat ve ödeme geçmişini şeffaf görmesi.
 
-### 2. 📸 Fotoğraf & Medya Depolama (Cloudflare R2 / S3 / Yerel VPS Depolama)
+### 2. 📄 Spec 0044: PDF Belge Motoru & Resmi Çıktılar
 
-- [ ] **Medya Yükleme Servisi:** Güvenli, presigned URL veya multipart upload destekli NestJS dosya yükleme modülü.
-- [ ] **Görsel Optimizasyonu:** Fotoğrafların web ve mobil için hafif thumbnail (küçük resim) ve optimize WebP formatına dönüştürülmesi.
-- [ ] **Aktivite Fotoğraf Akışı:** Öğretmenin mobil kamerayla çektiği günün etkinlik fotoğraflarını anında veli galerisine yükleyebilmesi.
+- **Dönem Sonu Pedagojik Karnesi:** Fotoğraflı, boy/kilo ve gelişim grafikli, öğretmen notlu A4 renkli karne PDF çıktısı.
+- **MEB Aylık Yoklama Çizelgesi:** Müfettiş teftişine hazır resmi sınıf yoklama listesi dökümü.
+- **Sağlık & Acil Durum Kapı Kartı:** Sınıf kapısına veya gezi dosyasına asılacak acil iletişim/alerji kartı.
 
-### 3. 🚀 Pazarlama & Karşılama Sitesi (`apps/marketing`)
+### 3. ☁️ Spec 0045: Gerçek Bulut Depolama (Cloudflare R2 / AWS S3)
 
-- [ ] **Modern Landing Page:** Kreş kurucuları ve veliler için KidsCare'in özelliklerini, güvenlik standartlarını ve mobil ekranlarını tanıtan vitrin.
-- [ ] **Demo Talep Formu:** Potansiyel kreşlerin tek tıkla demo talep edebileceği veya 14 gün ücretsiz deneme hesabı oluşturabileceği lead toplama altyapısı.
-- [ ] **Fiyatlandırma & Paketler:** Öğrenci kapasitesine göre şeffaf fiyatlandırma tablosu.
+- `s3-storage.driver.ts` sahte (stub) sürücüsünün `@aws-sdk/client-s3` ile gerçek Cloudflare R2'ye bağlanması.
+- Galeri ve portfolyo fotoğraflarının sunucu diskini şişirmesinin kesin olarak engellenmesi (VPS "İyi Misafir Protokolü").
+
+### 4. 🔑 Spec 0046: Şifremi Unuttum & E-posta Servisi (Resend / SMTP)
+
+- Web giriş ekranına _"Şifremi Unuttum"_ akışı.
+- Tek kullanımlık güvenli token ile e-posta üzerinden şifre sıfırlama.
+
+### 5. 🌐 Spec 0047: Landing Page Demo Formunun Canlıya Bağlanması
+
+- `apps/marketing` altındaki demo talep formunun simülasyondan çıkarılıp veritabanına ve yöneticiye bildirim gönderecek gerçek API'ye bağlanması.
 
 ---
 
-## 📌 Faz 4: AI Pedagojik Asistan, Storybook & İleri Analitik (Gelecek 🚀)
+## 📌 Faz 4: Mobil Uygulama (Expo SDK 57) Eşitleme (Sıradaki Faz 📱)
 
-- [ ] **AI Destekli Günlük Karne Hikayeleştirme:** Öğretmenin girdiği kısa notları veliye sıcak, samimi ve pedagojik bir günlük özet paragrafa dönüştüren yerleşik AI asistanı.
-- [ ] **Gelişim Portfolyosu & Analitik:** Çocuğun motor, sosyal ve bilişsel gelişim grafiklerinin aylık raporlanması.
-- [ ] **Storybook UI Bileşen Atölyesi (`@storybook/react-vite`):** Tüm atom ve molekül bileşenlerin izole görsel test atölyesi.
-- [ ] **Admin Erken Uyarı Merkezi:** Devamsızlık riski taşıyan öğrenciler, yaklaşan aşı takvimleri ve aidat ödeme hatırlatıcıları.
+> Web panelinin ticari ve operasyonel kararlılığı sağlandıktan sonra mobil taraf birebir eşitlenecektir.
+
+- [ ] **Push Bildirim Altyapısı:** `expo-notifications` kurulumu, APNS/FCM cihaz token kaydı ve arka plan dinleyicisi.
+- [ ] **Veli Mobil Mazeret & İzin Ekranları:** Spec 0040 ve 0041 özelliklerinin mobile taşınması (Sabah _"Gelemeyeceğimizi Bildir"_ butonu, gezi onayları).
+- [ ] **Yönetici (Admin) Mobil Ekranı:** Müdürün mobilden girdiğinde öğretmen ekranı yerine kreş KPI'larını ve aidat özetini göreceği özel arayüz.
+- [ ] **Mobil Test Paketi:** Vitest ve React Native Testing Library ile mobil test altyapısı (Spec 0024 tamamlanması).
+
+---
+
+## 📌 Faz 5: İleri Seviye Operasyonlar (V2 Gelecek 🚀)
+
+- [ ] **Servis & Güzergah Takibi:** Servis sabah bindi, indi, nerede bildirimleri ve hostes ekranı.
+- [ ] **AI Destekli Günlük Karne Özeti:** Öğretmenin notlarını sıcak ve samimi pedagojik paragrafa dönüştüren yerleşik AI asistanı.
+- [ ] **Personel Nöbet Çizelgesi:** Sabah nöbetçisi, akşam nöbetçisi ve personel izin takvimi.
+- [ ] **Gerçek Zamanlı Sohbet:** Mesajlaşmanın HTTP polling'den WebSocket / SSE mimarisine taşınması.

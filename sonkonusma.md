@@ -28,7 +28,17 @@
 
 ---
 
-## 2. Sıradaki İş / Bekleyen Durum
+## 2. Sıradaki İş: Spec 0043 (Yeni Sohbette Doğrudan Başlanacak İş)
 
-- Tüm aktif şartnameler ve QA maddeleri (28/28) çözüldü.
-- Yeni kullanıcı/müşteri geri bildirimi veya bir sonraki faz/özellik bekleniyor.
+Kullanıcı ile yapılan derin mimari denetim sonucunda **"Önce Web %100 eksiksiz tamamlanacak, ardından Mobile geçilecek"** stratejisi belirlendi ve `docs/ROADMAP.md` güncellendi.
+
+Kreş kurucuları ve yöneticileri için pazarın en kritik operasyonel ihtiyacı olan **Aidat & Tahsilat Yönetimi (`/finance`)** için şartname ve uygulama planı hazırlandı:
+
+- **Şartname:** `specs/active/0043-tuition-and-billing-management.md`
+- **Uygulama Planı:** `specs/plans/0043-tuition-and-billing-management-plan.md`
+- **Yeni Sohbette Yapılacaklar:**
+  1. `packages/database/prisma/schema.prisma` içine `StudentBillingPlan`, `BillingInvoice`, `PaymentTransaction` modellerinin ve enum'larının eklenmesi, migration çalıştırılması.
+  2. `packages/shared-types` ve `packages/shared-schemas` DTO ve Zod şemalarının tanımlanması.
+  3. `apps/api/src/modules/finance/` modülünün (`FinanceRepository`, `FinanceService`, `FinanceController` — `@Inject(...)` kuralıyla) yazılması.
+  4. `apps/admin-web/src/features/finance/FinancePage.tsx` sayfasının dokunsal tasarım sistemiyle (KPI kartları, 3 TactileTab, tahsilat modalı ve veli görünümü) yapılması.
+  5. `./scripts/check.ps1` %100 yeşil kanıtı ve yerel commit.
