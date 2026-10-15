@@ -12,29 +12,23 @@
    - Web panelinde `/events` rotası 3 rol için (Admin, Öğretmen, Veli) `Etkinlikler & İzinler` çatı sayfası olarak tamamlandı.
    - 3 Master Tab: `Dış Geziler (İzin & Servis)`, `Okul İçi Etkinlikler`, `Genel İzin & Onay Formları`.
    - `specs/active/0040` ve `0041` tamamlanıp `specs/done/` klasörüne arşivlendi.
-2. **Kural Güncellemesi (AGENTS.md):**
+2. **Spec 0042 (Yeni Sınıf Öğretmen Ataması & Öğrenci Sınıf Senkronizasyonu):**
+   - Backend `StudentsController.toResponse` fonksiyonuna `classroomId: s.classroomId ?? null` eklendi.
+   - `apps/admin-web/src/api/classrooms.ts` içine `assignTeacherToClassroom` fonksiyonu eklendi.
+   - `StudentsPage.tsx` üzerindeki `+ Yeni Sınıf` modalına öğretmen seçici dropdown eklendi ve sınıf açılırken otomatik atama sağlandı.
+   - Birim testleri (`students.controller.spec.ts`) güncellendi.
+   - `./scripts/check.ps1` %100 yeşil kalite kapısından geçti.
+   - Google E-Tablo Webhook ile Satır 27 ve 28 `✅ Çözüldü` olarak güncellendi.
+   - `specs/active/0042` tamamlanıp `specs/done/` klasörüne arşivlendi.
+3. **Kural Güncellemesi (AGENTS.md):**
    - 5. Değişmez kural olarak **"Zero flattery & Brutal honesty (Sıfır Pohpohlama & Dobra Ürün Filtresi)"** eklendi.
-3. **Google E-Tablo QA Entegrasyonu:**
+4. **Google E-Tablo QA Entegrasyonu:**
    - Webhook entegrasyonu sağlandı: `https://script.google.com/macros/s/AKfycbzor7XX4Yel5Sey042fb90z_zziYnRRJBh6xpzld31XE8cs2iBnb9WLYppEk3PiSF83tQ/exec`
-   - Tablodaki 28 satırın tümüne 10. sütun (Durum) ve 11. sütun (Öğretmen dostu çözüm özeti) yazıldı.
+   - Tablodaki 28 satırın tümüne 10. sütun (Durum) ve 11. sütun (Öğretmen dostu çözüm özeti) yazıldı; tüm maddeler çözüldü durumuna getirildi.
 
 ---
 
-## 2. Yeni Sohbette Doğrudan Başlanacak İş (Spec 0042)
+## 2. Sıradaki İş / Bekleyen Durum
 
-Google E-Tablo'daki 15 Ekim tarihli son 2 yeni madde için şartname ve plan hazırlandı:
-
-- **Şartname:** `specs/active/0042-classroom-teacher-assignment-and-student-sync.md`
-- **Plan:** `specs/plans/0042-classroom-teacher-assignment-and-student-sync-plan.md`
-
-### Çözülecek 2 Madde:
-
-1. **Öğrenci Sınıf Senkronu (Satır 28):**
-   - `apps/api/src/modules/students/controllers/students.controller.ts` dosyasında `toResponse` içine `classroomId: s.classroomId` eklenecek.
-2. **Yeni Sınıfa Öğretmen Atama (Satır 27):**
-   - `apps/admin-web/src/api/classrooms.ts` içine `assignTeacherToClassroom` eklenecek.
-   - `StudentsPage.tsx` üzerindeki `+ Yeni Sınıf` modalına öğretmen seçici dropdown eklenecek ve sınıf açılınca öğretmen atanacak.
-3. **Doğrulama & Güncelleme:**
-   - `.\scripts\check.ps1` yeşil kanıtı alınacak.
-   - Webhook ile Google Sheet'teki 27 ve 28. satırlar `✅ Çözüldü` yapılacak.
-   - Yerel commit atılacak (**ASLA PUSH YAPILMAYACAK**).
+- Tüm aktif şartnameler ve QA maddeleri (28/28) çözüldü.
+- Yeni kullanıcı/müşteri geri bildirimi veya bir sonraki faz/özellik bekleniyor.

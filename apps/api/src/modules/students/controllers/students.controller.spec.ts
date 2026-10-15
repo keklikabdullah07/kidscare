@@ -123,7 +123,7 @@ describe('StudentsController', () => {
   });
 
   describe('update', () => {
-    it('strips undefined keys and returns updated student', async () => {
+    it('strips undefined keys and returns updated student with classroomId', async () => {
       service.update.mockResolvedValue(
         Object.assign(
           new Student(
@@ -140,11 +140,15 @@ describe('StudentsController', () => {
             entity.createdAt,
             new Date(),
             entity.deletedAt,
+            'class-42',
           ),
         ),
       );
-      await expect(controller.update('t-1', 's-1', { firstName: 'Yeni' })).resolves.toMatchObject({
+      await expect(
+        controller.update('t-1', 's-1', { firstName: 'Yeni', classroomId: 'class-42' }),
+      ).resolves.toMatchObject({
         firstName: 'Yeni',
+        classroomId: 'class-42',
       });
     });
   });

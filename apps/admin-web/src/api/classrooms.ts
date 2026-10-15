@@ -39,3 +39,13 @@ export async function createClassroom(payload: {
     body: JSON.stringify(payload),
   });
 }
+
+export async function assignTeacherToClassroom(
+  classroomId: string,
+  teacherId: string,
+): Promise<Classroom> {
+  return apiFetch<Classroom>(`/classrooms/${encodeURIComponent(classroomId)}/teachers`, {
+    method: 'POST',
+    body: JSON.stringify({ teacherId }),
+  });
+}

@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { createStudent, deleteStudent, listStudents, updateStudent } from '../../api/students';
-import { createClassroom, listClassrooms } from '../../api/classrooms';
+import { assignTeacherToClassroom, createClassroom, listClassrooms } from '../../api/classrooms';
 import { listUsers } from '../../api/users';
 import type { Classroom, User } from '@kidscare/shared-types';
 import { StudentPassportModal } from './StudentPassportModal';
@@ -49,6 +49,8 @@ export function StudentsPage(): JSX.Element {
   const [showAddClassroomModal, setShowAddClassroomModal] = useState(false);
   const [newClassName, setNewClassName] = useState('');
   const [newClassAgeGroup, setNewClassAgeGroup] = useState('3-4 Yaş');
+  const [newClassTeacherId, setNewClassTeacherId] = useState('');
+  const [teachers, setTeachers] = useState<User[]>([]);
   const [classroomSubmitting, setClassroomSubmitting] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -86,6 +88,14 @@ export function StudentsPage(): JSX.Element {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(reload, []);
+
+  useEffect(() => {
+    if (isAdmin) {
+      listUsers('TEACHER')
+        .then(setTeachers)
+        .catch(() => setTeachers([]));
+    }
+  }, [isAdmin]);
 
   function handleDelete(id: string, name: string): void {
     setDeleteTarget({ id, name });
@@ -128,10 +138,19 @@ export function StudentsPage(): JSX.Element {
         payload.ageGroup = newClassAgeGroup.trim();
       }
       const created = await createClassroom(payload);
-      setClassrooms((prev) => [...prev, created]);
+      let classroomToStore = created;
+      if (newClassTeacherId) {
+        try {
+          classroomToStore = await assignTeacherToClassroom(created.id, newClassTeacherId);
+        } catch {
+          showToast('Sınıf oluşturuldu ancak öğretmen atanamadı.', 'info');
+        }
+      }
+      setClassrooms((prev) => [...prev, classroomToStore]);
       showToast(`"${created.name}" sınıfı başarıyla oluşturuldu! 🏫`, 'success');
       setShowAddClassroomModal(false);
       setNewClassName('');
+      setNewClassTeacherId('');
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Sınıf oluşturulamadı.', 'error');
     } finally {
@@ -779,7 +798,10 @@ export function StudentsPage(): JSX.Element {
               </div>
               <button
                 type="button"
-                onClick={() => setShowAddClassroomModal(false)}
+                onClick={() => {
+                  setShowAddClassroomModal(false);
+                  setNewClassTeacherId('');
+                }}
                 className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
               >
                 <X className="w-5 h-5" />
@@ -814,12 +836,33 @@ export function StudentsPage(): JSX.Element {
                 />
               </div>
 
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                  Sorumlu Öğretmen (İsteğe Bağlı)
+                </label>
+                <select
+                  value={newClassTeacherId}
+                  onChange={(e) => setNewClassTeacherId(e.target.value)}
+                  className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
+                >
+                  <option value="">Öğretmen Seçilmedi (Daha sonra atanabilir)</option>
+                  {teachers.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.email}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5">
                 <TactileButton
                   type="button"
                   variant="secondary"
                   size="md"
-                  onClick={() => setShowAddClassroomModal(false)}
+                  onClick={() => {
+                    setShowAddClassroomModal(false);
+                    setNewClassTeacherId('');
+                  }}
                 >
                   İptal
                 </TactileButton>

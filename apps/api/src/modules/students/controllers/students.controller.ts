@@ -129,6 +129,7 @@ export class StudentsController {
       notes: s.notes,
       passport: s.passport,
       isActive: s.isActive,
+      classroomId: s.classroomId ?? null,
       createdAt: s.createdAt.toISOString(),
       updatedAt: s.updatedAt.toISOString(),
       deletedAt: s.deletedAt ? s.deletedAt.toISOString() : null,
