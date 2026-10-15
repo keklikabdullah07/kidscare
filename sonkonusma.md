@@ -23,8 +23,8 @@
 3. **Kural Güncellemesi (AGENTS.md):**
    - 5. Değişmez kural olarak **"Zero flattery & Brutal honesty (Sıfır Pohpohlama & Dobra Ürün Filtresi)"** eklendi.
 4. **Google E-Tablo QA Entegrasyonu:**
-   - Webhook entegrasyonu sağlandı: `https://script.google.com/macros/s/AKfycbzor7XX4Yel5Sey042fb90z_zziYnRRJBh6xpzld31XE8cs2iBnb9WLYppEk3PiSF83tQ/exec`
    - Tablodaki 28 satırın tümüne 10. sütun (Durum) ve 11. sütun (Öğretmen dostu çözüm özeti) yazıldı; tüm maddeler çözüldü durumuna getirildi.
+   - Satır 29 olarak "✨ Yeni Özellik: Etkinlikler & İzinler (Spec 0040 & 0041)" tablonun altına başarıyla eklendi (Toplam 29 satır).
 
 ---
 
