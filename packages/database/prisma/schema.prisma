@@ -56,6 +56,9 @@ model Tenant {
   attendanceExcuses AttendanceExcuse[]
   eventConsents EventConsent[]
   eventConsentResponses EventConsentResponse[]
+  billingPlans StudentBillingPlan[]
+  billingInvoices BillingInvoice[]
+  paymentTransactions PaymentTransaction[]
 
   @@map("tenants")
 }
@@ -95,6 +98,7 @@ model User {
   attendanceExcusesCreated AttendanceExcuse[]
   eventConsentsCreated EventConsent[]
   eventConsentResponses EventConsentResponse[]
+  paymentsRecorded PaymentTransaction[] @relation("PaymentRecorder")
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -134,6 +138,9 @@ model Student {
   portfolioItems PortfolioItem[]
   attendanceExcuses AttendanceExcuse[]
   eventConsentResponses EventConsentResponse[]
+  billingPlans StudentBillingPlan[]
+  billingInvoices BillingInvoice[]
+  paymentTransactions PaymentTransaction[]
 
   @@index([tenantId])
   @@index([tenantId, parentId])
@@ -775,6 +782,91 @@ model EventConsentResponse {
   @@index([tenantId, consentId])
   @@index([tenantId, studentId])
   @@map("event_consent_responses")
+}
+
+enum InvoiceStatus {
+  PENDING
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  CREDIT_CARD
+  OTHER
+}
+
+model StudentBillingPlan {
+  id              String   @id @default(cuid())
+  tenantId        String
+  studentId       String
+  tuitionAmount   Float
+  serviceAmount   Float    @default(0)
+  activityAmount  Float    @default(0)
+  discountPercent Float    @default(0)
+  dueDayOfMonth   Int      @default(5)
+  notes           String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, studentId])
+  @@index([tenantId, isActive])
+  @@map("student_billing_plans")
+}
+
+model BillingInvoice {
+  id          String        @id @default(cuid())
+  tenantId    String
+  studentId   String
+  period      String
+  totalAmount Float
+  paidAmount  Float         @default(0)
+  dueDate     DateTime
+  status      InvoiceStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  tenant       Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  student      Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  payments     PaymentTransaction[]
+
+  @@unique([tenantId, studentId, period])
+  @@index([tenantId, studentId])
+  @@index([tenantId, status])
+  @@index([tenantId, dueDate])
+  @@map("billing_invoices")
+}
+
+model PaymentTransaction {
+  id               String        @id @default(cuid())
+  tenantId         String
+  invoiceId        String
+  studentId        String
+  amount           Float
+  method           PaymentMethod
+  paidAt           DateTime      @default(now())
+  referenceNo      String?
+  notes            String?
+  recordedByUserId String
+  createdAt        DateTime      @default(now())
+
+  tenant     Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  invoice    BillingInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  student    Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  recordedBy User           @relation("PaymentRecorder", fields: [recordedByUserId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, invoiceId])
+  @@index([tenantId, studentId])
+  @@index([tenantId, paidAt])
+  @@map("payment_transactions")
 }
 
 

@@ -24,6 +24,7 @@ import {
   Award,
   Search,
   Ticket,
+  CreditCard,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
@@ -56,6 +57,12 @@ function getNavGroupsForRole(role: string): NavGroup[] {
             label: 'Gelişim & Portfolyo',
             icon: Award,
             description: 'Gelişim raporları',
+          },
+          {
+            to: '/finance',
+            label: 'Aidat & Ödemeler',
+            icon: CreditCard,
+            description: 'Aylık aidat ve ödemeler',
           },
         ],
       },
@@ -216,6 +223,12 @@ function getNavGroupsForRole(role: string): NavGroup[] {
     groups.push({
       title: 'Yönetim',
       items: [
+        {
+          to: '/finance',
+          label: 'Aidat & Finans',
+          icon: CreditCard,
+          description: 'Tahsilat ve borç takibi',
+        },
         {
           to: '/team',
           label: 'Ekip & Roller',

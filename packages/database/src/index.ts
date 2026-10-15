@@ -24,6 +24,9 @@ export type {
   AttendanceExcuse,
   EventConsent,
   EventConsentResponse,
+  StudentBillingPlan,
+  BillingInvoice,
+  PaymentTransaction,
 } from './generated/client';
 
-export { NotificationType, MediaCategory } from './generated/client';
+export { NotificationType, MediaCategory, InvoiceStatus, PaymentMethod } from './generated/client';

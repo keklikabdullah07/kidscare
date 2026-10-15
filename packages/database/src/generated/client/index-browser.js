@@ -488,6 +488,49 @@ exports.Prisma.EventConsentResponseScalarFieldEnum = {
   respondedAt: 'respondedAt',
 };
 
+exports.Prisma.StudentBillingPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  tuitionAmount: 'tuitionAmount',
+  serviceAmount: 'serviceAmount',
+  activityAmount: 'activityAmount',
+  discountPercent: 'discountPercent',
+  dueDayOfMonth: 'dueDayOfMonth',
+  notes: 'notes',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.BillingInvoiceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studentId: 'studentId',
+  period: 'period',
+  totalAmount: 'totalAmount',
+  paidAmount: 'paidAmount',
+  dueDate: 'dueDate',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.PaymentTransactionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  invoiceId: 'invoiceId',
+  studentId: 'studentId',
+  amount: 'amount',
+  method: 'method',
+  paidAt: 'paidAt',
+  referenceNo: 'referenceNo',
+  notes: 'notes',
+  recordedByUserId: 'recordedByUserId',
+  createdAt: 'createdAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -621,6 +664,21 @@ exports.MediaCategory = exports.$Enums.MediaCategory = {
   GENERAL: 'GENERAL',
 };
 
+exports.InvoiceStatus = exports.$Enums.InvoiceStatus = {
+  PENDING: 'PENDING',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE',
+  CANCELLED: 'CANCELLED',
+};
+
+exports.PaymentMethod = exports.$Enums.PaymentMethod = {
+  CASH: 'CASH',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CREDIT_CARD: 'CREDIT_CARD',
+  OTHER: 'OTHER',
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
@@ -650,6 +708,9 @@ exports.Prisma.ModelName = {
   AttendanceExcuse: 'AttendanceExcuse',
   EventConsent: 'EventConsent',
   EventConsentResponse: 'EventConsentResponse',
+  StudentBillingPlan: 'StudentBillingPlan',
+  BillingInvoice: 'BillingInvoice',
+  PaymentTransaction: 'PaymentTransaction',
 };
 
 /**

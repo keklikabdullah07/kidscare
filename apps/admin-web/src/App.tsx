@@ -24,6 +24,7 @@ import { ParentRequestsPage } from './features/messages/ParentRequestsPage';
 import { IncidentsPage } from './features/incidents/IncidentsPage';
 import { DevelopmentPage } from './features/development/DevelopmentPage';
 import { EventsPage } from './features/events/EventsPage';
+import { FinancePage } from './features/finance/FinancePage';
 import { onUnauthorized } from './api/client';
 
 /**
@@ -182,6 +183,14 @@ export function App(): JSX.Element {
                     element={
                       <RoleGuard allowed={[...ALL_ROLES]}>
                         <EventsPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/finance"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <FinancePage />
                       </RoleGuard>
                     }
                   />

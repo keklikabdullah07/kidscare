@@ -154,6 +154,21 @@ export type EventConsent = $Result.DefaultSelection<Prisma.$EventConsentPayload>
  *
  */
 export type EventConsentResponse = $Result.DefaultSelection<Prisma.$EventConsentResponsePayload>;
+/**
+ * Model StudentBillingPlan
+ *
+ */
+export type StudentBillingPlan = $Result.DefaultSelection<Prisma.$StudentBillingPlanPayload>;
+/**
+ * Model BillingInvoice
+ *
+ */
+export type BillingInvoice = $Result.DefaultSelection<Prisma.$BillingInvoicePayload>;
+/**
+ * Model PaymentTransaction
+ *
+ */
+export type PaymentTransaction = $Result.DefaultSelection<Prisma.$PaymentTransactionPayload>;
 
 /**
  * Enums
@@ -291,6 +306,25 @@ export namespace $Enums {
   };
 
   export type MediaCategory = (typeof MediaCategory)[keyof typeof MediaCategory];
+
+  export const InvoiceStatus: {
+    PENDING: 'PENDING';
+    PARTIALLY_PAID: 'PARTIALLY_PAID';
+    PAID: 'PAID';
+    OVERDUE: 'OVERDUE';
+    CANCELLED: 'CANCELLED';
+  };
+
+  export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus];
+
+  export const PaymentMethod: {
+    CASH: 'CASH';
+    BANK_TRANSFER: 'BANK_TRANSFER';
+    CREDIT_CARD: 'CREDIT_CARD';
+    OTHER: 'OTHER';
+  };
+
+  export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod];
 }
 
 export type TenantStatus = $Enums.TenantStatus;
@@ -344,6 +378,14 @@ export const NotificationType: typeof $Enums.NotificationType;
 export type MediaCategory = $Enums.MediaCategory;
 
 export const MediaCategory: typeof $Enums.MediaCategory;
+
+export type InvoiceStatus = $Enums.InvoiceStatus;
+
+export const InvoiceStatus: typeof $Enums.InvoiceStatus;
+
+export type PaymentMethod = $Enums.PaymentMethod;
+
+export const PaymentMethod: typeof $Enums.PaymentMethod;
 
 /**
  * ##  Prisma Client ʲˢ
@@ -768,6 +810,36 @@ export class PrismaClient<
    * ```
    */
   get eventConsentResponse(): Prisma.EventConsentResponseDelegate<ExtArgs>;
+
+  /**
+   * `prisma.studentBillingPlan`: Exposes CRUD operations for the **StudentBillingPlan** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more StudentBillingPlans
+   * const studentBillingPlans = await prisma.studentBillingPlan.findMany()
+   * ```
+   */
+  get studentBillingPlan(): Prisma.StudentBillingPlanDelegate<ExtArgs>;
+
+  /**
+   * `prisma.billingInvoice`: Exposes CRUD operations for the **BillingInvoice** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more BillingInvoices
+   * const billingInvoices = await prisma.billingInvoice.findMany()
+   * ```
+   */
+  get billingInvoice(): Prisma.BillingInvoiceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.paymentTransaction`: Exposes CRUD operations for the **PaymentTransaction** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more PaymentTransactions
+   * const paymentTransactions = await prisma.paymentTransaction.findMany()
+   * ```
+   */
+  get paymentTransaction(): Prisma.PaymentTransactionDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1230,6 +1302,9 @@ export namespace Prisma {
     AttendanceExcuse: 'AttendanceExcuse';
     EventConsent: 'EventConsent';
     EventConsentResponse: 'EventConsentResponse';
+    StudentBillingPlan: 'StudentBillingPlan';
+    BillingInvoice: 'BillingInvoice';
+    PaymentTransaction: 'PaymentTransaction';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -1278,7 +1353,10 @@ export namespace Prisma {
         | 'mediaFile'
         | 'attendanceExcuse'
         | 'eventConsent'
-        | 'eventConsentResponse';
+        | 'eventConsentResponse'
+        | 'studentBillingPlan'
+        | 'billingInvoice'
+        | 'paymentTransaction';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -3242,6 +3320,216 @@ export namespace Prisma {
           };
         };
       };
+      StudentBillingPlan: {
+        payload: Prisma.$StudentBillingPlanPayload<ExtArgs>;
+        fields: Prisma.StudentBillingPlanFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.StudentBillingPlanFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.StudentBillingPlanFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload>;
+          };
+          findFirst: {
+            args: Prisma.StudentBillingPlanFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.StudentBillingPlanFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload>;
+          };
+          findMany: {
+            args: Prisma.StudentBillingPlanFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload>[];
+          };
+          create: {
+            args: Prisma.StudentBillingPlanCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload>;
+          };
+          createMany: {
+            args: Prisma.StudentBillingPlanCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.StudentBillingPlanCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload>[];
+          };
+          delete: {
+            args: Prisma.StudentBillingPlanDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload>;
+          };
+          update: {
+            args: Prisma.StudentBillingPlanUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload>;
+          };
+          deleteMany: {
+            args: Prisma.StudentBillingPlanDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.StudentBillingPlanUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.StudentBillingPlanUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$StudentBillingPlanPayload>;
+          };
+          aggregate: {
+            args: Prisma.StudentBillingPlanAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateStudentBillingPlan>;
+          };
+          groupBy: {
+            args: Prisma.StudentBillingPlanGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<StudentBillingPlanGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.StudentBillingPlanCountArgs<ExtArgs>;
+            result: $Utils.Optional<StudentBillingPlanCountAggregateOutputType> | number;
+          };
+        };
+      };
+      BillingInvoice: {
+        payload: Prisma.$BillingInvoicePayload<ExtArgs>;
+        fields: Prisma.BillingInvoiceFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.BillingInvoiceFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.BillingInvoiceFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload>;
+          };
+          findFirst: {
+            args: Prisma.BillingInvoiceFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.BillingInvoiceFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload>;
+          };
+          findMany: {
+            args: Prisma.BillingInvoiceFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload>[];
+          };
+          create: {
+            args: Prisma.BillingInvoiceCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload>;
+          };
+          createMany: {
+            args: Prisma.BillingInvoiceCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.BillingInvoiceCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload>[];
+          };
+          delete: {
+            args: Prisma.BillingInvoiceDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload>;
+          };
+          update: {
+            args: Prisma.BillingInvoiceUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload>;
+          };
+          deleteMany: {
+            args: Prisma.BillingInvoiceDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.BillingInvoiceUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.BillingInvoiceUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$BillingInvoicePayload>;
+          };
+          aggregate: {
+            args: Prisma.BillingInvoiceAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateBillingInvoice>;
+          };
+          groupBy: {
+            args: Prisma.BillingInvoiceGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<BillingInvoiceGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.BillingInvoiceCountArgs<ExtArgs>;
+            result: $Utils.Optional<BillingInvoiceCountAggregateOutputType> | number;
+          };
+        };
+      };
+      PaymentTransaction: {
+        payload: Prisma.$PaymentTransactionPayload<ExtArgs>;
+        fields: Prisma.PaymentTransactionFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.PaymentTransactionFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.PaymentTransactionFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload>;
+          };
+          findFirst: {
+            args: Prisma.PaymentTransactionFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.PaymentTransactionFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload>;
+          };
+          findMany: {
+            args: Prisma.PaymentTransactionFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload>[];
+          };
+          create: {
+            args: Prisma.PaymentTransactionCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload>;
+          };
+          createMany: {
+            args: Prisma.PaymentTransactionCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.PaymentTransactionCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload>[];
+          };
+          delete: {
+            args: Prisma.PaymentTransactionDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload>;
+          };
+          update: {
+            args: Prisma.PaymentTransactionUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload>;
+          };
+          deleteMany: {
+            args: Prisma.PaymentTransactionDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.PaymentTransactionUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.PaymentTransactionUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PaymentTransactionPayload>;
+          };
+          aggregate: {
+            args: Prisma.PaymentTransactionAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregatePaymentTransaction>;
+          };
+          groupBy: {
+            args: Prisma.PaymentTransactionGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<PaymentTransactionGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.PaymentTransactionCountArgs<ExtArgs>;
+            result: $Utils.Optional<PaymentTransactionCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -3436,6 +3724,9 @@ export namespace Prisma {
     attendanceExcuses: number;
     eventConsents: number;
     eventConsentResponses: number;
+    billingPlans: number;
+    billingInvoices: number;
+    paymentTransactions: number;
   };
 
   export type TenantCountOutputTypeSelect<
@@ -3468,6 +3759,9 @@ export namespace Prisma {
     attendanceExcuses?: boolean | TenantCountOutputTypeCountAttendanceExcusesArgs;
     eventConsents?: boolean | TenantCountOutputTypeCountEventConsentsArgs;
     eventConsentResponses?: boolean | TenantCountOutputTypeCountEventConsentResponsesArgs;
+    billingPlans?: boolean | TenantCountOutputTypeCountBillingPlansArgs;
+    billingInvoices?: boolean | TenantCountOutputTypeCountBillingInvoicesArgs;
+    paymentTransactions?: boolean | TenantCountOutputTypeCountPaymentTransactionsArgs;
   };
 
   // Custom InputTypes
@@ -3727,6 +4021,33 @@ export namespace Prisma {
   };
 
   /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountBillingPlansArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: StudentBillingPlanWhereInput;
+  };
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountBillingInvoicesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: BillingInvoiceWhereInput;
+  };
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountPaymentTransactionsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: PaymentTransactionWhereInput;
+  };
+
+  /**
    * Count Type UserCountOutputType
    */
 
@@ -3754,6 +4075,7 @@ export namespace Prisma {
     attendanceExcusesCreated: number;
     eventConsentsCreated: number;
     eventConsentResponses: number;
+    paymentsRecorded: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -3783,6 +4105,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: boolean | UserCountOutputTypeCountAttendanceExcusesCreatedArgs;
     eventConsentsCreated?: boolean | UserCountOutputTypeCountEventConsentsCreatedArgs;
     eventConsentResponses?: boolean | UserCountOutputTypeCountEventConsentResponsesArgs;
+    paymentsRecorded?: boolean | UserCountOutputTypeCountPaymentsRecordedArgs;
   };
 
   // Custom InputTypes
@@ -4006,6 +4329,15 @@ export namespace Prisma {
   };
 
   /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPaymentsRecordedArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: PaymentTransactionWhereInput;
+  };
+
+  /**
    * Count Type StudentCountOutputType
    */
 
@@ -4023,6 +4355,9 @@ export namespace Prisma {
     portfolioItems: number;
     attendanceExcuses: number;
     eventConsentResponses: number;
+    billingPlans: number;
+    billingInvoices: number;
+    paymentTransactions: number;
   };
 
   export type StudentCountOutputTypeSelect<
@@ -4041,6 +4376,9 @@ export namespace Prisma {
     portfolioItems?: boolean | StudentCountOutputTypeCountPortfolioItemsArgs;
     attendanceExcuses?: boolean | StudentCountOutputTypeCountAttendanceExcusesArgs;
     eventConsentResponses?: boolean | StudentCountOutputTypeCountEventConsentResponsesArgs;
+    billingPlans?: boolean | StudentCountOutputTypeCountBillingPlansArgs;
+    billingInvoices?: boolean | StudentCountOutputTypeCountBillingInvoicesArgs;
+    paymentTransactions?: boolean | StudentCountOutputTypeCountPaymentTransactionsArgs;
   };
 
   // Custom InputTypes
@@ -4171,6 +4509,33 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: EventConsentResponseWhereInput;
+  };
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountBillingPlansArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: StudentBillingPlanWhereInput;
+  };
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountBillingInvoicesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: BillingInvoiceWhereInput;
+  };
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountPaymentTransactionsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: PaymentTransactionWhereInput;
   };
 
   /**
@@ -4470,6 +4835,42 @@ export namespace Prisma {
   };
 
   /**
+   * Count Type BillingInvoiceCountOutputType
+   */
+
+  export type BillingInvoiceCountOutputType = {
+    payments: number;
+  };
+
+  export type BillingInvoiceCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    payments?: boolean | BillingInvoiceCountOutputTypeCountPaymentsArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * BillingInvoiceCountOutputType without action
+   */
+  export type BillingInvoiceCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoiceCountOutputType
+     */
+    select?: BillingInvoiceCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * BillingInvoiceCountOutputType without action
+   */
+  export type BillingInvoiceCountOutputTypeCountPaymentsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: PaymentTransactionWhereInput;
+  };
+
+  /**
    * Models
    */
 
@@ -4672,6 +5073,9 @@ export namespace Prisma {
         attendanceExcuses?: boolean | Tenant$attendanceExcusesArgs<ExtArgs>;
         eventConsents?: boolean | Tenant$eventConsentsArgs<ExtArgs>;
         eventConsentResponses?: boolean | Tenant$eventConsentResponsesArgs<ExtArgs>;
+        billingPlans?: boolean | Tenant$billingPlansArgs<ExtArgs>;
+        billingInvoices?: boolean | Tenant$billingInvoicesArgs<ExtArgs>;
+        paymentTransactions?: boolean | Tenant$paymentTransactionsArgs<ExtArgs>;
         _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['tenant']
@@ -4728,6 +5132,9 @@ export namespace Prisma {
     attendanceExcuses?: boolean | Tenant$attendanceExcusesArgs<ExtArgs>;
     eventConsents?: boolean | Tenant$eventConsentsArgs<ExtArgs>;
     eventConsentResponses?: boolean | Tenant$eventConsentResponsesArgs<ExtArgs>;
+    billingPlans?: boolean | Tenant$billingPlansArgs<ExtArgs>;
+    billingInvoices?: boolean | Tenant$billingInvoicesArgs<ExtArgs>;
+    paymentTransactions?: boolean | Tenant$paymentTransactionsArgs<ExtArgs>;
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TenantIncludeCreateManyAndReturn<
@@ -4764,6 +5171,9 @@ export namespace Prisma {
       attendanceExcuses: Prisma.$AttendanceExcusePayload<ExtArgs>[];
       eventConsents: Prisma.$EventConsentPayload<ExtArgs>[];
       eventConsentResponses: Prisma.$EventConsentResponsePayload<ExtArgs>[];
+      billingPlans: Prisma.$StudentBillingPlanPayload<ExtArgs>[];
+      billingInvoices: Prisma.$BillingInvoicePayload<ExtArgs>[];
+      paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -5335,6 +5745,21 @@ export namespace Prisma {
       args?: Subset<T, Tenant$eventConsentResponsesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    billingPlans<T extends Tenant$billingPlansArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$billingPlansArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    billingInvoices<T extends Tenant$billingInvoicesArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$billingInvoicesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    paymentTransactions<T extends Tenant$paymentTransactionsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$paymentTransactionsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6310,6 +6735,74 @@ export namespace Prisma {
   };
 
   /**
+   * Tenant.billingPlans
+   */
+  export type Tenant$billingPlansArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    where?: StudentBillingPlanWhereInput;
+    orderBy?:
+      StudentBillingPlanOrderByWithRelationInput | StudentBillingPlanOrderByWithRelationInput[];
+    cursor?: StudentBillingPlanWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: StudentBillingPlanScalarFieldEnum | StudentBillingPlanScalarFieldEnum[];
+  };
+
+  /**
+   * Tenant.billingInvoices
+   */
+  export type Tenant$billingInvoicesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    where?: BillingInvoiceWhereInput;
+    orderBy?: BillingInvoiceOrderByWithRelationInput | BillingInvoiceOrderByWithRelationInput[];
+    cursor?: BillingInvoiceWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: BillingInvoiceScalarFieldEnum | BillingInvoiceScalarFieldEnum[];
+  };
+
+  /**
+   * Tenant.paymentTransactions
+   */
+  export type Tenant$paymentTransactionsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    where?: PaymentTransactionWhereInput;
+    orderBy?:
+      PaymentTransactionOrderByWithRelationInput | PaymentTransactionOrderByWithRelationInput[];
+    cursor?: PaymentTransactionWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[];
+  };
+
+  /**
    * Tenant without action
    */
   export type TenantDefaultArgs<
@@ -6545,6 +7038,7 @@ export namespace Prisma {
         attendanceExcusesCreated?: boolean | User$attendanceExcusesCreatedArgs<ExtArgs>;
         eventConsentsCreated?: boolean | User$eventConsentsCreatedArgs<ExtArgs>;
         eventConsentResponses?: boolean | User$eventConsentResponsesArgs<ExtArgs>;
+        paymentsRecorded?: boolean | User$paymentsRecordedArgs<ExtArgs>;
         _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['user']
@@ -6605,6 +7099,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: boolean | User$attendanceExcusesCreatedArgs<ExtArgs>;
     eventConsentsCreated?: boolean | User$eventConsentsCreatedArgs<ExtArgs>;
     eventConsentResponses?: boolean | User$eventConsentResponsesArgs<ExtArgs>;
+    paymentsRecorded?: boolean | User$paymentsRecordedArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -6640,6 +7135,7 @@ export namespace Prisma {
       attendanceExcusesCreated: Prisma.$AttendanceExcusePayload<ExtArgs>[];
       eventConsentsCreated: Prisma.$EventConsentPayload<ExtArgs>[];
       eventConsentResponses: Prisma.$EventConsentResponsePayload<ExtArgs>[];
+      paymentsRecorded: Prisma.$PaymentTransactionPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -7207,6 +7703,11 @@ export namespace Prisma {
       args?: Subset<T, User$eventConsentResponsesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    paymentsRecorded<T extends User$paymentsRecordedArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$paymentsRecordedArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8096,6 +8597,29 @@ export namespace Prisma {
   };
 
   /**
+   * User.paymentsRecorded
+   */
+  export type User$paymentsRecordedArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    where?: PaymentTransactionWhereInput;
+    orderBy?:
+      PaymentTransactionOrderByWithRelationInput | PaymentTransactionOrderByWithRelationInput[];
+    cursor?: PaymentTransactionWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[];
+  };
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
@@ -8358,6 +8882,9 @@ export namespace Prisma {
         portfolioItems?: boolean | Student$portfolioItemsArgs<ExtArgs>;
         attendanceExcuses?: boolean | Student$attendanceExcusesArgs<ExtArgs>;
         eventConsentResponses?: boolean | Student$eventConsentResponsesArgs<ExtArgs>;
+        billingPlans?: boolean | Student$billingPlansArgs<ExtArgs>;
+        billingInvoices?: boolean | Student$billingInvoicesArgs<ExtArgs>;
+        paymentTransactions?: boolean | Student$paymentTransactionsArgs<ExtArgs>;
         _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['student']
@@ -8422,6 +8949,9 @@ export namespace Prisma {
     portfolioItems?: boolean | Student$portfolioItemsArgs<ExtArgs>;
     attendanceExcuses?: boolean | Student$attendanceExcusesArgs<ExtArgs>;
     eventConsentResponses?: boolean | Student$eventConsentResponsesArgs<ExtArgs>;
+    billingPlans?: boolean | Student$billingPlansArgs<ExtArgs>;
+    billingInvoices?: boolean | Student$billingInvoicesArgs<ExtArgs>;
+    paymentTransactions?: boolean | Student$paymentTransactionsArgs<ExtArgs>;
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type StudentIncludeCreateManyAndReturn<
@@ -8452,6 +8982,9 @@ export namespace Prisma {
         portfolioItems: Prisma.$PortfolioItemPayload<ExtArgs>[];
         attendanceExcuses: Prisma.$AttendanceExcusePayload<ExtArgs>[];
         eventConsentResponses: Prisma.$EventConsentResponsePayload<ExtArgs>[];
+        billingPlans: Prisma.$StudentBillingPlanPayload<ExtArgs>[];
+        billingInvoices: Prisma.$BillingInvoicePayload<ExtArgs>[];
+        paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[];
       };
       scalars: $Extensions.GetPayloadResult<
         {
@@ -8984,6 +9517,21 @@ export namespace Prisma {
       args?: Subset<T, Student$eventConsentResponsesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$EventConsentResponsePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    billingPlans<T extends Student$billingPlansArgs<ExtArgs> = {}>(
+      args?: Subset<T, Student$billingPlansArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    billingInvoices<T extends Student$billingInvoicesArgs<ExtArgs> = {}>(
+      args?: Subset<T, Student$billingInvoicesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    paymentTransactions<T extends Student$paymentTransactionsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Student$paymentTransactionsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9694,6 +10242,74 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: EventConsentResponseScalarFieldEnum | EventConsentResponseScalarFieldEnum[];
+  };
+
+  /**
+   * Student.billingPlans
+   */
+  export type Student$billingPlansArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    where?: StudentBillingPlanWhereInput;
+    orderBy?:
+      StudentBillingPlanOrderByWithRelationInput | StudentBillingPlanOrderByWithRelationInput[];
+    cursor?: StudentBillingPlanWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: StudentBillingPlanScalarFieldEnum | StudentBillingPlanScalarFieldEnum[];
+  };
+
+  /**
+   * Student.billingInvoices
+   */
+  export type Student$billingInvoicesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    where?: BillingInvoiceWhereInput;
+    orderBy?: BillingInvoiceOrderByWithRelationInput | BillingInvoiceOrderByWithRelationInput[];
+    cursor?: BillingInvoiceWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: BillingInvoiceScalarFieldEnum | BillingInvoiceScalarFieldEnum[];
+  };
+
+  /**
+   * Student.paymentTransactions
+   */
+  export type Student$paymentTransactionsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    where?: PaymentTransactionWhereInput;
+    orderBy?:
+      PaymentTransactionOrderByWithRelationInput | PaymentTransactionOrderByWithRelationInput[];
+    cursor?: PaymentTransactionWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[];
   };
 
   /**
@@ -38824,6 +39440,3633 @@ export namespace Prisma {
   };
 
   /**
+   * Model StudentBillingPlan
+   */
+
+  export type AggregateStudentBillingPlan = {
+    _count: StudentBillingPlanCountAggregateOutputType | null;
+    _avg: StudentBillingPlanAvgAggregateOutputType | null;
+    _sum: StudentBillingPlanSumAggregateOutputType | null;
+    _min: StudentBillingPlanMinAggregateOutputType | null;
+    _max: StudentBillingPlanMaxAggregateOutputType | null;
+  };
+
+  export type StudentBillingPlanAvgAggregateOutputType = {
+    tuitionAmount: number | null;
+    serviceAmount: number | null;
+    activityAmount: number | null;
+    discountPercent: number | null;
+    dueDayOfMonth: number | null;
+  };
+
+  export type StudentBillingPlanSumAggregateOutputType = {
+    tuitionAmount: number | null;
+    serviceAmount: number | null;
+    activityAmount: number | null;
+    discountPercent: number | null;
+    dueDayOfMonth: number | null;
+  };
+
+  export type StudentBillingPlanMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    studentId: string | null;
+    tuitionAmount: number | null;
+    serviceAmount: number | null;
+    activityAmount: number | null;
+    discountPercent: number | null;
+    dueDayOfMonth: number | null;
+    notes: string | null;
+    isActive: boolean | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type StudentBillingPlanMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    studentId: string | null;
+    tuitionAmount: number | null;
+    serviceAmount: number | null;
+    activityAmount: number | null;
+    discountPercent: number | null;
+    dueDayOfMonth: number | null;
+    notes: string | null;
+    isActive: boolean | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type StudentBillingPlanCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    studentId: number;
+    tuitionAmount: number;
+    serviceAmount: number;
+    activityAmount: number;
+    discountPercent: number;
+    dueDayOfMonth: number;
+    notes: number;
+    isActive: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type StudentBillingPlanAvgAggregateInputType = {
+    tuitionAmount?: true;
+    serviceAmount?: true;
+    activityAmount?: true;
+    discountPercent?: true;
+    dueDayOfMonth?: true;
+  };
+
+  export type StudentBillingPlanSumAggregateInputType = {
+    tuitionAmount?: true;
+    serviceAmount?: true;
+    activityAmount?: true;
+    discountPercent?: true;
+    dueDayOfMonth?: true;
+  };
+
+  export type StudentBillingPlanMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    tuitionAmount?: true;
+    serviceAmount?: true;
+    activityAmount?: true;
+    discountPercent?: true;
+    dueDayOfMonth?: true;
+    notes?: true;
+    isActive?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type StudentBillingPlanMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    tuitionAmount?: true;
+    serviceAmount?: true;
+    activityAmount?: true;
+    discountPercent?: true;
+    dueDayOfMonth?: true;
+    notes?: true;
+    isActive?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type StudentBillingPlanCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    tuitionAmount?: true;
+    serviceAmount?: true;
+    activityAmount?: true;
+    discountPercent?: true;
+    dueDayOfMonth?: true;
+    notes?: true;
+    isActive?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type StudentBillingPlanAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which StudentBillingPlan to aggregate.
+     */
+    where?: StudentBillingPlanWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of StudentBillingPlans to fetch.
+     */
+    orderBy?:
+      StudentBillingPlanOrderByWithRelationInput | StudentBillingPlanOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: StudentBillingPlanWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` StudentBillingPlans from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` StudentBillingPlans.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned StudentBillingPlans
+     **/
+    _count?: true | StudentBillingPlanCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: StudentBillingPlanAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: StudentBillingPlanSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: StudentBillingPlanMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: StudentBillingPlanMaxAggregateInputType;
+  };
+
+  export type GetStudentBillingPlanAggregateType<T extends StudentBillingPlanAggregateArgs> = {
+    [P in keyof T & keyof AggregateStudentBillingPlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentBillingPlan[P]>
+      : GetScalarType<T[P], AggregateStudentBillingPlan[P]>;
+  };
+
+  export type StudentBillingPlanGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: StudentBillingPlanWhereInput;
+    orderBy?:
+      | StudentBillingPlanOrderByWithAggregationInput
+      | StudentBillingPlanOrderByWithAggregationInput[];
+    by: StudentBillingPlanScalarFieldEnum[] | StudentBillingPlanScalarFieldEnum;
+    having?: StudentBillingPlanScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: StudentBillingPlanCountAggregateInputType | true;
+    _avg?: StudentBillingPlanAvgAggregateInputType;
+    _sum?: StudentBillingPlanSumAggregateInputType;
+    _min?: StudentBillingPlanMinAggregateInputType;
+    _max?: StudentBillingPlanMaxAggregateInputType;
+  };
+
+  export type StudentBillingPlanGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    studentId: string;
+    tuitionAmount: number;
+    serviceAmount: number;
+    activityAmount: number;
+    discountPercent: number;
+    dueDayOfMonth: number;
+    notes: string | null;
+    isActive: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: StudentBillingPlanCountAggregateOutputType | null;
+    _avg: StudentBillingPlanAvgAggregateOutputType | null;
+    _sum: StudentBillingPlanSumAggregateOutputType | null;
+    _min: StudentBillingPlanMinAggregateOutputType | null;
+    _max: StudentBillingPlanMaxAggregateOutputType | null;
+  };
+
+  type GetStudentBillingPlanGroupByPayload<T extends StudentBillingPlanGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<StudentBillingPlanGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof StudentBillingPlanGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentBillingPlanGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentBillingPlanGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type StudentBillingPlanSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      studentId?: boolean;
+      tuitionAmount?: boolean;
+      serviceAmount?: boolean;
+      activityAmount?: boolean;
+      discountPercent?: boolean;
+      dueDayOfMonth?: boolean;
+      notes?: boolean;
+      isActive?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['studentBillingPlan']
+  >;
+
+  export type StudentBillingPlanSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      studentId?: boolean;
+      tuitionAmount?: boolean;
+      serviceAmount?: boolean;
+      activityAmount?: boolean;
+      discountPercent?: boolean;
+      dueDayOfMonth?: boolean;
+      notes?: boolean;
+      isActive?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['studentBillingPlan']
+  >;
+
+  export type StudentBillingPlanSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    studentId?: boolean;
+    tuitionAmount?: boolean;
+    serviceAmount?: boolean;
+    activityAmount?: boolean;
+    discountPercent?: boolean;
+    dueDayOfMonth?: boolean;
+    notes?: boolean;
+    isActive?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type StudentBillingPlanInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+  };
+  export type StudentBillingPlanIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+  };
+
+  export type $StudentBillingPlanPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'StudentBillingPlan';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      student: Prisma.$StudentPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        studentId: string;
+        tuitionAmount: number;
+        serviceAmount: number;
+        activityAmount: number;
+        discountPercent: number;
+        dueDayOfMonth: number;
+        notes: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['studentBillingPlan']
+    >;
+    composites: {};
+  };
+
+  type StudentBillingPlanGetPayload<
+    S extends boolean | null | undefined | StudentBillingPlanDefaultArgs,
+  > = $Result.GetResult<Prisma.$StudentBillingPlanPayload, S>;
+
+  type StudentBillingPlanCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<StudentBillingPlanFindManyArgs, 'select' | 'include' | 'distinct'> & {
+    select?: StudentBillingPlanCountAggregateInputType | true;
+  };
+
+  export interface StudentBillingPlanDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['StudentBillingPlan'];
+      meta: { name: 'StudentBillingPlan' };
+    };
+    /**
+     * Find zero or one StudentBillingPlan that matches the filter.
+     * @param {StudentBillingPlanFindUniqueArgs} args - Arguments to find a StudentBillingPlan
+     * @example
+     * // Get one StudentBillingPlan
+     * const studentBillingPlan = await prisma.studentBillingPlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentBillingPlanFindUniqueArgs>(
+      args: SelectSubset<T, StudentBillingPlanFindUniqueArgs<ExtArgs>>,
+    ): Prisma__StudentBillingPlanClient<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one StudentBillingPlan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentBillingPlanFindUniqueOrThrowArgs} args - Arguments to find a StudentBillingPlan
+     * @example
+     * // Get one StudentBillingPlan
+     * const studentBillingPlan = await prisma.studentBillingPlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentBillingPlanFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, StudentBillingPlanFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__StudentBillingPlanClient<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first StudentBillingPlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentBillingPlanFindFirstArgs} args - Arguments to find a StudentBillingPlan
+     * @example
+     * // Get one StudentBillingPlan
+     * const studentBillingPlan = await prisma.studentBillingPlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentBillingPlanFindFirstArgs>(
+      args?: SelectSubset<T, StudentBillingPlanFindFirstArgs<ExtArgs>>,
+    ): Prisma__StudentBillingPlanClient<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first StudentBillingPlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentBillingPlanFindFirstOrThrowArgs} args - Arguments to find a StudentBillingPlan
+     * @example
+     * // Get one StudentBillingPlan
+     * const studentBillingPlan = await prisma.studentBillingPlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentBillingPlanFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, StudentBillingPlanFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__StudentBillingPlanClient<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more StudentBillingPlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentBillingPlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentBillingPlans
+     * const studentBillingPlans = await prisma.studentBillingPlan.findMany()
+     *
+     * // Get first 10 StudentBillingPlans
+     * const studentBillingPlans = await prisma.studentBillingPlan.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const studentBillingPlanWithIdOnly = await prisma.studentBillingPlan.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends StudentBillingPlanFindManyArgs>(
+      args?: SelectSubset<T, StudentBillingPlanFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'findMany'>
+    >;
+
+    /**
+     * Create a StudentBillingPlan.
+     * @param {StudentBillingPlanCreateArgs} args - Arguments to create a StudentBillingPlan.
+     * @example
+     * // Create one StudentBillingPlan
+     * const StudentBillingPlan = await prisma.studentBillingPlan.create({
+     *   data: {
+     *     // ... data to create a StudentBillingPlan
+     *   }
+     * })
+     *
+     */
+    create<T extends StudentBillingPlanCreateArgs>(
+      args: SelectSubset<T, StudentBillingPlanCreateArgs<ExtArgs>>,
+    ): Prisma__StudentBillingPlanClient<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many StudentBillingPlans.
+     * @param {StudentBillingPlanCreateManyArgs} args - Arguments to create many StudentBillingPlans.
+     * @example
+     * // Create many StudentBillingPlans
+     * const studentBillingPlan = await prisma.studentBillingPlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends StudentBillingPlanCreateManyArgs>(
+      args?: SelectSubset<T, StudentBillingPlanCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many StudentBillingPlans and returns the data saved in the database.
+     * @param {StudentBillingPlanCreateManyAndReturnArgs} args - Arguments to create many StudentBillingPlans.
+     * @example
+     * // Create many StudentBillingPlans
+     * const studentBillingPlan = await prisma.studentBillingPlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many StudentBillingPlans and only return the `id`
+     * const studentBillingPlanWithIdOnly = await prisma.studentBillingPlan.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends StudentBillingPlanCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, StudentBillingPlanCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a StudentBillingPlan.
+     * @param {StudentBillingPlanDeleteArgs} args - Arguments to delete one StudentBillingPlan.
+     * @example
+     * // Delete one StudentBillingPlan
+     * const StudentBillingPlan = await prisma.studentBillingPlan.delete({
+     *   where: {
+     *     // ... filter to delete one StudentBillingPlan
+     *   }
+     * })
+     *
+     */
+    delete<T extends StudentBillingPlanDeleteArgs>(
+      args: SelectSubset<T, StudentBillingPlanDeleteArgs<ExtArgs>>,
+    ): Prisma__StudentBillingPlanClient<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one StudentBillingPlan.
+     * @param {StudentBillingPlanUpdateArgs} args - Arguments to update one StudentBillingPlan.
+     * @example
+     * // Update one StudentBillingPlan
+     * const studentBillingPlan = await prisma.studentBillingPlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends StudentBillingPlanUpdateArgs>(
+      args: SelectSubset<T, StudentBillingPlanUpdateArgs<ExtArgs>>,
+    ): Prisma__StudentBillingPlanClient<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more StudentBillingPlans.
+     * @param {StudentBillingPlanDeleteManyArgs} args - Arguments to filter StudentBillingPlans to delete.
+     * @example
+     * // Delete a few StudentBillingPlans
+     * const { count } = await prisma.studentBillingPlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends StudentBillingPlanDeleteManyArgs>(
+      args?: SelectSubset<T, StudentBillingPlanDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more StudentBillingPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentBillingPlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentBillingPlans
+     * const studentBillingPlan = await prisma.studentBillingPlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends StudentBillingPlanUpdateManyArgs>(
+      args: SelectSubset<T, StudentBillingPlanUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one StudentBillingPlan.
+     * @param {StudentBillingPlanUpsertArgs} args - Arguments to update or create a StudentBillingPlan.
+     * @example
+     * // Update or create a StudentBillingPlan
+     * const studentBillingPlan = await prisma.studentBillingPlan.upsert({
+     *   create: {
+     *     // ... data to create a StudentBillingPlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentBillingPlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentBillingPlanUpsertArgs>(
+      args: SelectSubset<T, StudentBillingPlanUpsertArgs<ExtArgs>>,
+    ): Prisma__StudentBillingPlanClient<
+      $Result.GetResult<Prisma.$StudentBillingPlanPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of StudentBillingPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentBillingPlanCountArgs} args - Arguments to filter StudentBillingPlans to count.
+     * @example
+     * // Count the number of StudentBillingPlans
+     * const count = await prisma.studentBillingPlan.count({
+     *   where: {
+     *     // ... the filter for the StudentBillingPlans we want to count
+     *   }
+     * })
+     **/
+    count<T extends StudentBillingPlanCountArgs>(
+      args?: Subset<T, StudentBillingPlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentBillingPlanCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a StudentBillingPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentBillingPlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends StudentBillingPlanAggregateArgs>(
+      args: Subset<T, StudentBillingPlanAggregateArgs>,
+    ): Prisma.PrismaPromise<GetStudentBillingPlanAggregateType<T>>;
+
+    /**
+     * Group by StudentBillingPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentBillingPlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends StudentBillingPlanGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: StudentBillingPlanGroupByArgs['orderBy'] }
+        : { orderBy?: StudentBillingPlanGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, StudentBillingPlanGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetStudentBillingPlanGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the StudentBillingPlan model
+     */
+    readonly fields: StudentBillingPlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentBillingPlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentBillingPlanClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, StudentDefaultArgs<ExtArgs>>,
+    ): Prisma__StudentClient<
+      $Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the StudentBillingPlan model
+   */
+  interface StudentBillingPlanFieldRefs {
+    readonly id: FieldRef<'StudentBillingPlan', 'String'>;
+    readonly tenantId: FieldRef<'StudentBillingPlan', 'String'>;
+    readonly studentId: FieldRef<'StudentBillingPlan', 'String'>;
+    readonly tuitionAmount: FieldRef<'StudentBillingPlan', 'Float'>;
+    readonly serviceAmount: FieldRef<'StudentBillingPlan', 'Float'>;
+    readonly activityAmount: FieldRef<'StudentBillingPlan', 'Float'>;
+    readonly discountPercent: FieldRef<'StudentBillingPlan', 'Float'>;
+    readonly dueDayOfMonth: FieldRef<'StudentBillingPlan', 'Int'>;
+    readonly notes: FieldRef<'StudentBillingPlan', 'String'>;
+    readonly isActive: FieldRef<'StudentBillingPlan', 'Boolean'>;
+    readonly createdAt: FieldRef<'StudentBillingPlan', 'DateTime'>;
+    readonly updatedAt: FieldRef<'StudentBillingPlan', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * StudentBillingPlan findUnique
+   */
+  export type StudentBillingPlanFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * Filter, which StudentBillingPlan to fetch.
+     */
+    where: StudentBillingPlanWhereUniqueInput;
+  };
+
+  /**
+   * StudentBillingPlan findUniqueOrThrow
+   */
+  export type StudentBillingPlanFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * Filter, which StudentBillingPlan to fetch.
+     */
+    where: StudentBillingPlanWhereUniqueInput;
+  };
+
+  /**
+   * StudentBillingPlan findFirst
+   */
+  export type StudentBillingPlanFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * Filter, which StudentBillingPlan to fetch.
+     */
+    where?: StudentBillingPlanWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of StudentBillingPlans to fetch.
+     */
+    orderBy?:
+      StudentBillingPlanOrderByWithRelationInput | StudentBillingPlanOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for StudentBillingPlans.
+     */
+    cursor?: StudentBillingPlanWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` StudentBillingPlans from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` StudentBillingPlans.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of StudentBillingPlans.
+     */
+    distinct?: StudentBillingPlanScalarFieldEnum | StudentBillingPlanScalarFieldEnum[];
+  };
+
+  /**
+   * StudentBillingPlan findFirstOrThrow
+   */
+  export type StudentBillingPlanFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * Filter, which StudentBillingPlan to fetch.
+     */
+    where?: StudentBillingPlanWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of StudentBillingPlans to fetch.
+     */
+    orderBy?:
+      StudentBillingPlanOrderByWithRelationInput | StudentBillingPlanOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for StudentBillingPlans.
+     */
+    cursor?: StudentBillingPlanWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` StudentBillingPlans from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` StudentBillingPlans.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of StudentBillingPlans.
+     */
+    distinct?: StudentBillingPlanScalarFieldEnum | StudentBillingPlanScalarFieldEnum[];
+  };
+
+  /**
+   * StudentBillingPlan findMany
+   */
+  export type StudentBillingPlanFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * Filter, which StudentBillingPlans to fetch.
+     */
+    where?: StudentBillingPlanWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of StudentBillingPlans to fetch.
+     */
+    orderBy?:
+      StudentBillingPlanOrderByWithRelationInput | StudentBillingPlanOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing StudentBillingPlans.
+     */
+    cursor?: StudentBillingPlanWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` StudentBillingPlans from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` StudentBillingPlans.
+     */
+    skip?: number;
+    distinct?: StudentBillingPlanScalarFieldEnum | StudentBillingPlanScalarFieldEnum[];
+  };
+
+  /**
+   * StudentBillingPlan create
+   */
+  export type StudentBillingPlanCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a StudentBillingPlan.
+     */
+    data: XOR<StudentBillingPlanCreateInput, StudentBillingPlanUncheckedCreateInput>;
+  };
+
+  /**
+   * StudentBillingPlan createMany
+   */
+  export type StudentBillingPlanCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many StudentBillingPlans.
+     */
+    data: StudentBillingPlanCreateManyInput | StudentBillingPlanCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * StudentBillingPlan createManyAndReturn
+   */
+  export type StudentBillingPlanCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many StudentBillingPlans.
+     */
+    data: StudentBillingPlanCreateManyInput | StudentBillingPlanCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * StudentBillingPlan update
+   */
+  export type StudentBillingPlanUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a StudentBillingPlan.
+     */
+    data: XOR<StudentBillingPlanUpdateInput, StudentBillingPlanUncheckedUpdateInput>;
+    /**
+     * Choose, which StudentBillingPlan to update.
+     */
+    where: StudentBillingPlanWhereUniqueInput;
+  };
+
+  /**
+   * StudentBillingPlan updateMany
+   */
+  export type StudentBillingPlanUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update StudentBillingPlans.
+     */
+    data: XOR<
+      StudentBillingPlanUpdateManyMutationInput,
+      StudentBillingPlanUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which StudentBillingPlans to update
+     */
+    where?: StudentBillingPlanWhereInput;
+  };
+
+  /**
+   * StudentBillingPlan upsert
+   */
+  export type StudentBillingPlanUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the StudentBillingPlan to update in case it exists.
+     */
+    where: StudentBillingPlanWhereUniqueInput;
+    /**
+     * In case the StudentBillingPlan found by the `where` argument doesn't exist, create a new StudentBillingPlan with this data.
+     */
+    create: XOR<StudentBillingPlanCreateInput, StudentBillingPlanUncheckedCreateInput>;
+    /**
+     * In case the StudentBillingPlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentBillingPlanUpdateInput, StudentBillingPlanUncheckedUpdateInput>;
+  };
+
+  /**
+   * StudentBillingPlan delete
+   */
+  export type StudentBillingPlanDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+    /**
+     * Filter which StudentBillingPlan to delete.
+     */
+    where: StudentBillingPlanWhereUniqueInput;
+  };
+
+  /**
+   * StudentBillingPlan deleteMany
+   */
+  export type StudentBillingPlanDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which StudentBillingPlans to delete
+     */
+    where?: StudentBillingPlanWhereInput;
+  };
+
+  /**
+   * StudentBillingPlan without action
+   */
+  export type StudentBillingPlanDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the StudentBillingPlan
+     */
+    select?: StudentBillingPlanSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBillingPlanInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model BillingInvoice
+   */
+
+  export type AggregateBillingInvoice = {
+    _count: BillingInvoiceCountAggregateOutputType | null;
+    _avg: BillingInvoiceAvgAggregateOutputType | null;
+    _sum: BillingInvoiceSumAggregateOutputType | null;
+    _min: BillingInvoiceMinAggregateOutputType | null;
+    _max: BillingInvoiceMaxAggregateOutputType | null;
+  };
+
+  export type BillingInvoiceAvgAggregateOutputType = {
+    totalAmount: number | null;
+    paidAmount: number | null;
+  };
+
+  export type BillingInvoiceSumAggregateOutputType = {
+    totalAmount: number | null;
+    paidAmount: number | null;
+  };
+
+  export type BillingInvoiceMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    studentId: string | null;
+    period: string | null;
+    totalAmount: number | null;
+    paidAmount: number | null;
+    dueDate: Date | null;
+    status: $Enums.InvoiceStatus | null;
+    notes: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type BillingInvoiceMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    studentId: string | null;
+    period: string | null;
+    totalAmount: number | null;
+    paidAmount: number | null;
+    dueDate: Date | null;
+    status: $Enums.InvoiceStatus | null;
+    notes: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type BillingInvoiceCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    studentId: number;
+    period: number;
+    totalAmount: number;
+    paidAmount: number;
+    dueDate: number;
+    status: number;
+    notes: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type BillingInvoiceAvgAggregateInputType = {
+    totalAmount?: true;
+    paidAmount?: true;
+  };
+
+  export type BillingInvoiceSumAggregateInputType = {
+    totalAmount?: true;
+    paidAmount?: true;
+  };
+
+  export type BillingInvoiceMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    period?: true;
+    totalAmount?: true;
+    paidAmount?: true;
+    dueDate?: true;
+    status?: true;
+    notes?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type BillingInvoiceMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    period?: true;
+    totalAmount?: true;
+    paidAmount?: true;
+    dueDate?: true;
+    status?: true;
+    notes?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type BillingInvoiceCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    studentId?: true;
+    period?: true;
+    totalAmount?: true;
+    paidAmount?: true;
+    dueDate?: true;
+    status?: true;
+    notes?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type BillingInvoiceAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which BillingInvoice to aggregate.
+     */
+    where?: BillingInvoiceWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of BillingInvoices to fetch.
+     */
+    orderBy?: BillingInvoiceOrderByWithRelationInput | BillingInvoiceOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: BillingInvoiceWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` BillingInvoices from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` BillingInvoices.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned BillingInvoices
+     **/
+    _count?: true | BillingInvoiceCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: BillingInvoiceAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: BillingInvoiceSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: BillingInvoiceMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: BillingInvoiceMaxAggregateInputType;
+  };
+
+  export type GetBillingInvoiceAggregateType<T extends BillingInvoiceAggregateArgs> = {
+    [P in keyof T & keyof AggregateBillingInvoice]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBillingInvoice[P]>
+      : GetScalarType<T[P], AggregateBillingInvoice[P]>;
+  };
+
+  export type BillingInvoiceGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: BillingInvoiceWhereInput;
+    orderBy?:
+      BillingInvoiceOrderByWithAggregationInput | BillingInvoiceOrderByWithAggregationInput[];
+    by: BillingInvoiceScalarFieldEnum[] | BillingInvoiceScalarFieldEnum;
+    having?: BillingInvoiceScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: BillingInvoiceCountAggregateInputType | true;
+    _avg?: BillingInvoiceAvgAggregateInputType;
+    _sum?: BillingInvoiceSumAggregateInputType;
+    _min?: BillingInvoiceMinAggregateInputType;
+    _max?: BillingInvoiceMaxAggregateInputType;
+  };
+
+  export type BillingInvoiceGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    studentId: string;
+    period: string;
+    totalAmount: number;
+    paidAmount: number;
+    dueDate: Date;
+    status: $Enums.InvoiceStatus;
+    notes: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: BillingInvoiceCountAggregateOutputType | null;
+    _avg: BillingInvoiceAvgAggregateOutputType | null;
+    _sum: BillingInvoiceSumAggregateOutputType | null;
+    _min: BillingInvoiceMinAggregateOutputType | null;
+    _max: BillingInvoiceMaxAggregateOutputType | null;
+  };
+
+  type GetBillingInvoiceGroupByPayload<T extends BillingInvoiceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BillingInvoiceGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof BillingInvoiceGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], BillingInvoiceGroupByOutputType[P]>
+          : GetScalarType<T[P], BillingInvoiceGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type BillingInvoiceSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      studentId?: boolean;
+      period?: boolean;
+      totalAmount?: boolean;
+      paidAmount?: boolean;
+      dueDate?: boolean;
+      status?: boolean;
+      notes?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+      payments?: boolean | BillingInvoice$paymentsArgs<ExtArgs>;
+      _count?: boolean | BillingInvoiceCountOutputTypeDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['billingInvoice']
+  >;
+
+  export type BillingInvoiceSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      studentId?: boolean;
+      period?: boolean;
+      totalAmount?: boolean;
+      paidAmount?: boolean;
+      dueDate?: boolean;
+      status?: boolean;
+      notes?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['billingInvoice']
+  >;
+
+  export type BillingInvoiceSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    studentId?: boolean;
+    period?: boolean;
+    totalAmount?: boolean;
+    paidAmount?: boolean;
+    dueDate?: boolean;
+    status?: boolean;
+    notes?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type BillingInvoiceInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+    payments?: boolean | BillingInvoice$paymentsArgs<ExtArgs>;
+    _count?: boolean | BillingInvoiceCountOutputTypeDefaultArgs<ExtArgs>;
+  };
+  export type BillingInvoiceIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+  };
+
+  export type $BillingInvoicePayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'BillingInvoice';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      student: Prisma.$StudentPayload<ExtArgs>;
+      payments: Prisma.$PaymentTransactionPayload<ExtArgs>[];
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        studentId: string;
+        period: string;
+        totalAmount: number;
+        paidAmount: number;
+        dueDate: Date;
+        status: $Enums.InvoiceStatus;
+        notes: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['billingInvoice']
+    >;
+    composites: {};
+  };
+
+  type BillingInvoiceGetPayload<S extends boolean | null | undefined | BillingInvoiceDefaultArgs> =
+    $Result.GetResult<Prisma.$BillingInvoicePayload, S>;
+
+  type BillingInvoiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BillingInvoiceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BillingInvoiceCountAggregateInputType | true;
+    };
+
+  export interface BillingInvoiceDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['BillingInvoice'];
+      meta: { name: 'BillingInvoice' };
+    };
+    /**
+     * Find zero or one BillingInvoice that matches the filter.
+     * @param {BillingInvoiceFindUniqueArgs} args - Arguments to find a BillingInvoice
+     * @example
+     * // Get one BillingInvoice
+     * const billingInvoice = await prisma.billingInvoice.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BillingInvoiceFindUniqueArgs>(
+      args: SelectSubset<T, BillingInvoiceFindUniqueArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one BillingInvoice that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BillingInvoiceFindUniqueOrThrowArgs} args - Arguments to find a BillingInvoice
+     * @example
+     * // Get one BillingInvoice
+     * const billingInvoice = await prisma.billingInvoice.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BillingInvoiceFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, BillingInvoiceFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first BillingInvoice that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingInvoiceFindFirstArgs} args - Arguments to find a BillingInvoice
+     * @example
+     * // Get one BillingInvoice
+     * const billingInvoice = await prisma.billingInvoice.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BillingInvoiceFindFirstArgs>(
+      args?: SelectSubset<T, BillingInvoiceFindFirstArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first BillingInvoice that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingInvoiceFindFirstOrThrowArgs} args - Arguments to find a BillingInvoice
+     * @example
+     * // Get one BillingInvoice
+     * const billingInvoice = await prisma.billingInvoice.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BillingInvoiceFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, BillingInvoiceFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more BillingInvoices that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingInvoiceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BillingInvoices
+     * const billingInvoices = await prisma.billingInvoice.findMany()
+     *
+     * // Get first 10 BillingInvoices
+     * const billingInvoices = await prisma.billingInvoice.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const billingInvoiceWithIdOnly = await prisma.billingInvoice.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends BillingInvoiceFindManyArgs>(
+      args?: SelectSubset<T, BillingInvoiceFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'findMany'>
+    >;
+
+    /**
+     * Create a BillingInvoice.
+     * @param {BillingInvoiceCreateArgs} args - Arguments to create a BillingInvoice.
+     * @example
+     * // Create one BillingInvoice
+     * const BillingInvoice = await prisma.billingInvoice.create({
+     *   data: {
+     *     // ... data to create a BillingInvoice
+     *   }
+     * })
+     *
+     */
+    create<T extends BillingInvoiceCreateArgs>(
+      args: SelectSubset<T, BillingInvoiceCreateArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many BillingInvoices.
+     * @param {BillingInvoiceCreateManyArgs} args - Arguments to create many BillingInvoices.
+     * @example
+     * // Create many BillingInvoices
+     * const billingInvoice = await prisma.billingInvoice.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends BillingInvoiceCreateManyArgs>(
+      args?: SelectSubset<T, BillingInvoiceCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many BillingInvoices and returns the data saved in the database.
+     * @param {BillingInvoiceCreateManyAndReturnArgs} args - Arguments to create many BillingInvoices.
+     * @example
+     * // Create many BillingInvoices
+     * const billingInvoice = await prisma.billingInvoice.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many BillingInvoices and only return the `id`
+     * const billingInvoiceWithIdOnly = await prisma.billingInvoice.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends BillingInvoiceCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, BillingInvoiceCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a BillingInvoice.
+     * @param {BillingInvoiceDeleteArgs} args - Arguments to delete one BillingInvoice.
+     * @example
+     * // Delete one BillingInvoice
+     * const BillingInvoice = await prisma.billingInvoice.delete({
+     *   where: {
+     *     // ... filter to delete one BillingInvoice
+     *   }
+     * })
+     *
+     */
+    delete<T extends BillingInvoiceDeleteArgs>(
+      args: SelectSubset<T, BillingInvoiceDeleteArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one BillingInvoice.
+     * @param {BillingInvoiceUpdateArgs} args - Arguments to update one BillingInvoice.
+     * @example
+     * // Update one BillingInvoice
+     * const billingInvoice = await prisma.billingInvoice.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends BillingInvoiceUpdateArgs>(
+      args: SelectSubset<T, BillingInvoiceUpdateArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more BillingInvoices.
+     * @param {BillingInvoiceDeleteManyArgs} args - Arguments to filter BillingInvoices to delete.
+     * @example
+     * // Delete a few BillingInvoices
+     * const { count } = await prisma.billingInvoice.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends BillingInvoiceDeleteManyArgs>(
+      args?: SelectSubset<T, BillingInvoiceDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more BillingInvoices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingInvoiceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BillingInvoices
+     * const billingInvoice = await prisma.billingInvoice.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends BillingInvoiceUpdateManyArgs>(
+      args: SelectSubset<T, BillingInvoiceUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one BillingInvoice.
+     * @param {BillingInvoiceUpsertArgs} args - Arguments to update or create a BillingInvoice.
+     * @example
+     * // Update or create a BillingInvoice
+     * const billingInvoice = await prisma.billingInvoice.upsert({
+     *   create: {
+     *     // ... data to create a BillingInvoice
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BillingInvoice we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BillingInvoiceUpsertArgs>(
+      args: SelectSubset<T, BillingInvoiceUpsertArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of BillingInvoices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingInvoiceCountArgs} args - Arguments to filter BillingInvoices to count.
+     * @example
+     * // Count the number of BillingInvoices
+     * const count = await prisma.billingInvoice.count({
+     *   where: {
+     *     // ... the filter for the BillingInvoices we want to count
+     *   }
+     * })
+     **/
+    count<T extends BillingInvoiceCountArgs>(
+      args?: Subset<T, BillingInvoiceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BillingInvoiceCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a BillingInvoice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingInvoiceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends BillingInvoiceAggregateArgs>(
+      args: Subset<T, BillingInvoiceAggregateArgs>,
+    ): Prisma.PrismaPromise<GetBillingInvoiceAggregateType<T>>;
+
+    /**
+     * Group by BillingInvoice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingInvoiceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends BillingInvoiceGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: BillingInvoiceGroupByArgs['orderBy'] }
+        : { orderBy?: BillingInvoiceGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, BillingInvoiceGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetBillingInvoiceGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the BillingInvoice model
+     */
+    readonly fields: BillingInvoiceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BillingInvoice.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BillingInvoiceClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, StudentDefaultArgs<ExtArgs>>,
+    ): Prisma__StudentClient<
+      $Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    payments<T extends BillingInvoice$paymentsArgs<ExtArgs> = {}>(
+      args?: Subset<T, BillingInvoice$paymentsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the BillingInvoice model
+   */
+  interface BillingInvoiceFieldRefs {
+    readonly id: FieldRef<'BillingInvoice', 'String'>;
+    readonly tenantId: FieldRef<'BillingInvoice', 'String'>;
+    readonly studentId: FieldRef<'BillingInvoice', 'String'>;
+    readonly period: FieldRef<'BillingInvoice', 'String'>;
+    readonly totalAmount: FieldRef<'BillingInvoice', 'Float'>;
+    readonly paidAmount: FieldRef<'BillingInvoice', 'Float'>;
+    readonly dueDate: FieldRef<'BillingInvoice', 'DateTime'>;
+    readonly status: FieldRef<'BillingInvoice', 'InvoiceStatus'>;
+    readonly notes: FieldRef<'BillingInvoice', 'String'>;
+    readonly createdAt: FieldRef<'BillingInvoice', 'DateTime'>;
+    readonly updatedAt: FieldRef<'BillingInvoice', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * BillingInvoice findUnique
+   */
+  export type BillingInvoiceFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * Filter, which BillingInvoice to fetch.
+     */
+    where: BillingInvoiceWhereUniqueInput;
+  };
+
+  /**
+   * BillingInvoice findUniqueOrThrow
+   */
+  export type BillingInvoiceFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * Filter, which BillingInvoice to fetch.
+     */
+    where: BillingInvoiceWhereUniqueInput;
+  };
+
+  /**
+   * BillingInvoice findFirst
+   */
+  export type BillingInvoiceFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * Filter, which BillingInvoice to fetch.
+     */
+    where?: BillingInvoiceWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of BillingInvoices to fetch.
+     */
+    orderBy?: BillingInvoiceOrderByWithRelationInput | BillingInvoiceOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for BillingInvoices.
+     */
+    cursor?: BillingInvoiceWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` BillingInvoices from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` BillingInvoices.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of BillingInvoices.
+     */
+    distinct?: BillingInvoiceScalarFieldEnum | BillingInvoiceScalarFieldEnum[];
+  };
+
+  /**
+   * BillingInvoice findFirstOrThrow
+   */
+  export type BillingInvoiceFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * Filter, which BillingInvoice to fetch.
+     */
+    where?: BillingInvoiceWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of BillingInvoices to fetch.
+     */
+    orderBy?: BillingInvoiceOrderByWithRelationInput | BillingInvoiceOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for BillingInvoices.
+     */
+    cursor?: BillingInvoiceWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` BillingInvoices from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` BillingInvoices.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of BillingInvoices.
+     */
+    distinct?: BillingInvoiceScalarFieldEnum | BillingInvoiceScalarFieldEnum[];
+  };
+
+  /**
+   * BillingInvoice findMany
+   */
+  export type BillingInvoiceFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * Filter, which BillingInvoices to fetch.
+     */
+    where?: BillingInvoiceWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of BillingInvoices to fetch.
+     */
+    orderBy?: BillingInvoiceOrderByWithRelationInput | BillingInvoiceOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing BillingInvoices.
+     */
+    cursor?: BillingInvoiceWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` BillingInvoices from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` BillingInvoices.
+     */
+    skip?: number;
+    distinct?: BillingInvoiceScalarFieldEnum | BillingInvoiceScalarFieldEnum[];
+  };
+
+  /**
+   * BillingInvoice create
+   */
+  export type BillingInvoiceCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a BillingInvoice.
+     */
+    data: XOR<BillingInvoiceCreateInput, BillingInvoiceUncheckedCreateInput>;
+  };
+
+  /**
+   * BillingInvoice createMany
+   */
+  export type BillingInvoiceCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many BillingInvoices.
+     */
+    data: BillingInvoiceCreateManyInput | BillingInvoiceCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * BillingInvoice createManyAndReturn
+   */
+  export type BillingInvoiceCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many BillingInvoices.
+     */
+    data: BillingInvoiceCreateManyInput | BillingInvoiceCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * BillingInvoice update
+   */
+  export type BillingInvoiceUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a BillingInvoice.
+     */
+    data: XOR<BillingInvoiceUpdateInput, BillingInvoiceUncheckedUpdateInput>;
+    /**
+     * Choose, which BillingInvoice to update.
+     */
+    where: BillingInvoiceWhereUniqueInput;
+  };
+
+  /**
+   * BillingInvoice updateMany
+   */
+  export type BillingInvoiceUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update BillingInvoices.
+     */
+    data: XOR<BillingInvoiceUpdateManyMutationInput, BillingInvoiceUncheckedUpdateManyInput>;
+    /**
+     * Filter which BillingInvoices to update
+     */
+    where?: BillingInvoiceWhereInput;
+  };
+
+  /**
+   * BillingInvoice upsert
+   */
+  export type BillingInvoiceUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the BillingInvoice to update in case it exists.
+     */
+    where: BillingInvoiceWhereUniqueInput;
+    /**
+     * In case the BillingInvoice found by the `where` argument doesn't exist, create a new BillingInvoice with this data.
+     */
+    create: XOR<BillingInvoiceCreateInput, BillingInvoiceUncheckedCreateInput>;
+    /**
+     * In case the BillingInvoice was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BillingInvoiceUpdateInput, BillingInvoiceUncheckedUpdateInput>;
+  };
+
+  /**
+   * BillingInvoice delete
+   */
+  export type BillingInvoiceDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+    /**
+     * Filter which BillingInvoice to delete.
+     */
+    where: BillingInvoiceWhereUniqueInput;
+  };
+
+  /**
+   * BillingInvoice deleteMany
+   */
+  export type BillingInvoiceDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which BillingInvoices to delete
+     */
+    where?: BillingInvoiceWhereInput;
+  };
+
+  /**
+   * BillingInvoice.payments
+   */
+  export type BillingInvoice$paymentsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    where?: PaymentTransactionWhereInput;
+    orderBy?:
+      PaymentTransactionOrderByWithRelationInput | PaymentTransactionOrderByWithRelationInput[];
+    cursor?: PaymentTransactionWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * BillingInvoice without action
+   */
+  export type BillingInvoiceDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BillingInvoice
+     */
+    select?: BillingInvoiceSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingInvoiceInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model PaymentTransaction
+   */
+
+  export type AggregatePaymentTransaction = {
+    _count: PaymentTransactionCountAggregateOutputType | null;
+    _avg: PaymentTransactionAvgAggregateOutputType | null;
+    _sum: PaymentTransactionSumAggregateOutputType | null;
+    _min: PaymentTransactionMinAggregateOutputType | null;
+    _max: PaymentTransactionMaxAggregateOutputType | null;
+  };
+
+  export type PaymentTransactionAvgAggregateOutputType = {
+    amount: number | null;
+  };
+
+  export type PaymentTransactionSumAggregateOutputType = {
+    amount: number | null;
+  };
+
+  export type PaymentTransactionMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    invoiceId: string | null;
+    studentId: string | null;
+    amount: number | null;
+    method: $Enums.PaymentMethod | null;
+    paidAt: Date | null;
+    referenceNo: string | null;
+    notes: string | null;
+    recordedByUserId: string | null;
+    createdAt: Date | null;
+  };
+
+  export type PaymentTransactionMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    invoiceId: string | null;
+    studentId: string | null;
+    amount: number | null;
+    method: $Enums.PaymentMethod | null;
+    paidAt: Date | null;
+    referenceNo: string | null;
+    notes: string | null;
+    recordedByUserId: string | null;
+    createdAt: Date | null;
+  };
+
+  export type PaymentTransactionCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    invoiceId: number;
+    studentId: number;
+    amount: number;
+    method: number;
+    paidAt: number;
+    referenceNo: number;
+    notes: number;
+    recordedByUserId: number;
+    createdAt: number;
+    _all: number;
+  };
+
+  export type PaymentTransactionAvgAggregateInputType = {
+    amount?: true;
+  };
+
+  export type PaymentTransactionSumAggregateInputType = {
+    amount?: true;
+  };
+
+  export type PaymentTransactionMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    invoiceId?: true;
+    studentId?: true;
+    amount?: true;
+    method?: true;
+    paidAt?: true;
+    referenceNo?: true;
+    notes?: true;
+    recordedByUserId?: true;
+    createdAt?: true;
+  };
+
+  export type PaymentTransactionMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    invoiceId?: true;
+    studentId?: true;
+    amount?: true;
+    method?: true;
+    paidAt?: true;
+    referenceNo?: true;
+    notes?: true;
+    recordedByUserId?: true;
+    createdAt?: true;
+  };
+
+  export type PaymentTransactionCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    invoiceId?: true;
+    studentId?: true;
+    amount?: true;
+    method?: true;
+    paidAt?: true;
+    referenceNo?: true;
+    notes?: true;
+    recordedByUserId?: true;
+    createdAt?: true;
+    _all?: true;
+  };
+
+  export type PaymentTransactionAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which PaymentTransaction to aggregate.
+     */
+    where?: PaymentTransactionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PaymentTransactions to fetch.
+     */
+    orderBy?:
+      PaymentTransactionOrderByWithRelationInput | PaymentTransactionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: PaymentTransactionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PaymentTransactions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PaymentTransactions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned PaymentTransactions
+     **/
+    _count?: true | PaymentTransactionCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: PaymentTransactionAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: PaymentTransactionSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: PaymentTransactionMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: PaymentTransactionMaxAggregateInputType;
+  };
+
+  export type GetPaymentTransactionAggregateType<T extends PaymentTransactionAggregateArgs> = {
+    [P in keyof T & keyof AggregatePaymentTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePaymentTransaction[P]>
+      : GetScalarType<T[P], AggregatePaymentTransaction[P]>;
+  };
+
+  export type PaymentTransactionGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: PaymentTransactionWhereInput;
+    orderBy?:
+      | PaymentTransactionOrderByWithAggregationInput
+      | PaymentTransactionOrderByWithAggregationInput[];
+    by: PaymentTransactionScalarFieldEnum[] | PaymentTransactionScalarFieldEnum;
+    having?: PaymentTransactionScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: PaymentTransactionCountAggregateInputType | true;
+    _avg?: PaymentTransactionAvgAggregateInputType;
+    _sum?: PaymentTransactionSumAggregateInputType;
+    _min?: PaymentTransactionMinAggregateInputType;
+    _max?: PaymentTransactionMaxAggregateInputType;
+  };
+
+  export type PaymentTransactionGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    invoiceId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt: Date;
+    referenceNo: string | null;
+    notes: string | null;
+    recordedByUserId: string;
+    createdAt: Date;
+    _count: PaymentTransactionCountAggregateOutputType | null;
+    _avg: PaymentTransactionAvgAggregateOutputType | null;
+    _sum: PaymentTransactionSumAggregateOutputType | null;
+    _min: PaymentTransactionMinAggregateOutputType | null;
+    _max: PaymentTransactionMaxAggregateOutputType | null;
+  };
+
+  type GetPaymentTransactionGroupByPayload<T extends PaymentTransactionGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<PaymentTransactionGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof PaymentTransactionGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PaymentTransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], PaymentTransactionGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type PaymentTransactionSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      invoiceId?: boolean;
+      studentId?: boolean;
+      amount?: boolean;
+      method?: boolean;
+      paidAt?: boolean;
+      referenceNo?: boolean;
+      notes?: boolean;
+      recordedByUserId?: boolean;
+      createdAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      invoice?: boolean | BillingInvoiceDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+      recordedBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['paymentTransaction']
+  >;
+
+  export type PaymentTransactionSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      invoiceId?: boolean;
+      studentId?: boolean;
+      amount?: boolean;
+      method?: boolean;
+      paidAt?: boolean;
+      referenceNo?: boolean;
+      notes?: boolean;
+      recordedByUserId?: boolean;
+      createdAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      invoice?: boolean | BillingInvoiceDefaultArgs<ExtArgs>;
+      student?: boolean | StudentDefaultArgs<ExtArgs>;
+      recordedBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['paymentTransaction']
+  >;
+
+  export type PaymentTransactionSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    invoiceId?: boolean;
+    studentId?: boolean;
+    amount?: boolean;
+    method?: boolean;
+    paidAt?: boolean;
+    referenceNo?: boolean;
+    notes?: boolean;
+    recordedByUserId?: boolean;
+    createdAt?: boolean;
+  };
+
+  export type PaymentTransactionInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    invoice?: boolean | BillingInvoiceDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+    recordedBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type PaymentTransactionIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    invoice?: boolean | BillingInvoiceDefaultArgs<ExtArgs>;
+    student?: boolean | StudentDefaultArgs<ExtArgs>;
+    recordedBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $PaymentTransactionPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'PaymentTransaction';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      invoice: Prisma.$BillingInvoicePayload<ExtArgs>;
+      student: Prisma.$StudentPayload<ExtArgs>;
+      recordedBy: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        invoiceId: string;
+        studentId: string;
+        amount: number;
+        method: $Enums.PaymentMethod;
+        paidAt: Date;
+        referenceNo: string | null;
+        notes: string | null;
+        recordedByUserId: string;
+        createdAt: Date;
+      },
+      ExtArgs['result']['paymentTransaction']
+    >;
+    composites: {};
+  };
+
+  type PaymentTransactionGetPayload<
+    S extends boolean | null | undefined | PaymentTransactionDefaultArgs,
+  > = $Result.GetResult<Prisma.$PaymentTransactionPayload, S>;
+
+  type PaymentTransactionCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<PaymentTransactionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+    select?: PaymentTransactionCountAggregateInputType | true;
+  };
+
+  export interface PaymentTransactionDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['PaymentTransaction'];
+      meta: { name: 'PaymentTransaction' };
+    };
+    /**
+     * Find zero or one PaymentTransaction that matches the filter.
+     * @param {PaymentTransactionFindUniqueArgs} args - Arguments to find a PaymentTransaction
+     * @example
+     * // Get one PaymentTransaction
+     * const paymentTransaction = await prisma.paymentTransaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PaymentTransactionFindUniqueArgs>(
+      args: SelectSubset<T, PaymentTransactionFindUniqueArgs<ExtArgs>>,
+    ): Prisma__PaymentTransactionClient<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one PaymentTransaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PaymentTransactionFindUniqueOrThrowArgs} args - Arguments to find a PaymentTransaction
+     * @example
+     * // Get one PaymentTransaction
+     * const paymentTransaction = await prisma.paymentTransaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PaymentTransactionFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, PaymentTransactionFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__PaymentTransactionClient<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first PaymentTransaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentTransactionFindFirstArgs} args - Arguments to find a PaymentTransaction
+     * @example
+     * // Get one PaymentTransaction
+     * const paymentTransaction = await prisma.paymentTransaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PaymentTransactionFindFirstArgs>(
+      args?: SelectSubset<T, PaymentTransactionFindFirstArgs<ExtArgs>>,
+    ): Prisma__PaymentTransactionClient<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first PaymentTransaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentTransactionFindFirstOrThrowArgs} args - Arguments to find a PaymentTransaction
+     * @example
+     * // Get one PaymentTransaction
+     * const paymentTransaction = await prisma.paymentTransaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PaymentTransactionFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, PaymentTransactionFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__PaymentTransactionClient<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more PaymentTransactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentTransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PaymentTransactions
+     * const paymentTransactions = await prisma.paymentTransaction.findMany()
+     *
+     * // Get first 10 PaymentTransactions
+     * const paymentTransactions = await prisma.paymentTransaction.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const paymentTransactionWithIdOnly = await prisma.paymentTransaction.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends PaymentTransactionFindManyArgs>(
+      args?: SelectSubset<T, PaymentTransactionFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findMany'>
+    >;
+
+    /**
+     * Create a PaymentTransaction.
+     * @param {PaymentTransactionCreateArgs} args - Arguments to create a PaymentTransaction.
+     * @example
+     * // Create one PaymentTransaction
+     * const PaymentTransaction = await prisma.paymentTransaction.create({
+     *   data: {
+     *     // ... data to create a PaymentTransaction
+     *   }
+     * })
+     *
+     */
+    create<T extends PaymentTransactionCreateArgs>(
+      args: SelectSubset<T, PaymentTransactionCreateArgs<ExtArgs>>,
+    ): Prisma__PaymentTransactionClient<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many PaymentTransactions.
+     * @param {PaymentTransactionCreateManyArgs} args - Arguments to create many PaymentTransactions.
+     * @example
+     * // Create many PaymentTransactions
+     * const paymentTransaction = await prisma.paymentTransaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends PaymentTransactionCreateManyArgs>(
+      args?: SelectSubset<T, PaymentTransactionCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many PaymentTransactions and returns the data saved in the database.
+     * @param {PaymentTransactionCreateManyAndReturnArgs} args - Arguments to create many PaymentTransactions.
+     * @example
+     * // Create many PaymentTransactions
+     * const paymentTransaction = await prisma.paymentTransaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many PaymentTransactions and only return the `id`
+     * const paymentTransactionWithIdOnly = await prisma.paymentTransaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends PaymentTransactionCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, PaymentTransactionCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a PaymentTransaction.
+     * @param {PaymentTransactionDeleteArgs} args - Arguments to delete one PaymentTransaction.
+     * @example
+     * // Delete one PaymentTransaction
+     * const PaymentTransaction = await prisma.paymentTransaction.delete({
+     *   where: {
+     *     // ... filter to delete one PaymentTransaction
+     *   }
+     * })
+     *
+     */
+    delete<T extends PaymentTransactionDeleteArgs>(
+      args: SelectSubset<T, PaymentTransactionDeleteArgs<ExtArgs>>,
+    ): Prisma__PaymentTransactionClient<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one PaymentTransaction.
+     * @param {PaymentTransactionUpdateArgs} args - Arguments to update one PaymentTransaction.
+     * @example
+     * // Update one PaymentTransaction
+     * const paymentTransaction = await prisma.paymentTransaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends PaymentTransactionUpdateArgs>(
+      args: SelectSubset<T, PaymentTransactionUpdateArgs<ExtArgs>>,
+    ): Prisma__PaymentTransactionClient<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more PaymentTransactions.
+     * @param {PaymentTransactionDeleteManyArgs} args - Arguments to filter PaymentTransactions to delete.
+     * @example
+     * // Delete a few PaymentTransactions
+     * const { count } = await prisma.paymentTransaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends PaymentTransactionDeleteManyArgs>(
+      args?: SelectSubset<T, PaymentTransactionDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more PaymentTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentTransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PaymentTransactions
+     * const paymentTransaction = await prisma.paymentTransaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends PaymentTransactionUpdateManyArgs>(
+      args: SelectSubset<T, PaymentTransactionUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one PaymentTransaction.
+     * @param {PaymentTransactionUpsertArgs} args - Arguments to update or create a PaymentTransaction.
+     * @example
+     * // Update or create a PaymentTransaction
+     * const paymentTransaction = await prisma.paymentTransaction.upsert({
+     *   create: {
+     *     // ... data to create a PaymentTransaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PaymentTransaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PaymentTransactionUpsertArgs>(
+      args: SelectSubset<T, PaymentTransactionUpsertArgs<ExtArgs>>,
+    ): Prisma__PaymentTransactionClient<
+      $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of PaymentTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentTransactionCountArgs} args - Arguments to filter PaymentTransactions to count.
+     * @example
+     * // Count the number of PaymentTransactions
+     * const count = await prisma.paymentTransaction.count({
+     *   where: {
+     *     // ... the filter for the PaymentTransactions we want to count
+     *   }
+     * })
+     **/
+    count<T extends PaymentTransactionCountArgs>(
+      args?: Subset<T, PaymentTransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PaymentTransactionCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a PaymentTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentTransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends PaymentTransactionAggregateArgs>(
+      args: Subset<T, PaymentTransactionAggregateArgs>,
+    ): Prisma.PrismaPromise<GetPaymentTransactionAggregateType<T>>;
+
+    /**
+     * Group by PaymentTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentTransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends PaymentTransactionGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: PaymentTransactionGroupByArgs['orderBy'] }
+        : { orderBy?: PaymentTransactionGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, PaymentTransactionGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetPaymentTransactionGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the PaymentTransaction model
+     */
+    readonly fields: PaymentTransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PaymentTransaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PaymentTransactionClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    invoice<T extends BillingInvoiceDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, BillingInvoiceDefaultArgs<ExtArgs>>,
+    ): Prisma__BillingInvoiceClient<
+      $Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, StudentDefaultArgs<ExtArgs>>,
+    ): Prisma__StudentClient<
+      $Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    recordedBy<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the PaymentTransaction model
+   */
+  interface PaymentTransactionFieldRefs {
+    readonly id: FieldRef<'PaymentTransaction', 'String'>;
+    readonly tenantId: FieldRef<'PaymentTransaction', 'String'>;
+    readonly invoiceId: FieldRef<'PaymentTransaction', 'String'>;
+    readonly studentId: FieldRef<'PaymentTransaction', 'String'>;
+    readonly amount: FieldRef<'PaymentTransaction', 'Float'>;
+    readonly method: FieldRef<'PaymentTransaction', 'PaymentMethod'>;
+    readonly paidAt: FieldRef<'PaymentTransaction', 'DateTime'>;
+    readonly referenceNo: FieldRef<'PaymentTransaction', 'String'>;
+    readonly notes: FieldRef<'PaymentTransaction', 'String'>;
+    readonly recordedByUserId: FieldRef<'PaymentTransaction', 'String'>;
+    readonly createdAt: FieldRef<'PaymentTransaction', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * PaymentTransaction findUnique
+   */
+  export type PaymentTransactionFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which PaymentTransaction to fetch.
+     */
+    where: PaymentTransactionWhereUniqueInput;
+  };
+
+  /**
+   * PaymentTransaction findUniqueOrThrow
+   */
+  export type PaymentTransactionFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which PaymentTransaction to fetch.
+     */
+    where: PaymentTransactionWhereUniqueInput;
+  };
+
+  /**
+   * PaymentTransaction findFirst
+   */
+  export type PaymentTransactionFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which PaymentTransaction to fetch.
+     */
+    where?: PaymentTransactionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PaymentTransactions to fetch.
+     */
+    orderBy?:
+      PaymentTransactionOrderByWithRelationInput | PaymentTransactionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for PaymentTransactions.
+     */
+    cursor?: PaymentTransactionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PaymentTransactions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PaymentTransactions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PaymentTransactions.
+     */
+    distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * PaymentTransaction findFirstOrThrow
+   */
+  export type PaymentTransactionFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which PaymentTransaction to fetch.
+     */
+    where?: PaymentTransactionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PaymentTransactions to fetch.
+     */
+    orderBy?:
+      PaymentTransactionOrderByWithRelationInput | PaymentTransactionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for PaymentTransactions.
+     */
+    cursor?: PaymentTransactionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PaymentTransactions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PaymentTransactions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PaymentTransactions.
+     */
+    distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * PaymentTransaction findMany
+   */
+  export type PaymentTransactionFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which PaymentTransactions to fetch.
+     */
+    where?: PaymentTransactionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PaymentTransactions to fetch.
+     */
+    orderBy?:
+      PaymentTransactionOrderByWithRelationInput | PaymentTransactionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing PaymentTransactions.
+     */
+    cursor?: PaymentTransactionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PaymentTransactions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PaymentTransactions.
+     */
+    skip?: number;
+    distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * PaymentTransaction create
+   */
+  export type PaymentTransactionCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a PaymentTransaction.
+     */
+    data: XOR<PaymentTransactionCreateInput, PaymentTransactionUncheckedCreateInput>;
+  };
+
+  /**
+   * PaymentTransaction createMany
+   */
+  export type PaymentTransactionCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many PaymentTransactions.
+     */
+    data: PaymentTransactionCreateManyInput | PaymentTransactionCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * PaymentTransaction createManyAndReturn
+   */
+  export type PaymentTransactionCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many PaymentTransactions.
+     */
+    data: PaymentTransactionCreateManyInput | PaymentTransactionCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * PaymentTransaction update
+   */
+  export type PaymentTransactionUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a PaymentTransaction.
+     */
+    data: XOR<PaymentTransactionUpdateInput, PaymentTransactionUncheckedUpdateInput>;
+    /**
+     * Choose, which PaymentTransaction to update.
+     */
+    where: PaymentTransactionWhereUniqueInput;
+  };
+
+  /**
+   * PaymentTransaction updateMany
+   */
+  export type PaymentTransactionUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update PaymentTransactions.
+     */
+    data: XOR<
+      PaymentTransactionUpdateManyMutationInput,
+      PaymentTransactionUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which PaymentTransactions to update
+     */
+    where?: PaymentTransactionWhereInput;
+  };
+
+  /**
+   * PaymentTransaction upsert
+   */
+  export type PaymentTransactionUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the PaymentTransaction to update in case it exists.
+     */
+    where: PaymentTransactionWhereUniqueInput;
+    /**
+     * In case the PaymentTransaction found by the `where` argument doesn't exist, create a new PaymentTransaction with this data.
+     */
+    create: XOR<PaymentTransactionCreateInput, PaymentTransactionUncheckedCreateInput>;
+    /**
+     * In case the PaymentTransaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PaymentTransactionUpdateInput, PaymentTransactionUncheckedUpdateInput>;
+  };
+
+  /**
+   * PaymentTransaction delete
+   */
+  export type PaymentTransactionDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter which PaymentTransaction to delete.
+     */
+    where: PaymentTransactionWhereUniqueInput;
+  };
+
+  /**
+   * PaymentTransaction deleteMany
+   */
+  export type PaymentTransactionDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which PaymentTransactions to delete
+     */
+    where?: PaymentTransactionWhereInput;
+  };
+
+  /**
+   * PaymentTransaction without action
+   */
+  export type PaymentTransactionDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PaymentTransaction
+     */
+    select?: PaymentTransactionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentTransactionInclude<ExtArgs> | null;
+  };
+
+  /**
    * Enums
    */
 
@@ -39290,6 +43533,58 @@ export namespace Prisma {
   export type EventConsentResponseScalarFieldEnum =
     (typeof EventConsentResponseScalarFieldEnum)[keyof typeof EventConsentResponseScalarFieldEnum];
 
+  export const StudentBillingPlanScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    studentId: 'studentId';
+    tuitionAmount: 'tuitionAmount';
+    serviceAmount: 'serviceAmount';
+    activityAmount: 'activityAmount';
+    discountPercent: 'discountPercent';
+    dueDayOfMonth: 'dueDayOfMonth';
+    notes: 'notes';
+    isActive: 'isActive';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type StudentBillingPlanScalarFieldEnum =
+    (typeof StudentBillingPlanScalarFieldEnum)[keyof typeof StudentBillingPlanScalarFieldEnum];
+
+  export const BillingInvoiceScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    studentId: 'studentId';
+    period: 'period';
+    totalAmount: 'totalAmount';
+    paidAmount: 'paidAmount';
+    dueDate: 'dueDate';
+    status: 'status';
+    notes: 'notes';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type BillingInvoiceScalarFieldEnum =
+    (typeof BillingInvoiceScalarFieldEnum)[keyof typeof BillingInvoiceScalarFieldEnum];
+
+  export const PaymentTransactionScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    invoiceId: 'invoiceId';
+    studentId: 'studentId';
+    amount: 'amount';
+    method: 'method';
+    paidAt: 'paidAt';
+    referenceNo: 'referenceNo';
+    notes: 'notes';
+    recordedByUserId: 'recordedByUserId';
+    createdAt: 'createdAt';
+  };
+
+  export type PaymentTransactionScalarFieldEnum =
+    (typeof PaymentTransactionScalarFieldEnum)[keyof typeof PaymentTransactionScalarFieldEnum];
+
   export const SortOrder: {
     asc: 'asc';
     desc: 'desc';
@@ -39606,6 +43901,38 @@ export namespace Prisma {
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>;
 
   /**
+   * Reference to a field of type 'InvoiceStatus'
+   */
+  export type EnumInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'InvoiceStatus'
+  >;
+
+  /**
+   * Reference to a field of type 'InvoiceStatus[]'
+   */
+  export type ListEnumInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'InvoiceStatus[]'
+  >;
+
+  /**
+   * Reference to a field of type 'PaymentMethod'
+   */
+  export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'PaymentMethod'
+  >;
+
+  /**
+   * Reference to a field of type 'PaymentMethod[]'
+   */
+  export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'PaymentMethod[]'
+  >;
+
+  /**
    * Deep Input Types
    */
 
@@ -39646,6 +43973,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseListRelationFilter;
     eventConsents?: EventConsentListRelationFilter;
     eventConsentResponses?: EventConsentResponseListRelationFilter;
+    billingPlans?: StudentBillingPlanListRelationFilter;
+    billingInvoices?: BillingInvoiceListRelationFilter;
+    paymentTransactions?: PaymentTransactionListRelationFilter;
   };
 
   export type TenantOrderByWithRelationInput = {
@@ -39682,6 +44012,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseOrderByRelationAggregateInput;
     eventConsents?: EventConsentOrderByRelationAggregateInput;
     eventConsentResponses?: EventConsentResponseOrderByRelationAggregateInput;
+    billingPlans?: StudentBillingPlanOrderByRelationAggregateInput;
+    billingInvoices?: BillingInvoiceOrderByRelationAggregateInput;
+    paymentTransactions?: PaymentTransactionOrderByRelationAggregateInput;
   };
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<
@@ -39722,6 +44055,9 @@ export namespace Prisma {
       attendanceExcuses?: AttendanceExcuseListRelationFilter;
       eventConsents?: EventConsentListRelationFilter;
       eventConsentResponses?: EventConsentResponseListRelationFilter;
+      billingPlans?: StudentBillingPlanListRelationFilter;
+      billingInvoices?: BillingInvoiceListRelationFilter;
+      paymentTransactions?: PaymentTransactionListRelationFilter;
     },
     'id' | 'slug'
   >;
@@ -39787,6 +44123,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseListRelationFilter;
     eventConsentsCreated?: EventConsentListRelationFilter;
     eventConsentResponses?: EventConsentResponseListRelationFilter;
+    paymentsRecorded?: PaymentTransactionListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -39823,6 +44160,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseOrderByRelationAggregateInput;
     eventConsentsCreated?: EventConsentOrderByRelationAggregateInput;
     eventConsentResponses?: EventConsentResponseOrderByRelationAggregateInput;
+    paymentsRecorded?: PaymentTransactionOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -39864,6 +44202,7 @@ export namespace Prisma {
       attendanceExcusesCreated?: AttendanceExcuseListRelationFilter;
       eventConsentsCreated?: EventConsentListRelationFilter;
       eventConsentResponses?: EventConsentResponseListRelationFilter;
+      paymentsRecorded?: PaymentTransactionListRelationFilter;
     },
     'id' | 'tenantId_email'
   >;
@@ -39932,6 +44271,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemListRelationFilter;
     attendanceExcuses?: AttendanceExcuseListRelationFilter;
     eventConsentResponses?: EventConsentResponseListRelationFilter;
+    billingPlans?: StudentBillingPlanListRelationFilter;
+    billingInvoices?: BillingInvoiceListRelationFilter;
+    paymentTransactions?: PaymentTransactionListRelationFilter;
   };
 
   export type StudentOrderByWithRelationInput = {
@@ -39965,6 +44307,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemOrderByRelationAggregateInput;
     attendanceExcuses?: AttendanceExcuseOrderByRelationAggregateInput;
     eventConsentResponses?: EventConsentResponseOrderByRelationAggregateInput;
+    billingPlans?: StudentBillingPlanOrderByRelationAggregateInput;
+    billingInvoices?: BillingInvoiceOrderByRelationAggregateInput;
+    paymentTransactions?: PaymentTransactionOrderByRelationAggregateInput;
   };
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<
@@ -40002,6 +44347,9 @@ export namespace Prisma {
       portfolioItems?: PortfolioItemListRelationFilter;
       attendanceExcuses?: AttendanceExcuseListRelationFilter;
       eventConsentResponses?: EventConsentResponseListRelationFilter;
+      billingPlans?: StudentBillingPlanListRelationFilter;
+      billingInvoices?: BillingInvoiceListRelationFilter;
+      paymentTransactions?: PaymentTransactionListRelationFilter;
     },
     'id'
   >;
@@ -42422,6 +46770,310 @@ export namespace Prisma {
     respondedAt?: DateTimeWithAggregatesFilter<'EventConsentResponse'> | Date | string;
   };
 
+  export type StudentBillingPlanWhereInput = {
+    AND?: StudentBillingPlanWhereInput | StudentBillingPlanWhereInput[];
+    OR?: StudentBillingPlanWhereInput[];
+    NOT?: StudentBillingPlanWhereInput | StudentBillingPlanWhereInput[];
+    id?: StringFilter<'StudentBillingPlan'> | string;
+    tenantId?: StringFilter<'StudentBillingPlan'> | string;
+    studentId?: StringFilter<'StudentBillingPlan'> | string;
+    tuitionAmount?: FloatFilter<'StudentBillingPlan'> | number;
+    serviceAmount?: FloatFilter<'StudentBillingPlan'> | number;
+    activityAmount?: FloatFilter<'StudentBillingPlan'> | number;
+    discountPercent?: FloatFilter<'StudentBillingPlan'> | number;
+    dueDayOfMonth?: IntFilter<'StudentBillingPlan'> | number;
+    notes?: StringNullableFilter<'StudentBillingPlan'> | string | null;
+    isActive?: BoolFilter<'StudentBillingPlan'> | boolean;
+    createdAt?: DateTimeFilter<'StudentBillingPlan'> | Date | string;
+    updatedAt?: DateTimeFilter<'StudentBillingPlan'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    student?: XOR<StudentRelationFilter, StudentWhereInput>;
+  };
+
+  export type StudentBillingPlanOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    tuitionAmount?: SortOrder;
+    serviceAmount?: SortOrder;
+    activityAmount?: SortOrder;
+    discountPercent?: SortOrder;
+    dueDayOfMonth?: SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    isActive?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    student?: StudentOrderByWithRelationInput;
+  };
+
+  export type StudentBillingPlanWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: StudentBillingPlanWhereInput | StudentBillingPlanWhereInput[];
+      OR?: StudentBillingPlanWhereInput[];
+      NOT?: StudentBillingPlanWhereInput | StudentBillingPlanWhereInput[];
+      tenantId?: StringFilter<'StudentBillingPlan'> | string;
+      studentId?: StringFilter<'StudentBillingPlan'> | string;
+      tuitionAmount?: FloatFilter<'StudentBillingPlan'> | number;
+      serviceAmount?: FloatFilter<'StudentBillingPlan'> | number;
+      activityAmount?: FloatFilter<'StudentBillingPlan'> | number;
+      discountPercent?: FloatFilter<'StudentBillingPlan'> | number;
+      dueDayOfMonth?: IntFilter<'StudentBillingPlan'> | number;
+      notes?: StringNullableFilter<'StudentBillingPlan'> | string | null;
+      isActive?: BoolFilter<'StudentBillingPlan'> | boolean;
+      createdAt?: DateTimeFilter<'StudentBillingPlan'> | Date | string;
+      updatedAt?: DateTimeFilter<'StudentBillingPlan'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      student?: XOR<StudentRelationFilter, StudentWhereInput>;
+    },
+    'id'
+  >;
+
+  export type StudentBillingPlanOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    tuitionAmount?: SortOrder;
+    serviceAmount?: SortOrder;
+    activityAmount?: SortOrder;
+    discountPercent?: SortOrder;
+    dueDayOfMonth?: SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    isActive?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: StudentBillingPlanCountOrderByAggregateInput;
+    _avg?: StudentBillingPlanAvgOrderByAggregateInput;
+    _max?: StudentBillingPlanMaxOrderByAggregateInput;
+    _min?: StudentBillingPlanMinOrderByAggregateInput;
+    _sum?: StudentBillingPlanSumOrderByAggregateInput;
+  };
+
+  export type StudentBillingPlanScalarWhereWithAggregatesInput = {
+    AND?:
+      | StudentBillingPlanScalarWhereWithAggregatesInput
+      | StudentBillingPlanScalarWhereWithAggregatesInput[];
+    OR?: StudentBillingPlanScalarWhereWithAggregatesInput[];
+    NOT?:
+      | StudentBillingPlanScalarWhereWithAggregatesInput
+      | StudentBillingPlanScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'StudentBillingPlan'> | string;
+    tenantId?: StringWithAggregatesFilter<'StudentBillingPlan'> | string;
+    studentId?: StringWithAggregatesFilter<'StudentBillingPlan'> | string;
+    tuitionAmount?: FloatWithAggregatesFilter<'StudentBillingPlan'> | number;
+    serviceAmount?: FloatWithAggregatesFilter<'StudentBillingPlan'> | number;
+    activityAmount?: FloatWithAggregatesFilter<'StudentBillingPlan'> | number;
+    discountPercent?: FloatWithAggregatesFilter<'StudentBillingPlan'> | number;
+    dueDayOfMonth?: IntWithAggregatesFilter<'StudentBillingPlan'> | number;
+    notes?: StringNullableWithAggregatesFilter<'StudentBillingPlan'> | string | null;
+    isActive?: BoolWithAggregatesFilter<'StudentBillingPlan'> | boolean;
+    createdAt?: DateTimeWithAggregatesFilter<'StudentBillingPlan'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'StudentBillingPlan'> | Date | string;
+  };
+
+  export type BillingInvoiceWhereInput = {
+    AND?: BillingInvoiceWhereInput | BillingInvoiceWhereInput[];
+    OR?: BillingInvoiceWhereInput[];
+    NOT?: BillingInvoiceWhereInput | BillingInvoiceWhereInput[];
+    id?: StringFilter<'BillingInvoice'> | string;
+    tenantId?: StringFilter<'BillingInvoice'> | string;
+    studentId?: StringFilter<'BillingInvoice'> | string;
+    period?: StringFilter<'BillingInvoice'> | string;
+    totalAmount?: FloatFilter<'BillingInvoice'> | number;
+    paidAmount?: FloatFilter<'BillingInvoice'> | number;
+    dueDate?: DateTimeFilter<'BillingInvoice'> | Date | string;
+    status?: EnumInvoiceStatusFilter<'BillingInvoice'> | $Enums.InvoiceStatus;
+    notes?: StringNullableFilter<'BillingInvoice'> | string | null;
+    createdAt?: DateTimeFilter<'BillingInvoice'> | Date | string;
+    updatedAt?: DateTimeFilter<'BillingInvoice'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    student?: XOR<StudentRelationFilter, StudentWhereInput>;
+    payments?: PaymentTransactionListRelationFilter;
+  };
+
+  export type BillingInvoiceOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    period?: SortOrder;
+    totalAmount?: SortOrder;
+    paidAmount?: SortOrder;
+    dueDate?: SortOrder;
+    status?: SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    student?: StudentOrderByWithRelationInput;
+    payments?: PaymentTransactionOrderByRelationAggregateInput;
+  };
+
+  export type BillingInvoiceWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      tenantId_studentId_period?: BillingInvoiceTenantIdStudentIdPeriodCompoundUniqueInput;
+      AND?: BillingInvoiceWhereInput | BillingInvoiceWhereInput[];
+      OR?: BillingInvoiceWhereInput[];
+      NOT?: BillingInvoiceWhereInput | BillingInvoiceWhereInput[];
+      tenantId?: StringFilter<'BillingInvoice'> | string;
+      studentId?: StringFilter<'BillingInvoice'> | string;
+      period?: StringFilter<'BillingInvoice'> | string;
+      totalAmount?: FloatFilter<'BillingInvoice'> | number;
+      paidAmount?: FloatFilter<'BillingInvoice'> | number;
+      dueDate?: DateTimeFilter<'BillingInvoice'> | Date | string;
+      status?: EnumInvoiceStatusFilter<'BillingInvoice'> | $Enums.InvoiceStatus;
+      notes?: StringNullableFilter<'BillingInvoice'> | string | null;
+      createdAt?: DateTimeFilter<'BillingInvoice'> | Date | string;
+      updatedAt?: DateTimeFilter<'BillingInvoice'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      student?: XOR<StudentRelationFilter, StudentWhereInput>;
+      payments?: PaymentTransactionListRelationFilter;
+    },
+    'id' | 'tenantId_studentId_period'
+  >;
+
+  export type BillingInvoiceOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    period?: SortOrder;
+    totalAmount?: SortOrder;
+    paidAmount?: SortOrder;
+    dueDate?: SortOrder;
+    status?: SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: BillingInvoiceCountOrderByAggregateInput;
+    _avg?: BillingInvoiceAvgOrderByAggregateInput;
+    _max?: BillingInvoiceMaxOrderByAggregateInput;
+    _min?: BillingInvoiceMinOrderByAggregateInput;
+    _sum?: BillingInvoiceSumOrderByAggregateInput;
+  };
+
+  export type BillingInvoiceScalarWhereWithAggregatesInput = {
+    AND?:
+      BillingInvoiceScalarWhereWithAggregatesInput | BillingInvoiceScalarWhereWithAggregatesInput[];
+    OR?: BillingInvoiceScalarWhereWithAggregatesInput[];
+    NOT?:
+      BillingInvoiceScalarWhereWithAggregatesInput | BillingInvoiceScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'BillingInvoice'> | string;
+    tenantId?: StringWithAggregatesFilter<'BillingInvoice'> | string;
+    studentId?: StringWithAggregatesFilter<'BillingInvoice'> | string;
+    period?: StringWithAggregatesFilter<'BillingInvoice'> | string;
+    totalAmount?: FloatWithAggregatesFilter<'BillingInvoice'> | number;
+    paidAmount?: FloatWithAggregatesFilter<'BillingInvoice'> | number;
+    dueDate?: DateTimeWithAggregatesFilter<'BillingInvoice'> | Date | string;
+    status?: EnumInvoiceStatusWithAggregatesFilter<'BillingInvoice'> | $Enums.InvoiceStatus;
+    notes?: StringNullableWithAggregatesFilter<'BillingInvoice'> | string | null;
+    createdAt?: DateTimeWithAggregatesFilter<'BillingInvoice'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'BillingInvoice'> | Date | string;
+  };
+
+  export type PaymentTransactionWhereInput = {
+    AND?: PaymentTransactionWhereInput | PaymentTransactionWhereInput[];
+    OR?: PaymentTransactionWhereInput[];
+    NOT?: PaymentTransactionWhereInput | PaymentTransactionWhereInput[];
+    id?: StringFilter<'PaymentTransaction'> | string;
+    tenantId?: StringFilter<'PaymentTransaction'> | string;
+    invoiceId?: StringFilter<'PaymentTransaction'> | string;
+    studentId?: StringFilter<'PaymentTransaction'> | string;
+    amount?: FloatFilter<'PaymentTransaction'> | number;
+    method?: EnumPaymentMethodFilter<'PaymentTransaction'> | $Enums.PaymentMethod;
+    paidAt?: DateTimeFilter<'PaymentTransaction'> | Date | string;
+    referenceNo?: StringNullableFilter<'PaymentTransaction'> | string | null;
+    notes?: StringNullableFilter<'PaymentTransaction'> | string | null;
+    recordedByUserId?: StringFilter<'PaymentTransaction'> | string;
+    createdAt?: DateTimeFilter<'PaymentTransaction'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    invoice?: XOR<BillingInvoiceRelationFilter, BillingInvoiceWhereInput>;
+    student?: XOR<StudentRelationFilter, StudentWhereInput>;
+    recordedBy?: XOR<UserRelationFilter, UserWhereInput>;
+  };
+
+  export type PaymentTransactionOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    invoiceId?: SortOrder;
+    studentId?: SortOrder;
+    amount?: SortOrder;
+    method?: SortOrder;
+    paidAt?: SortOrder;
+    referenceNo?: SortOrderInput | SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    recordedByUserId?: SortOrder;
+    createdAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    invoice?: BillingInvoiceOrderByWithRelationInput;
+    student?: StudentOrderByWithRelationInput;
+    recordedBy?: UserOrderByWithRelationInput;
+  };
+
+  export type PaymentTransactionWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: PaymentTransactionWhereInput | PaymentTransactionWhereInput[];
+      OR?: PaymentTransactionWhereInput[];
+      NOT?: PaymentTransactionWhereInput | PaymentTransactionWhereInput[];
+      tenantId?: StringFilter<'PaymentTransaction'> | string;
+      invoiceId?: StringFilter<'PaymentTransaction'> | string;
+      studentId?: StringFilter<'PaymentTransaction'> | string;
+      amount?: FloatFilter<'PaymentTransaction'> | number;
+      method?: EnumPaymentMethodFilter<'PaymentTransaction'> | $Enums.PaymentMethod;
+      paidAt?: DateTimeFilter<'PaymentTransaction'> | Date | string;
+      referenceNo?: StringNullableFilter<'PaymentTransaction'> | string | null;
+      notes?: StringNullableFilter<'PaymentTransaction'> | string | null;
+      recordedByUserId?: StringFilter<'PaymentTransaction'> | string;
+      createdAt?: DateTimeFilter<'PaymentTransaction'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      invoice?: XOR<BillingInvoiceRelationFilter, BillingInvoiceWhereInput>;
+      student?: XOR<StudentRelationFilter, StudentWhereInput>;
+      recordedBy?: XOR<UserRelationFilter, UserWhereInput>;
+    },
+    'id'
+  >;
+
+  export type PaymentTransactionOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    invoiceId?: SortOrder;
+    studentId?: SortOrder;
+    amount?: SortOrder;
+    method?: SortOrder;
+    paidAt?: SortOrder;
+    referenceNo?: SortOrderInput | SortOrder;
+    notes?: SortOrderInput | SortOrder;
+    recordedByUserId?: SortOrder;
+    createdAt?: SortOrder;
+    _count?: PaymentTransactionCountOrderByAggregateInput;
+    _avg?: PaymentTransactionAvgOrderByAggregateInput;
+    _max?: PaymentTransactionMaxOrderByAggregateInput;
+    _min?: PaymentTransactionMinOrderByAggregateInput;
+    _sum?: PaymentTransactionSumOrderByAggregateInput;
+  };
+
+  export type PaymentTransactionScalarWhereWithAggregatesInput = {
+    AND?:
+      | PaymentTransactionScalarWhereWithAggregatesInput
+      | PaymentTransactionScalarWhereWithAggregatesInput[];
+    OR?: PaymentTransactionScalarWhereWithAggregatesInput[];
+    NOT?:
+      | PaymentTransactionScalarWhereWithAggregatesInput
+      | PaymentTransactionScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'PaymentTransaction'> | string;
+    tenantId?: StringWithAggregatesFilter<'PaymentTransaction'> | string;
+    invoiceId?: StringWithAggregatesFilter<'PaymentTransaction'> | string;
+    studentId?: StringWithAggregatesFilter<'PaymentTransaction'> | string;
+    amount?: FloatWithAggregatesFilter<'PaymentTransaction'> | number;
+    method?: EnumPaymentMethodWithAggregatesFilter<'PaymentTransaction'> | $Enums.PaymentMethod;
+    paidAt?: DateTimeWithAggregatesFilter<'PaymentTransaction'> | Date | string;
+    referenceNo?: StringNullableWithAggregatesFilter<'PaymentTransaction'> | string | null;
+    notes?: StringNullableWithAggregatesFilter<'PaymentTransaction'> | string | null;
+    recordedByUserId?: StringWithAggregatesFilter<'PaymentTransaction'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'PaymentTransaction'> | Date | string;
+  };
+
   export type TenantCreateInput = {
     id?: string;
     slug: string;
@@ -42456,6 +47108,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateInput = {
@@ -42492,6 +47147,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUpdateInput = {
@@ -42528,6 +47186,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateInput = {
@@ -42564,6 +47225,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateManyInput = {
@@ -42626,6 +47290,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -42661,6 +47326,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUpdateInput = {
@@ -42696,6 +47362,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -42731,6 +47398,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -42796,6 +47464,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateInput = {
@@ -42826,6 +47497,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUpdateInput = {
@@ -42856,6 +47530,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateInput = {
@@ -42886,6 +47563,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentCreateManyInput = {
@@ -45246,6 +49926,303 @@ export namespace Prisma {
     respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type StudentBillingPlanCreateInput = {
+    id?: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutBillingPlansInput;
+    student: StudentCreateNestedOneWithoutBillingPlansInput;
+  };
+
+  export type StudentBillingPlanUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type StudentBillingPlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutBillingPlansNestedInput;
+    student?: StudentUpdateOneRequiredWithoutBillingPlansNestedInput;
+  };
+
+  export type StudentBillingPlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type StudentBillingPlanCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type StudentBillingPlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type StudentBillingPlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type BillingInvoiceCreateInput = {
+    id?: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutBillingInvoicesInput;
+    student: StudentCreateNestedOneWithoutBillingInvoicesInput;
+    payments?: PaymentTransactionCreateNestedManyWithoutInvoiceInput;
+  };
+
+  export type BillingInvoiceUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    payments?: PaymentTransactionUncheckedCreateNestedManyWithoutInvoiceInput;
+  };
+
+  export type BillingInvoiceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutBillingInvoicesNestedInput;
+    student?: StudentUpdateOneRequiredWithoutBillingInvoicesNestedInput;
+    payments?: PaymentTransactionUpdateManyWithoutInvoiceNestedInput;
+  };
+
+  export type BillingInvoiceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    payments?: PaymentTransactionUncheckedUpdateManyWithoutInvoiceNestedInput;
+  };
+
+  export type BillingInvoiceCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type BillingInvoiceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type BillingInvoiceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionCreateInput = {
+    id?: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutPaymentTransactionsInput;
+    invoice: BillingInvoiceCreateNestedOneWithoutPaymentsInput;
+    student: StudentCreateNestedOneWithoutPaymentTransactionsInput;
+    recordedBy: UserCreateNestedOneWithoutPaymentsRecordedInput;
+  };
+
+  export type PaymentTransactionUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    invoiceId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    recordedByUserId: string;
+    createdAt?: Date | string;
+  };
+
+  export type PaymentTransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutPaymentTransactionsNestedInput;
+    invoice?: BillingInvoiceUpdateOneRequiredWithoutPaymentsNestedInput;
+    student?: StudentUpdateOneRequiredWithoutPaymentTransactionsNestedInput;
+    recordedBy?: UserUpdateOneRequiredWithoutPaymentsRecordedNestedInput;
+  };
+
+  export type PaymentTransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    invoiceId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    recordedByUserId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    invoiceId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    recordedByUserId: string;
+    createdAt?: Date | string;
+  };
+
+  export type PaymentTransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    invoiceId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    recordedByUserId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -45441,6 +50418,24 @@ export namespace Prisma {
     none?: EventConsentResponseWhereInput;
   };
 
+  export type StudentBillingPlanListRelationFilter = {
+    every?: StudentBillingPlanWhereInput;
+    some?: StudentBillingPlanWhereInput;
+    none?: StudentBillingPlanWhereInput;
+  };
+
+  export type BillingInvoiceListRelationFilter = {
+    every?: BillingInvoiceWhereInput;
+    some?: BillingInvoiceWhereInput;
+    none?: BillingInvoiceWhereInput;
+  };
+
+  export type PaymentTransactionListRelationFilter = {
+    every?: PaymentTransactionWhereInput;
+    some?: PaymentTransactionWhereInput;
+    none?: PaymentTransactionWhereInput;
+  };
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -45546,6 +50541,18 @@ export namespace Prisma {
   };
 
   export type EventConsentResponseOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type StudentBillingPlanOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type BillingInvoiceOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type PaymentTransactionOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -47348,6 +52355,241 @@ export namespace Prisma {
     respondedAt?: SortOrder;
   };
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>;
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>;
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>;
+    lt?: number | FloatFieldRefInput<$PrismaModel>;
+    lte?: number | FloatFieldRefInput<$PrismaModel>;
+    gt?: number | FloatFieldRefInput<$PrismaModel>;
+    gte?: number | FloatFieldRefInput<$PrismaModel>;
+    not?: NestedFloatFilter<$PrismaModel> | number;
+  };
+
+  export type StudentBillingPlanCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    tuitionAmount?: SortOrder;
+    serviceAmount?: SortOrder;
+    activityAmount?: SortOrder;
+    discountPercent?: SortOrder;
+    dueDayOfMonth?: SortOrder;
+    notes?: SortOrder;
+    isActive?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type StudentBillingPlanAvgOrderByAggregateInput = {
+    tuitionAmount?: SortOrder;
+    serviceAmount?: SortOrder;
+    activityAmount?: SortOrder;
+    discountPercent?: SortOrder;
+    dueDayOfMonth?: SortOrder;
+  };
+
+  export type StudentBillingPlanMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    tuitionAmount?: SortOrder;
+    serviceAmount?: SortOrder;
+    activityAmount?: SortOrder;
+    discountPercent?: SortOrder;
+    dueDayOfMonth?: SortOrder;
+    notes?: SortOrder;
+    isActive?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type StudentBillingPlanMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    tuitionAmount?: SortOrder;
+    serviceAmount?: SortOrder;
+    activityAmount?: SortOrder;
+    discountPercent?: SortOrder;
+    dueDayOfMonth?: SortOrder;
+    notes?: SortOrder;
+    isActive?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type StudentBillingPlanSumOrderByAggregateInput = {
+    tuitionAmount?: SortOrder;
+    serviceAmount?: SortOrder;
+    activityAmount?: SortOrder;
+    discountPercent?: SortOrder;
+    dueDayOfMonth?: SortOrder;
+  };
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>;
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>;
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>;
+    lt?: number | FloatFieldRefInput<$PrismaModel>;
+    lte?: number | FloatFieldRefInput<$PrismaModel>;
+    gt?: number | FloatFieldRefInput<$PrismaModel>;
+    gte?: number | FloatFieldRefInput<$PrismaModel>;
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _avg?: NestedFloatFilter<$PrismaModel>;
+    _sum?: NestedFloatFilter<$PrismaModel>;
+    _min?: NestedFloatFilter<$PrismaModel>;
+    _max?: NestedFloatFilter<$PrismaModel>;
+  };
+
+  export type EnumInvoiceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvoiceStatus | EnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumInvoiceStatusFilter<$PrismaModel> | $Enums.InvoiceStatus;
+  };
+
+  export type BillingInvoiceTenantIdStudentIdPeriodCompoundUniqueInput = {
+    tenantId: string;
+    studentId: string;
+    period: string;
+  };
+
+  export type BillingInvoiceCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    period?: SortOrder;
+    totalAmount?: SortOrder;
+    paidAmount?: SortOrder;
+    dueDate?: SortOrder;
+    status?: SortOrder;
+    notes?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type BillingInvoiceAvgOrderByAggregateInput = {
+    totalAmount?: SortOrder;
+    paidAmount?: SortOrder;
+  };
+
+  export type BillingInvoiceMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    period?: SortOrder;
+    totalAmount?: SortOrder;
+    paidAmount?: SortOrder;
+    dueDate?: SortOrder;
+    status?: SortOrder;
+    notes?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type BillingInvoiceMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    studentId?: SortOrder;
+    period?: SortOrder;
+    totalAmount?: SortOrder;
+    paidAmount?: SortOrder;
+    dueDate?: SortOrder;
+    status?: SortOrder;
+    notes?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type BillingInvoiceSumOrderByAggregateInput = {
+    totalAmount?: SortOrder;
+    paidAmount?: SortOrder;
+  };
+
+  export type EnumInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvoiceStatus | EnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumInvoiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvoiceStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumInvoiceStatusFilter<$PrismaModel>;
+    _max?: NestedEnumInvoiceStatusFilter<$PrismaModel>;
+  };
+
+  export type EnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>;
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>;
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod;
+  };
+
+  export type BillingInvoiceRelationFilter = {
+    is?: BillingInvoiceWhereInput;
+    isNot?: BillingInvoiceWhereInput;
+  };
+
+  export type PaymentTransactionCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    invoiceId?: SortOrder;
+    studentId?: SortOrder;
+    amount?: SortOrder;
+    method?: SortOrder;
+    paidAt?: SortOrder;
+    referenceNo?: SortOrder;
+    notes?: SortOrder;
+    recordedByUserId?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type PaymentTransactionAvgOrderByAggregateInput = {
+    amount?: SortOrder;
+  };
+
+  export type PaymentTransactionMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    invoiceId?: SortOrder;
+    studentId?: SortOrder;
+    amount?: SortOrder;
+    method?: SortOrder;
+    paidAt?: SortOrder;
+    referenceNo?: SortOrder;
+    notes?: SortOrder;
+    recordedByUserId?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type PaymentTransactionMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    invoiceId?: SortOrder;
+    studentId?: SortOrder;
+    amount?: SortOrder;
+    method?: SortOrder;
+    paidAt?: SortOrder;
+    referenceNo?: SortOrder;
+    notes?: SortOrder;
+    recordedByUserId?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type PaymentTransactionSumOrderByAggregateInput = {
+    amount?: SortOrder;
+  };
+
+  export type EnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>;
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>;
+    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>;
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>;
+  };
+
   export type UserCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -47690,6 +52932,48 @@ export namespace Prisma {
     connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
   };
 
+  export type StudentBillingPlanCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          StudentBillingPlanCreateWithoutTenantInput,
+          StudentBillingPlanUncheckedCreateWithoutTenantInput
+        >
+      | StudentBillingPlanCreateWithoutTenantInput[]
+      | StudentBillingPlanUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | StudentBillingPlanCreateOrConnectWithoutTenantInput
+      | StudentBillingPlanCreateOrConnectWithoutTenantInput[];
+    createMany?: StudentBillingPlanCreateManyTenantInputEnvelope;
+    connect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+  };
+
+  export type BillingInvoiceCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<BillingInvoiceCreateWithoutTenantInput, BillingInvoiceUncheckedCreateWithoutTenantInput>
+      | BillingInvoiceCreateWithoutTenantInput[]
+      | BillingInvoiceUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | BillingInvoiceCreateOrConnectWithoutTenantInput
+      | BillingInvoiceCreateOrConnectWithoutTenantInput[];
+    createMany?: BillingInvoiceCreateManyTenantInputEnvelope;
+    connect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+  };
+
+  export type PaymentTransactionCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutTenantInput,
+          PaymentTransactionUncheckedCreateWithoutTenantInput
+        >
+      | PaymentTransactionCreateWithoutTenantInput[]
+      | PaymentTransactionUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutTenantInput
+      | PaymentTransactionCreateOrConnectWithoutTenantInput[];
+    createMany?: PaymentTransactionCreateManyTenantInputEnvelope;
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+  };
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -48030,6 +53314,48 @@ export namespace Prisma {
       | EventConsentResponseCreateOrConnectWithoutTenantInput[];
     createMany?: EventConsentResponseCreateManyTenantInputEnvelope;
     connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+  };
+
+  export type StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          StudentBillingPlanCreateWithoutTenantInput,
+          StudentBillingPlanUncheckedCreateWithoutTenantInput
+        >
+      | StudentBillingPlanCreateWithoutTenantInput[]
+      | StudentBillingPlanUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | StudentBillingPlanCreateOrConnectWithoutTenantInput
+      | StudentBillingPlanCreateOrConnectWithoutTenantInput[];
+    createMany?: StudentBillingPlanCreateManyTenantInputEnvelope;
+    connect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+  };
+
+  export type BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<BillingInvoiceCreateWithoutTenantInput, BillingInvoiceUncheckedCreateWithoutTenantInput>
+      | BillingInvoiceCreateWithoutTenantInput[]
+      | BillingInvoiceUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | BillingInvoiceCreateOrConnectWithoutTenantInput
+      | BillingInvoiceCreateOrConnectWithoutTenantInput[];
+    createMany?: BillingInvoiceCreateManyTenantInputEnvelope;
+    connect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+  };
+
+  export type PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutTenantInput,
+          PaymentTransactionUncheckedCreateWithoutTenantInput
+        >
+      | PaymentTransactionCreateWithoutTenantInput[]
+      | PaymentTransactionUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutTenantInput
+      | PaymentTransactionCreateOrConnectWithoutTenantInput[];
+    createMany?: PaymentTransactionCreateManyTenantInputEnvelope;
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -48734,6 +54060,87 @@ export namespace Prisma {
     deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
   };
 
+  export type StudentBillingPlanUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          StudentBillingPlanCreateWithoutTenantInput,
+          StudentBillingPlanUncheckedCreateWithoutTenantInput
+        >
+      | StudentBillingPlanCreateWithoutTenantInput[]
+      | StudentBillingPlanUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | StudentBillingPlanCreateOrConnectWithoutTenantInput
+      | StudentBillingPlanCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | StudentBillingPlanUpsertWithWhereUniqueWithoutTenantInput
+      | StudentBillingPlanUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: StudentBillingPlanCreateManyTenantInputEnvelope;
+    set?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    disconnect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    delete?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    connect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    update?:
+      | StudentBillingPlanUpdateWithWhereUniqueWithoutTenantInput
+      | StudentBillingPlanUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | StudentBillingPlanUpdateManyWithWhereWithoutTenantInput
+      | StudentBillingPlanUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: StudentBillingPlanScalarWhereInput | StudentBillingPlanScalarWhereInput[];
+  };
+
+  export type BillingInvoiceUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<BillingInvoiceCreateWithoutTenantInput, BillingInvoiceUncheckedCreateWithoutTenantInput>
+      | BillingInvoiceCreateWithoutTenantInput[]
+      | BillingInvoiceUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | BillingInvoiceCreateOrConnectWithoutTenantInput
+      | BillingInvoiceCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | BillingInvoiceUpsertWithWhereUniqueWithoutTenantInput
+      | BillingInvoiceUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: BillingInvoiceCreateManyTenantInputEnvelope;
+    set?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    disconnect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    delete?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    connect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    update?:
+      | BillingInvoiceUpdateWithWhereUniqueWithoutTenantInput
+      | BillingInvoiceUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | BillingInvoiceUpdateManyWithWhereWithoutTenantInput
+      | BillingInvoiceUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: BillingInvoiceScalarWhereInput | BillingInvoiceScalarWhereInput[];
+  };
+
+  export type PaymentTransactionUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutTenantInput,
+          PaymentTransactionUncheckedCreateWithoutTenantInput
+        >
+      | PaymentTransactionCreateWithoutTenantInput[]
+      | PaymentTransactionUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutTenantInput
+      | PaymentTransactionCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | PaymentTransactionUpsertWithWhereUniqueWithoutTenantInput
+      | PaymentTransactionUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: PaymentTransactionCreateManyTenantInputEnvelope;
+    set?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    disconnect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    delete?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    update?:
+      | PaymentTransactionUpdateWithWhereUniqueWithoutTenantInput
+      | PaymentTransactionUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | PaymentTransactionUpdateManyWithWhereWithoutTenantInput
+      | PaymentTransactionUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+  };
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -49424,6 +54831,87 @@ export namespace Prisma {
     deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
   };
 
+  export type StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          StudentBillingPlanCreateWithoutTenantInput,
+          StudentBillingPlanUncheckedCreateWithoutTenantInput
+        >
+      | StudentBillingPlanCreateWithoutTenantInput[]
+      | StudentBillingPlanUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | StudentBillingPlanCreateOrConnectWithoutTenantInput
+      | StudentBillingPlanCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | StudentBillingPlanUpsertWithWhereUniqueWithoutTenantInput
+      | StudentBillingPlanUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: StudentBillingPlanCreateManyTenantInputEnvelope;
+    set?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    disconnect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    delete?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    connect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    update?:
+      | StudentBillingPlanUpdateWithWhereUniqueWithoutTenantInput
+      | StudentBillingPlanUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | StudentBillingPlanUpdateManyWithWhereWithoutTenantInput
+      | StudentBillingPlanUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: StudentBillingPlanScalarWhereInput | StudentBillingPlanScalarWhereInput[];
+  };
+
+  export type BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<BillingInvoiceCreateWithoutTenantInput, BillingInvoiceUncheckedCreateWithoutTenantInput>
+      | BillingInvoiceCreateWithoutTenantInput[]
+      | BillingInvoiceUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | BillingInvoiceCreateOrConnectWithoutTenantInput
+      | BillingInvoiceCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | BillingInvoiceUpsertWithWhereUniqueWithoutTenantInput
+      | BillingInvoiceUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: BillingInvoiceCreateManyTenantInputEnvelope;
+    set?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    disconnect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    delete?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    connect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    update?:
+      | BillingInvoiceUpdateWithWhereUniqueWithoutTenantInput
+      | BillingInvoiceUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | BillingInvoiceUpdateManyWithWhereWithoutTenantInput
+      | BillingInvoiceUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: BillingInvoiceScalarWhereInput | BillingInvoiceScalarWhereInput[];
+  };
+
+  export type PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutTenantInput,
+          PaymentTransactionUncheckedCreateWithoutTenantInput
+        >
+      | PaymentTransactionCreateWithoutTenantInput[]
+      | PaymentTransactionUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutTenantInput
+      | PaymentTransactionCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | PaymentTransactionUpsertWithWhereUniqueWithoutTenantInput
+      | PaymentTransactionUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: PaymentTransactionCreateManyTenantInputEnvelope;
+    set?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    disconnect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    delete?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    update?:
+      | PaymentTransactionUpdateWithWhereUniqueWithoutTenantInput
+      | PaymentTransactionUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | PaymentTransactionUpdateManyWithWhereWithoutTenantInput
+      | PaymentTransactionUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutUsersInput = {
     create?: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutUsersInput;
@@ -49753,6 +55241,21 @@ export namespace Prisma {
     connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
   };
 
+  export type PaymentTransactionCreateNestedManyWithoutRecordedByInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutRecordedByInput,
+          PaymentTransactionUncheckedCreateWithoutRecordedByInput
+        >
+      | PaymentTransactionCreateWithoutRecordedByInput[]
+      | PaymentTransactionUncheckedCreateWithoutRecordedByInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutRecordedByInput
+      | PaymentTransactionCreateOrConnectWithoutRecordedByInput[];
+    createMany?: PaymentTransactionCreateManyRecordedByInputEnvelope;
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+  };
+
   export type StudentUncheckedCreateNestedManyWithoutParentInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -50074,6 +55577,21 @@ export namespace Prisma {
       | EventConsentResponseCreateOrConnectWithoutParentUserInput[];
     createMany?: EventConsentResponseCreateManyParentUserInputEnvelope;
     connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+  };
+
+  export type PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutRecordedByInput,
+          PaymentTransactionUncheckedCreateWithoutRecordedByInput
+        >
+      | PaymentTransactionCreateWithoutRecordedByInput[]
+      | PaymentTransactionUncheckedCreateWithoutRecordedByInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutRecordedByInput
+      | PaymentTransactionCreateOrConnectWithoutRecordedByInput[];
+    createMany?: PaymentTransactionCreateManyRecordedByInputEnvelope;
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
   };
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -50721,6 +56239,34 @@ export namespace Prisma {
     deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
   };
 
+  export type PaymentTransactionUpdateManyWithoutRecordedByNestedInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutRecordedByInput,
+          PaymentTransactionUncheckedCreateWithoutRecordedByInput
+        >
+      | PaymentTransactionCreateWithoutRecordedByInput[]
+      | PaymentTransactionUncheckedCreateWithoutRecordedByInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutRecordedByInput
+      | PaymentTransactionCreateOrConnectWithoutRecordedByInput[];
+    upsert?:
+      | PaymentTransactionUpsertWithWhereUniqueWithoutRecordedByInput
+      | PaymentTransactionUpsertWithWhereUniqueWithoutRecordedByInput[];
+    createMany?: PaymentTransactionCreateManyRecordedByInputEnvelope;
+    set?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    disconnect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    delete?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    update?:
+      | PaymentTransactionUpdateWithWhereUniqueWithoutRecordedByInput
+      | PaymentTransactionUpdateWithWhereUniqueWithoutRecordedByInput[];
+    updateMany?:
+      | PaymentTransactionUpdateManyWithWhereWithoutRecordedByInput
+      | PaymentTransactionUpdateManyWithWhereWithoutRecordedByInput[];
+    deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+  };
+
   export type StudentUncheckedUpdateManyWithoutParentNestedInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -51343,6 +56889,34 @@ export namespace Prisma {
     deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
   };
 
+  export type PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutRecordedByInput,
+          PaymentTransactionUncheckedCreateWithoutRecordedByInput
+        >
+      | PaymentTransactionCreateWithoutRecordedByInput[]
+      | PaymentTransactionUncheckedCreateWithoutRecordedByInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutRecordedByInput
+      | PaymentTransactionCreateOrConnectWithoutRecordedByInput[];
+    upsert?:
+      | PaymentTransactionUpsertWithWhereUniqueWithoutRecordedByInput
+      | PaymentTransactionUpsertWithWhereUniqueWithoutRecordedByInput[];
+    createMany?: PaymentTransactionCreateManyRecordedByInputEnvelope;
+    set?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    disconnect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    delete?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    update?:
+      | PaymentTransactionUpdateWithWhereUniqueWithoutRecordedByInput
+      | PaymentTransactionUpdateWithWhereUniqueWithoutRecordedByInput[];
+    updateMany?:
+      | PaymentTransactionUpdateManyWithWhereWithoutRecordedByInput
+      | PaymentTransactionUpdateManyWithWhereWithoutRecordedByInput[];
+    deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutStudentsInput = {
     create?: XOR<TenantCreateWithoutStudentsInput, TenantUncheckedCreateWithoutStudentsInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutStudentsInput;
@@ -51534,6 +57108,51 @@ export namespace Prisma {
     connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
   };
 
+  export type StudentBillingPlanCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          StudentBillingPlanCreateWithoutStudentInput,
+          StudentBillingPlanUncheckedCreateWithoutStudentInput
+        >
+      | StudentBillingPlanCreateWithoutStudentInput[]
+      | StudentBillingPlanUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | StudentBillingPlanCreateOrConnectWithoutStudentInput
+      | StudentBillingPlanCreateOrConnectWithoutStudentInput[];
+    createMany?: StudentBillingPlanCreateManyStudentInputEnvelope;
+    connect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+  };
+
+  export type BillingInvoiceCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          BillingInvoiceCreateWithoutStudentInput,
+          BillingInvoiceUncheckedCreateWithoutStudentInput
+        >
+      | BillingInvoiceCreateWithoutStudentInput[]
+      | BillingInvoiceUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | BillingInvoiceCreateOrConnectWithoutStudentInput
+      | BillingInvoiceCreateOrConnectWithoutStudentInput[];
+    createMany?: BillingInvoiceCreateManyStudentInputEnvelope;
+    connect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+  };
+
+  export type PaymentTransactionCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutStudentInput,
+          PaymentTransactionUncheckedCreateWithoutStudentInput
+        >
+      | PaymentTransactionCreateWithoutStudentInput[]
+      | PaymentTransactionUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutStudentInput
+      | PaymentTransactionCreateOrConnectWithoutStudentInput[];
+    createMany?: PaymentTransactionCreateManyStudentInputEnvelope;
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+  };
+
   export type DailyReportUncheckedCreateNestedManyWithoutStudentInput = {
     create?:
       | XOR<DailyReportCreateWithoutStudentInput, DailyReportUncheckedCreateWithoutStudentInput>
@@ -51705,6 +57324,51 @@ export namespace Prisma {
       | EventConsentResponseCreateOrConnectWithoutStudentInput[];
     createMany?: EventConsentResponseCreateManyStudentInputEnvelope;
     connect?: EventConsentResponseWhereUniqueInput | EventConsentResponseWhereUniqueInput[];
+  };
+
+  export type StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          StudentBillingPlanCreateWithoutStudentInput,
+          StudentBillingPlanUncheckedCreateWithoutStudentInput
+        >
+      | StudentBillingPlanCreateWithoutStudentInput[]
+      | StudentBillingPlanUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | StudentBillingPlanCreateOrConnectWithoutStudentInput
+      | StudentBillingPlanCreateOrConnectWithoutStudentInput[];
+    createMany?: StudentBillingPlanCreateManyStudentInputEnvelope;
+    connect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+  };
+
+  export type BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          BillingInvoiceCreateWithoutStudentInput,
+          BillingInvoiceUncheckedCreateWithoutStudentInput
+        >
+      | BillingInvoiceCreateWithoutStudentInput[]
+      | BillingInvoiceUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | BillingInvoiceCreateOrConnectWithoutStudentInput
+      | BillingInvoiceCreateOrConnectWithoutStudentInput[];
+    createMany?: BillingInvoiceCreateManyStudentInputEnvelope;
+    connect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+  };
+
+  export type PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutStudentInput,
+          PaymentTransactionUncheckedCreateWithoutStudentInput
+        >
+      | PaymentTransactionCreateWithoutStudentInput[]
+      | PaymentTransactionUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutStudentInput
+      | PaymentTransactionCreateOrConnectWithoutStudentInput[];
+    createMany?: PaymentTransactionCreateManyStudentInputEnvelope;
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
   };
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -52090,6 +57754,90 @@ export namespace Prisma {
     deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
   };
 
+  export type StudentBillingPlanUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          StudentBillingPlanCreateWithoutStudentInput,
+          StudentBillingPlanUncheckedCreateWithoutStudentInput
+        >
+      | StudentBillingPlanCreateWithoutStudentInput[]
+      | StudentBillingPlanUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | StudentBillingPlanCreateOrConnectWithoutStudentInput
+      | StudentBillingPlanCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | StudentBillingPlanUpsertWithWhereUniqueWithoutStudentInput
+      | StudentBillingPlanUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: StudentBillingPlanCreateManyStudentInputEnvelope;
+    set?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    disconnect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    delete?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    connect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    update?:
+      | StudentBillingPlanUpdateWithWhereUniqueWithoutStudentInput
+      | StudentBillingPlanUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | StudentBillingPlanUpdateManyWithWhereWithoutStudentInput
+      | StudentBillingPlanUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: StudentBillingPlanScalarWhereInput | StudentBillingPlanScalarWhereInput[];
+  };
+
+  export type BillingInvoiceUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          BillingInvoiceCreateWithoutStudentInput,
+          BillingInvoiceUncheckedCreateWithoutStudentInput
+        >
+      | BillingInvoiceCreateWithoutStudentInput[]
+      | BillingInvoiceUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | BillingInvoiceCreateOrConnectWithoutStudentInput
+      | BillingInvoiceCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | BillingInvoiceUpsertWithWhereUniqueWithoutStudentInput
+      | BillingInvoiceUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: BillingInvoiceCreateManyStudentInputEnvelope;
+    set?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    disconnect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    delete?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    connect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    update?:
+      | BillingInvoiceUpdateWithWhereUniqueWithoutStudentInput
+      | BillingInvoiceUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | BillingInvoiceUpdateManyWithWhereWithoutStudentInput
+      | BillingInvoiceUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: BillingInvoiceScalarWhereInput | BillingInvoiceScalarWhereInput[];
+  };
+
+  export type PaymentTransactionUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutStudentInput,
+          PaymentTransactionUncheckedCreateWithoutStudentInput
+        >
+      | PaymentTransactionCreateWithoutStudentInput[]
+      | PaymentTransactionUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutStudentInput
+      | PaymentTransactionCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | PaymentTransactionUpsertWithWhereUniqueWithoutStudentInput
+      | PaymentTransactionUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: PaymentTransactionCreateManyStudentInputEnvelope;
+    set?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    disconnect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    delete?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    update?:
+      | PaymentTransactionUpdateWithWhereUniqueWithoutStudentInput
+      | PaymentTransactionUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | PaymentTransactionUpdateManyWithWhereWithoutStudentInput
+      | PaymentTransactionUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+  };
+
   export type DailyReportUncheckedUpdateManyWithoutStudentNestedInput = {
     create?:
       | XOR<DailyReportCreateWithoutStudentInput, DailyReportUncheckedCreateWithoutStudentInput>
@@ -52430,6 +58178,90 @@ export namespace Prisma {
       | EventConsentResponseUpdateManyWithWhereWithoutStudentInput
       | EventConsentResponseUpdateManyWithWhereWithoutStudentInput[];
     deleteMany?: EventConsentResponseScalarWhereInput | EventConsentResponseScalarWhereInput[];
+  };
+
+  export type StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          StudentBillingPlanCreateWithoutStudentInput,
+          StudentBillingPlanUncheckedCreateWithoutStudentInput
+        >
+      | StudentBillingPlanCreateWithoutStudentInput[]
+      | StudentBillingPlanUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | StudentBillingPlanCreateOrConnectWithoutStudentInput
+      | StudentBillingPlanCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | StudentBillingPlanUpsertWithWhereUniqueWithoutStudentInput
+      | StudentBillingPlanUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: StudentBillingPlanCreateManyStudentInputEnvelope;
+    set?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    disconnect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    delete?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    connect?: StudentBillingPlanWhereUniqueInput | StudentBillingPlanWhereUniqueInput[];
+    update?:
+      | StudentBillingPlanUpdateWithWhereUniqueWithoutStudentInput
+      | StudentBillingPlanUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | StudentBillingPlanUpdateManyWithWhereWithoutStudentInput
+      | StudentBillingPlanUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: StudentBillingPlanScalarWhereInput | StudentBillingPlanScalarWhereInput[];
+  };
+
+  export type BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          BillingInvoiceCreateWithoutStudentInput,
+          BillingInvoiceUncheckedCreateWithoutStudentInput
+        >
+      | BillingInvoiceCreateWithoutStudentInput[]
+      | BillingInvoiceUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | BillingInvoiceCreateOrConnectWithoutStudentInput
+      | BillingInvoiceCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | BillingInvoiceUpsertWithWhereUniqueWithoutStudentInput
+      | BillingInvoiceUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: BillingInvoiceCreateManyStudentInputEnvelope;
+    set?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    disconnect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    delete?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    connect?: BillingInvoiceWhereUniqueInput | BillingInvoiceWhereUniqueInput[];
+    update?:
+      | BillingInvoiceUpdateWithWhereUniqueWithoutStudentInput
+      | BillingInvoiceUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | BillingInvoiceUpdateManyWithWhereWithoutStudentInput
+      | BillingInvoiceUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: BillingInvoiceScalarWhereInput | BillingInvoiceScalarWhereInput[];
+  };
+
+  export type PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutStudentInput,
+          PaymentTransactionUncheckedCreateWithoutStudentInput
+        >
+      | PaymentTransactionCreateWithoutStudentInput[]
+      | PaymentTransactionUncheckedCreateWithoutStudentInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutStudentInput
+      | PaymentTransactionCreateOrConnectWithoutStudentInput[];
+    upsert?:
+      | PaymentTransactionUpsertWithWhereUniqueWithoutStudentInput
+      | PaymentTransactionUpsertWithWhereUniqueWithoutStudentInput[];
+    createMany?: PaymentTransactionCreateManyStudentInputEnvelope;
+    set?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    disconnect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    delete?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    update?:
+      | PaymentTransactionUpdateWithWhereUniqueWithoutStudentInput
+      | PaymentTransactionUpdateWithWhereUniqueWithoutStudentInput[];
+    updateMany?:
+      | PaymentTransactionUpdateManyWithWhereWithoutStudentInput
+      | PaymentTransactionUpdateManyWithWhereWithoutStudentInput[];
+    deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
   };
 
   export type TenantCreateNestedOneWithoutClassroomsInput = {
@@ -55158,6 +60990,313 @@ export namespace Prisma {
     >;
   };
 
+  export type TenantCreateNestedOneWithoutBillingPlansInput = {
+    create?: XOR<
+      TenantCreateWithoutBillingPlansInput,
+      TenantUncheckedCreateWithoutBillingPlansInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutBillingPlansInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type StudentCreateNestedOneWithoutBillingPlansInput = {
+    create?: XOR<
+      StudentCreateWithoutBillingPlansInput,
+      StudentUncheckedCreateWithoutBillingPlansInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutBillingPlansInput;
+    connect?: StudentWhereUniqueInput;
+  };
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number;
+    increment?: number;
+    decrement?: number;
+    multiply?: number;
+    divide?: number;
+  };
+
+  export type TenantUpdateOneRequiredWithoutBillingPlansNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutBillingPlansInput,
+      TenantUncheckedCreateWithoutBillingPlansInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutBillingPlansInput;
+    upsert?: TenantUpsertWithoutBillingPlansInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<TenantUpdateToOneWithWhereWithoutBillingPlansInput, TenantUpdateWithoutBillingPlansInput>,
+      TenantUncheckedUpdateWithoutBillingPlansInput
+    >;
+  };
+
+  export type StudentUpdateOneRequiredWithoutBillingPlansNestedInput = {
+    create?: XOR<
+      StudentCreateWithoutBillingPlansInput,
+      StudentUncheckedCreateWithoutBillingPlansInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutBillingPlansInput;
+    upsert?: StudentUpsertWithoutBillingPlansInput;
+    connect?: StudentWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        StudentUpdateToOneWithWhereWithoutBillingPlansInput,
+        StudentUpdateWithoutBillingPlansInput
+      >,
+      StudentUncheckedUpdateWithoutBillingPlansInput
+    >;
+  };
+
+  export type TenantCreateNestedOneWithoutBillingInvoicesInput = {
+    create?: XOR<
+      TenantCreateWithoutBillingInvoicesInput,
+      TenantUncheckedCreateWithoutBillingInvoicesInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutBillingInvoicesInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type StudentCreateNestedOneWithoutBillingInvoicesInput = {
+    create?: XOR<
+      StudentCreateWithoutBillingInvoicesInput,
+      StudentUncheckedCreateWithoutBillingInvoicesInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutBillingInvoicesInput;
+    connect?: StudentWhereUniqueInput;
+  };
+
+  export type PaymentTransactionCreateNestedManyWithoutInvoiceInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutInvoiceInput,
+          PaymentTransactionUncheckedCreateWithoutInvoiceInput
+        >
+      | PaymentTransactionCreateWithoutInvoiceInput[]
+      | PaymentTransactionUncheckedCreateWithoutInvoiceInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutInvoiceInput
+      | PaymentTransactionCreateOrConnectWithoutInvoiceInput[];
+    createMany?: PaymentTransactionCreateManyInvoiceInputEnvelope;
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+  };
+
+  export type PaymentTransactionUncheckedCreateNestedManyWithoutInvoiceInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutInvoiceInput,
+          PaymentTransactionUncheckedCreateWithoutInvoiceInput
+        >
+      | PaymentTransactionCreateWithoutInvoiceInput[]
+      | PaymentTransactionUncheckedCreateWithoutInvoiceInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutInvoiceInput
+      | PaymentTransactionCreateOrConnectWithoutInvoiceInput[];
+    createMany?: PaymentTransactionCreateManyInvoiceInputEnvelope;
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+  };
+
+  export type EnumInvoiceStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InvoiceStatus;
+  };
+
+  export type TenantUpdateOneRequiredWithoutBillingInvoicesNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutBillingInvoicesInput,
+      TenantUncheckedCreateWithoutBillingInvoicesInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutBillingInvoicesInput;
+    upsert?: TenantUpsertWithoutBillingInvoicesInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TenantUpdateToOneWithWhereWithoutBillingInvoicesInput,
+        TenantUpdateWithoutBillingInvoicesInput
+      >,
+      TenantUncheckedUpdateWithoutBillingInvoicesInput
+    >;
+  };
+
+  export type StudentUpdateOneRequiredWithoutBillingInvoicesNestedInput = {
+    create?: XOR<
+      StudentCreateWithoutBillingInvoicesInput,
+      StudentUncheckedCreateWithoutBillingInvoicesInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutBillingInvoicesInput;
+    upsert?: StudentUpsertWithoutBillingInvoicesInput;
+    connect?: StudentWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        StudentUpdateToOneWithWhereWithoutBillingInvoicesInput,
+        StudentUpdateWithoutBillingInvoicesInput
+      >,
+      StudentUncheckedUpdateWithoutBillingInvoicesInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateManyWithoutInvoiceNestedInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutInvoiceInput,
+          PaymentTransactionUncheckedCreateWithoutInvoiceInput
+        >
+      | PaymentTransactionCreateWithoutInvoiceInput[]
+      | PaymentTransactionUncheckedCreateWithoutInvoiceInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutInvoiceInput
+      | PaymentTransactionCreateOrConnectWithoutInvoiceInput[];
+    upsert?:
+      | PaymentTransactionUpsertWithWhereUniqueWithoutInvoiceInput
+      | PaymentTransactionUpsertWithWhereUniqueWithoutInvoiceInput[];
+    createMany?: PaymentTransactionCreateManyInvoiceInputEnvelope;
+    set?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    disconnect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    delete?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    update?:
+      | PaymentTransactionUpdateWithWhereUniqueWithoutInvoiceInput
+      | PaymentTransactionUpdateWithWhereUniqueWithoutInvoiceInput[];
+    updateMany?:
+      | PaymentTransactionUpdateManyWithWhereWithoutInvoiceInput
+      | PaymentTransactionUpdateManyWithWhereWithoutInvoiceInput[];
+    deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+  };
+
+  export type PaymentTransactionUncheckedUpdateManyWithoutInvoiceNestedInput = {
+    create?:
+      | XOR<
+          PaymentTransactionCreateWithoutInvoiceInput,
+          PaymentTransactionUncheckedCreateWithoutInvoiceInput
+        >
+      | PaymentTransactionCreateWithoutInvoiceInput[]
+      | PaymentTransactionUncheckedCreateWithoutInvoiceInput[];
+    connectOrCreate?:
+      | PaymentTransactionCreateOrConnectWithoutInvoiceInput
+      | PaymentTransactionCreateOrConnectWithoutInvoiceInput[];
+    upsert?:
+      | PaymentTransactionUpsertWithWhereUniqueWithoutInvoiceInput
+      | PaymentTransactionUpsertWithWhereUniqueWithoutInvoiceInput[];
+    createMany?: PaymentTransactionCreateManyInvoiceInputEnvelope;
+    set?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    disconnect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    delete?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+    update?:
+      | PaymentTransactionUpdateWithWhereUniqueWithoutInvoiceInput
+      | PaymentTransactionUpdateWithWhereUniqueWithoutInvoiceInput[];
+    updateMany?:
+      | PaymentTransactionUpdateManyWithWhereWithoutInvoiceInput
+      | PaymentTransactionUpdateManyWithWhereWithoutInvoiceInput[];
+    deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+  };
+
+  export type TenantCreateNestedOneWithoutPaymentTransactionsInput = {
+    create?: XOR<
+      TenantCreateWithoutPaymentTransactionsInput,
+      TenantUncheckedCreateWithoutPaymentTransactionsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutPaymentTransactionsInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type BillingInvoiceCreateNestedOneWithoutPaymentsInput = {
+    create?: XOR<
+      BillingInvoiceCreateWithoutPaymentsInput,
+      BillingInvoiceUncheckedCreateWithoutPaymentsInput
+    >;
+    connectOrCreate?: BillingInvoiceCreateOrConnectWithoutPaymentsInput;
+    connect?: BillingInvoiceWhereUniqueInput;
+  };
+
+  export type StudentCreateNestedOneWithoutPaymentTransactionsInput = {
+    create?: XOR<
+      StudentCreateWithoutPaymentTransactionsInput,
+      StudentUncheckedCreateWithoutPaymentTransactionsInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutPaymentTransactionsInput;
+    connect?: StudentWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutPaymentsRecordedInput = {
+    create?: XOR<
+      UserCreateWithoutPaymentsRecordedInput,
+      UserUncheckedCreateWithoutPaymentsRecordedInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutPaymentsRecordedInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EnumPaymentMethodFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentMethod;
+  };
+
+  export type TenantUpdateOneRequiredWithoutPaymentTransactionsNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutPaymentTransactionsInput,
+      TenantUncheckedCreateWithoutPaymentTransactionsInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutPaymentTransactionsInput;
+    upsert?: TenantUpsertWithoutPaymentTransactionsInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TenantUpdateToOneWithWhereWithoutPaymentTransactionsInput,
+        TenantUpdateWithoutPaymentTransactionsInput
+      >,
+      TenantUncheckedUpdateWithoutPaymentTransactionsInput
+    >;
+  };
+
+  export type BillingInvoiceUpdateOneRequiredWithoutPaymentsNestedInput = {
+    create?: XOR<
+      BillingInvoiceCreateWithoutPaymentsInput,
+      BillingInvoiceUncheckedCreateWithoutPaymentsInput
+    >;
+    connectOrCreate?: BillingInvoiceCreateOrConnectWithoutPaymentsInput;
+    upsert?: BillingInvoiceUpsertWithoutPaymentsInput;
+    connect?: BillingInvoiceWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        BillingInvoiceUpdateToOneWithWhereWithoutPaymentsInput,
+        BillingInvoiceUpdateWithoutPaymentsInput
+      >,
+      BillingInvoiceUncheckedUpdateWithoutPaymentsInput
+    >;
+  };
+
+  export type StudentUpdateOneRequiredWithoutPaymentTransactionsNestedInput = {
+    create?: XOR<
+      StudentCreateWithoutPaymentTransactionsInput,
+      StudentUncheckedCreateWithoutPaymentTransactionsInput
+    >;
+    connectOrCreate?: StudentCreateOrConnectWithoutPaymentTransactionsInput;
+    upsert?: StudentUpsertWithoutPaymentTransactionsInput;
+    connect?: StudentWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        StudentUpdateToOneWithWhereWithoutPaymentTransactionsInput,
+        StudentUpdateWithoutPaymentTransactionsInput
+      >,
+      StudentUncheckedUpdateWithoutPaymentTransactionsInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutPaymentsRecordedNestedInput = {
+    create?: XOR<
+      UserCreateWithoutPaymentsRecordedInput,
+      UserUncheckedCreateWithoutPaymentsRecordedInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutPaymentsRecordedInput;
+    upsert?: UserUpsertWithoutPaymentsRecordedInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutPaymentsRecordedInput,
+        UserUpdateWithoutPaymentsRecordedInput
+      >,
+      UserUncheckedUpdateWithoutPaymentsRecordedInput
+    >;
+  };
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -55717,6 +61856,56 @@ export namespace Prisma {
     _max?: NestedDecimalNullableFilter<$PrismaModel>;
   };
 
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>;
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>;
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>;
+    lt?: number | FloatFieldRefInput<$PrismaModel>;
+    lte?: number | FloatFieldRefInput<$PrismaModel>;
+    gt?: number | FloatFieldRefInput<$PrismaModel>;
+    gte?: number | FloatFieldRefInput<$PrismaModel>;
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _avg?: NestedFloatFilter<$PrismaModel>;
+    _sum?: NestedFloatFilter<$PrismaModel>;
+    _min?: NestedFloatFilter<$PrismaModel>;
+    _max?: NestedFloatFilter<$PrismaModel>;
+  };
+
+  export type NestedEnumInvoiceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvoiceStatus | EnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumInvoiceStatusFilter<$PrismaModel> | $Enums.InvoiceStatus;
+  };
+
+  export type NestedEnumInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvoiceStatus | EnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumInvoiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvoiceStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumInvoiceStatusFilter<$PrismaModel>;
+    _max?: NestedEnumInvoiceStatusFilter<$PrismaModel>;
+  };
+
+  export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>;
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>;
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod;
+  };
+
+  export type NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>;
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>;
+    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>;
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>;
+  };
+
   export type UserCreateWithoutTenantInput = {
     id?: string;
     email: string;
@@ -55749,6 +61938,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutTenantInput = {
@@ -55783,6 +61973,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -55822,6 +62013,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutTenantInput = {
@@ -55851,6 +62045,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutTenantInput = {
@@ -56803,6 +63000,127 @@ export namespace Prisma {
 
   export type EventConsentResponseCreateManyTenantInputEnvelope = {
     data: EventConsentResponseCreateManyTenantInput | EventConsentResponseCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type StudentBillingPlanCreateWithoutTenantInput = {
+    id?: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    student: StudentCreateNestedOneWithoutBillingPlansInput;
+  };
+
+  export type StudentBillingPlanUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    studentId: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type StudentBillingPlanCreateOrConnectWithoutTenantInput = {
+    where: StudentBillingPlanWhereUniqueInput;
+    create: XOR<
+      StudentBillingPlanCreateWithoutTenantInput,
+      StudentBillingPlanUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type StudentBillingPlanCreateManyTenantInputEnvelope = {
+    data: StudentBillingPlanCreateManyTenantInput | StudentBillingPlanCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type BillingInvoiceCreateWithoutTenantInput = {
+    id?: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    student: StudentCreateNestedOneWithoutBillingInvoicesInput;
+    payments?: PaymentTransactionCreateNestedManyWithoutInvoiceInput;
+  };
+
+  export type BillingInvoiceUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    studentId: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    payments?: PaymentTransactionUncheckedCreateNestedManyWithoutInvoiceInput;
+  };
+
+  export type BillingInvoiceCreateOrConnectWithoutTenantInput = {
+    where: BillingInvoiceWhereUniqueInput;
+    create: XOR<
+      BillingInvoiceCreateWithoutTenantInput,
+      BillingInvoiceUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type BillingInvoiceCreateManyTenantInputEnvelope = {
+    data: BillingInvoiceCreateManyTenantInput | BillingInvoiceCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type PaymentTransactionCreateWithoutTenantInput = {
+    id?: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    invoice: BillingInvoiceCreateNestedOneWithoutPaymentsInput;
+    student: StudentCreateNestedOneWithoutPaymentTransactionsInput;
+    recordedBy: UserCreateNestedOneWithoutPaymentsRecordedInput;
+  };
+
+  export type PaymentTransactionUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    invoiceId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    recordedByUserId: string;
+    createdAt?: Date | string;
+  };
+
+  export type PaymentTransactionCreateOrConnectWithoutTenantInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    create: XOR<
+      PaymentTransactionCreateWithoutTenantInput,
+      PaymentTransactionUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type PaymentTransactionCreateManyTenantInputEnvelope = {
+    data: PaymentTransactionCreateManyTenantInput | PaymentTransactionCreateManyTenantInput[];
     skipDuplicates?: boolean;
   };
 
@@ -57887,6 +64205,142 @@ export namespace Prisma {
     respondedAt?: DateTimeFilter<'EventConsentResponse'> | Date | string;
   };
 
+  export type StudentBillingPlanUpsertWithWhereUniqueWithoutTenantInput = {
+    where: StudentBillingPlanWhereUniqueInput;
+    update: XOR<
+      StudentBillingPlanUpdateWithoutTenantInput,
+      StudentBillingPlanUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      StudentBillingPlanCreateWithoutTenantInput,
+      StudentBillingPlanUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type StudentBillingPlanUpdateWithWhereUniqueWithoutTenantInput = {
+    where: StudentBillingPlanWhereUniqueInput;
+    data: XOR<
+      StudentBillingPlanUpdateWithoutTenantInput,
+      StudentBillingPlanUncheckedUpdateWithoutTenantInput
+    >;
+  };
+
+  export type StudentBillingPlanUpdateManyWithWhereWithoutTenantInput = {
+    where: StudentBillingPlanScalarWhereInput;
+    data: XOR<
+      StudentBillingPlanUpdateManyMutationInput,
+      StudentBillingPlanUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type StudentBillingPlanScalarWhereInput = {
+    AND?: StudentBillingPlanScalarWhereInput | StudentBillingPlanScalarWhereInput[];
+    OR?: StudentBillingPlanScalarWhereInput[];
+    NOT?: StudentBillingPlanScalarWhereInput | StudentBillingPlanScalarWhereInput[];
+    id?: StringFilter<'StudentBillingPlan'> | string;
+    tenantId?: StringFilter<'StudentBillingPlan'> | string;
+    studentId?: StringFilter<'StudentBillingPlan'> | string;
+    tuitionAmount?: FloatFilter<'StudentBillingPlan'> | number;
+    serviceAmount?: FloatFilter<'StudentBillingPlan'> | number;
+    activityAmount?: FloatFilter<'StudentBillingPlan'> | number;
+    discountPercent?: FloatFilter<'StudentBillingPlan'> | number;
+    dueDayOfMonth?: IntFilter<'StudentBillingPlan'> | number;
+    notes?: StringNullableFilter<'StudentBillingPlan'> | string | null;
+    isActive?: BoolFilter<'StudentBillingPlan'> | boolean;
+    createdAt?: DateTimeFilter<'StudentBillingPlan'> | Date | string;
+    updatedAt?: DateTimeFilter<'StudentBillingPlan'> | Date | string;
+  };
+
+  export type BillingInvoiceUpsertWithWhereUniqueWithoutTenantInput = {
+    where: BillingInvoiceWhereUniqueInput;
+    update: XOR<
+      BillingInvoiceUpdateWithoutTenantInput,
+      BillingInvoiceUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      BillingInvoiceCreateWithoutTenantInput,
+      BillingInvoiceUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type BillingInvoiceUpdateWithWhereUniqueWithoutTenantInput = {
+    where: BillingInvoiceWhereUniqueInput;
+    data: XOR<
+      BillingInvoiceUpdateWithoutTenantInput,
+      BillingInvoiceUncheckedUpdateWithoutTenantInput
+    >;
+  };
+
+  export type BillingInvoiceUpdateManyWithWhereWithoutTenantInput = {
+    where: BillingInvoiceScalarWhereInput;
+    data: XOR<
+      BillingInvoiceUpdateManyMutationInput,
+      BillingInvoiceUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type BillingInvoiceScalarWhereInput = {
+    AND?: BillingInvoiceScalarWhereInput | BillingInvoiceScalarWhereInput[];
+    OR?: BillingInvoiceScalarWhereInput[];
+    NOT?: BillingInvoiceScalarWhereInput | BillingInvoiceScalarWhereInput[];
+    id?: StringFilter<'BillingInvoice'> | string;
+    tenantId?: StringFilter<'BillingInvoice'> | string;
+    studentId?: StringFilter<'BillingInvoice'> | string;
+    period?: StringFilter<'BillingInvoice'> | string;
+    totalAmount?: FloatFilter<'BillingInvoice'> | number;
+    paidAmount?: FloatFilter<'BillingInvoice'> | number;
+    dueDate?: DateTimeFilter<'BillingInvoice'> | Date | string;
+    status?: EnumInvoiceStatusFilter<'BillingInvoice'> | $Enums.InvoiceStatus;
+    notes?: StringNullableFilter<'BillingInvoice'> | string | null;
+    createdAt?: DateTimeFilter<'BillingInvoice'> | Date | string;
+    updatedAt?: DateTimeFilter<'BillingInvoice'> | Date | string;
+  };
+
+  export type PaymentTransactionUpsertWithWhereUniqueWithoutTenantInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    update: XOR<
+      PaymentTransactionUpdateWithoutTenantInput,
+      PaymentTransactionUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      PaymentTransactionCreateWithoutTenantInput,
+      PaymentTransactionUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateWithWhereUniqueWithoutTenantInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    data: XOR<
+      PaymentTransactionUpdateWithoutTenantInput,
+      PaymentTransactionUncheckedUpdateWithoutTenantInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateManyWithWhereWithoutTenantInput = {
+    where: PaymentTransactionScalarWhereInput;
+    data: XOR<
+      PaymentTransactionUpdateManyMutationInput,
+      PaymentTransactionUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type PaymentTransactionScalarWhereInput = {
+    AND?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+    OR?: PaymentTransactionScalarWhereInput[];
+    NOT?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+    id?: StringFilter<'PaymentTransaction'> | string;
+    tenantId?: StringFilter<'PaymentTransaction'> | string;
+    invoiceId?: StringFilter<'PaymentTransaction'> | string;
+    studentId?: StringFilter<'PaymentTransaction'> | string;
+    amount?: FloatFilter<'PaymentTransaction'> | number;
+    method?: EnumPaymentMethodFilter<'PaymentTransaction'> | $Enums.PaymentMethod;
+    paidAt?: DateTimeFilter<'PaymentTransaction'> | Date | string;
+    referenceNo?: StringNullableFilter<'PaymentTransaction'> | string | null;
+    notes?: StringNullableFilter<'PaymentTransaction'> | string | null;
+    recordedByUserId?: StringFilter<'PaymentTransaction'> | string;
+    createdAt?: DateTimeFilter<'PaymentTransaction'> | Date | string;
+  };
+
   export type TenantCreateWithoutUsersInput = {
     id?: string;
     slug: string;
@@ -57920,6 +64374,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -57955,6 +64412,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -57989,6 +64449,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutParentInput = {
@@ -58018,6 +64481,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutParentInput = {
@@ -58905,6 +65371,46 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type PaymentTransactionCreateWithoutRecordedByInput = {
+    id?: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutPaymentTransactionsInput;
+    invoice: BillingInvoiceCreateNestedOneWithoutPaymentsInput;
+    student: StudentCreateNestedOneWithoutPaymentTransactionsInput;
+  };
+
+  export type PaymentTransactionUncheckedCreateWithoutRecordedByInput = {
+    id?: string;
+    tenantId: string;
+    invoiceId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+  };
+
+  export type PaymentTransactionCreateOrConnectWithoutRecordedByInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    create: XOR<
+      PaymentTransactionCreateWithoutRecordedByInput,
+      PaymentTransactionUncheckedCreateWithoutRecordedByInput
+    >;
+  };
+
+  export type PaymentTransactionCreateManyRecordedByInputEnvelope = {
+    data:
+      PaymentTransactionCreateManyRecordedByInput | PaymentTransactionCreateManyRecordedByInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>;
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
@@ -58949,6 +65455,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -58984,6 +65493,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutParentInput = {
@@ -59582,6 +66094,34 @@ export namespace Prisma {
     >;
   };
 
+  export type PaymentTransactionUpsertWithWhereUniqueWithoutRecordedByInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    update: XOR<
+      PaymentTransactionUpdateWithoutRecordedByInput,
+      PaymentTransactionUncheckedUpdateWithoutRecordedByInput
+    >;
+    create: XOR<
+      PaymentTransactionCreateWithoutRecordedByInput,
+      PaymentTransactionUncheckedCreateWithoutRecordedByInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateWithWhereUniqueWithoutRecordedByInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    data: XOR<
+      PaymentTransactionUpdateWithoutRecordedByInput,
+      PaymentTransactionUncheckedUpdateWithoutRecordedByInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateManyWithWhereWithoutRecordedByInput = {
+    where: PaymentTransactionScalarWhereInput;
+    data: XOR<
+      PaymentTransactionUpdateManyMutationInput,
+      PaymentTransactionUncheckedUpdateManyWithoutRecordedByInput
+    >;
+  };
+
   export type TenantCreateWithoutStudentsInput = {
     id?: string;
     slug: string;
@@ -59615,6 +66155,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -59650,6 +66193,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -59689,6 +66235,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutChildrenInput = {
@@ -59723,6 +66270,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutChildrenInput = {
@@ -60296,6 +66844,127 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type StudentBillingPlanCreateWithoutStudentInput = {
+    id?: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutBillingPlansInput;
+  };
+
+  export type StudentBillingPlanUncheckedCreateWithoutStudentInput = {
+    id?: string;
+    tenantId: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type StudentBillingPlanCreateOrConnectWithoutStudentInput = {
+    where: StudentBillingPlanWhereUniqueInput;
+    create: XOR<
+      StudentBillingPlanCreateWithoutStudentInput,
+      StudentBillingPlanUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type StudentBillingPlanCreateManyStudentInputEnvelope = {
+    data: StudentBillingPlanCreateManyStudentInput | StudentBillingPlanCreateManyStudentInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type BillingInvoiceCreateWithoutStudentInput = {
+    id?: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutBillingInvoicesInput;
+    payments?: PaymentTransactionCreateNestedManyWithoutInvoiceInput;
+  };
+
+  export type BillingInvoiceUncheckedCreateWithoutStudentInput = {
+    id?: string;
+    tenantId: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    payments?: PaymentTransactionUncheckedCreateNestedManyWithoutInvoiceInput;
+  };
+
+  export type BillingInvoiceCreateOrConnectWithoutStudentInput = {
+    where: BillingInvoiceWhereUniqueInput;
+    create: XOR<
+      BillingInvoiceCreateWithoutStudentInput,
+      BillingInvoiceUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type BillingInvoiceCreateManyStudentInputEnvelope = {
+    data: BillingInvoiceCreateManyStudentInput | BillingInvoiceCreateManyStudentInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type PaymentTransactionCreateWithoutStudentInput = {
+    id?: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutPaymentTransactionsInput;
+    invoice: BillingInvoiceCreateNestedOneWithoutPaymentsInput;
+    recordedBy: UserCreateNestedOneWithoutPaymentsRecordedInput;
+  };
+
+  export type PaymentTransactionUncheckedCreateWithoutStudentInput = {
+    id?: string;
+    tenantId: string;
+    invoiceId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    recordedByUserId: string;
+    createdAt?: Date | string;
+  };
+
+  export type PaymentTransactionCreateOrConnectWithoutStudentInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    create: XOR<
+      PaymentTransactionCreateWithoutStudentInput,
+      PaymentTransactionUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type PaymentTransactionCreateManyStudentInputEnvelope = {
+    data: PaymentTransactionCreateManyStudentInput | PaymentTransactionCreateManyStudentInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type TenantUpsertWithoutStudentsInput = {
     update: XOR<TenantUpdateWithoutStudentsInput, TenantUncheckedUpdateWithoutStudentsInput>;
     create: XOR<TenantCreateWithoutStudentsInput, TenantUncheckedCreateWithoutStudentsInput>;
@@ -60340,6 +67009,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -60375,6 +67047,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutChildrenInput = {
@@ -60420,6 +67095,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutChildrenInput = {
@@ -60454,6 +67130,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type ClassroomUpsertWithoutStudentsInput = {
@@ -60837,6 +67514,90 @@ export namespace Prisma {
     >;
   };
 
+  export type StudentBillingPlanUpsertWithWhereUniqueWithoutStudentInput = {
+    where: StudentBillingPlanWhereUniqueInput;
+    update: XOR<
+      StudentBillingPlanUpdateWithoutStudentInput,
+      StudentBillingPlanUncheckedUpdateWithoutStudentInput
+    >;
+    create: XOR<
+      StudentBillingPlanCreateWithoutStudentInput,
+      StudentBillingPlanUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type StudentBillingPlanUpdateWithWhereUniqueWithoutStudentInput = {
+    where: StudentBillingPlanWhereUniqueInput;
+    data: XOR<
+      StudentBillingPlanUpdateWithoutStudentInput,
+      StudentBillingPlanUncheckedUpdateWithoutStudentInput
+    >;
+  };
+
+  export type StudentBillingPlanUpdateManyWithWhereWithoutStudentInput = {
+    where: StudentBillingPlanScalarWhereInput;
+    data: XOR<
+      StudentBillingPlanUpdateManyMutationInput,
+      StudentBillingPlanUncheckedUpdateManyWithoutStudentInput
+    >;
+  };
+
+  export type BillingInvoiceUpsertWithWhereUniqueWithoutStudentInput = {
+    where: BillingInvoiceWhereUniqueInput;
+    update: XOR<
+      BillingInvoiceUpdateWithoutStudentInput,
+      BillingInvoiceUncheckedUpdateWithoutStudentInput
+    >;
+    create: XOR<
+      BillingInvoiceCreateWithoutStudentInput,
+      BillingInvoiceUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type BillingInvoiceUpdateWithWhereUniqueWithoutStudentInput = {
+    where: BillingInvoiceWhereUniqueInput;
+    data: XOR<
+      BillingInvoiceUpdateWithoutStudentInput,
+      BillingInvoiceUncheckedUpdateWithoutStudentInput
+    >;
+  };
+
+  export type BillingInvoiceUpdateManyWithWhereWithoutStudentInput = {
+    where: BillingInvoiceScalarWhereInput;
+    data: XOR<
+      BillingInvoiceUpdateManyMutationInput,
+      BillingInvoiceUncheckedUpdateManyWithoutStudentInput
+    >;
+  };
+
+  export type PaymentTransactionUpsertWithWhereUniqueWithoutStudentInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    update: XOR<
+      PaymentTransactionUpdateWithoutStudentInput,
+      PaymentTransactionUncheckedUpdateWithoutStudentInput
+    >;
+    create: XOR<
+      PaymentTransactionCreateWithoutStudentInput,
+      PaymentTransactionUncheckedCreateWithoutStudentInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateWithWhereUniqueWithoutStudentInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    data: XOR<
+      PaymentTransactionUpdateWithoutStudentInput,
+      PaymentTransactionUncheckedUpdateWithoutStudentInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateManyWithWhereWithoutStudentInput = {
+    where: PaymentTransactionScalarWhereInput;
+    data: XOR<
+      PaymentTransactionUpdateManyMutationInput,
+      PaymentTransactionUncheckedUpdateManyWithoutStudentInput
+    >;
+  };
+
   export type TenantCreateWithoutClassroomsInput = {
     id?: string;
     slug: string;
@@ -60870,6 +67631,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomsInput = {
@@ -60905,6 +67669,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomsInput = {
@@ -60939,6 +67706,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutClassroomInput = {
@@ -60968,6 +67738,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutClassroomInput = {
@@ -61098,6 +67871,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomsInput = {
@@ -61133,6 +67909,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutClassroomInput = {
@@ -61240,6 +68019,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomTeachersInput = {
@@ -61275,6 +68057,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomTeachersInput = {
@@ -61349,6 +68134,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutClassroomTeachersInput = {
@@ -61383,6 +68169,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutClassroomTeachersInput = {
@@ -61446,6 +68233,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -61481,6 +68271,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ClassroomUpsertWithoutTeacherAssignmentsInput = {
@@ -61579,6 +68372,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -61613,6 +68407,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutDailyReportsInput = {
@@ -61648,6 +68443,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyReportsInput = {
@@ -61683,6 +68481,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyReportsInput = {
@@ -61720,6 +68521,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutDailyReportsInput = {
@@ -61749,6 +68553,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutDailyReportsInput = {
@@ -61809,6 +68616,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyReportsInput = {
@@ -61844,6 +68654,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDailyReportsInput = {
@@ -61893,6 +68706,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutDailyReportsInput = {
@@ -61922,6 +68738,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type TenantCreateWithoutAttendancesInput = {
@@ -61957,6 +68776,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendancesInput = {
@@ -61992,6 +68814,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendancesInput = {
@@ -62026,6 +68851,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutAttendancesInput = {
@@ -62055,6 +68883,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutAttendancesInput = {
@@ -62109,6 +68940,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendancesInput = {
@@ -62144,6 +68978,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendancesInput = {
@@ -62190,6 +69027,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutAttendancesInput = {
@@ -62219,6 +69059,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type TenantCreateWithoutDailyMenusInput = {
@@ -62254,6 +69097,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyMenusInput = {
@@ -62289,6 +69135,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyMenusInput = {
@@ -62340,6 +69189,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyMenusInput = {
@@ -62375,6 +69227,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutActivityPostsInput = {
@@ -62410,6 +69265,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutActivityPostsInput = {
@@ -62445,6 +69303,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutActivityPostsInput = {
@@ -62508,6 +69369,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutActivityPostsInput = {
@@ -62543,6 +69407,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPickupContactsInput = {
@@ -62578,6 +69445,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupContactsInput = {
@@ -62613,6 +69483,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupContactsInput = {
@@ -62650,6 +69523,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutPickupContactsInput = {
@@ -62679,6 +69555,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutPickupContactsInput = {
@@ -62826,6 +69705,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupContactsInput = {
@@ -62861,6 +69743,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupContactsInput = {
@@ -62910,6 +69795,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutPickupContactsInput = {
@@ -62939,6 +69827,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type PickupAuthorizationUpsertWithWhereUniqueWithoutPickupContactInput = {
@@ -63030,6 +69921,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupAuthorizationsInput = {
@@ -63065,6 +69959,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupAuthorizationsInput = {
@@ -63102,6 +69999,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutPickupAuthorizationsInput = {
@@ -63131,6 +70031,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutPickupAuthorizationsInput = {
@@ -63209,6 +70112,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthRequestedInput = {
@@ -63243,6 +70147,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthRequestedInput = {
@@ -63285,6 +70190,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthReviewedInput = {
@@ -63319,6 +70225,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthReviewedInput = {
@@ -63421,6 +70328,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupAuthorizationsInput = {
@@ -63456,6 +70366,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupAuthorizationsInput = {
@@ -63505,6 +70418,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutPickupAuthorizationsInput = {
@@ -63534,6 +70450,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type PickupContactUpsertWithoutAuthorizationsInput = {
@@ -63636,6 +70555,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthRequestedInput = {
@@ -63670,6 +70590,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUpsertWithoutPickupAuthReviewedInput = {
@@ -63724,6 +70645,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthReviewedInput = {
@@ -63758,6 +70680,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type PickupEventUpsertWithWhereUniqueWithoutAuthorizationInput = {
@@ -63821,6 +70744,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupEventsInput = {
@@ -63856,6 +70782,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupEventsInput = {
@@ -63893,6 +70822,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutPickupEventsInput = {
@@ -63922,6 +70854,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutPickupEventsInput = {
@@ -64038,6 +70973,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutPickupEventsVerifiedInput = {
@@ -64072,6 +71008,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutPickupEventsVerifiedInput = {
@@ -64132,6 +71069,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupEventsInput = {
@@ -64167,6 +71107,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupEventsInput = {
@@ -64216,6 +71159,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutPickupEventsInput = {
@@ -64245,6 +71191,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type PickupContactUpsertWithoutPickupEventsInput = {
@@ -64399,6 +71348,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupEventsVerifiedInput = {
@@ -64433,6 +71383,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutMedicationRecordsInput = {
@@ -64468,6 +71419,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMedicationRecordsInput = {
@@ -64503,6 +71457,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMedicationRecordsInput = {
@@ -64540,6 +71497,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutMedicationRecordsInput = {
@@ -64569,6 +71529,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutMedicationRecordsInput = {
@@ -64611,6 +71574,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsRequestedInput = {
@@ -64645,6 +71609,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsRequestedInput = {
@@ -64687,6 +71652,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsApprovedInput = {
@@ -64721,6 +71687,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsApprovedInput = {
@@ -64763,6 +71730,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsAdministeredInput = {
@@ -64797,6 +71765,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsAdministeredInput = {
@@ -64860,6 +71829,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMedicationRecordsInput = {
@@ -64895,6 +71867,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutMedicationRecordsInput = {
@@ -64944,6 +71919,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutMedicationRecordsInput = {
@@ -64973,6 +71951,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsRequestedInput = {
@@ -65027,6 +72008,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsRequestedInput = {
@@ -65061,6 +72043,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsApprovedInput = {
@@ -65115,6 +72098,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsApprovedInput = {
@@ -65149,6 +72133,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsAdministeredInput = {
@@ -65203,6 +72188,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsAdministeredInput = {
@@ -65237,6 +72223,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutConversationsInput = {
@@ -65272,6 +72259,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationsInput = {
@@ -65307,6 +72297,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationsInput = {
@@ -65344,6 +72337,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutConversationsInput = {
@@ -65373,6 +72369,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutConversationsInput = {
@@ -65415,6 +72414,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutConversationsCreatedInput = {
@@ -65449,6 +72449,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutConversationsCreatedInput = {
@@ -65576,6 +72577,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationsInput = {
@@ -65611,6 +72615,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutConversationsInput = {
@@ -65660,6 +72667,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutConversationsInput = {
@@ -65689,6 +72699,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutConversationsCreatedInput = {
@@ -65743,6 +72756,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationsCreatedInput = {
@@ -65777,6 +72791,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutConversationInput = {
@@ -65865,6 +72880,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationParticipantsInput = {
@@ -65900,6 +72918,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationParticipantsInput = {
@@ -65980,6 +73001,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutConversationParticipationsInput = {
@@ -66014,6 +73036,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutConversationParticipationsInput = {
@@ -66077,6 +73100,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationParticipantsInput = {
@@ -66112,6 +73138,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutParticipantsInput = {
@@ -66216,6 +73245,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationParticipationsInput = {
@@ -66250,6 +73280,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutMessagesInput = {
@@ -66285,6 +73316,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessagesInput = {
@@ -66320,6 +73354,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessagesInput = {
@@ -66397,6 +73434,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutMessagesSentInput = {
@@ -66431,6 +73469,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutMessagesSentInput = {
@@ -66509,6 +73548,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessagesInput = {
@@ -66544,6 +73586,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutMessagesInput = {
@@ -66639,6 +73684,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessagesSentInput = {
@@ -66673,6 +73719,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type MessageReadReceiptUpsertWithWhereUniqueWithoutMessageInput = {
@@ -66736,6 +73783,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessageReceiptsInput = {
@@ -66771,6 +73821,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessageReceiptsInput = {
@@ -66840,6 +73893,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutMessageReceiptsInput = {
@@ -66874,6 +73928,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutMessageReceiptsInput = {
@@ -66937,6 +73992,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -66972,6 +74030,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type MessageUpsertWithoutReceiptsInput = {
@@ -67059,6 +74120,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -67093,6 +74155,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutParentRequestsInput = {
@@ -67128,6 +74191,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutParentRequestsInput = {
@@ -67163,6 +74229,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutParentRequestsInput = {
@@ -67205,6 +74274,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsRaisedInput = {
@@ -67239,6 +74309,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsRaisedInput = {
@@ -67276,6 +74347,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutParentRequestsInput = {
@@ -67305,6 +74379,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutParentRequestsInput = {
@@ -67347,6 +74424,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsResolvedInput = {
@@ -67381,6 +74459,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsResolvedInput = {
@@ -67444,6 +74523,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutParentRequestsInput = {
@@ -67479,6 +74561,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutParentRequestsRaisedInput = {
@@ -67533,6 +74618,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsRaisedInput = {
@@ -67567,6 +74653,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type StudentUpsertWithoutParentRequestsInput = {
@@ -67616,6 +74703,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutParentRequestsInput = {
@@ -67645,6 +74735,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutParentRequestsResolvedInput = {
@@ -67699,6 +74792,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsResolvedInput = {
@@ -67733,6 +74827,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutIncidentRecordsInput = {
@@ -67768,6 +74863,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutIncidentRecordsInput = {
@@ -67803,6 +74901,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutIncidentRecordsInput = {
@@ -67840,6 +74941,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutIncidentRecordsInput = {
@@ -67869,6 +74973,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutIncidentRecordsInput = {
@@ -67911,6 +75018,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsReportedInput = {
@@ -67945,6 +75053,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsReportedInput = {
@@ -67987,6 +75096,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsNotifiedInput = {
@@ -68021,6 +75131,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsNotifiedInput = {
@@ -68084,6 +75195,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutIncidentRecordsInput = {
@@ -68119,6 +75233,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutIncidentRecordsInput = {
@@ -68168,6 +75285,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutIncidentRecordsInput = {
@@ -68197,6 +75317,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutIncidentsReportedInput = {
@@ -68251,6 +75374,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsReportedInput = {
@@ -68285,6 +75409,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUpsertWithoutIncidentsNotifiedInput = {
@@ -68339,6 +75464,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsNotifiedInput = {
@@ -68373,6 +75499,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutDevelopmentObservationsInput = {
@@ -68408,6 +75535,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDevelopmentObservationsInput = {
@@ -68443,6 +75573,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDevelopmentObservationsInput = {
@@ -68480,6 +75613,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutDevelopmentObservationsInput = {
@@ -68509,6 +75645,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutDevelopmentObservationsInput = {
@@ -68551,6 +75690,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutDevelopmentObservationsAuthoredInput = {
@@ -68585,6 +75725,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutDevelopmentObservationsAuthoredInput = {
@@ -68685,6 +75826,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDevelopmentObservationsInput = {
@@ -68720,6 +75864,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDevelopmentObservationsInput = {
@@ -68769,6 +75916,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutDevelopmentObservationsInput = {
@@ -68798,6 +75948,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutDevelopmentObservationsAuthoredInput = {
@@ -68852,6 +76005,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutDevelopmentObservationsAuthoredInput = {
@@ -68886,6 +76040,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type PortfolioItemUpsertWithWhereUniqueWithoutObservationInput = {
@@ -68949,6 +76104,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPortfolioItemsInput = {
@@ -68984,6 +76142,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPortfolioItemsInput = {
@@ -69021,6 +76182,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutPortfolioItemsInput = {
@@ -69050,6 +76214,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutPortfolioItemsInput = {
@@ -69149,6 +76316,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -69184,6 +76354,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPortfolioItemsInput = {
@@ -69233,6 +76406,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -69262,6 +76438,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type DevelopmentObservationUpsertWithoutPortfolioItemsInput = {
@@ -69345,6 +76524,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutHomeActivitySuggestionsInput = {
@@ -69380,6 +76562,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutHomeActivitySuggestionsInput = {
@@ -69443,6 +76628,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutHomeActivitySuggestionsInput = {
@@ -69478,6 +76666,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPushTokensInput = {
@@ -69513,6 +76704,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPushTokensInput = {
@@ -69548,6 +76742,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPushTokensInput = {
@@ -69587,6 +76784,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutPushTokensInput = {
@@ -69621,6 +76819,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutPushTokensInput = {
@@ -69672,6 +76871,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPushTokensInput = {
@@ -69707,6 +76909,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutPushTokensInput = {
@@ -69752,6 +76957,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPushTokensInput = {
@@ -69786,6 +76992,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutNotificationsInput = {
@@ -69821,6 +77028,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutNotificationsInput = {
@@ -69856,6 +77066,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutNotificationsInput = {
@@ -69898,6 +77111,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -69932,6 +77146,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -69992,6 +77207,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutNotificationsInput = {
@@ -70027,6 +77245,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -70072,6 +77293,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -70106,6 +77328,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutMediaFilesInput = {
@@ -70141,6 +77364,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMediaFilesInput = {
@@ -70176,6 +77402,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMediaFilesInput = {
@@ -70215,6 +77444,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutUploadedMediaInput = {
@@ -70249,6 +77479,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutUploadedMediaInput = {
@@ -70300,6 +77531,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMediaFilesInput = {
@@ -70335,6 +77569,9 @@ export namespace Prisma {
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutUploadedMediaInput = {
@@ -70380,6 +77617,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutUploadedMediaInput = {
@@ -70414,6 +77652,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutAttendanceExcusesInput = {
@@ -70449,6 +77688,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendanceExcusesInput = {
@@ -70484,6 +77726,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendanceExcusesInput = {
@@ -70521,6 +77766,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutAttendanceExcusesInput = {
@@ -70550,6 +77798,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutAttendanceExcusesInput = {
@@ -70592,6 +77843,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutAttendanceExcusesCreatedInput = {
@@ -70626,6 +77878,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutAttendanceExcusesCreatedInput = {
@@ -70689,6 +77942,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendanceExcusesInput = {
@@ -70724,6 +77980,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendanceExcusesInput = {
@@ -70773,6 +78032,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutAttendanceExcusesInput = {
@@ -70802,6 +78064,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutAttendanceExcusesCreatedInput = {
@@ -70856,6 +78121,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAttendanceExcusesCreatedInput = {
@@ -70890,6 +78156,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type TenantCreateWithoutEventConsentsInput = {
@@ -70925,6 +78192,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutEventConsentsInput = {
@@ -70960,6 +78230,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutEventConsentsInput = {
@@ -71034,6 +78307,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutEventConsentsCreatedInput = {
@@ -71068,6 +78342,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutEventConsentsCreatedInput = {
@@ -71164,6 +78439,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutEventConsentsInput = {
@@ -71199,6 +78477,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ClassroomUpsertWithoutEventConsentsInput = {
@@ -71297,6 +78578,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutEventConsentsCreatedInput = {
@@ -71331,6 +78613,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type EventConsentResponseUpsertWithWhereUniqueWithoutConsentInput = {
@@ -71394,6 +78677,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutEventConsentResponsesInput = {
@@ -71429,6 +78715,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
     eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutEventConsentResponsesInput = {
@@ -71506,6 +78795,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentUncheckedCreateWithoutEventConsentResponsesInput = {
@@ -71535,6 +78827,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
     portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
     attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
   };
 
   export type StudentCreateOrConnectWithoutEventConsentResponsesInput = {
@@ -71577,6 +78872,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserUncheckedCreateWithoutEventConsentResponsesInput = {
@@ -71611,6 +78907,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
   };
 
   export type UserCreateOrConnectWithoutEventConsentResponsesInput = {
@@ -71674,6 +78971,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutEventConsentResponsesInput = {
@@ -71709,6 +79009,9 @@ export namespace Prisma {
     mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
     eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type EventConsentUpsertWithoutResponsesInput = {
@@ -71812,6 +79115,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutEventConsentResponsesInput = {
@@ -71841,6 +79147,9 @@ export namespace Prisma {
     developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type UserUpsertWithoutEventConsentResponsesInput = {
@@ -71895,6 +79204,7 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutEventConsentResponsesInput = {
@@ -71929,6 +79239,1331 @@ export namespace Prisma {
     uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+  };
+
+  export type TenantCreateWithoutBillingPlansInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutBillingPlansInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutBillingPlansInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutBillingPlansInput,
+      TenantUncheckedCreateWithoutBillingPlansInput
+    >;
+  };
+
+  export type StudentCreateWithoutBillingPlansInput = {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    tenant: TenantCreateNestedOneWithoutStudentsInput;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
+    classroom?: ClassroomCreateNestedOneWithoutStudentsInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentUncheckedCreateWithoutBillingPlansInput = {
+    id?: string;
+    tenantId: string;
+    parentId?: string | null;
+    classroomId?: string | null;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentCreateOrConnectWithoutBillingPlansInput = {
+    where: StudentWhereUniqueInput;
+    create: XOR<
+      StudentCreateWithoutBillingPlansInput,
+      StudentUncheckedCreateWithoutBillingPlansInput
+    >;
+  };
+
+  export type TenantUpsertWithoutBillingPlansInput = {
+    update: XOR<
+      TenantUpdateWithoutBillingPlansInput,
+      TenantUncheckedUpdateWithoutBillingPlansInput
+    >;
+    create: XOR<
+      TenantCreateWithoutBillingPlansInput,
+      TenantUncheckedCreateWithoutBillingPlansInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutBillingPlansInput = {
+    where?: TenantWhereInput;
+    data: XOR<TenantUpdateWithoutBillingPlansInput, TenantUncheckedUpdateWithoutBillingPlansInput>;
+  };
+
+  export type TenantUpdateWithoutBillingPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutBillingPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type StudentUpsertWithoutBillingPlansInput = {
+    update: XOR<
+      StudentUpdateWithoutBillingPlansInput,
+      StudentUncheckedUpdateWithoutBillingPlansInput
+    >;
+    create: XOR<
+      StudentCreateWithoutBillingPlansInput,
+      StudentUncheckedCreateWithoutBillingPlansInput
+    >;
+    where?: StudentWhereInput;
+  };
+
+  export type StudentUpdateToOneWithWhereWithoutBillingPlansInput = {
+    where?: StudentWhereInput;
+    data: XOR<
+      StudentUpdateWithoutBillingPlansInput,
+      StudentUncheckedUpdateWithoutBillingPlansInput
+    >;
+  };
+
+  export type StudentUpdateWithoutBillingPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
+    classroom?: ClassroomUpdateOneWithoutStudentsNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type StudentUncheckedUpdateWithoutBillingPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type TenantCreateWithoutBillingInvoicesInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutBillingInvoicesInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutBillingInvoicesInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutBillingInvoicesInput,
+      TenantUncheckedCreateWithoutBillingInvoicesInput
+    >;
+  };
+
+  export type StudentCreateWithoutBillingInvoicesInput = {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    tenant: TenantCreateNestedOneWithoutStudentsInput;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
+    classroom?: ClassroomCreateNestedOneWithoutStudentsInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentUncheckedCreateWithoutBillingInvoicesInput = {
+    id?: string;
+    tenantId: string;
+    parentId?: string | null;
+    classroomId?: string | null;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentCreateOrConnectWithoutBillingInvoicesInput = {
+    where: StudentWhereUniqueInput;
+    create: XOR<
+      StudentCreateWithoutBillingInvoicesInput,
+      StudentUncheckedCreateWithoutBillingInvoicesInput
+    >;
+  };
+
+  export type PaymentTransactionCreateWithoutInvoiceInput = {
+    id?: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutPaymentTransactionsInput;
+    student: StudentCreateNestedOneWithoutPaymentTransactionsInput;
+    recordedBy: UserCreateNestedOneWithoutPaymentsRecordedInput;
+  };
+
+  export type PaymentTransactionUncheckedCreateWithoutInvoiceInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    recordedByUserId: string;
+    createdAt?: Date | string;
+  };
+
+  export type PaymentTransactionCreateOrConnectWithoutInvoiceInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    create: XOR<
+      PaymentTransactionCreateWithoutInvoiceInput,
+      PaymentTransactionUncheckedCreateWithoutInvoiceInput
+    >;
+  };
+
+  export type PaymentTransactionCreateManyInvoiceInputEnvelope = {
+    data: PaymentTransactionCreateManyInvoiceInput | PaymentTransactionCreateManyInvoiceInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type TenantUpsertWithoutBillingInvoicesInput = {
+    update: XOR<
+      TenantUpdateWithoutBillingInvoicesInput,
+      TenantUncheckedUpdateWithoutBillingInvoicesInput
+    >;
+    create: XOR<
+      TenantCreateWithoutBillingInvoicesInput,
+      TenantUncheckedCreateWithoutBillingInvoicesInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutBillingInvoicesInput = {
+    where?: TenantWhereInput;
+    data: XOR<
+      TenantUpdateWithoutBillingInvoicesInput,
+      TenantUncheckedUpdateWithoutBillingInvoicesInput
+    >;
+  };
+
+  export type TenantUpdateWithoutBillingInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutBillingInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type StudentUpsertWithoutBillingInvoicesInput = {
+    update: XOR<
+      StudentUpdateWithoutBillingInvoicesInput,
+      StudentUncheckedUpdateWithoutBillingInvoicesInput
+    >;
+    create: XOR<
+      StudentCreateWithoutBillingInvoicesInput,
+      StudentUncheckedCreateWithoutBillingInvoicesInput
+    >;
+    where?: StudentWhereInput;
+  };
+
+  export type StudentUpdateToOneWithWhereWithoutBillingInvoicesInput = {
+    where?: StudentWhereInput;
+    data: XOR<
+      StudentUpdateWithoutBillingInvoicesInput,
+      StudentUncheckedUpdateWithoutBillingInvoicesInput
+    >;
+  };
+
+  export type StudentUpdateWithoutBillingInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
+    classroom?: ClassroomUpdateOneWithoutStudentsNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type StudentUncheckedUpdateWithoutBillingInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type PaymentTransactionUpsertWithWhereUniqueWithoutInvoiceInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    update: XOR<
+      PaymentTransactionUpdateWithoutInvoiceInput,
+      PaymentTransactionUncheckedUpdateWithoutInvoiceInput
+    >;
+    create: XOR<
+      PaymentTransactionCreateWithoutInvoiceInput,
+      PaymentTransactionUncheckedCreateWithoutInvoiceInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateWithWhereUniqueWithoutInvoiceInput = {
+    where: PaymentTransactionWhereUniqueInput;
+    data: XOR<
+      PaymentTransactionUpdateWithoutInvoiceInput,
+      PaymentTransactionUncheckedUpdateWithoutInvoiceInput
+    >;
+  };
+
+  export type PaymentTransactionUpdateManyWithWhereWithoutInvoiceInput = {
+    where: PaymentTransactionScalarWhereInput;
+    data: XOR<
+      PaymentTransactionUpdateManyMutationInput,
+      PaymentTransactionUncheckedUpdateManyWithoutInvoiceInput
+    >;
+  };
+
+  export type TenantCreateWithoutPaymentTransactionsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutPaymentTransactionsInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutPaymentTransactionsInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutPaymentTransactionsInput,
+      TenantUncheckedCreateWithoutPaymentTransactionsInput
+    >;
+  };
+
+  export type BillingInvoiceCreateWithoutPaymentsInput = {
+    id?: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutBillingInvoicesInput;
+    student: StudentCreateNestedOneWithoutBillingInvoicesInput;
+  };
+
+  export type BillingInvoiceUncheckedCreateWithoutPaymentsInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type BillingInvoiceCreateOrConnectWithoutPaymentsInput = {
+    where: BillingInvoiceWhereUniqueInput;
+    create: XOR<
+      BillingInvoiceCreateWithoutPaymentsInput,
+      BillingInvoiceUncheckedCreateWithoutPaymentsInput
+    >;
+  };
+
+  export type StudentCreateWithoutPaymentTransactionsInput = {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    tenant: TenantCreateNestedOneWithoutStudentsInput;
+    parent?: UserCreateNestedOneWithoutChildrenInput;
+    classroom?: ClassroomCreateNestedOneWithoutStudentsInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentUncheckedCreateWithoutPaymentTransactionsInput = {
+    id?: string;
+    tenantId: string;
+    parentId?: string | null;
+    classroomId?: string | null;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date | string;
+    gender?: string | null;
+    notes?: string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutStudentInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutStudentInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutStudentInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutStudentInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutStudentInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutStudentInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutStudentInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutStudentInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutStudentInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutStudentInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutStudentInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutStudentInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutStudentInput;
+  };
+
+  export type StudentCreateOrConnectWithoutPaymentTransactionsInput = {
+    where: StudentWhereUniqueInput;
+    create: XOR<
+      StudentCreateWithoutPaymentTransactionsInput,
+      StudentUncheckedCreateWithoutPaymentTransactionsInput
+    >;
+  };
+
+  export type UserCreateWithoutPaymentsRecordedInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutPaymentsRecordedInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventUncheckedCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordUncheckedCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordUncheckedCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordUncheckedCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationUncheckedCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestUncheckedCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutPaymentsRecordedInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutPaymentsRecordedInput,
+      UserUncheckedCreateWithoutPaymentsRecordedInput
+    >;
+  };
+
+  export type TenantUpsertWithoutPaymentTransactionsInput = {
+    update: XOR<
+      TenantUpdateWithoutPaymentTransactionsInput,
+      TenantUncheckedUpdateWithoutPaymentTransactionsInput
+    >;
+    create: XOR<
+      TenantCreateWithoutPaymentTransactionsInput,
+      TenantUncheckedCreateWithoutPaymentTransactionsInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutPaymentTransactionsInput = {
+    where?: TenantWhereInput;
+    data: XOR<
+      TenantUpdateWithoutPaymentTransactionsInput,
+      TenantUncheckedUpdateWithoutPaymentTransactionsInput
+    >;
+  };
+
+  export type TenantUpdateWithoutPaymentTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutPaymentTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type BillingInvoiceUpsertWithoutPaymentsInput = {
+    update: XOR<
+      BillingInvoiceUpdateWithoutPaymentsInput,
+      BillingInvoiceUncheckedUpdateWithoutPaymentsInput
+    >;
+    create: XOR<
+      BillingInvoiceCreateWithoutPaymentsInput,
+      BillingInvoiceUncheckedCreateWithoutPaymentsInput
+    >;
+    where?: BillingInvoiceWhereInput;
+  };
+
+  export type BillingInvoiceUpdateToOneWithWhereWithoutPaymentsInput = {
+    where?: BillingInvoiceWhereInput;
+    data: XOR<
+      BillingInvoiceUpdateWithoutPaymentsInput,
+      BillingInvoiceUncheckedUpdateWithoutPaymentsInput
+    >;
+  };
+
+  export type BillingInvoiceUpdateWithoutPaymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutBillingInvoicesNestedInput;
+    student?: StudentUpdateOneRequiredWithoutBillingInvoicesNestedInput;
+  };
+
+  export type BillingInvoiceUncheckedUpdateWithoutPaymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type StudentUpsertWithoutPaymentTransactionsInput = {
+    update: XOR<
+      StudentUpdateWithoutPaymentTransactionsInput,
+      StudentUncheckedUpdateWithoutPaymentTransactionsInput
+    >;
+    create: XOR<
+      StudentCreateWithoutPaymentTransactionsInput,
+      StudentUncheckedCreateWithoutPaymentTransactionsInput
+    >;
+    where?: StudentWhereInput;
+  };
+
+  export type StudentUpdateToOneWithWhereWithoutPaymentTransactionsInput = {
+    where?: StudentWhereInput;
+    data: XOR<
+      StudentUpdateWithoutPaymentTransactionsInput,
+      StudentUncheckedUpdateWithoutPaymentTransactionsInput
+    >;
+  };
+
+  export type StudentUpdateWithoutPaymentTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    tenant?: TenantUpdateOneRequiredWithoutStudentsNestedInput;
+    parent?: UserUpdateOneWithoutChildrenNestedInput;
+    classroom?: ClassroomUpdateOneWithoutStudentsNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type StudentUncheckedUpdateWithoutPaymentTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null;
+    classroomId?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: StringFieldUpdateOperationsInput | string;
+    lastName?: StringFieldUpdateOperationsInput | string;
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    passport?: NullableJsonNullValueInput | InputJsonValue;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutStudentNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutStudentNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutStudentNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutStudentNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutStudentNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutStudentNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+  };
+
+  export type UserUpsertWithoutPaymentsRecordedInput = {
+    update: XOR<
+      UserUpdateWithoutPaymentsRecordedInput,
+      UserUncheckedUpdateWithoutPaymentsRecordedInput
+    >;
+    create: XOR<
+      UserCreateWithoutPaymentsRecordedInput,
+      UserUncheckedCreateWithoutPaymentsRecordedInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutPaymentsRecordedInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutPaymentsRecordedInput,
+      UserUncheckedUpdateWithoutPaymentsRecordedInput
+    >;
+  };
+
+  export type UserUpdateWithoutPaymentsRecordedInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutPaymentsRecordedInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUncheckedUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUncheckedUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUncheckedUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUncheckedUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUncheckedUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUncheckedUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
   };
 
   export type UserCreateManyTenantInput = {
@@ -72265,6 +80900,46 @@ export namespace Prisma {
     respondedAt?: Date | string;
   };
 
+  export type StudentBillingPlanCreateManyTenantInput = {
+    id?: string;
+    studentId: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type BillingInvoiceCreateManyTenantInput = {
+    id?: string;
+    studentId: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type PaymentTransactionCreateManyTenantInput = {
+    id?: string;
+    invoiceId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    recordedByUserId: string;
+    createdAt?: Date | string;
+  };
+
   export type UserUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
@@ -72297,6 +80972,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTenantInput = {
@@ -72331,6 +81007,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -72371,6 +81048,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutTenantInput = {
@@ -72400,6 +81080,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateManyWithoutTenantInput = {
@@ -73370,6 +82053,128 @@ export namespace Prisma {
     respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type StudentBillingPlanUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    student?: StudentUpdateOneRequiredWithoutBillingPlansNestedInput;
+  };
+
+  export type StudentBillingPlanUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type StudentBillingPlanUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type BillingInvoiceUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    student?: StudentUpdateOneRequiredWithoutBillingInvoicesNestedInput;
+    payments?: PaymentTransactionUpdateManyWithoutInvoiceNestedInput;
+  };
+
+  export type BillingInvoiceUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    payments?: PaymentTransactionUncheckedUpdateManyWithoutInvoiceNestedInput;
+  };
+
+  export type BillingInvoiceUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    invoice?: BillingInvoiceUpdateOneRequiredWithoutPaymentsNestedInput;
+    student?: StudentUpdateOneRequiredWithoutPaymentTransactionsNestedInput;
+    recordedBy?: UserUpdateOneRequiredWithoutPaymentsRecordedNestedInput;
+  };
+
+  export type PaymentTransactionUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    invoiceId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    recordedByUserId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    invoiceId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    recordedByUserId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StudentCreateManyParentInput = {
     id?: string;
     tenantId: string;
@@ -73673,6 +82478,19 @@ export namespace Prisma {
     respondedAt?: Date | string;
   };
 
+  export type PaymentTransactionCreateManyRecordedByInput = {
+    id?: string;
+    tenantId: string;
+    invoiceId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    createdAt?: Date | string;
+  };
+
   export type StudentUpdateWithoutParentInput = {
     id?: StringFieldUpdateOperationsInput | string;
     firstName?: StringFieldUpdateOperationsInput | string;
@@ -73700,6 +82518,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutParentInput = {
@@ -73729,6 +82550,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateManyWithoutParentInput = {
@@ -74634,6 +83458,45 @@ export namespace Prisma {
     respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type PaymentTransactionUpdateWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutPaymentTransactionsNestedInput;
+    invoice?: BillingInvoiceUpdateOneRequiredWithoutPaymentsNestedInput;
+    student?: StudentUpdateOneRequiredWithoutPaymentTransactionsNestedInput;
+  };
+
+  export type PaymentTransactionUncheckedUpdateWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    invoiceId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionUncheckedUpdateManyWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    invoiceId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type DailyReportCreateManyStudentInput = {
     id?: string;
     tenantId: string;
@@ -74811,6 +83674,46 @@ export namespace Prisma {
     decision: string;
     notes?: string | null;
     respondedAt?: Date | string;
+  };
+
+  export type StudentBillingPlanCreateManyStudentInput = {
+    id?: string;
+    tenantId: string;
+    tuitionAmount: number;
+    serviceAmount?: number;
+    activityAmount?: number;
+    discountPercent?: number;
+    dueDayOfMonth?: number;
+    notes?: string | null;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type BillingInvoiceCreateManyStudentInput = {
+    id?: string;
+    tenantId: string;
+    period: string;
+    totalAmount: number;
+    paidAmount?: number;
+    dueDate: Date | string;
+    status?: $Enums.InvoiceStatus;
+    notes?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type PaymentTransactionCreateManyStudentInput = {
+    id?: string;
+    tenantId: string;
+    invoiceId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    recordedByUserId: string;
+    createdAt?: Date | string;
   };
 
   export type DailyReportUpdateWithoutStudentInput = {
@@ -75368,6 +84271,128 @@ export namespace Prisma {
     respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type StudentBillingPlanUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutBillingPlansNestedInput;
+  };
+
+  export type StudentBillingPlanUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type StudentBillingPlanUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    tuitionAmount?: FloatFieldUpdateOperationsInput | number;
+    serviceAmount?: FloatFieldUpdateOperationsInput | number;
+    activityAmount?: FloatFieldUpdateOperationsInput | number;
+    discountPercent?: FloatFieldUpdateOperationsInput | number;
+    dueDayOfMonth?: IntFieldUpdateOperationsInput | number;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type BillingInvoiceUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutBillingInvoicesNestedInput;
+    payments?: PaymentTransactionUpdateManyWithoutInvoiceNestedInput;
+  };
+
+  export type BillingInvoiceUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    payments?: PaymentTransactionUncheckedUpdateManyWithoutInvoiceNestedInput;
+  };
+
+  export type BillingInvoiceUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    period?: StringFieldUpdateOperationsInput | string;
+    totalAmount?: FloatFieldUpdateOperationsInput | number;
+    paidAmount?: FloatFieldUpdateOperationsInput | number;
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutPaymentTransactionsNestedInput;
+    invoice?: BillingInvoiceUpdateOneRequiredWithoutPaymentsNestedInput;
+    recordedBy?: UserUpdateOneRequiredWithoutPaymentsRecordedNestedInput;
+  };
+
+  export type PaymentTransactionUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    invoiceId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    recordedByUserId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    invoiceId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    recordedByUserId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StudentCreateManyClassroomInput = {
     id?: string;
     tenantId: string;
@@ -75434,6 +84459,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateWithoutClassroomInput = {
@@ -75463,6 +84491,9 @@ export namespace Prisma {
     portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutStudentNestedInput;
     attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutStudentNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutStudentNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutStudentNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutStudentNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutStudentNestedInput;
   };
 
   export type StudentUncheckedUpdateManyWithoutClassroomInput = {
@@ -75912,6 +84943,58 @@ export namespace Prisma {
     respondedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type PaymentTransactionCreateManyInvoiceInput = {
+    id?: string;
+    tenantId: string;
+    studentId: string;
+    amount: number;
+    method: $Enums.PaymentMethod;
+    paidAt?: Date | string;
+    referenceNo?: string | null;
+    notes?: string | null;
+    recordedByUserId: string;
+    createdAt?: Date | string;
+  };
+
+  export type PaymentTransactionUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutPaymentTransactionsNestedInput;
+    student?: StudentUpdateOneRequiredWithoutPaymentTransactionsNestedInput;
+    recordedBy?: UserUpdateOneRequiredWithoutPaymentsRecordedNestedInput;
+  };
+
+  export type PaymentTransactionUncheckedUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    recordedByUserId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PaymentTransactionUncheckedUpdateManyWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    studentId?: StringFieldUpdateOperationsInput | string;
+    amount?: FloatFieldUpdateOperationsInput | number;
+    method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
+    paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    recordedByUserId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   /**
    * Aliases for legacy arg types
    */
@@ -75975,6 +85058,12 @@ export namespace Prisma {
   export type EventConsentCountOutputTypeArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = EventConsentCountOutputTypeDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use BillingInvoiceCountOutputTypeDefaultArgs instead
+   */
+  export type BillingInvoiceCountOutputTypeArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = BillingInvoiceCountOutputTypeDefaultArgs<ExtArgs>;
   /**
    * @deprecated Use TenantDefaultArgs instead
    */
@@ -76129,6 +85218,24 @@ export namespace Prisma {
   export type EventConsentResponseArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = EventConsentResponseDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use StudentBillingPlanDefaultArgs instead
+   */
+  export type StudentBillingPlanArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = StudentBillingPlanDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use BillingInvoiceDefaultArgs instead
+   */
+  export type BillingInvoiceArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = BillingInvoiceDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use PaymentTransactionDefaultArgs instead
+   */
+  export type PaymentTransactionArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = PaymentTransactionDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
