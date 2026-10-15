@@ -19,9 +19,11 @@ import {
   RotateCw,
   X,
   User,
+  Printer,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { useToast } from '../../components/Toast';
+import { PrintPreviewModal, ReportCardPrint } from '../../components/print';
 import { listStudents } from '../../api/students';
 import { listMediaFiles } from '../../api/media';
 import {
@@ -119,6 +121,7 @@ export function DevelopmentPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [showReportCardPrint, setShowReportCardPrint] = useState(false);
 
   // Modal states
   const [showObsModal, setShowObsModal] = useState(false);
@@ -379,6 +382,17 @@ export function DevelopmentPage(): JSX.Element {
           >
             <RotateCw className="w-3.5 h-3.5" />
             Yenile
+          </TactileButton>
+
+          <TactileButton
+            variant="secondary"
+            size="sm"
+            onClick={() => setShowReportCardPrint(true)}
+            disabled={students.length === 0}
+            title="Seçili öğrencinin pedagojik gelişim karnesini yazdır"
+          >
+            <Printer className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+            <span>🎓 Karne Yazdır</span>
           </TactileButton>
 
           {canEdit && activeTab === 'observations' && (
@@ -1206,6 +1220,28 @@ export function DevelopmentPage(): JSX.Element {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Report Card Print Preview Modal */}
+      {showReportCardPrint && (
+        <PrintPreviewModal
+          isOpen={showReportCardPrint}
+          onClose={() => setShowReportCardPrint(false)}
+          title={`Pedagojik Gelişim Raporu (Karne) — ${
+            (students.find((s) => s.id === selectedStudentId) || students[0])?.firstName ||
+            'Öğrenci'
+          } ${(students.find((s) => s.id === selectedStudentId) || students[0])?.lastName || ''}`}
+          subtitle="2026-2027 Eğitim Öğretim Yılı • 6 Temel Pedagojik Gelişim Alanı"
+          orientation="portrait"
+        >
+          {(students.find((s) => s.id === selectedStudentId) || students[0]) && (
+            <ReportCardPrint
+              student={(students.find((s) => s.id === selectedStudentId) || students[0]) as Student}
+              observations={observations}
+              passport={(students.find((s) => s.id === selectedStudentId) || students[0])?.passport}
+            />
+          )}
+        </PrintPreviewModal>
       )}
     </div>
   );

@@ -15,6 +15,7 @@ import {
   MinusCircle,
   HeartPulse,
   AlertTriangle,
+  FileText,
 } from 'lucide-react';
 import { checkInStudent, getAttendanceByDate, updateStudentAttendance } from '../../api/attendance';
 import { listStudents } from '../../api/students';
@@ -24,6 +25,7 @@ import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { PrintPreviewModal, AttendanceSheetPrint } from '../../components/print';
 
 const STATUS_CONFIG: Record<
   AttendanceStatus,
@@ -85,6 +87,7 @@ export function AttendancePage(): JSX.Element {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [checkoutStudent, setCheckoutStudent] = useState<Student | null>(null);
+  const [showMebPrint, setShowMebPrint] = useState(false);
 
   const { showToast } = useToast();
 
@@ -285,6 +288,16 @@ export function AttendancePage(): JSX.Element {
                 </TactileButton>
               )}
             </div>
+
+            <TactileButton
+              variant="secondary"
+              size="md"
+              onClick={() => setShowMebPrint(true)}
+              title="Seçili ay için Millî Eğitim Bakanlığı resmi formatında aylık yoklama çizelgesini yazdır"
+            >
+              <FileText className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+              <span>📄 MEB Çizelgesi Yazdır</span>
+            </TactileButton>
 
             <TactileButton
               variant="teal"
@@ -833,6 +846,25 @@ export function AttendancePage(): JSX.Element {
           onConfirm={() => void executeBulkMarkPresent()}
           onCancel={() => setShowBulkPresentConfirm(false)}
         />
+      )}
+
+      {/* MEB Monthly Attendance Sheet Print Preview Modal */}
+      {showMebPrint && (
+        <PrintPreviewModal
+          isOpen={showMebPrint}
+          onClose={() => setShowMebPrint(false)}
+          title={`MEB Aylık Resmî Yoklama Çizelgesi — ${new Date(selectedDate).toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })}`}
+          subtitle={`Toplam ${students.length} Kayıtlı Öğrenci • Resmî Teftiş & Arşiv Formatı`}
+          orientation="landscape"
+        >
+          <AttendanceSheetPrint
+            classroomName="Ana Sınıfı & Gündüz Bakımevi Grubu"
+            year={parseInt(selectedDate.slice(0, 4), 10)}
+            month={parseInt(selectedDate.slice(5, 7), 10)}
+            students={students}
+            attendances={Object.values(attendanceMap)}
+          />
+        </PrintPreviewModal>
       )}
     </div>
   );

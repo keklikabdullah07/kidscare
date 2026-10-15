@@ -17,6 +17,8 @@ import {
   HeartPulse,
   Apple,
   ShieldCheck,
+  Printer,
+  ShieldAlert,
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { createStudent, deleteStudent, listStudents, updateStudent } from '../../api/students';
@@ -30,6 +32,7 @@ import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { PrintPreviewModal, ReportCardPrint, EmergencyRosterPrint } from '../../components/print';
 
 type Status = 'loading' | 'ready' | 'error';
 type ViewMode = 'grid' | 'table';
@@ -58,6 +61,8 @@ export function StudentsPage(): JSX.Element {
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [passportStudent, setPassportStudent] = useState<Student | null>(null);
   const [pickupContactsStudent, setPickupContactsStudent] = useState<Student | null>(null);
+  const [reportCardStudent, setReportCardStudent] = useState<Student | null>(null);
+  const [showEmergencyRoster, setShowEmergencyRoster] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -254,6 +259,17 @@ export function StudentsPage(): JSX.Element {
               <span>+ Yeni Sınıf</span>
             </TactileButton>
           )}
+
+          <TactileButton
+            type="button"
+            variant="secondary"
+            onClick={() => setShowEmergencyRoster(true)}
+            className="px-3.5 py-2 text-xs sm:text-sm"
+            title="Acil Durum, Kan Grubu ve Gezi Listesini Yazdır"
+          >
+            <ShieldAlert className="w-4 h-4 text-rose-700 dark:text-rose-400" />
+            <span>🚨 Acil Durum / Gezi Listesi</span>
+          </TactileButton>
 
           <TactileButton
             type="button"
@@ -549,6 +565,7 @@ export function StudentsPage(): JSX.Element {
                   classroomName={classrooms.find((c) => c.id === s.classroomId)?.name}
                   onOpenPassport={() => setPassportStudent(s)}
                   onOpenPickupContacts={() => setPickupContactsStudent(s)}
+                  onPrintReportCard={() => setReportCardStudent(s)}
                   onEdit={() => setEditingStudent(s)}
                   onDelete={() => void handleDelete(s.id, `${s.firstName} ${s.lastName}`)}
                 />
@@ -565,6 +582,7 @@ export function StudentsPage(): JSX.Element {
                     classroomName={classrooms.find((c) => c.id === s.classroomId)?.name}
                     onOpenPassport={() => setPassportStudent(s)}
                     onOpenPickupContacts={() => setPickupContactsStudent(s)}
+                    onPrintReportCard={() => setReportCardStudent(s)}
                     onEdit={() => setEditingStudent(s)}
                     onDelete={() => void handleDelete(s.id, `${s.firstName} ${s.lastName}`)}
                   />
@@ -682,6 +700,15 @@ export function StudentsPage(): JSX.Element {
                               <TactileButton
                                 type="button"
                                 variant="secondary"
+                                onClick={() => setReportCardStudent(s)}
+                                className="px-3 py-1 text-xs"
+                                title="Dönem Sonu Pedagojik Karnesini Yazdır"
+                              >
+                                <Printer className="w-3.5 h-3.5 text-teal-700" /> Karne
+                              </TactileButton>
+                              <TactileButton
+                                type="button"
+                                variant="secondary"
                                 onClick={() => setPassportStudent(s)}
                                 className="px-3 py-1 text-xs"
                               >
@@ -762,6 +789,53 @@ export function StudentsPage(): JSX.Element {
           student={pickupContactsStudent}
           onClose={() => setPickupContactsStudent(null)}
         />
+      )}
+
+      {/* Report Card Print Preview Modal */}
+      {reportCardStudent && (
+        <PrintPreviewModal
+          isOpen={!!reportCardStudent}
+          onClose={() => setReportCardStudent(null)}
+          title={`Pedagojik Gelişim Raporu (Karne) — ${reportCardStudent.firstName} ${reportCardStudent.lastName}`}
+          subtitle={`${classrooms.find((c) => c.id === reportCardStudent.classroomId)?.name || 'Sınıf'} • 2026-2027 Eğitim Öğretim Yılı`}
+          orientation="portrait"
+        >
+          <ReportCardPrint
+            student={reportCardStudent}
+            classroomName={classrooms.find((c) => c.id === reportCardStudent.classroomId)?.name}
+            passport={reportCardStudent.passport}
+          />
+        </PrintPreviewModal>
+      )}
+
+      {/* Emergency & Allergen Roster Print Preview Modal */}
+      {showEmergencyRoster && (
+        <PrintPreviewModal
+          isOpen={showEmergencyRoster}
+          onClose={() => setShowEmergencyRoster(false)}
+          title={`Acil Durum & Gezi Güvenlik Listesi — ${
+            selectedClassroomId === 'ALL'
+              ? 'Tüm Okul'
+              : classrooms.find((c) => c.id === selectedClassroomId)?.name || 'Sınıf'
+          }`}
+          subtitle={`Toplam ${filteredStudents.length} Kayıtlı Öğrenci • Resmî Kapı/Gezi Dosyası`}
+          orientation="portrait"
+        >
+          <EmergencyRosterPrint
+            classroomName={
+              selectedClassroomId === 'ALL'
+                ? 'Tüm Okul / Genel Mevcut'
+                : classrooms.find((c) => c.id === selectedClassroomId)?.name || 'Sınıf'
+            }
+            students={filteredStudents}
+            passportsMap={filteredStudents.reduce<
+              Record<string, StudentPassport | null | undefined>
+            >((acc, s) => {
+              acc[s.id] = s.passport;
+              return acc;
+            }, {})}
+          />
+        </PrintPreviewModal>
       )}
 
       {/* Delete Confirmation Modal */}
@@ -889,6 +963,7 @@ function StudentCard({
   classroomName,
   onOpenPassport,
   onOpenPickupContacts,
+  onPrintReportCard,
   onEdit,
   onDelete,
 }: {
@@ -896,6 +971,7 @@ function StudentCard({
   classroomName?: string | undefined;
   onOpenPassport: () => void;
   onOpenPickupContacts: () => void;
+  onPrintReportCard: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }): JSX.Element {
@@ -1050,7 +1126,17 @@ function StudentCard({
           className="px-3.5 py-1.5 text-xs text-teal-900 dark:text-teal-200"
         >
           <FileText className="w-3.5 h-3.5 text-teal-700" />
-          <span>Pasaport & Sağlık</span>
+          <span>Pasaport</span>
+        </TactileButton>
+        <TactileButton
+          type="button"
+          variant="secondary"
+          onClick={onPrintReportCard}
+          className="px-3.5 py-1.5 text-xs text-teal-900 dark:text-teal-200"
+          title="Dönem Sonu Pedagojik Karnesini Yazdır"
+        >
+          <Printer className="w-3.5 h-3.5 text-teal-700" />
+          <span>Karne</span>
         </TactileButton>
         <TactileButton
           type="button"
@@ -1059,7 +1145,7 @@ function StudentCard({
           className="px-3.5 py-1.5 text-xs text-amber-900 dark:text-amber-300"
         >
           <Users className="w-3.5 h-3.5 text-amber-700" />
-          <span>Teslim Kişileri</span>
+          <span>Teslim</span>
         </TactileButton>
 
         <div className="flex items-center gap-1.5">
