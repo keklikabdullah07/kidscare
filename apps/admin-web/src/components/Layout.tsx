@@ -99,9 +99,9 @@ function getNavGroupsForRole(role: string): NavGroup[] {
           },
           {
             to: '/events',
-            label: 'Geziler & İzinler',
+            label: 'Etkinlikler & İzinler',
             icon: Ticket,
-            description: 'Gezi izin onayları ve geçmişi',
+            description: 'Dış geziler, okul etkinlikleri ve izinler',
           },
           {
             to: '/gallery',
@@ -198,9 +198,9 @@ function getNavGroupsForRole(role: string): NavGroup[] {
         },
         {
           to: '/events',
-          label: 'Geziler & İzinler',
+          label: 'Etkinlikler & İzinler',
           icon: Ticket,
-          description: 'Gezi izinleri ve katılımcı listesi',
+          description: 'Dış geziler, etkinlikler ve izin yönetimi',
         },
         {
           to: '/gallery',

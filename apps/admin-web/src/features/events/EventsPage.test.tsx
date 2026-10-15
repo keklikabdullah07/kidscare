@@ -70,7 +70,10 @@ describe('EventsPage', () => {
 
     render(<EventsPage />);
 
-    expect(await screen.findByText('Geziler & İzin Yönetimi')).toBeInTheDocument();
+    expect(await screen.findByText('Etkinlikler & İzin Yönetimi')).toBeInTheDocument();
+    expect(screen.getByText('Dış Geziler (İzin & Servis)')).toBeInTheDocument();
+    expect(screen.getByText('Okul İçi Etkinlikler & Atölyeler')).toBeInTheDocument();
+    expect(screen.getByText('Genel İzin & Onay Formları')).toBeInTheDocument();
     expect(screen.getByText('Yeni Gezi / Etkinlik Oluştur')).toBeInTheDocument();
     expect(screen.getByText('Atatürk Arboretumu Gezisi')).toBeInTheDocument();
     expect(screen.getByText('3 İzin Verildi')).toBeInTheDocument();
@@ -156,5 +159,37 @@ describe('EventsPage', () => {
         }),
       );
     });
+  });
+
+  it('switches between master tabs (in_school, forms, trips)', async () => {
+    const user = userEvent.setup();
+    mockUseAuth.mockReturnValue({
+      state: {
+        status: 'authenticated',
+        user: { id: 'admin-1', role: 'ADMIN', tenantId: 't-1', email: 'admin@demo.test' },
+      },
+    });
+
+    render(<EventsPage />);
+
+    // Click on Okul İçi Etkinlikler tab
+    const inSchoolTab = await screen.findByText('Okul İçi Etkinlikler & Atölyeler');
+    await user.click(inSchoolTab);
+
+    expect(screen.getByText('Kurum İçi Etkinlikler, Gösteriler & Atölyeler')).toBeInTheDocument();
+    expect(screen.getByText('🎨 Kil & Çömlek Atölyesi Günü')).toBeInTheDocument();
+
+    // Click on Genel İzin & Onay Formları tab
+    const formsTab = screen.getByText('Genel İzin & Onay Formları');
+    await user.click(formsTab);
+
+    expect(screen.getByText('Resmi İzin & Yasal Onay Belgeleri')).toBeInTheDocument();
+    expect(screen.getByText(/KVKK & Medya Paylaşım İzni/)).toBeInTheDocument();
+
+    // Switch back to Trips
+    const tripsTab = screen.getByText('Dış Geziler (İzin & Servis)');
+    await user.click(tripsTab);
+
+    expect(screen.getByText('Atatürk Arboretumu Gezisi')).toBeInTheDocument();
   });
 });
