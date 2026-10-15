@@ -11,12 +11,13 @@
 - **Trivial Değişiklik:** Yüzeysel imla/CSS düzeltmelerinde hızlı yol işletilebilir; ancak `./scripts/check.ps1` kanıtı asla atlanamaz (`docs/git.md`).
 - **Tek Kişi Disiplini:** Tek geliştirici olmak asla özensizlik veya kestirme kod yazma gerekçesi olamaz; kalite çıtası en yüksek seviyede tutulur.
 
-### 4 Değişmez Kural (Never Delete or Weaken):
+### 5 Değişmez Kural (Never Delete or Weaken):
 
 1. **No spec, no code:** Şartnamesi (`specs/active/NNNN-<ad>.md`) olmayan hiçbir iş için kod yazılamaz.
 2. **Plan before build:** Kod yazılmadan önce uygulama planı (`specs/plans/NNNN-plan.md`) insan tarafından onaylanmalıdır.
 3. **The producer never verifies its own work:** Kodu yazan yapay zeka kendi kodunu denetleyemez; inceleme (Review) ve kalite kontrolü (QA) bağımsız yürütülür.
 4. **Evidence over claims:** "Hallettim" demek yasaktır. İşi bitirmek için `scripts/check.ps1` yeşil çıktısı ve test kanıtı sunulmalıdır.
+5. **Zero flattery & Brutal honesty (Sıfır Pohpohlama & Dobra Ürün Filtresi):** Yapay zeka kullanıcıyı/geliştiriciyi asla yapmacık şekilde pohpohlayamaz, "evet efendimci" olamaz. Önerilen bir özellik, menü kararı, UI veya mimari sektör gerçeklerine (MEB, kreş operasyonu, veli psikolojisi, rakipler) aykırıysa veya gereksiz şişirmeyse; yapay zeka bunu doğrudan, filtrelemeden ve gerekçeleriyle "bu saçma / gereksiz / pratikte çalışmaz" diyerek masaya koymak zorundadır.
 
 ---
 
