@@ -169,6 +169,11 @@ export type BillingInvoice = $Result.DefaultSelection<Prisma.$BillingInvoicePayl
  *
  */
 export type PaymentTransaction = $Result.DefaultSelection<Prisma.$PaymentTransactionPayload>;
+/**
+ * Model PasswordResetToken
+ *
+ */
+export type PasswordResetToken = $Result.DefaultSelection<Prisma.$PasswordResetTokenPayload>;
 
 /**
  * Enums
@@ -840,6 +845,16 @@ export class PrismaClient<
    * ```
    */
   get paymentTransaction(): Prisma.PaymentTransactionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.passwordResetToken`: Exposes CRUD operations for the **PasswordResetToken** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more PasswordResetTokens
+   * const passwordResetTokens = await prisma.passwordResetToken.findMany()
+   * ```
+   */
+  get passwordResetToken(): Prisma.PasswordResetTokenDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1305,6 +1320,7 @@ export namespace Prisma {
     StudentBillingPlan: 'StudentBillingPlan';
     BillingInvoice: 'BillingInvoice';
     PaymentTransaction: 'PaymentTransaction';
+    PasswordResetToken: 'PasswordResetToken';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -1356,7 +1372,8 @@ export namespace Prisma {
         | 'eventConsentResponse'
         | 'studentBillingPlan'
         | 'billingInvoice'
-        | 'paymentTransaction';
+        | 'paymentTransaction'
+        | 'passwordResetToken';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -3530,6 +3547,76 @@ export namespace Prisma {
           };
         };
       };
+      PasswordResetToken: {
+        payload: Prisma.$PasswordResetTokenPayload<ExtArgs>;
+        fields: Prisma.PasswordResetTokenFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.PasswordResetTokenFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.PasswordResetTokenFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>;
+          };
+          findFirst: {
+            args: Prisma.PasswordResetTokenFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.PasswordResetTokenFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>;
+          };
+          findMany: {
+            args: Prisma.PasswordResetTokenFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>[];
+          };
+          create: {
+            args: Prisma.PasswordResetTokenCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>;
+          };
+          createMany: {
+            args: Prisma.PasswordResetTokenCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.PasswordResetTokenCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>[];
+          };
+          delete: {
+            args: Prisma.PasswordResetTokenDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>;
+          };
+          update: {
+            args: Prisma.PasswordResetTokenUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>;
+          };
+          deleteMany: {
+            args: Prisma.PasswordResetTokenDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.PasswordResetTokenUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.PasswordResetTokenUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>;
+          };
+          aggregate: {
+            args: Prisma.PasswordResetTokenAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregatePasswordResetToken>;
+          };
+          groupBy: {
+            args: Prisma.PasswordResetTokenGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<PasswordResetTokenGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.PasswordResetTokenCountArgs<ExtArgs>;
+            result: $Utils.Optional<PasswordResetTokenCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -3727,6 +3814,7 @@ export namespace Prisma {
     billingPlans: number;
     billingInvoices: number;
     paymentTransactions: number;
+    passwordResetTokens: number;
   };
 
   export type TenantCountOutputTypeSelect<
@@ -3762,6 +3850,7 @@ export namespace Prisma {
     billingPlans?: boolean | TenantCountOutputTypeCountBillingPlansArgs;
     billingInvoices?: boolean | TenantCountOutputTypeCountBillingInvoicesArgs;
     paymentTransactions?: boolean | TenantCountOutputTypeCountPaymentTransactionsArgs;
+    passwordResetTokens?: boolean | TenantCountOutputTypeCountPasswordResetTokensArgs;
   };
 
   // Custom InputTypes
@@ -4048,6 +4137,15 @@ export namespace Prisma {
   };
 
   /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountPasswordResetTokensArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: PasswordResetTokenWhereInput;
+  };
+
+  /**
    * Count Type UserCountOutputType
    */
 
@@ -4076,6 +4174,7 @@ export namespace Prisma {
     eventConsentsCreated: number;
     eventConsentResponses: number;
     paymentsRecorded: number;
+    passwordResetTokens: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -4106,6 +4205,7 @@ export namespace Prisma {
     eventConsentsCreated?: boolean | UserCountOutputTypeCountEventConsentsCreatedArgs;
     eventConsentResponses?: boolean | UserCountOutputTypeCountEventConsentResponsesArgs;
     paymentsRecorded?: boolean | UserCountOutputTypeCountPaymentsRecordedArgs;
+    passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs;
   };
 
   // Custom InputTypes
@@ -4335,6 +4435,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: PaymentTransactionWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPasswordResetTokensArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: PasswordResetTokenWhereInput;
   };
 
   /**
@@ -5076,6 +5185,7 @@ export namespace Prisma {
         billingPlans?: boolean | Tenant$billingPlansArgs<ExtArgs>;
         billingInvoices?: boolean | Tenant$billingInvoicesArgs<ExtArgs>;
         paymentTransactions?: boolean | Tenant$paymentTransactionsArgs<ExtArgs>;
+        passwordResetTokens?: boolean | Tenant$passwordResetTokensArgs<ExtArgs>;
         _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['tenant']
@@ -5135,6 +5245,7 @@ export namespace Prisma {
     billingPlans?: boolean | Tenant$billingPlansArgs<ExtArgs>;
     billingInvoices?: boolean | Tenant$billingInvoicesArgs<ExtArgs>;
     paymentTransactions?: boolean | Tenant$paymentTransactionsArgs<ExtArgs>;
+    passwordResetTokens?: boolean | Tenant$passwordResetTokensArgs<ExtArgs>;
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TenantIncludeCreateManyAndReturn<
@@ -5174,6 +5285,7 @@ export namespace Prisma {
       billingPlans: Prisma.$StudentBillingPlanPayload<ExtArgs>[];
       billingInvoices: Prisma.$BillingInvoicePayload<ExtArgs>[];
       paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[];
+      passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -5760,6 +5872,11 @@ export namespace Prisma {
       args?: Subset<T, Tenant$paymentTransactionsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    passwordResetTokens<T extends Tenant$passwordResetTokensArgs<ExtArgs> = {}>(
+      args?: Subset<T, Tenant$passwordResetTokensArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6803,6 +6920,29 @@ export namespace Prisma {
   };
 
   /**
+   * Tenant.passwordResetTokens
+   */
+  export type Tenant$passwordResetTokensArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    where?: PasswordResetTokenWhereInput;
+    orderBy?:
+      PasswordResetTokenOrderByWithRelationInput | PasswordResetTokenOrderByWithRelationInput[];
+    cursor?: PasswordResetTokenWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: PasswordResetTokenScalarFieldEnum | PasswordResetTokenScalarFieldEnum[];
+  };
+
+  /**
    * Tenant without action
    */
   export type TenantDefaultArgs<
@@ -7039,6 +7179,7 @@ export namespace Prisma {
         eventConsentsCreated?: boolean | User$eventConsentsCreatedArgs<ExtArgs>;
         eventConsentResponses?: boolean | User$eventConsentResponsesArgs<ExtArgs>;
         paymentsRecorded?: boolean | User$paymentsRecordedArgs<ExtArgs>;
+        passwordResetTokens?: boolean | User$passwordResetTokensArgs<ExtArgs>;
         _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['user']
@@ -7100,6 +7241,7 @@ export namespace Prisma {
     eventConsentsCreated?: boolean | User$eventConsentsCreatedArgs<ExtArgs>;
     eventConsentResponses?: boolean | User$eventConsentResponsesArgs<ExtArgs>;
     paymentsRecorded?: boolean | User$paymentsRecordedArgs<ExtArgs>;
+    passwordResetTokens?: boolean | User$passwordResetTokensArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -7136,6 +7278,7 @@ export namespace Prisma {
       eventConsentsCreated: Prisma.$EventConsentPayload<ExtArgs>[];
       eventConsentResponses: Prisma.$EventConsentResponsePayload<ExtArgs>[];
       paymentsRecorded: Prisma.$PaymentTransactionPayload<ExtArgs>[];
+      passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -7708,6 +7851,11 @@ export namespace Prisma {
       args?: Subset<T, User$paymentsRecordedArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, 'findMany'> | Null
+    >;
+    passwordResetTokens<T extends User$passwordResetTokensArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$passwordResetTokensArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'findMany'> | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8617,6 +8765,29 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * User.passwordResetTokens
+   */
+  export type User$passwordResetTokensArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    where?: PasswordResetTokenWhereInput;
+    orderBy?:
+      PasswordResetTokenOrderByWithRelationInput | PasswordResetTokenOrderByWithRelationInput[];
+    cursor?: PasswordResetTokenWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: PasswordResetTokenScalarFieldEnum | PasswordResetTokenScalarFieldEnum[];
   };
 
   /**
@@ -43067,6 +43238,1107 @@ export namespace Prisma {
   };
 
   /**
+   * Model PasswordResetToken
+   */
+
+  export type AggregatePasswordResetToken = {
+    _count: PasswordResetTokenCountAggregateOutputType | null;
+    _min: PasswordResetTokenMinAggregateOutputType | null;
+    _max: PasswordResetTokenMaxAggregateOutputType | null;
+  };
+
+  export type PasswordResetTokenMinAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    userId: string | null;
+    tokenHash: string | null;
+    expiresAt: Date | null;
+    usedAt: Date | null;
+    createdAt: Date | null;
+  };
+
+  export type PasswordResetTokenMaxAggregateOutputType = {
+    id: string | null;
+    tenantId: string | null;
+    userId: string | null;
+    tokenHash: string | null;
+    expiresAt: Date | null;
+    usedAt: Date | null;
+    createdAt: Date | null;
+  };
+
+  export type PasswordResetTokenCountAggregateOutputType = {
+    id: number;
+    tenantId: number;
+    userId: number;
+    tokenHash: number;
+    expiresAt: number;
+    usedAt: number;
+    createdAt: number;
+    _all: number;
+  };
+
+  export type PasswordResetTokenMinAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    tokenHash?: true;
+    expiresAt?: true;
+    usedAt?: true;
+    createdAt?: true;
+  };
+
+  export type PasswordResetTokenMaxAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    tokenHash?: true;
+    expiresAt?: true;
+    usedAt?: true;
+    createdAt?: true;
+  };
+
+  export type PasswordResetTokenCountAggregateInputType = {
+    id?: true;
+    tenantId?: true;
+    userId?: true;
+    tokenHash?: true;
+    expiresAt?: true;
+    usedAt?: true;
+    createdAt?: true;
+    _all?: true;
+  };
+
+  export type PasswordResetTokenAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which PasswordResetToken to aggregate.
+     */
+    where?: PasswordResetTokenWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PasswordResetTokens to fetch.
+     */
+    orderBy?:
+      PasswordResetTokenOrderByWithRelationInput | PasswordResetTokenOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: PasswordResetTokenWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PasswordResetTokens from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PasswordResetTokens.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned PasswordResetTokens
+     **/
+    _count?: true | PasswordResetTokenCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: PasswordResetTokenMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: PasswordResetTokenMaxAggregateInputType;
+  };
+
+  export type GetPasswordResetTokenAggregateType<T extends PasswordResetTokenAggregateArgs> = {
+    [P in keyof T & keyof AggregatePasswordResetToken]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePasswordResetToken[P]>
+      : GetScalarType<T[P], AggregatePasswordResetToken[P]>;
+  };
+
+  export type PasswordResetTokenGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: PasswordResetTokenWhereInput;
+    orderBy?:
+      | PasswordResetTokenOrderByWithAggregationInput
+      | PasswordResetTokenOrderByWithAggregationInput[];
+    by: PasswordResetTokenScalarFieldEnum[] | PasswordResetTokenScalarFieldEnum;
+    having?: PasswordResetTokenScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: PasswordResetTokenCountAggregateInputType | true;
+    _min?: PasswordResetTokenMinAggregateInputType;
+    _max?: PasswordResetTokenMaxAggregateInputType;
+  };
+
+  export type PasswordResetTokenGroupByOutputType = {
+    id: string;
+    tenantId: string;
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date;
+    usedAt: Date | null;
+    createdAt: Date;
+    _count: PasswordResetTokenCountAggregateOutputType | null;
+    _min: PasswordResetTokenMinAggregateOutputType | null;
+    _max: PasswordResetTokenMaxAggregateOutputType | null;
+  };
+
+  type GetPasswordResetTokenGroupByPayload<T extends PasswordResetTokenGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<PasswordResetTokenGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof PasswordResetTokenGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PasswordResetTokenGroupByOutputType[P]>
+            : GetScalarType<T[P], PasswordResetTokenGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type PasswordResetTokenSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      userId?: boolean;
+      tokenHash?: boolean;
+      expiresAt?: boolean;
+      usedAt?: boolean;
+      createdAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['passwordResetToken']
+  >;
+
+  export type PasswordResetTokenSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      tenantId?: boolean;
+      userId?: boolean;
+      tokenHash?: boolean;
+      expiresAt?: boolean;
+      usedAt?: boolean;
+      createdAt?: boolean;
+      tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['passwordResetToken']
+  >;
+
+  export type PasswordResetTokenSelectScalar = {
+    id?: boolean;
+    tenantId?: boolean;
+    userId?: boolean;
+    tokenHash?: boolean;
+    expiresAt?: boolean;
+    usedAt?: boolean;
+    createdAt?: boolean;
+  };
+
+  export type PasswordResetTokenInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type PasswordResetTokenIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $PasswordResetTokenPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'PasswordResetToken';
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>;
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        tenantId: string;
+        userId: string;
+        tokenHash: string;
+        expiresAt: Date;
+        usedAt: Date | null;
+        createdAt: Date;
+      },
+      ExtArgs['result']['passwordResetToken']
+    >;
+    composites: {};
+  };
+
+  type PasswordResetTokenGetPayload<
+    S extends boolean | null | undefined | PasswordResetTokenDefaultArgs,
+  > = $Result.GetResult<Prisma.$PasswordResetTokenPayload, S>;
+
+  type PasswordResetTokenCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<PasswordResetTokenFindManyArgs, 'select' | 'include' | 'distinct'> & {
+    select?: PasswordResetTokenCountAggregateInputType | true;
+  };
+
+  export interface PasswordResetTokenDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['PasswordResetToken'];
+      meta: { name: 'PasswordResetToken' };
+    };
+    /**
+     * Find zero or one PasswordResetToken that matches the filter.
+     * @param {PasswordResetTokenFindUniqueArgs} args - Arguments to find a PasswordResetToken
+     * @example
+     * // Get one PasswordResetToken
+     * const passwordResetToken = await prisma.passwordResetToken.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PasswordResetTokenFindUniqueArgs>(
+      args: SelectSubset<T, PasswordResetTokenFindUniqueArgs<ExtArgs>>,
+    ): Prisma__PasswordResetTokenClient<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'findUnique'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find one PasswordResetToken that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PasswordResetTokenFindUniqueOrThrowArgs} args - Arguments to find a PasswordResetToken
+     * @example
+     * // Get one PasswordResetToken
+     * const passwordResetToken = await prisma.passwordResetToken.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PasswordResetTokenFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, PasswordResetTokenFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__PasswordResetTokenClient<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'findUniqueOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first PasswordResetToken that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PasswordResetTokenFindFirstArgs} args - Arguments to find a PasswordResetToken
+     * @example
+     * // Get one PasswordResetToken
+     * const passwordResetToken = await prisma.passwordResetToken.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PasswordResetTokenFindFirstArgs>(
+      args?: SelectSubset<T, PasswordResetTokenFindFirstArgs<ExtArgs>>,
+    ): Prisma__PasswordResetTokenClient<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'findFirst'> | null,
+      null,
+      ExtArgs
+    >;
+
+    /**
+     * Find the first PasswordResetToken that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PasswordResetTokenFindFirstOrThrowArgs} args - Arguments to find a PasswordResetToken
+     * @example
+     * // Get one PasswordResetToken
+     * const passwordResetToken = await prisma.passwordResetToken.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PasswordResetTokenFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, PasswordResetTokenFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__PasswordResetTokenClient<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'findFirstOrThrow'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Find zero or more PasswordResetTokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PasswordResetTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PasswordResetTokens
+     * const passwordResetTokens = await prisma.passwordResetToken.findMany()
+     *
+     * // Get first 10 PasswordResetTokens
+     * const passwordResetTokens = await prisma.passwordResetToken.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const passwordResetTokenWithIdOnly = await prisma.passwordResetToken.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends PasswordResetTokenFindManyArgs>(
+      args?: SelectSubset<T, PasswordResetTokenFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'findMany'>
+    >;
+
+    /**
+     * Create a PasswordResetToken.
+     * @param {PasswordResetTokenCreateArgs} args - Arguments to create a PasswordResetToken.
+     * @example
+     * // Create one PasswordResetToken
+     * const PasswordResetToken = await prisma.passwordResetToken.create({
+     *   data: {
+     *     // ... data to create a PasswordResetToken
+     *   }
+     * })
+     *
+     */
+    create<T extends PasswordResetTokenCreateArgs>(
+      args: SelectSubset<T, PasswordResetTokenCreateArgs<ExtArgs>>,
+    ): Prisma__PasswordResetTokenClient<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'create'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Create many PasswordResetTokens.
+     * @param {PasswordResetTokenCreateManyArgs} args - Arguments to create many PasswordResetTokens.
+     * @example
+     * // Create many PasswordResetTokens
+     * const passwordResetToken = await prisma.passwordResetToken.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends PasswordResetTokenCreateManyArgs>(
+      args?: SelectSubset<T, PasswordResetTokenCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many PasswordResetTokens and returns the data saved in the database.
+     * @param {PasswordResetTokenCreateManyAndReturnArgs} args - Arguments to create many PasswordResetTokens.
+     * @example
+     * // Create many PasswordResetTokens
+     * const passwordResetToken = await prisma.passwordResetToken.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many PasswordResetTokens and only return the `id`
+     * const passwordResetTokenWithIdOnly = await prisma.passwordResetToken.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends PasswordResetTokenCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, PasswordResetTokenCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'createManyAndReturn'>
+    >;
+
+    /**
+     * Delete a PasswordResetToken.
+     * @param {PasswordResetTokenDeleteArgs} args - Arguments to delete one PasswordResetToken.
+     * @example
+     * // Delete one PasswordResetToken
+     * const PasswordResetToken = await prisma.passwordResetToken.delete({
+     *   where: {
+     *     // ... filter to delete one PasswordResetToken
+     *   }
+     * })
+     *
+     */
+    delete<T extends PasswordResetTokenDeleteArgs>(
+      args: SelectSubset<T, PasswordResetTokenDeleteArgs<ExtArgs>>,
+    ): Prisma__PasswordResetTokenClient<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'delete'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Update one PasswordResetToken.
+     * @param {PasswordResetTokenUpdateArgs} args - Arguments to update one PasswordResetToken.
+     * @example
+     * // Update one PasswordResetToken
+     * const passwordResetToken = await prisma.passwordResetToken.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends PasswordResetTokenUpdateArgs>(
+      args: SelectSubset<T, PasswordResetTokenUpdateArgs<ExtArgs>>,
+    ): Prisma__PasswordResetTokenClient<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'update'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Delete zero or more PasswordResetTokens.
+     * @param {PasswordResetTokenDeleteManyArgs} args - Arguments to filter PasswordResetTokens to delete.
+     * @example
+     * // Delete a few PasswordResetTokens
+     * const { count } = await prisma.passwordResetToken.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends PasswordResetTokenDeleteManyArgs>(
+      args?: SelectSubset<T, PasswordResetTokenDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more PasswordResetTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PasswordResetTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PasswordResetTokens
+     * const passwordResetToken = await prisma.passwordResetToken.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends PasswordResetTokenUpdateManyArgs>(
+      args: SelectSubset<T, PasswordResetTokenUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one PasswordResetToken.
+     * @param {PasswordResetTokenUpsertArgs} args - Arguments to update or create a PasswordResetToken.
+     * @example
+     * // Update or create a PasswordResetToken
+     * const passwordResetToken = await prisma.passwordResetToken.upsert({
+     *   create: {
+     *     // ... data to create a PasswordResetToken
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PasswordResetToken we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PasswordResetTokenUpsertArgs>(
+      args: SelectSubset<T, PasswordResetTokenUpsertArgs<ExtArgs>>,
+    ): Prisma__PasswordResetTokenClient<
+      $Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, 'upsert'>,
+      never,
+      ExtArgs
+    >;
+
+    /**
+     * Count the number of PasswordResetTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PasswordResetTokenCountArgs} args - Arguments to filter PasswordResetTokens to count.
+     * @example
+     * // Count the number of PasswordResetTokens
+     * const count = await prisma.passwordResetToken.count({
+     *   where: {
+     *     // ... the filter for the PasswordResetTokens we want to count
+     *   }
+     * })
+     **/
+    count<T extends PasswordResetTokenCountArgs>(
+      args?: Subset<T, PasswordResetTokenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PasswordResetTokenCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a PasswordResetToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PasswordResetTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends PasswordResetTokenAggregateArgs>(
+      args: Subset<T, PasswordResetTokenAggregateArgs>,
+    ): Prisma.PrismaPromise<GetPasswordResetTokenAggregateType<T>>;
+
+    /**
+     * Group by PasswordResetToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PasswordResetTokenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends PasswordResetTokenGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends (True extends HasSelectOrTake
+        ? { orderBy: PasswordResetTokenGroupByArgs['orderBy'] }
+        : { orderBy?: PasswordResetTokenGroupByArgs['orderBy'] }),
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends (T['by'] extends never[] ? True : False),
+      InputErrors extends (ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]),
+    >(
+      args: SubsetIntersection<T, PasswordResetTokenGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetPasswordResetTokenGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the PasswordResetToken model
+     */
+    readonly fields: PasswordResetTokenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PasswordResetToken.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PasswordResetTokenClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TenantDefaultArgs<ExtArgs>>,
+    ): Prisma__TenantClient<
+      $Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null,
+      Null,
+      ExtArgs
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the PasswordResetToken model
+   */
+  interface PasswordResetTokenFieldRefs {
+    readonly id: FieldRef<'PasswordResetToken', 'String'>;
+    readonly tenantId: FieldRef<'PasswordResetToken', 'String'>;
+    readonly userId: FieldRef<'PasswordResetToken', 'String'>;
+    readonly tokenHash: FieldRef<'PasswordResetToken', 'String'>;
+    readonly expiresAt: FieldRef<'PasswordResetToken', 'DateTime'>;
+    readonly usedAt: FieldRef<'PasswordResetToken', 'DateTime'>;
+    readonly createdAt: FieldRef<'PasswordResetToken', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * PasswordResetToken findUnique
+   */
+  export type PasswordResetTokenFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which PasswordResetToken to fetch.
+     */
+    where: PasswordResetTokenWhereUniqueInput;
+  };
+
+  /**
+   * PasswordResetToken findUniqueOrThrow
+   */
+  export type PasswordResetTokenFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which PasswordResetToken to fetch.
+     */
+    where: PasswordResetTokenWhereUniqueInput;
+  };
+
+  /**
+   * PasswordResetToken findFirst
+   */
+  export type PasswordResetTokenFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which PasswordResetToken to fetch.
+     */
+    where?: PasswordResetTokenWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PasswordResetTokens to fetch.
+     */
+    orderBy?:
+      PasswordResetTokenOrderByWithRelationInput | PasswordResetTokenOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for PasswordResetTokens.
+     */
+    cursor?: PasswordResetTokenWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PasswordResetTokens from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PasswordResetTokens.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PasswordResetTokens.
+     */
+    distinct?: PasswordResetTokenScalarFieldEnum | PasswordResetTokenScalarFieldEnum[];
+  };
+
+  /**
+   * PasswordResetToken findFirstOrThrow
+   */
+  export type PasswordResetTokenFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which PasswordResetToken to fetch.
+     */
+    where?: PasswordResetTokenWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PasswordResetTokens to fetch.
+     */
+    orderBy?:
+      PasswordResetTokenOrderByWithRelationInput | PasswordResetTokenOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for PasswordResetTokens.
+     */
+    cursor?: PasswordResetTokenWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PasswordResetTokens from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PasswordResetTokens.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PasswordResetTokens.
+     */
+    distinct?: PasswordResetTokenScalarFieldEnum | PasswordResetTokenScalarFieldEnum[];
+  };
+
+  /**
+   * PasswordResetToken findMany
+   */
+  export type PasswordResetTokenFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * Filter, which PasswordResetTokens to fetch.
+     */
+    where?: PasswordResetTokenWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PasswordResetTokens to fetch.
+     */
+    orderBy?:
+      PasswordResetTokenOrderByWithRelationInput | PasswordResetTokenOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing PasswordResetTokens.
+     */
+    cursor?: PasswordResetTokenWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PasswordResetTokens from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PasswordResetTokens.
+     */
+    skip?: number;
+    distinct?: PasswordResetTokenScalarFieldEnum | PasswordResetTokenScalarFieldEnum[];
+  };
+
+  /**
+   * PasswordResetToken create
+   */
+  export type PasswordResetTokenCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a PasswordResetToken.
+     */
+    data: XOR<PasswordResetTokenCreateInput, PasswordResetTokenUncheckedCreateInput>;
+  };
+
+  /**
+   * PasswordResetToken createMany
+   */
+  export type PasswordResetTokenCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many PasswordResetTokens.
+     */
+    data: PasswordResetTokenCreateManyInput | PasswordResetTokenCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * PasswordResetToken createManyAndReturn
+   */
+  export type PasswordResetTokenCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * The data used to create many PasswordResetTokens.
+     */
+    data: PasswordResetTokenCreateManyInput | PasswordResetTokenCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * PasswordResetToken update
+   */
+  export type PasswordResetTokenUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a PasswordResetToken.
+     */
+    data: XOR<PasswordResetTokenUpdateInput, PasswordResetTokenUncheckedUpdateInput>;
+    /**
+     * Choose, which PasswordResetToken to update.
+     */
+    where: PasswordResetTokenWhereUniqueInput;
+  };
+
+  /**
+   * PasswordResetToken updateMany
+   */
+  export type PasswordResetTokenUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update PasswordResetTokens.
+     */
+    data: XOR<
+      PasswordResetTokenUpdateManyMutationInput,
+      PasswordResetTokenUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which PasswordResetTokens to update
+     */
+    where?: PasswordResetTokenWhereInput;
+  };
+
+  /**
+   * PasswordResetToken upsert
+   */
+  export type PasswordResetTokenUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the PasswordResetToken to update in case it exists.
+     */
+    where: PasswordResetTokenWhereUniqueInput;
+    /**
+     * In case the PasswordResetToken found by the `where` argument doesn't exist, create a new PasswordResetToken with this data.
+     */
+    create: XOR<PasswordResetTokenCreateInput, PasswordResetTokenUncheckedCreateInput>;
+    /**
+     * In case the PasswordResetToken was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PasswordResetTokenUpdateInput, PasswordResetTokenUncheckedUpdateInput>;
+  };
+
+  /**
+   * PasswordResetToken delete
+   */
+  export type PasswordResetTokenDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+    /**
+     * Filter which PasswordResetToken to delete.
+     */
+    where: PasswordResetTokenWhereUniqueInput;
+  };
+
+  /**
+   * PasswordResetToken deleteMany
+   */
+  export type PasswordResetTokenDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which PasswordResetTokens to delete
+     */
+    where?: PasswordResetTokenWhereInput;
+  };
+
+  /**
+   * PasswordResetToken without action
+   */
+  export type PasswordResetTokenDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the PasswordResetToken
+     */
+    select?: PasswordResetTokenSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PasswordResetTokenInclude<ExtArgs> | null;
+  };
+
+  /**
    * Enums
    */
 
@@ -43585,6 +44857,19 @@ export namespace Prisma {
   export type PaymentTransactionScalarFieldEnum =
     (typeof PaymentTransactionScalarFieldEnum)[keyof typeof PaymentTransactionScalarFieldEnum];
 
+  export const PasswordResetTokenScalarFieldEnum: {
+    id: 'id';
+    tenantId: 'tenantId';
+    userId: 'userId';
+    tokenHash: 'tokenHash';
+    expiresAt: 'expiresAt';
+    usedAt: 'usedAt';
+    createdAt: 'createdAt';
+  };
+
+  export type PasswordResetTokenScalarFieldEnum =
+    (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum];
+
   export const SortOrder: {
     asc: 'asc';
     desc: 'desc';
@@ -43976,6 +45261,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanListRelationFilter;
     billingInvoices?: BillingInvoiceListRelationFilter;
     paymentTransactions?: PaymentTransactionListRelationFilter;
+    passwordResetTokens?: PasswordResetTokenListRelationFilter;
   };
 
   export type TenantOrderByWithRelationInput = {
@@ -44015,6 +45301,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanOrderByRelationAggregateInput;
     billingInvoices?: BillingInvoiceOrderByRelationAggregateInput;
     paymentTransactions?: PaymentTransactionOrderByRelationAggregateInput;
+    passwordResetTokens?: PasswordResetTokenOrderByRelationAggregateInput;
   };
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<
@@ -44058,6 +45345,7 @@ export namespace Prisma {
       billingPlans?: StudentBillingPlanListRelationFilter;
       billingInvoices?: BillingInvoiceListRelationFilter;
       paymentTransactions?: PaymentTransactionListRelationFilter;
+      passwordResetTokens?: PasswordResetTokenListRelationFilter;
     },
     'id' | 'slug'
   >;
@@ -44124,6 +45412,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentListRelationFilter;
     eventConsentResponses?: EventConsentResponseListRelationFilter;
     paymentsRecorded?: PaymentTransactionListRelationFilter;
+    passwordResetTokens?: PasswordResetTokenListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -44161,6 +45450,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentOrderByRelationAggregateInput;
     eventConsentResponses?: EventConsentResponseOrderByRelationAggregateInput;
     paymentsRecorded?: PaymentTransactionOrderByRelationAggregateInput;
+    passwordResetTokens?: PasswordResetTokenOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -44203,6 +45493,7 @@ export namespace Prisma {
       eventConsentsCreated?: EventConsentListRelationFilter;
       eventConsentResponses?: EventConsentResponseListRelationFilter;
       paymentsRecorded?: PaymentTransactionListRelationFilter;
+      passwordResetTokens?: PasswordResetTokenListRelationFilter;
     },
     'id' | 'tenantId_email'
   >;
@@ -47074,6 +48365,81 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<'PaymentTransaction'> | Date | string;
   };
 
+  export type PasswordResetTokenWhereInput = {
+    AND?: PasswordResetTokenWhereInput | PasswordResetTokenWhereInput[];
+    OR?: PasswordResetTokenWhereInput[];
+    NOT?: PasswordResetTokenWhereInput | PasswordResetTokenWhereInput[];
+    id?: StringFilter<'PasswordResetToken'> | string;
+    tenantId?: StringFilter<'PasswordResetToken'> | string;
+    userId?: StringFilter<'PasswordResetToken'> | string;
+    tokenHash?: StringFilter<'PasswordResetToken'> | string;
+    expiresAt?: DateTimeFilter<'PasswordResetToken'> | Date | string;
+    usedAt?: DateTimeNullableFilter<'PasswordResetToken'> | Date | string | null;
+    createdAt?: DateTimeFilter<'PasswordResetToken'> | Date | string;
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+    user?: XOR<UserRelationFilter, UserWhereInput>;
+  };
+
+  export type PasswordResetTokenOrderByWithRelationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    usedAt?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    tenant?: TenantOrderByWithRelationInput;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type PasswordResetTokenWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      tokenHash?: string;
+      AND?: PasswordResetTokenWhereInput | PasswordResetTokenWhereInput[];
+      OR?: PasswordResetTokenWhereInput[];
+      NOT?: PasswordResetTokenWhereInput | PasswordResetTokenWhereInput[];
+      tenantId?: StringFilter<'PasswordResetToken'> | string;
+      userId?: StringFilter<'PasswordResetToken'> | string;
+      expiresAt?: DateTimeFilter<'PasswordResetToken'> | Date | string;
+      usedAt?: DateTimeNullableFilter<'PasswordResetToken'> | Date | string | null;
+      createdAt?: DateTimeFilter<'PasswordResetToken'> | Date | string;
+      tenant?: XOR<TenantRelationFilter, TenantWhereInput>;
+      user?: XOR<UserRelationFilter, UserWhereInput>;
+    },
+    'id' | 'tokenHash'
+  >;
+
+  export type PasswordResetTokenOrderByWithAggregationInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    usedAt?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    _count?: PasswordResetTokenCountOrderByAggregateInput;
+    _max?: PasswordResetTokenMaxOrderByAggregateInput;
+    _min?: PasswordResetTokenMinOrderByAggregateInput;
+  };
+
+  export type PasswordResetTokenScalarWhereWithAggregatesInput = {
+    AND?:
+      | PasswordResetTokenScalarWhereWithAggregatesInput
+      | PasswordResetTokenScalarWhereWithAggregatesInput[];
+    OR?: PasswordResetTokenScalarWhereWithAggregatesInput[];
+    NOT?:
+      | PasswordResetTokenScalarWhereWithAggregatesInput
+      | PasswordResetTokenScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'PasswordResetToken'> | string;
+    tenantId?: StringWithAggregatesFilter<'PasswordResetToken'> | string;
+    userId?: StringWithAggregatesFilter<'PasswordResetToken'> | string;
+    tokenHash?: StringWithAggregatesFilter<'PasswordResetToken'> | string;
+    expiresAt?: DateTimeWithAggregatesFilter<'PasswordResetToken'> | Date | string;
+    usedAt?: DateTimeNullableWithAggregatesFilter<'PasswordResetToken'> | Date | string | null;
+    createdAt?: DateTimeWithAggregatesFilter<'PasswordResetToken'> | Date | string;
+  };
+
   export type TenantCreateInput = {
     id?: string;
     slug: string;
@@ -47111,6 +48477,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateInput = {
@@ -47150,6 +48517,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUpdateInput = {
@@ -47189,6 +48557,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateInput = {
@@ -47228,6 +48597,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateManyInput = {
@@ -47291,6 +48661,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -47327,6 +48698,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserUpdateInput = {
@@ -47363,6 +48735,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -47399,6 +48772,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -50223,6 +51597,74 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type PasswordResetTokenCreateInput = {
+    id?: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutPasswordResetTokensInput;
+    user: UserCreateNestedOneWithoutPasswordResetTokensInput;
+  };
+
+  export type PasswordResetTokenUncheckedCreateInput = {
+    id?: string;
+    tenantId: string;
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type PasswordResetTokenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutPasswordResetTokensNestedInput;
+    user?: UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput;
+  };
+
+  export type PasswordResetTokenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PasswordResetTokenCreateManyInput = {
+    id?: string;
+    tenantId: string;
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type PasswordResetTokenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PasswordResetTokenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -50436,6 +51878,12 @@ export namespace Prisma {
     none?: PaymentTransactionWhereInput;
   };
 
+  export type PasswordResetTokenListRelationFilter = {
+    every?: PasswordResetTokenWhereInput;
+    some?: PasswordResetTokenWhereInput;
+    none?: PasswordResetTokenWhereInput;
+  };
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -50553,6 +52001,10 @@ export namespace Prisma {
   };
 
   export type PaymentTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type PasswordResetTokenOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -52590,6 +54042,36 @@ export namespace Prisma {
     _max?: NestedEnumPaymentMethodFilter<$PrismaModel>;
   };
 
+  export type PasswordResetTokenCountOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    usedAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type PasswordResetTokenMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    usedAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type PasswordResetTokenMinOrderByAggregateInput = {
+    id?: SortOrder;
+    tenantId?: SortOrder;
+    userId?: SortOrder;
+    tokenHash?: SortOrder;
+    expiresAt?: SortOrder;
+    usedAt?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
   export type UserCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -52974,6 +54456,21 @@ export namespace Prisma {
     connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
   };
 
+  export type PasswordResetTokenCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          PasswordResetTokenCreateWithoutTenantInput,
+          PasswordResetTokenUncheckedCreateWithoutTenantInput
+        >
+      | PasswordResetTokenCreateWithoutTenantInput[]
+      | PasswordResetTokenUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | PasswordResetTokenCreateOrConnectWithoutTenantInput
+      | PasswordResetTokenCreateOrConnectWithoutTenantInput[];
+    createMany?: PasswordResetTokenCreateManyTenantInputEnvelope;
+    connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+  };
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -53356,6 +54853,21 @@ export namespace Prisma {
       | PaymentTransactionCreateOrConnectWithoutTenantInput[];
     createMany?: PaymentTransactionCreateManyTenantInputEnvelope;
     connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+  };
+
+  export type PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput = {
+    create?:
+      | XOR<
+          PasswordResetTokenCreateWithoutTenantInput,
+          PasswordResetTokenUncheckedCreateWithoutTenantInput
+        >
+      | PasswordResetTokenCreateWithoutTenantInput[]
+      | PasswordResetTokenUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | PasswordResetTokenCreateOrConnectWithoutTenantInput
+      | PasswordResetTokenCreateOrConnectWithoutTenantInput[];
+    createMany?: PasswordResetTokenCreateManyTenantInputEnvelope;
+    connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
   };
 
   export type StringFieldUpdateOperationsInput = {
@@ -54141,6 +55653,34 @@ export namespace Prisma {
     deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
   };
 
+  export type PasswordResetTokenUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          PasswordResetTokenCreateWithoutTenantInput,
+          PasswordResetTokenUncheckedCreateWithoutTenantInput
+        >
+      | PasswordResetTokenCreateWithoutTenantInput[]
+      | PasswordResetTokenUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | PasswordResetTokenCreateOrConnectWithoutTenantInput
+      | PasswordResetTokenCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | PasswordResetTokenUpsertWithWhereUniqueWithoutTenantInput
+      | PasswordResetTokenUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: PasswordResetTokenCreateManyTenantInputEnvelope;
+    set?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    disconnect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    delete?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    update?:
+      | PasswordResetTokenUpdateWithWhereUniqueWithoutTenantInput
+      | PasswordResetTokenUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | PasswordResetTokenUpdateManyWithWhereWithoutTenantInput
+      | PasswordResetTokenUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[];
+  };
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?:
       | XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
@@ -54912,6 +56452,34 @@ export namespace Prisma {
     deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
   };
 
+  export type PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?:
+      | XOR<
+          PasswordResetTokenCreateWithoutTenantInput,
+          PasswordResetTokenUncheckedCreateWithoutTenantInput
+        >
+      | PasswordResetTokenCreateWithoutTenantInput[]
+      | PasswordResetTokenUncheckedCreateWithoutTenantInput[];
+    connectOrCreate?:
+      | PasswordResetTokenCreateOrConnectWithoutTenantInput
+      | PasswordResetTokenCreateOrConnectWithoutTenantInput[];
+    upsert?:
+      | PasswordResetTokenUpsertWithWhereUniqueWithoutTenantInput
+      | PasswordResetTokenUpsertWithWhereUniqueWithoutTenantInput[];
+    createMany?: PasswordResetTokenCreateManyTenantInputEnvelope;
+    set?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    disconnect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    delete?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    update?:
+      | PasswordResetTokenUpdateWithWhereUniqueWithoutTenantInput
+      | PasswordResetTokenUpdateWithWhereUniqueWithoutTenantInput[];
+    updateMany?:
+      | PasswordResetTokenUpdateManyWithWhereWithoutTenantInput
+      | PasswordResetTokenUpdateManyWithWhereWithoutTenantInput[];
+    deleteMany?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[];
+  };
+
   export type TenantCreateNestedOneWithoutUsersInput = {
     create?: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
     connectOrCreate?: TenantCreateOrConnectWithoutUsersInput;
@@ -55256,6 +56824,21 @@ export namespace Prisma {
     connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
   };
 
+  export type PasswordResetTokenCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<
+          PasswordResetTokenCreateWithoutUserInput,
+          PasswordResetTokenUncheckedCreateWithoutUserInput
+        >
+      | PasswordResetTokenCreateWithoutUserInput[]
+      | PasswordResetTokenUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | PasswordResetTokenCreateOrConnectWithoutUserInput
+      | PasswordResetTokenCreateOrConnectWithoutUserInput[];
+    createMany?: PasswordResetTokenCreateManyUserInputEnvelope;
+    connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+  };
+
   export type StudentUncheckedCreateNestedManyWithoutParentInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -55592,6 +57175,21 @@ export namespace Prisma {
       | PaymentTransactionCreateOrConnectWithoutRecordedByInput[];
     createMany?: PaymentTransactionCreateManyRecordedByInputEnvelope;
     connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[];
+  };
+
+  export type PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<
+          PasswordResetTokenCreateWithoutUserInput,
+          PasswordResetTokenUncheckedCreateWithoutUserInput
+        >
+      | PasswordResetTokenCreateWithoutUserInput[]
+      | PasswordResetTokenUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | PasswordResetTokenCreateOrConnectWithoutUserInput
+      | PasswordResetTokenCreateOrConnectWithoutUserInput[];
+    createMany?: PasswordResetTokenCreateManyUserInputEnvelope;
+    connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
   };
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -56267,6 +57865,34 @@ export namespace Prisma {
     deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
   };
 
+  export type PasswordResetTokenUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<
+          PasswordResetTokenCreateWithoutUserInput,
+          PasswordResetTokenUncheckedCreateWithoutUserInput
+        >
+      | PasswordResetTokenCreateWithoutUserInput[]
+      | PasswordResetTokenUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | PasswordResetTokenCreateOrConnectWithoutUserInput
+      | PasswordResetTokenCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | PasswordResetTokenUpsertWithWhereUniqueWithoutUserInput
+      | PasswordResetTokenUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: PasswordResetTokenCreateManyUserInputEnvelope;
+    set?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    disconnect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    delete?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    update?:
+      | PasswordResetTokenUpdateWithWhereUniqueWithoutUserInput
+      | PasswordResetTokenUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | PasswordResetTokenUpdateManyWithWhereWithoutUserInput
+      | PasswordResetTokenUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[];
+  };
+
   export type StudentUncheckedUpdateManyWithoutParentNestedInput = {
     create?:
       | XOR<StudentCreateWithoutParentInput, StudentUncheckedCreateWithoutParentInput>
@@ -56915,6 +58541,34 @@ export namespace Prisma {
       | PaymentTransactionUpdateManyWithWhereWithoutRecordedByInput
       | PaymentTransactionUpdateManyWithWhereWithoutRecordedByInput[];
     deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[];
+  };
+
+  export type PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<
+          PasswordResetTokenCreateWithoutUserInput,
+          PasswordResetTokenUncheckedCreateWithoutUserInput
+        >
+      | PasswordResetTokenCreateWithoutUserInput[]
+      | PasswordResetTokenUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | PasswordResetTokenCreateOrConnectWithoutUserInput
+      | PasswordResetTokenCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | PasswordResetTokenUpsertWithWhereUniqueWithoutUserInput
+      | PasswordResetTokenUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: PasswordResetTokenCreateManyUserInputEnvelope;
+    set?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    disconnect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    delete?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[];
+    update?:
+      | PasswordResetTokenUpdateWithWhereUniqueWithoutUserInput
+      | PasswordResetTokenUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | PasswordResetTokenUpdateManyWithWhereWithoutUserInput
+      | PasswordResetTokenUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[];
   };
 
   export type TenantCreateNestedOneWithoutStudentsInput = {
@@ -61297,6 +62951,58 @@ export namespace Prisma {
     >;
   };
 
+  export type TenantCreateNestedOneWithoutPasswordResetTokensInput = {
+    create?: XOR<
+      TenantCreateWithoutPasswordResetTokensInput,
+      TenantUncheckedCreateWithoutPasswordResetTokensInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutPasswordResetTokensInput;
+    connect?: TenantWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutPasswordResetTokensInput = {
+    create?: XOR<
+      UserCreateWithoutPasswordResetTokensInput,
+      UserUncheckedCreateWithoutPasswordResetTokensInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutPasswordResetTokensInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type TenantUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
+    create?: XOR<
+      TenantCreateWithoutPasswordResetTokensInput,
+      TenantUncheckedCreateWithoutPasswordResetTokensInput
+    >;
+    connectOrCreate?: TenantCreateOrConnectWithoutPasswordResetTokensInput;
+    upsert?: TenantUpsertWithoutPasswordResetTokensInput;
+    connect?: TenantWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TenantUpdateToOneWithWhereWithoutPasswordResetTokensInput,
+        TenantUpdateWithoutPasswordResetTokensInput
+      >,
+      TenantUncheckedUpdateWithoutPasswordResetTokensInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
+    create?: XOR<
+      UserCreateWithoutPasswordResetTokensInput,
+      UserUncheckedCreateWithoutPasswordResetTokensInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutPasswordResetTokensInput;
+    upsert?: UserUpsertWithoutPasswordResetTokensInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutPasswordResetTokensInput,
+        UserUpdateWithoutPasswordResetTokensInput
+      >,
+      UserUncheckedUpdateWithoutPasswordResetTokensInput
+    >;
+  };
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -61939,6 +63645,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutTenantInput = {
@@ -61974,6 +63681,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -63121,6 +64829,37 @@ export namespace Prisma {
 
   export type PaymentTransactionCreateManyTenantInputEnvelope = {
     data: PaymentTransactionCreateManyTenantInput | PaymentTransactionCreateManyTenantInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type PasswordResetTokenCreateWithoutTenantInput = {
+    id?: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+    user: UserCreateNestedOneWithoutPasswordResetTokensInput;
+  };
+
+  export type PasswordResetTokenUncheckedCreateWithoutTenantInput = {
+    id?: string;
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type PasswordResetTokenCreateOrConnectWithoutTenantInput = {
+    where: PasswordResetTokenWhereUniqueInput;
+    create: XOR<
+      PasswordResetTokenCreateWithoutTenantInput,
+      PasswordResetTokenUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type PasswordResetTokenCreateManyTenantInputEnvelope = {
+    data: PasswordResetTokenCreateManyTenantInput | PasswordResetTokenCreateManyTenantInput[];
     skipDuplicates?: boolean;
   };
 
@@ -64341,6 +66080,47 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<'PaymentTransaction'> | Date | string;
   };
 
+  export type PasswordResetTokenUpsertWithWhereUniqueWithoutTenantInput = {
+    where: PasswordResetTokenWhereUniqueInput;
+    update: XOR<
+      PasswordResetTokenUpdateWithoutTenantInput,
+      PasswordResetTokenUncheckedUpdateWithoutTenantInput
+    >;
+    create: XOR<
+      PasswordResetTokenCreateWithoutTenantInput,
+      PasswordResetTokenUncheckedCreateWithoutTenantInput
+    >;
+  };
+
+  export type PasswordResetTokenUpdateWithWhereUniqueWithoutTenantInput = {
+    where: PasswordResetTokenWhereUniqueInput;
+    data: XOR<
+      PasswordResetTokenUpdateWithoutTenantInput,
+      PasswordResetTokenUncheckedUpdateWithoutTenantInput
+    >;
+  };
+
+  export type PasswordResetTokenUpdateManyWithWhereWithoutTenantInput = {
+    where: PasswordResetTokenScalarWhereInput;
+    data: XOR<
+      PasswordResetTokenUpdateManyMutationInput,
+      PasswordResetTokenUncheckedUpdateManyWithoutTenantInput
+    >;
+  };
+
+  export type PasswordResetTokenScalarWhereInput = {
+    AND?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[];
+    OR?: PasswordResetTokenScalarWhereInput[];
+    NOT?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[];
+    id?: StringFilter<'PasswordResetToken'> | string;
+    tenantId?: StringFilter<'PasswordResetToken'> | string;
+    userId?: StringFilter<'PasswordResetToken'> | string;
+    tokenHash?: StringFilter<'PasswordResetToken'> | string;
+    expiresAt?: DateTimeFilter<'PasswordResetToken'> | Date | string;
+    usedAt?: DateTimeNullableFilter<'PasswordResetToken'> | Date | string | null;
+    createdAt?: DateTimeFilter<'PasswordResetToken'> | Date | string;
+  };
+
   export type TenantCreateWithoutUsersInput = {
     id?: string;
     slug: string;
@@ -64377,6 +66157,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -64415,6 +66196,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -65411,6 +67193,37 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type PasswordResetTokenCreateWithoutUserInput = {
+    id?: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutPasswordResetTokensInput;
+  };
+
+  export type PasswordResetTokenUncheckedCreateWithoutUserInput = {
+    id?: string;
+    tenantId: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type PasswordResetTokenCreateOrConnectWithoutUserInput = {
+    where: PasswordResetTokenWhereUniqueInput;
+    create: XOR<
+      PasswordResetTokenCreateWithoutUserInput,
+      PasswordResetTokenUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type PasswordResetTokenCreateManyUserInputEnvelope = {
+    data: PasswordResetTokenCreateManyUserInput | PasswordResetTokenCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>;
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>;
@@ -65458,6 +67271,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -65496,6 +67310,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutParentInput = {
@@ -66122,6 +67937,34 @@ export namespace Prisma {
     >;
   };
 
+  export type PasswordResetTokenUpsertWithWhereUniqueWithoutUserInput = {
+    where: PasswordResetTokenWhereUniqueInput;
+    update: XOR<
+      PasswordResetTokenUpdateWithoutUserInput,
+      PasswordResetTokenUncheckedUpdateWithoutUserInput
+    >;
+    create: XOR<
+      PasswordResetTokenCreateWithoutUserInput,
+      PasswordResetTokenUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type PasswordResetTokenUpdateWithWhereUniqueWithoutUserInput = {
+    where: PasswordResetTokenWhereUniqueInput;
+    data: XOR<
+      PasswordResetTokenUpdateWithoutUserInput,
+      PasswordResetTokenUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type PasswordResetTokenUpdateManyWithWhereWithoutUserInput = {
+    where: PasswordResetTokenScalarWhereInput;
+    data: XOR<
+      PasswordResetTokenUpdateManyMutationInput,
+      PasswordResetTokenUncheckedUpdateManyWithoutUserInput
+    >;
+  };
+
   export type TenantCreateWithoutStudentsInput = {
     id?: string;
     slug: string;
@@ -66158,6 +68001,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -66196,6 +68040,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -66236,6 +68081,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutChildrenInput = {
@@ -66271,6 +68117,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutChildrenInput = {
@@ -67012,6 +68859,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -67050,6 +68898,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutChildrenInput = {
@@ -67096,6 +68945,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutChildrenInput = {
@@ -67131,6 +68981,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type ClassroomUpsertWithoutStudentsInput = {
@@ -67634,6 +69485,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomsInput = {
@@ -67672,6 +69524,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomsInput = {
@@ -67874,6 +69727,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomsInput = {
@@ -67912,6 +69766,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithWhereUniqueWithoutClassroomInput = {
@@ -68022,6 +69877,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutClassroomTeachersInput = {
@@ -68060,6 +69916,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutClassroomTeachersInput = {
@@ -68135,6 +69992,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutClassroomTeachersInput = {
@@ -68170,6 +70028,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutClassroomTeachersInput = {
@@ -68236,6 +70095,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -68274,6 +70134,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ClassroomUpsertWithoutTeacherAssignmentsInput = {
@@ -68373,6 +70234,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutClassroomTeachersInput = {
@@ -68408,6 +70270,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutDailyReportsInput = {
@@ -68446,6 +70309,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyReportsInput = {
@@ -68484,6 +70348,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyReportsInput = {
@@ -68619,6 +70484,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyReportsInput = {
@@ -68657,6 +70523,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDailyReportsInput = {
@@ -68779,6 +70646,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendancesInput = {
@@ -68817,6 +70685,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendancesInput = {
@@ -68943,6 +70812,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendancesInput = {
@@ -68981,6 +70851,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendancesInput = {
@@ -69100,6 +70971,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDailyMenusInput = {
@@ -69138,6 +71010,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDailyMenusInput = {
@@ -69192,6 +71065,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDailyMenusInput = {
@@ -69230,6 +71104,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutActivityPostsInput = {
@@ -69268,6 +71143,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutActivityPostsInput = {
@@ -69306,6 +71182,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutActivityPostsInput = {
@@ -69372,6 +71249,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutActivityPostsInput = {
@@ -69410,6 +71288,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPickupContactsInput = {
@@ -69448,6 +71327,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupContactsInput = {
@@ -69486,6 +71366,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupContactsInput = {
@@ -69708,6 +71589,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupContactsInput = {
@@ -69746,6 +71628,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupContactsInput = {
@@ -69924,6 +71807,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupAuthorizationsInput = {
@@ -69962,6 +71846,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupAuthorizationsInput = {
@@ -70113,6 +71998,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthRequestedInput = {
@@ -70148,6 +72034,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthRequestedInput = {
@@ -70191,6 +72078,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupAuthReviewedInput = {
@@ -70226,6 +72114,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupAuthReviewedInput = {
@@ -70331,6 +72220,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupAuthorizationsInput = {
@@ -70369,6 +72259,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupAuthorizationsInput = {
@@ -70556,6 +72447,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthRequestedInput = {
@@ -70591,6 +72483,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutPickupAuthReviewedInput = {
@@ -70646,6 +72539,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupAuthReviewedInput = {
@@ -70681,6 +72575,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type PickupEventUpsertWithWhereUniqueWithoutAuthorizationInput = {
@@ -70747,6 +72642,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPickupEventsInput = {
@@ -70785,6 +72681,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPickupEventsInput = {
@@ -70974,6 +72871,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutPickupEventsVerifiedInput = {
@@ -71009,6 +72907,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutPickupEventsVerifiedInput = {
@@ -71072,6 +72971,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPickupEventsInput = {
@@ -71110,6 +73010,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPickupEventsInput = {
@@ -71349,6 +73250,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPickupEventsVerifiedInput = {
@@ -71384,6 +73286,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutMedicationRecordsInput = {
@@ -71422,6 +73325,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMedicationRecordsInput = {
@@ -71460,6 +73364,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMedicationRecordsInput = {
@@ -71575,6 +73480,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsRequestedInput = {
@@ -71610,6 +73516,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsRequestedInput = {
@@ -71653,6 +73560,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsApprovedInput = {
@@ -71688,6 +73596,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsApprovedInput = {
@@ -71731,6 +73640,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMedicationsAdministeredInput = {
@@ -71766,6 +73676,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMedicationsAdministeredInput = {
@@ -71832,6 +73743,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMedicationRecordsInput = {
@@ -71870,6 +73782,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutMedicationRecordsInput = {
@@ -72009,6 +73922,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsRequestedInput = {
@@ -72044,6 +73958,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsApprovedInput = {
@@ -72099,6 +74014,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsApprovedInput = {
@@ -72134,6 +74050,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutMedicationsAdministeredInput = {
@@ -72189,6 +74106,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMedicationsAdministeredInput = {
@@ -72224,6 +74142,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutConversationsInput = {
@@ -72262,6 +74181,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationsInput = {
@@ -72300,6 +74220,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationsInput = {
@@ -72415,6 +74336,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutConversationsCreatedInput = {
@@ -72450,6 +74372,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutConversationsCreatedInput = {
@@ -72580,6 +74503,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationsInput = {
@@ -72618,6 +74542,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutConversationsInput = {
@@ -72757,6 +74682,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationsCreatedInput = {
@@ -72792,6 +74718,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutConversationInput = {
@@ -72883,6 +74810,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutConversationParticipantsInput = {
@@ -72921,6 +74849,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutConversationParticipantsInput = {
@@ -73002,6 +74931,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutConversationParticipationsInput = {
@@ -73037,6 +74967,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutConversationParticipationsInput = {
@@ -73103,6 +75034,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutConversationParticipantsInput = {
@@ -73141,6 +75073,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutParticipantsInput = {
@@ -73246,6 +75179,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationParticipationsInput = {
@@ -73281,6 +75215,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutMessagesInput = {
@@ -73319,6 +75254,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessagesInput = {
@@ -73357,6 +75293,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessagesInput = {
@@ -73435,6 +75372,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMessagesSentInput = {
@@ -73470,6 +75408,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMessagesSentInput = {
@@ -73551,6 +75490,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessagesInput = {
@@ -73589,6 +75529,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ConversationUpsertWithoutMessagesInput = {
@@ -73685,6 +75626,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessagesSentInput = {
@@ -73720,6 +75662,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type MessageReadReceiptUpsertWithWhereUniqueWithoutMessageInput = {
@@ -73786,6 +75729,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMessageReceiptsInput = {
@@ -73824,6 +75768,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMessageReceiptsInput = {
@@ -73894,6 +75839,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMessageReceiptsInput = {
@@ -73929,6 +75875,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMessageReceiptsInput = {
@@ -73995,6 +75942,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -74033,6 +75981,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type MessageUpsertWithoutReceiptsInput = {
@@ -74121,6 +76070,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMessageReceiptsInput = {
@@ -74156,6 +76106,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutParentRequestsInput = {
@@ -74194,6 +76145,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutParentRequestsInput = {
@@ -74232,6 +76184,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutParentRequestsInput = {
@@ -74275,6 +76228,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsRaisedInput = {
@@ -74310,6 +76264,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsRaisedInput = {
@@ -74425,6 +76380,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutParentRequestsResolvedInput = {
@@ -74460,6 +76416,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutParentRequestsResolvedInput = {
@@ -74526,6 +76483,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutParentRequestsInput = {
@@ -74564,6 +76522,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutParentRequestsRaisedInput = {
@@ -74619,6 +76578,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsRaisedInput = {
@@ -74654,6 +76614,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type StudentUpsertWithoutParentRequestsInput = {
@@ -74793,6 +76754,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutParentRequestsResolvedInput = {
@@ -74828,6 +76790,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutIncidentRecordsInput = {
@@ -74866,6 +76829,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutIncidentRecordsInput = {
@@ -74904,6 +76868,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutIncidentRecordsInput = {
@@ -75019,6 +76984,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsReportedInput = {
@@ -75054,6 +77020,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsReportedInput = {
@@ -75097,6 +77064,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutIncidentsNotifiedInput = {
@@ -75132,6 +77100,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutIncidentsNotifiedInput = {
@@ -75198,6 +77167,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutIncidentRecordsInput = {
@@ -75236,6 +77206,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutIncidentRecordsInput = {
@@ -75375,6 +77346,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsReportedInput = {
@@ -75410,6 +77382,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutIncidentsNotifiedInput = {
@@ -75465,6 +77438,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutIncidentsNotifiedInput = {
@@ -75500,6 +77474,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutDevelopmentObservationsInput = {
@@ -75538,6 +77513,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutDevelopmentObservationsInput = {
@@ -75576,6 +77552,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutDevelopmentObservationsInput = {
@@ -75691,6 +77668,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutDevelopmentObservationsAuthoredInput = {
@@ -75726,6 +77704,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutDevelopmentObservationsAuthoredInput = {
@@ -75829,6 +77808,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutDevelopmentObservationsInput = {
@@ -75867,6 +77847,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutDevelopmentObservationsInput = {
@@ -76006,6 +77987,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutDevelopmentObservationsAuthoredInput = {
@@ -76041,6 +78023,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type PortfolioItemUpsertWithWhereUniqueWithoutObservationInput = {
@@ -76107,6 +78090,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPortfolioItemsInput = {
@@ -76145,6 +78129,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPortfolioItemsInput = {
@@ -76319,6 +78304,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPortfolioItemsInput = {
@@ -76357,6 +78343,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutPortfolioItemsInput = {
@@ -76527,6 +78514,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutHomeActivitySuggestionsInput = {
@@ -76565,6 +78553,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutHomeActivitySuggestionsInput = {
@@ -76631,6 +78620,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutHomeActivitySuggestionsInput = {
@@ -76669,6 +78659,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantCreateWithoutPushTokensInput = {
@@ -76707,6 +78698,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPushTokensInput = {
@@ -76745,6 +78737,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPushTokensInput = {
@@ -76785,6 +78778,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutPushTokensInput = {
@@ -76820,6 +78814,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutPushTokensInput = {
@@ -76874,6 +78869,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPushTokensInput = {
@@ -76912,6 +78908,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutPushTokensInput = {
@@ -76958,6 +78955,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPushTokensInput = {
@@ -76993,6 +78991,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutNotificationsInput = {
@@ -77031,6 +79030,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutNotificationsInput = {
@@ -77069,6 +79069,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutNotificationsInput = {
@@ -77112,6 +79113,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -77147,6 +79149,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -77210,6 +79213,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutNotificationsInput = {
@@ -77248,6 +79252,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -77294,6 +79299,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -77329,6 +79335,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutMediaFilesInput = {
@@ -77367,6 +79374,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutMediaFilesInput = {
@@ -77405,6 +79413,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutMediaFilesInput = {
@@ -77445,6 +79454,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutUploadedMediaInput = {
@@ -77480,6 +79490,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutUploadedMediaInput = {
@@ -77534,6 +79545,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutMediaFilesInput = {
@@ -77572,6 +79584,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type UserUpsertWithoutUploadedMediaInput = {
@@ -77618,6 +79631,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutUploadedMediaInput = {
@@ -77653,6 +79667,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutAttendanceExcusesInput = {
@@ -77691,6 +79706,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutAttendanceExcusesInput = {
@@ -77729,6 +79745,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutAttendanceExcusesInput = {
@@ -77844,6 +79861,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutAttendanceExcusesCreatedInput = {
@@ -77879,6 +79897,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutAttendanceExcusesCreatedInput = {
@@ -77945,6 +79964,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutAttendanceExcusesInput = {
@@ -77983,6 +80003,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutAttendanceExcusesInput = {
@@ -78122,6 +80143,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAttendanceExcusesCreatedInput = {
@@ -78157,6 +80179,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutEventConsentsInput = {
@@ -78195,6 +80218,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutEventConsentsInput = {
@@ -78233,6 +80257,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutEventConsentsInput = {
@@ -78308,6 +80333,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutEventConsentsCreatedInput = {
@@ -78343,6 +80369,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutEventConsentsCreatedInput = {
@@ -78442,6 +80469,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutEventConsentsInput = {
@@ -78480,6 +80508,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type ClassroomUpsertWithoutEventConsentsInput = {
@@ -78579,6 +80608,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutEventConsentsCreatedInput = {
@@ -78614,6 +80644,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type EventConsentResponseUpsertWithWhereUniqueWithoutConsentInput = {
@@ -78680,6 +80711,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutEventConsentResponsesInput = {
@@ -78718,6 +80750,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutEventConsentResponsesInput = {
@@ -78873,6 +80906,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutEventConsentResponsesInput = {
@@ -78908,6 +80942,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutEventConsentResponsesInput = {
@@ -78974,6 +81009,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutEventConsentResponsesInput = {
@@ -79012,6 +81048,7 @@ export namespace Prisma {
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type EventConsentUpsertWithoutResponsesInput = {
@@ -79205,6 +81242,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutEventConsentResponsesInput = {
@@ -79240,6 +81278,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TenantCreateWithoutBillingPlansInput = {
@@ -79278,6 +81317,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutBillingPlansInput = {
@@ -79316,6 +81356,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutBillingPlansInput = {
@@ -79451,6 +81492,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutBillingPlansInput = {
@@ -79489,6 +81531,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutBillingPlansInput = {
@@ -79611,6 +81654,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutBillingInvoicesInput = {
@@ -79649,6 +81693,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutBillingInvoicesInput = {
@@ -79826,6 +81871,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutBillingInvoicesInput = {
@@ -79864,6 +81910,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type StudentUpsertWithoutBillingInvoicesInput = {
@@ -80014,6 +82061,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
     billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantUncheckedCreateWithoutPaymentTransactionsInput = {
@@ -80052,6 +82100,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
     billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
     billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput;
   };
 
   export type TenantCreateOrConnectWithoutPaymentTransactionsInput = {
@@ -80203,6 +82252,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutPaymentsRecordedInput = {
@@ -80238,6 +82288,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
     eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutPaymentsRecordedInput = {
@@ -80304,6 +82355,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
     billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutTenantNestedInput;
   };
 
   export type TenantUncheckedUpdateWithoutPaymentTransactionsInput = {
@@ -80342,6 +82394,7 @@ export namespace Prisma {
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
     billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
     billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput;
   };
 
   export type BillingInvoiceUpsertWithoutPaymentsInput = {
@@ -80529,6 +82582,7 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPaymentsRecordedInput = {
@@ -80564,6 +82618,363 @@ export namespace Prisma {
     attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type TenantCreateWithoutPasswordResetTokensInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserCreateNestedManyWithoutTenantInput;
+    students?: StudentCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantCreateNestedManyWithoutTenantInput;
+    messages?: MessageCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantUncheckedCreateWithoutPasswordResetTokensInput = {
+    id?: string;
+    slug: string;
+    name: string;
+    status?: $Enums.TenantStatus;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput;
+    students?: StudentUncheckedCreateNestedManyWithoutTenantInput;
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutTenantInput;
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutTenantInput;
+    dailyMenus?: DailyMenuUncheckedCreateNestedManyWithoutTenantInput;
+    activityPosts?: ActivityPostUncheckedCreateNestedManyWithoutTenantInput;
+    classrooms?: ClassroomUncheckedCreateNestedManyWithoutTenantInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTenantInput;
+    pickupContacts?: PickupContactUncheckedCreateNestedManyWithoutTenantInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedCreateNestedManyWithoutTenantInput;
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTenantInput;
+    medicationRecords?: MedicationRecordUncheckedCreateNestedManyWithoutTenantInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTenantInput;
+    conversationParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutTenantInput;
+    messages?: MessageUncheckedCreateNestedManyWithoutTenantInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutTenantInput;
+    parentRequests?: ParentRequestUncheckedCreateNestedManyWithoutTenantInput;
+    incidentRecords?: IncidentRecordUncheckedCreateNestedManyWithoutTenantInput;
+    developmentObservations?: DevelopmentObservationUncheckedCreateNestedManyWithoutTenantInput;
+    portfolioItems?: PortfolioItemUncheckedCreateNestedManyWithoutTenantInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedCreateNestedManyWithoutTenantInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutTenantInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTenantInput;
+    mediaFiles?: MediaFileUncheckedCreateNestedManyWithoutTenantInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsents?: EventConsentUncheckedCreateNestedManyWithoutTenantInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutTenantInput;
+    billingPlans?: StudentBillingPlanUncheckedCreateNestedManyWithoutTenantInput;
+    billingInvoices?: BillingInvoiceUncheckedCreateNestedManyWithoutTenantInput;
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutTenantInput;
+  };
+
+  export type TenantCreateOrConnectWithoutPasswordResetTokensInput = {
+    where: TenantWhereUniqueInput;
+    create: XOR<
+      TenantCreateWithoutPasswordResetTokensInput,
+      TenantUncheckedCreateWithoutPasswordResetTokensInput
+    >;
+  };
+
+  export type UserCreateWithoutPasswordResetTokensInput = {
+    id?: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    tenant: TenantCreateNestedOneWithoutUsersInput;
+    children?: StudentCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenCreateNestedManyWithoutUserInput;
+    notifications?: NotificationCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionCreateNestedManyWithoutRecordedByInput;
+  };
+
+  export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
+    id?: string;
+    tenantId: string;
+    email: string;
+    passwordHash: string;
+    role: $Enums.UserRole;
+    isActive?: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: StudentUncheckedCreateNestedManyWithoutParentInput;
+    classroomTeachers?: ClassroomTeacherUncheckedCreateNestedManyWithoutTeacherInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedCreateNestedManyWithoutRequestedByInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedCreateNestedManyWithoutReviewedByInput;
+    pickupEventsVerified?: PickupEventUncheckedCreateNestedManyWithoutVerifiedByInput;
+    medicationsRequested?: MedicationRecordUncheckedCreateNestedManyWithoutRequestedByInput;
+    medicationsApproved?: MedicationRecordUncheckedCreateNestedManyWithoutApprovedByInput;
+    medicationsAdministered?: MedicationRecordUncheckedCreateNestedManyWithoutAdministeredByInput;
+    conversationsCreated?: ConversationUncheckedCreateNestedManyWithoutCreatedByInput;
+    conversationParticipations?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    messageReceipts?: MessageReadReceiptUncheckedCreateNestedManyWithoutUserInput;
+    parentRequestsRaised?: ParentRequestUncheckedCreateNestedManyWithoutParentInput;
+    parentRequestsResolved?: ParentRequestUncheckedCreateNestedManyWithoutResolvedByInput;
+    incidentsReported?: IncidentRecordUncheckedCreateNestedManyWithoutReportedByInput;
+    incidentsNotified?: IncidentRecordUncheckedCreateNestedManyWithoutParentNotifiedByInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedCreateNestedManyWithoutTeacherInput;
+    pushTokens?: UserPushTokenUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput;
+    uploadedMedia?: MediaFileUncheckedCreateNestedManyWithoutUploadedByInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentsCreated?: EventConsentUncheckedCreateNestedManyWithoutCreatedByInput;
+    eventConsentResponses?: EventConsentResponseUncheckedCreateNestedManyWithoutParentUserInput;
+    paymentsRecorded?: PaymentTransactionUncheckedCreateNestedManyWithoutRecordedByInput;
+  };
+
+  export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutPasswordResetTokensInput,
+      UserUncheckedCreateWithoutPasswordResetTokensInput
+    >;
+  };
+
+  export type TenantUpsertWithoutPasswordResetTokensInput = {
+    update: XOR<
+      TenantUpdateWithoutPasswordResetTokensInput,
+      TenantUncheckedUpdateWithoutPasswordResetTokensInput
+    >;
+    create: XOR<
+      TenantCreateWithoutPasswordResetTokensInput,
+      TenantUncheckedCreateWithoutPasswordResetTokensInput
+    >;
+    where?: TenantWhereInput;
+  };
+
+  export type TenantUpdateToOneWithWhereWithoutPasswordResetTokensInput = {
+    where?: TenantWhereInput;
+    data: XOR<
+      TenantUpdateWithoutPasswordResetTokensInput,
+      TenantUncheckedUpdateWithoutPasswordResetTokensInput
+    >;
+  };
+
+  export type TenantUpdateWithoutPasswordResetTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUpdateManyWithoutTenantNestedInput;
+    students?: StudentUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type TenantUncheckedUpdateWithoutPasswordResetTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput;
+    students?: StudentUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutTenantNestedInput;
+    attendances?: AttendanceUncheckedUpdateManyWithoutTenantNestedInput;
+    dailyMenus?: DailyMenuUncheckedUpdateManyWithoutTenantNestedInput;
+    activityPosts?: ActivityPostUncheckedUpdateManyWithoutTenantNestedInput;
+    classrooms?: ClassroomUncheckedUpdateManyWithoutTenantNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupContacts?: PickupContactUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupAuthorizations?: PickupAuthorizationUncheckedUpdateManyWithoutTenantNestedInput;
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTenantNestedInput;
+    medicationRecords?: MedicationRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutTenantNestedInput;
+    conversationParticipants?: ConversationParticipantUncheckedUpdateManyWithoutTenantNestedInput;
+    messages?: MessageUncheckedUpdateManyWithoutTenantNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutTenantNestedInput;
+    parentRequests?: ParentRequestUncheckedUpdateManyWithoutTenantNestedInput;
+    incidentRecords?: IncidentRecordUncheckedUpdateManyWithoutTenantNestedInput;
+    developmentObservations?: DevelopmentObservationUncheckedUpdateManyWithoutTenantNestedInput;
+    portfolioItems?: PortfolioItemUncheckedUpdateManyWithoutTenantNestedInput;
+    homeActivitySuggestions?: HomeActivitySuggestionUncheckedUpdateManyWithoutTenantNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutTenantNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutTenantNestedInput;
+    mediaFiles?: MediaFileUncheckedUpdateManyWithoutTenantNestedInput;
+    attendanceExcuses?: AttendanceExcuseUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsents?: EventConsentUncheckedUpdateManyWithoutTenantNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutTenantNestedInput;
+    billingPlans?: StudentBillingPlanUncheckedUpdateManyWithoutTenantNestedInput;
+    billingInvoices?: BillingInvoiceUncheckedUpdateManyWithoutTenantNestedInput;
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutTenantNestedInput;
+  };
+
+  export type UserUpsertWithoutPasswordResetTokensInput = {
+    update: XOR<
+      UserUpdateWithoutPasswordResetTokensInput,
+      UserUncheckedUpdateWithoutPasswordResetTokensInput
+    >;
+    create: XOR<
+      UserCreateWithoutPasswordResetTokensInput,
+      UserUncheckedCreateWithoutPasswordResetTokensInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutPasswordResetTokensInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutPasswordResetTokensInput,
+      UserUncheckedUpdateWithoutPasswordResetTokensInput
+    >;
+  };
+
+  export type UserUpdateWithoutPasswordResetTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput;
+    children?: StudentUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    passwordHash?: StringFieldUpdateOperationsInput | string;
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: StudentUncheckedUpdateManyWithoutParentNestedInput;
+    classroomTeachers?: ClassroomTeacherUncheckedUpdateManyWithoutTeacherNestedInput;
+    pickupAuthRequested?: PickupAuthorizationUncheckedUpdateManyWithoutRequestedByNestedInput;
+    pickupAuthReviewed?: PickupAuthorizationUncheckedUpdateManyWithoutReviewedByNestedInput;
+    pickupEventsVerified?: PickupEventUncheckedUpdateManyWithoutVerifiedByNestedInput;
+    medicationsRequested?: MedicationRecordUncheckedUpdateManyWithoutRequestedByNestedInput;
+    medicationsApproved?: MedicationRecordUncheckedUpdateManyWithoutApprovedByNestedInput;
+    medicationsAdministered?: MedicationRecordUncheckedUpdateManyWithoutAdministeredByNestedInput;
+    conversationsCreated?: ConversationUncheckedUpdateManyWithoutCreatedByNestedInput;
+    conversationParticipations?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    messageReceipts?: MessageReadReceiptUncheckedUpdateManyWithoutUserNestedInput;
+    parentRequestsRaised?: ParentRequestUncheckedUpdateManyWithoutParentNestedInput;
+    parentRequestsResolved?: ParentRequestUncheckedUpdateManyWithoutResolvedByNestedInput;
+    incidentsReported?: IncidentRecordUncheckedUpdateManyWithoutReportedByNestedInput;
+    incidentsNotified?: IncidentRecordUncheckedUpdateManyWithoutParentNotifiedByNestedInput;
+    developmentObservationsAuthored?: DevelopmentObservationUncheckedUpdateManyWithoutTeacherNestedInput;
+    pushTokens?: UserPushTokenUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    uploadedMedia?: MediaFileUncheckedUpdateManyWithoutUploadedByNestedInput;
+    attendanceExcusesCreated?: AttendanceExcuseUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
+    eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
+    paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
   };
 
   export type UserCreateManyTenantInput = {
@@ -80940,6 +83351,15 @@ export namespace Prisma {
     createdAt?: Date | string;
   };
 
+  export type PasswordResetTokenCreateManyTenantInput = {
+    id?: string;
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+  };
+
   export type UserUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
@@ -80973,6 +83393,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTenantInput = {
@@ -81008,6 +83429,7 @@ export namespace Prisma {
     eventConsentsCreated?: EventConsentUncheckedUpdateManyWithoutCreatedByNestedInput;
     eventConsentResponses?: EventConsentResponseUncheckedUpdateManyWithoutParentUserNestedInput;
     paymentsRecorded?: PaymentTransactionUncheckedUpdateManyWithoutRecordedByNestedInput;
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -82175,6 +84597,33 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type PasswordResetTokenUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput;
+  };
+
+  export type PasswordResetTokenUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PasswordResetTokenUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type StudentCreateManyParentInput = {
     id?: string;
     tenantId: string;
@@ -82488,6 +84937,15 @@ export namespace Prisma {
     paidAt?: Date | string;
     referenceNo?: string | null;
     notes?: string | null;
+    createdAt?: Date | string;
+  };
+
+  export type PasswordResetTokenCreateManyUserInput = {
+    id?: string;
+    tenantId: string;
+    tokenHash: string;
+    expiresAt: Date | string;
+    usedAt?: Date | string | null;
     createdAt?: Date | string;
   };
 
@@ -83494,6 +85952,33 @@ export namespace Prisma {
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     referenceNo?: NullableStringFieldUpdateOperationsInput | string | null;
     notes?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PasswordResetTokenUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    tenant?: TenantUpdateOneRequiredWithoutPasswordResetTokensNestedInput;
+  };
+
+  export type PasswordResetTokenUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type PasswordResetTokenUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    tenantId?: StringFieldUpdateOperationsInput | string;
+    tokenHash?: StringFieldUpdateOperationsInput | string;
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
@@ -85236,6 +87721,12 @@ export namespace Prisma {
   export type PaymentTransactionArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = PaymentTransactionDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use PasswordResetTokenDefaultArgs instead
+   */
+  export type PasswordResetTokenArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = PasswordResetTokenDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

@@ -59,6 +59,7 @@ model Tenant {
   billingPlans             StudentBillingPlan[]
   billingInvoices          BillingInvoice[]
   paymentTransactions      PaymentTransaction[]
+  passwordResetTokens      PasswordResetToken[]
 
   @@map("tenants")
 }
@@ -99,6 +100,7 @@ model User {
   eventConsentsCreated            EventConsent[]
   eventConsentResponses           EventConsentResponse[]
   paymentsRecorded                PaymentTransaction[]      @relation("PaymentRecorder")
+  passwordResetTokens             PasswordResetToken[]
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -867,4 +869,22 @@ model PaymentTransaction {
   @@index([tenantId, studentId])
   @@index([tenantId, paidAt])
   @@map("payment_transactions")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tenantId  String
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("password_reset_tokens")
 }

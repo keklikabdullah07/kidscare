@@ -121,4 +121,16 @@ describe('LoginPage', () => {
     await user.click(screen.getByRole('link', { name: /kayıt ol/i }));
     expect(await screen.findByText(/signup page/i)).toBeInTheDocument();
   });
+
+  it('opens forgot password modal when clicked', async () => {
+    mockFetchByUrl({
+      '/auth/me': () => new Response(JSON.stringify({ message: 'no token' }), { status: 401 }),
+    });
+    const user = userEvent.setup();
+    renderLogin();
+
+    await user.click(screen.getByRole('button', { name: /şifremi unuttum/i }));
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /şifremi unuttum/i })).toBeInTheDocument();
+  });
 });

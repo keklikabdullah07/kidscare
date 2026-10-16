@@ -27,3 +27,31 @@ export function signup(payload: {
 export function me(): Promise<{ tenantId: string; userId: string; role: string }> {
   return apiFetch('/auth/me');
 }
+
+export function forgotPassword(payload: {
+  tenantSlug: string;
+  email: string;
+}): Promise<{ success: boolean; message: string }> {
+  return apiFetch('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function verifyResetToken(token: string): Promise<{
+  valid: boolean;
+  email?: string;
+  reason?: 'NOT_FOUND' | 'EXPIRED' | 'ALREADY_USED';
+}> {
+  return apiFetch(`/auth/verify-reset-token?token=${encodeURIComponent(token)}`);
+}
+
+export function resetPassword(payload: {
+  token: string;
+  newPassword: string;
+}): Promise<{ success: boolean; message: string }> {
+  return apiFetch('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}

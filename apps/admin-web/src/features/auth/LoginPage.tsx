@@ -17,6 +17,7 @@ import {
 import { useAuth } from './AuthContext';
 import { useTheme } from '../../components/ThemeContext';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { ForgotPasswordModal } from './ForgotPasswordModal';
 
 function useSafeTheme() {
   try {
@@ -74,6 +75,7 @@ export function LoginPage(): JSX.Element {
   const [isWarmingUp, setIsWarmingUp] = useState(false);
   const [clientError, setClientError] = useState<string | null>(null);
   const [activePreset, setActivePreset] = useState<DemoRole>('ADMIN');
+  const [showForgotModal, setShowForgotModal] = useState(false);
 
   const error = clientError || (state.status === 'unauthenticated' ? state.error : null);
 
@@ -352,12 +354,21 @@ export function LoginPage(): JSX.Element {
 
               {/* Şifre */}
               <div>
-                <label
-                  htmlFor="login-password"
-                  className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5"
-                >
-                  Şifre
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label
+                    htmlFor="login-password"
+                    className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider"
+                  >
+                    Şifre
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotModal(true)}
+                    className="text-xs font-semibold text-teal-800 dark:text-teal-400 hover:text-teal-950 dark:hover:text-teal-300 hover:underline transition-colors"
+                  >
+                    Şifremi unuttum?
+                  </button>
+                </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 dark:text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
@@ -453,6 +464,12 @@ export function LoginPage(): JSX.Element {
       <div className="w-full py-2 text-center text-[10px] text-slate-400 dark:text-slate-500 font-medium">
         © {new Date().getFullYear()} KidsCare Okul Öncesi Portalı. Tüm hakları saklıdır.
       </div>
+
+      <ForgotPasswordModal
+        isOpen={showForgotModal}
+        onClose={() => setShowForgotModal(false)}
+        initialSlug={slug}
+      />
     </div>
   );
 }

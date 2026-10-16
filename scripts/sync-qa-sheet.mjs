@@ -7,12 +7,23 @@ export const GOOGLE_SHEET_WEBHOOK_URL =
 
 export async function updateCell(row, col, value) {
   const payload = { row, col, status: value };
-  const res = await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: { 'Content-Type': 'application/json' },
-  });
-  return res.json();
+  try {
+    const res = await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+      redirect: 'follow',
+      signal: AbortSignal.timeout(6000),
+    });
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch {
+      return { success: res.ok, raw: text };
+    }
+  } catch (err) {
+    return { success: false, error: String(err) };
+  }
 }
 
 export async function appendRow(rowNumber, colValues) {
@@ -21,6 +32,7 @@ export async function appendRow(rowNumber, colValues) {
     const val = colValues[c] || '';
     const res = await updateCell(rowNumber, c, val);
     process.stdout.write(`R${rowNumber}C${c}: ${res.success} | `);
+    await new Promise((r) => setTimeout(r, 600));
   }
   console.log(`\nRow ${rowNumber} successfully synced.`);
 }

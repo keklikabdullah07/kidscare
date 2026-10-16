@@ -4,10 +4,19 @@ import { AuthService } from './services/auth.service';
 import { JwtService } from './services/jwt.service';
 import { PasswordService } from './services/password.service';
 import { AuthLookupRepository } from './repositories/auth-lookup.repository';
+import { PasswordResetRepository } from './repositories/password-reset.repository';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
+  imports: [MailModule],
   controllers: [AuthController],
-  providers: [AuthService, JwtService, PasswordService, AuthLookupRepository],
+  providers: [
+    AuthService,
+    JwtService,
+    PasswordService,
+    AuthLookupRepository,
+    PasswordResetRepository,
+  ],
   // JwtService is consumed by AuthMiddleware (wired in TenantContextModule)
   // and by AuthController (via AuthService). Export so both can inject it.
   exports: [JwtService, PasswordService],

@@ -30,3 +30,29 @@ export type AuthResponse = {
   token: string;
   user: AuthenticatedUser;
 };
+
+export type ForgotPasswordInput = {
+  tenantSlug: string;
+  email: string;
+};
+
+export type ForgotPasswordResponse = {
+  success: boolean;
+  message: string;
+};
+
+export type VerifyResetTokenResponse = {
+  valid: boolean;
+  email?: string;
+  reason?: 'NOT_FOUND' | 'EXPIRED' | 'ALREADY_USED';
+};
+
+export type ResetPasswordInput = {
+  token: string;
+  newPassword: string;
+};
+
+export type ResetPasswordResponse = {
+  success: boolean;
+  message: string;
+};

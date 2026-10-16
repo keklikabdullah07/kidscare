@@ -531,6 +531,16 @@ exports.Prisma.PaymentTransactionScalarFieldEnum = {
   createdAt: 'createdAt',
 };
 
+exports.Prisma.PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -711,6 +721,7 @@ exports.Prisma.ModelName = {
   StudentBillingPlan: 'StudentBillingPlan',
   BillingInvoice: 'BillingInvoice',
   PaymentTransaction: 'PaymentTransaction',
+  PasswordResetToken: 'PasswordResetToken',
 };
 
 /**

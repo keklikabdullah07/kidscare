@@ -1,13 +1,25 @@
-import { Body, Controller, Get, HttpCode, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Inject, Post, Query } from '@nestjs/common';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
-import type { LoginInput, SignupInput } from '@kidscare/shared-schemas';
+import type {
+  ForgotPasswordInput,
+  LoginInput,
+  ResetPasswordInput,
+  SignupInput,
+} from '@kidscare/shared-schemas';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
 import { tenantContext } from '@kidscare/tenant-context';
 import { Public } from '../../../common/decorators/public.decorator';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
-import type { AuthResponse } from '@kidscare/shared-types';
+import type {
+  AuthResponse,
+  ForgotPasswordResponse,
+  ResetPasswordResponse,
+  VerifyResetTokenResponse,
+} from '@kidscare/shared-types';
 import { loginSchema } from '../dto/login.dto';
 import { signupSchema } from '../dto/signup.dto';
+import { forgotPasswordSchema } from '../dto/forgot-password.dto';
+import { resetPasswordSchema } from '../dto/reset-password.dto';
 import { AuthService } from '../services/auth.service';
 
 // Auth endpoints are an obvious brute-force target. Tighten limits:
@@ -35,6 +47,32 @@ export class AuthController {
   @HttpCode(200)
   async login(@Body(new ZodValidationPipe(loginSchema)) body: LoginInput): Promise<AuthResponse> {
     return this.authService.login(body);
+  }
+
+  @Public()
+  @Throttle({ short: { limit: 5, ttl: 60_000 }, long: { limit: 20, ttl: 600_000 } })
+  @Post('forgot-password')
+  @HttpCode(200)
+  async forgotPassword(
+    @Body(new ZodValidationPipe(forgotPasswordSchema)) body: ForgotPasswordInput,
+  ): Promise<ForgotPasswordResponse> {
+    return this.authService.forgotPassword(body);
+  }
+
+  @Public()
+  @Get('verify-reset-token')
+  async verifyResetToken(@Query('token') token: string): Promise<VerifyResetTokenResponse> {
+    return this.authService.verifyResetToken(token);
+  }
+
+  @Public()
+  @Throttle({ short: { limit: 5, ttl: 60_000 }, long: { limit: 20, ttl: 600_000 } })
+  @Post('reset-password')
+  @HttpCode(200)
+  async resetPassword(
+    @Body(new ZodValidationPipe(resetPasswordSchema)) body: ResetPasswordInput,
+  ): Promise<ResetPasswordResponse> {
+    return this.authService.resetPassword(body);
   }
 
   /**

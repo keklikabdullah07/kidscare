@@ -1,10 +1,28 @@
-import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { randomBytes } from 'crypto';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { createHash, randomBytes } from 'crypto';
 import { runWithTenant } from '@kidscare/tenant-context';
-import type { AuthResponse, JwtClaims, UserRole } from '@kidscare/shared-types';
+import type {
+  AuthResponse,
+  ForgotPasswordInput,
+  ForgotPasswordResponse,
+  JwtClaims,
+  ResetPasswordInput,
+  ResetPasswordResponse,
+  UserRole,
+  VerifyResetTokenResponse,
+} from '@kidscare/shared-types';
 import type { LoginInput, SignupInput } from '@kidscare/shared-schemas';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AuthLookupRepository } from '../repositories/auth-lookup.repository';
+import { PasswordResetRepository } from '../repositories/password-reset.repository';
+import { MailService } from '../../mail/mail.service';
 import { JwtService } from './jwt.service';
 import { PasswordService } from './password.service';
 
@@ -25,10 +43,14 @@ function cuid(): string {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @Inject(AuthLookupRepository) private readonly lookupRepo: AuthLookupRepository,
+    @Inject(PasswordResetRepository) private readonly passwordResetRepo: PasswordResetRepository,
     @Inject(PasswordService) private readonly password: PasswordService,
     @Inject(JwtService) private readonly jwt: JwtService,
+    @Inject(MailService) private readonly mailService: MailService,
     @Inject(PrismaService) private readonly prisma: PrismaService,
   ) {}
 
@@ -124,6 +146,108 @@ export class AuthService {
         email: fullUser.email,
         role,
       },
+    };
+  }
+
+  private hashToken(rawToken: string): string {
+    return createHash('sha256').update(rawToken).digest('hex');
+  }
+
+  async forgotPassword(input: ForgotPasswordInput): Promise<ForgotPasswordResponse> {
+    const genericSuccess: ForgotPasswordResponse = {
+      success: true,
+      message:
+        'Eğer bilgileriniz kayıtlarımızla eşleşiyorsa şifre sıfırlama bağlantısı iletilmiştir.',
+    };
+
+    try {
+      const tenant = await this.lookupRepo.findTenantBySlug(input.tenantSlug);
+      if (!tenant) {
+        return genericSuccess;
+      }
+
+      const user = await this.lookupRepo.findUserByEmail(tenant.id, input.email);
+      if (!user) {
+        return genericSuccess;
+      }
+
+      // Generate 256-bit cryptographic token
+      const rawToken = randomBytes(32).toString('hex');
+      const tokenHash = this.hashToken(rawToken);
+      const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+      await this.passwordResetRepo.createToken(tenant.id, user.id, tokenHash, expiresAt);
+
+      const webBaseUrl = process.env.WEB_URL || process.env.FRONTEND_URL || 'http://localhost:5173';
+      const resetUrl = `${webBaseUrl.replace(/\/$/, '')}/reset-password?token=${rawToken}`;
+
+      await this.mailService.sendPasswordResetMail({
+        recipientEmail: input.email,
+        resetUrl,
+        expiresInMinutes: 15,
+        tenantName: input.tenantSlug,
+      });
+
+      return genericSuccess;
+    } catch (err) {
+      this.logger.error(`Error in forgotPassword flow: ${String(err)}`);
+      // Never reveal backend errors that could leak tenant or user existence
+      return genericSuccess;
+    }
+  }
+
+  async verifyResetToken(token: string): Promise<VerifyResetTokenResponse> {
+    if (!token || token.length < 16) {
+      return { valid: false, reason: 'NOT_FOUND' };
+    }
+
+    const tokenHash = this.hashToken(token);
+    const record = await this.passwordResetRepo.findByTokenHash(tokenHash);
+
+    if (!record) {
+      return { valid: false, reason: 'NOT_FOUND' };
+    }
+
+    if (record.usedAt) {
+      return { valid: false, reason: 'ALREADY_USED' };
+    }
+
+    if (new Date() > record.expiresAt) {
+      return { valid: false, reason: 'EXPIRED' };
+    }
+
+    const response: VerifyResetTokenResponse = {
+      valid: true,
+    };
+    if (record.user?.email) {
+      response.email = record.user.email;
+    }
+    return response;
+  }
+
+  async resetPassword(input: ResetPasswordInput): Promise<ResetPasswordResponse> {
+    if (!input.token || input.token.length < 16) {
+      throw new BadRequestException('Sıfırlama bağlantısı geçersiz veya süresi dolmuş.');
+    }
+
+    const tokenHash = this.hashToken(input.token);
+    const record = await this.passwordResetRepo.findByTokenHash(tokenHash);
+
+    if (!record || record.usedAt || new Date() > record.expiresAt) {
+      throw new BadRequestException('Sıfırlama bağlantısı geçersiz veya süresi dolmuş.');
+    }
+
+    const passwordHash = await this.password.hash(input.newPassword);
+
+    await this.passwordResetRepo.updateUserPassword(record.userId, passwordHash);
+    await this.passwordResetRepo.markAsUsed(record.id);
+    await this.passwordResetRepo.invalidateUserTokens(record.userId);
+
+    this.logger.log(`Password reset successfully for user ${record.userId}`);
+
+    return {
+      success: true,
+      message: 'Şifreniz başarıyla güncellendi. Yeni şifrenizle giriş yapabilirsiniz.',
     };
   }
 }

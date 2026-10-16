@@ -27,6 +27,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { MediaModule } from './modules/media/media.module';
 import { ConsentsModule } from './modules/consents/consents.module';
 import { FinanceModule } from './modules/finance/finance.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { FinanceModule } from './modules/finance/finance.module';
     PrismaModule,
     HealthModule,
     AuthModule,
+    MailModule,
     TenantsModule,
     StudentsModule,
     DailyReportsModule,

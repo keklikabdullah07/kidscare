@@ -22,9 +22,9 @@ Tek kişilik geliştirici disiplininde iki cephede birden (Web + Mobil) değişe
 [Faz 3.5: Web Ticari & Operasyonel Tamamlama] 🎯 AKTİF ÇALIŞILAN FAZ
    ├── 💰 Spec 0043: Aidat, Tahsilat & Borç Takip Modülü (/finance) ✅ TAMAMLANDI
    ├── 📄 Spec 0044: PDF Belge Motoru (Dönem Sonu Karnesi & MEB Yoklama Çizelgesi) ✅ TAMAMLANDI
-   ├── ☁️ Spec 0045: Gerçek Bulut Depolama (Cloudflare R2 / AWS S3 Sürücüsü) ⏳ SIRADAKİ
-   ├── 🔑 Spec 0046: Şifremi Unuttum & E-posta Servisi (Resend / SMTP)
-   └── 🌐 Spec 0047: Landing Page Demo Formunun Canlıya Bağlanması
+   ├── ☁️ Spec 0045: Gerçek Bulut Depolama (Cloudflare R2 / AWS S3 Sürücüsü) ✅ TAMAMLANDI
+   ├── 🔑 Spec 0046: Şifremi Unuttum & E-posta Servisi (Resend / SMTP) ✅ TAMAMLANDI
+   └── 🌐 Spec 0047: Landing Page Demo Formunun Canlıya Bağlanması ⏳ SIRADAKİ
         ↓
 [Faz 4: Mobil Uygulama (Expo SDK 57) Eşitleme & Canlı Bildirimler] 📱 GELECEK
    ├── 🔔 expo-notifications & Gerçek APNS/FCM Push Token Kaydı

@@ -25,6 +25,7 @@ import {
 } from '../../api/consents';
 import { listClassrooms } from '../../api/classrooms';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PrintPreviewModal, EventRosterPrint } from '../../components/print';
 import type {
   Classroom,
   EventConsent,
@@ -1049,6 +1050,7 @@ function EventRosterModal({
 }): JSX.Element {
   const [filter, setFilter] = useState<'ALL' | 'APPROVED' | 'DECLINED'>('ALL');
   const [search, setSearch] = useState('');
+  const [showPrintPreview, setShowPrintPreview] = useState(false);
 
   const responses: EventConsentResponseItem[] = consent.responses || [];
 
@@ -1067,212 +1069,224 @@ function EventRosterModal({
   const declinedCount = responses.filter((r) => r.decision === 'DECLINED').length;
 
   function handlePrint(): void {
-    window.print();
+    setShowPrintPreview(true);
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-      <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col p-6 space-y-4">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
-          <div>
+    <>
+      <div className="no-print fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col p-6 space-y-4">
+          {/* Modal Header */}
+          <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 dark:bg-purple-900/60 text-purple-800 dark:text-purple-300">
+                  {consent.classroom?.name || 'Tüm Okul'}
+                </span>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  {consent.title} — Servis & Katılımcı Listesi
+                </h3>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                📅{' '}
+                {new Date(consent.eventDate).toLocaleDateString('tr-TR', {
+                  day: 'numeric',
+                  month: 'long',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}{' '}
+                {consent.location && `· 📍 ${consent.location}`}
+              </p>
+            </div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 dark:bg-purple-900/60 text-purple-800 dark:text-purple-300">
-                {consent.classroom?.name || 'Tüm Okul'}
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="btn-tactile-secondary py-1.5 px-3 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>Yazdır</span>
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Quick KPI stats */}
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 p-3 rounded-2xl text-center">
+              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 block">
+                İzin Verenler (Servise Biniş)
               </span>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                {consent.title} — Servis & Katılımcı Listesi
-              </h3>
+              <span className="text-xl font-bold text-emerald-900 dark:text-emerald-200">
+                {approvedCount}
+              </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              📅{' '}
-              {new Date(consent.eventDate).toLocaleDateString('tr-TR', {
-                day: 'numeric',
-                month: 'long',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}{' '}
-              {consent.location && `· 📍 ${consent.location}`}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="btn-tactile-secondary py-1.5 px-3 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Yazdır</span>
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Quick KPI stats */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 p-3 rounded-2xl text-center">
-            <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 block">
-              İzin Verenler (Servise Biniş)
-            </span>
-            <span className="text-xl font-bold text-emerald-900 dark:text-emerald-200">
-              {approvedCount}
-            </span>
-          </div>
-          <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 p-3 rounded-2xl text-center">
-            <span className="text-[10px] font-bold text-rose-700 dark:text-rose-400 block">
-              Katılmayacaklar
-            </span>
-            <span className="text-xl font-bold text-rose-900 dark:text-rose-200">
-              {declinedCount}
-            </span>
-          </div>
-          <div className="bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/60 p-3 rounded-2xl text-center">
-            <span className="text-[10px] font-bold text-teal-700 dark:text-teal-400 block">
-              Tahmini Gelir
-            </span>
-            <span className="text-xl font-bold text-teal-900 dark:text-teal-200">
-              {consent.price ? `${approvedCount * Number(consent.price)} TL` : 'Ücretsiz'}
-            </span>
-          </div>
-        </div>
-
-        {/* Filter bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
-          <div className="flex items-center gap-1.5 w-full sm:w-auto">
-            <button
-              type="button"
-              onClick={() => setFilter('ALL')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer ${
-                filter === 'ALL'
-                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
-              }`}
-            >
-              Tümü ({responses.length})
-            </button>
-            <button
-              type="button"
-              onClick={() => setFilter('APPROVED')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer ${
-                filter === 'APPROVED'
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400'
-              }`}
-            >
-              İzin Verenler ({approvedCount})
-            </button>
-            <button
-              type="button"
-              onClick={() => setFilter('DECLINED')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer ${
-                filter === 'DECLINED'
-                  ? 'bg-rose-600 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-rose-700 dark:text-rose-400'
-              }`}
-            >
-              Katılmayanlar ({declinedCount})
-            </button>
-          </div>
-
-          <div className="relative w-full sm:w-64">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Öğrenci veya veli ara..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white"
-            />
-          </div>
-        </div>
-
-        {/* Table list */}
-        <div className="flex-1 overflow-y-auto border border-[#DDD4C4]/60 dark:border-slate-800 rounded-2xl">
-          {isLoading ? (
-            <div className="p-8 text-center text-xs text-slate-500">Yükleniyor...</div>
-          ) : filteredResponses.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-500">
-              Bu filtreye uygun öğrenci yanıtı bulunamadı.
+            <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 p-3 rounded-2xl text-center">
+              <span className="text-[10px] font-bold text-rose-700 dark:text-rose-400 block">
+                Katılmayacaklar
+              </span>
+              <span className="text-xl font-bold text-rose-900 dark:text-rose-200">
+                {declinedCount}
+              </span>
             </div>
-          ) : (
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#FAF9F6] dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 sticky top-0 border-b border-[#DDD4C4]/60 dark:border-slate-800">
-                <tr>
-                  <th className="py-2.5 px-3.5 font-bold">#</th>
-                  <th className="py-2.5 px-3.5 font-bold">Öğrenci</th>
-                  <th className="py-2.5 px-3.5 font-bold">Veli Hesabı</th>
-                  <th className="py-2.5 px-3.5 font-bold">İzin Durumu</th>
-                  <th className="py-2.5 px-3.5 font-bold">Veli Notu</th>
-                  <th className="py-2.5 px-3.5 font-bold">Yanıt Tarihi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#DDD4C4]/40 dark:divide-slate-800">
-                {filteredResponses.map((r, idx) => {
-                  const isApproved = r.decision === 'APPROVED';
-                  return (
-                    <tr
-                      key={r.id}
-                      className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
-                    >
-                      <td className="py-2.5 px-3.5 font-medium text-slate-400">{idx + 1}</td>
-                      <td className="py-2.5 px-3.5 font-bold text-slate-900 dark:text-white">
-                        {r.student?.firstName} {r.student?.lastName}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-slate-600 dark:text-slate-400">
-                        {r.parentUser?.email || '-'}
-                      </td>
-                      <td className="py-2.5 px-3.5">
-                        <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                            isApproved
-                              ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300'
-                              : 'bg-rose-50 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300'
-                          }`}
-                        >
-                          {isApproved ? (
-                            <>
-                              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                              <span>İzin Verildi</span>
-                            </>
-                          ) : (
-                            <>
-                              <XCircle className="w-3 h-3 text-rose-600" />
-                              <span>Katılmıyor</span>
-                            </>
-                          )}
-                        </span>
-                      </td>
-                      <td className="py-2.5 px-3.5 text-slate-700 dark:text-slate-300 max-w-xs truncate">
-                        {r.notes ? (
-                          <span className="px-2 py-0.5 rounded-lg bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border border-amber-200 font-medium text-[11px]">
-                            {r.notes}
+            <div className="bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/60 p-3 rounded-2xl text-center">
+              <span className="text-[10px] font-bold text-teal-700 dark:text-teal-400 block">
+                Tahmini Gelir
+              </span>
+              <span className="text-xl font-bold text-teal-900 dark:text-teal-200">
+                {consent.price ? `${approvedCount * Number(consent.price)} TL` : 'Ücretsiz'}
+              </span>
+            </div>
+          </div>
+
+          {/* Filter bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+            <div className="flex items-center gap-1.5 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => setFilter('ALL')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer ${
+                  filter === 'ALL'
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                }`}
+              >
+                Tümü ({responses.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilter('APPROVED')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer ${
+                  filter === 'APPROVED'
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400'
+                }`}
+              >
+                İzin Verenler ({approvedCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilter('DECLINED')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer ${
+                  filter === 'DECLINED'
+                    ? 'bg-rose-600 text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-rose-700 dark:text-rose-400'
+                }`}
+              >
+                Katılmayanlar ({declinedCount})
+              </button>
+            </div>
+
+            <div className="relative w-full sm:w-64">
+              <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Öğrenci veya veli ara..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white"
+              />
+            </div>
+          </div>
+
+          {/* Table list */}
+          <div className="flex-1 overflow-y-auto border border-[#DDD4C4]/60 dark:border-slate-800 rounded-2xl">
+            {isLoading ? (
+              <div className="p-8 text-center text-xs text-slate-500">Yükleniyor...</div>
+            ) : filteredResponses.length === 0 ? (
+              <div className="p-8 text-center text-xs text-slate-500">
+                Bu filtreye uygun öğrenci yanıtı bulunamadı.
+              </div>
+            ) : (
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#FAF9F6] dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 sticky top-0 border-b border-[#DDD4C4]/60 dark:border-slate-800">
+                  <tr>
+                    <th className="py-2.5 px-3.5 font-bold">#</th>
+                    <th className="py-2.5 px-3.5 font-bold">Öğrenci</th>
+                    <th className="py-2.5 px-3.5 font-bold">Veli Hesabı</th>
+                    <th className="py-2.5 px-3.5 font-bold">İzin Durumu</th>
+                    <th className="py-2.5 px-3.5 font-bold">Veli Notu</th>
+                    <th className="py-2.5 px-3.5 font-bold">Yanıt Tarihi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#DDD4C4]/40 dark:divide-slate-800">
+                  {filteredResponses.map((r, idx) => {
+                    const isApproved = r.decision === 'APPROVED';
+                    return (
+                      <tr
+                        key={r.id}
+                        className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
+                      >
+                        <td className="py-2.5 px-3.5 font-medium text-slate-400">{idx + 1}</td>
+                        <td className="py-2.5 px-3.5 font-bold text-slate-900 dark:text-white">
+                          {r.student?.firstName} {r.student?.lastName}
+                        </td>
+                        <td className="py-2.5 px-3.5 text-slate-600 dark:text-slate-400">
+                          {r.parentUser?.email || '-'}
+                        </td>
+                        <td className="py-2.5 px-3.5">
+                          <span
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                              isApproved
+                                ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300'
+                                : 'bg-rose-50 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300'
+                            }`}
+                          >
+                            {isApproved ? (
+                              <>
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                <span>İzin Verildi</span>
+                              </>
+                            ) : (
+                              <>
+                                <XCircle className="w-3 h-3 text-rose-600" />
+                                <span>Katılmıyor</span>
+                              </>
+                            )}
                           </span>
-                        ) : (
-                          '-'
-                        )}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-slate-500 text-[11px]">
-                        {new Date(r.respondedAt).toLocaleDateString('tr-TR', {
-                          day: 'numeric',
-                          month: 'short',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
+                        </td>
+                        <td className="py-2.5 px-3.5 text-slate-700 dark:text-slate-300 max-w-xs truncate">
+                          {r.notes ? (
+                            <span className="px-2 py-0.5 rounded-lg bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border border-amber-200 font-medium text-[11px]">
+                              {r.notes}
+                            </span>
+                          ) : (
+                            '-'
+                          )}
+                        </td>
+                        <td className="py-2.5 px-3.5 text-slate-500 text-[11px]">
+                          {new Date(r.respondedAt).toLocaleDateString('tr-TR', {
+                            day: 'numeric',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      <PrintPreviewModal
+        isOpen={showPrintPreview}
+        onClose={() => setShowPrintPreview(false)}
+        title={`${consent.title} — Servis & Katılımcı Listesi`}
+        subtitle="Resmî Gezi, Etkinlik ve Servis Biniş Kontrol Çizelgesi"
+        orientation="portrait"
+      >
+        <EventRosterPrint consent={consent} responses={responses} />
+      </PrintPreviewModal>
+    </>
   );
 }

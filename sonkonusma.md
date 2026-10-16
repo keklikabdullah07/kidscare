@@ -54,14 +54,33 @@
    - `S3StorageDriver` implementasyonu tamamlandı; Cloudflare R2 ve AWS S3 formatlarına tam uyumlu dosya yükleme (`PutObjectCommand`), silme (`DeleteObjectCommand`) ve CDN URL üretimi sağlandı.
    - 9 birim test (%100) yazıldı ve `./scripts/check.ps1` yeşil onay verdi; `specs/done/0045-cloudflare-r2-s3-storage-driver.md` arşivlendi.
 
-6. **Sektörel Kıyaslama ve Eksiklik Analizi:**
+6. **Spec 0046 (Şifremi Unuttum & E-posta Servisi — Resend / SMTP / Console):**
+   - **Veritabanı Katmanı (`packages/database`):**
+     - `PasswordResetToken` modeli tanımlandı; `20261016180000_add_password_reset_tokens` PostgreSQL migration'ı RLS izolasyonu ile uygulandı.
+   - **Paylaşılan Paketler (`shared-types`, `shared-schemas`):**
+     - `ForgotPasswordInput`, `VerifyResetTokenInput`, `ResetPasswordInput` modelleri ve Zod validasyon şemaları tanımlandı (%100 birim test yeşil).
+   - **E-posta Altyapısı (`apps/api/src/modules/mail/`):**
+     - Sürücü mimarisi (`ResendDriver`, `ConsoleDriver`) ve KidsCare dokunsal tasarım kimliğine uygun Türkçe HTML e-posta şablonu oluşturuldu. "İyi Misafir Protokolü" gereği harici gereksiz paket eklenmeden yerleşik fetch ile API entegrasyonu sağlandı.
+   - **Backend API & Güvenlik:**
+     - SHA-256 token hash saklama (DB'de asla plain-text token tutulmaz), 15 dakika geçerlilik süresi, tek kullanımlık `usedAt` mekanizması ve Account Enumeration saldırılarına karşı nötr generic yanıt koruması uygulandı.
+     - `POST /auth/forgot-password`, `GET /auth/verify-reset-token`, `POST /auth/reset-password` uç noktaları Throttler korumasıyla devreye alındı. Backend birim testleri (4 suite, 22 test) %100 yeşil tamamlandı.
+   - **Web Paneli (`apps/admin-web/`):**
+     - `LoginPage.tsx` şifre alanına dokunsal "Şifremi unuttum?" butonu ve sayfa yenilenmeden açılan `<ForgotPasswordModal />` eklendi.
+     - Bağımsız `/reset-password?token=...` rotası oluşturuldu; token doğrulama, yeni şifre ve şifre tekrarı kontrolleri, şifre gücü göstergesi ve 3 saniyelik otomatik yönlendirme akışı sağlandı.
+   - **Google E-Tablo QA Entegrasyonu:**
+     - Google E-Tabloya Satır 33 olarak Spec 0046 kaydı başarıyla işlendi (Toplam 33 satır senkronize).
+   - **Kalite Kapısı:**
+     - `./scripts/check.ps1` %100 yeşil tamamlandı (TypeScript Tip Kontrolü + ESLint sıfır hata + Tüm testler başarılı).
+     - `specs/done/0046-password-reset-and-email-service.md` arşivlendi.
+
+7. **Sektörel Kıyaslama ve Eksiklik Analizi:**
    - MEB, Aile Bakanlığı ve küresel kreş pazarı (Brightwheel, Kinderpedia vb.) derinlemesine incelendi.
-   - `docs/SECTOR_BENCHMARK_AND_GAP_ANALYSIS.md` belgelendi; `docs/ROADMAP.md` güncellendi (İhtiyaç/Bez Bildirimi Spec 0048, Nöbetçi Öğretmen Spec 0049, Dijital Sözleşme/KVKK Spec 0050, Servis Takip Spec 0051 yol haritasına bağlandı).
+   - `docs/SECTOR_BENCHMARK_AND_GAP_ANALYSIS.md` belgelendi; `docs/ROADMAP.md` güncellendi.
 
 ---
 
 ## 2. Sıradaki İş ve Yol Haritası (Faz 3.5 Web Tamamlama)
 
-- **Sıradaki Adım (Spec 0046):** Şifremi Unuttum & E-posta Servisi (Resend / SMTP).
-- **Sonraki Adım (Spec 0047):** Landing Page Demo Formunun Canlıya Bağlanması.
+- **Sıradaki Adım (Spec 0047):** Landing Page Demo Formunun Canlıya Bağlanması (`apps/marketing`).
 - **Sonraki Adım (Spec 0048):** Öğrenci İhtiyaç & Sarf Malzemesi Bildirimi (Bez/Kıyafet Bitti Uyarısı).
+- **Sonraki Adım (Spec 0049):** Nöbetçi Öğretmen / Karşılama Modu (Sabah/Akşam Kapı Teslimi).

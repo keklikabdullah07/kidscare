@@ -10,6 +10,9 @@ describe('AuthController', () => {
     service = {
       signup: jest.fn(),
       login: jest.fn(),
+      forgotPassword: jest.fn(),
+      verifyResetToken: jest.fn(),
+      resetPassword: jest.fn(),
     } as unknown as jest.Mocked<AuthService>;
     controller = new AuthController(service);
   });
@@ -48,6 +51,44 @@ describe('AuthController', () => {
           tenantSlug: 'demo',
           email: 'a@b.com',
           password: 'longpass1',
+        }),
+      ).resolves.toEqual(resp);
+    });
+  });
+
+  describe('forgotPassword', () => {
+    it('calls service.forgotPassword and returns response', async () => {
+      const resp = { success: true, message: 'Mail sent' };
+      service.forgotPassword.mockResolvedValue(resp);
+
+      await expect(
+        controller.forgotPassword({
+          tenantSlug: 'demo',
+          email: 'user@test.com',
+        }),
+      ).resolves.toEqual(resp);
+    });
+  });
+
+  describe('verifyResetToken', () => {
+    it('calls service.verifyResetToken with query token', async () => {
+      const resp = { valid: true, email: 'user@test.com' };
+      service.verifyResetToken.mockResolvedValue(resp);
+
+      await expect(controller.verifyResetToken('valid-token-123456')).resolves.toEqual(resp);
+      expect(service.verifyResetToken).toHaveBeenCalledWith('valid-token-123456');
+    });
+  });
+
+  describe('resetPassword', () => {
+    it('calls service.resetPassword and returns response', async () => {
+      const resp = { success: true, message: 'Password updated' };
+      service.resetPassword.mockResolvedValue(resp);
+
+      await expect(
+        controller.resetPassword({
+          token: 'valid-token-123456',
+          newPassword: 'MyNewPassword123!',
         }),
       ).resolves.toEqual(resp);
     });

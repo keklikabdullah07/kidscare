@@ -1,4 +1,10 @@
-import { loginSchema, signupSchema } from './auth.schema';
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  resetPasswordSchema,
+  signupSchema,
+  verifyResetTokenSchema,
+} from './auth.schema';
 
 describe('loginSchema', () => {
   it('accepts a valid login payload', () => {
@@ -62,6 +68,64 @@ describe('signupSchema', () => {
         tenantName: 'Y',
         email: 'admin@yeni.com',
         password: 'strongpass1',
+      }),
+    ).toThrow();
+  });
+});
+
+describe('forgotPasswordSchema', () => {
+  it('accepts valid payload', () => {
+    expect(() =>
+      forgotPasswordSchema.parse({
+        tenantSlug: 'demo',
+        email: 'user@example.com',
+      }),
+    ).not.toThrow();
+  });
+
+  it('rejects invalid email', () => {
+    expect(() =>
+      forgotPasswordSchema.parse({
+        tenantSlug: 'demo',
+        email: 'not-email',
+      }),
+    ).toThrow();
+  });
+});
+
+describe('verifyResetTokenSchema', () => {
+  it('accepts valid token', () => {
+    expect(() =>
+      verifyResetTokenSchema.parse({
+        token: 'a1b2c3d4e5f6g7h8i9j0k1l2',
+      }),
+    ).not.toThrow();
+  });
+
+  it('rejects short token', () => {
+    expect(() =>
+      verifyResetTokenSchema.parse({
+        token: 'short',
+      }),
+    ).toThrow();
+  });
+});
+
+describe('resetPasswordSchema', () => {
+  it('accepts valid new password', () => {
+    expect(() =>
+      resetPasswordSchema.parse({
+        token: 'a1b2c3d4e5f6g7h8i9j0k1l2',
+        newPassword: 'MySecurePassword123!',
+      }),
+    ).not.toThrow();
+  });
+
+  it('rejects password shorter than 8 characters', () => {
+    expect(() =>
+      resetPasswordSchema.parse({
+        token: 'a1b2c3d4e5f6g7h8i9j0k1l2',
+        newPassword: 'short',
       }),
     ).toThrow();
   });

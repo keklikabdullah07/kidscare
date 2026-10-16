@@ -5,6 +5,7 @@ import { AuthGuard } from './features/auth/AuthGuard';
 import { RoleGuard } from './features/auth/RoleGuard';
 import { LoginPage } from './features/auth/LoginPage';
 import { SignupPage } from './features/auth/SignupPage';
+import { ResetPasswordPage } from './features/auth/ResetPasswordPage';
 import { Layout } from './components/Layout';
 import { ToastProvider } from './components/Toast';
 import { ThemeProvider } from './components/ThemeContext';
@@ -69,6 +70,7 @@ export function App(): JSX.Element {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route element={<AuthGuard />}>
                 <Route element={<Layout />}>
                   {/* Parent-only portal */}
