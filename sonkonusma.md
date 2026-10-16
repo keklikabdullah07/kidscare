@@ -49,11 +49,19 @@
    - Webhook motoru `scripts/sync-qa-sheet.mjs` olarak sabitlendi (`https://script.google.com/macros/s/AKfycbzor7XX4Yel5Sey042fb90z_zziYnRRJBh6xpzld31XE8cs2iBnb9WLYppEk3PiSF83tQ/exec`).
    - Drive'daki Google E-Tabloya Satır 30 (Aidat & Finans - Spec 0043), Satır 31 (PDF Belge Motoru - Spec 0044) ve Satır 32 (Karne Baskı Sızıntısı & Tek Sayfa A4 Düzenlemesi) başarıyla yazıldı (Toplam 32 satır canlı senkronize).
 
+5. **Spec 0045 (Cloudflare R2 / AWS S3 Gerçek Bulut Depolama):**
+   - **İyi Misafir Protokolü:** Canlı VPS diskini medya dosyalarıyla şişirmemek için `@aws-sdk/client-s3` kütüphanesi eklendi.
+   - `S3StorageDriver` implementasyonu tamamlandı; Cloudflare R2 ve AWS S3 formatlarına tam uyumlu dosya yükleme (`PutObjectCommand`), silme (`DeleteObjectCommand`) ve CDN URL üretimi sağlandı.
+   - 9 birim test (%100) yazıldı ve `./scripts/check.ps1` yeşil onay verdi; `specs/done/0045-cloudflare-r2-s3-storage-driver.md` arşivlendi.
+
+6. **Sektörel Kıyaslama ve Eksiklik Analizi:**
+   - MEB, Aile Bakanlığı ve küresel kreş pazarı (Brightwheel, Kinderpedia vb.) derinlemesine incelendi.
+   - `docs/SECTOR_BENCHMARK_AND_GAP_ANALYSIS.md` belgelendi; `docs/ROADMAP.md` güncellendi (İhtiyaç/Bez Bildirimi Spec 0048, Nöbetçi Öğretmen Spec 0049, Dijital Sözleşme/KVKK Spec 0050, Servis Takip Spec 0051 yol haritasına bağlandı).
+
 ---
 
 ## 2. Sıradaki İş ve Yol Haritası (Faz 3.5 Web Tamamlama)
 
-- Web operasyonel eksiklikleri sırasıyla giderilmektedir:
-  - **Sıradaki Adım (Spec 0045):** Gerçek Bulut Depolama (Cloudflare R2 / AWS S3 Sürücüsü) — sunucu diskini şişirmemek için.
-  - **Sonraki Adım (Spec 0046):** Şifremi Unuttum & E-posta Servisi (Resend / SMTP).
-  - **Sonraki Adım (Spec 0047):** Landing Page Demo Formunun Canlıya Bağlanması.
+- **Sıradaki Adım (Spec 0046):** Şifremi Unuttum & E-posta Servisi (Resend / SMTP).
+- **Sonraki Adım (Spec 0047):** Landing Page Demo Formunun Canlıya Bağlanması.
+- **Sonraki Adım (Spec 0048):** Öğrenci İhtiyaç & Sarf Malzemesi Bildirimi (Bez/Kıyafet Bitti Uyarısı).

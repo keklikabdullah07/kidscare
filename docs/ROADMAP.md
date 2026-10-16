@@ -103,20 +103,23 @@ Tek kişilik geliştirici disiplininde iki cephede birden (Web + Mobil) değişe
 
 ---
 
-## 📌 Faz 4: Mobil Uygulama (Expo SDK 57) Eşitleme (Sıradaki Faz 📱)
+## 📌 Faz 4: Mobil Eşitleme & Sektörel Kreş Modülleri (Saha Gücü 📱)
 
-> Web panelinin ticari ve operasyonel kararlılığı sağlandıktan sonra mobil taraf birebir eşitlenecektir.
+> Web altyapısı tamamlandıktan sonra hem mobil eşitleme hem de sahada fark yaratacak kritik kreş operasyonları devreye alınacaktır.  
+> 🔗 Detaylı sektör analizi ve gerekçeler için: [`docs/SECTOR_BENCHMARK_AND_GAP_ANALYSIS.md`](./SECTOR_BENCHMARK_AND_GAP_ANALYSIS.md)
 
 - [ ] **Push Bildirim Altyapısı:** `expo-notifications` kurulumu, APNS/FCM cihaz token kaydı ve arka plan dinleyicisi.
+- [ ] **Spec 0048 (İhtiyaç & Sarf Bildirimi):** Bez, ıslak mendil, yedek kıyafet azaldı/bitti tek tıkla veli bilgilendirme motoru.
+- [ ] **Spec 0049 (Nöbetçi Öğretmen / Karşılama Modu):** Sabah 07:30 - 09:00 kapı karşılama ve akşam geç teslimat için sınıf kilitsiz personel modu.
+- [ ] **Spec 0050 (Dijital Sözleşme & KVKK Açık Rıza):** Kayıt sözleşmesi, KVKK ve fotoğraf izinlerinin veli portalından dijital onayı.
 - [ ] **Veli Mobil Mazeret & İzin Ekranları:** Spec 0040 ve 0041 özelliklerinin mobile taşınması (Sabah _"Gelemeyeceğimizi Bildir"_ butonu, gezi onayları).
-- [ ] **Yönetici (Admin) Mobil Ekranı:** Müdürün mobilden girdiğinde öğretmen ekranı yerine kreş KPI'larını ve aidat özetini göreceği özel arayüz.
-- [ ] **Mobil Test Paketi:** Vitest ve React Native Testing Library ile mobil test altyapısı (Spec 0024 tamamlanması).
+- [ ] **Yönetici (Admin) Mobil Ekranı:** Müdürün mobilden girdiğinde kreş KPI'larını ve aidat özetini göreceği özel arayüz.
 
 ---
 
 ## 📌 Faz 5: İleri Seviye Operasyonlar (V2 Gelecek 🚀)
 
-- [ ] **Servis & Güzergah Takibi:** Servis sabah bindi, indi, nerede bildirimleri ve hostes ekranı.
+- [ ] **Spec 0051 (Servis & Güvenli Taşıma Takibi):** Şoför/hostes için tek tıkla bindi/indi/teslim edildi butonları ve veli anlık anksiyete önleyici bildirimler.
+- [ ] **Aşı Takvimi & Doktor Muayene Raporu:** İl Sağlık ve MEB denetimine hazır sağlık arşivi.
 - [ ] **AI Destekli Günlük Karne Özeti:** Öğretmenin notlarını sıcak ve samimi pedagojik paragrafa dönüştüren yerleşik AI asistanı.
-- [ ] **Personel Nöbet Çizelgesi:** Sabah nöbetçisi, akşam nöbetçisi ve personel izin takvimi.
 - [ ] **Gerçek Zamanlı Sohbet:** Mesajlaşmanın HTTP polling'den WebSocket / SSE mimarisine taşınması.
