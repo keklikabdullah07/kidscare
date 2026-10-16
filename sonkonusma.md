@@ -45,6 +45,10 @@
    - **Web Entegrasyonları:** `PrintPreviewModal.tsx` canlı antetli önizleme modalı; `StudentsPage.tsx`, `AttendancePage.tsx`, `DevelopmentPage.tsx` butonları.
    - **Kalite Kapısı:** 8 birim test (%100) ve `./scripts/check.ps1` yeşil tamamlandı; `specs/done/0044-pdf-document-engine-and-reports.md` arşivlendi.
 
+4. **Google E-Tablo QA Entegrasyonu:**
+   - Webhook motoru `scripts/sync-qa-sheet.mjs` olarak sabitlendi (`https://script.google.com/macros/s/AKfycbzor7XX4Yel5Sey042fb90z_zziYnRRJBh6xpzld31XE8cs2iBnb9WLYppEk3PiSF83tQ/exec`).
+   - Drive'daki Google E-Tabloya Satır 30 (Aidat & Finans - Spec 0043), Satır 31 (PDF Belge Motoru - Spec 0044) ve Satır 32 (Karne Baskı Sızıntısı & Tek Sayfa A4 Düzenlemesi) başarıyla yazıldı (Toplam 32 satır canlı senkronize).
+
 ---
 
 ## 2. Sıradaki İş ve Yol Haritası (Faz 3.5 Web Tamamlama)

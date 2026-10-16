@@ -680,6 +680,12 @@ html.dark .tactile-tab-btn-inactive:active {
     display: none !important;
   }
 
+  /* When printing from the preview modal, completely hide the background app tree */
+  body.print-modal-active > #root,
+  body.print-modal-active > *:not(.print-modal-backdrop) {
+    display: none !important;
+  }
+
   /* Reset body and background for printing */
   html,
   body {

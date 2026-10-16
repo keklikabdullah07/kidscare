@@ -1,4 +1,5 @@
 import { useEffect, type ReactElement, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { Printer, X, FileText, CheckCircle2 } from 'lucide-react';
 import { TactileButton } from '../ui/TactileButton';
 
@@ -21,13 +22,17 @@ export function PrintPreviewModal({
 }: PrintPreviewModalProps): ReactElement | null {
   useEffect(() => {
     if (!isOpen) return;
+    document.body.classList.add('print-modal-active');
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.classList.remove('print-modal-active');
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -36,7 +41,7 @@ export function PrintPreviewModal({
     window.print();
   };
 
-  return (
+  const modalNode = (
     <div
       className="print-modal-backdrop fixed inset-0 z-50 flex flex-col bg-slate-900/80 backdrop-blur-sm overflow-y-auto"
       data-testid="print-preview-modal"
@@ -94,4 +99,6 @@ export function PrintPreviewModal({
       </div>
     </div>
   );
+
+  return createPortal(modalNode, document.body);
 }

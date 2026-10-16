@@ -144,37 +144,39 @@ export function ReportCardPrint({
     `ailece keyifli ve dinlendirici bir tatil diliyorum.`;
 
   return (
-    <div className="bg-white text-slate-800 font-sans p-2 sm:p-4 text-[13px] leading-relaxed">
+    <div className="bg-white text-slate-800 font-sans p-1 sm:p-2 text-[12px] leading-snug">
       {/* Official Top Header / Antet */}
-      <div className="border-b-2 border-teal-900/80 pb-4 mb-4">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+      <div className="border-b-2 border-teal-900/80 pb-2 mb-2.5">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
             {tenantLogo ? (
               <img
                 src={tenantLogo}
                 alt={tenantName}
-                className="h-16 w-16 object-contain rounded-lg border border-stone-200 p-1"
+                className="h-12 w-12 object-contain rounded-lg border border-stone-200 p-1 shrink-0"
               />
             ) : (
-              <div className="h-16 w-16 rounded-xl bg-teal-900 text-amber-300 flex items-center justify-center font-black text-2xl shadow-sm">
+              <div className="h-12 w-12 rounded-xl bg-teal-900 text-amber-300 flex items-center justify-center font-black text-xl shadow-xs shrink-0">
                 KC
               </div>
             )}
             <div>
-              <p className="text-[10px] uppercase font-bold tracking-widest text-teal-900">
+              <p className="text-[9px] uppercase font-bold tracking-widest text-teal-900">
                 T.C. MİLLÎ EĞİTİM BAKANLIĞI STANDARTLARINDA
               </p>
-              <h1 className="text-xl font-extrabold text-stone-900 tracking-tight">{tenantName}</h1>
-              <p className="text-xs font-semibold text-teal-800">
+              <h1 className="text-base font-extrabold text-stone-900 tracking-tight leading-tight">
+                {tenantName}
+              </h1>
+              <p className="text-[11px] font-semibold text-teal-800">
                 Okul Öncesi Pedagojik Gelişim Değerlendirme Raporu (Karne)
               </p>
             </div>
           </div>
-          <div className="text-right">
-            <span className="inline-block rounded bg-amber-100 border border-amber-300 px-3 py-1 text-xs font-bold text-amber-900">
+          <div className="text-right shrink-0">
+            <span className="inline-block rounded bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-[11px] font-bold text-amber-900">
               {period}
             </span>
-            <p className="text-[11px] text-stone-500 mt-1 font-medium">
+            <p className="text-[10px] text-stone-500 mt-0.5 font-medium">
               Tanzim Tarihi: {issueDate}
             </p>
           </div>
@@ -182,18 +184,18 @@ export function ReportCardPrint({
       </div>
 
       {/* Student Passport & Profile Snapshot */}
-      <div className="rounded-xl border border-stone-300 bg-stone-50/70 p-3.5 mb-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-full bg-teal-100 border-2 border-teal-600 flex items-center justify-center text-teal-900 font-bold text-xl overflow-hidden shrink-0">
+      <div className="rounded-lg border border-stone-300 bg-stone-50/70 p-2.5 mb-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="h-12 w-12 rounded-full bg-teal-100 border-2 border-teal-600 flex items-center justify-center text-teal-900 font-bold text-base overflow-hidden shrink-0">
               {`${student.firstName[0] || ''}${student.lastName[0] || ''}`}
             </div>
             <div>
-              <h2 className="text-lg font-black text-stone-900">
+              <h2 className="text-base font-black text-stone-900 leading-tight">
                 {student.firstName} {student.lastName}
               </h2>
-              <div className="flex flex-wrap items-center gap-2 mt-0.5 text-xs text-stone-600">
-                <span className="font-semibold text-teal-900 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+              <div className="flex flex-wrap items-center gap-2 mt-0.5 text-[11px] text-stone-600">
+                <span className="font-semibold text-teal-900 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200">
                   {classroomName || 'Sınıf Bilgisi Yok'}
                 </span>
                 <span>•</span>
@@ -217,17 +219,15 @@ export function ReportCardPrint({
           </div>
 
           {/* Quick Health & Vitals from Passport */}
-          <div className="flex items-center gap-3 text-xs bg-white rounded-lg p-2 border border-stone-200 shadow-2xs">
+          <div className="flex items-center gap-2 text-[11px] bg-white rounded-md p-1.5 border border-stone-200 shadow-2xs">
             <div className="text-center px-2 border-r border-stone-200">
-              <span className="block text-[10px] text-stone-400 uppercase font-bold">
-                Kan Grubu
-              </span>
+              <span className="block text-[9px] text-stone-400 uppercase font-bold">Kan Grubu</span>
               <span className="font-bold text-rose-700">
                 {passport?.bloodType || 'Belirtilmedi'}
               </span>
             </div>
             <div className="text-center px-2 border-r border-stone-200">
-              <span className="block text-[10px] text-stone-400 uppercase font-bold">Alerjen</span>
+              <span className="block text-[9px] text-stone-400 uppercase font-bold">Alerjen</span>
               <span className="font-bold text-stone-700">
                 {passport?.allergies && passport.allergies.length > 0
                   ? passport.allergies.join(', ')
@@ -235,7 +235,7 @@ export function ReportCardPrint({
               </span>
             </div>
             <div className="text-center px-2">
-              <span className="block text-[10px] text-stone-400 uppercase font-bold">
+              <span className="block text-[9px] text-stone-400 uppercase font-bold">
                 Öğrenci No
               </span>
               <span className="font-bold text-stone-700">
@@ -246,43 +246,47 @@ export function ReportCardPrint({
         </div>
       </div>
 
-      {/* 6 Pedagogical Development Areas Grid */}
-      <div className="mb-4">
-        <h3 className="text-xs font-black uppercase tracking-wider text-teal-950 mb-2 flex items-center gap-1.5">
-          <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+      {/* 6 Pedagogical Development Areas Grid - Strict 2-Column Layout */}
+      <div className="mb-2.5">
+        <h3 className="text-[11px] font-black uppercase tracking-wider text-teal-950 mb-1.5 flex items-center gap-1.5">
+          <Sparkles className="h-3 w-3 text-amber-600" />
           Pedagojik Gelişim Alanları ve Kazanım Değerlendirmeleri
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-2">
           {domainObservations.map((domainItem) => {
             const Icon = domainItem.icon;
             const scoreMeta = SCORE_LABELS[domainItem.score] ?? DEFAULT_SCORE_META;
             return (
               <div
                 key={domainItem.domain}
-                className="rounded-lg border border-stone-200 bg-white p-3 shadow-2xs flex flex-col justify-between avoid-break"
+                className="rounded-md border border-stone-200 bg-white p-2 shadow-2xs flex flex-col justify-between avoid-break"
               >
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <div className="h-6 w-6 rounded-md bg-teal-50 text-teal-800 flex items-center justify-center shrink-0">
-                        <Icon className="h-3.5 w-3.5" />
+                  <div className="flex items-center justify-between gap-1.5 mb-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <div className="h-5 w-5 rounded bg-teal-50 text-teal-800 flex items-center justify-center shrink-0">
+                        <Icon className="h-3 w-3" />
                       </div>
-                      <h4 className="font-bold text-stone-900 text-xs">{domainItem.title}</h4>
+                      <h4 className="font-bold text-stone-900 text-[11px] truncate">
+                        {domainItem.title}
+                      </h4>
                     </div>
                     <span
-                      className={`text-[10px] px-2 py-0.5 rounded border ${scoreMeta.bg} ${scoreMeta.textCol}`}
+                      className={`text-[9px] px-1.5 py-0.2 rounded border shrink-0 ${scoreMeta.bg} ${scoreMeta.textCol}`}
                     >
                       {scoreMeta.text}
                     </span>
                   </div>
-                  <p className="text-xs text-stone-600 leading-normal">{domainItem.description}</p>
+                  <p className="text-[10.5px] text-stone-600 leading-snug">
+                    {domainItem.description}
+                  </p>
                 </div>
 
                 {/* Visual Progress Stars */}
-                <div className="flex items-center gap-1 mt-2 pt-1.5 border-t border-stone-100 text-[10px] text-stone-400">
-                  <span className="font-medium">Kazanım Düzeyi:</span>
-                  <div className="flex gap-1 ml-1 text-amber-500 font-bold">
+                <div className="flex items-center gap-1 mt-1.5 pt-1 border-t border-stone-100 text-[9px] text-stone-400">
+                  <span className="font-medium">Kazanım:</span>
+                  <div className="flex gap-0.5 ml-1 text-amber-500 font-bold">
                     {'★'.repeat(domainItem.score)}
                     <span className="text-stone-300">{'★'.repeat(4 - domainItem.score)}</span>
                   </div>
@@ -294,34 +298,34 @@ export function ReportCardPrint({
       </div>
 
       {/* Teacher's Pedagogical Note */}
-      <div className="rounded-xl border border-teal-200 bg-teal-50/40 p-3.5 mb-6 avoid-break">
-        <h3 className="text-xs font-black uppercase tracking-wider text-teal-900 mb-1.5 flex items-center gap-1.5">
-          <Heart className="h-3.5 w-3.5 text-teal-700" />
+      <div className="rounded-lg border border-teal-200 bg-teal-50/40 p-2.5 mb-3 avoid-break">
+        <h3 className="text-[11px] font-black uppercase tracking-wider text-teal-900 mb-1 flex items-center gap-1.5">
+          <Heart className="h-3 w-3 text-teal-700" />
           Öğretmenin Dönem Sonu Pedagojik Değerlendirmesi & Mesajı
         </h3>
-        <p className="text-xs text-stone-800 leading-relaxed italic bg-white/80 p-2.5 rounded-lg border border-teal-100">
+        <p className="text-[11px] text-stone-800 leading-relaxed italic bg-white/80 p-2 rounded border border-teal-100">
           "{customTeacherNote || defaultTeacherNote}"
         </p>
       </div>
 
       {/* Signature & Seal Blocks */}
       <div className="pt-2 border-t-2 border-stone-200 avoid-break">
-        <div className="grid grid-cols-2 gap-8 text-center text-xs">
+        <div className="grid grid-cols-2 gap-8 text-center text-[11px]">
           <div>
-            <p className="font-semibold text-stone-500 mb-10">Sınıf Öğretmeni</p>
+            <p className="font-semibold text-stone-500 mb-6">Sınıf Öğretmeni</p>
             <p className="font-bold text-stone-900">{teacherName}</p>
-            <p className="text-[11px] text-stone-400">İmza</p>
+            <p className="text-[10px] text-stone-400">İmza</p>
           </div>
           <div>
-            <p className="font-semibold text-stone-500 mb-10">Kurum Müdürü / Kurucu</p>
+            <p className="font-semibold text-stone-500 mb-6">Kurum Müdürü / Kurucu</p>
             <p className="font-bold text-stone-900">{directorName}</p>
-            <p className="text-[11px] text-stone-400">İmza & Mühür</p>
+            <p className="text-[10px] text-stone-400">İmza & Mühür</p>
           </div>
         </div>
       </div>
 
       {/* Tiny Footer */}
-      <div className="mt-6 text-center text-[10px] text-stone-400">
+      <div className="mt-2 text-center text-[9px] text-stone-400">
         KidsCare Çocuk Gelişimi & Kreş Yönetim Bilgi Sistemi tarafından resmi standartlarda
         üretilmiştir.
       </div>
