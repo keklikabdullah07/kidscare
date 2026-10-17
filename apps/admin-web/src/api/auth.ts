@@ -1,5 +1,12 @@
-import type { AuthResponse } from '@kidscare/shared-types';
+import type { AuthenticatedUser, AuthResponse, UserProfileUpdateInput } from '@kidscare/shared-types';
 import { apiFetch } from './client';
+
+export function updateProfile(payload: UserProfileUpdateInput): Promise<AuthenticatedUser> {
+  return apiFetch<AuthenticatedUser>('/auth/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
+}
 
 export function login(payload: {
   tenantSlug: string;

@@ -50,15 +50,22 @@ function UnauthorizedRedirect(): null {
 function HomeRedirect(): JSX.Element {
   const { state } = useAuth();
   if (state.status === 'authenticated') {
-    return <Navigate to={state.user.role === 'PARENT' ? '/portal' : '/dashboard'} replace />;
+    if (state.user.role === 'PARENT') {
+      return <Navigate to="/portal" replace />;
+    }
+    if (state.user.role === 'SERVICE_STAFF') {
+      return <Navigate to="/pickup" replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
   }
   return <Navigate to="/login" replace />;
 }
 
-/** Roles that can manage the daycare (everything except PARENT) */
+/** Roles that can manage the daycare (everything except PARENT and SERVICE_STAFF) */
 const STAFF_ROLES = ['SUPER_ADMIN', 'ADMIN', 'TEACHER'] as const;
 /** All roles — pages shared between staff and parents */
 const ALL_ROLES = ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT'] as const;
+
 
 export function App(): JSX.Element {
   return (
@@ -135,7 +142,7 @@ export function App(): JSX.Element {
                   <Route
                     path="/pickup"
                     element={
-                      <RoleGuard allowed={[...ALL_ROLES]}>
+                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}>
                         <PickupPage />
                       </RoleGuard>
                     }
@@ -151,7 +158,7 @@ export function App(): JSX.Element {
                   <Route
                     path="/messages"
                     element={
-                      <RoleGuard allowed={[...ALL_ROLES]}>
+                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}>
                         <MessagesPage />
                       </RoleGuard>
                     }
@@ -159,7 +166,7 @@ export function App(): JSX.Element {
                   <Route
                     path="/requests"
                     element={
-                      <RoleGuard allowed={[...ALL_ROLES]}>
+                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}>
                         <ParentRequestsPage />
                       </RoleGuard>
                     }
@@ -191,7 +198,7 @@ export function App(): JSX.Element {
                   <Route
                     path="/finance"
                     element={
-                      <RoleGuard allowed={[...ALL_ROLES]}>
+                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'PARENT']}>
                         <FinancePage />
                       </RoleGuard>
                     }

@@ -115,7 +115,7 @@ export class MessagingController {
     const filters: { parentId?: string; status?: ParentRequestStatus } = {};
     if (user.role === 'PARENT') filters.parentId = user.userId;
     if (status) filters.status = status;
-    return this.service.listParentRequests(tenantId, filters);
+    return this.service.listParentRequests(tenantId, filters, user);
   }
 
   @Post('parent-requests')

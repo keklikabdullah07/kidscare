@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export type BadgeVariant = 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'brand';
+export type BadgeVariant = 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'brand' | 'accent';
 export type BadgeSize = 'sm' | 'md';
 
 interface BadgeProps {
@@ -42,6 +42,11 @@ const VARIANT_MAP: Record<BadgeVariant, { container: string; dot: string }> = {
       'bg-teal-50 text-teal-900 border-teal-200/80 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800/60',
     dot: 'bg-teal-600 dark:bg-teal-400',
   },
+  accent: {
+    container:
+      'bg-orange-50 text-orange-900 border-orange-200/80 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-800/60',
+    dot: 'bg-orange-500 dark:orange-400',
+  },
 };
 
 const SIZE_MAP: Record<BadgeSize, string> = {
@@ -56,8 +61,8 @@ export function Badge({
   className = '',
   dot = false,
 }: BadgeProps): React.ReactElement {
-  const styles = VARIANT_MAP[variant];
-  const sizeStyles = SIZE_MAP[size];
+  const styles = VARIANT_MAP[variant] ?? VARIANT_MAP.neutral;
+  const sizeStyles = SIZE_MAP[size] ?? SIZE_MAP.md;
 
   return (
     <span

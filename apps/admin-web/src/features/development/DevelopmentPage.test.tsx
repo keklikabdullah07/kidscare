@@ -36,6 +36,10 @@ vi.mock('../../api/students', () => ({
   listStudents: vi.fn().mockResolvedValue([{ id: 'st-1', firstName: 'Ali', lastName: 'Yılmaz' }]),
 }));
 
+vi.mock('../../api/classrooms', () => ({
+  listClassrooms: vi.fn().mockResolvedValue([]),
+}));
+
 vi.mock('../../api/development', () => ({
   listObservations: vi.fn().mockResolvedValue([
     {

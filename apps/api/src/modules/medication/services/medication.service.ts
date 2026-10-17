@@ -21,11 +21,16 @@ import type {
 } from '../repositories/medication.repository';
 import { NotificationsService } from '../../notifications/services/notifications.service';
 
+import { PrismaService } from '../../../prisma/prisma.service';
+import { getScopedStudentIdsForUser } from '../../../common/utils/student-access';
+
 @Injectable()
 export class MedicationService {
   constructor(
     @Inject('IMedicationRepository')
     private readonly repo: IMedicationRepository,
+    @Inject(PrismaService)
+    private readonly prisma: PrismaService,
     @Optional()
     @Inject(NotificationsService)
     private readonly notificationsService?: NotificationsService,
@@ -39,8 +44,29 @@ export class MedicationService {
       from?: Date;
       to?: Date;
     },
+    user?: CurrentUserPayload,
   ): Promise<MedicationRecord[]> {
-    const rows = await this.repo.list(tenantId, filters);
+    const activeFilters: {
+      studentId?: string;
+      studentIds?: string[];
+      status?: MedicationStatus;
+      from?: Date;
+      to?: Date;
+    } = { ...filters };
+
+    if (user) {
+      const allowedStudentIds = await getScopedStudentIdsForUser(this.prisma, tenantId, user);
+      if (allowedStudentIds !== null) {
+        if (allowedStudentIds.length === 0) return [];
+        if (activeFilters.studentId) {
+          if (!allowedStudentIds.includes(activeFilters.studentId)) return [];
+        } else {
+          activeFilters.studentIds = allowedStudentIds;
+        }
+      }
+    }
+
+    const rows = await this.repo.list(tenantId, activeFilters);
     return rows.map((row) => this.toResponse(row));
   }
 

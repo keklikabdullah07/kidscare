@@ -5,6 +5,7 @@ import type {
 } from '../repositories/pickup.repository';
 import { PickupService } from './pickup.service';
 import type { IPickupRepository } from '../repositories/pickup.repository';
+import type { PrismaService } from '../../../prisma/prisma.service';
 
 const baseContact: PickupContactRow = {
   id: 'pc-1',
@@ -67,7 +68,7 @@ describe('PickupService', () => {
       listEvents: jest.fn(),
       createEvent: jest.fn(),
     };
-    service = new PickupService(repo);
+    service = new PickupService(repo, {} as unknown as PrismaService);
   });
 
   describe('contacts', () => {

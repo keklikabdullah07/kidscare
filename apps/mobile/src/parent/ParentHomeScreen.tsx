@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import type { DailyMenu, ParentChildOverview } from '@kidscare/shared-types';
+import type { DailyMenu, ParentChildOverview, NapData } from '@kidscare/shared-types';
 import { fetchParentChildrenOverview } from '../api/parent';
 import { getDailyMenu } from '../api/daily-menus';
 import { DailyMenuModal } from '../daily-menus/DailyMenuModal';
@@ -102,6 +102,56 @@ export function ParentHomeScreen(): React.ReactElement {
       default:
         return { text: 'Belirtilmedi', bg: colors.surfaceMuted, fg: colors.textMuted };
     }
+  };
+
+  const getNapInfo = (naps?: NapData | null) => {
+    if (!naps || (!naps.quality && !naps.startTime && !naps.endTime && !naps.notes)) {
+      return {
+        label: 'Belirtilmedi',
+        timeText: null,
+        notes: null,
+      };
+    }
+    const timeText =
+      naps.startTime && naps.endTime
+        ? `${naps.startTime} - ${naps.endTime}`
+        : naps.startTime
+          ? `${naps.startTime} başlangıç`
+          : null;
+
+    if (naps.quality === 'NONE') {
+      return {
+        label: 'Uyumadı',
+        timeText,
+        notes: naps.notes || null,
+      };
+    }
+    if (naps.quality === 'INTERRUPTED') {
+      return {
+        label: 'Bölünmüş / Huzursuz',
+        timeText,
+        notes: naps.notes || null,
+      };
+    }
+    if (naps.quality === 'GOOD') {
+      return {
+        label: 'İyi Uyudu',
+        timeText,
+        notes: naps.notes || null,
+      };
+    }
+    return {
+      label: timeText ? 'Uyudu' : 'Uyumadı',
+      timeText,
+      notes: naps.notes || null,
+    };
+  };
+
+  const POTTY_LABEL_MAP: Record<string, { label: string; emoji: string }> = {
+    WET: { label: 'Çişli Bez', emoji: '💧' },
+    DIRTY: { label: 'Kaka / Kirli Bez', emoji: '💩' },
+    POTTY: { label: 'Tuvalete Yaptı', emoji: '🚽' },
+    ACCIDENT: { label: 'Kaçırdı / Kaza', emoji: '⚠️' },
   };
 
   // Match allergens with today's menu
@@ -420,33 +470,59 @@ export function ParentHomeScreen(): React.ReactElement {
                     </View>
                   </View>
 
+                  {/* Meals Note if present */}
+                  {activeChild.todayDailyReport.meals?.notes && (
+                    <View style={styles.noteBox}>
+                      <Text style={styles.noteTitle}>🥣 Beslenme Notu</Text>
+                      <Text style={styles.noteContent}>
+                        "{activeChild.todayDailyReport.meals.notes}"
+                      </Text>
+                    </View>
+                  )}
+
                   {/* Nap & Potty Stats */}
                   <View style={styles.miniStatsRow}>
                     <View style={styles.miniStatBox}>
                       <Text style={styles.miniStatEmoji}>😴</Text>
-                      <View>
+                      <View style={{ flex: 1 }}>
                         <Text style={styles.miniStatTitle}>Uyku & Dinlenme</Text>
                         <Text style={styles.miniStatValue}>
-                          {activeChild.todayDailyReport.naps?.startTime &&
-                          activeChild.todayDailyReport.naps?.endTime
-                            ? `${activeChild.todayDailyReport.naps.startTime} - ${activeChild.todayDailyReport.naps.endTime}`
-                            : activeChild.todayDailyReport.naps?.quality === 'GOOD'
-                              ? 'Deliksiz uyudu'
-                              : 'Uyumadı'}
+                          {(() => {
+                            const nap = getNapInfo(activeChild.todayDailyReport.naps);
+                            return nap.timeText ? `${nap.label} (${nap.timeText})` : nap.label;
+                          })()}
                         </Text>
+                        {activeChild.todayDailyReport.naps?.notes && (
+                          <Text style={styles.subNoteText}>
+                            "{activeChild.todayDailyReport.naps.notes}"
+                          </Text>
+                        )}
                       </View>
                     </View>
 
                     <View style={styles.miniStatBox}>
                       <Text style={styles.miniStatEmoji}>🚽</Text>
-                      <View>
+                      <View style={{ flex: 1 }}>
                         <Text style={styles.miniStatTitle}>Tuvalet / Bez</Text>
-                        <Text style={styles.miniStatValue}>
-                          {activeChild.todayDailyReport.potty &&
-                          activeChild.todayDailyReport.potty.length > 0
-                            ? `${activeChild.todayDailyReport.potty.length} kayıt`
-                            : 'Düzenli'}
-                        </Text>
+                        {activeChild.todayDailyReport.potty &&
+                        activeChild.todayDailyReport.potty.length > 0 ? (
+                          <View style={{ gap: 2, marginTop: 2 }}>
+                            {activeChild.todayDailyReport.potty.map((entry, idx) => {
+                              const meta = POTTY_LABEL_MAP[entry.type] ?? {
+                                label: entry.type,
+                                emoji: '🚻',
+                              };
+                              return (
+                                <Text key={entry.id ?? idx} style={styles.pottyEntryText}>
+                                  {entry.time} · {meta.emoji} {meta.label}
+                                  {entry.notes ? ` (${entry.notes})` : ''}
+                                </Text>
+                              );
+                            })}
+                          </View>
+                        ) : (
+                          <Text style={styles.miniStatValue}>Kayıt yok</Text>
+                        )}
                       </View>
                     </View>
                   </View>
@@ -832,6 +908,36 @@ const styles = StyleSheet.create({
   miniStatValue: {
     ...typography.captionBold,
     color: colors.textPrimary,
+  },
+  subNoteText: {
+    ...typography.tiny,
+    color: colors.textSecondary,
+    fontStyle: 'italic',
+    marginTop: 2,
+  },
+  pottyEntryText: {
+    ...typography.tiny,
+    color: colors.textPrimary,
+    fontWeight: '600',
+  },
+  noteBox: {
+    marginTop: spacing.xs,
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.md,
+    padding: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+  },
+  noteTitle: {
+    ...typography.captionBold,
+    fontSize: 11,
+    color: colors.textSecondary,
+    marginBottom: 2,
+  },
+  noteContent: {
+    ...typography.caption,
+    color: colors.textPrimary,
+    fontStyle: 'italic',
   },
 
   teacherNoteBox: {

@@ -33,6 +33,7 @@ import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTab
 import { TactileButton } from '../../components/ui/TactileButton';
 import { Badge } from '../../components/ui/Badge';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PageHeader } from '../../components/ui/PageHeader';
 import type {
   BillingInvoice,
   CreateBillingPlanInput,
@@ -51,7 +52,7 @@ export function FinancePage(): JSX.Element {
   const { state: authState } = useAuth();
   const { showToast } = useToast();
   const userRole = authState.status === 'authenticated' ? authState.user.role : 'PARENT';
-  const isStaff = userRole === 'SUPER_ADMIN' || userRole === 'ADMIN' || userRole === 'TEACHER';
+  const isStaff = userRole === 'SUPER_ADMIN' || userRole === 'ADMIN';
 
   // Current Period YYYY-MM
   const now = new Date();
@@ -428,33 +429,26 @@ export function FinancePage(): JSX.Element {
 
     return (
       <div className="space-y-6">
-        {/* Header Hero */}
-        <div className="bg-white dark:bg-[#131B2E] border-2 border-[#DCD4C6] dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 text-teal-800 dark:text-teal-300 text-xs font-bold uppercase tracking-wider mb-1">
-                <CreditCard className="w-4 h-4" />
-                <span>Veli Portalı · Aidat ve Ödeme Durumu</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                Öğrenci Aidat & Ödeme Dökümü
-              </h1>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
-                Çocuğunuzun aylık eğitim aidatı, servis/etkinlik ücretleri ve geçmiş ödeme
-                makbuzlarını buradan takip edebilirsiniz.
-              </p>
-            </div>
-            <div className="bg-[#FAF9F6] dark:bg-slate-900/80 border border-[#DDD4C4] dark:border-slate-800 p-4 rounded-2xl shrink-0">
-              <span className="text-xs font-bold text-slate-500 uppercase">Kalan Toplam Borç</span>
-              <div className="text-2xl sm:text-3xl font-black text-rose-600 dark:text-rose-400 mt-0.5">
+        {/* Slim Page Hero Card */}
+        <PageHeader
+          title="Öğrenci Aidat & Ödeme Dökümü"
+          description="Çocuğunuzun aylık eğitim aidatı, servis/etkinlik ücretleri ve geçmiş ödeme makbuzlarını buradan takip edebilirsiniz"
+          icon={CreditCard}
+          colorTheme="teal"
+          badges={
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-100 dark:bg-teal-950/60 text-teal-900 dark:text-teal-300 font-bold text-[11px] border border-teal-200/80 dark:border-teal-800/60">
+              {parentInvoices.length} Fatura · {paidInvoicesCount} Ödendi
+            </span>
+          }
+          actions={
+            <div className="bg-[#FAF9F6] dark:bg-slate-900/80 border border-[#DDD4C4] dark:border-slate-800 px-4 py-2 rounded-2xl shrink-0 text-right">
+              <span className="text-[11px] font-bold text-slate-500 uppercase block">Kalan Toplam Borç</span>
+              <div className="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400 mt-0.5">
                 {formatCurrency(totalRemaining)}
               </div>
-              <span className="text-[11px] text-slate-400 font-medium">
-                {paidInvoicesCount} fatura ödendi
-              </span>
             </div>
-          </div>
-        </div>
+          }
+        />
 
         {/* Bank Wire Guide Box */}
         <div className="bg-teal-50/70 dark:bg-teal-950/30 border-2 border-teal-200 dark:border-teal-800/60 rounded-3xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -578,60 +572,77 @@ export function FinancePage(): JSX.Element {
   // ----------------------------------------------------
   return (
     <div className="space-y-6">
-      {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-teal-800 dark:text-teal-300 text-xs font-bold uppercase tracking-wider mb-1">
-            <CreditCard className="w-4 h-4" />
-            <span>Kreş Finans & Muhasebe Paneli</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-            Aidat & Tahsilat Yönetimi
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
-            Öğrenci aidat planları, tahsilat girişleri, faturalar ve veli borç takibi.
-          </p>
-        </div>
+      {/* Slim Page Hero Card */}
+      <PageHeader
+        title="Aidat & Tahsilat Yönetimi"
+        description="Öğrenci aidat planları, tahsilat girişleri, faturalar ve veli borç takibi"
+        icon={CreditCard}
+        colorTheme="amber"
+        badges={
+          <>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 font-bold text-[11px] border border-amber-200/80 dark:border-amber-800/60">
+              {invoices.length} Kayıtlı Fatura
+            </span>
+            {overdueInvoices.length > 0 ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 font-bold text-[11px] border border-rose-300 dark:border-rose-700">
+                <AlertTriangle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                {overdueInvoices.length} Gecikmede
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 font-bold text-[11px] border border-emerald-300 dark:border-emerald-700">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                Geciken Fatura Yok
+              </span>
+            )}
+          </>
+        }
+        actions={
+          <>
+            {/* Period Selector */}
+            <div className="relative">
+              <select
+                value={selectedPeriod}
+                onChange={(e) => setSelectedPeriod(e.target.value)}
+                className="bg-white dark:bg-slate-800 border-2 border-[#DDD4C4] dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold rounded-2xl px-3 py-1.5 pr-8 focus:outline-hidden focus:border-amber-600 appearance-none shadow-2xs cursor-pointer"
+              >
+                {periodOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+              <Calendar className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Period Selector */}
-          <div className="relative">
-            <select
-              value={selectedPeriod}
-              onChange={(e) => setSelectedPeriod(e.target.value)}
-              className="bg-white dark:bg-slate-800 border-2 border-[#DDD4C4] dark:border-slate-700 text-slate-900 dark:text-white text-xs font-bold rounded-2xl px-3.5 py-2.5 pr-8 focus:outline-hidden focus:border-teal-600 appearance-none shadow-2xs cursor-pointer"
+            <TactileButton
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsInvoiceModalOpen(true)}
+              className="whitespace-nowrap"
             >
-              {periodOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <Calendar className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
+              <Plus className="w-3.5 h-3.5" />
+              <span>Fatura Kes</span>
+            </TactileButton>
 
-          <TactileButton variant="secondary" size="sm" onClick={() => setIsInvoiceModalOpen(true)}>
-            <Plus className="w-3.5 h-3.5" />
-            <span>Fatura Kes</span>
-          </TactileButton>
-
-          <TactileButton
-            variant="amber"
-            size="sm"
-            onClick={() => {
-              const firstInv = invoices[0];
-              if (firstInv) {
-                openPaymentModal(firstInv);
-              } else {
-                showToast('Ödeme alınacak fatura bulunamadı.', 'info');
-              }
-            }}
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Tahsilat Al</span>
-          </TactileButton>
-        </div>
-      </div>
+            <TactileButton
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                const firstInv = invoices[0];
+                if (firstInv) {
+                  openPaymentModal(firstInv);
+                } else {
+                  showToast('Ödeme alınacak fatura bulunamadı.', 'info');
+                }
+              }}
+              className="whitespace-nowrap text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700/80 hover:border-amber-400"
+            >
+              <Receipt className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              <span>+ Tahsilat Al</span>
+            </TactileButton>
+          </>
+        }
+      />
 
       {/* 4 StatCards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

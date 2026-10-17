@@ -6,6 +6,7 @@ import type {
 } from '../repositories/messaging.repository';
 import { MessagingService } from './messaging.service';
 import type { IMessagingRepository } from '../repositories/messaging.repository';
+import type { PrismaService } from '../../../prisma/prisma.service';
 
 const baseConversation: ConversationRow = {
   id: 'c-1',
@@ -75,7 +76,7 @@ describe('MessagingService', () => {
       findParentRequest: jest.fn(),
       resolveDefaultParticipants: jest.fn().mockResolvedValue([]),
     };
-    service = new MessagingService(repo);
+    service = new MessagingService(repo, {} as unknown as PrismaService);
   });
 
   describe('conversations', () => {

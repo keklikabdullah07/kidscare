@@ -43,6 +43,13 @@ function getTabsForRole(role: string): BottomNavItem[] {
     ];
   }
 
+  if (role === 'SERVICE_STAFF') {
+    return [
+      { to: '/pickup', label: 'Servis', icon: ShieldCheck },
+      { to: '/messages', label: 'Mesajlar', icon: MessageSquare },
+    ];
+  }
+
   // ADMIN / SUPER_ADMIN
   return [
     { to: '/dashboard', label: 'Gösterge', icon: LayoutDashboard },

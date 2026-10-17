@@ -1,17 +1,21 @@
-import { Body, Controller, Get, HttpCode, Inject, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Inject, Patch, Post, Query } from '@nestjs/common';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
-import type {
-  ForgotPasswordInput,
-  LoginInput,
-  ResetPasswordInput,
-  SignupInput,
+import {
+  userProfileUpdateSchema,
+  type ForgotPasswordInput,
+  type LoginInput,
+  type ResetPasswordInput,
+  type SignupInput,
+  type UserProfileUpdate,
 } from '@kidscare/shared-schemas';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
+import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { tenantContext } from '@kidscare/tenant-context';
 import { Public } from '../../../common/decorators/public.decorator';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import type {
   AuthResponse,
+  AuthenticatedUser,
   ForgotPasswordResponse,
   ResetPasswordResponse,
   VerifyResetTokenResponse,
@@ -89,4 +93,14 @@ export class AuthController {
     const ctx = tenantContext.getStore();
     return { tenantId, userId: ctx?.userId ?? '', role: ctx?.role ?? 'TEACHER' };
   }
+
+  @Patch('profile')
+  @HttpCode(200)
+  async updateProfile(
+    @CurrentUser() user: CurrentUserPayload,
+    @Body(new ZodValidationPipe(userProfileUpdateSchema)) body: UserProfileUpdate,
+  ): Promise<AuthenticatedUser> {
+    return this.authService.updateProfile(user.userId, user.tenantId, body);
+  }
 }
+

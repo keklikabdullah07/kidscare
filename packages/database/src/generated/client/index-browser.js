@@ -1,4 +1,5 @@
-Object.defineProperty(exports, '__esModule', { value: true });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 const {
   Decimal,
@@ -6,54 +7,55 @@ const {
   makeStrictEnum,
   Public,
   getRuntime,
-  skip,
-} = require('./runtime/index-browser.js');
+  skip
+} = require('./runtime/index-browser.js')
 
-const Prisma = {};
 
-exports.Prisma = Prisma;
-exports.$Enums = {};
+const Prisma = {}
+
+exports.Prisma = Prisma
+exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 5.22.0
  * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
  */
 Prisma.prismaVersion = {
-  client: '5.22.0',
-  engine: '605197351a3c8bdd595af2d2a9bc3025bca48ea2',
-};
+  client: "5.22.0",
+  engine: "605197351a3c8bdd595af2d2a9bc3025bca48ea2"
+}
 
 Prisma.PrismaClientKnownRequestError = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`PrismaClientKnownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)};
 Prisma.PrismaClientUnknownRequestError = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`PrismaClientUnknownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.PrismaClientRustPanicError = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`PrismaClientRustPanicError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.PrismaClientInitializationError = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`PrismaClientInitializationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.PrismaClientValidationError = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`PrismaClientValidationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.NotFoundError = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`NotFoundError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
-Prisma.Decimal = Decimal;
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.Decimal = Decimal
 
 /**
  * Re-export of sql-template-tag
@@ -61,51 +63,53 @@ Prisma.Decimal = Decimal;
 Prisma.sql = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`sqltag is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.empty = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`empty is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.join = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`join is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.raw = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`raw is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
-Prisma.validator = Public.validator;
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.validator = Public.validator
 
 /**
- * Extensions
- */
+* Extensions
+*/
 Prisma.getExtensionContext = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`Extensions.getExtensionContext is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 Prisma.defineExtension = () => {
   const runtimeName = getRuntime().prettyName;
   throw new Error(`Extensions.defineExtension is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`);
-};
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
 
 /**
  * Shorthand utilities for JSON filtering
  */
-Prisma.DbNull = objectEnumValues.instances.DbNull;
-Prisma.JsonNull = objectEnumValues.instances.JsonNull;
-Prisma.AnyNull = objectEnumValues.instances.AnyNull;
+Prisma.DbNull = objectEnumValues.instances.DbNull
+Prisma.JsonNull = objectEnumValues.instances.JsonNull
+Prisma.AnyNull = objectEnumValues.instances.AnyNull
 
 Prisma.NullTypes = {
   DbNull: objectEnumValues.classes.DbNull,
   JsonNull: objectEnumValues.classes.JsonNull,
-  AnyNull: objectEnumValues.classes.AnyNull,
-};
+  AnyNull: objectEnumValues.classes.AnyNull
+}
+
+
 
 /**
  * Enums
@@ -115,7 +119,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
   RepeatableRead: 'RepeatableRead',
-  Serializable: 'Serializable',
+  Serializable: 'Serializable'
 });
 
 exports.Prisma.TenantScalarFieldEnum = {
@@ -124,7 +128,7 @@ exports.Prisma.TenantScalarFieldEnum = {
   name: 'name',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -133,10 +137,14 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   role: 'role',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  avatarUrl: 'avatarUrl',
+  phone: 'phone',
   isActive: 'isActive',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
@@ -153,7 +161,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.ClassroomScalarFieldEnum = {
@@ -163,7 +171,7 @@ exports.Prisma.ClassroomScalarFieldEnum = {
   ageGroup: 'ageGroup',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ClassroomTeacherScalarFieldEnum = {
@@ -172,7 +180,7 @@ exports.Prisma.ClassroomTeacherScalarFieldEnum = {
   classroomId: 'classroomId',
   teacherId: 'teacherId',
   assignedAt: 'assignedAt',
-  removedAt: 'removedAt',
+  removedAt: 'removedAt'
 };
 
 exports.Prisma.DailyReportScalarFieldEnum = {
@@ -188,7 +196,7 @@ exports.Prisma.DailyReportScalarFieldEnum = {
   medications: 'medications',
   teacherNote: 'teacherNote',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AttendanceScalarFieldEnum = {
@@ -205,7 +213,7 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   pickupNote: 'pickupNote',
   note: 'note',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.DailyMenuScalarFieldEnum = {
@@ -219,7 +227,7 @@ exports.Prisma.DailyMenuScalarFieldEnum = {
   calories: 'calories',
   notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ActivityPostScalarFieldEnum = {
@@ -235,7 +243,7 @@ exports.Prisma.ActivityPostScalarFieldEnum = {
   taggedStudentIds: 'taggedStudentIds',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.PickupContactScalarFieldEnum = {
@@ -248,7 +256,7 @@ exports.Prisma.PickupContactScalarFieldEnum = {
   identityNote: 'identityNote',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PickupAuthorizationScalarFieldEnum = {
@@ -263,7 +271,7 @@ exports.Prisma.PickupAuthorizationScalarFieldEnum = {
   validUntil: 'validUntil',
   note: 'note',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PickupEventScalarFieldEnum = {
@@ -277,7 +285,7 @@ exports.Prisma.PickupEventScalarFieldEnum = {
   verificationMethod: 'verificationMethod',
   verifiedByUserId: 'verifiedByUserId',
   occurredAt: 'occurredAt',
-  note: 'note',
+  note: 'note'
 };
 
 exports.Prisma.MedicationRecordScalarFieldEnum = {
@@ -297,7 +305,7 @@ exports.Prisma.MedicationRecordScalarFieldEnum = {
   rejectionReason: 'rejectionReason',
   skipReason: 'skipReason',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ConversationScalarFieldEnum = {
@@ -311,7 +319,7 @@ exports.Prisma.ConversationScalarFieldEnum = {
   createdById: 'createdById',
   lastMessageAt: 'lastMessageAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ConversationParticipantScalarFieldEnum = {
@@ -319,7 +327,7 @@ exports.Prisma.ConversationParticipantScalarFieldEnum = {
   tenantId: 'tenantId',
   conversationId: 'conversationId',
   userId: 'userId',
-  joinedAt: 'joinedAt',
+  joinedAt: 'joinedAt'
 };
 
 exports.Prisma.MessageScalarFieldEnum = {
@@ -330,7 +338,7 @@ exports.Prisma.MessageScalarFieldEnum = {
   content: 'content',
   isCritical: 'isCritical',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.MessageReadReceiptScalarFieldEnum = {
@@ -338,7 +346,7 @@ exports.Prisma.MessageReadReceiptScalarFieldEnum = {
   tenantId: 'tenantId',
   messageId: 'messageId',
   userId: 'userId',
-  readAt: 'readAt',
+  readAt: 'readAt'
 };
 
 exports.Prisma.ParentRequestScalarFieldEnum = {
@@ -354,7 +362,7 @@ exports.Prisma.ParentRequestScalarFieldEnum = {
   resolvedAt: 'resolvedAt',
   resolutionNote: 'resolutionNote',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.IncidentRecordScalarFieldEnum = {
@@ -370,7 +378,7 @@ exports.Prisma.IncidentRecordScalarFieldEnum = {
   parentNotifiedById: 'parentNotifiedById',
   reportedById: 'reportedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.DevelopmentObservationScalarFieldEnum = {
@@ -384,7 +392,7 @@ exports.Prisma.DevelopmentObservationScalarFieldEnum = {
   observedAt: 'observedAt',
   isParentVisible: 'isParentVisible',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PortfolioItemScalarFieldEnum = {
@@ -397,7 +405,7 @@ exports.Prisma.PortfolioItemScalarFieldEnum = {
   mediaUrl: 'mediaUrl',
   isParentVisible: 'isParentVisible',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.HomeActivitySuggestionScalarFieldEnum = {
@@ -408,7 +416,7 @@ exports.Prisma.HomeActivitySuggestionScalarFieldEnum = {
   title: 'title',
   description: 'description',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.UserPushTokenScalarFieldEnum = {
@@ -418,7 +426,7 @@ exports.Prisma.UserPushTokenScalarFieldEnum = {
   token: 'token',
   platform: 'platform',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -431,7 +439,7 @@ exports.Prisma.NotificationScalarFieldEnum = {
   data: 'data',
   isRead: 'isRead',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.MediaFileScalarFieldEnum = {
@@ -445,7 +453,7 @@ exports.Prisma.MediaFileScalarFieldEnum = {
   fileSize: 'fileSize',
   url: 'url',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AttendanceExcuseScalarFieldEnum = {
@@ -458,7 +466,7 @@ exports.Prisma.AttendanceExcuseScalarFieldEnum = {
   status: 'status',
   createdById: 'createdById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.EventConsentScalarFieldEnum = {
@@ -474,7 +482,7 @@ exports.Prisma.EventConsentScalarFieldEnum = {
   status: 'status',
   createdById: 'createdById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.EventConsentResponseScalarFieldEnum = {
@@ -485,7 +493,7 @@ exports.Prisma.EventConsentResponseScalarFieldEnum = {
   parentUserId: 'parentUserId',
   decision: 'decision',
   notes: 'notes',
-  respondedAt: 'respondedAt',
+  respondedAt: 'respondedAt'
 };
 
 exports.Prisma.StudentBillingPlanScalarFieldEnum = {
@@ -500,7 +508,7 @@ exports.Prisma.StudentBillingPlanScalarFieldEnum = {
   notes: 'notes',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.BillingInvoiceScalarFieldEnum = {
@@ -514,7 +522,7 @@ exports.Prisma.BillingInvoiceScalarFieldEnum = {
   status: 'status',
   notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PaymentTransactionScalarFieldEnum = {
@@ -528,7 +536,7 @@ exports.Prisma.PaymentTransactionScalarFieldEnum = {
   referenceNo: 'referenceNo',
   notes: 'notes',
   recordedByUserId: 'recordedByUserId',
-  createdAt: 'createdAt',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.PasswordResetTokenScalarFieldEnum = {
@@ -538,42 +546,42 @@ exports.Prisma.PasswordResetTokenScalarFieldEnum = {
   tokenHash: 'tokenHash',
   expiresAt: 'expiresAt',
   usedAt: 'usedAt',
-  createdAt: 'createdAt',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
-  desc: 'desc',
+  desc: 'desc'
 };
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.JsonNullValueInput = {
-  JsonNull: Prisma.JsonNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
   default: 'default',
-  insensitive: 'insensitive',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
-  last: 'last',
+  last: 'last'
 };
 
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.TenantStatus = exports.$Enums.TenantStatus = {
   ACTIVE: 'ACTIVE',
   SUSPENDED: 'SUSPENDED',
-  DELETED: 'DELETED',
+  DELETED: 'DELETED'
 };
 
 exports.UserRole = exports.$Enums.UserRole = {
@@ -581,6 +589,7 @@ exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN',
   TEACHER: 'TEACHER',
   PARENT: 'PARENT',
+  SERVICE_STAFF: 'SERVICE_STAFF'
 };
 
 exports.PickupAuthorizationStatus = exports.$Enums.PickupAuthorizationStatus = {
@@ -588,7 +597,7 @@ exports.PickupAuthorizationStatus = exports.$Enums.PickupAuthorizationStatus = {
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   EXPIRED: 'EXPIRED',
-  REVOKED: 'REVOKED',
+  REVOKED: 'REVOKED'
 };
 
 exports.PickupVerificationMethod = exports.$Enums.PickupVerificationMethod = {
@@ -596,7 +605,7 @@ exports.PickupVerificationMethod = exports.$Enums.PickupVerificationMethod = {
   PHONE_CONFIRM: 'PHONE_CONFIRM',
   PASSWORD: 'PASSWORD',
   KNOWN_FACE: 'KNOWN_FACE',
-  OTHER: 'OTHER',
+  OTHER: 'OTHER'
 };
 
 exports.MedicationStatus = exports.$Enums.MedicationStatus = {
@@ -605,7 +614,7 @@ exports.MedicationStatus = exports.$Enums.MedicationStatus = {
   SCHEDULED: 'SCHEDULED',
   GIVEN: 'GIVEN',
   SKIPPED: 'SKIPPED',
-  REJECTED: 'REJECTED',
+  REJECTED: 'REJECTED'
 };
 
 exports.ConversationCategory = exports.$Enums.ConversationCategory = {
@@ -616,26 +625,26 @@ exports.ConversationCategory = exports.$Enums.ConversationCategory = {
   GUNLUK_BILGI: 'GUNLUK_BILGI',
   DUYURU: 'DUYURU',
   ODEME: 'ODEME',
-  RANDEVU: 'RANDEVU',
+  RANDEVU: 'RANDEVU'
 };
 
 exports.ConversationStatus = exports.$Enums.ConversationStatus = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
-  ARCHIVED: 'ARCHIVED',
+  ARCHIVED: 'ARCHIVED'
 };
 
 exports.ParentRequestType = exports.$Enums.ParentRequestType = {
   IZIN: 'IZIN',
   BILGI_TALEP: 'BILGI_TALEP',
   DEGISIKLIK: 'DEGISIKLIK',
-  DIGER: 'DIGER',
+  DIGER: 'DIGER'
 };
 
 exports.ParentRequestStatus = exports.$Enums.ParentRequestStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
+  REJECTED: 'REJECTED'
 };
 
 exports.IncidentCategory = exports.$Enums.IncidentCategory = {
@@ -644,7 +653,7 @@ exports.IncidentCategory = exports.$Enums.IncidentCategory = {
   HASTALIK: 'HASTALIK',
   DAVRANIS: 'DAVRANIS',
   KAZA: 'KAZA',
-  DIGER: 'DIGER',
+  DIGER: 'DIGER'
 };
 
 exports.DevelopmentDomain = exports.$Enums.DevelopmentDomain = {
@@ -653,7 +662,7 @@ exports.DevelopmentDomain = exports.$Enums.DevelopmentDomain = {
   SOSYAL_DUYGUSAL: 'SOSYAL_DUYGUSAL',
   BILISSEL: 'BILISSEL',
   OZ_BAKIM: 'OZ_BAKIM',
-  SANAT: 'SANAT',
+  SANAT: 'SANAT'
 };
 
 exports.NotificationType = exports.$Enums.NotificationType = {
@@ -662,7 +671,7 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   DAILY_REPORT_SAVED: 'DAILY_REPORT_SAVED',
   MEDICATION_GIVEN: 'MEDICATION_GIVEN',
   ANNOUNCEMENT: 'ANNOUNCEMENT',
-  SYSTEM: 'SYSTEM',
+  SYSTEM: 'SYSTEM'
 };
 
 exports.MediaCategory = exports.$Enums.MediaCategory = {
@@ -671,7 +680,7 @@ exports.MediaCategory = exports.$Enums.MediaCategory = {
   ACTIVITY: 'ACTIVITY',
   PORTFOLIO: 'PORTFOLIO',
   HEALTH_RECORD: 'HEALTH_RECORD',
-  GENERAL: 'GENERAL',
+  GENERAL: 'GENERAL'
 };
 
 exports.InvoiceStatus = exports.$Enums.InvoiceStatus = {
@@ -679,14 +688,14 @@ exports.InvoiceStatus = exports.$Enums.InvoiceStatus = {
   PARTIALLY_PAID: 'PARTIALLY_PAID',
   PAID: 'PAID',
   OVERDUE: 'OVERDUE',
-  CANCELLED: 'CANCELLED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   CASH: 'CASH',
   BANK_TRANSFER: 'BANK_TRANSFER',
   CREDIT_CARD: 'CREDIT_CARD',
-  OTHER: 'OTHER',
+  OTHER: 'OTHER'
 };
 
 exports.Prisma.ModelName = {
@@ -721,7 +730,7 @@ exports.Prisma.ModelName = {
   StudentBillingPlan: 'StudentBillingPlan',
   BillingInvoice: 'BillingInvoice',
   PaymentTransaction: 'PaymentTransaction',
-  PasswordResetToken: 'PasswordResetToken',
+  PasswordResetToken: 'PasswordResetToken'
 };
 
 /**
@@ -731,29 +740,26 @@ class PrismaClient {
   constructor() {
     return new Proxy(this, {
       get(target, prop) {
-        let message;
-        const runtime = getRuntime();
+        let message
+        const runtime = getRuntime()
         if (runtime.isEdge) {
           message = `PrismaClient is not configured to run in ${runtime.prettyName}. In order to run Prisma Client on edge runtime, either:
 - Use Prisma Accelerate: https://pris.ly/d/accelerate
 - Use Driver Adapters: https://pris.ly/d/driver-adapters
 `;
         } else {
-          message =
-            'PrismaClient is unable to run in this browser environment, or has been bundled for the browser (running in `' +
-            runtime.prettyName +
-            '`).';
+          message = 'PrismaClient is unable to run in this browser environment, or has been bundled for the browser (running in `' + runtime.prettyName + '`).'
         }
-
+        
         message += `
-If this is unexpected, please open an issue: https://pris.ly/prisma-prisma-bug-report`;
+If this is unexpected, please open an issue: https://pris.ly/prisma-prisma-bug-report`
 
-        throw new Error(message);
-      },
-    });
+        throw new Error(message)
+      }
+    })
   }
 }
 
-exports.PrismaClient = PrismaClient;
+exports.PrismaClient = PrismaClient
 
-Object.assign(exports, Prisma);
+Object.assign(exports, Prisma)

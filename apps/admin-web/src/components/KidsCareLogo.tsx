@@ -5,6 +5,7 @@ type KidsCareLogoProps = {
   showText?: boolean;
   variant?: 'standard' | 'icon' | 'horizontal' | 'full';
   className?: string;
+  inverted?: boolean;
 };
 
 /**
@@ -16,6 +17,7 @@ export function KidsCareLogo({
   showText = true,
   variant = 'standard',
   className = '',
+  inverted = false,
 }: KidsCareLogoProps): JSX.Element {
   if (variant === 'horizontal') {
     const hSizes = {
@@ -58,24 +60,24 @@ export function KidsCareLogo({
   }
 
   const sizeMap = {
-    sm: { box: 'w-11 h-11 p-1', text: 'text-base', sub: 'text-[10px]' },
-    md: { box: 'w-16 h-16 p-1', text: 'text-2xl', sub: 'text-xs' },
-    lg: { box: 'w-20 h-20 p-1.5', text: 'text-3xl', sub: 'text-sm' },
-    xl: { box: 'w-28 h-28 p-2', text: 'text-4xl', sub: 'text-base' },
+    sm: { box: 'w-9 h-9 p-0.5', text: 'text-base', sub: 'text-[10px]' },
+    md: { box: 'w-11 h-11 p-1', text: 'text-xl', sub: 'text-[11px]' },
+    lg: { box: 'w-16 h-16 p-1.5', text: 'text-2xl', sub: 'text-xs' },
+    xl: { box: 'w-24 h-24 p-2', text: 'text-3xl', sub: 'text-sm' },
   };
 
   const { box, text, sub } = sizeMap[size];
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      {/* Brand Icon Mark with Authentic Logo Image and Soft Cream/Kırık Beyaz Contrast */}
+    <div className={`flex items-center gap-2.5 ${className}`}>
+      {/* Brand Icon Mark with Authentic Logo Image and Soft Contrast */}
       <div
-        className={`${box} rounded-2xl bg-white dark:bg-[#FAF8F5] shadow-xs border border-teal-100/80 dark:border-amber-200/40 flex items-center justify-center shrink-0 overflow-hidden relative group transition-colors`}
+        className={`${box} rounded-xl bg-white shadow-xs border border-teal-100/50 flex items-center justify-center shrink-0 overflow-hidden relative group transition-transform group-hover:scale-105`}
       >
         <img
           src="/brand/kidscare-icon.png"
           alt="KidsCare Emblem"
-          className="w-full h-full object-contain transform transition-transform group-hover:scale-105"
+          className="w-full h-full object-contain"
         />
       </div>
 
@@ -83,15 +85,30 @@ export function KidsCareLogo({
       {showText && variant !== 'icon' && (
         <div className="flex flex-col leading-none">
           <div className="flex items-center gap-1.5">
-            <span className={`${text} font-black tracking-tight text-teal-950 dark:text-white`}>
-              Kids<span className="text-teal-600 dark:text-teal-400">Care</span>
+            <span
+              className={`${text} font-black tracking-tight ${
+                inverted ? 'text-white' : 'text-teal-950 dark:text-white'
+              }`}
+            >
+              Kids
+              <span className={inverted ? 'text-amber-300' : 'text-teal-600 dark:text-teal-400'}>
+                Care
+              </span>
             </span>
-            <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
+            <span
+              className={`text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full ${
+                inverted
+                  ? 'bg-amber-400/20 text-amber-200 border border-amber-300/40'
+                  : 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60'
+              }`}
+            >
               Kreş
             </span>
           </div>
           <span
-            className={`${sub} text-slate-500 dark:text-slate-400 font-medium tracking-normal mt-0.5`}
+            className={`${sub} font-medium tracking-normal mt-0.5 ${
+              inverted ? 'text-teal-100/75' : 'text-slate-500 dark:text-slate-400'
+            }`}
           >
             Okul Öncesi Portalı
           </span>

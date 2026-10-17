@@ -68,7 +68,12 @@ export function StatCard({
       groupText: 'group-hover:text-orange-700 dark:group-hover:text-orange-300',
       progressBar: 'bg-orange-500',
     },
-  }[variant];
+  }[variant] ?? {
+    borderHover: 'hover:border-teal-500/40 dark:hover:border-teal-500/40',
+    iconBg: 'bg-teal-50 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300',
+    groupText: 'group-hover:text-teal-800 dark:group-hover:text-teal-300',
+    progressBar: 'bg-teal-600',
+  };
 
   return (
     <div

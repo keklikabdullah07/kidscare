@@ -24,6 +24,10 @@ export type AuthenticatedUser = {
   tenantId: string;
   email: string;
   role: UserRole;
+  firstName?: string | null;
+  lastName?: string | null;
+  avatarUrl?: string | null;
+  phone?: string | null;
 };
 
 export type AuthResponse = {

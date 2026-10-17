@@ -5,6 +5,8 @@ import type { CurrentUserPayload } from '../../../common/decorators/current-user
 import { PrismaService } from '../../../prisma/prisma.service';
 import type { IIncidentsRepository, IncidentRow } from '../repositories/incidents.repository';
 
+import { getScopedStudentIdsForUser } from '../../../common/utils/student-access';
+
 @Injectable()
 export class IncidentsService {
   constructor(
@@ -27,21 +29,15 @@ export class IncidentsService {
   ): Promise<IncidentRecord[]> {
     const activeFilters = { ...filters };
 
-    // Veli (PARENT) rolü için sadece kendi çocuklarının olayları (Madde 19)
-    if (user?.role === 'PARENT') {
-      const children = await this.prisma.withTenant((client) =>
-        client.student.findMany({
-          where: { tenantId, parentId: user.userId, deletedAt: null },
-          select: { id: true },
-        }),
-      );
-      const childIds = children.map((c) => c.id);
-      if (childIds.length === 0) return [];
-
-      if (activeFilters.studentId) {
-        if (!childIds.includes(activeFilters.studentId)) return [];
-      } else {
-        activeFilters.studentIds = childIds;
+    if (user) {
+      const allowedStudentIds = await getScopedStudentIdsForUser(this.prisma, tenantId, user);
+      if (allowedStudentIds !== null) {
+        if (allowedStudentIds.length === 0) return [];
+        if (activeFilters.studentId) {
+          if (!allowedStudentIds.includes(activeFilters.studentId)) return [];
+        } else {
+          activeFilters.studentIds = allowedStudentIds;
+        }
       }
     }
 

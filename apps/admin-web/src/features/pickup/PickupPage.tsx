@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from 'react';
+import { useEffect, useState, useMemo, type JSX } from 'react';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -16,8 +16,11 @@ import {
   History,
   Lock,
   AlertTriangle,
+  Search,
+  School,
 } from 'lucide-react';
 import type {
+  Classroom,
   PickupAuthorization,
   PickupAuthorizationStatus,
   PickupEvent,
@@ -33,6 +36,8 @@ import {
   createPickupAuthorization,
 } from '../../api/pickup';
 import { listStudents } from '../../api/students';
+import { listClassrooms } from '../../api/classrooms';
+import { getParentChildrenOverview } from '../../api/parent';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
@@ -80,9 +85,66 @@ const RELATIONS_LIST = [
   'Hala',
   'Servis Şoförü',
   'Servis Hostesi',
+  'Servis Personeli',
   'Komşu / Aile Dostu',
   'Diğer',
 ];
+
+export type DatePreset = 'TODAY' | 'YESTERDAY' | 'LAST_7_DAYS' | 'THIS_MONTH' | 'ALL' | 'CUSTOM';
+
+function getDateRangeForPreset(
+  preset: DatePreset,
+  customStart: string,
+  customEnd: string,
+): { from?: string; to?: string } {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const formatYMD = (d: Date) =>
+    `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+  if (preset === 'ALL') {
+    return {};
+  }
+  const now = new Date();
+  if (preset === 'TODAY') {
+    const today = formatYMD(now);
+    return {
+      from: `${today}T00:00:00.000Z`,
+      to: `${today}T23:59:59.999Z`,
+    };
+  }
+  if (preset === 'YESTERDAY') {
+    const y = new Date(now);
+    y.setDate(y.getDate() - 1);
+    const yStr = formatYMD(y);
+    return {
+      from: `${yStr}T00:00:00.000Z`,
+      to: `${yStr}T23:59:59.999Z`,
+    };
+  }
+  if (preset === 'LAST_7_DAYS') {
+    const start = new Date(now);
+    start.setDate(start.getDate() - 6);
+    return {
+      from: `${formatYMD(start)}T00:00:00.000Z`,
+      to: `${formatYMD(now)}T23:59:59.999Z`,
+    };
+  }
+  if (preset === 'THIS_MONTH') {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return {
+      from: `${formatYMD(start)}T00:00:00.000Z`,
+      to: `${formatYMD(end)}T23:59:59.999Z`,
+    };
+  }
+  if (preset === 'CUSTOM') {
+    const range: { from?: string; to?: string } = {};
+    if (customStart) range.from = `${customStart}T00:00:00.000Z`;
+    if (customEnd) range.to = `${customEnd}T23:59:59.999Z`;
+    return range;
+  }
+  return {};
+}
 
 export function PickupPage(): JSX.Element {
   const { state } = useAuth();
@@ -92,13 +154,27 @@ export function PickupPage(): JSX.Element {
   const canOperate = state.status === 'authenticated' && state.user.role !== 'PARENT';
 
   const [activeTab, setActiveTab] = useState<'AUTHORIZATIONS' | 'EVENTS'>('AUTHORIZATIONS');
-  const [items, setItems] = useState<PickupAuthorization[]>([]);
+  const [allAuthorizations, setAllAuthorizations] = useState<PickupAuthorization[]>([]);
   const [events, setEvents] = useState<PickupEvent[]>([]);
+  const [allEvents, setAllEvents] = useState<PickupEvent[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [filter, setFilter] = useState<PickupAuthorizationStatus | 'ALL'>('PENDING');
   const [loading, setLoading] = useState(true);
+  const [eventsLoading, setEventsLoading] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [rejectTargetId, setRejectTargetId] = useState<string | null>(null);
+
+  // Events filter state (Geçmiş kütük sorguları için)
+  const [eventDatePreset, setEventDatePreset] = useState<DatePreset>('TODAY');
+  const [eventStartDate, setEventStartDate] = useState<string>(() =>
+    new Date().toISOString().slice(0, 10),
+  );
+  const [eventEndDate, setEventEndDate] = useState<string>(() =>
+    new Date().toISOString().slice(0, 10),
+  );
+  const [eventStudentFilter, setEventStudentFilter] = useState<string>('ALL');
+  const [eventSearchQuery, setEventSearchQuery] = useState<string>('');
 
   // Modals state
   const [isHandoverOpen, setIsHandoverOpen] = useState(false);
@@ -124,20 +200,23 @@ export function PickupPage(): JSX.Element {
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsList, eventsList] = await Promise.all([
-        listPickupAuthorizations(undefined, filter === 'ALL' ? undefined : filter),
+      const [authList, studentsList, classList, allEvList] = await Promise.all([
+        listPickupAuthorizations(),
         listStudents().catch(() => []),
+        listClassrooms().catch(() => []),
         listPickupEvents().catch(() => []),
       ]);
-      setItems(list);
+      setAllAuthorizations(authList);
       setStudents(studentsList);
-      setEvents(eventsList);
+      setClassrooms(classList);
+      setAllEvents(allEvList);
+
       if (studentsList.length > 0 && !handoverStudentId) {
         setHandoverStudentId(studentsList[0]?.id || '');
         setNewStudentId(studentsList[0]?.id || '');
       }
     } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : 'Liste yüklenemedi', 'error');
+      showToast(err instanceof Error ? err.message : 'Veriler yüklenemedi', 'error');
     } finally {
       setLoading(false);
     }
@@ -145,7 +224,141 @@ export function PickupPage(): JSX.Element {
 
   useEffect(() => {
     void refresh();
-  }, [filter]);
+  }, []);
+
+  // Geçmiş veya seçilen kapsamdaki kütükleri yükle
+  async function loadEventsForRange(): Promise<void> {
+    setEventsLoading(true);
+    try {
+      const range = getDateRangeForPreset(eventDatePreset, eventStartDate, eventEndDate);
+      const studentParam = eventStudentFilter !== 'ALL' ? eventStudentFilter : undefined;
+      const res = await listPickupEvents(studentParam, range.from, range.to);
+      setEvents(res);
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : 'Kütük kayıtları yüklenemedi', 'error');
+    } finally {
+      setEventsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    void loadEventsForRange();
+  }, [eventDatePreset, eventStudentFilter]);
+
+  const isParent = state.status === 'authenticated' && state.user.role === 'PARENT';
+  const isTeacher = state.status === 'authenticated' && state.user.role === 'TEACHER';
+  const currentUserId = state.status === 'authenticated' ? state.user.id : null;
+  const [parentChildren, setParentChildren] = useState<Student[]>([]);
+
+  useEffect(() => {
+    if (isParent) {
+      getParentChildrenOverview()
+        .then((items) => {
+          setParentChildren(items.map((i) => i.student));
+        })
+        .catch(() => {});
+    }
+  }, [isParent]);
+
+  // Öğretmen Sınıf İzolasyonu (Role Scoping)
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher || !currentUserId) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    const studentClassIds = new Set(students.map((s) => s.classroomId).filter(Boolean));
+    const matched = classrooms.filter((c) => studentClassIds.has(c.id));
+    if (matched.length > 0) return matched;
+    return [];
+  }, [isTeacher, currentUserId, classrooms, students]);
+
+  const teacherClassroomIds = useMemo(
+    () => new Set(teacherClassrooms.map((c) => c.id)),
+    [teacherClassrooms],
+  );
+
+  // Rol Bazlı Öğrenci & Veri İzolasyonu (Role Scoping)
+  const scopedStudents = useMemo(() => {
+    if (isParent) {
+      if (parentChildren.length > 0) return parentChildren;
+      if (currentUserId) return students.filter((s) => s.parentId === currentUserId);
+      return [];
+    }
+    if (isTeacher) {
+      if (teacherClassroomIds.size > 0) {
+        return students.filter((s) => s.classroomId && teacherClassroomIds.has(s.classroomId));
+      }
+      return [];
+    }
+    return students;
+  }, [isParent, isTeacher, parentChildren, currentUserId, teacherClassroomIds, students]);
+
+  const scopedStudentIds = useMemo(
+    () => new Set(scopedStudents.map((s) => s.id)),
+    [scopedStudents],
+  );
+
+  const scopedAuthorizations = useMemo(() => {
+    if (isAdmin) return allAuthorizations;
+    return allAuthorizations.filter((a) => scopedStudentIds.has(a.studentId));
+  }, [isAdmin, allAuthorizations, scopedStudentIds]);
+
+  const scopedEvents = useMemo(() => {
+    if (isAdmin) return events;
+    return events.filter((e) => scopedStudentIds.has(e.studentId));
+  }, [isAdmin, events, scopedStudentIds]);
+
+  const scopedAllEvents = useMemo(() => {
+    if (isAdmin) return allEvents;
+    return allEvents.filter((e) => scopedStudentIds.has(e.studentId));
+  }, [isAdmin, allEvents, scopedStudentIds]);
+
+  // Sayaçlar (Dokunsal Özellik & KPI Kartları)
+  const pendingCount = useMemo(
+    () => scopedAuthorizations.filter((i) => i.status === 'PENDING').length,
+    [scopedAuthorizations],
+  );
+
+  const approvedCount = useMemo(
+    () => scopedAuthorizations.filter((i) => i.status === 'APPROVED').length,
+    [scopedAuthorizations],
+  );
+
+  const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
+
+  const todayEventsCount = useMemo(() => {
+    return scopedAllEvents.filter((e) => {
+      try {
+        return new Date(e.occurredAt).toISOString().slice(0, 10) === todayStr;
+      } catch {
+        return false;
+      }
+    }).length;
+  }, [scopedAllEvents, todayStr]);
+
+  const totalEventsCount = scopedAllEvents.length;
+
+  // Filtrelenmiş yetkiler
+  const items = useMemo(() => {
+    if (filter === 'ALL') return scopedAuthorizations;
+    return scopedAuthorizations.filter((i) => i.status === filter);
+  }, [scopedAuthorizations, filter]);
+
+  // Arama filtreli teslimat günlüğü
+  const filteredEvents = useMemo(() => {
+    return scopedEvents.filter((ev) => {
+      if (!eventSearchQuery.trim()) return true;
+      const q = eventSearchQuery.toLowerCase();
+      const student = scopedStudents.find((s) => s.id === ev.studentId);
+      const sName = student ? `${student.firstName} ${student.lastName}`.toLowerCase() : '';
+      const pName = (ev.pickupPersonName || '').toLowerCase();
+      const phone = (ev.pickupPersonPhone || '').toLowerCase();
+      const note = (ev.note || '').toLowerCase();
+      return sName.includes(q) || pName.includes(q) || phone.includes(q) || note.includes(q);
+    });
+  }, [events, eventSearchQuery, students]);
 
   async function review(id: string, status: 'APPROVED' | 'REJECTED'): Promise<void> {
     setBusyId(id);
@@ -264,7 +477,11 @@ export function PickupPage(): JSX.Element {
       {/* Header */}
       <PageHeader
         title="Güvenlik & Teslimat Kontrolü"
-        description="Öğrenci teslim alma yetkileri, veli talepleri ve gün sonu kapı teslimat günlüğü."
+        description={
+          isParent
+            ? 'Çocuğunuza ait teslim yetkilileri, acil durum irtibatları ve okul çıkışı teslim kütüğü.'
+            : 'Öğrenci teslim alma yetkileri, veli talepleri ve gün sonu kapı teslimat günlüğü.'
+        }
         icon={ShieldCheck}
         actions={
           <>
@@ -310,6 +527,145 @@ export function PickupPage(): JSX.Element {
           </>
         }
       />
+
+      {/* Dokunsal Özellik & Güvenlik KPI Kartları */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('AUTHORIZATIONS');
+            setFilter('PENDING');
+          }}
+          className={`rounded-3xl border-2 text-left p-4.5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
+            activeTab === 'AUTHORIZATIONS' && filter === 'PENDING'
+              ? 'border-amber-600 bg-amber-600 text-white shadow-[0_4px_0_0_#92400e,0_8px_20px_-2px_rgba(217,119,6,0.35)] font-bold'
+              : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-amber-900 dark:text-amber-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
+          }`}
+        >
+          <p
+            className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+              activeTab === 'AUTHORIZATIONS' && filter === 'PENDING'
+                ? 'text-amber-100'
+                : 'text-amber-800 dark:text-amber-300'
+            }`}
+          >
+            <Clock className="w-3.5 h-3.5" />
+            <span>Onay Bekleyenler</span>
+          </p>
+          <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{pendingCount}</p>
+          <p
+            className={`text-[11px] mt-1 font-medium truncate ${
+              activeTab === 'AUTHORIZATIONS' && filter === 'PENDING'
+                ? 'text-amber-100'
+                : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            Veli onay talepleri
+          </p>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('AUTHORIZATIONS');
+            setFilter('APPROVED');
+          }}
+          className={`rounded-3xl border-2 text-left p-4.5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
+            activeTab === 'AUTHORIZATIONS' && filter === 'APPROVED'
+              ? 'border-emerald-700 bg-emerald-700 text-white shadow-[0_4px_0_0_#064e3b,0_8px_20px_-2px_rgba(5,150,105,0.35)] font-bold'
+              : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-emerald-900 dark:text-emerald-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
+          }`}
+        >
+          <p
+            className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+              activeTab === 'AUTHORIZATIONS' && filter === 'APPROVED'
+                ? 'text-emerald-100'
+                : 'text-emerald-800 dark:text-emerald-300'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Yetkili / Onaylı</span>
+          </p>
+          <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{approvedCount}</p>
+          <p
+            className={`text-[11px] mt-1 font-medium truncate ${
+              activeTab === 'AUTHORIZATIONS' && filter === 'APPROVED'
+                ? 'text-emerald-100'
+                : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            Aktif teslim yetkilileri
+          </p>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('EVENTS');
+            setEventDatePreset('TODAY');
+          }}
+          className={`rounded-3xl border-2 text-left p-4.5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
+            activeTab === 'EVENTS' && eventDatePreset === 'TODAY'
+              ? 'border-[#0f766e] bg-[#115e59] text-white shadow-[0_4px_0_0_#042f2e,0_8px_20px_-2px_rgba(17,94,89,0.35)] font-bold'
+              : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-teal-900 dark:text-teal-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
+          }`}
+        >
+          <p
+            className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+              activeTab === 'EVENTS' && eventDatePreset === 'TODAY'
+                ? 'text-teal-100'
+                : 'text-teal-800 dark:text-teal-300'
+            }`}
+          >
+            <UserCheck className="w-3.5 h-3.5" />
+            <span>Bugün Teslim Edilen</span>
+          </p>
+          <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{todayEventsCount}</p>
+          <p
+            className={`text-[11px] mt-1 font-medium truncate ${
+              activeTab === 'EVENTS' && eventDatePreset === 'TODAY'
+                ? 'text-teal-100'
+                : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            Bugün kapıdan çıkanlar
+          </p>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('EVENTS');
+            setEventDatePreset('ALL');
+          }}
+          className={`rounded-3xl border-2 text-left p-4.5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
+            activeTab === 'EVENTS' && eventDatePreset === 'ALL'
+              ? 'border-indigo-800 bg-indigo-800 text-white shadow-[0_4px_0_0_#1e1b4b,0_8px_20px_-2px_rgba(67,56,202,0.35)] font-bold'
+              : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-indigo-900 dark:text-indigo-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
+          }`}
+        >
+          <p
+            className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+              activeTab === 'EVENTS' && eventDatePreset === 'ALL'
+                ? 'text-indigo-100'
+                : 'text-indigo-800 dark:text-indigo-300'
+            }`}
+          >
+            <History className="w-3.5 h-3.5" />
+            <span>Kütük Arşivi</span>
+          </p>
+          <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{totalEventsCount}</p>
+          <p
+            className={`text-[11px] mt-1 font-medium truncate ${
+              activeTab === 'EVENTS' && eventDatePreset === 'ALL'
+                ? 'text-indigo-100'
+                : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            Resmi teslim kütük kayıtları
+          </p>
+        </button>
+      </div>
 
       {/* Main Tabs */}
       <div className="pb-3 border-b border-[#DDD4C4]/60 dark:border-slate-800">
@@ -515,7 +871,7 @@ export function PickupPage(): JSX.Element {
         </div>
       )}
 
-      {/* TAB 2: EVENTS (TESLİMAT GÜNLÜĞÜ) */}
+      {/* TAB 2: EVENTS (TESLİMAT GÜNLÜĞÜ VE GEÇMİŞ KÜTÜK) */}
       {activeTab === 'EVENTS' && (
         <div className="space-y-4">
           <div className="bg-[#FCFAF7] dark:bg-slate-900/60 p-4 rounded-2xl border border-[#DDD4C4] dark:border-slate-800 flex items-center justify-between gap-3 flex-wrap">
@@ -526,15 +882,155 @@ export function PickupPage(): JSX.Element {
               </span>
             </div>
             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
-              Kapıdan teslim edilen tüm öğrencilerin doğrulama arşivi.
+              Kapıdan teslim edilen tüm öğrencilerin doğrulama ve geçmiş kütük arşivi.
             </span>
           </div>
 
-          {events.length === 0 ? (
+          {/* Gelişmiş Tarih, Öğrenci ve Arama Filtre Çubuğu */}
+          <div className="bg-white dark:bg-[#131B2E] p-4.5 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-3.5">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 flex-wrap">
+              {/* Tarih Presets (Dönem Seçimi) */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 mr-1 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                  <span>Kütük Dönemi:</span>
+                </span>
+                {(
+                  [
+                    { id: 'TODAY', label: 'Bugün' },
+                    { id: 'YESTERDAY', label: 'Dün' },
+                    { id: 'LAST_7_DAYS', label: 'Son 7 Gün' },
+                    { id: 'THIS_MONTH', label: 'Bu Ay' },
+                    { id: 'ALL', label: 'Tüm Arşiv' },
+                    { id: 'CUSTOM', label: 'Özel Tarih' },
+                  ] as const
+                ).map((p) => {
+                  const isActive = eventDatePreset === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setEventDatePreset(p.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer active:translate-y-[2px] ${
+                        isActive
+                          ? 'bg-teal-700 text-white shadow-2xs font-extrabold'
+                          : 'bg-[#FCFAF7] dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-[#DDD4C4] dark:border-slate-800 hover:border-teal-400'
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Öğrenci Filtresi */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                  <span>Öğrenci:</span>
+                </span>
+                <select
+                  value={eventStudentFilter}
+                  onChange={(e) => setEventStudentFilter(e.target.value)}
+                  className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-2xl px-3 py-2 focus:outline-hidden shadow-2xs cursor-pointer"
+                >
+                  <option value="ALL">
+                    {isParent
+                      ? `Çocuklarım (${scopedStudents.length})`
+                      : `Tüm Öğrenciler (${students.length})`}
+                  </option>
+                  {scopedStudents.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.firstName} {s.lastName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Özel Tarih Seçiciler (Yalnızca 'CUSTOM' seçildiğinde açılır) */}
+            {eventDatePreset === 'CUSTOM' && (
+              <div className="flex items-center gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    Başlangıç:
+                  </span>
+                  <input
+                    type="date"
+                    value={eventStartDate}
+                    onChange={(e) => setEventStartDate(e.target.value)}
+                    className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-hidden shadow-2xs cursor-pointer"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Bitiş:</span>
+                  <input
+                    type="date"
+                    value={eventEndDate}
+                    onChange={(e) => setEventEndDate(e.target.value)}
+                    className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-hidden shadow-2xs cursor-pointer"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void loadEventsForRange()}
+                  className="btn-tactile-teal px-3 py-1.5 text-xs font-bold"
+                >
+                  Filtreyi Uygula
+                </button>
+              </div>
+            )}
+
+            {/* Arama Kutusu ve Sayaç */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+              <div className="relative flex-1 max-w-sm">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={eventSearchQuery}
+                  onChange={(e) => setEventSearchQuery(e.target.value)}
+                  placeholder="Teslim alan kişi, telefon veya güvenlik notu ara..."
+                  className="w-full pl-10 pr-3.5 py-2 bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 rounded-2xl text-xs font-medium text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-700 transition shadow-2xs"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                <span>
+                  Toplam{' '}
+                  <strong className="text-slate-900 dark:text-white font-bold">
+                    {filteredEvents.length}
+                  </strong>{' '}
+                  teslimat kütüğü kaydı listeleniyor
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {eventsLoading ? (
+            <div className="py-20 text-center bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent mb-3" />
+              <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
+                Geçmiş kütük kayıtları sorgulanıyor…
+              </p>
+            </div>
+          ) : filteredEvents.length === 0 ? (
             <EmptyState
               icon={History}
-              title="Bugün henüz teslimat kaydı girilmedi."
-              description="Okul çıkışında öğrencileri teslim ederken 'Öğrenciyi Teslim Et' butonu ile teslimat kaydı oluşturabilirsiniz."
+              title="Seçilen tarih aralığında ve kriterlerde teslimat kaydı bulunamadı."
+              description="Dönem filtresini değiştirebilir, 'Tüm Arşiv' seçeneğine geçebilir veya öğrenci filtresini sıfırlayabilirsiniz."
+              action={
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEventDatePreset('ALL');
+                    setEventStudentFilter('ALL');
+                    setEventSearchQuery('');
+                  }}
+                  className="text-xs text-teal-900 dark:text-teal-300 font-semibold hover:underline"
+                >
+                  Tüm Arşivi Göster
+                </button>
+              }
             />
           ) : (
             <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 overflow-hidden shadow-2xs">
@@ -542,55 +1038,76 @@ export function PickupPage(): JSX.Element {
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr className="border-b border-[#DDD4C4] dark:border-slate-800 bg-[#FCFAF7] dark:bg-slate-900/80 text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                      <th className="py-3 px-4">Zaman / Saat</th>
+                      <th className="py-3 px-4">Tarih & Saat</th>
                       <th className="py-3 px-4">Teslim Edilen Öğrenci</th>
                       <th className="py-3 px-4">Teslim Alan Kişi</th>
                       <th className="py-3 px-4">Doğrulama Yöntemi</th>
-                      <th className="py-3 px-4">Not</th>
+                      <th className="py-3 px-4">Güvenlik Notu</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-800 dark:text-slate-200">
-                    {events.map((ev) => {
+                    {filteredEvents.map((ev) => {
                       const st = students.find((s) => s.id === ev.studentId);
-                      const timeStr = new Date(ev.occurredAt).toLocaleTimeString('tr-TR', {
+                      const cls = st?.classroomId
+                        ? classrooms.find((c) => c.id === st.classroomId)
+                        : null;
+                      const dateObj = new Date(ev.occurredAt);
+                      const timeStr = dateObj.toLocaleTimeString('tr-TR', {
                         hour: '2-digit',
                         minute: '2-digit',
                       });
-                      const dateStr = new Date(ev.occurredAt).toLocaleDateString('tr-TR');
+                      const dateStr = dateObj.toLocaleDateString('tr-TR', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      });
 
                       return (
-                        <tr key={ev.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                          <td className="py-3 px-4 whitespace-nowrap">
+                        <tr
+                          key={ev.id}
+                          className="hover:bg-[#FCFAF7] dark:hover:bg-slate-800/50 transition-colors"
+                        >
+                          <td className="py-3.5 px-4 whitespace-nowrap">
                             <div className="flex items-center gap-1.5 font-bold font-mono text-teal-800 dark:text-teal-300">
                               <Clock className="w-3.5 h-3.5 text-slate-400" />
                               <span>{timeStr}</span>
                             </div>
-                            <span className="text-[10px] text-slate-400 block">{dateStr}</span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <span className="font-bold text-slate-900 dark:text-white">
-                              {st
-                                ? `${st.firstName} ${st.lastName}`
-                                : `Öğrenci #${ev.studentId.slice(0, 8)}`}
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-0.5">
+                              {dateStr}
                             </span>
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="py-3.5 px-4">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-slate-900 dark:text-white">
+                                {st
+                                  ? `${st.firstName} ${st.lastName}`
+                                  : `Öğrenci #${ev.studentId.slice(0, 8)}`}
+                              </span>
+                              {cls && (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-1.5 py-0.5 rounded-md border border-teal-200/70 dark:border-slate-700">
+                                  <School className="w-2.5 h-2.5" />
+                                  <span>{cls.name}</span>
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4">
                             <span className="font-black text-slate-900 dark:text-slate-100">
                               {ev.pickupPersonName}
                             </span>
                             {ev.pickupPersonPhone && (
-                              <span className="text-[10px] text-slate-500 block font-mono">
+                              <span className="text-[10px] text-slate-500 block font-mono mt-0.5">
                                 {ev.pickupPersonPhone}
                               </span>
                             )}
                           </td>
-                          <td className="py-3 px-4">
-                            <span className="px-2.5 py-1 text-[10px] font-bold rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                          <td className="py-3.5 px-4">
+                            <span className="px-2.5 py-1 text-[10px] font-bold rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80 shadow-2xs">
                               {VERIFICATION_LABEL[ev.verificationMethod]}
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-slate-500 dark:text-slate-400 text-[11px] max-w-xs truncate">
-                            {ev.note || '—'}
+                          <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 text-[11px] max-w-xs truncate">
+                            {ev.note || <span className="text-slate-400 italic">Not girilmedi</span>}
                           </td>
                         </tr>
                       );
@@ -666,7 +1183,7 @@ export function PickupPage(): JSX.Element {
                   required
                   className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 p-3 text-xs font-medium text-slate-900 dark:text-slate-100 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
                 >
-                  {students.map((st) => (
+                  {scopedStudents.map((st) => (
                     <option key={st.id} value={st.id}>
                       {st.firstName} {st.lastName}
                     </option>
@@ -676,7 +1193,7 @@ export function PickupPage(): JSX.Element {
 
               {/* Approved Contacts & Passport Emergency Contacts Quick Selection */}
               {(() => {
-                const approvedContacts = items
+                const approvedContacts = allAuthorizations
                   .filter(
                     (i) =>
                       i.studentId === handoverStudentId &&
@@ -768,7 +1285,7 @@ export function PickupPage(): JSX.Element {
               {/* Unauthorized Person Warning Banner */}
               {(() => {
                 if (!handoverPersonName.trim()) return null;
-                const approvedContacts = items
+                const approvedContacts = allAuthorizations
                   .filter(
                     (i) =>
                       i.studentId === handoverStudentId &&
@@ -909,7 +1426,7 @@ export function PickupPage(): JSX.Element {
                   required
                   className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 p-3 text-xs font-medium text-slate-900 dark:text-slate-100 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
                 >
-                  {students.map((st) => (
+                  {scopedStudents.map((st) => (
                     <option key={st.id} value={st.id}>
                       {st.firstName} {st.lastName}
                     </option>

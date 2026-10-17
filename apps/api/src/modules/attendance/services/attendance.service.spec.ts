@@ -26,6 +26,7 @@ describe('AttendanceService', () => {
   beforeEach(() => {
     repo = {
       findByDate: jest.fn(),
+      findByDateRange: jest.fn(),
       findByStudentAndDate: jest.fn(),
       upsert: jest.fn(),
       createExcuse: jest.fn(),
@@ -41,6 +42,20 @@ describe('AttendanceService', () => {
       expect(res).toHaveLength(1);
       expect(res[0]?.status).toBe('PRESENT');
       expect(repo.findByDate).toHaveBeenCalledWith('t-1', expect.any(Date));
+    });
+  });
+
+  describe('findByDateRange', () => {
+    it('returns attendance list for date range', async () => {
+      repo.findByDateRange.mockResolvedValue([mockAttendance]);
+      const res = await service.findByDateRange('t-1', '2026-10-01', '2026-10-31');
+      expect(res).toHaveLength(1);
+      expect(res[0]?.status).toBe('PRESENT');
+      expect(repo.findByDateRange).toHaveBeenCalledWith(
+        't-1',
+        expect.any(Date),
+        expect.any(Date),
+      );
     });
   });
 

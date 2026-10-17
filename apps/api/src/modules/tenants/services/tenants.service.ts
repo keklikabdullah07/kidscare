@@ -2,10 +2,16 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Tenant } from '../entities/tenant.entity';
 import type { Prisma } from '@kidscare/database';
 import type { ITenantsRepository } from '../repositories/tenants.repository';
+import { PrismaService } from '../../../prisma/prisma.service';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
+import { getScopedStudentIdsForUser } from '../../../common/utils/student-access';
 
 @Injectable()
 export class TenantsService {
-  constructor(@Inject('ITenantsRepository') private readonly repo: ITenantsRepository) {}
+  constructor(
+    @Inject('ITenantsRepository') private readonly repo: ITenantsRepository,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+  ) {}
 
   async findOne(tenantId: string): Promise<Tenant> {
     const found = await this.repo.findById(tenantId);
@@ -22,7 +28,10 @@ export class TenantsService {
     return Tenant.fromPrisma(updated);
   }
 
-  async getOperationalAlerts(tenantId: string) {
-    return this.repo.getOperationalAlerts(tenantId);
+  async getOperationalAlerts(tenantId: string, user?: CurrentUserPayload) {
+    const studentIds = user
+      ? await getScopedStudentIdsForUser(this.prisma, tenantId, user)
+      : null;
+    return this.repo.getOperationalAlerts(tenantId, studentIds ?? undefined);
   }
 }

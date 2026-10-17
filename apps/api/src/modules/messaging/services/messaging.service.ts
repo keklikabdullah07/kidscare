@@ -19,12 +19,17 @@ import type {
   MessageRow,
   ParentRequestRow,
 } from '../repositories/messaging.repository';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { getScopedStudentIdsForUser } from '../../../common/utils/student-access';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 
 @Injectable()
 export class MessagingService {
   constructor(
     @Inject('IMessagingRepository')
     private readonly repo: IMessagingRepository,
+    @Inject(PrismaService)
+    private readonly prisma: PrismaService,
   ) {}
 
   // ===== Conversations =====
@@ -138,8 +143,23 @@ export class MessagingService {
   async listParentRequests(
     tenantId: string,
     filters?: { parentId?: string; status?: ParentRequestStatus },
+    user?: CurrentUserPayload,
   ): Promise<ParentRequest[]> {
-    const rows = await this.repo.listParentRequests(tenantId, filters);
+    const activeFilters: {
+      parentId?: string;
+      studentIds?: string[];
+      status?: ParentRequestStatus;
+    } = { ...filters };
+
+    if (user) {
+      const allowedStudentIds = await getScopedStudentIdsForUser(this.prisma, tenantId, user);
+      if (allowedStudentIds !== null) {
+        if (allowedStudentIds.length === 0) return [];
+        activeFilters.studentIds = allowedStudentIds;
+      }
+    }
+
+    const rows = await this.repo.listParentRequests(tenantId, activeFilters);
     return rows.map((row) => this.parentRequestToResponse(row));
   }
 

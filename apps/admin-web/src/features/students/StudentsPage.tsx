@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   Printer,
   ShieldAlert,
+  GraduationCap,
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { createStudent, deleteStudent, listStudents, updateStudent } from '../../api/students';
@@ -32,6 +33,7 @@ import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { PageHeader } from '../../components/ui/PageHeader';
 import { PrintPreviewModal, ReportCardPrint, EmergencyRosterPrint } from '../../components/print';
 
 type Status = 'loading' | 'ready' | 'error';
@@ -40,6 +42,7 @@ type FilterType = 'all' | 'active' | 'allergy' | 'blood';
 
 export function StudentsPage(): JSX.Element {
   const { state: authState } = useAuth();
+  const authUser = authState.status === 'authenticated' ? authState.user : null;
   const isAdmin =
     authState.status === 'authenticated' &&
     (authState.user.role === 'ADMIN' || authState.user.role === 'SUPER_ADMIN');
@@ -56,6 +59,21 @@ export function StudentsPage(): JSX.Element {
   const [teachers, setTeachers] = useState<User[]>([]);
   const [classroomSubmitting, setClassroomSubmitting] = useState(false);
 
+  // Öğretmen için sadece kendi sınıfı izole edilir
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher) return classrooms;
+    if (!authUser) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === authUser.id),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    const studentClassIds = new Set(students.map((s) => s.classroomId).filter(Boolean));
+    const matched = classrooms.filter((c) => studentClassIds.has(c.id));
+    if (matched.length > 0) return matched;
+    return [];
+  }, [isTeacher, classrooms, authUser, students]);
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -70,18 +88,25 @@ export function StudentsPage(): JSX.Element {
   const { showToast } = useToast();
 
   useEffect(() => {
-    if (isTeacher && classrooms.length > 0 && selectedClassroomId === 'ALL') {
-      const firstClass = classrooms[0];
-      if (firstClass) setSelectedClassroomId(firstClass.id);
+    if (isTeacher && teacherClassrooms.length > 0) {
+      if (selectedClassroomId === 'ALL' || !teacherClassrooms.some((c) => c.id === selectedClassroomId)) {
+        const firstClass = teacherClassrooms[0];
+        if (firstClass) setSelectedClassroomId(firstClass.id);
+      }
     }
-  }, [isTeacher, classrooms, selectedClassroomId]);
+  }, [isTeacher, teacherClassrooms, selectedClassroomId]);
 
   function reload(): void {
     setStatus('loading');
-    Promise.all([listStudents(), listClassrooms().catch(() => [])])
-      .then(([rows, classList]) => {
+    Promise.all([
+      listStudents(),
+      listClassrooms().catch(() => []),
+      listUsers('TEACHER').catch(() => []),
+    ])
+      .then(([rows, classList, teacherList]) => {
         setStudents(rows);
         setClassrooms(classList);
+        setTeachers(teacherList);
         setStatus('ready');
       })
       .catch((err: unknown) => {
@@ -93,14 +118,6 @@ export function StudentsPage(): JSX.Element {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(reload, []);
-
-  useEffect(() => {
-    if (isAdmin) {
-      listUsers('TEACHER')
-        .then(setTeachers)
-        .catch(() => setTeachers([]));
-    }
-  }, [isAdmin]);
 
   function handleDelete(id: string, name: string): void {
     setDeleteTarget({ id, name });
@@ -163,9 +180,19 @@ export function StudentsPage(): JSX.Element {
     }
   }
 
+  // Öğretmen Rolü Öğrenci İzolasyonu (Role Scoping)
+  const scopedStudents = useMemo(() => {
+    if (!isTeacher) return students;
+    if (teacherClassrooms.length > 0) {
+      const allowedIds = new Set(teacherClassrooms.map((c) => c.id));
+      return students.filter((s) => s.classroomId && allowedIds.has(s.classroomId));
+    }
+    return students;
+  }, [isTeacher, students, teacherClassrooms]);
+
   // Filter & Search logic
   const filteredStudents = useMemo(() => {
-    return students
+    return scopedStudents
       .filter((s) => {
         // Sınıf Hiyerarşisi Filtresi (Madde 17)
         if (selectedClassroomId !== 'ALL') {
@@ -199,89 +226,76 @@ export function StudentsPage(): JSX.Element {
         return true;
       })
       .sort(byLastName);
-  }, [students, searchQuery, filterType, selectedClassroomId]);
+  }, [scopedStudents, searchQuery, filterType, selectedClassroomId]);
 
   // Statistics
-  const totalCount = students.length;
-  const activeCount = students.filter((s) => s.isActive).length;
-  const allergyCount = students.filter((s) => (s.passport?.allergies?.length ?? 0) > 0).length;
+  const totalCount = scopedStudents.length;
+  const activeCount = scopedStudents.filter((s) => s.isActive).length;
+  const allergyCount = scopedStudents.filter((s) => (s.passport?.allergies?.length ?? 0) > 0).length;
 
   return (
     <div className="space-y-6">
-      {/* Header & Quick Stats */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold">
-              <Users className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-                Öğrenci Yönetimi
-              </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Kayıtlı öğrenciler, acil iletişim rehberi ve sağlık pasaportları
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <div className="hidden lg:flex items-center gap-2.5 bg-white dark:bg-[#131B2E] px-4 py-2 rounded-2xl border border-[#DDD4C4] dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 shadow-2xs font-medium">
-            <span>
-              Toplam:{' '}
-              <strong className="text-slate-900 dark:text-white font-bold">{totalCount}</strong>
-            </span>
-            <span className="text-[#DDD4C4] dark:text-slate-700">|</span>
-            <span>
-              Aktif:{' '}
-              <strong className="text-teal-800 dark:text-teal-400 font-bold">{activeCount}</strong>
+      {/* Slim Page Hero Card */}
+      <PageHeader
+        title="Öğrenci Yönetimi"
+        description="Kayıtlı öğrenciler, veli iletişim rehberi, sağlık pasaportları ve acil durum protokolleri"
+        icon={Users}
+        colorTheme="teal"
+        badges={
+          <>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-100 dark:bg-teal-950/60 text-teal-900 dark:text-teal-300 font-bold text-[11px] border border-teal-200/80 dark:border-teal-800/60">
+              {totalCount} Kayıtlı Öğrenci · {activeCount} Aktif
             </span>
             {allergyCount > 0 && (
-              <>
-                <span className="text-[#DDD4C4] dark:text-slate-700">|</span>
-                <span className="text-rose-700 dark:text-rose-400 font-bold flex items-center gap-1">
-                  <AlertTriangle className="w-3.5 h-3.5" /> {allergyCount} Alerji
-                </span>
-              </>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 font-bold text-[11px] border border-rose-200/80 dark:border-rose-800/60">
+                <AlertTriangle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                {allergyCount} Kritik Alerji
+              </span>
             )}
-          </div>
+          </>
+        }
+        actions={
+          <>
+            {isAdmin && (
+              <TactileButton
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => setShowAddClassroomModal(true)}
+                title="Yeni Sınıf Oluştur"
+              >
+                <School className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+                <span>+ Yeni Sınıf</span>
+              </TactileButton>
+            )}
 
-          {isAdmin && (
             <TactileButton
               type="button"
               variant="secondary"
-              onClick={() => setShowAddClassroomModal(true)}
-              className="px-3.5 py-2 text-xs sm:text-sm"
-              title="Yeni Sınıf Oluştur"
+              size="sm"
+              onClick={() => setShowEmergencyRoster(true)}
+              title="Acil Durum, Kan Grubu ve Gezi Listesini Yazdır"
             >
-              <School className="w-4 h-4 text-teal-700 dark:text-teal-400" />
-              <span>+ Yeni Sınıf</span>
+              <ShieldAlert className="w-4 h-4 text-rose-700 dark:text-rose-400" />
+              <span>🚨 Acil Durum Listesi</span>
             </TactileButton>
-          )}
 
-          <TactileButton
-            type="button"
-            variant="secondary"
-            onClick={() => setShowEmergencyRoster(true)}
-            className="px-3.5 py-2 text-xs sm:text-sm"
-            title="Acil Durum, Kan Grubu ve Gezi Listesini Yazdır"
-          >
-            <ShieldAlert className="w-4 h-4 text-rose-700 dark:text-rose-400" />
-            <span>🚨 Acil Durum / Gezi Listesi</span>
-          </TactileButton>
-
-          <TactileButton
-            type="button"
-            variant="teal"
-            onClick={() => setShowAddModal(true)}
-            className="px-4 py-2 text-xs sm:text-sm"
-          >
-            <UserPlus className="w-4 h-4" />
-            <span>+ Yeni Öğrenci</span>
-          </TactileButton>
-        </div>
-      </div>
+            {isAdmin && (
+              <TactileButton
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => setShowAddModal(true)}
+                className="whitespace-nowrap text-teal-900 dark:text-teal-200 border-teal-300 dark:border-teal-700/80 hover:border-teal-400"
+                title="Yeni Öğrenci Kaydı Aç"
+              >
+                <UserPlus className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+                <span>+ Yeni Öğrenci</span>
+              </TactileButton>
+            )}
+          </>
+        }
+      />
 
       {/* Sınıf Hiyerarşisi Kartları (Madde 17: Admin öğrenci yönetiminde önce sınıfları görür) */}
       <div className="space-y-2.5">
@@ -290,7 +304,7 @@ export function StudentsPage(): JSX.Element {
             <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
             <span>Kreş Sınıfları & Gruplar</span>
           </h2>
-          {selectedClassroomId !== 'ALL' && (
+          {!isTeacher && selectedClassroomId !== 'ALL' && (
             <button
               type="button"
               onClick={() => setSelectedClassroomId('ALL')}
@@ -327,13 +341,22 @@ export function StudentsPage(): JSX.Element {
                 </strong>{' '}
                 Öğrenci
               </div>
+              <div className="mt-2.5 pt-2 border-t border-[#DDD4C4]/50 dark:border-slate-800 flex items-center gap-1.5 text-[11px] text-teal-800 dark:text-teal-300 font-semibold truncate">
+                <GraduationCap className="w-3.5 h-3.5 shrink-0 text-teal-700 dark:text-teal-400" />
+                <span className="truncate">Tüm Kadro</span>
+              </div>
             </button>
           )}
 
           {/* Dinamik Sınıf Kartları */}
-          {classrooms.map((cls) => {
-            const count = students.filter((s) => s.classroomId === cls.id).length;
+          {teacherClassrooms.map((cls) => {
+            const count = scopedStudents.filter((s) => s.classroomId === cls.id).length;
             const isSelected = selectedClassroomId === cls.id;
+            const teacherAssignment = cls.teachers?.[0];
+            const assignedTeacher = teacherAssignment
+              ? teachers.find((t) => t.id === teacherAssignment.teacherId)
+              : null;
+
             return (
               <button
                 key={cls.id}
@@ -345,21 +368,49 @@ export function StudentsPage(): JSX.Element {
                     : 'bg-white dark:bg-[#131B2E] border-[#DDD4C4] dark:border-slate-800 hover:border-teal-300 dark:hover:border-slate-700'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-slate-900 dark:text-white truncate">
-                    {cls.name}
-                  </span>
-                  {cls.ageGroup && (
-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                      {cls.ageGroup}
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold text-slate-900 dark:text-white truncate">
+                      {cls.name}
                     </span>
-                  )}
+                    {cls.ageGroup && (
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                        {cls.ageGroup}
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-2.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                    <strong className="text-base font-black text-slate-900 dark:text-white">
+                      {count}
+                    </strong>{' '}
+                    Öğrenci
+                  </div>
                 </div>
-                <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                  <strong className="text-base font-black text-slate-900 dark:text-white">
-                    {count}
-                  </strong>{' '}
-                  Öğrenci
+
+                <div className="mt-2.5 pt-2 border-t border-[#DDD4C4]/50 dark:border-slate-800 flex items-center gap-1.5 text-[11px] truncate">
+                  {assignedTeacher?.avatarUrl ? (
+                    <img
+                      src={assignedTeacher.avatarUrl}
+                      alt="Öğretmen"
+                      className="w-4 h-4 rounded-full object-cover shrink-0 border border-teal-600/40"
+                    />
+                  ) : (
+                    <GraduationCap
+                      className={`w-3.5 h-3.5 shrink-0 ${
+                        assignedTeacher ? 'text-teal-700 dark:text-teal-400' : 'text-slate-400'
+                      }`}
+                    />
+                  )}
+                  <span
+                    className={`truncate font-semibold ${
+                      assignedTeacher
+                        ? 'text-slate-700 dark:text-slate-200'
+                        : 'text-slate-400 italic text-[10px]'
+                    }`}
+                    title={assignedTeacher ? assignedTeacher.email : 'Öğretmen atanmadı'}
+                  >
+                    {getTeacherDisplayName(assignedTeacher)}
+                  </span>
                 </div>
               </button>
             );
@@ -376,19 +427,25 @@ export function StudentsPage(): JSX.Element {
                   : 'bg-white dark:bg-[#131B2E] border-[#DDD4C4] dark:border-slate-800 hover:border-amber-300'
               }`}
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-slate-900 dark:text-white">
-                  Sınıfsız
-                </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-rose-100 dark:bg-rose-950 text-rose-900 dark:text-rose-300">
-                  Bekleyen
-                </span>
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold text-slate-900 dark:text-white">
+                    Sınıfsız
+                  </span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-rose-100 dark:bg-rose-950 text-rose-900 dark:text-rose-300">
+                    Bekleyen
+                  </span>
+                </div>
+                <div className="mt-2.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                  <strong className="text-base font-black text-slate-900 dark:text-white">
+                    {students.filter((s) => !s.classroomId).length}
+                  </strong>{' '}
+                  Öğrenci
+                </div>
               </div>
-              <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                <strong className="text-base font-black text-slate-900 dark:text-white">
-                  {students.filter((s) => !s.classroomId).length}
-                </strong>{' '}
-                Öğrenci
+
+              <div className="mt-2.5 pt-2 border-t border-[#DDD4C4]/50 dark:border-slate-800 flex items-center gap-1.5 text-[10px] text-slate-400 italic font-medium truncate">
+                <span>Atama Bekliyor</span>
               </div>
             </button>
           )}
@@ -522,13 +579,16 @@ export function StudentsPage(): JSX.Element {
           title="Henüz öğrenci yok."
           description="Kreşinize ilk öğrencinizi eklemek için aşağıdaki butonu kullanabilirsiniz."
           action={
-            <button
+            <TactileButton
               type="button"
+              variant="secondary"
+              size="sm"
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-600 dark:hover:bg-teal-500 dark:text-white rounded-xl px-4 py-2 text-xs font-bold transition active:scale-95 shadow-xs"
+              className="text-teal-900 dark:text-teal-200 border-teal-300 dark:border-teal-700/80 hover:border-teal-400"
             >
-              <UserPlus className="w-4 h-4" /> + Yeni Öğrenci
-            </button>
+              <UserPlus className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+              <span>+ Yeni Öğrenci</span>
+            </TactileButton>
           }
         />
       )}
@@ -665,7 +725,18 @@ export function StudentsPage(): JSX.Element {
                                     {p.allergies.length} Alerji
                                   </span>
                                 )}
-                                {!blood && !hasAllergy && (
+                                {p?.dietaryRestrictions && p.dietaryRestrictions.length > 0 && (
+                                  <span
+                                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60 shadow-2xs"
+                                    title={p.dietaryRestrictions.join(', ')}
+                                  >
+                                    <Apple className="w-3 h-3 text-amber-700" />
+                                    <span className="truncate max-w-[120px]">
+                                      {p.dietaryRestrictions.join(', ')}
+                                    </span>
+                                  </span>
+                                )}
+                                {!blood && !hasAllergy && (!p?.dietaryRestrictions || p.dietaryRestrictions.length === 0) && (
                                   <span className="text-slate-400 text-xs font-medium">—</span>
                                 )}
                               </div>
@@ -920,11 +991,14 @@ export function StudentsPage(): JSX.Element {
                   className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
                 >
                   <option value="">Öğretmen Seçilmedi (Daha sonra atanabilir)</option>
-                  {teachers.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.email}
-                    </option>
-                  ))}
+                  {teachers.map((t) => {
+                    const name = [t.firstName, t.lastName].filter(Boolean).join(' ').trim();
+                    return (
+                      <option key={t.id} value={t.id}>
+                        {name ? `${name} (${t.email})` : t.email}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -1398,11 +1472,14 @@ function StudentFormModal({
               className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-white px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
             >
               <option value="">Veli atanmadı</option>
-              {parents.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.email}
-                </option>
-              ))}
+              {parents.map((p) => {
+                const name = [p.firstName, p.lastName].filter(Boolean).join(' ').trim();
+                return (
+                  <option key={p.id} value={p.id}>
+                    {name ? `${name} (${p.email})` : p.email}
+                  </option>
+                );
+              })}
             </select>
             <p className="text-[11px] text-slate-500 dark:text-slate-300 mt-1">
               Veli hesabı yoksa önce Ekip & Veliler sayfasından oluşturabilirsiniz.
@@ -1445,6 +1522,24 @@ function StudentFormModal({
       </div>
     </div>
   );
+}
+
+function formatTeacherName(email?: string): string {
+  if (!email) return 'Öğretmen Atanmadı';
+  const prefix = email.split('@')[0] || '';
+  const formatted = prefix
+    .split(/[._-]/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+  return formatted ? `Öğrt. ${formatted}` : email;
+}
+
+function getTeacherDisplayName(teacher?: User | null): string {
+  if (!teacher) return 'Öğretmen Atanmadı';
+  const fullName = [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim();
+  if (fullName) return `Öğrt. ${fullName}`;
+  return formatTeacherName(teacher.email);
 }
 
 function byLastName(a: Student, b: Student): number {

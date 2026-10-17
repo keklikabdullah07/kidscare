@@ -13,6 +13,7 @@ enum UserRole {
   ADMIN
   TEACHER
   PARENT
+  SERVICE_STAFF
 }
 
 enum TenantStatus {
@@ -70,6 +71,10 @@ model User {
   email        String
   passwordHash String
   role         UserRole
+  firstName    String?
+  lastName     String?
+  avatarUrl    String?
+  phone        String?
   isActive     Boolean   @default(true)
   lastLoginAt  DateTime?
   createdAt    DateTime  @default(now())

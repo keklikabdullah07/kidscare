@@ -226,6 +226,97 @@ export function ParentDashboardPage(): JSX.Element {
     }
   };
 
+  const getNapQualityInfo = (
+    naps?: {
+      startTime?: string | undefined;
+      endTime?: string | undefined;
+      quality?: 'GOOD' | 'INTERRUPTED' | 'NONE' | undefined;
+      notes?: string | undefined;
+    } | null,
+  ) => {
+    if (!naps || (!naps.quality && !naps.startTime && !naps.endTime && !naps.notes)) {
+      return {
+        label: 'Belirtilmedi',
+        badgeClass:
+          'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+        timeText: null,
+        notes: null,
+      };
+    }
+
+    const timeText =
+      naps.startTime && naps.endTime
+        ? `${naps.startTime} - ${naps.endTime}`
+        : naps.startTime
+          ? `${naps.startTime} başlangıç`
+          : null;
+
+    if (naps.quality === 'NONE') {
+      return {
+        label: 'Uyumadı',
+        badgeClass:
+          'bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800',
+        timeText,
+        notes: naps.notes || null,
+      };
+    }
+
+    if (naps.quality === 'INTERRUPTED') {
+      return {
+        label: 'Bölünmüş / Huzursuz Uyku',
+        badgeClass:
+          'bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+        timeText,
+        notes: naps.notes || null,
+      };
+    }
+
+    if (naps.quality === 'GOOD') {
+      return {
+        label: 'İyi Uyudu',
+        badgeClass:
+          'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+        timeText,
+        notes: naps.notes || null,
+      };
+    }
+
+    return {
+      label: timeText ? 'Uyudu' : 'Uyumadı',
+      badgeClass:
+        'bg-teal-50 text-teal-800 border-teal-200 dark:bg-teal-950/60 dark:text-teal-300 dark:border-teal-800',
+      timeText,
+      notes: naps.notes || null,
+    };
+  };
+
+  const POTTY_TYPE_MAP: Record<string, { label: string; emoji: string; color: string }> = {
+    WET: {
+      label: 'Çişli Bez',
+      emoji: '💧',
+      color:
+        'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800',
+    },
+    DIRTY: {
+      label: 'Kaka / Kirli Bez',
+      emoji: '💩',
+      color:
+        'bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+    },
+    POTTY: {
+      label: 'Tuvalete Yaptı',
+      emoji: '🚽',
+      color:
+        'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+    },
+    ACCIDENT: {
+      label: 'Kaçırdı / Kaza',
+      emoji: '⚠️',
+      color:
+        'bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800',
+    },
+  };
+
   // Check matching allergens and health passport for active child
   const childPassport = activeChildOverview?.student.passport;
   const childAllergies =
@@ -898,37 +989,107 @@ export function ParentDashboardPage(): JSX.Element {
                         </span>
                       </div>
                     </div>
+                    {activeChildOverview.todayDailyReport.meals?.notes && (
+                      <div className="p-3 bg-amber-50/70 dark:bg-slate-900/60 rounded-2xl border border-amber-200/80 dark:border-amber-900/40 text-xs">
+                        <span className="font-bold text-amber-900 dark:text-amber-300 block text-[11px] mb-0.5">
+                          Öğretmenin Beslenme Notu
+                        </span>
+                        <p className="text-amber-950 dark:text-slate-200 italic font-medium text-[11px]">
+                          "{activeChildOverview.todayDailyReport.meals.notes}"
+                        </p>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Sleep / Nap */}
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-purple-900/40 shadow-2xs">
-                      <span className="text-xs text-purple-800 dark:text-purple-300 font-bold block flex items-center gap-1.5">
-                        <Moon className="w-3.5 h-3.5 text-purple-500" />
-                        <span>Uyku</span>
+                  {/* Sleep & Nap Tracking */}
+                  {(() => {
+                    const napInfo = getNapQualityInfo(activeChildOverview.todayDailyReport.naps);
+                    return (
+                      <div className="p-4 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-purple-900/40 shadow-2xs space-y-2 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-purple-800 dark:text-purple-300 font-bold flex items-center gap-1.5">
+                            <Moon className="w-3.5 h-3.5 text-purple-500" />
+                            <span>Uyku & Dinlenme</span>
+                          </span>
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border shadow-2xs ${napInfo.badgeClass}`}
+                          >
+                            {napInfo.label}
+                          </span>
+                        </div>
+
+                        {napInfo.timeText && (
+                          <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-bold text-xs mt-1">
+                            <Clock className="w-3.5 h-3.5 text-slate-400" />
+                            <span>{napInfo.timeText}</span>
+                          </div>
+                        )}
+
+                        {napInfo.notes && (
+                          <div className="p-2.5 bg-purple-50/70 dark:bg-purple-950/30 rounded-xl border border-purple-200/70 dark:border-purple-800/40 text-[11px] text-purple-950 dark:text-purple-200 italic font-medium">
+                            "{napInfo.notes}"
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
+
+                  {/* Potty / Toilet & Diaper Tracking */}
+                  <div className="p-4 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-teal-900/40 shadow-2xs space-y-2.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-teal-800 dark:text-teal-300 font-bold flex items-center gap-1.5">
+                        <Heart className="w-3.5 h-3.5 text-teal-500" />
+                        <span>Tuvalet & Bez Takibi</span>
                       </span>
-                      <span className="font-bold text-slate-900 dark:text-white mt-1 block">
-                        {activeChildOverview.todayDailyReport.naps?.startTime &&
-                        activeChildOverview.todayDailyReport.naps?.endTime
-                          ? `${activeChildOverview.todayDailyReport.naps.startTime} - ${activeChildOverview.todayDailyReport.naps.endTime}`
-                          : activeChildOverview.todayDailyReport.naps?.quality === 'GOOD'
-                            ? 'İyi uyudu'
-                            : 'Uyumadı / Belirtilmedi'}
-                      </span>
+                      {activeChildOverview.todayDailyReport.potty &&
+                      activeChildOverview.todayDailyReport.potty.length > 0 ? (
+                        <span className="text-[11px] font-bold text-teal-800 dark:text-teal-300 px-2 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800/60 shadow-2xs">
+                          {activeChildOverview.todayDailyReport.potty.length} Giriş
+                        </span>
+                      ) : (
+                        <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                          Kayıt yok
+                        </span>
+                      )}
                     </div>
 
-                    <div className="p-3 bg-[#FCFAF7] dark:bg-slate-900/50 rounded-2xl border border-[#DDD4C4]/70 dark:border-teal-900/40 shadow-2xs">
-                      <span className="text-xs text-teal-800 dark:text-teal-300 font-bold block flex items-center gap-1.5">
-                        <Heart className="w-3.5 h-3.5 text-teal-500" />
-                        <span>Tuvalet / Bez</span>
-                      </span>
-                      <span className="font-bold text-slate-900 dark:text-white mt-1 block">
-                        {activeChildOverview.todayDailyReport.potty &&
-                        activeChildOverview.todayDailyReport.potty.length > 0
-                          ? `${activeChildOverview.todayDailyReport.potty.length} kayıt`
-                          : 'Normal'}
-                      </span>
-                    </div>
+                    {activeChildOverview.todayDailyReport.potty &&
+                    activeChildOverview.todayDailyReport.potty.length > 0 ? (
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {activeChildOverview.todayDailyReport.potty.map((entry, idx) => {
+                          const meta = POTTY_TYPE_MAP[entry.type] ?? {
+                            label: entry.type,
+                            emoji: '🚻',
+                            color:
+                              'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300',
+                          };
+                          return (
+                            <div
+                              key={entry.id ?? idx}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold border shadow-2xs ${meta.color}`}
+                              title={
+                                entry.notes
+                                  ? `${entry.time} · ${meta.label}: ${entry.notes}`
+                                  : `${entry.time} · ${meta.label}`
+                              }
+                            >
+                              <span className="font-mono text-[10px] opacity-75">{entry.time}</span>
+                              <span>{meta.emoji}</span>
+                              <span>{meta.label}</span>
+                              {entry.notes && (
+                                <span className="italic font-normal opacity-90 border-l border-current/20 pl-1">
+                                  {entry.notes}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-slate-500 dark:text-slate-400 text-xs italic">
+                        Bugün için tuvalet veya bez değişimi kaydı girilmedi.
+                      </p>
+                    )}
                   </div>
 
                   {/* Activities */}

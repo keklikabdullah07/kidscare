@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from 'react';
+import { useEffect, useState, useMemo, type JSX } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Users,
@@ -74,13 +74,26 @@ export function DashboardPage(): JSX.Element {
     };
   }, [today]);
 
+  const isTeacher = state.status === 'authenticated' && state.user.role === 'TEACHER';
+  const scopedStudentIds = useMemo(() => new Set(students.map((s) => s.id)), [students]);
+
+  const scopedAttendances = useMemo<Attendance[]>(() => {
+    if (!isTeacher) return attendances;
+    return attendances.filter((a: Attendance) => scopedStudentIds.has(a.studentId));
+  }, [isTeacher, attendances, scopedStudentIds]);
+
+  const scopedReports = useMemo<DailyReport[]>(() => {
+    if (!isTeacher) return reports;
+    return reports.filter((r: DailyReport) => scopedStudentIds.has(r.studentId));
+  }, [isTeacher, reports, scopedStudentIds]);
+
   const totalStudents = students.length;
-  const presentCount = attendances.filter(
-    (a) => a.status === 'PRESENT' || a.status === 'LEFT',
+  const presentCount = scopedAttendances.filter(
+    (a: Attendance) => a.status === 'PRESENT' || a.status === 'LEFT',
   ).length;
-  const absentCount = attendances.filter((a) => a.status === 'ABSENT').length;
-  const excusedCount = attendances.filter((a) => a.status === 'EXCUSED').length;
-  const filledReportsCount = reports.length;
+  const absentCount = scopedAttendances.filter((a: Attendance) => a.status === 'ABSENT').length;
+  const excusedCount = scopedAttendances.filter((a: Attendance) => a.status === 'EXCUSED').length;
+  const filledReportsCount = scopedReports.length;
   const targetReportCount = presentCount > 0 ? presentCount : totalStudents;
   const attendanceRate = totalStudents > 0 ? Math.round((presentCount / totalStudents) * 100) : 0;
   const reportRate =

@@ -48,10 +48,21 @@ export class AttendanceController {
   async findByDate(
     @CurrentTenantId() tenantId: string,
     @Query('date') dateQuery?: string,
+    @Query('startDate') startDateQuery?: string,
+    @Query('endDate') endDateQuery?: string,
+    @CurrentUser() user?: CurrentUserPayload,
   ): Promise<AttendanceResponseDto[]> {
+    if (startDateQuery && endDateQuery) {
+      const list = user
+        ? await this.service.findByDateRange(tenantId, startDateQuery, endDateQuery, user)
+        : await this.service.findByDateRange(tenantId, startDateQuery, endDateQuery);
+      return list.map((a) => this.toResponse(a));
+    }
     const todayStr = new Date().toISOString().slice(0, 10);
     const dateStr = dateQuery || todayStr;
-    const list = await this.service.findByDate(tenantId, dateStr);
+    const list = user
+      ? await this.service.findByDate(tenantId, dateStr, user)
+      : await this.service.findByDate(tenantId, dateStr);
     return list.map((a) => this.toResponse(a));
   }
 
@@ -64,7 +75,11 @@ export class AttendanceController {
     @CurrentUser() user: CurrentUserPayload,
   ): Promise<AttendanceResponseDto | null> {
     const student = await this.studentsService.findOne(tenantId, studentId);
-    assertStudentVisibleToUser(student, user.role, user.userId);
+    let teacherClassroomIds: string[] | undefined;
+    if (user.role === 'TEACHER') {
+      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+    }
+    assertStudentVisibleToUser(student, user.role, user.userId, teacherClassroomIds);
     const item = await this.service.findByStudentAndDate(tenantId, studentId, date);
     return item ? this.toResponse(item) : null;
   }
@@ -76,7 +91,16 @@ export class AttendanceController {
     @Param('studentId') studentId: string,
     @Param('date') date: string,
     @Body(new ZodValidationPipe(checkInInputSchema)) body: CheckInInput,
+    @CurrentUser() user?: CurrentUserPayload,
   ): Promise<AttendanceResponseDto> {
+    if (user) {
+      const student = await this.studentsService.findOne(tenantId, studentId);
+      let teacherClassroomIds: string[] | undefined;
+      if (user.role === 'TEACHER') {
+        teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+      }
+      assertStudentVisibleToUser(student, user.role, user.userId, teacherClassroomIds);
+    }
     const saved = await this.service.checkIn(tenantId, studentId, date, body);
     return this.toResponse(saved);
   }
@@ -88,7 +112,16 @@ export class AttendanceController {
     @Param('studentId') studentId: string,
     @Param('date') date: string,
     @Body(new ZodValidationPipe(checkOutInputSchema)) body: CheckOutInput,
+    @CurrentUser() user?: CurrentUserPayload,
   ): Promise<AttendanceResponseDto> {
+    if (user) {
+      const student = await this.studentsService.findOne(tenantId, studentId);
+      let teacherClassroomIds: string[] | undefined;
+      if (user.role === 'TEACHER') {
+        teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+      }
+      assertStudentVisibleToUser(student, user.role, user.userId, teacherClassroomIds);
+    }
     const saved = await this.service.checkOut(tenantId, studentId, date, body);
     return this.toResponse(saved);
   }
@@ -100,7 +133,16 @@ export class AttendanceController {
     @Param('studentId') studentId: string,
     @Param('date') date: string,
     @Body(new ZodValidationPipe(attendanceUpdateInputSchema)) body: AttendanceUpdateInput,
+    @CurrentUser() user?: CurrentUserPayload,
   ): Promise<AttendanceResponseDto> {
+    if (user) {
+      const student = await this.studentsService.findOne(tenantId, studentId);
+      let teacherClassroomIds: string[] | undefined;
+      if (user.role === 'TEACHER') {
+        teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+      }
+      assertStudentVisibleToUser(student, user.role, user.userId, teacherClassroomIds);
+    }
     const saved = await this.service.update(tenantId, studentId, date, body);
     return this.toResponse(saved);
   }
@@ -115,7 +157,11 @@ export class AttendanceController {
     body: CreateAttendanceExcuseInput,
   ): Promise<AttendanceExcuseWithStudent> {
     const student = await this.studentsService.findOne(tenantId, body.studentId);
-    assertStudentVisibleToUser(student, user.role, user.userId);
+    let teacherClassroomIds: string[] | undefined;
+    if (user.role === 'TEACHER') {
+      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+    }
+    assertStudentVisibleToUser(student, user.role, user.userId, teacherClassroomIds);
     const excuseInput: { studentId: string; date: string; reason: string; notes?: string } = {
       studentId: body.studentId,
       date: body.date,
@@ -137,6 +183,9 @@ export class AttendanceController {
     if (user.role === 'PARENT') {
       const parentStudents = await this.studentsService.findByParent(tenantId, user.userId);
       studentIds = parentStudents.map((s) => s.id);
+    } else if (user.role === 'TEACHER') {
+      const teacherStudents = await this.studentsService.findAll(tenantId, user);
+      studentIds = teacherStudents.map((s) => s.id);
     }
 
     const filterParams: { dateStr?: string; studentId?: string; studentIds?: string[] } = {};

@@ -41,6 +41,9 @@ export class UsersService {
       email,
       passwordHash,
       role: input.role,
+      firstName: input.firstName ?? null,
+      lastName: input.lastName ?? null,
+      phone: input.phone ?? null,
       isActive: true,
     });
     return this.toResponse(created);
@@ -58,6 +61,10 @@ export class UsersService {
     tenantId: string;
     email: string;
     role: UserRole;
+    firstName?: string | null;
+    lastName?: string | null;
+    avatarUrl?: string | null;
+    phone?: string | null;
     isActive: boolean;
     lastLoginAt: Date | null;
     createdAt: Date;
@@ -68,6 +75,10 @@ export class UsersService {
       tenantId: row.tenantId,
       email: row.email,
       role: row.role,
+      firstName: row.firstName ?? null,
+      lastName: row.lastName ?? null,
+      avatarUrl: row.avatarUrl ?? null,
+      phone: row.phone ?? null,
       isActive: row.isActive,
       lastLoginAt: row.lastLoginAt ? row.lastLoginAt.toISOString() : null,
       createdAt: row.createdAt.toISOString(),

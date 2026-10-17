@@ -32,6 +32,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { StatCard } from '../../components/ui/StatCard';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
+import { PageHeader } from '../../components/ui/PageHeader';
 
 type TabKey = 'ALL' | 'REQUESTED' | 'TODAY' | 'GIVEN' | 'ARCHIVED';
 
@@ -79,6 +80,20 @@ export function MedicationPage(): JSX.Element {
   const [busyId, setBusyId] = useState<string | null>(null);
   const { showToast } = useToast();
 
+  const isTeacher = role === 'TEACHER';
+  const scopedStudents = students;
+  const scopedStudentIds = useMemo(
+    () => new Set(scopedStudents.map((s) => s.id)),
+    [scopedStudents],
+  );
+
+  const scopedRecords = useMemo(() => {
+    if (isTeacher) {
+      return records.filter((r) => scopedStudentIds.has(r.studentId));
+    }
+    return records;
+  }, [isTeacher, records, scopedStudentIds]);
+
   // Tab & Filters
   const [activeTab, setActiveTab] = useState<TabKey>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -122,7 +137,10 @@ export function MedicationPage(): JSX.Element {
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes] = await Promise.all([listMedicationRecords(), listStudents()]);
+      const [list, studentsRes] = await Promise.all([
+        listMedicationRecords(),
+        listStudents().catch(() => []),
+      ]);
       setRecords(list);
       setStudents(studentsRes);
     } catch (err: unknown) {
@@ -159,22 +177,22 @@ export function MedicationPage(): JSX.Element {
 
   // Summary Metrics
   const pendingCount = useMemo(
-    () => records.filter((r) => r.status === 'REQUESTED').length,
-    [records],
+    () => scopedRecords.filter((r) => r.status === 'REQUESTED').length,
+    [scopedRecords],
   );
   const todayPlanCount = useMemo(
-    () => records.filter((r) => r.status === 'APPROVED' || r.status === 'SCHEDULED').length,
-    [records],
+    () => scopedRecords.filter((r) => r.status === 'APPROVED' || r.status === 'SCHEDULED').length,
+    [scopedRecords],
   );
-  const givenCount = useMemo(() => records.filter((r) => r.status === 'GIVEN').length, [records]);
+  const givenCount = useMemo(() => scopedRecords.filter((r) => r.status === 'GIVEN').length, [scopedRecords]);
   const archivedCount = useMemo(
-    () => records.filter((r) => r.status === 'SKIPPED' || r.status === 'REJECTED').length,
-    [records],
+    () => scopedRecords.filter((r) => r.status === 'SKIPPED' || r.status === 'REJECTED').length,
+    [scopedRecords],
   );
 
   // Filtered Records
   const filteredRecords = useMemo(() => {
-    return records.filter((r) => {
+    return scopedRecords.filter((r) => {
       // 1. Tab filter
       if (activeTab === 'REQUESTED' && r.status !== 'REQUESTED') return false;
       if (activeTab === 'TODAY' && r.status !== 'APPROVED' && r.status !== 'SCHEDULED')
@@ -205,7 +223,7 @@ export function MedicationPage(): JSX.Element {
 
       return true;
     });
-  }, [records, activeTab, selectedStudentFilter, searchQuery, students]);
+  }, [scopedRecords, activeTab, selectedStudentFilter, searchQuery, students]);
 
   // Actions
   async function handleApprove(record: MedicationRecord): Promise<void> {
@@ -373,52 +391,52 @@ export function MedicationPage(): JSX.Element {
 
   return (
     <div className="space-y-6">
-      {/* Sayfa Başlığı ve Aksiyonlar */}
-      <div className="flex items-center justify-between gap-4 flex-wrap pb-1">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-slate-800 border-2 border-teal-600/30 dark:border-teal-500/30 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold shadow-xs">
-            <Pill className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                İlaç Takibi & Sağlık Kütüğü
-              </h1>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-teal-100/80 dark:bg-teal-900/50 text-teal-900 dark:text-teal-200 border border-teal-200 dark:border-teal-700">
-                Güvenlik & Sağlık
+      {/* Slim Page Hero Card */}
+      <PageHeader
+        title="İlaç Takibi & Sağlık Kütüğü"
+        description="Veli talepleri, hekim/veli talimatları, öğretmen onayı ve anlık uygulama kütüğü."
+        icon={Pill}
+        colorTheme="rose"
+        badges={
+          <>
+            {pendingCount > 0 && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 font-bold text-[11px] border border-rose-200/80 dark:border-rose-800/60">
+                ⚠️ {pendingCount} Onay Bekliyor
               </span>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Veli talepleri, hekim/veli talimatları, öğretmen onayı ve anlık uygulama kütüğü.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <TactileButton
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={() => void refresh()}
-            title="Kayıtları Yenile"
-          >
-            <RotateCw className="w-3.5 h-3.5" />
-            <span>Yenile</span>
-          </TactileButton>
-
-          {(role === 'PARENT' || role === 'ADMIN' || role === 'SUPER_ADMIN') && (
+            )}
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-100 dark:bg-teal-950/60 text-teal-900 dark:text-teal-300 font-bold text-[11px] border border-teal-200/80 dark:border-teal-800/60">
+              📅 {todayPlanCount} Bugün Planlanan
+            </span>
+          </>
+        }
+        actions={
+          <>
             <TactileButton
               type="button"
-              variant="teal"
+              variant="secondary"
               size="sm"
-              onClick={() => setCreateOpen(true)}
+              onClick={() => void refresh()}
+              title="Kayıtları Yenile"
             >
-              <Plus className="w-4 h-4" />
-              <span>Yeni İlaç Talebi</span>
+              <RotateCw className="w-3.5 h-3.5" />
+              <span>Yenile</span>
             </TactileButton>
-          )}
-        </div>
-      </div>
+
+            {(role === 'PARENT' || role === 'ADMIN' || role === 'SUPER_ADMIN') && (
+              <TactileButton
+                type="button"
+                variant="teal"
+                size="sm"
+                onClick={() => setCreateOpen(true)}
+                className="whitespace-nowrap"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Yeni İlaç Talebi</span>
+              </TactileButton>
+            )}
+          </>
+        }
+      />
 
       {/* Dokunsal KPI Özet Sayaçları */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -483,8 +501,8 @@ export function MedicationPage(): JSX.Element {
               onChange={(e) => setSelectedStudentFilter(e.target.value)}
               className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20"
             >
-              <option value="">Tüm Öğrenciler ({students.length})</option>
-              {students.map((s) => (
+              <option value="">Tüm Öğrenciler ({scopedStudents.length})</option>
+              {scopedStudents.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.firstName} {s.lastName}
                 </option>
@@ -761,7 +779,7 @@ export function MedicationPage(): JSX.Element {
                   required
                 >
                   <option value="">Öğrenci Seçiniz…</option>
-                  {students.map((s) => (
+                  {scopedStudents.map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.firstName} {s.lastName}
                     </option>

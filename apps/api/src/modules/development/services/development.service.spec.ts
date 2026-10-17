@@ -1,6 +1,7 @@
 import { DevelopmentService } from './development.service';
 import type { DevelopmentRepository } from '../repositories/development.repository';
 import type { NotificationsService } from '../../notifications/services/notifications.service';
+import type { PrismaService } from '../../../prisma/prisma.service';
 
 describe('DevelopmentService', () => {
   let service: DevelopmentService;
@@ -21,7 +22,7 @@ describe('DevelopmentService', () => {
       notifyStudentParents: jest.fn().mockResolvedValue(undefined),
     } as unknown as jest.Mocked<NotificationsService>;
 
-    service = new DevelopmentService(repo, notif);
+    service = new DevelopmentService(repo, notif, {} as unknown as PrismaService);
   });
 
   it('notifies parents when isParentVisible observation is created', async () => {

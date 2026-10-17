@@ -16,9 +16,11 @@ import type {
   ParentRequestStatus,
   ParentRequestType,
   Student,
+  Classroom,
 } from '@kidscare/shared-types';
 import { createParentRequest, listParentRequests, resolveParentRequest } from '../../api/messaging';
 import { listStudents } from '../../api/students';
+import { listClassrooms } from '../../api/classrooms';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { PromptModal } from '../../components/ui/PromptModal';
@@ -56,6 +58,7 @@ export function ParentRequestsPage(): JSX.Element {
 
   const [requests, setRequests] = useState<ParentRequest[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -71,6 +74,46 @@ export function ParentRequestsPage(): JSX.Element {
 
   const { showToast } = useToast();
 
+  // Öğretmen Sınıf İzolasyonu (Role Scoping)
+  const currentUserId = state.status === 'authenticated' ? state.user.id : null;
+  const isTeacher = role === 'TEACHER';
+
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher || !currentUserId) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    const studentClassIds = new Set(students.map((s) => s.classroomId).filter(Boolean));
+    const matched = classrooms.filter((c) => studentClassIds.has(c.id));
+    if (matched.length > 0) return matched;
+    return [];
+  }, [isTeacher, currentUserId, classrooms, students]);
+
+  const teacherClassroomIds = useMemo(
+    () => new Set(teacherClassrooms.map((c) => c.id)),
+    [teacherClassrooms],
+  );
+
+  const scopedStudents = useMemo(() => {
+    if (!isTeacher) return students;
+    if (teacherClassroomIds.size > 0) {
+      return students.filter((s) => s.classroomId && teacherClassroomIds.has(s.classroomId));
+    }
+    return [];
+  }, [isTeacher, students, teacherClassroomIds]);
+
+  const scopedStudentIds = useMemo(
+    () => new Set(scopedStudents.map((s) => s.id)),
+    [scopedStudents],
+  );
+
+  const scopedRequests = useMemo(() => {
+    if (!isTeacher) return requests;
+    return requests.filter((r) => r.studentId && scopedStudentIds.has(r.studentId));
+  }, [isTeacher, requests, scopedStudentIds]);
+
   // Yeni Talep Form State'leri
   const [fType, setFType] = useState<ParentRequestType>('IZIN');
   const [fStudentId, setFStudentId] = useState('');
@@ -81,9 +124,14 @@ export function ParentRequestsPage(): JSX.Element {
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes] = await Promise.all([listParentRequests(), listStudents()]);
+      const [list, studentsRes, classroomsRes] = await Promise.all([
+        listParentRequests(),
+        listStudents().catch(() => []),
+        listClassrooms().catch(() => []),
+      ]);
       setRequests(list);
       setStudents(studentsRes);
+      setClassrooms(classroomsRes);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Liste yüklenemedi', 'error');
     } finally {
@@ -156,19 +204,19 @@ export function ParentRequestsPage(): JSX.Element {
     return s ? `${s.firstName} ${s.lastName}` : `#${id.slice(0, 8)}`;
   }
 
-  // KPI Metrikleri
-  const totalCount = requests.length;
+  // KPI Metrikleri (Öğretmen için scopedRequests üzerinden hesaplanır)
+  const totalCount = scopedRequests.length;
   const pendingCount = useMemo(
-    () => requests.filter((r) => r.status === 'PENDING').length,
-    [requests],
+    () => scopedRequests.filter((r) => r.status === 'PENDING').length,
+    [scopedRequests],
   );
   const approvedCount = useMemo(
-    () => requests.filter((r) => r.status === 'APPROVED').length,
-    [requests],
+    () => scopedRequests.filter((r) => r.status === 'APPROVED').length,
+    [scopedRequests],
   );
   const rejectedCount = useMemo(
-    () => requests.filter((r) => r.status === 'REJECTED').length,
-    [requests],
+    () => scopedRequests.filter((r) => r.status === 'REJECTED').length,
+    [scopedRequests],
   );
 
   // Sekmeler
@@ -184,7 +232,7 @@ export function ParentRequestsPage(): JSX.Element {
 
   // Filtrelenmiş Talepler
   const filteredRequests = useMemo(() => {
-    return requests.filter((r) => {
+    return scopedRequests.filter((r) => {
       // Sekme filtresi
       if (activeTab === 'PENDING' && r.status !== 'PENDING') return false;
       if (activeTab === 'APPROVED' && r.status !== 'APPROVED') return false;
@@ -207,14 +255,18 @@ export function ParentRequestsPage(): JSX.Element {
 
       return true;
     });
-  }, [requests, activeTab, selectedStudentFilter, searchQuery, students]);
+  }, [scopedRequests, activeTab, selectedStudentFilter, searchQuery, students]);
 
   return (
     <div className="space-y-6">
       {/* Sayfa Başlığı ve Dokunsal Aksiyonlar */}
       <PageHeader
         title="Veli Talepleri"
-        description="Velilerden iletilen izin, bilgi alma, randevu ve diğer idari başvuruları inceleyin ve yanıtlayın."
+        description={
+          isTeacher
+            ? `Sorumlu olduğunuz sınıf(lar)ın (${teacherClassrooms.map((c) => c.name).join(', ') || 'Atanmış sınıf yok'}) veli taleplerini inceleyin ve yanıtlayın.`
+            : 'Velilerden iletilen izin, bilgi alma, randevu ve diğer idari başvuruları inceleyin ve yanıtlayın.'
+        }
         icon={ClipboardList}
         actions={
           <>
@@ -298,8 +350,8 @@ export function ParentRequestsPage(): JSX.Element {
               onChange={(e) => setSelectedStudentFilter(e.target.value)}
               className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl px-3 py-2 bg-white dark:bg-[#131B2E] text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs"
             >
-              <option value="">Tüm Öğrenciler</option>
-              {students.map((s) => (
+              <option value="">{isTeacher ? 'Sınıfımdaki Tüm Öğrenciler' : 'Tüm Öğrenciler'}</option>
+              {scopedStudents.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.firstName} {s.lastName}
                 </option>
@@ -508,7 +560,7 @@ export function ParentRequestsPage(): JSX.Element {
                     className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700"
                   >
                     <option value="">— Genel Konu —</option>
-                    {students.map((s) => (
+                    {scopedStudents.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.firstName} {s.lastName}
                       </option>

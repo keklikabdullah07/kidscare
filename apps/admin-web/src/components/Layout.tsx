@@ -1,4 +1,4 @@
-import { useState, type JSX } from 'react';
+import { useState, useEffect, type JSX } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import {
   Users,
@@ -25,13 +25,16 @@ import {
   Search,
   Ticket,
   CreditCard,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
 import { KidsCareLogo } from './KidsCareLogo';
-import { Badge, type BadgeVariant } from './ui/Badge';
+import type { BadgeVariant } from './ui/Badge';
 import { MobileBottomNav } from './navigation/MobileBottomNav';
 import { NotificationBell } from './notifications/NotificationBell';
+import { ProfileEditModal } from './ProfileEditModal';
 
 type NavItem = {
   to: string;
@@ -115,6 +118,39 @@ function getNavGroupsForRole(role: string): NavGroup[] {
             label: 'Etkinlik Galerisi',
             icon: Camera,
             description: 'Sınıf fotoğrafları',
+          },
+        ],
+      },
+    ];
+  }
+
+  if (role === 'SERVICE_STAFF') {
+    return [
+      {
+        title: 'Servis & Teslimat',
+        items: [
+          {
+            to: '/pickup',
+            label: 'Servis & Teslimat',
+            icon: ShieldCheck,
+            description: 'Yolcu listesi ve biniş/iniş kontrolü',
+          },
+        ],
+      },
+      {
+        title: 'İletişim & Talepler',
+        items: [
+          {
+            to: '/messages',
+            label: 'Mesajlar',
+            icon: MessageSquare,
+            description: 'Veli ve okul iletişimi',
+          },
+          {
+            to: '/requests',
+            label: 'Servis Talepleri',
+            icon: ClipboardList,
+            description: 'Servis bildirimleri ve izinler',
           },
         ],
       },
@@ -268,6 +304,8 @@ function getRoleBadge(role: string): { label: string; variant: BadgeVariant } {
       return { label: 'Öğretmen', variant: 'warning' };
     case 'PARENT':
       return { label: 'Veli', variant: 'success' };
+    case 'SERVICE_STAFF':
+      return { label: 'Servis Personeli', variant: 'accent' };
     default:
       return { label: role, variant: 'neutral' };
   }
@@ -277,28 +315,66 @@ export function Layout(): JSX.Element {
   const { state, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('kidscare_sidebar_collapsed') === 'true';
+    } catch {
+      return false;
+    }
+  });
 
-  const userRole = state.status === 'authenticated' ? state.user.role : '';
-  const userEmail = state.status === 'authenticated' ? state.user.email : '';
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('kidscare_sidebar_collapsed', String(next));
+      } catch {
+        /* storage may be disabled */
+      }
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && (e.key === 'm' || e.key === 'M' || e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        toggleCollapsed();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const currentUser = state.status === 'authenticated' ? state.user : null;
+  const userRole = currentUser?.role ?? '';
+  const userEmail = currentUser?.email ?? '';
   const roleBadge = getRoleBadge(userRole);
 
-  const displayName = (() => {
-    if (userEmail && userEmail.includes('@')) {
-      const prefix = userEmail.split('@')[0] ?? '';
-      if (prefix) {
-        return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+  const fullName = [currentUser?.firstName, currentUser?.lastName].filter(Boolean).join(' ').trim();
+  const displayName =
+    fullName ||
+    (() => {
+      if (userEmail && userEmail.includes('@')) {
+        const prefix = userEmail.split('@')[0] ?? '';
+        if (prefix) {
+          return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+        }
       }
-    }
-    const roleLabels: Record<string, string> = {
-      SUPERADMIN: 'Süper Admin',
-      ADMIN: 'Kreş Müdürü',
-      TEACHER: 'Öğretmen',
-      PARENT: 'Veli',
-    };
-    return roleLabels[userRole] || 'Kullanıcı';
-  })();
+      const roleLabels: Record<string, string> = {
+        SUPER_ADMIN: 'Süper Admin',
+        SUPERADMIN: 'Süper Admin',
+        ADMIN: 'Kreş Müdürü',
+        TEACHER: 'Öğretmen',
+        PARENT: 'Veli',
+        SERVICE_STAFF: 'Servis Personeli',
+      };
+      return roleLabels[userRole] || 'Kullanıcı';
+    })();
 
-  const userInitial = displayName.charAt(0).toUpperCase();
+  const userInitial = (displayName || 'K').charAt(0).toUpperCase();
+  const userAvatar = currentUser?.avatarUrl;
   const navGroups = getNavGroupsForRole(userRole);
 
   return (
@@ -311,64 +387,85 @@ export function Layout(): JSX.Element {
         />
       )}
 
-      {/* Sidebar Navigation */}
+      {/* Sidebar Navigation: Floating Island Console (Ada Menüsü) */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 sm:w-64 bg-[#FCFAF7]/95 dark:bg-[#0D1524]/95 backdrop-blur-xl border-r border-[#E8E2D5]/80 dark:border-slate-800/80 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed top-3 bottom-3 left-3 z-50 bg-[#115E59] dark:bg-[#0C433F] rounded-3xl shadow-[0_16px_40px_-8px_rgba(17,94,89,0.38),0_4px_16px_rgba(0,0,0,0.12)] border border-teal-500/30 dark:border-teal-700/50 flex flex-col justify-between transition-all duration-300 ease-in-out md:translate-x-0 overflow-hidden ${
+          mobileOpen ? 'translate-x-0 w-72 sm:w-64' : '-translate-x-full'
+        } ${collapsed ? 'md:w-[4.85rem]' : 'md:w-64'}`}
       >
         <div className="overflow-y-auto flex-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {/* Brand Header with Authentic Logo */}
-          <div className="h-16 px-4 flex items-center justify-between border-b border-[#E8E2D5]/70 dark:border-slate-800 sticky top-0 bg-[#FCFAF7]/95 dark:bg-[#0D1524]/95 backdrop-blur-md z-10">
-            <NavLink
-              to="/"
-              className="flex items-center group focus:outline-hidden"
-              title="KidsCare Ana Sayfa"
-            >
-              <KidsCareLogo size="md" showText={true} />
-            </NavLink>
+          {/* Brand Header with Inverted Authentic Logo */}
+          <div
+            className={`h-[4.5rem] px-4 flex items-center border-b border-teal-700/70 dark:border-teal-800/80 sticky top-0 bg-[#115E59]/95 dark:bg-[#0C433F]/95 backdrop-blur-md z-10 ${
+              collapsed ? 'justify-center' : 'justify-between'
+            }`}
+          >
+            {!collapsed ? (
+              <NavLink
+                to="/"
+                className="flex items-center group focus:outline-hidden min-w-0"
+                title="KidsCare Ana Sayfa"
+              >
+                <KidsCareLogo size="md" showText={true} inverted={true} />
+              </NavLink>
+            ) : (
+              <NavLink to="/" className="focus:outline-hidden" title="KidsCare Ana Sayfa">
+                <KidsCareLogo size="sm" variant="icon" inverted={true} />
+              </NavLink>
+            )}
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
               aria-label="Menüyü Kapat"
-              className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 md:hidden"
+              className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-teal-200 hover:text-white hover:bg-white/10 md:hidden"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Grouped Navigation Links */}
-          <div className="p-3 space-y-5">
+          <div className="p-2.5 space-y-4">
             {navGroups.map((group) => (
               <div key={group.title} className="space-y-1">
-                <div className="px-3 py-1 text-[11px] font-bold text-slate-500 dark:text-slate-300 uppercase tracking-wider">
-                  {group.title}
-                </div>
+                {!collapsed ? (
+                  <div className="px-3 py-1 text-[11px] font-bold text-teal-200/90 uppercase tracking-wider">
+                    {group.title}
+                  </div>
+                ) : (
+                  <div className="h-px bg-teal-700/60 my-2.5 mx-2" title={group.title} />
+                )}
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   return (
                     <NavLink
                       key={item.to}
                       to={item.to}
+                      title={item.label}
                       onClick={() => setMobileOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition-all duration-200 group ${
+                        `flex items-center transition-all duration-150 group rounded-2xl ${
+                          collapsed
+                            ? 'justify-center w-11 h-11 mx-auto'
+                            : 'gap-3 px-3.5 py-2.5 text-xs font-semibold'
+                        } ${
                           isActive
-                            ? 'bg-teal-800 text-white font-bold shadow-sm shadow-teal-950/20 dark:bg-teal-700 dark:text-white'
-                            : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-[#EFEAE0]/80 dark:hover:bg-slate-800/80'
+                            ? 'bg-white text-teal-900 font-bold shadow-[0_4px_14px_rgba(0,0,0,0.12)]'
+                            : 'text-teal-100/85 hover:text-white hover:bg-white/12'
                         }`
                       }
                     >
                       {({ isActive }) => (
                         <>
                           <Icon
-                            className={`w-4 h-4 shrink-0 transition-colors ${
+                            className={`shrink-0 transition-colors ${
+                              collapsed ? 'w-5 h-5' : 'w-4 h-4'
+                            } ${
                               isActive
-                                ? 'text-white dark:text-white'
-                                : 'text-slate-400 dark:text-slate-400 group-hover:text-teal-700 dark:group-hover:text-teal-300'
+                                ? 'text-teal-800'
+                                : 'text-teal-200/80 group-hover:text-white'
                             }`}
                           />
-                          <span className="truncate">{item.label}</span>
+                          {!collapsed && <span className="truncate">{item.label}</span>}
                         </>
                       )}
                     </NavLink>
@@ -379,39 +476,105 @@ export function Layout(): JSX.Element {
           </div>
         </div>
 
-        {/* User Card & Logout */}
-        <div className="p-3 border-t border-[#E8E2D5]/80 dark:border-slate-800/80 shrink-0 bg-[#FCFAF7]/95 dark:bg-[#0D1524]/95">
-          <div className="p-2.5 rounded-2xl bg-[#EFEAE0]/80 dark:bg-slate-800/80 border border-[#E3DCCE]/80 dark:border-slate-700/80 flex items-center justify-between gap-2 shadow-2xs">
-            <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="w-8 h-8 rounded-xl bg-teal-700 text-white dark:bg-teal-600 dark:text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
-                {userInitial}
-              </div>
-              <div className="overflow-hidden">
-                <p
-                  className="text-xs font-bold text-slate-900 dark:text-white truncate"
-                  title={userEmail || displayName}
+        {/* User Card & Collapsible Control Dock */}
+        <div className="p-3 border-t border-teal-700/70 dark:border-teal-800/80 shrink-0 bg-[#0D4D49]/95 dark:bg-[#083330]/95">
+          {!collapsed ? (
+            <>
+              <div className="p-2.5 rounded-2xl bg-white/12 border border-white/20 flex items-center justify-between gap-2 shadow-2xs backdrop-blur-xs">
+                <button
+                  type="button"
+                  onClick={() => setIsProfileModalOpen(true)}
+                  title="Profilimi Düzenle"
+                  className="flex items-center gap-2.5 overflow-hidden text-left hover:opacity-90 transition-opacity cursor-pointer group flex-1 min-w-0"
                 >
-                  {displayName}
-                </p>
-                <Badge variant={roleBadge.variant} size="sm" className="mt-0.5">
-                  {roleBadge.label}
-                </Badge>
+                  <div className="w-8 h-8 rounded-xl bg-white text-teal-900 font-black flex items-center justify-center text-xs shrink-0 shadow-xs overflow-hidden border border-white/40">
+                    {userAvatar ? (
+                      <img src={userAvatar} alt={displayName} className="w-full h-full object-cover" />
+                    ) : (
+                      userInitial
+                    )}
+                  </div>
+                  <div className="overflow-hidden min-w-0 flex-1">
+                    <p
+                      className="text-xs font-bold text-white truncate group-hover:underline"
+                      title={userEmail || displayName}
+                    >
+                      {displayName}
+                    </p>
+                    <span className="inline-block text-[10px] font-semibold text-teal-200 mt-0.5">
+                      {roleBadge.label}
+                    </span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={logout}
+                  title="Çıkış Yap"
+                  className="p-1.5 text-teal-200 hover:text-rose-300 hover:bg-rose-500/20 rounded-lg transition-colors shrink-0 cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
               </div>
+
+              {/* Functional Sidebar Collapse Control Bar */}
+              <button
+                type="button"
+                onClick={toggleCollapsed}
+                className="w-full mt-2.5 px-3 py-2 rounded-xl bg-teal-950/40 hover:bg-white/15 border border-teal-600/30 hover:border-white/20 text-teal-100 hover:text-white flex items-center justify-between text-xs font-semibold transition-all cursor-pointer group shadow-2xs"
+                title="Menüyü Daralt (Kısayol: Alt + M)"
+              >
+                <div className="flex items-center gap-2">
+                  <PanelLeftClose className="w-4 h-4 text-teal-300 group-hover:text-white transition-colors" />
+                  <span>Menüyü Daralt</span>
+                </div>
+                <kbd className="px-1.5 py-0.5 rounded bg-black/25 text-[10px] font-mono text-teal-300/90 border border-teal-700/40">
+                  Alt+M
+                </kbd>
+              </button>
+            </>
+          ) : (
+            <div className="flex flex-col items-center gap-2 py-0.5">
+              <button
+                type="button"
+                onClick={() => setIsProfileModalOpen(true)}
+                className="w-9 h-9 rounded-xl bg-white text-teal-900 font-black flex items-center justify-center text-xs shadow-xs cursor-pointer overflow-hidden border border-white/40 hover:scale-105 transition-transform"
+                title={`${displayName} (${roleBadge.label}) - Profilimi Düzenle`}
+              >
+                {userAvatar ? (
+                  <img src={userAvatar} alt={displayName} className="w-full h-full object-cover" />
+                ) : (
+                  userInitial
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={logout}
+                title="Çıkış Yap"
+                className="p-1.5 text-teal-200 hover:text-rose-300 hover:bg-rose-500/20 rounded-lg transition-colors shrink-0 cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+
+              {/* Functional Sidebar Expand Icon Button */}
+              <button
+                type="button"
+                onClick={toggleCollapsed}
+                className="w-10 h-10 mt-1 rounded-xl bg-white/12 hover:bg-white hover:text-teal-900 border border-white/20 text-teal-100 flex items-center justify-center transition-all cursor-pointer shadow-sm group"
+                title="Menüyü Genişlet (Kısayol: Alt + M)"
+              >
+                <PanelLeftOpen className="w-5 h-5 text-teal-200 group-hover:text-teal-900 transition-colors" />
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={logout}
-              title="Çıkış Yap"
-              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-rose-400 rounded-lg transition-colors shrink-0"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
+          )}
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 md:pl-64">
+      <div
+        className={`flex-1 flex flex-col min-w-0 transition-[padding] duration-300 ease-in-out ${
+          collapsed ? 'md:pl-[5.85rem]' : 'md:pl-[17.5rem]'
+        }`}
+      >
         {/* Top Navbar */}
         <header className="sticky top-0 z-30 h-16 bg-[#F6F3EC]/85 dark:bg-[#090D16]/85 backdrop-blur-xl border-b border-[#E8E2D5]/70 dark:border-slate-800/80 px-4 sm:px-6 flex items-center justify-between transition-colors">
           <div className="flex items-center gap-3">
@@ -460,6 +623,30 @@ export function Layout(): JSX.Element {
                 <Moon className="w-4.5 h-4.5 text-teal-700 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" />
               )}
             </button>
+
+            {/* Quick Profile Access Pill */}
+            <button
+              type="button"
+              onClick={() => setIsProfileModalOpen(true)}
+              className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-white dark:bg-slate-800 border-[1.5px] border-[#DCD4C6] dark:border-slate-700 hover:border-teal-600/60 dark:hover:border-teal-500/60 shadow-[0_2px_4px_rgba(0,0,0,0.04)] active:translate-y-[1px] transition-all cursor-pointer group"
+              title="Profilimi Düzenle"
+            >
+              <div className="w-7 h-7 rounded-full overflow-hidden bg-teal-800 text-white font-bold text-xs flex items-center justify-center shrink-0 border border-teal-600">
+                {userAvatar ? (
+                  <img src={userAvatar} alt={displayName} className="w-full h-full object-cover" />
+                ) : (
+                  <span>{userInitial}</span>
+                )}
+              </div>
+              <div className="hidden md:flex flex-col text-left">
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors truncate max-w-[120px]">
+                  {displayName}
+                </span>
+                <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 leading-none">
+                  {roleBadge.label}
+                </span>
+              </div>
+            </button>
           </div>
         </header>
 
@@ -471,6 +658,12 @@ export function Layout(): JSX.Element {
 
       {/* Mobile Bottom Navigation Bar */}
       <MobileBottomNav role={userRole} onOpenMenu={() => setMobileOpen(true)} />
+
+      {/* Interactive Profile Edit Modal */}
+      <ProfileEditModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
     </div>
   );
 }

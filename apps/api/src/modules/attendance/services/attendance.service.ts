@@ -7,6 +7,8 @@ import type {
   IAttendanceRepository,
 } from '../repositories/attendance.repository';
 import { NotificationsService } from '../../notifications/services/notifications.service';
+import { StudentsService } from '../../students/services/students.service';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 
 @Injectable()
 export class AttendanceService {
@@ -16,11 +18,44 @@ export class AttendanceService {
     @Optional()
     @Inject(NotificationsService)
     private readonly notificationsService?: NotificationsService,
+    @Optional()
+    @Inject(StudentsService)
+    private readonly studentsService?: StudentsService,
   ) {}
 
-  async findByDate(tenantId: string, dateStr: string): Promise<Attendance[]> {
+  async findByDate(tenantId: string, dateStr: string, user?: CurrentUserPayload): Promise<Attendance[]> {
     const date = new Date(dateStr);
-    const rows = await this.repo.findByDate(tenantId, date);
+    let studentIds: string[] | undefined;
+    if (user?.role === 'TEACHER' && this.studentsService) {
+      const teacherStudents = await this.studentsService.findAll(tenantId, user);
+      studentIds = teacherStudents.map((s) => s.id);
+      if (studentIds.length === 0) return [];
+    }
+    const rows =
+      studentIds !== undefined
+        ? await this.repo.findByDate(tenantId, date, studentIds)
+        : await this.repo.findByDate(tenantId, date);
+    return rows.map((row) => Attendance.fromPrisma(row));
+  }
+
+  async findByDateRange(
+    tenantId: string,
+    startDateStr: string,
+    endDateStr: string,
+    user?: CurrentUserPayload,
+  ): Promise<Attendance[]> {
+    const startDate = new Date(startDateStr);
+    const endDate = new Date(endDateStr);
+    let studentIds: string[] | undefined;
+    if (user?.role === 'TEACHER' && this.studentsService) {
+      const teacherStudents = await this.studentsService.findAll(tenantId, user);
+      studentIds = teacherStudents.map((s) => s.id);
+      if (studentIds.length === 0) return [];
+    }
+    const rows =
+      studentIds !== undefined
+        ? await this.repo.findByDateRange(tenantId, startDate, endDate, studentIds)
+        : await this.repo.findByDateRange(tenantId, startDate, endDate);
     return rows.map((row) => Attendance.fromPrisma(row));
   }
 

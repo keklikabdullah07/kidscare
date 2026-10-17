@@ -13,12 +13,17 @@ import type {
   PickupContactRow,
   PickupEventRow,
 } from '../repositories/pickup.repository';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { getScopedStudentIdsForUser } from '../../../common/utils/student-access';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 
 @Injectable()
 export class PickupService {
   constructor(
     @Inject('IPickupRepository')
     private readonly repo: IPickupRepository,
+    @Inject(PrismaService)
+    private readonly prisma: PrismaService,
   ) {}
 
   async listContacts(tenantId: string, studentId: string): Promise<PickupContact[]> {
@@ -64,8 +69,27 @@ export class PickupService {
   async listAuthorizations(
     tenantId: string,
     filters?: { studentId?: string; status?: PickupAuthorization['status'] },
+    user?: CurrentUserPayload,
   ): Promise<PickupAuthorization[]> {
-    const rows = await this.repo.listAuthorizations(tenantId, filters);
+    const activeFilters: {
+      studentId?: string;
+      studentIds?: string[];
+      status?: PickupAuthorization['status'];
+    } = { ...filters };
+
+    if (user) {
+      const allowedStudentIds = await getScopedStudentIdsForUser(this.prisma, tenantId, user);
+      if (allowedStudentIds !== null) {
+        if (allowedStudentIds.length === 0) return [];
+        if (activeFilters.studentId) {
+          if (!allowedStudentIds.includes(activeFilters.studentId)) return [];
+        } else {
+          activeFilters.studentIds = allowedStudentIds;
+        }
+      }
+    }
+
+    const rows = await this.repo.listAuthorizations(tenantId, activeFilters);
     return rows.map((row) => this.authToResponse(row));
   }
 
@@ -107,8 +131,28 @@ export class PickupService {
   async listEvents(
     tenantId: string,
     filters?: { studentId?: string; from?: Date; to?: Date },
+    user?: CurrentUserPayload,
   ): Promise<PickupEvent[]> {
-    const rows = await this.repo.listEvents(tenantId, filters);
+    const activeFilters: {
+      studentId?: string;
+      studentIds?: string[];
+      from?: Date;
+      to?: Date;
+    } = { ...filters };
+
+    if (user) {
+      const allowedStudentIds = await getScopedStudentIdsForUser(this.prisma, tenantId, user);
+      if (allowedStudentIds !== null) {
+        if (allowedStudentIds.length === 0) return [];
+        if (activeFilters.studentId) {
+          if (!allowedStudentIds.includes(activeFilters.studentId)) return [];
+        } else {
+          activeFilters.studentIds = allowedStudentIds;
+        }
+      }
+    }
+
+    const rows = await this.repo.listEvents(tenantId, activeFilters);
     return rows.map((row) => this.eventToResponse(row));
   }
 

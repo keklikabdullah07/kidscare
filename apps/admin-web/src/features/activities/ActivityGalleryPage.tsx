@@ -1,7 +1,8 @@
-import { useState, useEffect, type JSX } from 'react';
-import type { ActivityPost, MediaFileItem } from '@kidscare/shared-types';
+import { useState, useEffect, useMemo, type JSX } from 'react';
+import type { ActivityPost, Classroom, MediaFileItem } from '@kidscare/shared-types';
 import { Camera, Plus, Trash2, Calendar, X, Sparkles, School, Check } from 'lucide-react';
 import { getActivities, createActivity, deleteActivity } from '../../api/activities';
+import { listClassrooms } from '../../api/classrooms';
 import { listMediaFiles } from '../../api/media';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
@@ -17,31 +18,58 @@ const FILTER_TAGS = ['Hepsi', 'Sanat', 'Oyun', 'Bahçe', 'Müzik', 'Resim', 'Gel
 export function ActivityGalleryPage(): JSX.Element {
   const { state: authState } = useAuth();
   const [posts, setPosts] = useState<ActivityPost[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState('Hepsi');
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [activeLightboxFile, setActiveLightboxFile] = useState<MediaFileItem | null>(null);
 
+  const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
+  const currentUserId = authState.status === 'authenticated' ? authState.user.id : null;
   const canEdit = authState.status === 'authenticated' && authState.user.role !== 'PARENT';
+
+  // Öğretmen için sadece kendi sınıfı
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher) return classrooms;
+    if (!currentUserId) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    return [];
+  }, [isTeacher, currentUserId, classrooms]);
+
+  const displayClassrooms = isTeacher ? teacherClassrooms : classrooms;
 
   // Form states
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [classroom, setClassroom] = useState('Papatyalar Sınıfı');
+  const [classroom, setClassroom] = useState('');
   const [selectedUrls, setSelectedUrls] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>(['Sanat', 'Etkinlik']);
   const [submitting, setSubmitting] = useState(false);
   const [tenantMediaFiles, setTenantMediaFiles] = useState<MediaFileItem[]>([]);
+
+  useEffect(() => {
+    if (displayClassrooms.length > 0 && !classroom) {
+      setClassroom(displayClassrooms[0]?.name || 'Tüm Kreş');
+    }
+  }, [displayClassrooms, classroom]);
 
   const { showToast } = useToast();
 
   function loadPosts(): void {
     setLoading(true);
     setError(null);
-    getActivities({ tag: selectedTag === 'Hepsi' ? undefined : selectedTag })
-      .then((data) => {
+    Promise.all([
+      getActivities({ tag: selectedTag === 'Hepsi' ? undefined : selectedTag }),
+      listClassrooms().catch(() => []),
+    ])
+      .then(([data, classList]) => {
         setPosts(data);
+        setClassrooms(classList);
         setLoading(false);
       })
       .catch((err: unknown) => {
@@ -402,10 +430,12 @@ export function ActivityGalleryPage(): JSX.Element {
                   onChange={(e) => setClassroom(e.target.value)}
                   className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 p-3.5 text-xs font-medium text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-900 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
                 >
-                  <option value="Papatyalar Sınıfı">Papatyalar Sınıfı (3-4 Yaş)</option>
-                  <option value="Yıldızlar Sınıfı">Yıldızlar Sınıfı (4-5 Yaş)</option>
-                  <option value="Minikler Sınıfı">Minikler Sınıfı (2-3 Yaş)</option>
-                  <option value="Tüm Kreş">Tüm Kreş (Genel Etkinlik)</option>
+                  {displayClassrooms.map((cls) => (
+                    <option key={cls.id} value={cls.name}>
+                      {cls.name} {cls.ageGroup ? `(${cls.ageGroup})` : ''}
+                    </option>
+                  ))}
+                  {!isTeacher && <option value="Tüm Kreş">Tüm Kreş (Genel Etkinlik)</option>}
                 </select>
               </div>
 

@@ -9,6 +9,8 @@ import {
   GraduationCap,
   HeartHandshake,
   Shield,
+  Bus,
+  Phone,
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { inviteUser, listUsers } from '../../api/users';
@@ -26,6 +28,7 @@ const roleLabels: Record<string, string> = {
   ADMIN: 'Yönetici / Müdür',
   TEACHER: 'Sınıf Öğretmeni',
   PARENT: 'Öğrenci Velisi',
+  SERVICE_STAFF: 'Servis Personeli',
 };
 
 const roleVariants: Record<string, BadgeVariant> = {
@@ -33,6 +36,7 @@ const roleVariants: Record<string, BadgeVariant> = {
   ADMIN: 'brand',
   TEACHER: 'info',
   PARENT: 'warning',
+  SERVICE_STAFF: 'accent',
 };
 
 export function TeamPage(): JSX.Element {
@@ -41,17 +45,24 @@ export function TeamPage(): JSX.Element {
   const [users, setUsers] = useState<User[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'TEACHER' | 'PARENT'>('TEACHER');
+  const [role, setRole] = useState<'TEACHER' | 'PARENT' | 'SERVICE_STAFF'>('TEACHER');
   const [inviting, setInviting] = useState(false);
-  const [activeRoleFilter, setActiveRoleFilter] = useState<'ALL' | 'TEACHER' | 'PARENT' | 'ADMIN'>(
-    'ALL',
-  );
+  const [activeRoleFilter, setActiveRoleFilter] = useState<
+    'ALL' | 'TEACHER' | 'PARENT' | 'ADMIN' | 'SERVICE_STAFF'
+  >('ALL');
 
   const totalCount = useMemo(() => users.length, [users]);
   const teacherCount = useMemo(() => users.filter((u) => u.role === 'TEACHER').length, [users]);
   const parentCount = useMemo(() => users.filter((u) => u.role === 'PARENT').length, [users]);
+  const serviceStaffCount = useMemo(
+    () => users.filter((u) => u.role === 'SERVICE_STAFF').length,
+    [users],
+  );
   const adminCount = useMemo(
     () => users.filter((u) => u.role === 'ADMIN' || u.role === 'SUPER_ADMIN').length,
     [users],
@@ -63,6 +74,8 @@ export function TeamPage(): JSX.Element {
         return users.filter((u) => u.role === 'TEACHER');
       case 'PARENT':
         return users.filter((u) => u.role === 'PARENT');
+      case 'SERVICE_STAFF':
+        return users.filter((u) => u.role === 'SERVICE_STAFF');
       case 'ADMIN':
         return users.filter((u) => u.role === 'ADMIN' || u.role === 'SUPER_ADMIN');
       default:
@@ -93,15 +106,23 @@ export function TeamPage(): JSX.Element {
     if (inviting) return;
     setInviting(true);
     try {
-      const created = await inviteUser({
+      const payload: Parameters<typeof inviteUser>[0] = {
         email: email.trim(),
         password,
         role,
-      });
+      };
+      if (firstName.trim()) payload.firstName = firstName.trim();
+      if (lastName.trim()) payload.lastName = lastName.trim();
+      if (phone.trim()) payload.phone = phone.trim();
+      const created = await inviteUser(payload);
       setUsers((prev) => [...prev, created].sort((a, b) => a.email.localeCompare(b.email, 'tr')));
+      setFirstName('');
+      setLastName('');
+      setPhone('');
       setEmail('');
       setPassword('');
-      showToast(`${created.email} hesabı oluşturuldu`, 'success');
+      const displayName = [created.firstName, created.lastName].filter(Boolean).join(' ').trim() || created.email;
+      showToast(`${displayName} hesabı başarıyla oluşturuldu! 🎉`, 'success');
     } catch (err) {
       const msg =
         err instanceof ApiError
@@ -131,7 +152,7 @@ export function TeamPage(): JSX.Element {
       />
 
       {/* KPI Stat Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
         <StatCard
           title="Toplam Kullanıcı"
           value={totalCount}
@@ -172,6 +193,19 @@ export function TeamPage(): JSX.Element {
           }
         />
         <StatCard
+          title="Servis Ekibi"
+          value={serviceStaffCount}
+          subtitle="Servis Personeli"
+          icon={Bus}
+          variant="teal"
+          onClick={() => setActiveRoleFilter('SERVICE_STAFF')}
+          className={
+            activeRoleFilter === 'SERVICE_STAFF'
+              ? 'ring-2 ring-offset-2 ring-teal-500/60 dark:ring-teal-400/60'
+              : ''
+          }
+        />
+        <StatCard
           title="Yöneticiler"
           value={adminCount}
           subtitle="Admin & Süper Admin"
@@ -190,16 +224,60 @@ export function TeamPage(): JSX.Element {
         {/* Create Form */}
         <form
           onSubmit={(e) => void handleInvite(e)}
-          className="lg:col-span-2 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] p-6 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] space-y-4"
+          className="lg:col-span-2 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] p-6 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] space-y-3.5"
         >
           <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-sm">
             <UserPlus className="w-4 h-4 text-teal-900 dark:text-teal-300" />
             Yeni Hesap Oluştur
           </div>
 
+          <div className="grid grid-cols-2 gap-3">
+            <label className="block">
+              <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
+                Ad
+              </span>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                maxLength={100}
+                className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
+                placeholder="Örn: Mehmet"
+              />
+            </label>
+
+            <label className="block">
+              <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
+                Soyad
+              </span>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                maxLength={100}
+                className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
+                placeholder="Örn: Kaya"
+              />
+            </label>
+          </div>
+
           <label className="block">
-            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              E-posta
+            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
+              Telefon Numarası
+            </span>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              maxLength={30}
+              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
+              placeholder="05xx xxx xx xx"
+            />
+          </label>
+
+          <label className="block">
+            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
+              E-posta <span className="text-amber-600">*</span>
             </span>
             <input
               type="email"
@@ -207,13 +285,13 @@ export function TeamPage(): JSX.Element {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:border-teal-700 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
-              placeholder="veli@ornek.com"
+              placeholder="ornek@kidscare.test"
             />
           </label>
 
           <label className="block">
-            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              Geçici Şifre
+            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
+              Geçici Şifre <span className="text-amber-600">*</span>
             </span>
             <input
               type="password"
@@ -227,16 +305,17 @@ export function TeamPage(): JSX.Element {
           </label>
 
           <label className="block">
-            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
               Rol
             </span>
             <select
               value={role}
-              onChange={(e) => setRole(e.target.value as 'TEACHER' | 'PARENT')}
-              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 px-3.5 py-2.5 text-xs bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:border-teal-700 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs"
+              onChange={(e) => setRole(e.target.value as 'TEACHER' | 'PARENT' | 'SERVICE_STAFF')}
+              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 px-3.5 py-2.5 text-xs bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:border-teal-700 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 font-medium shadow-2xs cursor-pointer"
             >
               <option value="TEACHER">Öğretmen</option>
               <option value="PARENT">Veli</option>
+              <option value="SERVICE_STAFF">Servis Personeli</option>
             </select>
           </label>
 
@@ -245,7 +324,7 @@ export function TeamPage(): JSX.Element {
             variant="teal"
             size="md"
             disabled={inviting}
-            className="w-full"
+            className="w-full mt-2"
           >
             {inviting ? 'Oluşturuluyor…' : 'Hesap Oluştur'}
           </TactileButton>
@@ -278,7 +357,7 @@ export function TeamPage(): JSX.Element {
               <EmptyState
                 icon={Users}
                 title="Henüz kullanıcı yok."
-                description="Sol taraftaki formu kullanarak öğretmen veya veli hesabı oluşturabilirsiniz."
+                description="Sol taraftaki formu kullanarak öğretmen, veli veya servis personeli hesabı oluşturabilirsiniz."
               />
             </div>
           )}
@@ -295,30 +374,55 @@ export function TeamPage(): JSX.Element {
             <ul className="divide-y divide-slate-100 dark:divide-slate-700">
               {filteredUsers.map((u) => {
                 const variant = roleVariants[u.role] ?? 'neutral';
-                const initial = (u.email.charAt(0) || 'U').toUpperCase();
+                const fullName = [u.firstName, u.lastName].filter(Boolean).join(' ').trim();
+                const displayTitle = fullName || u.email;
+                const initials =
+                  (u.firstName && u.lastName
+                    ? `${u.firstName.charAt(0)}${u.lastName.charAt(0)}`
+                    : u.firstName?.charAt(0) || u.email.charAt(0) || 'U'
+                  ).toUpperCase();
 
                 return (
                   <li
                     key={u.id}
-                    className="px-6 py-3.5 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/40 transition"
+                    className="px-6 py-4 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/40 transition"
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-full bg-teal-100 dark:bg-slate-700 text-teal-800 dark:text-teal-200 border border-teal-200 dark:border-slate-600 flex items-center justify-center font-bold text-xs shrink-0">
-                        {initial}
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className="w-10 h-10 rounded-2xl overflow-hidden bg-teal-100 dark:bg-slate-700 text-teal-800 dark:text-teal-200 border border-teal-200 dark:border-slate-600 flex items-center justify-center font-black text-xs shrink-0 shadow-2xs">
+                        {u.avatarUrl ? (
+                          <img src={u.avatarUrl} alt={displayTitle} className="w-full h-full object-cover" />
+                        ) : (
+                          initials
+                        )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-bold text-slate-900 dark:text-white truncate flex items-center gap-1.5">
-                          <Mail className="w-3 h-3 text-slate-400 shrink-0" />
-                          {u.email}
-                        </p>
-                        <div className="mt-0.5">
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                            {displayTitle}
+                          </p>
                           <Badge variant={variant} size="sm">
                             {roleLabels[u.role] ?? u.role}
                           </Badge>
                         </div>
+                        {(fullName || u.phone) && (
+                          <div className="flex items-center gap-3 mt-1 text-[11px] text-slate-500 dark:text-slate-400 flex-wrap">
+                            {fullName && (
+                              <span className="flex items-center gap-1 font-mono">
+                                <Mail className="w-3 h-3 text-slate-400 shrink-0" />
+                                {u.email}
+                              </span>
+                            )}
+                            {u.phone && (
+                              <span className="flex items-center gap-1 font-mono">
+                                <Phone className="w-3 h-3 text-slate-400 shrink-0" />
+                                {u.phone}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 px-2 py-0.5 rounded-lg">
+                    <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 px-2.5 py-1 rounded-xl">
                       <CheckCircle2 className="w-3 h-3" />
                       Aktif
                     </span>

@@ -46,7 +46,7 @@ export class PickupController {
 
   // ===== Contacts =====
   @Get('contacts')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF')
   async listContacts(
     @CurrentTenantId() tenantId: string,
     @Query('studentId') studentId: string,
@@ -83,16 +83,17 @@ export class PickupController {
 
   // ===== Authorizations =====
   @Get('authorizations')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF')
   async listAuthorizations(
     @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
     @Query('studentId') studentId?: string,
     @Query('status') status?: PickupAuthorizationStatus,
   ): Promise<PickupAuthorization[]> {
     const filters: { studentId?: string; status?: PickupAuthorizationStatus } = {};
     if (studentId) filters.studentId = studentId;
     if (status) filters.status = status;
-    return this.service.listAuthorizations(tenantId, filters);
+    return this.service.listAuthorizations(tenantId, filters, user);
   }
 
   @Post('authorizations')
@@ -119,9 +120,10 @@ export class PickupController {
 
   // ===== Events =====
   @Get('events')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'SERVICE_STAFF')
   async listEvents(
     @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
     @Query('studentId') studentId?: string,
     @Query('from') from?: string,
     @Query('to') to?: string,
@@ -130,11 +132,11 @@ export class PickupController {
     if (studentId) filters.studentId = studentId;
     if (from) filters.from = new Date(from);
     if (to) filters.to = new Date(to);
-    return this.service.listEvents(tenantId, filters);
+    return this.service.listEvents(tenantId, filters, user);
   }
 
   @Post('events')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'SERVICE_STAFF')
   @HttpCode(201)
   async createEvent(
     @CurrentTenantId() tenantId: string,

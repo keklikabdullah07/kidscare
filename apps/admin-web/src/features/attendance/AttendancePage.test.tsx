@@ -67,18 +67,57 @@ const fakeAttendance = [
   },
 ];
 
+const fakeClassrooms = [
+  {
+    id: 'cls-arilar',
+    name: 'Arılar Sınıfı',
+    ageGroup: '3-4 Yaş',
+    capacity: 15,
+    isActive: true,
+  },
+  {
+    id: 'cls-kelebekler',
+    name: 'Kelebekler Sınıfı',
+    ageGroup: '4-5 Yaş',
+    capacity: 15,
+    isActive: true,
+  },
+];
+
+vi.mock('../auth/AuthContext', () => ({
+  useAuth: () => ({
+    state: {
+      status: 'authenticated',
+      user: {
+        id: 'admin-1',
+        tenantId: 't-1',
+        email: 'admin@demo.test',
+        role: 'ADMIN',
+      },
+      token: 'test-jwt',
+    },
+    login: async () => {},
+    signup: async () => {},
+    logout: () => {},
+  }),
+}));
+
 function mockFetchByUrl(handlers: Record<string, (init?: RequestInit) => Response>) {
   return vi.spyOn(global, 'fetch').mockImplementation((...args: unknown[]) => {
     const [input, init] = args as [string | URL | Request, RequestInit | undefined];
     const url = input instanceof globalThis.Request ? input.url : String(input);
-    const path = new URL(url, 'http://localhost').pathname;
+    const rawPath = new URL(url, 'http://localhost').pathname;
+    const path = rawPath.replace(/^\/api/, '');
     // First try exact path, then any pattern handler (key starts with '*')
-    const exact = handlers[path];
+    const exact = handlers[path] ?? handlers[rawPath];
     if (exact) return Promise.resolve(exact(init));
     const patternKey = Object.keys(handlers).find(
-      (k) => k.startsWith('*') && path.includes(k.slice(1)),
+      (k) => k.startsWith('*') && (path.includes(k.slice(1)) || rawPath.includes(k.slice(1))),
     );
     if (patternKey) return Promise.resolve(handlers[patternKey]!(init));
+    if (path === '/classrooms' || path === '/users') {
+      return Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
+    }
     return Promise.resolve(new Response(JSON.stringify({ message: 'unhandled' }), { status: 500 }));
   });
 }
@@ -217,5 +256,137 @@ describe('AttendancePage', () => {
     // In grid view, allergy badge should still be present with tooltip 'Fıstık'
     const gridAllergyBadge = screen.getByTitle('Fıstık');
     expect(gridAllergyBadge).toBeInTheDocument();
+  });
+
+  it('renders classroom breakdown cards for admin showing live attendance metrics', async () => {
+    const fakeClassrooms = [
+      {
+        id: 'cls-1',
+        name: 'Papatyalar Sınıfı',
+        ageGroup: '4-5 Yaş',
+        capacity: 15,
+        isActive: true,
+        teachers: [{ classroomId: 'cls-1', teacherId: 't-1' }],
+      },
+    ];
+
+    const fakeTeachers = [
+      {
+        id: 't-1',
+        email: 'ayse.ogretmen@demo.test',
+        role: 'TEACHER',
+      },
+    ];
+
+    const studentsWithClass = [
+      { ...fakeStudents[0], classroomId: 'cls-1' },
+      { ...fakeStudents[1], classroomId: 'cls-1' },
+    ];
+
+    mockFetchByUrl({
+      '/students': () => new Response(JSON.stringify(studentsWithClass), { status: 200 }),
+      '/attendance': () => new Response(JSON.stringify(fakeAttendance), { status: 200 }),
+      '/classrooms': () => new Response(JSON.stringify(fakeClassrooms), { status: 200 }),
+      '/users': () => new Response(JSON.stringify(fakeTeachers), { status: 200 }),
+    });
+
+    render(<AttendancePage />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Sınıflara Göre Canlı Katılım & Yoklama Dağılımı'),
+      ).toBeInTheDocument();
+      expect(screen.getAllByText('Papatyalar Sınıfı').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText('1 Geldi').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText('1 Gelmedi').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText('%50 Katılım')).toBeInTheDocument();
+    });
+  });
+
+  it('updates lower stats cards dynamically when a specific classroom card is clicked', async () => {
+    const studentArilar = {
+      ...fakeStudents[0],
+      id: 's-arilar',
+      firstName: 'Ali',
+      classroomId: 'cls-arilar',
+    };
+    const studentKelebekler = {
+      ...fakeStudents[1],
+      id: 's-kelebekler',
+      firstName: 'Ayşe',
+      classroomId: 'cls-kelebekler',
+    };
+
+    const multiAttendance = [
+      {
+        id: 'att-1',
+        tenantId: 't-1',
+        studentId: 's-arilar',
+        date: '2026-09-15',
+        status: 'EXCUSED',
+      },
+      {
+        id: 'att-2',
+        tenantId: 't-1',
+        studentId: 's-kelebekler',
+        date: '2026-09-15',
+        status: 'PRESENT',
+      },
+    ];
+
+    mockFetchByUrl({
+      '/students': () =>
+        new Response(JSON.stringify([studentArilar, studentKelebekler]), { status: 200 }),
+      '/attendance': () => new Response(JSON.stringify(multiAttendance), { status: 200 }),
+      '/classrooms': () => new Response(JSON.stringify(fakeClassrooms), { status: 200 }),
+      '/users': () => new Response(JSON.stringify([]), { status: 200 }),
+    });
+
+    const user = userEvent.setup();
+    render(<AttendancePage />);
+
+    // Başlangıçta Tüm Kreş seçilidir: Toplam 2 öğrenci
+    await waitFor(() => {
+      expect(screen.getAllByText('Arılar Sınıfı').length).toBeGreaterThanOrEqual(1);
+    });
+
+    // Arılar Sınıfı kartına tıkla
+    const arilarBtn = screen.getByTitle('Arılar Sınıfı').closest('button')!;
+    await user.click(arilarBtn);
+
+    // Arılar sınıfında 1 öğrenci var ve o da İZİNLİ
+    await waitFor(() => {
+      expect(screen.getAllByText(/Arılar Sınıfı/).length).toBeGreaterThanOrEqual(2);
+    });
+
+    const excusedBtn = screen.getAllByText('İzinli / Raporlu')[0]!.closest('button')!;
+    expect(excusedBtn).toHaveTextContent('1');
+  });
+
+  it('opens MEB official attendance sheet modal with classroom filter and monthly data', async () => {
+    mockFetchByUrl({
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+      '/attendance': () => new Response(JSON.stringify(fakeAttendance), { status: 200 }),
+      '/classrooms': () => new Response(JSON.stringify(fakeClassrooms), { status: 200 }),
+      '/users': () => new Response(JSON.stringify([]), { status: 200 }),
+    });
+
+    const user = userEvent.setup();
+    render(<AttendancePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ada Yılmaz')).toBeInTheDocument();
+    });
+
+    const mebPrintBtn = screen.getByText(/MEB Çizelgesi Yazdır/i).closest('button')!;
+    await user.click(mebPrintBtn);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/T\.C\. MİLLÎ EĞİTİM BAKANLIĞI RESMÎ TEFTİŞ & ARŞİV FORMATI/i),
+      ).toBeInTheDocument();
+      expect(screen.getByText('Kütük No')).toBeInTheDocument();
+      expect(screen.getByText('D.Yılı (Yaş)')).toBeInTheDocument();
+    });
   });
 });

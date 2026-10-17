@@ -50,4 +50,19 @@ describe('MobileBottomNav', () => {
     expect(screen.getByText('Mesajlar')).toBeDefined();
     expect(screen.getByText('Menü')).toBeDefined();
   });
+
+  it('renders service staff tabs for SERVICE_STAFF role', () => {
+    const onOpenMenu = vi.fn();
+    render(
+      <MemoryRouter>
+        <MobileBottomNav role="SERVICE_STAFF" onOpenMenu={onOpenMenu} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText('Servis')).toBeDefined();
+    expect(screen.getByText('Mesajlar')).toBeDefined();
+    expect(screen.getByText('Menü')).toBeDefined();
+    expect(screen.queryByText('Yoklama')).toBeNull();
+    expect(screen.queryByText('Gösterge')).toBeNull();
+  });
 });

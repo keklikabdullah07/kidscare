@@ -63,6 +63,7 @@ export interface IMedicationRepository {
     tenantId: string,
     filters?: {
       studentId?: string;
+      studentIds?: string[];
       status?: Prisma.MedicationRecordWhereInput['status'];
       from?: Date;
       to?: Date;
@@ -89,6 +90,7 @@ export class MedicationRepository implements IMedicationRepository {
     tenantId: string,
     filters?: {
       studentId?: string;
+      studentIds?: string[];
       status?: Prisma.MedicationRecordWhereInput['status'];
       from?: Date;
       to?: Date;
@@ -98,7 +100,11 @@ export class MedicationRepository implements IMedicationRepository {
       client.medicationRecord.findMany({
         where: {
           tenantId,
-          ...(filters?.studentId ? { studentId: filters.studentId } : {}),
+          ...(filters?.studentIds
+            ? { studentId: { in: filters.studentIds } }
+            : filters?.studentId
+            ? { studentId: filters.studentId }
+            : {}),
           ...(filters?.status ? { status: filters.status } : {}),
           ...(filters?.from || filters?.to
             ? {

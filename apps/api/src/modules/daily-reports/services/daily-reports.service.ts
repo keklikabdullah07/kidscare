@@ -4,6 +4,8 @@ import type { BulkDailyReportItem, DailyReportInput } from '@kidscare/shared-sch
 import { DailyReport } from '../entities/daily-report.entity';
 import type { IDailyReportsRepository } from '../repositories/daily-reports.repository';
 import { NotificationsService } from '../../notifications/services/notifications.service';
+import { StudentsService } from '../../students/services/students.service';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 
 @Injectable()
 export class DailyReportsService {
@@ -13,11 +15,23 @@ export class DailyReportsService {
     @Optional()
     @Inject(NotificationsService)
     private readonly notificationsService?: NotificationsService,
+    @Optional()
+    @Inject(StudentsService)
+    private readonly studentsService?: StudentsService,
   ) {}
 
-  async findByDate(tenantId: string, dateStr: string): Promise<DailyReport[]> {
+  async findByDate(tenantId: string, dateStr: string, user?: CurrentUserPayload): Promise<DailyReport[]> {
     const date = new Date(dateStr);
-    const rows = await this.repo.findByDate(tenantId, date);
+    let studentIds: string[] | undefined;
+    if (user?.role === 'TEACHER' && this.studentsService) {
+      const teacherStudents = await this.studentsService.findAll(tenantId, user);
+      studentIds = teacherStudents.map((s) => s.id);
+      if (studentIds.length === 0) return [];
+    }
+    const rows =
+      studentIds !== undefined
+        ? await this.repo.findByDate(tenantId, date, studentIds)
+        : await this.repo.findByDate(tenantId, date);
     return rows.map((row) => DailyReport.fromPrisma(row));
   }
 

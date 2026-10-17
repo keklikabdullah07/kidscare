@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import type { Tenant as PrismaTenant } from '@kidscare/database';
 import { TenantsService } from './tenants.service';
 import type { ITenantsRepository } from '../repositories/tenants.repository';
+import type { PrismaService } from '../../../prisma/prisma.service';
 
 const mockTenant: PrismaTenant = {
   id: 't-1',
@@ -22,7 +23,7 @@ describe('TenantsService', () => {
       update: jest.fn(),
       getOperationalAlerts: jest.fn(),
     };
-    service = new TenantsService(repo);
+    service = new TenantsService(repo, {} as unknown as PrismaService);
   });
 
   describe('findOne', () => {

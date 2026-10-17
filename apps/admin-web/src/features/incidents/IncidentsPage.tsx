@@ -14,14 +14,13 @@ import {
   Search,
   AlertCircle,
 } from 'lucide-react';
-import type { IncidentCategory, IncidentRecord, Student } from '@kidscare/shared-types';
+import type { Classroom, IncidentCategory, IncidentRecord, Student } from '@kidscare/shared-types';
 import { createIncident, listIncidents, updateIncident } from '../../api/incidents';
 import { listStudents } from '../../api/students';
+import { listClassrooms } from '../../api/classrooms';
+import { useAuth } from '../auth/AuthContext';
 import { useToast } from '../../components/Toast';
-import { EmptyState } from '../../components/ui/EmptyState';
-import { StatCard } from '../../components/ui/StatCard';
-import { TactileButton } from '../../components/ui/TactileButton';
-import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
+import { EmptyState, PageHeader, StatCard, TactileButton, TactileTabs, type TactileTabItem } from '../../components/ui';
 
 type TabKey = 'ALL' | 'PENDING_PARENT' | 'INJURIES' | 'ILLNESS' | 'BEHAVIOR';
 
@@ -95,12 +94,17 @@ function toLocalDatetimeInput(d: Date = new Date()): string {
 }
 
 export function IncidentsPage(): JSX.Element {
+  const { state: authState } = useAuth();
   const [items, setItems] = useState<IncidentRecord[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const { showToast } = useToast();
+
+  const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
+  const currentUserId = authState.status === 'authenticated' ? authState.user.id : null;
 
   // Tab & Filter state
   const [activeTab, setActiveTab] = useState<TabKey>('ALL');
@@ -119,9 +123,14 @@ export function IncidentsPage(): JSX.Element {
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes] = await Promise.all([listIncidents(), listStudents()]);
+      const [list, studentsRes, classroomsRes] = await Promise.all([
+        listIncidents(),
+        listStudents().catch(() => []),
+        listClassrooms().catch(() => []),
+      ]);
       setItems(list);
       setStudents(studentsRes);
+      setClassrooms(classroomsRes);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Kayıtlar yüklenemedi', 'error');
     } finally {
@@ -133,6 +142,43 @@ export function IncidentsPage(): JSX.Element {
     void refresh();
   }, []);
 
+  // Öğretmen İzolasyonu (Sınıf Yetki Filtresi)
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher || !currentUserId) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    const studentClassIds = new Set(students.map((s) => s.classroomId).filter(Boolean));
+    const matched = classrooms.filter((c) => studentClassIds.has(c.id));
+    if (matched.length > 0) return matched;
+    return [];
+  }, [isTeacher, currentUserId, classrooms, students]);
+
+  const teacherClassroomIds = useMemo(
+    () => new Set(teacherClassrooms.map((c) => c.id)),
+    [teacherClassrooms],
+  );
+
+  const scopedStudents = useMemo(() => {
+    if (!isTeacher) return students;
+    if (teacherClassroomIds.size > 0) {
+      return students.filter((s) => s.classroomId && teacherClassroomIds.has(s.classroomId));
+    }
+    return [];
+  }, [isTeacher, students, teacherClassroomIds]);
+
+  const scopedStudentIds = useMemo(
+    () => new Set(scopedStudents.map((s) => s.id)),
+    [scopedStudents],
+  );
+
+  const scopedItems = useMemo(() => {
+    if (!isTeacher) return items;
+    return items.filter((i) => scopedStudentIds.has(i.studentId));
+  }, [isTeacher, items, scopedStudentIds]);
+
   function getStudent(id: string): Student | undefined {
     return students.find((x) => x.id === id);
   }
@@ -142,24 +188,24 @@ export function IncidentsPage(): JSX.Element {
     return s ? `${s.firstName} ${s.lastName}` : `#${id.slice(0, 8)}`;
   }
 
-  // Summary Metrics
-  const totalCount = items.length;
+  // Summary Metrics (Öğretmen için scopedItems baz alınır)
+  const totalCount = scopedItems.length;
   const pendingNotificationCount = useMemo(
-    () => items.filter((i) => !i.parentNotified).length,
-    [items],
+    () => scopedItems.filter((i) => !i.parentNotified).length,
+    [scopedItems],
   );
   const injuryCount = useMemo(
     () =>
-      items.filter(
+      scopedItems.filter(
         (i) => i.category === 'DUSME' || i.category === 'YARALANMA' || i.category === 'KAZA',
       ).length,
-    [items],
+    [scopedItems],
   );
-  const notifiedCount = useMemo(() => items.filter((i) => i.parentNotified).length, [items]);
+  const notifiedCount = useMemo(() => scopedItems.filter((i) => i.parentNotified).length, [scopedItems]);
 
-  // Filtered Items
+  // Filtered Items (Öğretmen için scopedItems üzerinden filtrelenir)
   const filteredItems = useMemo(() => {
-    return items.filter((i) => {
+    return scopedItems.filter((i) => {
       // 1. Tab filter
       if (activeTab === 'PENDING_PARENT' && i.parentNotified) return false;
       if (
@@ -195,7 +241,7 @@ export function IncidentsPage(): JSX.Element {
 
       return true;
     });
-  }, [items, activeTab, selectedStudentFilter, searchQuery, students]);
+  }, [scopedItems, activeTab, selectedStudentFilter, searchQuery, students]);
 
   async function submitCreate(e: FormEvent): Promise<void> {
     e.preventDefault();
@@ -272,49 +318,62 @@ export function IncidentsPage(): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Sayfa Başlığı ve Dokunsal Aksiyonlar */}
-      <div className="flex items-center justify-between gap-4 flex-wrap pb-1">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-slate-800 border-2 border-amber-600/30 dark:border-amber-500/30 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold shadow-xs">
-            <AlertTriangle className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                Olay Kayıtları & Revir Takibi
-              </h1>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100/80 dark:bg-amber-900/50 text-amber-900 dark:text-amber-200 border border-amber-200 dark:border-amber-700">
-                Güvenlik & Sağlık
+      {/* Slim Page Hero Card */}
+      <PageHeader
+        title="Olay Kayıtları & Revir Takibi"
+        description={
+          isTeacher
+            ? `Sorumlu olduğunuz sınıf(lar)ın (${teacherClassrooms.map((c) => c.name).join(', ') || 'Atanmış sınıf yok'}) revir, kaza ve ilk yardım tutanakları`
+            : 'Düşme, yaralanma, revir müdahaleleri, ilk yardım ve acil veli bildirim raporları'
+        }
+        icon={AlertTriangle}
+        colorTheme="rose"
+        badges={
+          <>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 font-bold text-[11px] border border-slate-200 dark:border-slate-700">
+              {totalCount} Toplam Tutanak
+            </span>
+            {pendingNotificationCount > 0 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 font-bold text-[11px] border border-amber-300 dark:border-amber-700">
+                <AlertCircle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                {pendingNotificationCount} Veli Bildirimi Bekliyor
               </span>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Düşme, yaralanma, revir müdahaleleri, ilk yardım ve acil veli bildirim raporları.
-            </p>
-          </div>
-        </div>
+            )}
+            {injuryCount > 0 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 font-bold text-[11px] border border-rose-300 dark:border-rose-700">
+                <Bandage className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                {injuryCount} Yaralanma / Revir
+              </span>
+            )}
+          </>
+        }
+        actions={
+          <>
+            <TactileButton
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => void refresh()}
+              title="Kayıtları Yenile"
+            >
+              <RotateCw className="w-3.5 h-3.5" />
+              <span>Yenile</span>
+            </TactileButton>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <TactileButton
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={() => void refresh()}
-            title="Kayıtları Yenile"
-          >
-            <RotateCw className="w-3.5 h-3.5" />
-            <span>Yenile</span>
-          </TactileButton>
-
-          <TactileButton
-            type="button"
-            variant="amber"
-            size="sm"
-            onClick={() => setIsCreateOpen(true)}
-          >
-            <Plus className="w-4 h-4" />
-            <span>Yeni Tutanak Oluştur</span>
-          </TactileButton>
-        </div>
-      </div>
+            <TactileButton
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsCreateOpen(true)}
+              className="whitespace-nowrap text-rose-900 dark:text-rose-200 border-rose-300 dark:border-rose-700/80 hover:border-rose-400"
+              title="Yeni Olay Tutanağı Kaydet"
+            >
+              <Plus className="w-4 h-4 text-rose-700 dark:text-rose-400" />
+              <span>+ Yeni Tutanak</span>
+            </TactileButton>
+          </>
+        }
+      />
 
       {/* Dokunsal KPI Özet Sayaçları */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -379,8 +438,12 @@ export function IncidentsPage(): JSX.Element {
               onChange={(e) => setSelectedStudentFilter(e.target.value)}
               className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
             >
-              <option value="">Tüm Öğrenciler ({students.length})</option>
-              {students.map((s) => (
+              <option value="">
+                {isTeacher
+                  ? `Sınıfımdaki Öğrenciler (${scopedStudents.length})`
+                  : `Tüm Öğrenciler (${students.length})`}
+              </option>
+              {scopedStudents.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.firstName} {s.lastName}
                 </option>
@@ -558,7 +621,7 @@ export function IncidentsPage(): JSX.Element {
                   required
                 >
                   <option value="">Öğrenci Seçiniz…</option>
-                  {students.map((s) => (
+                  {scopedStudents.map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.firstName} {s.lastName}
                     </option>

@@ -15,7 +15,13 @@ export type AttendanceExcuseWithStudent = PrismaAttendanceExcuse & {
 };
 
 export interface IAttendanceRepository {
-  findByDate(tenantId: string, date: Date): Promise<PrismaAttendance[]>;
+  findByDate(tenantId: string, date: Date, studentIds?: string[]): Promise<PrismaAttendance[]>;
+  findByDateRange(
+    tenantId: string,
+    startDate: Date,
+    endDate: Date,
+    studentIds?: string[],
+  ): Promise<PrismaAttendance[]>;
   findByStudentAndDate(
     tenantId: string,
     studentId: string,
@@ -47,11 +53,36 @@ export interface IAttendanceRepository {
 export class AttendanceRepository implements IAttendanceRepository {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
-  async findByDate(tenantId: string, date: Date): Promise<PrismaAttendance[]> {
+  async findByDate(tenantId: string, date: Date, studentIds?: string[]): Promise<PrismaAttendance[]> {
     return this.prisma.withTenant((client) =>
       client.attendance.findMany({
-        where: { tenantId, date },
+        where: {
+          tenantId,
+          date,
+          ...(studentIds && studentIds.length > 0 ? { studentId: { in: studentIds } } : {}),
+        },
         orderBy: { createdAt: 'asc' },
+      }),
+    );
+  }
+
+  async findByDateRange(
+    tenantId: string,
+    startDate: Date,
+    endDate: Date,
+    studentIds?: string[],
+  ): Promise<PrismaAttendance[]> {
+    return this.prisma.withTenant((client) =>
+      client.attendance.findMany({
+        where: {
+          tenantId,
+          date: {
+            gte: startDate,
+            lte: endDate,
+          },
+          ...(studentIds && studentIds.length > 0 ? { studentId: { in: studentIds } } : {}),
+        },
+        orderBy: [{ date: 'asc' }, { createdAt: 'asc' }],
       }),
     );
   }

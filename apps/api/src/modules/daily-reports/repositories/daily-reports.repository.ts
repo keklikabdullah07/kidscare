@@ -13,7 +13,7 @@ export interface IDailyReportsRepository {
     studentId: string,
     date: Date,
   ): Promise<PrismaDailyReport | null>;
-  findByDate(tenantId: string, date: Date): Promise<PrismaDailyReport[]>;
+  findByDate(tenantId: string, date: Date, studentIds?: string[]): Promise<PrismaDailyReport[]>;
   upsert(
     tenantId: string,
     studentId: string,
@@ -49,12 +49,13 @@ export class DailyReportsRepository implements IDailyReportsRepository {
     );
   }
 
-  async findByDate(tenantId: string, date: Date): Promise<PrismaDailyReport[]> {
+  async findByDate(tenantId: string, date: Date, studentIds?: string[]): Promise<PrismaDailyReport[]> {
     return this.prisma.withTenant((client) =>
       client.dailyReport.findMany({
         where: {
           tenantId,
           date,
+          ...(studentIds && studentIds.length > 0 ? { studentId: { in: studentIds } } : {}),
         },
         orderBy: { createdAt: 'asc' },
       }),

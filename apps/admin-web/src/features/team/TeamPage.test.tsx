@@ -43,6 +43,18 @@ const fakeUsers = [
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-01T00:00:00.000Z',
   },
+  {
+    id: 'u-5',
+    tenantId: 't-1',
+    email: 'driver@demo.test',
+    firstName: 'Hasan',
+    lastName: 'Servis',
+    role: 'SERVICE_STAFF',
+    isActive: true,
+    lastLoginAt: null,
+    createdAt: '2026-01-01T00:00:00.000Z',
+    updatedAt: '2026-01-01T00:00:00.000Z',
+  },
 ];
 
 function mockUsersApi(payload: unknown) {

@@ -41,7 +41,12 @@ export type PortfolioWithRelations = Prisma.PortfolioItemGetPayload<{
 export interface IDevelopmentRepository {
   listObservations(
     tenantId: string,
-    filters?: { studentId?: string; domain?: DevelopmentDomain; parentVisibleOnly?: boolean },
+    filters?: {
+      studentId?: string;
+      studentIds?: string[];
+      domain?: DevelopmentDomain;
+      parentVisibleOnly?: boolean;
+    },
   ): Promise<ObservationWithRelations[]>;
   createObservation(
     tenantId: string,
@@ -57,7 +62,7 @@ export interface IDevelopmentRepository {
   ): Promise<ObservationCreated>;
   listPortfolioItems(
     tenantId: string,
-    filters?: { studentId?: string; parentVisibleOnly?: boolean },
+    filters?: { studentId?: string; studentIds?: string[]; parentVisibleOnly?: boolean },
   ): Promise<PortfolioWithRelations[]>;
   createPortfolioItem(
     tenantId: string,
@@ -91,10 +96,19 @@ export class DevelopmentRepository implements IDevelopmentRepository {
 
   async listObservations(
     tenantId: string,
-    filters?: { studentId?: string; domain?: DevelopmentDomain; parentVisibleOnly?: boolean },
+    filters?: {
+      studentId?: string;
+      studentIds?: string[];
+      domain?: DevelopmentDomain;
+      parentVisibleOnly?: boolean;
+    },
   ): Promise<ObservationWithRelations[]> {
     const where: Prisma.DevelopmentObservationWhereInput = { tenantId };
-    if (filters?.studentId) where.studentId = filters.studentId;
+    if (filters?.studentIds) {
+      where.studentId = { in: filters.studentIds };
+    } else if (filters?.studentId) {
+      where.studentId = filters.studentId;
+    }
     if (filters?.domain) where.domain = filters.domain;
     if (filters?.parentVisibleOnly) where.isParentVisible = true;
 
@@ -153,10 +167,14 @@ export class DevelopmentRepository implements IDevelopmentRepository {
 
   async listPortfolioItems(
     tenantId: string,
-    filters?: { studentId?: string; parentVisibleOnly?: boolean },
+    filters?: { studentId?: string; studentIds?: string[]; parentVisibleOnly?: boolean },
   ): Promise<PortfolioWithRelations[]> {
     const where: Prisma.PortfolioItemWhereInput = { tenantId };
-    if (filters?.studentId) where.studentId = filters.studentId;
+    if (filters?.studentIds) {
+      where.studentId = { in: filters.studentIds };
+    } else if (filters?.studentId) {
+      where.studentId = filters.studentId;
+    }
     if (filters?.parentVisibleOnly) where.isParentVisible = true;
 
     return this.prisma.withTenant((client: PrismaClient) =>

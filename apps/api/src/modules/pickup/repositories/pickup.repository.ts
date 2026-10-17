@@ -110,7 +110,11 @@ export interface IPickupRepository {
 
   listAuthorizations(
     tenantId: string,
-    filters?: { studentId?: string; status?: Prisma.PickupAuthorizationWhereInput['status'] },
+    filters?: {
+      studentId?: string;
+      studentIds?: string[];
+      status?: Prisma.PickupAuthorizationWhereInput['status'];
+    },
   ): Promise<PickupAuthorizationRow[]>;
   createAuthorization(
     tenantId: string,
@@ -125,7 +129,7 @@ export interface IPickupRepository {
 
   listEvents(
     tenantId: string,
-    filters?: { studentId?: string; from?: Date; to?: Date },
+    filters?: { studentId?: string; studentIds?: string[]; from?: Date; to?: Date },
   ): Promise<PickupEventRow[]>;
   createEvent(
     tenantId: string,
@@ -197,13 +201,21 @@ export class PickupRepository implements IPickupRepository {
 
   async listAuthorizations(
     tenantId: string,
-    filters?: { studentId?: string; status?: Prisma.PickupAuthorizationWhereInput['status'] },
+    filters?: {
+      studentId?: string;
+      studentIds?: string[];
+      status?: Prisma.PickupAuthorizationWhereInput['status'];
+    },
   ): Promise<PickupAuthorizationRow[]> {
     return this.prisma.withTenant((client) =>
       client.pickupAuthorization.findMany({
         where: {
           tenantId,
-          ...(filters?.studentId ? { studentId: filters.studentId } : {}),
+          ...(filters?.studentIds
+            ? { studentId: { in: filters.studentIds } }
+            : filters?.studentId
+            ? { studentId: filters.studentId }
+            : {}),
           ...(filters?.status ? { status: filters.status } : {}),
         },
         select: AUTH_SELECT,
@@ -251,13 +263,17 @@ export class PickupRepository implements IPickupRepository {
 
   async listEvents(
     tenantId: string,
-    filters?: { studentId?: string; from?: Date; to?: Date },
+    filters?: { studentId?: string; studentIds?: string[]; from?: Date; to?: Date },
   ): Promise<PickupEventRow[]> {
     return this.prisma.withTenant((client) =>
       client.pickupEvent.findMany({
         where: {
           tenantId,
-          ...(filters?.studentId ? { studentId: filters.studentId } : {}),
+          ...(filters?.studentIds
+            ? { studentId: { in: filters.studentIds } }
+            : filters?.studentId
+            ? { studentId: filters.studentId }
+            : {}),
           ...(filters?.from || filters?.to
             ? {
                 occurredAt: {

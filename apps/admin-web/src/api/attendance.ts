@@ -11,6 +11,15 @@ export async function getAttendanceByDate(date: string): Promise<Attendance[]> {
   return apiFetch<Attendance[]>(`/attendance?date=${encodeURIComponent(date)}`);
 }
 
+export async function getAttendanceRange(
+  startDate: string,
+  endDate: string,
+): Promise<Attendance[]> {
+  return apiFetch<Attendance[]>(
+    `/attendance?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`,
+  );
+}
+
 export async function getStudentAttendance(
   studentId: string,
   date: string,

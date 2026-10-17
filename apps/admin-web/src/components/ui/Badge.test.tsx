@@ -16,4 +16,15 @@ describe('Badge Component', () => {
     );
     expect(container.querySelector('.rounded-full.shrink-0')).toBeInTheDocument();
   });
+
+  it('renders accent variant correctly', () => {
+    render(<Badge variant="accent">Servis Personeli</Badge>);
+    expect(screen.getByText('Servis Personeli')).toBeInTheDocument();
+  });
+
+  it('safely falls back to neutral when an unknown variant is provided', () => {
+    // @ts-expect-error testing invalid variant runtime safety
+    render(<Badge variant="unknown_variant">Güvenli Fallback</Badge>);
+    expect(screen.getByText('Güvenli Fallback')).toBeInTheDocument();
+  });
 });

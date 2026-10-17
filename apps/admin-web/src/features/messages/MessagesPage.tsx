@@ -35,6 +35,7 @@ import { useAuth } from '../auth/AuthContext';
 import {
   Badge,
   EmptyState,
+  PageHeader,
   StatCard,
   TactileButton,
   TactileTabs,
@@ -279,39 +280,57 @@ export function MessagesPage(): JSX.Element {
 
   return (
     <div className="space-y-6">
-      {/* Üst Başlık ve Dokunsal Butonlar */}
-      <div className="flex items-center justify-between gap-4 flex-wrap pb-1">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-slate-800 border-2 border-teal-700/30 dark:border-teal-500/30 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold shadow-[0_3px_0_0_#0f766e]">
-            <MessageSquare className="w-6 h-6 text-amber-500 dark:text-amber-400" />
-          </div>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-              Mesajlar
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Veli, öğretmen ve admin arası güvenli iletişim ve anlık mesajlaşma
-            </p>
-          </div>
-        </div>
+      {/* Slim Page Hero Card */}
+      <PageHeader
+        title="Mesajlar"
+        description="Veli, öğretmen ve admin arası güvenli iletişim ve anlık mesajlaşma"
+        icon={MessageSquare}
+        colorTheme="sky"
+        badges={
+          <>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/60 text-sky-900 dark:text-sky-300 font-bold text-[11px] border border-sky-200/80 dark:border-sky-800/60">
+              {totalCount} Toplam Sohbet
+            </span>
+            {unreadTotal > 0 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 font-bold text-[11px] border border-amber-300 dark:border-amber-700">
+                <Inbox className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                {unreadTotal} Yanıt Bekliyor
+              </span>
+            )}
+            {criticalCount > 0 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 font-bold text-[11px] border border-rose-300 dark:border-rose-700">
+                <AlertCircle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                {criticalCount} Acil & Sağlık
+              </span>
+            )}
+          </>
+        }
+        actions={
+          <>
+            <TactileButton
+              variant="secondary"
+              size="sm"
+              onClick={() => void refreshList()}
+              disabled={loading}
+              title="Sohbetleri Yenile"
+            >
+              <RotateCw className="w-3.5 h-3.5" />
+              <span>Yenile</span>
+            </TactileButton>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <TactileButton
-            variant="secondary"
-            size="sm"
-            onClick={() => void refreshList()}
-            disabled={loading}
-          >
-            <RotateCw className="w-3.5 h-3.5" />
-            Yenile
-          </TactileButton>
-
-          <TactileButton variant="teal" size="sm" onClick={() => setShowCompose(true)}>
-            <Plus className="w-3.5 h-3.5" />
-            Yeni Sohbet
-          </TactileButton>
-        </div>
-      </div>
+            <TactileButton
+              variant="secondary"
+              size="sm"
+              onClick={() => setShowCompose(true)}
+              className="whitespace-nowrap text-sky-900 dark:text-sky-200 border-sky-300 dark:border-sky-700/80 hover:border-sky-400"
+              title="Yeni Sohbet Başlat"
+            >
+              <Plus className="w-4 h-4 text-sky-700 dark:text-sky-400" />
+              <span>+ Yeni Sohbet</span>
+            </TactileButton>
+          </>
+        }
+      />
 
       {/* Dokunsal KPI Özet Sayaçları (Tıklanabilir Sekme Geçişi) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">

@@ -25,6 +25,7 @@ import { useAuth } from '../auth/AuthContext';
 import { useToast } from '../../components/Toast';
 import { PrintPreviewModal, ReportCardPrint } from '../../components/print';
 import { listStudents } from '../../api/students';
+import { listClassrooms } from '../../api/classrooms';
 import { listMediaFiles } from '../../api/media';
 import {
   listObservations,
@@ -35,6 +36,7 @@ import {
   createHomeActivity,
 } from '../../api/development';
 import type {
+  Classroom,
   DevelopmentDomain,
   DevelopmentObservationDto,
   HomeActivitySuggestionDto,
@@ -46,6 +48,7 @@ import {
   Badge,
   EmptyState,
   MediaUrlField,
+  PageHeader,
   StatCard,
   TactileButton,
   TactileTabs,
@@ -111,6 +114,7 @@ export function DevelopmentPage(): JSX.Element {
   const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<TabKey>('observations');
   const [students, setStudents] = useState<Student[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [selectedStudentId, setSelectedStudentId] = useState<string>('');
   const [selectedDomain, setSelectedDomain] = useState<DevelopmentDomain | ''>('');
 
@@ -151,6 +155,9 @@ export function DevelopmentPage(): JSX.Element {
     description: '',
   });
 
+  const isTeacher = state.status === 'authenticated' && state.user.role === 'TEACHER';
+  const currentUserId = state.status === 'authenticated' ? state.user.id : null;
+
   const canEdit =
     state.status === 'authenticated' &&
     (state.user.role === 'ADMIN' ||
@@ -188,14 +195,60 @@ export function DevelopmentPage(): JSX.Element {
   useEffect(() => {
     async function init() {
       try {
-        const studentList = await listStudents();
+        const [studentList, classroomList] = await Promise.all([
+          listStudents().catch(() => []),
+          listClassrooms().catch(() => []),
+        ]);
         setStudents(studentList);
+        setClassrooms(classroomList);
       } catch (err) {
         console.error(err);
       }
     }
     void init();
   }, []);
+
+  // Öğretmen Sınıf İzolasyonu (Role Scoping)
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher || !currentUserId) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    const studentClassIds = new Set(students.map((s) => s.classroomId).filter(Boolean));
+    const matched = classrooms.filter((c) => studentClassIds.has(c.id));
+    if (matched.length > 0) return matched;
+    return [];
+  }, [isTeacher, currentUserId, classrooms, students]);
+
+  const teacherClassroomIds = useMemo(
+    () => new Set(teacherClassrooms.map((c) => c.id)),
+    [teacherClassrooms],
+  );
+
+  const scopedStudents = useMemo(() => {
+    if (!isTeacher) return students;
+    if (teacherClassroomIds.size > 0) {
+      return students.filter((s) => s.classroomId && teacherClassroomIds.has(s.classroomId));
+    }
+    return students;
+  }, [isTeacher, students, teacherClassroomIds]);
+
+  const scopedStudentIds = useMemo(
+    () => new Set(scopedStudents.map((s) => s.id)),
+    [scopedStudents],
+  );
+
+  const scopedObservations = useMemo(() => {
+    if (!isTeacher) return observations;
+    return observations.filter((o) => scopedStudentIds.has(o.studentId));
+  }, [isTeacher, observations, scopedStudentIds]);
+
+  const scopedPortfolioItems = useMemo(() => {
+    if (!isTeacher) return portfolioItems;
+    return portfolioItems.filter((p) => scopedStudentIds.has(p.studentId));
+  }, [isTeacher, portfolioItems, scopedStudentIds]);
 
   async function loadData() {
     setLoading(true);
@@ -327,14 +380,14 @@ export function DevelopmentPage(): JSX.Element {
         id: 'observations',
         label: 'Pedagojik Gözlemler',
         icon: BookOpen,
-        count: observations.length,
+        count: scopedObservations.length,
         activeVariant: 'teal',
       },
       {
         id: 'portfolio',
         label: 'Öğrenci Portfolyosu',
         icon: ImageIcon,
-        count: portfolioItems.length,
+        count: scopedPortfolioItems.length,
         activeVariant: 'amber',
       },
       {
@@ -345,98 +398,115 @@ export function DevelopmentPage(): JSX.Element {
         activeVariant: 'sky',
       },
     ],
-    [observations.length, portfolioItems.length, activities.length],
+    [scopedObservations.length, scopedPortfolioItems.length, activities.length],
   );
 
   const parentVisibleCount = useMemo(() => {
     return (
-      observations.filter((o) => o.isParentVisible).length +
-      portfolioItems.filter((p) => p.isParentVisible).length
+      scopedObservations.filter((o) => o.isParentVisible).length +
+      scopedPortfolioItems.filter((p) => p.isParentVisible).length
     );
-  }, [observations, portfolioItems]);
+  }, [scopedObservations, scopedPortfolioItems]);
 
   return (
     <div className="space-y-6">
-      {/* Üst Başlık ve Dokunsal Aksiyonlar */}
-      <div className="flex items-center justify-between gap-4 flex-wrap pb-1">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-slate-800 border-2 border-teal-700/30 dark:border-teal-500/30 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold shadow-[0_3px_0_0_#0f766e]">
-            <Award className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-              Gelişim Hikâyesi & Öğrenci Portfolyosu
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Pedagojik gözlem tutanakları, dijital ürün portfolyosu ve ev etkinlik önerileri
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <TactileButton
-            variant="secondary"
-            size="sm"
-            onClick={() => void loadData()}
-            disabled={loading}
-          >
-            <RotateCw className="w-3.5 h-3.5" />
-            Yenile
-          </TactileButton>
-
-          <TactileButton
-            variant="secondary"
-            size="sm"
-            onClick={() => setShowReportCardPrint(true)}
-            disabled={students.length === 0}
-            title="Seçili öğrencinin pedagojik gelişim karnesini yazdır"
-          >
-            <Printer className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
-            <span>🎓 Karne Yazdır</span>
-          </TactileButton>
-
-          {canEdit && activeTab === 'observations' && (
+      {/* Slim Page Hero Card */}
+      <PageHeader
+        title="Gelişim Hikâyesi & Öğrenci Portfolyosu"
+        description={
+          isTeacher
+            ? `Sorumlu olduğunuz sınıf(lar)ın (${teacherClassrooms.map((c) => c.name).join(', ') || 'Atanmış sınıf yok'}) pedagojik gözlem tutanakları ve portfolyosu`
+            : 'Pedagojik gözlem tutanakları, dijital ürün portfolyosu ve ev etkinlik önerileri'
+        }
+        icon={Award}
+        colorTheme="teal"
+        badges={
+          <>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-100 dark:bg-teal-950/60 text-teal-900 dark:text-teal-300 font-bold text-[11px] border border-teal-200/80 dark:border-teal-800/60">
+              {scopedObservations.length} Pedagojik Gözlem
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 font-bold text-[11px] border border-amber-200/80 dark:border-amber-800/60">
+              {scopedPortfolioItems.length} Portfolyo Ürünü
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/60 text-sky-900 dark:text-sky-300 font-bold text-[11px] border border-sky-200/80 dark:border-sky-800/60">
+              {parentVisibleCount} Paylaşılan Pedagojik Kayıt
+            </span>
+          </>
+        }
+        actions={
+          <>
             <TactileButton
-              variant="teal"
+              variant="secondary"
               size="sm"
-              onClick={() => {
-                setObsForm((prev) => ({
-                  ...prev,
-                  studentId: selectedStudentId || (students[0]?.id ?? ''),
-                }));
-                setShowObsModal(true);
-              }}
+              onClick={() => void loadData()}
+              disabled={loading}
+              title="Kayıtları Yenile"
             >
-              <Plus className="w-3.5 h-3.5" />
-              Gözlem Ekle
+              <RotateCw className="w-3.5 h-3.5" />
+              <span>Yenile</span>
             </TactileButton>
-          )}
 
-          {canEdit && activeTab === 'portfolio' && (
             <TactileButton
-              variant="amber"
+              variant="secondary"
               size="sm"
-              onClick={() => {
-                setPortForm((prev) => ({
-                  ...prev,
-                  studentId: selectedStudentId || (students[0]?.id ?? ''),
-                }));
-                setShowPortModal(true);
-              }}
+              onClick={() => setShowReportCardPrint(true)}
+              disabled={scopedStudents.length === 0}
+              title="Seçili öğrencinin pedagojik gelişim karnesini yazdır"
             >
-              <Plus className="w-3.5 h-3.5" />
-              Çalışma Ekle
+              <Printer className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+              <span>🎓 Karne Yazdır</span>
             </TactileButton>
-          )}
 
-          {canEdit && activeTab === 'activities' && (
-            <TactileButton variant="teal" size="sm" onClick={() => setShowActModal(true)}>
-              <Plus className="w-3.5 h-3.5" />
-              Etkinlik Önerisi Ekle
-            </TactileButton>
-          )}
-        </div>
-      </div>
+            {canEdit && activeTab === 'observations' && (
+              <TactileButton
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  setObsForm((prev) => ({
+                    ...prev,
+                    studentId: selectedStudentId || (scopedStudents[0]?.id ?? ''),
+                  }));
+                  setShowObsModal(true);
+                }}
+                className="whitespace-nowrap text-teal-900 dark:text-teal-200 border-teal-300 dark:border-teal-700/80 hover:border-teal-400"
+              >
+                <Plus className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                <span>+ Gözlem Ekle</span>
+              </TactileButton>
+            )}
+
+            {canEdit && activeTab === 'portfolio' && (
+              <TactileButton
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  setPortForm((prev) => ({
+                    ...prev,
+                    studentId: selectedStudentId || (scopedStudents[0]?.id ?? ''),
+                  }));
+                  setShowPortModal(true);
+                }}
+                className="whitespace-nowrap text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700/80 hover:border-amber-400"
+              >
+                <Plus className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                <span>+ Çalışma Ekle</span>
+              </TactileButton>
+            )}
+
+            {canEdit && activeTab === 'activities' && (
+              <TactileButton
+                variant="secondary"
+                size="sm"
+                onClick={() => setShowActModal(true)}
+                className="whitespace-nowrap text-sky-900 dark:text-sky-200 border-sky-300 dark:border-sky-700/80 hover:border-sky-400"
+              >
+                <Plus className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" />
+                <span>+ Etkinlik Önerisi</span>
+              </TactileButton>
+            )}
+          </>
+        }
+      />
 
       {/* Dokunsal KPI Özet Sayaçları (Tıklanabilir Sekme Geçişi) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
@@ -452,7 +522,7 @@ export function DevelopmentPage(): JSX.Element {
         >
           <StatCard
             title="Toplam Gözlem"
-            value={observations.length}
+            value={scopedObservations.length}
             subtitle="Pedagojik kayıt"
             variant="blue"
             icon={BookOpen}
@@ -469,7 +539,7 @@ export function DevelopmentPage(): JSX.Element {
         >
           <StatCard
             title="Portfolyo Eseri"
-            value={portfolioItems.length}
+            value={scopedPortfolioItems.length}
             subtitle="Görsel & proje ürünü"
             variant="amber"
             icon={ImageIcon}
@@ -528,8 +598,12 @@ export function DevelopmentPage(): JSX.Element {
                   onChange={(e) => setSelectedStudentId(e.target.value)}
                   className="bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl text-xs font-bold px-3 py-2 text-slate-800 dark:text-white shadow-2xs focus:border-teal-700 focus:outline-none transition"
                 >
-                  <option value="">Tüm Öğrenciler</option>
-                  {students.map((s) => (
+                  <option value="">
+                    {isTeacher
+                      ? `Sınıfımdaki Öğrenciler (${scopedStudents.length})`
+                      : `Tüm Öğrenciler (${students.length})`}
+                  </option>
+                  {scopedStudents.map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.firstName} {s.lastName}
                     </option>
@@ -577,7 +651,7 @@ export function DevelopmentPage(): JSX.Element {
           {/* TAB 1: Pedagojik Gözlemler */}
           {activeTab === 'observations' && (
             <div className="space-y-4">
-              {observations.length === 0 ? (
+              {scopedObservations.length === 0 ? (
                 <EmptyState
                   icon={BookOpen}
                   title="Henüz kayıtlı gelişim gözlemi bulunmuyor"
@@ -585,7 +659,7 @@ export function DevelopmentPage(): JSX.Element {
                 />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {observations.map((obs) => {
+                  {scopedObservations.map((obs) => {
                     const domainInfo = DOMAIN_LABELS[obs.domain];
                     const DomainIcon = domainInfo?.icon ?? Award;
 
@@ -650,7 +724,7 @@ export function DevelopmentPage(): JSX.Element {
           {/* TAB 2: Öğrenci Portfolyosu */}
           {activeTab === 'portfolio' && (
             <div className="space-y-4">
-              {portfolioItems.length === 0 ? (
+              {scopedPortfolioItems.length === 0 ? (
                 <EmptyState
                   icon={ImageIcon}
                   title="Henüz portfolyoya eklenmiş çalışma bulunmuyor"
@@ -658,7 +732,7 @@ export function DevelopmentPage(): JSX.Element {
                 />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                  {portfolioItems.map((item) => (
+                  {scopedPortfolioItems.map((item) => (
                     <div
                       key={item.id}
                       className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 overflow-hidden shadow-2xs flex flex-col group hover:border-amber-600/50 dark:hover:border-amber-500/50 transition-all"
@@ -811,7 +885,7 @@ export function DevelopmentPage(): JSX.Element {
                   className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl p-2.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700"
                 >
                   <option value="">Öğrenci Seçiniz</option>
-                  {students.map((s) => (
+                  {scopedStudents.map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.firstName} {s.lastName}
                     </option>
@@ -935,7 +1009,7 @@ export function DevelopmentPage(): JSX.Element {
                   className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 p-3 text-xs font-semibold text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-900 focus:border-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 shadow-2xs cursor-pointer"
                 >
                   <option value="">Öğrenci Seçiniz</option>
-                  {students.map((s) => (
+                  {scopedStudents.map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.firstName} {s.lastName}
                     </option>
@@ -1228,17 +1302,17 @@ export function DevelopmentPage(): JSX.Element {
           isOpen={showReportCardPrint}
           onClose={() => setShowReportCardPrint(false)}
           title={`Pedagojik Gelişim Raporu (Karne) — ${
-            (students.find((s) => s.id === selectedStudentId) || students[0])?.firstName ||
+            (scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0])?.firstName ||
             'Öğrenci'
-          } ${(students.find((s) => s.id === selectedStudentId) || students[0])?.lastName || ''}`}
+          } ${(scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0])?.lastName || ''}`}
           subtitle="2026-2027 Eğitim Öğretim Yılı • 6 Temel Pedagojik Gelişim Alanı"
           orientation="portrait"
         >
-          {(students.find((s) => s.id === selectedStudentId) || students[0]) && (
+          {(scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0]) && (
             <ReportCardPrint
-              student={(students.find((s) => s.id === selectedStudentId) || students[0]) as Student}
-              observations={observations}
-              passport={(students.find((s) => s.id === selectedStudentId) || students[0])?.passport}
+              student={(scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0]) as Student}
+              observations={scopedObservations}
+              passport={(scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0])?.passport}
             />
           )}
         </PrintPreviewModal>

@@ -35,7 +35,7 @@ import { StudentsService } from '../services/students.service';
 
 @Controller('students')
 @UseGuards(TenantGuard)
-@Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
+@Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'SERVICE_STAFF')
 export class StudentsController {
   constructor(@Inject(StudentsService) private readonly studentsService: StudentsService) {}
 
@@ -49,26 +49,34 @@ export class StudentsController {
   }
 
   @Get(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF')
   async findOne(
     @CurrentTenantId() tenantId: string,
     @Param('id') id: string,
     @CurrentUser() user: CurrentUserPayload,
   ): Promise<StudentResponse> {
     const row = await this.studentsService.findOne(tenantId, id);
-    assertStudentVisibleToUser(row, user.role, user.userId);
+    let teacherClassroomIds: string[] | undefined;
+    if (user.role === 'TEACHER') {
+      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+    }
+    assertStudentVisibleToUser(row, user.role, user.userId, teacherClassroomIds);
     return this.toResponse(row);
   }
 
   @Get(':id/passport')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF')
   async getPassport(
     @CurrentTenantId() tenantId: string,
     @Param('id') id: string,
     @CurrentUser() user: CurrentUserPayload,
   ): Promise<StudentPassport> {
     const row = await this.studentsService.findOne(tenantId, id);
-    assertStudentVisibleToUser(row, user.role, user.userId);
+    let teacherClassroomIds: string[] | undefined;
+    if (user.role === 'TEACHER') {
+      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+    }
+    assertStudentVisibleToUser(row, user.role, user.userId, teacherClassroomIds);
     return this.studentsService.getPassport(tenantId, id);
   }
 

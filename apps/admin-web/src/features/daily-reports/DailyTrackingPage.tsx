@@ -31,6 +31,7 @@ import {
 import { listStudents } from '../../api/students';
 import { DailyReportEditorModal } from './DailyReportEditorModal';
 import { useToast } from '../../components/Toast';
+import { useAuth } from '../auth/AuthContext';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
@@ -150,6 +151,25 @@ export function DailyTrackingPage(): JSX.Element {
   const [bulkSaving, setBulkSaving] = useState(false);
 
   const { showToast } = useToast();
+  const { state: authState } = useAuth();
+  const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
+  const authUser = authState.status === 'authenticated' ? authState.user : null;
+
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher) return classrooms;
+    if (!authUser) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === authUser.id),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    const studentClassIds = new Set(students.map((s) => s.classroomId).filter(Boolean));
+    const matched = classrooms.filter((c) => studentClassIds.has(c.id));
+    if (matched.length > 0) return matched;
+    return [];
+  }, [isTeacher, classrooms, authUser, students]);
+
+  const displayClassrooms = isTeacher ? teacherClassrooms : classrooms;
 
   useEffect(() => {
     let cancelled = false;
@@ -170,6 +190,15 @@ export function DailyTrackingPage(): JSX.Element {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (isTeacher && teacherClassrooms.length > 0) {
+      if (!teacherClassrooms.some((c) => c.id === selectedClassroomId)) {
+        const first = teacherClassrooms[0];
+        if (first) setSelectedClassroomId(first.id);
+      }
+    }
+  }, [isTeacher, teacherClassrooms, selectedClassroomId]);
 
   useEffect(() => {
     if (!selectedClassroomId) {
@@ -370,9 +399,9 @@ export function DailyTrackingPage(): JSX.Element {
       )}
 
       {/* Classroom Card Grid */}
-      {classrooms.length > 0 && (
+      {displayClassrooms.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {classrooms.map((classroom) => {
+          {displayClassrooms.map((classroom) => {
             const isActive = classroom.id === selectedClassroomId;
             const classroomAgeLabel = classroom.ageGroup ?? '';
             const emoji = pickClassroomEmoji(classroom.name);

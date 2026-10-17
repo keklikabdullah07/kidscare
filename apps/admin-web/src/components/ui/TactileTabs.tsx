@@ -51,7 +51,7 @@ export function TactileTabs<T extends string = string>({
             aria-selected={isActive}
             onClick={() => onChange(tab.id)}
             className={`tactile-tab-btn ${
-              isActive ? ACTIVE_CLASS_MAP[variant] : 'tactile-tab-btn-inactive'
+              isActive ? (ACTIVE_CLASS_MAP[variant] || ACTIVE_CLASS_MAP.teal) : 'tactile-tab-btn-inactive'
             }`}
           >
             {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}

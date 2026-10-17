@@ -10,6 +10,7 @@ import { createHash, randomBytes } from 'crypto';
 import { runWithTenant } from '@kidscare/tenant-context';
 import type {
   AuthResponse,
+  AuthenticatedUser,
   ForgotPasswordInput,
   ForgotPasswordResponse,
   JwtClaims,
@@ -18,7 +19,7 @@ import type {
   UserRole,
   VerifyResetTokenResponse,
 } from '@kidscare/shared-types';
-import type { LoginInput, SignupInput } from '@kidscare/shared-schemas';
+import type { LoginInput, SignupInput, UserProfileUpdate } from '@kidscare/shared-schemas';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AuthLookupRepository } from '../repositories/auth-lookup.repository';
 import { PasswordResetRepository } from '../repositories/password-reset.repository';
@@ -122,6 +123,10 @@ export class AuthService {
               tenantId: true,
               email: true,
               role: true,
+              firstName: true,
+              lastName: true,
+              avatarUrl: true,
+              phone: true,
               isActive: true,
             },
           }),
@@ -145,6 +150,10 @@ export class AuthService {
         tenantId: fullUser.tenantId,
         email: fullUser.email,
         role,
+        firstName: fullUser.firstName,
+        lastName: fullUser.lastName,
+        avatarUrl: fullUser.avatarUrl,
+        phone: fullUser.phone,
       },
     };
   }
@@ -250,4 +259,44 @@ export class AuthService {
       message: 'Şifreniz başarıyla güncellendi. Yeni şifrenizle giriş yapabilirsiniz.',
     };
   }
+
+  async updateProfile(
+    userId: string,
+    tenantId: string,
+    input: UserProfileUpdate,
+  ): Promise<AuthenticatedUser> {
+    const updated = await this.prisma.withTenant((client) =>
+      client.user.update({
+        where: { id: userId },
+        data: {
+          ...(input.firstName !== undefined ? { firstName: input.firstName } : {}),
+          ...(input.lastName !== undefined ? { lastName: input.lastName } : {}),
+          ...(input.phone !== undefined ? { phone: input.phone } : {}),
+          ...(input.avatarUrl !== undefined ? { avatarUrl: input.avatarUrl } : {}),
+        },
+        select: {
+          id: true,
+          tenantId: true,
+          email: true,
+          role: true,
+          firstName: true,
+          lastName: true,
+          avatarUrl: true,
+          phone: true,
+        },
+      }),
+    );
+
+    return {
+      id: updated.id,
+      tenantId: updated.tenantId,
+      email: updated.email,
+      role: updated.role,
+      firstName: updated.firstName,
+      lastName: updated.lastName,
+      avatarUrl: updated.avatarUrl,
+      phone: updated.phone,
+    };
+  }
 }
+

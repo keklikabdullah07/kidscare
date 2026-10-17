@@ -1,5 +1,9 @@
 import { Body, Controller, Get, Inject, Patch, UseGuards } from '@nestjs/common';
 import { CurrentTenantId } from '../../../common/decorators/current-tenant.decorator';
+import {
+  CurrentUser,
+  type CurrentUserPayload,
+} from '../../../common/decorators/current-user.decorator';
 import { TenantGuard } from '../../../common/guards/tenant.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
@@ -22,8 +26,11 @@ export class TenantsController {
 
   @Get('me/operational-alerts')
   @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
-  async getOperationalAlerts(@CurrentTenantId() tenantId: string) {
-    return this.tenantsService.getOperationalAlerts(tenantId);
+  async getOperationalAlerts(
+    @CurrentTenantId() tenantId: string,
+    @CurrentUser() user?: CurrentUserPayload,
+  ) {
+    return this.tenantsService.getOperationalAlerts(tenantId, user);
   }
 
   @Patch('me')

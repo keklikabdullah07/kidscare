@@ -25,6 +25,7 @@ import {
 } from '../../api/consents';
 import { listClassrooms } from '../../api/classrooms';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { PageHeader, TactileButton } from '../../components/ui';
 import { PrintPreviewModal, EventRosterPrint } from '../../components/print';
 import type {
   Classroom,
@@ -39,6 +40,8 @@ export function EventsPage(): JSX.Element {
   const { state: authState } = useAuth();
   const userRole = authState.status === 'authenticated' ? authState.user.role : 'PARENT';
   const isStaff = userRole === 'SUPER_ADMIN' || userRole === 'ADMIN' || userRole === 'TEACHER';
+  const isTeacher = userRole === 'TEACHER';
+  const currentUserId = authState.status === 'authenticated' ? authState.user.id : null;
 
   // Master Category: 'trips' (Dış Geziler) | 'in_school' (Okul İçi Etkinlikler) | 'forms' (Genel İzin & Onay Formları)
   const [categoryTab, setCategoryTab] = useState<EventCategoryTab>('trips');
@@ -48,12 +51,35 @@ export function EventsPage(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Öğretmen Sınıf İzolasyonu (Role Scoping)
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher) return classrooms;
+    if (!currentUserId) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    return [];
+  }, [isTeacher, currentUserId, classrooms]);
+
+  const displayClassrooms = isTeacher ? teacherClassrooms : classrooms;
+
   // Parent tab state: 'active' | 'history'
   const [parentTab, setParentTab] = useState<'active' | 'history'>('active');
 
   // Staff filters
   const [selectedClassroomId, setSelectedClassroomId] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
+
+  useEffect(() => {
+    if (isTeacher && teacherClassrooms.length > 0) {
+      if (selectedClassroomId === 'all' || !teacherClassrooms.some((c) => c.id === selectedClassroomId)) {
+        const first = teacherClassrooms[0];
+        if (first) setSelectedClassroomId(first.id);
+      }
+    }
+  }, [isTeacher, teacherClassrooms, selectedClassroomId]);
 
   // Modals
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
@@ -159,35 +185,39 @@ export function EventsPage(): JSX.Element {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#131B2E] p-6 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 flex items-center justify-center border border-purple-200/60 dark:border-purple-800/60 shadow-2xs">
-            <Ticket className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white">
-              Etkinlikler & İzin Yönetimi
-            </h1>
-            <p className="text-xs text-slate-600 dark:text-slate-300">
-              {isStaff
-                ? 'Okul dışı geziler, kurum içi etkinlikler, veli izin takibi ve servis biniş listeleri'
-                : 'Çocuğunuzun okul gezileri, etkinlikleri, dijital izin onayları ve geçmiş etkinlik arşivi'}
-            </p>
-          </div>
-        </div>
-
-        {isStaff && categoryTab === 'trips' && (
-          <button
-            type="button"
-            onClick={() => setIsCreateModalOpen(true)}
-            className="btn-tactile-teal py-2.5 px-4 text-xs font-bold flex items-center gap-2 cursor-pointer self-start sm:self-auto"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Yeni Gezi / Etkinlik Oluştur</span>
-          </button>
-        )}
-      </div>
+      {/* Slim Page Hero Card */}
+      <PageHeader
+        title="Etkinlikler & İzin Yönetimi"
+        description={
+          isStaff
+            ? 'Okul dışı geziler, kurum içi etkinlikler, veli izin takibi ve servis biniş listeleri'
+            : 'Çocuğunuzun okul gezileri, etkinlikleri, dijital izin onayları ve geçmiş etkinlik arşivi'
+        }
+        icon={Ticket}
+        colorTheme="indigo"
+        badges={
+          <>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/60 text-indigo-900 dark:text-indigo-300 font-bold text-[11px] border border-indigo-200/80 dark:border-indigo-800/60">
+              {consents.length} Kayıtlı Etkinlik
+            </span>
+          </>
+        }
+        actions={
+          isStaff && categoryTab === 'trips' ? (
+            <TactileButton
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsCreateModalOpen(true)}
+              className="whitespace-nowrap text-indigo-900 dark:text-indigo-200 border-indigo-300 dark:border-indigo-700/80 hover:border-indigo-400"
+              title="Yeni Gezi veya Etkinlik Planla"
+            >
+              <Plus className="w-4 h-4 text-indigo-700 dark:text-indigo-400" />
+              <span>Yeni Gezi / Etkinlik Oluştur</span>
+            </TactileButton>
+          ) : undefined
+        }
+      />
 
       {/* MASTER CATEGORY TABS (Çatı Modül Sekmeleri) */}
       <div className="flex flex-wrap items-center gap-2 p-1.5 bg-[#FAF9F6] dark:bg-[#0F172A] rounded-2xl border border-[#DDD4C4] dark:border-slate-800 shadow-2xs">
@@ -327,8 +357,8 @@ export function EventsPage(): JSX.Element {
                   onChange={(e) => setSelectedClassroomId(e.target.value)}
                   className="px-3 py-1.5 rounded-xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-medium text-slate-800 dark:text-white"
                 >
-                  <option value="all">Tüm Sınıflar</option>
-                  {classrooms.map((c) => (
+                  {!isTeacher && <option value="all">Tüm Sınıflar</option>}
+                  {displayClassrooms.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
                     </option>

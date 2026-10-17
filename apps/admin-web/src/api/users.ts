@@ -9,7 +9,10 @@ export function listUsers(role?: UserRole): Promise<User[]> {
 export function inviteUser(payload: {
   email: string;
   password: string;
-  role: 'TEACHER' | 'PARENT';
+  role: 'TEACHER' | 'PARENT' | 'SERVICE_STAFF';
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
 }): Promise<User> {
   return apiFetch<User>('/users', {
     method: 'POST',

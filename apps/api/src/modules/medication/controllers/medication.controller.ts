@@ -43,6 +43,7 @@ export class MedicationController {
   @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT')
   async list(
     @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
     @Query('studentId') studentId?: string,
     @Query('status') status?: MedicationStatus,
     @Query('from') from?: string,
@@ -53,7 +54,7 @@ export class MedicationController {
     if (status) filters.status = status;
     if (from) filters.from = new Date(from);
     if (to) filters.to = new Date(to);
-    return this.service.list(tenantId, filters);
+    return this.service.list(tenantId, filters, user);
   }
 
   @Post('records')

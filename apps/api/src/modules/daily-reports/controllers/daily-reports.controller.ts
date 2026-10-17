@@ -45,10 +45,13 @@ export class DailyReportsController {
   async findByDate(
     @CurrentTenantId() tenantId: string,
     @Query('date') dateQuery?: string,
+    @CurrentUser() user?: CurrentUserPayload,
   ): Promise<DailyReportResponseDto[]> {
     const todayStr = new Date().toISOString().slice(0, 10);
     const dateStr = dateQuery || todayStr;
-    const reports = await this.service.findByDate(tenantId, dateStr);
+    const reports = user
+      ? await this.service.findByDate(tenantId, dateStr, user)
+      : await this.service.findByDate(tenantId, dateStr);
     return reports.map((r) => this.toResponse(r));
   }
 
@@ -61,7 +64,11 @@ export class DailyReportsController {
     @CurrentUser() user: CurrentUserPayload,
   ): Promise<DailyReportResponseDto | null> {
     const student = await this.studentsService.findOne(tenantId, studentId);
-    assertStudentVisibleToUser(student, user.role, user.userId);
+    let teacherClassroomIds: string[] | undefined;
+    if (user.role === 'TEACHER') {
+      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+    }
+    assertStudentVisibleToUser(student, user.role, user.userId, teacherClassroomIds);
     const report = await this.service.findByStudentAndDate(tenantId, studentId, date);
     return report ? this.toResponse(report) : null;
   }
@@ -73,7 +80,16 @@ export class DailyReportsController {
     @Param('studentId') studentId: string,
     @Param('date') date: string,
     @Body(new ZodValidationPipe(dailyReportInputSchema)) body: DailyReportInput,
+    @CurrentUser() user?: CurrentUserPayload,
   ): Promise<DailyReportResponseDto> {
+    if (user) {
+      const student = await this.studentsService.findOne(tenantId, studentId);
+      let teacherClassroomIds: string[] | undefined;
+      if (user.role === 'TEACHER') {
+        teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+      }
+      assertStudentVisibleToUser(student, user.role, user.userId, teacherClassroomIds);
+    }
     const saved = await this.service.saveReport(tenantId, studentId, date, body);
     return this.toResponse(saved);
   }

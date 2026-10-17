@@ -6,5 +6,8 @@
   "types": "src/index.ts",
   "scripts": {
     "test": "jest"
+  },
+  "dependencies": {
+    "@kidscare/shared-types": "workspace:*"
   }
 }

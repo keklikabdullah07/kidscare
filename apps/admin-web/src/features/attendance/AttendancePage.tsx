@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, type JSX } from 'react';
-import type { Attendance, AttendanceStatus, Student } from '@kidscare/shared-types';
+import type { Attendance, AttendanceStatus, Classroom, Student, User } from '@kidscare/shared-types';
 import {
   CheckCheck,
   Search,
@@ -16,16 +16,45 @@ import {
   HeartPulse,
   AlertTriangle,
   FileText,
+  School,
+  GraduationCap,
 } from 'lucide-react';
-import { checkInStudent, getAttendanceByDate, updateStudentAttendance } from '../../api/attendance';
+import {
+  checkInStudent,
+  getAttendanceByDate,
+  getAttendanceRange,
+  updateStudentAttendance,
+} from '../../api/attendance';
 import { listStudents } from '../../api/students';
+import { listClassrooms } from '../../api/classrooms';
+import { listUsers } from '../../api/users';
 import { CheckOutModal } from './CheckOutModal';
 import { useToast } from '../../components/Toast';
+import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { PrintPreviewModal, AttendanceSheetPrint } from '../../components/print';
+
+function formatTeacherName(email?: string): string {
+  if (!email) return 'Öğretmen Atanmadı';
+  const prefix = email.split('@')[0] ?? email;
+  const parts = prefix.split(/[._-]/).filter(Boolean);
+  if (parts.length === 0) return email;
+  const capitalized = parts
+    .map((p) => p.charAt(0).toLocaleUpperCase('tr-TR') + p.slice(1).toLocaleLowerCase('tr-TR'))
+    .join(' ');
+  return `Öğrt. ${capitalized}`;
+}
+
+function getTeacherDisplayName(teacher?: User | null): string {
+  if (!teacher) return 'Öğretmen Atanmadı';
+  const fullName = [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim();
+  if (fullName) return `Öğrt. ${fullName}`;
+  return formatTeacherName(teacher.email);
+}
+
 
 const STATUS_CONFIG: Record<
   AttendanceStatus,
@@ -76,28 +105,122 @@ type ViewMode = 'table' | 'grid';
 type StatusFilter = 'all' | AttendanceStatus;
 
 export function AttendancePage(): JSX.Element {
+  const { state: authState } = useAuth();
+  const authUser = authState.status === 'authenticated' ? authState.user : null;
+  const isAdmin =
+    authState.status === 'authenticated' &&
+    (authState.user.role === 'ADMIN' || authState.user.role === 'SUPER_ADMIN');
+  const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
+
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [students, setStudents] = useState<Student[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [teachers, setTeachers] = useState<User[]>([]);
   const [attendanceMap, setAttendanceMap] = useState<Record<string, Attendance>>({});
   const [loading, setLoading] = useState(true);
   const [bulkLoading, setBulkLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedClassroomId, setSelectedClassroomId] = useState<string>('ALL');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [checkoutStudent, setCheckoutStudent] = useState<Student | null>(null);
   const [showMebPrint, setShowMebPrint] = useState(false);
+  const [printClassroomId, setPrintClassroomId] = useState<string>('ALL');
+  const [printYear, setPrintYear] = useState<number>(() => parseInt(selectedDate.slice(0, 4), 10));
+  const [printMonth, setPrintMonth] = useState<number>(() => parseInt(selectedDate.slice(5, 7), 10));
+  const [monthlyAttendances, setMonthlyAttendances] = useState<Attendance[]>([]);
+  const [loadingMonthlyAtt, setLoadingMonthlyAtt] = useState(false);
 
   const { showToast } = useToast();
+
+  // MEB Modal açıldığında sayfa filtresini varsayılan olarak devralır
+  useEffect(() => {
+    if (showMebPrint) {
+      if (isTeacher && classrooms.length > 0) {
+        const validClass = classrooms.some((c) => c.id === selectedClassroomId)
+          ? selectedClassroomId
+          : classrooms[0]?.id ?? 'ALL';
+        setPrintClassroomId(validClass);
+      } else {
+        setPrintClassroomId(selectedClassroomId);
+      }
+      setPrintYear(parseInt(selectedDate.slice(0, 4), 10));
+      setPrintMonth(parseInt(selectedDate.slice(5, 7), 10));
+    }
+  }, [showMebPrint, selectedClassroomId, selectedDate, isTeacher, classrooms]);
+
+  // MEB modalı açıkken seçili ayın tüm yoklama kayıtlarını aralık API'si ile çeker
+  useEffect(() => {
+    if (!showMebPrint) return;
+
+    let isMounted = true;
+    setLoadingMonthlyAtt(true);
+
+    const daysInMonth = new Date(printYear, printMonth, 0).getDate();
+    const startDate = `${printYear}-${String(printMonth).padStart(2, '0')}-01`;
+    const endDate = `${printYear}-${String(printMonth).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`;
+
+    getAttendanceRange(startDate, endDate)
+      .then((records) => {
+        if (isMounted) {
+          setMonthlyAttendances(records);
+          setLoadingMonthlyAtt(false);
+        }
+      })
+      .catch((err: unknown) => {
+        if (isMounted) {
+          console.error('Failed to load monthly attendance for MEB print', err);
+          setMonthlyAttendances(Object.values(attendanceMap));
+          setLoadingMonthlyAtt(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [showMebPrint, printYear, printMonth, attendanceMap]);
+
+  // Öğretmen için sadece kendi sınıfı izole edilir
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher) return classrooms;
+    if (!authUser) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === authUser.id),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    const studentClassIds = new Set(students.map((s) => s.classroomId).filter(Boolean));
+    const matched = classrooms.filter((c) => studentClassIds.has(c.id));
+    if (matched.length > 0) return matched;
+    return [];
+  }, [isTeacher, classrooms, authUser, students]);
+
+  // Öğretmen ilk girdiğinde otomatik olarak kendi sınıfına odaklansın
+  useEffect(() => {
+    if (isTeacher && teacherClassrooms.length > 0) {
+      if (selectedClassroomId === 'ALL' || !teacherClassrooms.some((c) => c.id === selectedClassroomId)) {
+        const firstClass = teacherClassrooms[0];
+        if (firstClass) setSelectedClassroomId(firstClass.id);
+      }
+    }
+  }, [isTeacher, teacherClassrooms, selectedClassroomId]);
 
   function loadData(): void {
     setLoading(true);
     setError(null);
 
-    Promise.all([listStudents(), getAttendanceByDate(selectedDate)])
-      .then(([studentsList, attList]) => {
+    Promise.all([
+      listStudents(),
+      getAttendanceByDate(selectedDate),
+      listClassrooms().catch(() => []),
+      listUsers('TEACHER').catch(() => []),
+    ])
+      .then(([studentsList, attList, classList, teacherList]) => {
         setStudents(studentsList);
+        setClassrooms(classList);
+        setTeachers(teacherList);
         const map: Record<string, Attendance> = {};
         for (const a of attList) {
           map[a.studentId] = a;
@@ -156,16 +279,78 @@ export function AttendancePage(): JSX.Element {
 
   const [showBulkPresentConfirm, setShowBulkPresentConfirm] = useState(false);
 
-  // Bulk Check-in (Mark All Present)
+  // Seçili sınıfa göre kapsam öğrencileri (Kullanıcı bir sınıfa tıkladığında tüm alt istatistikler o sınıfa göre güncellenir)
+  const scopedStudents = useMemo(() => {
+    if (isTeacher) {
+      if (teacherClassrooms.length > 0) {
+        const allowedIds = new Set(teacherClassrooms.map((c) => c.id));
+        return students.filter((s) => s.classroomId && allowedIds.has(s.classroomId));
+      }
+      return [];
+    }
+    if (selectedClassroomId === 'UNASSIGNED') {
+      return students.filter((s) => !s.classroomId);
+    }
+    if (selectedClassroomId !== 'ALL') {
+      return students.filter((s) => s.classroomId === selectedClassroomId);
+    }
+    return students;
+  }, [isTeacher, teacherClassrooms, students, selectedClassroomId]);
+
+  const selectedClassroom = useMemo(() => {
+    return (isTeacher ? teacherClassrooms : classrooms).find((c) => c.id === selectedClassroomId) ?? null;
+  }, [isTeacher, teacherClassrooms, classrooms, selectedClassroomId]);
+
+  const printClassroom = useMemo(() => {
+    return (isTeacher ? teacherClassrooms : classrooms).find((c) => c.id === printClassroomId) ?? null;
+  }, [isTeacher, teacherClassrooms, classrooms, printClassroomId]);
+
+  const printScopedStudents = useMemo(() => {
+    if (isTeacher) {
+      if (
+        printClassroomId &&
+        printClassroomId !== 'ALL' &&
+        teacherClassrooms.some((c) => c.id === printClassroomId)
+      ) {
+        return students.filter((s) => s.classroomId === printClassroomId);
+      }
+      return students.filter((s) => teacherClassrooms.some((c) => c.id === s.classroomId));
+    }
+    if (printClassroomId === 'UNASSIGNED') {
+      return students.filter((s) => !s.classroomId);
+    }
+    if (printClassroomId !== 'ALL') {
+      return students.filter((s) => s.classroomId === printClassroomId);
+    }
+    return students;
+  }, [students, printClassroomId, isTeacher, teacherClassrooms]);
+
+  const printTeacherName = useMemo(() => {
+    if (printClassroom && printClassroom.teachers && printClassroom.teachers.length > 0) {
+      const firstAssignment = printClassroom.teachers[0];
+      const teacherUser = teachers.find((t) => t.id === firstAssignment?.teacherId);
+      if (teacherUser) {
+        const full = [teacherUser.firstName, teacherUser.lastName].filter(Boolean).join(' ');
+        if (full) return full;
+      }
+    }
+    if (isTeacher && authUser) {
+      const full = [authUser.firstName, authUser.lastName].filter(Boolean).join(' ');
+      if (full) return full;
+    }
+    return 'Sınıf Öğretmeni';
+  }, [printClassroom, teachers, isTeacher, authUser]);
+
+  // Bulk Check-in (Mark All Present in Selected Scope)
   function handleMarkAllPresent(): void {
-    const absentCount = students.filter((s) => {
+    const absentCountInScope = scopedStudents.filter((s) => {
       const att = attendanceMap[s.id];
       const st = att?.status ?? 'ABSENT';
       return st === 'ABSENT';
     }).length;
 
-    if (absentCount === 0) {
-      showToast('Sınıftaki tüm öğrenciler zaten mevcut veya işlem görmüş.', 'info');
+    if (absentCountInScope === 0) {
+      showToast('Seçili kapsamdaki tüm öğrenciler zaten mevcut veya işlem görmüş.', 'info');
       return;
     }
 
@@ -174,7 +359,7 @@ export function AttendancePage(): JSX.Element {
 
   async function executeBulkMarkPresent(): Promise<void> {
     setShowBulkPresentConfirm(false);
-    const absentStudents = students.filter((s) => {
+    const absentStudentsInScope = scopedStudents.filter((s) => {
       const att = attendanceMap[s.id];
       const st = att?.status ?? 'ABSENT';
       return st === 'ABSENT';
@@ -183,7 +368,7 @@ export function AttendancePage(): JSX.Element {
     setBulkLoading(true);
     try {
       const results = await Promise.all(
-        absentStudents.map((s) => checkInStudent(s.id, selectedDate)),
+        absentStudentsInScope.map((s) => checkInStudent(s.id, selectedDate)),
       );
 
       setAttendanceMap((prev) => {
@@ -204,14 +389,14 @@ export function AttendancePage(): JSX.Element {
     }
   }
 
-  // Statistics
-  const totalStudents = students.length;
+  // Statistics (Seçili sınıfa / kapsama göre canlı hesaplanır)
+  const totalStudents = scopedStudents.length;
   let presentCount = 0;
   let leftCount = 0;
   let excusedCount = 0;
   let absentCount = 0;
 
-  for (const s of students) {
+  for (const s of scopedStudents) {
     const att = attendanceMap[s.id];
     const st = att?.status ?? 'ABSENT';
     if (st === 'PRESENT') presentCount++;
@@ -220,9 +405,95 @@ export function AttendancePage(): JSX.Element {
     else absentCount++;
   }
 
+  // Tüm kreş genel sayaçları (Üstteki "Tüm Kreş" kartı her zaman genel toplamı yansıtır)
+  const overallPresentCount = useMemo(() => {
+    return students.filter((s) => {
+      const st = attendanceMap[s.id]?.status;
+      return st === 'PRESENT' || st === 'LEFT';
+    }).length;
+  }, [students, attendanceMap]);
+
+  const overallExcusedCount = useMemo(() => {
+    return students.filter((s) => {
+      const st = attendanceMap[s.id]?.status;
+      return st === 'EXCUSED';
+    }).length;
+  }, [students, attendanceMap]);
+
+  const overallAbsentCount = useMemo(() => {
+    return students.filter((s) => {
+      const st = attendanceMap[s.id]?.status ?? 'ABSENT';
+      return st === 'ABSENT';
+    }).length;
+  }, [students, attendanceMap]);
+
+  // Sınıf Bazlı Canlı Katılım Metrikleri (Admin Paneli İçin)
+  const classroomBreakdown = useMemo(() => {
+    return classrooms.map((cls) => {
+      const clsStudents = students.filter((s) => s.classroomId === cls.id);
+      const total = clsStudents.length;
+      let present = 0;
+      let absent = 0;
+      let excused = 0;
+
+      for (const s of clsStudents) {
+        const att = attendanceMap[s.id];
+        const st = att?.status ?? 'ABSENT';
+        if (st === 'PRESENT' || st === 'LEFT') {
+          present++;
+        } else if (st === 'EXCUSED') {
+          excused++;
+        } else {
+          absent++;
+        }
+      }
+
+      const rate = total > 0 ? Math.round((present / total) * 100) : 0;
+      const teacherAssignment = cls.teachers?.[0];
+      const assignedTeacher = teacherAssignment
+        ? teachers.find((t) => t.id === teacherAssignment.teacherId)
+        : null;
+
+      return {
+        classroom: cls,
+        total,
+        present,
+        absent,
+        excused,
+        rate,
+        assignedTeacher,
+      };
+    });
+  }, [classrooms, students, attendanceMap, teachers]);
+
+  const unassignedStudents = useMemo(() => {
+    return students.filter((s) => !s.classroomId);
+  }, [students]);
+
+  const unassignedPresent = useMemo(() => {
+    return unassignedStudents.filter((s) => {
+      const st = attendanceMap[s.id]?.status ?? 'ABSENT';
+      return st === 'PRESENT' || st === 'LEFT';
+    }).length;
+  }, [unassignedStudents, attendanceMap]);
+
+  const unassignedExcused = useMemo(() => {
+    return unassignedStudents.filter((s) => {
+      const st = attendanceMap[s.id]?.status;
+      return st === 'EXCUSED';
+    }).length;
+  }, [unassignedStudents, attendanceMap]);
+
+  const unassignedAbsent = useMemo(() => {
+    return unassignedStudents.filter((s) => {
+      const st = attendanceMap[s.id]?.status ?? 'ABSENT';
+      return st === 'ABSENT';
+    }).length;
+  }, [unassignedStudents, attendanceMap]);
+
   // Filtered Students List
   const filteredStudents = useMemo(() => {
-    return students.filter((s) => {
+    return scopedStudents.filter((s) => {
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const fullName = `${s.firstName} ${s.lastName}`.toLowerCase();
@@ -230,6 +501,14 @@ export function AttendancePage(): JSX.Element {
           c.name.toLowerCase().includes(q),
         );
         if (!fullName.includes(q) && !contactMatch) return false;
+      }
+
+      if (!isTeacher) {
+        if (selectedClassroomId === 'UNASSIGNED') {
+          if (s.classroomId) return false;
+        } else if (selectedClassroomId !== 'ALL' && s.classroomId !== selectedClassroomId) {
+          return false;
+        }
       }
 
       if (statusFilter !== 'all') {
@@ -240,7 +519,7 @@ export function AttendancePage(): JSX.Element {
 
       return true;
     });
-  }, [students, attendanceMap, searchQuery, statusFilter]);
+  }, [scopedStudents, isTeacher, attendanceMap, searchQuery, selectedClassroomId, statusFilter]);
 
   return (
     <div className="space-y-6">
@@ -249,6 +528,17 @@ export function AttendancePage(): JSX.Element {
         title="Giriş-Çıkış, Güvenlik & Yoklama"
         description="Öğrenci yoklama durumlarını kaydedin, pasaport yetkilisi doğrulamasıyla güvenli teslimatı sağlayın."
         icon={ShieldCheck}
+        colorTheme="emerald"
+        badges={
+          <>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 font-bold text-[11px] border border-emerald-200/80 dark:border-emerald-800/60">
+              {presentCount} Sınıfta
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 font-bold text-[11px] border border-rose-200/80 dark:border-rose-800/60">
+              {absentCount} Gelmedi
+            </span>
+          </>
+        }
         actions={
           <div className="flex items-center gap-3 flex-wrap">
             {/* Date Picker Control */}
@@ -326,6 +616,228 @@ export function AttendancePage(): JSX.Element {
         </div>
       )}
 
+      {/* Sınıf Bazlı Canlı Katılım & Yoklama Kartları (Yalnızca Admin/SuperAdmin) */}
+      {isAdmin && classrooms.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+              <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+              <span>Sınıflara Göre Canlı Katılım & Yoklama Dağılımı</span>
+            </h2>
+            {selectedClassroomId !== 'ALL' && (
+              <button
+                type="button"
+                onClick={() => setSelectedClassroomId('ALL')}
+                className="text-[11px] font-bold text-teal-800 dark:text-teal-300 hover:underline cursor-pointer"
+              >
+                Tüm Sınıfları Göster (Filtreyi Kaldır)
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+            {/* Tüm Kreş Kartı */}
+            <button
+              type="button"
+              onClick={() => setSelectedClassroomId('ALL')}
+              className={`p-4 rounded-3xl border-2 text-left transition-all duration-150 ease-out flex flex-col justify-between cursor-pointer active:translate-y-[3px] active:shadow-none ${
+                selectedClassroomId === 'ALL'
+                  ? 'border-teal-600 dark:border-teal-500 bg-teal-50/70 dark:bg-teal-950/40 shadow-[0_4px_0_0_#0f766e,0_8px_20px_-2px_rgba(17,94,89,0.25)] ring-2 ring-teal-500/20'
+                  : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] hover:-translate-y-0.5'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-slate-900 dark:text-white">
+                    Tüm Kreş
+                  </span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-teal-100 dark:bg-teal-900/60 text-teal-900 dark:text-teal-200">
+                    Genel Bakış
+                  </span>
+                </div>
+                <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                  Toplam <strong className="text-sm font-black text-slate-900 dark:text-white">{students.length}</strong> Öğrenci
+                </div>
+              </div>
+
+              <div className="mt-3 space-y-2">
+                <div className="flex items-center justify-between text-xs gap-1 flex-wrap">
+                  <span className="inline-flex items-center gap-1 font-bold text-emerald-800 dark:text-emerald-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    {overallPresentCount} Geldi
+                  </span>
+                  {overallExcusedCount > 0 && (
+                    <span className="inline-flex items-center gap-1 font-bold text-amber-800 dark:text-amber-300 bg-amber-100/70 dark:bg-amber-950/60 px-1.5 py-0.5 rounded-md">
+                      <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                      {overallExcusedCount} İzinli
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 font-bold text-rose-800 dark:text-rose-300">
+                    <MinusCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                    {overallAbsentCount} Gelmedi
+                  </span>
+                </div>
+
+                <div className="w-full bg-[#EFECE6] dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-teal-600 dark:bg-teal-400 h-full rounded-full transition-all duration-300"
+                    style={{
+                      width: `${students.length > 0 ? Math.round((overallPresentCount / students.length) * 100) : 0}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            </button>
+
+            {/* Dinamik Sınıf Kartları */}
+            {classroomBreakdown.map((item) => {
+              const isSelected = selectedClassroomId === item.classroom.id;
+
+              return (
+                <button
+                  key={item.classroom.id}
+                  type="button"
+                  onClick={() =>
+                    setSelectedClassroomId(isSelected ? 'ALL' : item.classroom.id)
+                  }
+                  className={`p-4 rounded-3xl border-2 text-left transition-all duration-150 ease-out flex flex-col justify-between cursor-pointer active:translate-y-[3px] active:shadow-none ${
+                    isSelected
+                      ? 'border-teal-600 dark:border-teal-500 bg-teal-50/70 dark:bg-teal-950/40 shadow-[0_4px_0_0_#0f766e,0_8px_20px_-2px_rgba(17,94,89,0.25)] ring-2 ring-teal-500/20'
+                      : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] hover:-translate-y-0.5'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-1">
+                      <span
+                        className="text-xs font-black text-slate-900 dark:text-white truncate"
+                        title={item.classroom.name}
+                      >
+                        {item.classroom.name}
+                      </span>
+                      {item.classroom.ageGroup && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 shrink-0">
+                          {item.classroom.ageGroup}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="mt-1 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                      {item.assignedTeacher?.avatarUrl ? (
+                        <img
+                          src={item.assignedTeacher.avatarUrl}
+                          alt="Öğretmen Avatar"
+                          className="w-4 h-4 rounded-full object-cover shrink-0 border border-teal-600/40"
+                        />
+                      ) : (
+                        <GraduationCap
+                          className={`w-3.5 h-3.5 shrink-0 ${
+                            item.assignedTeacher ? 'text-teal-700 dark:text-teal-400' : 'text-slate-400'
+                          }`}
+                        />
+                      )}
+                      <span
+                        className="truncate font-semibold text-[10px]"
+                        title={item.assignedTeacher ? item.assignedTeacher.email : 'Öğretmen Atanmadı'}
+                      >
+                        {getTeacherDisplayName(item.assignedTeacher)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 space-y-2">
+                    <div className="flex items-center justify-between text-xs gap-1 flex-wrap">
+                      <span className="inline-flex items-center gap-1 font-bold text-emerald-800 dark:text-emerald-300">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                        {item.present} Geldi
+                      </span>
+                      {item.excused > 0 && (
+                        <span className="inline-flex items-center gap-1 font-bold text-amber-800 dark:text-amber-300 bg-amber-100/70 dark:bg-amber-950/60 px-1.5 py-0.5 rounded-md">
+                          <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                          {item.excused} İzinli
+                        </span>
+                      )}
+                      <span className="inline-flex items-center gap-1 font-bold text-rose-800 dark:text-rose-300">
+                        <MinusCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                        {item.absent} Gelmedi
+                      </span>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="w-full bg-[#EFECE6] dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-300 ${
+                            item.rate >= 80
+                              ? 'bg-emerald-600 dark:bg-emerald-500'
+                              : item.rate >= 50
+                              ? 'bg-amber-600 dark:bg-amber-500'
+                              : 'bg-rose-600 dark:bg-rose-500'
+                          }`}
+                          style={{ width: `${item.rate}%` }}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                        <span>{item.total} Öğrenci</span>
+                        <span className="font-bold text-slate-700 dark:text-slate-300">
+                          %{item.rate} Katılım
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+
+            {/* Sınıf Atanmamış Öğrenciler (Varsa) */}
+            {unassignedStudents.length > 0 && (
+              <button
+                type="button"
+                onClick={() =>
+                  setSelectedClassroomId(
+                    selectedClassroomId === 'UNASSIGNED' ? 'ALL' : 'UNASSIGNED',
+                  )
+                }
+                className={`p-4 rounded-3xl border-2 text-left transition-all duration-150 ease-out flex flex-col justify-between cursor-pointer active:translate-y-[3px] active:shadow-none ${
+                  selectedClassroomId === 'UNASSIGNED'
+                    ? 'border-amber-600 dark:border-amber-500 bg-amber-50/70 dark:bg-amber-950/40 shadow-[0_4px_0_0_#92400e,0_8px_20px_-2px_rgba(217,119,6,0.25)] ring-2 ring-amber-500/20'
+                    : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] hover:-translate-y-0.5'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black text-slate-900 dark:text-white">
+                      Sınıfı Olmayanlar
+                    </span>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300">
+                      Bekleyen
+                    </span>
+                  </div>
+                  <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                    Toplam <strong className="text-sm font-black text-slate-900 dark:text-white">{unassignedStudents.length}</strong> Öğrenci
+                  </div>
+                </div>
+
+                <div className="mt-3 flex items-center justify-between text-xs gap-1 flex-wrap">
+                  <span className="inline-flex items-center gap-1 font-bold text-emerald-800 dark:text-emerald-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    {unassignedPresent} Geldi
+                  </span>
+                  {unassignedExcused > 0 && (
+                    <span className="inline-flex items-center gap-1 font-bold text-amber-800 dark:text-amber-300 bg-amber-100/70 dark:bg-amber-950/60 px-1.5 py-0.5 rounded-md">
+                      <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                      {unassignedExcused} İzinli
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 font-bold text-rose-800 dark:text-rose-300">
+                    <MinusCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                    {unassignedAbsent} Gelmedi
+                  </span>
+                </div>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Stats Summary Cards with tactile 3D extrusion and claymorphic depth */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
         <button
@@ -338,9 +850,20 @@ export function AttendancePage(): JSX.Element {
           }`}
         >
           <p
-            className={`text-xs font-bold uppercase tracking-wider ${statusFilter === 'all' ? 'text-teal-100' : 'text-slate-500 dark:text-slate-400'}`}
+            className={`text-xs font-bold uppercase tracking-wider truncate ${statusFilter === 'all' ? 'text-teal-100' : 'text-slate-500 dark:text-slate-400'}`}
+            title={
+              selectedClassroom
+                ? `${selectedClassroom.name} Mevcudu`
+                : selectedClassroomId === 'UNASSIGNED'
+                ? 'Sınıfsızlar'
+                : 'Toplam Öğrenci'
+            }
           >
-            Toplam Öğrenci
+            {selectedClassroom
+              ? selectedClassroom.name
+              : selectedClassroomId === 'UNASSIGNED'
+              ? 'Sınıfsızlar'
+              : 'Toplam Öğrenci'}
           </p>
           <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{totalStudents}</p>
         </button>
@@ -431,7 +954,37 @@ export function AttendancePage(): JSX.Element {
           />
         </div>
 
-        <div className="flex items-center justify-between sm:justify-end gap-3.5">
+        <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
+          {(isTeacher ? teacherClassrooms : classrooms).length > 0 && (
+            <div className="relative">
+              <select
+                value={selectedClassroomId}
+                onChange={(e) => setSelectedClassroomId(e.target.value)}
+                className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-2xl px-3 py-2 pr-8 focus:outline-hidden appearance-none shadow-2xs cursor-pointer"
+                title="Sınıfa Göre Filtrele"
+              >
+                {!isTeacher && <option value="ALL">Tüm Sınıflar</option>}
+                {(isTeacher ? teacherClassrooms : classrooms).map((c) => {
+                  const brk = classroomBreakdown.find((b) => b.classroom.id === c.id);
+                  const suffix = brk
+                    ? ` (${brk.present} Geldi${brk.excused > 0 ? ` / ${brk.excused} İzinli` : ''} / ${brk.absent} Gelmedi)`
+                    : '';
+                  return (
+                    <option key={c.id} value={c.id}>
+                      {c.name}{suffix}
+                    </option>
+                  );
+                })}
+                {!isTeacher && unassignedStudents.length > 0 && (
+                  <option value="UNASSIGNED">
+                    Sınıfsız Öğrenciler ({unassignedPresent} Geldi{unassignedExcused > 0 ? ` / ${unassignedExcused} İzinli` : ''} / {unassignedAbsent} Gelmedi)
+                  </option>
+                )}
+              </select>
+              <School className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+          )}
+
           <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
             Gösterilen:{' '}
             <strong className="text-slate-900 dark:text-white font-bold">
@@ -533,11 +1086,19 @@ export function AttendancePage(): JSX.Element {
                             {student.lastName.charAt(0)}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <div
-                              className="font-bold text-slate-900 dark:text-white text-sm truncate max-w-[200px]"
-                              title={`${student.firstName} ${student.lastName}`}
-                            >
-                              {student.firstName} {student.lastName}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span
+                                className="font-bold text-slate-900 dark:text-white text-sm truncate max-w-[200px]"
+                                title={`${student.firstName} ${student.lastName}`}
+                              >
+                                {student.firstName} {student.lastName}
+                              </span>
+                              {classrooms.find((c) => c.id === student.classroomId) && (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-lg border border-teal-200/80 dark:border-slate-700 shrink-0">
+                                  <School className="w-2.5 h-2.5" />
+                                  <span>{classrooms.find((c) => c.id === student.classroomId)?.name}</span>
+                                </span>
+                              )}
                             </div>
                             <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                               <span className="text-slate-600 dark:text-slate-300 text-[11px] shrink-0 font-medium">
@@ -710,12 +1271,20 @@ export function AttendancePage(): JSX.Element {
                         {student.lastName.charAt(0)}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h4
-                          className="font-bold text-slate-900 dark:text-white text-sm truncate"
-                          title={`${student.firstName} ${student.lastName}`}
-                        >
-                          {student.firstName} {student.lastName}
-                        </h4>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <h4
+                            className="font-bold text-slate-900 dark:text-white text-sm truncate"
+                            title={`${student.firstName} ${student.lastName}`}
+                          >
+                            {student.firstName} {student.lastName}
+                          </h4>
+                          {classrooms.find((c) => c.id === student.classroomId) && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-1.5 py-0.5 rounded-lg border border-teal-200/80 dark:border-slate-700 shrink-0">
+                              <School className="w-2.5 h-2.5" />
+                              <span>{classrooms.find((c) => c.id === student.classroomId)?.name}</span>
+                            </span>
+                          )}
+                        </div>
                         <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                           <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
                             {student.dateOfBirth}
@@ -853,16 +1422,97 @@ export function AttendancePage(): JSX.Element {
         <PrintPreviewModal
           isOpen={showMebPrint}
           onClose={() => setShowMebPrint(false)}
-          title={`MEB Aylık Resmî Yoklama Çizelgesi — ${new Date(selectedDate).toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })}`}
-          subtitle={`Toplam ${students.length} Kayıtlı Öğrenci • Resmî Teftiş & Arşiv Formatı`}
+          title={`MEB Aylık Resmî Yoklama Çizelgesi — ${printClassroom ? printClassroom.name : 'Tüm Sınıflar & Gruplar'}`}
+          subtitle={`${printMonth}. Ay ${printYear} • Toplam ${printScopedStudents.length} Kayıtlı Öğrenci • Resmî Teftiş & Arşiv Formatı`}
           orientation="landscape"
         >
+          {/* Modal Toolbar - Hidden during printing */}
+          <div className="print:hidden mb-4 p-3 bg-stone-50 dark:bg-slate-800 rounded-xl border border-stone-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="font-semibold text-stone-700 dark:text-slate-300 flex items-center gap-1.5">
+                <School className="w-4 h-4 text-teal-700 dark:text-teal-400" />
+                Sınıf / Grup:
+                <select
+                  value={printClassroomId}
+                  onChange={(e) => setPrintClassroomId(e.target.value)}
+                  className="ml-1 bg-white dark:bg-slate-900 border border-stone-300 dark:border-slate-600 rounded-lg px-2.5 py-1 text-stone-800 dark:text-slate-200 font-medium focus:ring-1 focus:ring-teal-600"
+                >
+                  {!isTeacher && (
+                    <option value="ALL">Tüm Sınıflar & Gruplar ({students.length} Öğrenci)</option>
+                  )}
+                  {classrooms.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({students.filter((s) => s.classroomId === c.id).length} Öğrenci)
+                    </option>
+                  ))}
+                  {!isTeacher && students.some((s) => !s.classroomId) && (
+                    <option value="UNASSIGNED">
+                      Sınıfsız Öğrenciler ({students.filter((s) => !s.classroomId).length} Öğrenci)
+                    </option>
+                  )}
+                </select>
+              </label>
+
+              <div className="flex items-center gap-1.5 border-l border-stone-200 dark:border-slate-700 pl-3">
+                <span className="font-semibold text-stone-700 dark:text-slate-300">Dönem:</span>
+                <select
+                  value={printMonth}
+                  onChange={(e) => setPrintMonth(parseInt(e.target.value, 10))}
+                  className="bg-white dark:bg-slate-900 border border-stone-300 dark:border-slate-600 rounded-lg px-2 py-1 text-stone-800 dark:text-slate-200 font-medium"
+                >
+                  {[
+                    'Ocak',
+                    'Şubat',
+                    'Mart',
+                    'Nisan',
+                    'Mayıs',
+                    'Haziran',
+                    'Temmuz',
+                    'Ağustos',
+                    'Eylül',
+                    'Ekim',
+                    'Kasım',
+                    'Aralık',
+                  ].map((mName, idx) => (
+                    <option key={idx + 1} value={idx + 1}>
+                      {mName}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={printYear}
+                  onChange={(e) => setPrintYear(parseInt(e.target.value, 10))}
+                  className="bg-white dark:bg-slate-900 border border-stone-300 dark:border-slate-600 rounded-lg px-2 py-1 text-stone-800 dark:text-slate-200 font-medium"
+                >
+                  {[2024, 2025, 2026, 2027].map((yr) => (
+                    <option key={yr} value={yr}>
+                      {yr}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-stone-500 dark:text-slate-400">
+              {loadingMonthlyAtt ? (
+                <span className="inline-flex items-center gap-1.5 text-teal-700 dark:text-teal-400 font-medium animate-pulse">
+                  <Clock className="w-3.5 h-3.5 animate-spin" /> Veriler güncelleniyor...
+                </span>
+              ) : (
+                <span className="text-[11px]">
+                  {monthlyAttendances.length} yoklama kaydı hazır
+                </span>
+              )}
+            </div>
+          </div>
+
           <AttendanceSheetPrint
-            classroomName="Ana Sınıfı & Gündüz Bakımevi Grubu"
-            year={parseInt(selectedDate.slice(0, 4), 10)}
-            month={parseInt(selectedDate.slice(5, 7), 10)}
-            students={students}
-            attendances={Object.values(attendanceMap)}
+            classroomName={printClassroom ? printClassroom.name : 'Tüm Okul & Gruplar'}
+            year={printYear}
+            month={printMonth}
+            students={printScopedStudents}
+            attendances={monthlyAttendances}
+            teacherName={printTeacherName}
           />
         </PrintPreviewModal>
       )}

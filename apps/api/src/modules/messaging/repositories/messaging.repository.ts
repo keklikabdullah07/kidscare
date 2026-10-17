@@ -130,7 +130,11 @@ export interface IMessagingRepository {
 
   listParentRequests(
     tenantId: string,
-    filters?: { parentId?: string; status?: Prisma.ParentRequestWhereInput['status'] },
+    filters?: {
+      parentId?: string;
+      studentIds?: string[];
+      status?: Prisma.ParentRequestWhereInput['status'];
+    },
   ): Promise<ParentRequestRow[]>;
   createParentRequest(
     tenantId: string,
@@ -272,13 +276,18 @@ export class MessagingRepository implements IMessagingRepository {
 
   async listParentRequests(
     tenantId: string,
-    filters?: { parentId?: string; status?: Prisma.ParentRequestWhereInput['status'] },
+    filters?: {
+      parentId?: string;
+      studentIds?: string[];
+      status?: Prisma.ParentRequestWhereInput['status'];
+    },
   ): Promise<ParentRequestRow[]> {
     return this.prisma.withTenant((client) =>
       client.parentRequest.findMany({
         where: {
           tenantId,
           ...(filters?.parentId ? { parentId: filters.parentId } : {}),
+          ...(filters?.studentIds ? { studentId: { in: filters.studentIds } } : {}),
           ...(filters?.status ? { status: filters.status } : {}),
         },
         select: PARENT_REQUEST_SELECT,

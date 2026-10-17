@@ -52,7 +52,7 @@ export class DevelopmentController {
     if (domain) filters.domain = domain;
     if (parentVisibleOnly) filters.parentVisibleOnly = true;
 
-    return this.service.listObservations(tenantId, filters);
+    return this.service.listObservations(tenantId, filters, user);
   }
 
   @Post('observations')
@@ -89,7 +89,7 @@ export class DevelopmentController {
     if (studentId) filters.studentId = studentId;
     if (parentVisibleOnly) filters.parentVisibleOnly = true;
 
-    return this.service.listPortfolioItems(tenantId, filters);
+    return this.service.listPortfolioItems(tenantId, filters, user);
   }
 
   @Post('portfolio')

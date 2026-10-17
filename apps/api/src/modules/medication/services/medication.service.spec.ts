@@ -2,6 +2,7 @@ import { BadRequestException, ForbiddenException, NotFoundException } from '@nes
 import type { MedicationRecordRow } from '../repositories/medication.repository';
 import { MedicationService } from './medication.service';
 import type { IMedicationRepository } from '../repositories/medication.repository';
+import type { PrismaService } from '../../../prisma/prisma.service';
 
 const baseRow: MedicationRecordRow = {
   id: 'med-1',
@@ -40,7 +41,7 @@ describe('MedicationService', () => {
       update: jest.fn(),
       delete: jest.fn(),
     };
-    service = new MedicationService(repo);
+    service = new MedicationService(repo, {} as unknown as PrismaService);
   });
 
   it('creates REQUESTED record with requestedById', async () => {

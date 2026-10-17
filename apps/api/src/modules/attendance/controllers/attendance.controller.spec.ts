@@ -46,6 +46,7 @@ describe('AttendanceController', () => {
   beforeEach(() => {
     service = {
       findByDate: jest.fn(),
+      findByDateRange: jest.fn(),
       findByStudentAndDate: jest.fn(),
       checkIn: jest.fn(),
       checkOut: jest.fn(),
@@ -66,6 +67,18 @@ describe('AttendanceController', () => {
       const res = await controller.findByDate('t-1', '2026-09-15');
       expect(res).toHaveLength(1);
       expect(res[0]?.status).toBe('PRESENT');
+    });
+
+    it('returns attendance list by date range when startDate and endDate provided', async () => {
+      service.findByDateRange.mockResolvedValue([mockEntity]);
+      const res = await controller.findByDate(
+        't-1',
+        undefined,
+        '2026-10-01',
+        '2026-10-31',
+      );
+      expect(res).toHaveLength(1);
+      expect(service.findByDateRange).toHaveBeenCalledWith('t-1', '2026-10-01', '2026-10-31');
     });
   });
 

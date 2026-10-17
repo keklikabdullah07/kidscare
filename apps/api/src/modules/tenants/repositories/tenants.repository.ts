@@ -7,7 +7,10 @@ import type { OperationalAlertItem, OperationalAlertsResponse } from '@kidscare/
 export interface ITenantsRepository {
   findById(tenantId: string): Promise<PrismaTenant | null>;
   update(tenantId: string, data: Prisma.TenantUpdateInput): Promise<PrismaTenant>;
-  getOperationalAlerts(tenantId: string): Promise<OperationalAlertsResponse>;
+  getOperationalAlerts(
+    tenantId: string,
+    studentIds?: string[],
+  ): Promise<OperationalAlertsResponse>;
 }
 
 @Injectable()
@@ -26,10 +29,15 @@ export class TenantsRepository implements ITenantsRepository {
     );
   }
 
-  async getOperationalAlerts(tenantId: string): Promise<OperationalAlertsResponse> {
+  async getOperationalAlerts(
+    tenantId: string,
+    studentIds?: string[],
+  ): Promise<OperationalAlertsResponse> {
     return this.prisma.withTenant(async (client) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+
+      const studentFilter = studentIds !== undefined ? { in: studentIds } : undefined;
 
       const [
         pendingMeds,
@@ -41,19 +49,31 @@ export class TenantsRepository implements ITenantsRepository {
         reports,
       ] = await Promise.all([
         client.medicationRecord.findMany({
-          where: { tenantId, status: 'REQUESTED' },
+          where: {
+            tenantId,
+            status: 'REQUESTED',
+            ...(studentFilter ? { studentId: studentFilter } : {}),
+          },
           include: { student: { select: { firstName: true, lastName: true } } },
           orderBy: { createdAt: 'desc' },
           take: 10,
         }),
         client.incidentRecord.findMany({
-          where: { tenantId, parentNotified: false },
+          where: {
+            tenantId,
+            parentNotified: false,
+            ...(studentFilter ? { studentId: studentFilter } : {}),
+          },
           include: { student: { select: { firstName: true, lastName: true } } },
           orderBy: { occurredAt: 'desc' },
           take: 10,
         }),
         client.pickupAuthorization.findMany({
-          where: { tenantId, status: 'PENDING' },
+          where: {
+            tenantId,
+            status: 'PENDING',
+            ...(studentFilter ? { studentId: studentFilter } : {}),
+          },
           include: {
             student: { select: { firstName: true, lastName: true } },
             pickupContact: { select: { fullName: true, relation: true } },
@@ -62,19 +82,36 @@ export class TenantsRepository implements ITenantsRepository {
           take: 10,
         }),
         client.parentRequest.findMany({
-          where: { tenantId, status: 'PENDING' },
+          where: {
+            tenantId,
+            status: 'PENDING',
+            ...(studentFilter ? { studentId: studentFilter } : {}),
+          },
           include: { student: { select: { firstName: true, lastName: true } } },
           orderBy: { createdAt: 'desc' },
           take: 10,
         }),
         client.student.count({
-          where: { tenantId, isActive: true, deletedAt: null },
+          where: {
+            tenantId,
+            isActive: true,
+            deletedAt: null,
+            ...(studentFilter ? { id: studentFilter } : {}),
+          },
         }),
         client.attendance.count({
-          where: { tenantId, date: today },
+          where: {
+            tenantId,
+            date: today,
+            ...(studentFilter ? { studentId: studentFilter } : {}),
+          },
         }),
         client.dailyReport.count({
-          where: { tenantId, date: today },
+          where: {
+            tenantId,
+            date: today,
+            ...(studentFilter ? { studentId: studentFilter } : {}),
+          },
         }),
       ]);
 

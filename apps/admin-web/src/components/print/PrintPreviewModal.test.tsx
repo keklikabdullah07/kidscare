@@ -189,7 +189,14 @@ describe('KidsCare PDF Belge Motoru & Resmi Çıktılar (Spec 0044)', () => {
 
       // Table headers
       expect(screen.getByText('Sıra')).toBeInTheDocument();
+      expect(screen.getByText('Kütük No')).toBeInTheDocument();
       expect(screen.getByText('Öğrenci Adı Soyadı')).toBeInTheDocument();
+      expect(screen.getByText('Cns')).toBeInTheDocument();
+      expect(screen.getByText('D.Yılı (Yaş)')).toBeInTheDocument();
+
+      // Demographic summary & dynamic rate
+      expect(screen.getByText(/Resmî Devam Ortalaması/i)).toBeInTheDocument();
+      expect(screen.getByText(/K: 1, E: 0/i)).toBeInTheDocument();
 
       // Signatures
       expect(screen.getByText('Ahmet Öğretmen')).toBeInTheDocument();

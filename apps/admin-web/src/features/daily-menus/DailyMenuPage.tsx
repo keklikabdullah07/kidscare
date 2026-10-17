@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type JSX } from 'react';
-import type { AllergenWarningSummary, DailyMenu } from '@kidscare/shared-types';
+import type { AllergenWarningSummary, Classroom, DailyMenu, Student } from '@kidscare/shared-types';
 import {
   Utensils,
   AlertTriangle,
@@ -21,6 +21,8 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { deleteDailyMenu, getDailyMenu, saveDailyMenu } from '../../api/daily-menus';
+import { listClassrooms } from '../../api/classrooms';
+import { listStudents } from '../../api/students';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
@@ -56,10 +58,52 @@ export function DailyMenuPage(): JSX.Element {
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [menu, setMenu] = useState<DailyMenu | null>(null);
   const [warnings, setWarnings] = useState<AllergenWarningSummary[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
+  const currentUserId = authState.status === 'authenticated' ? authState.user.id : null;
+
+  useEffect(() => {
+    if (isTeacher) {
+      Promise.all([listClassrooms(), listStudents()])
+        .then(([cList, sList]) => {
+          setClassrooms(cList);
+          setStudents(sList);
+        })
+        .catch(() => {});
+    }
+  }, [isTeacher]);
+
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher || !currentUserId) return [];
+    return classrooms.filter((c) =>
+      (c.teachers || []).some((t) => t.teacherId === currentUserId),
+    );
+  }, [isTeacher, currentUserId, classrooms]);
+
+  const teacherClassroomIds = useMemo(
+    () => new Set(teacherClassrooms.map((c) => c.id)),
+    [teacherClassrooms],
+  );
+
+  const teacherStudentIds = useMemo(() => {
+    if (!isTeacher) return null;
+    return new Set(
+      students
+        .filter((s) => s.classroomId && teacherClassroomIds.has(s.classroomId))
+        .map((s) => s.id),
+    );
+  }, [isTeacher, students, teacherClassroomIds]);
+
+  const scopedWarnings = useMemo(() => {
+    if (!isTeacher || !teacherStudentIds) return warnings;
+    return warnings.filter((w) => teacherStudentIds.has(w.studentId));
+  }, [isTeacher, warnings, teacherStudentIds]);
 
   const canEdit =
     authState.status === 'authenticated' &&
@@ -185,7 +229,7 @@ export function DailyMenuPage(): JSX.Element {
   const breakfastCount = useMemo(() => menu?.breakfast.length ?? 0, [menu]);
   const lunchCount = useMemo(() => menu?.lunch.length ?? 0, [menu]);
   const snackCount = useMemo(() => menu?.snack.length ?? 0, [menu]);
-  const allergenRiskCount = useMemo(() => warnings.length, [warnings]);
+  const allergenRiskCount = useMemo(() => scopedWarnings.length, [scopedWarnings]);
 
   function handleDelete(): void {
     setShowDeleteConfirm(true);
@@ -223,6 +267,12 @@ export function DailyMenuPage(): JSX.Element {
         title="Kreş Yemek Menüsü & Beslenme Yönetimi"
         description="Kahvaltı, öğle ve ikindi menüleri ile otomatik öğrenci alerjen denetimi"
         icon={Utensils}
+        colorTheme="amber"
+        badges={
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 font-bold text-[11px] border border-amber-200/80 dark:border-amber-800/60">
+            {menu ? '🍽️ Günün Menüsü Hazır' : '⚠️ Menü Henüz Girilmedi'}
+          </span>
+        }
         actions={
           <div className="flex items-center gap-2 bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 p-1.5 rounded-2xl shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)]">
             <button
@@ -325,7 +375,7 @@ export function DailyMenuPage(): JSX.Element {
       )}
 
       {/* Allergen Warning Banner */}
-      {warnings.length > 0 && (
+      {scopedWarnings.length > 0 && (
         <div className="rounded-3xl border-2 border-amber-300 dark:border-amber-800/60 bg-amber-50/90 dark:bg-amber-950/30 p-5 shadow-[0_4px_0_0_#D5CBB9,0_10px_24px_-3px_rgba(217,119,6,0.18)] dark:shadow-[0_4px_0_0_#1E293B,0_10px_24px_-3px_rgba(0,0,0,0.5)]">
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0 border border-amber-300 dark:border-amber-700 shadow-2xs">
@@ -333,14 +383,14 @@ export function DailyMenuPage(): JSX.Element {
             </div>
             <div className="flex-1">
               <h3 className="text-sm font-bold text-amber-950 dark:text-amber-100">
-                Alerjen Riski Uyarısı — {warnings.length} Öğrenci Etkileniyor!
+                Alerjen Riski Uyarısı {isTeacher ? '(Sorumlu Olduğunuz Sınıflar)' : ''} — {scopedWarnings.length} Öğrenci Etkileniyor!
               </h3>
               <p className="text-xs text-amber-900 dark:text-amber-200/90 mt-1 font-medium">
                 Günün menüsündeki içerikler, aşağıdaki öğrencilerin sağlık pasaportundaki kayıtlı
                 alerjileri ile çakışmaktadır:
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {warnings.map((w) => (
+                {scopedWarnings.map((w) => (
                   <div
                     key={w.studentId}
                     className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700/80 rounded-2xl px-3.5 py-1.5 text-xs shadow-2xs"

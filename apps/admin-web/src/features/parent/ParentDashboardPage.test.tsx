@@ -522,4 +522,129 @@ describe('ParentDashboardPage', () => {
       expect(consentResponded).toBe(true);
     });
   });
+
+  it('renders rich daily report with exact sleep status (NONE / Uyumadı), sleep note, meals note and potty entries', async () => {
+    const fakeOverviewRichReport = [
+      {
+        ...fakeOverview[0],
+        todayDailyReport: {
+          id: 'rep-rich',
+          tenantId: 't-1',
+          studentId: 's-1',
+          date: '2026-09-15',
+          mood: 'CALM',
+          meals: {
+            breakfast: 'ALL',
+            lunch: 'HALF',
+            afternoonSnack: 'NONE',
+            notes: 'Öğle çorbasını çok sevdi, ikindi kekini yemek istemedi.',
+          },
+          naps: {
+            quality: 'NONE',
+            notes: 'Bugün uyumak istemedi, yerine sessizce resim yaptı.',
+          },
+          potty: [
+            { id: 'p-1', time: '10:15', type: 'WET' },
+            { id: 'p-2', time: '13:45', type: 'DIRTY', notes: 'Normal kıvamda' },
+          ],
+          activities: ['Müzik & Ritim'],
+          teacherNote: 'Günü sakin ve huzurlu tamamladı.',
+          medications: [],
+          createdAt: '2026-09-15T12:00:00.000Z',
+          updatedAt: '2026-09-15T12:00:00.000Z',
+        },
+      },
+    ];
+
+    mockFetchByUrl({
+      '/parent/children': () =>
+        new Response(JSON.stringify({ data: fakeOverviewRichReport }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/daily-menus': () =>
+        new Response(JSON.stringify(fakeMenu), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    });
+
+    render(<ParentDashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ada Yılmaz')).toBeInTheDocument();
+    });
+
+    // 1. Explicit Sleep Status: "Uyumadı" (NOT "Uyumadı / Belirtilmedi")
+    expect(screen.getByText('Uyumadı')).toBeInTheDocument();
+    expect(screen.queryByText('Uyumadı / Belirtilmedi')).not.toBeInTheDocument();
+    expect(
+      screen.getByText('"Bugün uyumak istemedi, yerine sessizce resim yaptı."'),
+    ).toBeInTheDocument();
+
+    // 2. Meals Note
+    expect(screen.getByText('Öğretmenin Beslenme Notu')).toBeInTheDocument();
+    expect(
+      screen.getByText('"Öğle çorbasını çok sevdi, ikindi kekini yemek istemedi."'),
+    ).toBeInTheDocument();
+
+    // 3. Potty Timeline Chips & Notes
+    expect(screen.getByText('2 Giriş')).toBeInTheDocument();
+    expect(screen.getByText('Çişli Bez')).toBeInTheDocument();
+    expect(screen.getByText('10:15')).toBeInTheDocument();
+    expect(screen.getByText('Kaka / Kirli Bez')).toBeInTheDocument();
+    expect(screen.getByText('13:45')).toBeInTheDocument();
+    expect(screen.getByText('Normal kıvamda')).toBeInTheDocument();
+  });
+
+  it('renders INTERRUPTED sleep quality badge correctly', async () => {
+    const fakeOverviewInterrupted = [
+      {
+        ...fakeOverview[0],
+        todayDailyReport: {
+          id: 'rep-interrupted',
+          tenantId: 't-1',
+          studentId: 's-1',
+          date: '2026-09-15',
+          mood: 'TIRED',
+          meals: { breakfast: 'ALL', lunch: 'ALL', afternoonSnack: 'ALL' },
+          naps: {
+            startTime: '13:15',
+            endTime: '14:00',
+            quality: 'INTERRUPTED',
+            notes: 'Huzursuz uyandı.',
+          },
+          potty: [],
+          activities: [],
+          teacherNote: null,
+          medications: [],
+          createdAt: '2026-09-15T12:00:00.000Z',
+          updatedAt: '2026-09-15T12:00:00.000Z',
+        },
+      },
+    ];
+
+    mockFetchByUrl({
+      '/parent/children': () =>
+        new Response(JSON.stringify({ data: fakeOverviewInterrupted }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      '/daily-menus': () =>
+        new Response(JSON.stringify(fakeMenu), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    });
+
+    render(<ParentDashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ada Yılmaz')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Bölünmüş / Huzursuz Uyku')).toBeInTheDocument();
+    expect(screen.getByText('13:15 - 14:00')).toBeInTheDocument();
+    expect(screen.getByText('"Huzursuz uyandı."')).toBeInTheDocument();
+  });
 });

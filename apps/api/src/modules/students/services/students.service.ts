@@ -16,24 +16,41 @@ export class StudentsService {
     @Inject(PrismaService) private readonly prisma: PrismaService,
   ) {}
 
+  async getTeacherClassroomIds(tenantId: string, teacherUserId: string): Promise<string[]> {
+    const assignments = await this.prisma.withTenant((client) =>
+      client.classroomTeacher.findMany({
+        where: { tenantId, teacherId: teacherUserId, removedAt: null },
+        select: { classroomId: true },
+      }),
+    );
+    return assignments.map((a) => a.classroomId);
+  }
+
   async findAll(tenantId: string, user?: CurrentUserPayload): Promise<Student[]> {
     // Madde 21: Öğretmen rolü için sadece atandığı sınıfların öğrencileri izole edilir
     if (user?.role === 'TEACHER') {
-      const assignments = await this.prisma.withTenant((client) =>
-        client.classroomTeacher.findMany({
-          where: { tenantId, teacherId: user.userId, removedAt: null },
-          select: { classroomId: true },
-        }),
-      );
-      const classroomIds = assignments.map((a) => a.classroomId);
+      const classroomIds = await this.getTeacherClassroomIds(tenantId, user.userId);
       if (classroomIds.length === 0) return [];
       const rows = await this.repo.findMany(tenantId, { classroomIds });
       return rows.map((row) => Student.fromPrisma(row));
     }
 
+    // Servis personeli için yalnızca servisine atanmış öğrenciler izole edilir
+    if (user?.role === 'SERVICE_STAFF') {
+      const rows = await this.repo.findMany(tenantId);
+      return rows
+        .map((row) => Student.fromPrisma(row))
+        .filter((s) => {
+          const pass = (s.passport as Record<string, unknown> | null) ?? {};
+          const assigned = pass['serviceStaffId'] ?? pass['assignedServiceStaffId'];
+          return assigned === user.userId;
+        });
+    }
+
     const rows = await this.repo.findMany(tenantId);
     return rows.map((row) => Student.fromPrisma(row));
   }
+
 
   async findOne(tenantId: string, id: string): Promise<Student> {
     const found = await this.repo.findById(tenantId, id);
