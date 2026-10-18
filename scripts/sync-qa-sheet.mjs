@@ -13,7 +13,7 @@ export async function updateCell(row, col, value) {
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' },
       redirect: 'follow',
-      signal: AbortSignal.timeout(6000),
+      signal: AbortSignal.timeout(15000),
     });
     const text = await res.text();
     try {

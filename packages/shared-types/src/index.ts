@@ -18,3 +18,4 @@ export * from './media';
 export * from './consent';
 export * from './finance';
 export * from './broadcast';
+export * from './survey';

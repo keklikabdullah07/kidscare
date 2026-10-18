@@ -561,6 +561,48 @@ exports.Prisma.PasswordResetTokenScalarFieldEnum = {
   createdAt: 'createdAt',
 };
 
+exports.Prisma.SurveyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  createdById: 'createdById',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  targetType: 'targetType',
+  targetClassroomId: 'targetClassroomId',
+  isAnonymous: 'isAnonymous',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.SurveyQuestionScalarFieldEnum = {
+  id: 'id',
+  surveyId: 'surveyId',
+  orderIndex: 'orderIndex',
+  questionText: 'questionText',
+  questionType: 'questionType',
+  options: 'options',
+  isRequired: 'isRequired',
+};
+
+exports.Prisma.SurveyResponseScalarFieldEnum = {
+  id: 'id',
+  surveyId: 'surveyId',
+  respondentId: 'respondentId',
+  studentId: 'studentId',
+  createdAt: 'createdAt',
+};
+
+exports.Prisma.SurveyAnswerScalarFieldEnum = {
+  id: 'id',
+  responseId: 'responseId',
+  questionId: 'questionId',
+  ratingValue: 'ratingValue',
+  selectedOptions: 'selectedOptions',
+  textResponse: 'textResponse',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -723,6 +765,19 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   OTHER: 'OTHER',
 };
 
+exports.SurveyStatus = exports.$Enums.SurveyStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  CLOSED: 'CLOSED',
+};
+
+exports.SurveyQuestionType = exports.$Enums.SurveyQuestionType = {
+  RATING_1_5: 'RATING_1_5',
+  SINGLE_CHOICE: 'SINGLE_CHOICE',
+  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+  OPEN_TEXT: 'OPEN_TEXT',
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
@@ -757,6 +812,10 @@ exports.Prisma.ModelName = {
   BillingInvoice: 'BillingInvoice',
   PaymentTransaction: 'PaymentTransaction',
   PasswordResetToken: 'PasswordResetToken',
+  Survey: 'Survey',
+  SurveyQuestion: 'SurveyQuestion',
+  SurveyResponse: 'SurveyResponse',
+  SurveyAnswer: 'SurveyAnswer',
 };
 
 /**

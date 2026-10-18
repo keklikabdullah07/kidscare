@@ -27,6 +27,7 @@ import { DevelopmentPage } from './features/development/DevelopmentPage';
 import { EventsPage } from './features/events/EventsPage';
 import { FinancePage } from './features/finance/FinancePage';
 import { BroadcastPage } from './features/broadcast/BroadcastPage';
+import { SurveysPage } from './features/surveys/SurveysPage';
 import { onUnauthorized } from './api/client';
 
 /**
@@ -182,6 +183,14 @@ export function App(): JSX.Element {
                     element={
                       <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER']}>
                         <BroadcastPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/surveys"
+                    element={
+                      <RoleGuard allowed={[...ALL_ROLES]}>
+                        <SurveysPage />
                       </RoleGuard>
                     }
                   />

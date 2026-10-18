@@ -28,6 +28,7 @@ import { MediaModule } from './modules/media/media.module';
 import { ConsentsModule } from './modules/consents/consents.module';
 import { FinanceModule } from './modules/finance/finance.module';
 import { MailModule } from './modules/mail/mail.module';
+import { SurveysModule } from './modules/surveys/surveys.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { MailModule } from './modules/mail/mail.module';
     MediaModule,
     ConsentsModule,
     FinanceModule,
+    SurveysModule,
   ],
 
   providers: [

@@ -28,6 +28,10 @@ export type {
   BillingInvoice,
   PaymentTransaction,
   BroadcastLog,
+  Survey,
+  SurveyQuestion,
+  SurveyResponse,
+  SurveyAnswer,
 } from './generated/client';
 
 export {
@@ -37,4 +41,6 @@ export {
   PaymentMethod,
   BroadcastTargetType,
   BroadcastPriority,
+  SurveyStatus,
+  SurveyQuestionType,
 } from './generated/client';

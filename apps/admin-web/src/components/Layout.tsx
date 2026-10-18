@@ -28,6 +28,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Megaphone,
+  Vote,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
@@ -101,6 +102,12 @@ function getNavGroupsForRole(role: string): NavGroup[] {
             label: 'Veli Talepleri',
             icon: ClipboardList,
             description: 'İzin ve bildirimler',
+          },
+          {
+            to: '/surveys',
+            label: 'Anketler & Oylama',
+            icon: Vote,
+            description: 'Yemek ve etkinlik oylamaları',
           },
           {
             to: '/menus',
@@ -239,6 +246,12 @@ function getNavGroupsForRole(role: string): NavGroup[] {
           label: 'Duyuru & Bildirim',
           icon: Megaphone,
           description: 'Toplu duyuru ve acil push iletimi',
+        },
+        {
+          to: '/surveys',
+          label: 'Anketler & Oylama',
+          icon: Vote,
+          description: 'Memnuniyet ve etkinlik oylamaları',
         },
         {
           to: '/menus',
