@@ -368,7 +368,11 @@ importers:
 
   packages/shared-types: {}
 
-  packages/tenant-context: {}
+  packages/tenant-context:
+    dependencies:
+      '@kidscare/shared-types':
+        specifier: workspace:*
+        version: link:../shared-types
 
 packages:
 
