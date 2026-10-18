@@ -29,6 +29,9 @@ export function StudentPassportModal({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [identityNumber, setIdentityNumber] = useState('');
+  const [motherName, setMotherName] = useState('');
+  const [fatherName, setFatherName] = useState('');
   const [bloodType, setBloodType] = useState<BloodType>('UNKNOWN');
   const [allergies, setAllergies] = useState<string[]>([]);
   const [allergyInput, setAllergyInput] = useState('');
@@ -54,6 +57,9 @@ export function StudentPassportModal({
     getStudentPassport(student.id)
       .then((p) => {
         if (cancelled) return;
+        setIdentityNumber(p.identityNumber || '');
+        setMotherName(p.motherName || '');
+        setFatherName(p.fatherName || '');
         setBloodType(p.bloodType || 'UNKNOWN');
         setAllergies(p.allergies || []);
         setDietaryRestrictions(p.dietaryRestrictions || []);
@@ -146,6 +152,9 @@ export function StudentPassportModal({
     setError(null);
     try {
       const payload: StudentPassport = {
+        identityNumber: identityNumber.trim() || undefined,
+        motherName: motherName.trim() || undefined,
+        fatherName: fatherName.trim() || undefined,
         bloodType,
         allergies,
         dietaryRestrictions,
@@ -224,6 +233,52 @@ export function StudentPassportModal({
                 {error}
               </div>
             )}
+
+            {/* Section: Kimlik & Aile Bilgileri */}
+            <div className="rounded-2xl border border-[#DDD4C4] dark:border-slate-800 p-4.5 bg-[#FCFAF7]/60 dark:bg-slate-900/40 space-y-3 shadow-2xs">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <span>📋</span> Kimlik & Aile Bilgileri
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
+                    T.C. Kimlik No
+                  </label>
+                  <input
+                    type="text"
+                    value={identityNumber}
+                    onChange={(e) => setIdentityNumber(e.target.value.replace(/\D/g, '').slice(0, 11))}
+                    maxLength={11}
+                    placeholder="11 haneli T.C. No"
+                    className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs focus:border-teal-700 focus:outline-hidden"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
+                    Anne Adı
+                  </label>
+                  <input
+                    type="text"
+                    value={motherName}
+                    onChange={(e) => setMotherName(e.target.value)}
+                    placeholder="Örn: Ayşe"
+                    className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs focus:border-teal-700 focus:outline-hidden"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
+                    Baba Adı
+                  </label>
+                  <input
+                    type="text"
+                    value={fatherName}
+                    onChange={(e) => setFatherName(e.target.value)}
+                    placeholder="Örn: Mehmet"
+                    className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 px-3.5 py-2 text-xs font-medium shadow-2xs focus:border-teal-700 focus:outline-hidden"
+                  />
+                </div>
+              </div>
+            </div>
 
             {/* Section: Kan Grubu & Sağlık */}
             <div className="rounded-2xl border border-[#DDD4C4] dark:border-slate-800 p-4.5 bg-[#FCFAF7]/60 dark:bg-slate-900/40 space-y-3 shadow-2xs">
@@ -403,6 +458,28 @@ export function StudentPassportModal({
                     Ekle
                   </button>
                 </div>
+
+                {/* Seçili & Özel Beslenme Çipleri */}
+                {dietaryRestrictions.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1 border-t border-amber-200 dark:border-amber-900/40">
+                    {dietaryRestrictions.map((item) => (
+                      <span
+                        key={item}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 shadow-2xs"
+                      >
+                        🥗 {item}
+                        <button
+                          type="button"
+                          onClick={() => toggleDiet(item)}
+                          className="hover:text-rose-600 dark:hover:text-rose-400 font-extrabold cursor-pointer ml-0.5"
+                          title="Kaldır"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Düzenli İlaç & Kronik */}

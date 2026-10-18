@@ -32,6 +32,9 @@ export function createStudent(payload: {
   parentId?: string | null;
   classroomId?: string | null;
   passport?: StudentPassport;
+  identityNumber?: string;
+  motherName?: string;
+  fatherName?: string;
 }): Promise<Student> {
   return apiFetch<Student>('/students', {
     method: 'POST',

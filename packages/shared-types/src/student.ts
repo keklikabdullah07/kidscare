@@ -12,6 +12,9 @@ export type EmergencyContact = {
 };
 
 export type StudentPassport = {
+  identityNumber?: string | undefined;
+  motherName?: string | undefined;
+  fatherName?: string | undefined;
   bloodType: BloodType;
   allergies: string[];
   dietaryRestrictions: string[];

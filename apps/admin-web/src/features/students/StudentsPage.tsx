@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { createStudent, deleteStudent, listStudents, updateStudent } from '../../api/students';
-import { assignTeacherToClassroom, createClassroom, listClassrooms } from '../../api/classrooms';
+import { assignTeacherToClassroom, createClassroom, listClassrooms, updateClassroom } from '../../api/classrooms';
 import { listUsers } from '../../api/users';
 import type { Classroom, User } from '@kidscare/shared-types';
 import { StudentPassportModal } from './StudentPassportModal';
@@ -53,6 +53,7 @@ export function StudentsPage(): JSX.Element {
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [selectedClassroomId, setSelectedClassroomId] = useState<string>('ALL');
   const [showAddClassroomModal, setShowAddClassroomModal] = useState(false);
+  const [editingClassroom, setEditingClassroom] = useState<Classroom | null>(null);
   const [newClassName, setNewClassName] = useState('');
   const [newClassAgeGroup, setNewClassAgeGroup] = useState('3-4 Yaş');
   const [newClassTeacherId, setNewClassTeacherId] = useState('');
@@ -373,11 +374,26 @@ export function StudentsPage(): JSX.Element {
                     <span className="text-xs font-extrabold text-slate-900 dark:text-white truncate">
                       {cls.name}
                     </span>
-                    {cls.ageGroup && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                        {cls.ageGroup}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-1 shrink-0">
+                      {cls.ageGroup && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                          {cls.ageGroup}
+                        </span>
+                      )}
+                      {isAdmin && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingClassroom(cls);
+                          }}
+                          className="p-1 rounded-md text-slate-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                          title="Sınıfı Düzenle"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div className="mt-2.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                     <strong className="text-base font-black text-slate-900 dark:text-white">
@@ -697,7 +713,17 @@ export function StudentsPage(): JSX.Element {
                                         <School className="w-2.5 h-2.5" /> {cName}
                                       </span>
                                     )}
+                                    {s.passport?.identityNumber && (
+                                      <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded shrink-0">
+                                        TC: {s.passport.identityNumber}
+                                      </span>
+                                    )}
                                   </div>
+                                  {(s.passport?.motherName || s.passport?.fatherName) && (
+                                    <span className="text-[10px] text-teal-800 dark:text-teal-300 line-clamp-1 truncate max-w-[220px] block font-medium">
+                                      {[s.passport.motherName && `Anne: ${s.passport.motherName}`, s.passport.fatherName && `Baba: ${s.passport.fatherName}`].filter(Boolean).join(' • ')}
+                                    </span>
+                                  )}
                                   {s.notes && (
                                     <span className="text-[11px] text-slate-500 line-clamp-1 truncate max-w-[220px] block font-medium">
                                       {s.notes}
@@ -1027,6 +1053,21 @@ export function StudentsPage(): JSX.Element {
           </div>
         </div>
       )}
+
+      {/* Edit Classroom Modal (Madde 40: Mevcut Sınıfı Düzenleme) */}
+      {editingClassroom && (
+        <ClassroomEditModal
+          classroom={editingClassroom}
+          teachers={teachers}
+          onClose={() => setEditingClassroom(null)}
+          onSaved={(updated) => {
+            setClassrooms((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+            setEditingClassroom(null);
+            showToast(`"${updated.name}" sınıfı başarıyla güncellendi!`, 'success');
+            reload();
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -1101,6 +1142,20 @@ function StudentCard({
                   </>
                 )}
               </div>
+              {(p?.identityNumber || p?.motherName || p?.fatherName) && (
+                <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex-wrap">
+                  {p.identityNumber && (
+                    <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-300 text-[10px]">
+                      TC: {p.identityNumber}
+                    </span>
+                  )}
+                  {(p.motherName || p.fatherName) && (
+                    <span className="text-[11px] font-medium text-teal-800 dark:text-teal-300">
+                      {[p.motherName && `Anne: ${p.motherName}`, p.fatherName && `Baba: ${p.fatherName}`].filter(Boolean).join(' • ')}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -1267,6 +1322,11 @@ function StudentFormModal({
   const [isActive, setIsActive] = useState(initialStudent?.isActive ?? true);
   const [parentId, setParentId] = useState(initialStudent?.parentId ?? '');
   const [classroomId, setClassroomId] = useState(initialStudent?.classroomId ?? '');
+  const [identityNumber, setIdentityNumber] = useState(
+    initialStudent?.passport?.identityNumber ?? '',
+  );
+  const [motherName, setMotherName] = useState(initialStudent?.passport?.motherName ?? '');
+  const [fatherName, setFatherName] = useState(initialStudent?.passport?.fatherName ?? '');
   const [parents, setParents] = useState<User[]>([]);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -1291,7 +1351,21 @@ function StudentFormModal({
 
     try {
       if (initialStudent) {
-        // Update
+        const prevPassport = initialStudent.passport;
+        const passportPayload: StudentPassport = {
+          bloodType: prevPassport?.bloodType ?? 'UNKNOWN',
+          allergies: prevPassport?.allergies ?? [],
+          dietaryRestrictions: prevPassport?.dietaryRestrictions ?? [],
+          chronicConditions: prevPassport?.chronicConditions ?? [],
+          regularMedications: prevPassport?.regularMedications ?? [],
+          emergencyContacts: prevPassport?.emergencyContacts ?? [],
+          ...(prevPassport?.doctorName ? { doctorName: prevPassport.doctorName } : {}),
+          ...(prevPassport?.doctorPhone ? { doctorPhone: prevPassport.doctorPhone } : {}),
+          ...(prevPassport?.specialNotes ? { specialNotes: prevPassport.specialNotes } : {}),
+          ...(identityNumber.trim() ? { identityNumber: identityNumber.trim() } : {}),
+          ...(motherName.trim() ? { motherName: motherName.trim() } : {}),
+          ...(fatherName.trim() ? { fatherName: fatherName.trim() } : {}),
+        };
         const updated = await updateStudent(initialStudent.id, {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
@@ -1301,6 +1375,7 @@ function StudentFormModal({
           isActive,
           parentId: parentId || null,
           classroomId: classroomId || null,
+          passport: passportPayload,
         });
         onSaved(updated);
       } else {
@@ -1314,6 +1389,9 @@ function StudentFormModal({
         if (notes.trim()) payload.notes = notes.trim();
         if (parentId) payload.parentId = parentId;
         if (classroomId) payload.classroomId = classroomId;
+        if (identityNumber.trim()) payload.identityNumber = identityNumber.trim();
+        if (motherName.trim()) payload.motherName = motherName.trim();
+        if (fatherName.trim()) payload.fatherName = fatherName.trim();
         const created = await createStudent(payload);
         onSaved(created);
       }
@@ -1431,6 +1509,52 @@ function StudentFormModal({
             </label>
           </div>
 
+          {/* Kimlik & Aile Bilgileri (Madde 37) */}
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+              <span>📋 Resmî Kimlik & Aile Bilgileri</span>
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <label className="block">
+                <span className="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">
+                  T.C. Kimlik No
+                </span>
+                <input
+                  type="text"
+                  maxLength={11}
+                  value={identityNumber}
+                  onChange={(e) => setIdentityNumber(e.target.value.replace(/\D/g, ''))}
+                  placeholder="11 haneli TCKN"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-white placeholder-slate-400 px-3 py-2 text-xs font-mono text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                />
+              </label>
+              <label className="block">
+                <span className="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">
+                  Anne Adı
+                </span>
+                <input
+                  type="text"
+                  value={motherName}
+                  onChange={(e) => setMotherName(e.target.value)}
+                  placeholder="Örn: Ayşe"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-white placeholder-slate-400 px-3 py-2 text-xs text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                />
+              </label>
+              <label className="block">
+                <span className="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">
+                  Baba Adı
+                </span>
+                <input
+                  type="text"
+                  value={fatherName}
+                  onChange={(e) => setFatherName(e.target.value)}
+                  placeholder="Örn: Mehmet"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-white placeholder-slate-400 px-3 py-2 text-xs text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                />
+              </label>
+            </div>
+          </div>
+
           <label className="block">
             <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
               Notlar
@@ -1516,6 +1640,175 @@ function StudentFormModal({
               className="px-5 py-2 text-xs"
             >
               {saving ? 'Kaydediliyor…' : initialStudent ? 'Güncelle' : 'Ekle'}
+            </TactileButton>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// Classroom Edit Modal (Madde 40: Mevcut Sınıfı Düzenleme)
+function ClassroomEditModal({
+  classroom,
+  teachers,
+  onClose,
+  onSaved,
+}: {
+  classroom: Classroom;
+  teachers: User[];
+  onClose: () => void;
+  onSaved: (updated: Classroom) => void;
+}): JSX.Element {
+  const currentTeacherId = classroom.teachers?.[0]?.teacherId || '';
+  const [name, setName] = useState(classroom.name);
+  const [ageGroup, setAgeGroup] = useState(classroom.ageGroup || '');
+  const [teacherId, setTeacherId] = useState(currentTeacherId);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  async function handleSubmit(e: FormEvent): Promise<void> {
+    e.preventDefault();
+    if (!name.trim()) {
+      setError('Lütfen sınıf adını girin');
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      const classroomPayload: { name: string; ageGroup?: string } = {
+        name: name.trim(),
+      };
+      if (ageGroup.trim()) {
+        classroomPayload.ageGroup = ageGroup.trim();
+      }
+      let updated = await updateClassroom(classroom.id, classroomPayload);
+
+      if (teacherId && teacherId !== currentTeacherId) {
+        try {
+          updated = await assignTeacherToClassroom(classroom.id, teacherId);
+        } catch {
+          // assignment warning or ignore
+        }
+      }
+      onSaved(updated);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Sınıf güncellenemedi');
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
+    >
+      <div className="bg-white dark:bg-[#131B2E] w-full max-w-md rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-xl overflow-hidden animate-in zoom-in-95">
+        <div className="p-5 border-b border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold">
+              <School className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Sınıfı Düzenle
+              </h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Sınıf adı, yaş grubu ve sorumlu öğretmen bilgisini güncelleyin.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={(e) => void handleSubmit(e)} className="p-5 space-y-4">
+          {error && (
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-700 dark:text-rose-200 font-medium">
+              {error}
+            </div>
+          )}
+
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+              Sınıf Adı *
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+              Yaş Grubu (İsteğe Bağlı)
+            </label>
+            <input
+              type="text"
+              value={ageGroup}
+              onChange={(e) => setAgeGroup(e.target.value)}
+              placeholder="Örn: 3-4 Yaş, 4-5 Yaş"
+              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+              Sorumlu Öğretmen
+            </label>
+            <select
+              value={teacherId}
+              onChange={(e) => setTeacherId(e.target.value)}
+              className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
+            >
+              <option value="">Öğretmen Seçilmedi</option>
+              {teachers.map((t) => {
+                const fullName = [t.firstName, t.lastName].filter(Boolean).join(' ').trim();
+                return (
+                  <option key={t.id} value={t.id}>
+                    {fullName ? `${fullName} (${t.email})` : t.email}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5">
+            <TactileButton
+              type="button"
+              variant="secondary"
+              size="md"
+              onClick={onClose}
+            >
+              İptal
+            </TactileButton>
+            <TactileButton
+              type="submit"
+              variant="teal"
+              size="md"
+              disabled={saving}
+            >
+              <span>{saving ? 'Kaydediliyor…' : 'Güncelle'}</span>
             </TactileButton>
           </div>
         </form>

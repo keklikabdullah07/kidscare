@@ -40,6 +40,19 @@ export async function createClassroom(payload: {
   });
 }
 
+export async function updateClassroom(
+  classroomId: string,
+  payload: {
+    name?: string;
+    ageGroup?: string;
+  },
+): Promise<Classroom> {
+  return apiFetch<Classroom>(`/classrooms/${encodeURIComponent(classroomId)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
+}
+
 export async function assignTeacherToClassroom(
   classroomId: string,
   teacherId: string,

@@ -76,7 +76,12 @@ export class StudentsService {
       dateOfBirth: new Date(input.dateOfBirth),
       gender: input.gender ?? null,
       notes: input.notes ?? null,
-      passport: (input.passport as unknown as Prisma.InputJsonValue) ?? {},
+      passport: {
+        ...((input.passport as Record<string, unknown>) ?? {}),
+        ...(input.identityNumber ? { identityNumber: input.identityNumber } : {}),
+        ...(input.motherName ? { motherName: input.motherName } : {}),
+        ...(input.fatherName ? { fatherName: input.fatherName } : {}),
+      },
       parentId: input.parentId ?? null,
       classroomId: input.classroomId ?? null,
     });
