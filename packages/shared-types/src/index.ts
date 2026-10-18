@@ -17,3 +17,4 @@ export * from './notification';
 export * from './media';
 export * from './consent';
 export * from './finance';
+export * from './broadcast';

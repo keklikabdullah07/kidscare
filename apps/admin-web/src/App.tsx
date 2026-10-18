@@ -26,6 +26,7 @@ import { IncidentsPage } from './features/incidents/IncidentsPage';
 import { DevelopmentPage } from './features/development/DevelopmentPage';
 import { EventsPage } from './features/events/EventsPage';
 import { FinancePage } from './features/finance/FinancePage';
+import { BroadcastPage } from './features/broadcast/BroadcastPage';
 import { onUnauthorized } from './api/client';
 
 /**
@@ -65,7 +66,6 @@ function HomeRedirect(): JSX.Element {
 const STAFF_ROLES = ['SUPER_ADMIN', 'ADMIN', 'TEACHER'] as const;
 /** All roles — pages shared between staff and parents */
 const ALL_ROLES = ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT'] as const;
-
 
 export function App(): JSX.Element {
   return (
@@ -142,7 +142,9 @@ export function App(): JSX.Element {
                   <Route
                     path="/pickup"
                     element={
-                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}>
+                      <RoleGuard
+                        allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}
+                      >
                         <PickupPage />
                       </RoleGuard>
                     }
@@ -158,7 +160,9 @@ export function App(): JSX.Element {
                   <Route
                     path="/messages"
                     element={
-                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}>
+                      <RoleGuard
+                        allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}
+                      >
                         <MessagesPage />
                       </RoleGuard>
                     }
@@ -166,8 +170,18 @@ export function App(): JSX.Element {
                   <Route
                     path="/requests"
                     element={
-                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}>
+                      <RoleGuard
+                        allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF']}
+                      >
                         <ParentRequestsPage />
+                      </RoleGuard>
+                    }
+                  />
+                  <Route
+                    path="/broadcast"
+                    element={
+                      <RoleGuard allowed={['SUPER_ADMIN', 'ADMIN', 'TEACHER']}>
+                        <BroadcastPage />
                       </RoleGuard>
                     }
                   />

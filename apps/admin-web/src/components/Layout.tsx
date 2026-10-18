@@ -27,6 +27,7 @@ import {
   CreditCard,
   PanelLeftClose,
   PanelLeftOpen,
+  Megaphone,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 import { useTheme } from './ThemeContext';
@@ -232,6 +233,12 @@ function getNavGroupsForRole(role: string): NavGroup[] {
           label: 'Veli Talepleri',
           icon: ClipboardList,
           description: 'İzin ve bilgi talepleri',
+        },
+        {
+          to: '/broadcast',
+          label: 'Duyuru & Bildirim',
+          icon: Megaphone,
+          description: 'Toplu duyuru ve acil push iletimi',
         },
         {
           to: '/menus',
@@ -460,9 +467,7 @@ export function Layout(): JSX.Element {
                             className={`shrink-0 transition-colors ${
                               collapsed ? 'w-5 h-5' : 'w-4 h-4'
                             } ${
-                              isActive
-                                ? 'text-teal-800'
-                                : 'text-teal-200/80 group-hover:text-white'
+                              isActive ? 'text-teal-800' : 'text-teal-200/80 group-hover:text-white'
                             }`}
                           />
                           {!collapsed && <span className="truncate">{item.label}</span>}
@@ -489,7 +494,11 @@ export function Layout(): JSX.Element {
                 >
                   <div className="w-8 h-8 rounded-xl bg-white text-teal-900 font-black flex items-center justify-center text-xs shrink-0 shadow-xs overflow-hidden border border-white/40">
                     {userAvatar ? (
-                      <img src={userAvatar} alt={displayName} className="w-full h-full object-cover" />
+                      <img
+                        src={userAvatar}
+                        alt={displayName}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       userInitial
                     )}
@@ -660,10 +669,7 @@ export function Layout(): JSX.Element {
       <MobileBottomNav role={userRole} onOpenMenu={() => setMobileOpen(true)} />
 
       {/* Interactive Profile Edit Modal */}
-      <ProfileEditModal
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
-      />
+      <ProfileEditModal isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
     </div>
   );
 }

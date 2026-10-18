@@ -28,3 +28,18 @@ export const sendNotificationSchema = z
 export type NotificationTypeDto = z.infer<typeof notificationTypeSchema>;
 export type RegisterPushTokenInput = z.infer<typeof registerPushTokenSchema>;
 export type SendNotificationInput = z.infer<typeof sendNotificationSchema>;
+
+export const createBroadcastSchema = z
+  .object({
+    title: z.string().min(1, 'Başlık boş bırakılamaz').max(200),
+    body: z.string().min(1, 'Mesaj içeriği boş bırakılamaz').max(2000),
+    targetType: z.enum(['ALL_DAYCARE', 'CLASSROOM', 'SPECIFIC_STUDENTS', 'TEACHERS_ONLY']),
+    targetId: z.string().optional(),
+    targetName: z.string().optional(),
+    studentIds: z.array(z.string()).optional(),
+    priority: z.enum(['NORMAL', 'IMPORTANT', 'URGENT']).optional(),
+    channels: z.array(z.string()).optional(),
+  })
+  .strict();
+
+export type CreateBroadcastInput = z.infer<typeof createBroadcastSchema>;

@@ -27,6 +27,14 @@ export type {
   StudentBillingPlan,
   BillingInvoice,
   PaymentTransaction,
+  BroadcastLog,
 } from './generated/client';
 
-export { NotificationType, MediaCategory, InvoiceStatus, PaymentMethod } from './generated/client';
+export {
+  NotificationType,
+  MediaCategory,
+  InvoiceStatus,
+  PaymentMethod,
+  BroadcastTargetType,
+  BroadcastPriority,
+} from './generated/client';

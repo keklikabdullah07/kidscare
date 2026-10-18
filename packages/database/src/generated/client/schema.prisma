@@ -53,6 +53,7 @@ model Tenant {
   homeActivitySuggestions  HomeActivitySuggestion[]
   pushTokens               UserPushToken[]
   notifications            Notification[]
+  broadcastLogs            BroadcastLog[]
   mediaFiles               MediaFile[]
   attendanceExcuses        AttendanceExcuse[]
   eventConsents            EventConsent[]
@@ -106,6 +107,7 @@ model User {
   eventConsentResponses           EventConsentResponse[]
   paymentsRecorded                PaymentTransaction[]      @relation("PaymentRecorder")
   passwordResetTokens             PasswordResetToken[]
+  broadcastsSent                  BroadcastLog[]            @relation("BroadcastSender")
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -690,6 +692,41 @@ model Notification {
   @@index([tenantId, userId, isRead])
   @@index([tenantId, createdAt])
   @@map("notifications")
+}
+
+enum BroadcastTargetType {
+  ALL_DAYCARE
+  CLASSROOM
+  SPECIFIC_STUDENTS
+  TEACHERS_ONLY
+}
+
+enum BroadcastPriority {
+  NORMAL
+  IMPORTANT
+  URGENT
+}
+
+model BroadcastLog {
+  id             String              @id @default(cuid())
+  tenantId       String
+  senderId       String
+  title          String
+  body           String
+  targetType     BroadcastTargetType @default(ALL_DAYCARE)
+  targetId       String?
+  targetName     String?
+  priority       BroadcastPriority   @default(NORMAL)
+  recipientCount Int                 @default(0)
+  deliveredCount Int                 @default(0)
+  channels       String[]            @default(["IN_APP", "PUSH"])
+  createdAt      DateTime            @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sender User   @relation("BroadcastSender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, createdAt])
+  @@map("broadcast_logs")
 }
 
 enum MediaCategory {

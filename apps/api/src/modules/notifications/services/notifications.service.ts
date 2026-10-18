@@ -4,6 +4,9 @@ import type {
   NotificationItem,
   RegisterPushTokenDto,
   SendNotificationPayload,
+  BroadcastLog,
+  CreateBroadcastDto,
+  BroadcastStatsDto,
 } from '@kidscare/shared-types';
 import { NotificationsRepository } from '../repositories/notifications.repository';
 import { ExpoPushService } from './expo-push.service';
@@ -121,5 +124,117 @@ export class NotificationsService {
         `Failed to notify parents for student=${studentId}: ${err instanceof Error ? err.message : String(err)}`,
       );
     }
+  }
+
+  async sendBroadcast(
+    tenantId: string,
+    senderId: string,
+    dto: CreateBroadcastDto,
+  ): Promise<{ success: boolean; log: BroadcastLog }> {
+    const priority = dto.priority ?? 'NORMAL';
+    const channels = dto.channels && dto.channels.length > 0 ? dto.channels : ['PUSH'];
+
+    // 1. Resolve target recipient user IDs
+    const targetUserIds = await this.repo.findTargetUserIds(
+      tenantId,
+      dto.targetType,
+      dto.targetId,
+      dto.studentIds,
+    );
+
+    let deliveredCount = 0;
+
+    if (targetUserIds.length > 0) {
+      // 2. Persist in-app notifications in batch
+      await this.repo.createBatchNotifications(tenantId, targetUserIds, {
+        title: dto.title,
+        body: dto.body,
+        type: NotificationType.ANNOUNCEMENT,
+        data: {
+          broadcast: true,
+          priority,
+          targetType: dto.targetType,
+          targetName: dto.targetName,
+        },
+      });
+
+      // 3. Gather push tokens and dispatch via Expo
+      const pushTokens = await this.repo.findPushTokensForUsers(tenantId, targetUserIds);
+      if (pushTokens.length > 0) {
+        const messages = pushTokens.map((t) => ({
+          to: t.token,
+          sound: 'default' as const,
+          title: priority === 'URGENT' ? `🚨 [ACİL] ${dto.title}` : dto.title,
+          body: dto.body,
+          data: {
+            broadcast: true,
+            priority,
+            targetType: dto.targetType,
+          },
+        }));
+
+        await this.expoPush.sendPushNotifications(messages);
+      }
+
+      deliveredCount = targetUserIds.length;
+    }
+
+    // 4. Create audit log
+    const log = await this.repo.createBroadcastLog(tenantId, senderId, {
+      title: dto.title,
+      body: dto.body,
+      targetType: dto.targetType,
+      targetId: dto.targetId ?? null,
+      targetName: dto.targetName ?? null,
+      priority,
+      recipientCount: targetUserIds.length,
+      deliveredCount,
+      channels,
+    });
+
+    return {
+      success: true,
+      log: {
+        id: log.id,
+        tenantId: log.tenantId,
+        senderId: log.senderId,
+        title: log.title,
+        body: log.body,
+        targetType: log.targetType,
+        targetId: log.targetId,
+        targetName: log.targetName,
+        priority: log.priority,
+        recipientCount: log.recipientCount,
+        deliveredCount: log.deliveredCount,
+        channels: log.channels,
+        createdAt: log.createdAt.toISOString(),
+      },
+    };
+  }
+
+  async getBroadcastHistory(tenantId: string, limit = 50): Promise<BroadcastLog[]> {
+    const logs = await this.repo.findBroadcastLogs(tenantId, limit);
+    return logs.map((l) => ({
+      id: l.id,
+      tenantId: l.tenantId,
+      senderId: l.senderId,
+      senderName: l.sender
+        ? [l.sender.firstName, l.sender.lastName].filter(Boolean).join(' ').trim() || l.sender.email
+        : undefined,
+      title: l.title,
+      body: l.body,
+      targetType: l.targetType,
+      targetId: l.targetId,
+      targetName: l.targetName,
+      priority: l.priority,
+      recipientCount: l.recipientCount,
+      deliveredCount: l.deliveredCount,
+      channels: l.channels,
+      createdAt: l.createdAt.toISOString(),
+    }));
+  }
+
+  async getBroadcastStats(tenantId: string): Promise<BroadcastStatsDto> {
+    return this.repo.getBroadcastStats(tenantId);
   }
 }
