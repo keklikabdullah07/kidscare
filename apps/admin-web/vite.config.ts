@@ -35,6 +35,7 @@ export default defineConfig({
       '/pickup': proxyConfig,
       '/medication': proxyConfig,
       '/messaging': proxyConfig,
+      '/finance': proxyConfig,
       '/incidents': proxyConfig,
       '/development': proxyConfig,
       '/media': proxyConfig,
