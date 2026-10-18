@@ -25,8 +25,9 @@ function mockFetchByUrl(handlers: Record<string, (init?: RequestInit) => Respons
   return vi.spyOn(global, 'fetch').mockImplementation((...args: unknown[]) => {
     const [input, init] = args as [string | URL | Request, RequestInit | undefined];
     const url = input instanceof globalThis.Request ? input.url : String(input);
-    const path = new URL(url, 'http://localhost').pathname;
-    const handler = handlers[path];
+    const rawPath = new URL(url, 'http://localhost').pathname;
+    const path = rawPath.replace(/^\/api/, '');
+    const handler = handlers[path] || handlers[rawPath];
     if (handler) return Promise.resolve(handler(init));
     return Promise.resolve(
       new Response(JSON.stringify([]), {
@@ -66,12 +67,21 @@ const fakeAuthorizations = [
   },
 ];
 
+const fakeClassrooms = [
+  {
+    id: 'c-1',
+    name: 'Papatyalar Sınıfı',
+    teachers: [],
+  },
+];
+
 const fakeStudents = [
   {
     id: 's-1',
     tenantId: 't-1',
     firstName: 'Ada',
     lastName: 'Yılmaz',
+    classroomId: 'c-1',
     classroom: 'Papatyalar Sınıfı',
   },
 ];
@@ -219,6 +229,37 @@ describe('PickupPage', () => {
     expect(nameInput).toHaveValue('Ahmet Yılmaz');
     await waitFor(() => {
       expect(screen.queryByTestId('unauthorized-pickup-warning')).not.toBeInTheDocument();
+    });
+  });
+
+  it('allows admin to filter delivery events and authorizations by classroom', async () => {
+    mockFetchByUrl({
+      '/pickup/authorizations': () =>
+        new Response(JSON.stringify(fakeAuthorizations), { status: 200 }),
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+      '/classrooms': () => new Response(JSON.stringify(fakeClassrooms), { status: 200 }),
+      '/pickup/events': () => new Response(JSON.stringify(fakeEvents), { status: 200 }),
+    });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Tüm Sınıflar')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Papatyalar Sınıfı' })).toBeInTheDocument();
+    });
+
+    // Sınıfa tıkla
+    const classBtn = screen.getByRole('button', { name: 'Papatyalar Sınıfı' });
+    await userEvent.click(classBtn);
+
+    // EVENTS sekmesine geç
+    const eventsTab = screen.getByRole('tab', { name: /Teslimat Günlüğü & Kütük/i });
+    await userEvent.click(eventsTab);
+
+    // Kütükte sınıf rozetinin ve öğrencinin listelendiğini doğrula
+    await waitFor(() => {
+      expect(screen.getByText('Ahmet Yılmaz')).toBeInTheDocument();
+      expect(screen.getByText('Sınıftaki Öğrenciler (1)')).toBeInTheDocument();
     });
   });
 });

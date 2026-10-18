@@ -119,6 +119,7 @@ export function DevelopmentPage(): JSX.Element {
   const [students, setStudents] = useState<Student[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [teachers, setTeachers] = useState<UserModel[]>([]);
+  const [parents, setParents] = useState<UserModel[]>([]);
   const [selectedStudentId, setSelectedStudentId] = useState<string>('');
   const [selectedDomain, setSelectedDomain] = useState<DevelopmentDomain | ''>('');
 
@@ -208,7 +209,13 @@ export function DevelopmentPage(): JSX.Element {
     const teacherName = teacher
       ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() || teacher.email
       : null;
+    const parentUser = student.parentId ? parents.find((u) => u.id === student.parentId) : null;
+    const parentUserFullName = parentUser
+      ? [parentUser.firstName, parentUser.lastName].filter(Boolean).join(' ').trim() ||
+        parentUser.email
+      : null;
     const parentName =
+      parentUserFullName ||
       student.passport?.motherName ||
       student.passport?.fatherName ||
       student.passport?.emergencyContacts?.[0]?.name ||
@@ -219,14 +226,16 @@ export function DevelopmentPage(): JSX.Element {
   useEffect(() => {
     async function init() {
       try {
-        const [studentList, classroomList, teacherList] = await Promise.all([
+        const [studentList, classroomList, teacherList, parentList] = await Promise.all([
           listStudents().catch(() => []),
           listClassrooms().catch(() => []),
           listUsers('TEACHER').catch(() => []),
+          listUsers('PARENT').catch(() => []),
         ]);
         setStudents(studentList);
         setClassrooms(classroomList);
         setTeachers(teacherList);
+        setParents(parentList);
       } catch (err) {
         console.error(err);
       }

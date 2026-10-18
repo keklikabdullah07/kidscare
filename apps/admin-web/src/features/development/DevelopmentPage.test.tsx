@@ -33,11 +33,42 @@ vi.mock('../../api/media', () => ({
 }));
 
 vi.mock('../../api/students', () => ({
-  listStudents: vi.fn().mockResolvedValue([{ id: 'st-1', firstName: 'Ali', lastName: 'Yılmaz' }]),
+  listStudents: vi.fn().mockResolvedValue([
+    {
+      id: 'st-1',
+      firstName: 'Ali',
+      lastName: 'Yılmaz',
+      classroomId: 'cls-1',
+      parentId: 'parent-1',
+      passport: { motherName: 'Zeynep Yılmaz' },
+    },
+  ]),
 }));
 
 vi.mock('../../api/classrooms', () => ({
-  listClassrooms: vi.fn().mockResolvedValue([]),
+  listClassrooms: vi.fn().mockResolvedValue([
+    {
+      id: 'cls-1',
+      name: 'Yunuslar Sınıfı',
+      teachers: [{ teacherId: 'usr-1' }],
+    },
+  ]),
+}));
+
+vi.mock('../../api/users', () => ({
+  listUsers: vi.fn().mockImplementation((role?: string) => {
+    if (role === 'TEACHER') {
+      return Promise.resolve([
+        { id: 'usr-1', firstName: 'Ayşe', lastName: 'Demir', email: 'teacher@demo.test' },
+      ]);
+    }
+    if (role === 'PARENT') {
+      return Promise.resolve([
+        { id: 'parent-1', firstName: 'Fatma', lastName: 'Yılmaz', email: 'parent@demo.test' },
+      ]);
+    }
+    return Promise.resolve([]);
+  }),
 }));
 
 vi.mock('../../api/development', () => ({
@@ -130,5 +161,19 @@ describe('DevelopmentPage', () => {
     expect(await screen.findByText('1 seçildi')).toBeInTheDocument();
     expect(screen.getByText('Tümünü Temizle')).toBeInTheDocument();
     expect(screen.getByText('Yüklenen Foto')).toBeInTheDocument();
+  });
+
+  it('displays classroom, teacher and parent context badges on observation cards', async () => {
+    render(
+      <BrowserRouter>
+        <DevelopmentPage />
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Yunuslar Sınıfı')).toBeInTheDocument();
+      expect(screen.getByText('Ayşe Demir')).toBeInTheDocument();
+      expect(screen.getByText('Fatma Yılmaz')).toBeInTheDocument();
+    });
   });
 });

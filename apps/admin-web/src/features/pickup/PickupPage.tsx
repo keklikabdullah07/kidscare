@@ -309,6 +309,24 @@ export function PickupPage(): JSX.Element {
     return students;
   }, [isParent, isTeacher, parentChildren, currentUserId, teacherClassroomIds, students]);
 
+  const eventsScopedStudents = useMemo(() => {
+    if (selectedClassroomId !== 'ALL') {
+      return scopedStudents.filter((s) => s.classroomId === selectedClassroomId);
+    }
+    return scopedStudents;
+  }, [scopedStudents, selectedClassroomId]);
+
+  useEffect(() => {
+    if (selectedClassroomId !== 'ALL' && eventStudentFilter !== 'ALL') {
+      const studentInClass = students.find(
+        (s) => s.id === eventStudentFilter && s.classroomId === selectedClassroomId,
+      );
+      if (!studentInClass) {
+        setEventStudentFilter('ALL');
+      }
+    }
+  }, [selectedClassroomId, eventStudentFilter, students]);
+
   const scopedStudentIds = useMemo(
     () => new Set(scopedStudents.map((s) => s.id)),
     [scopedStudents],
@@ -700,7 +718,7 @@ export function PickupPage(): JSX.Element {
       </div>
 
       {/* Main Tabs */}
-      <div className="pb-3 border-b border-[#DDD4C4]/60 dark:border-slate-800">
+      <div className="pb-3 border-b border-[#DDD4C4]/60 dark:border-slate-800 space-y-3">
         <TactileTabs<'AUTHORIZATIONS' | 'EVENTS'>
           tabs={[
             {
@@ -713,7 +731,7 @@ export function PickupPage(): JSX.Element {
             {
               id: 'EVENTS',
               label: 'Teslimat Günlüğü & Kütük',
-              count: events.length,
+              count: filteredEvents.length,
               icon: History,
               activeVariant: 'teal',
             },
@@ -722,12 +740,9 @@ export function PickupPage(): JSX.Element {
           onChange={setActiveTab}
           ariaLabel="Teslimat Ana Sekmeleri"
         />
-      </div>
 
-      {/* TAB 1: AUTHORIZATIONS */}
-      {activeTab === 'AUTHORIZATIONS' && (
-        <div className="space-y-4">
-          {/* Sınıf Filtresi Sekmeleri */}
+        {/* Ortak Sınıf Filtresi Sekmeleri (!isParent) */}
+        {!isParent && displayClassrooms.length > 0 && (
           <div className="flex items-center gap-2 overflow-x-auto pb-1 py-1">
             <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-1 shrink-0 flex items-center gap-1">
               <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
@@ -760,7 +775,12 @@ export function PickupPage(): JSX.Element {
               );
             })}
           </div>
+        )}
+      </div>
 
+      {/* TAB 1: AUTHORIZATIONS */}
+      {activeTab === 'AUTHORIZATIONS' && (
+        <div className="space-y-4">
           {/* Status Filter Bar */}
           <div className="overflow-x-auto pb-1">
             <TactileTabs<'ALL' | PickupAuthorizationStatus>
@@ -1025,9 +1045,11 @@ export function PickupPage(): JSX.Element {
                   <option value="ALL">
                     {isParent
                       ? `Çocuklarım (${scopedStudents.length})`
-                      : `Tüm Öğrenciler (${students.length})`}
+                      : selectedClassroomId !== 'ALL'
+                        ? `Sınıftaki Öğrenciler (${eventsScopedStudents.length})`
+                        : `Tüm Öğrenciler (${students.length})`}
                   </option>
-                  {scopedStudents.map((s) => (
+                  {eventsScopedStudents.map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.firstName} {s.lastName}
                     </option>
