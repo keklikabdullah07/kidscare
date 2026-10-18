@@ -227,7 +227,7 @@ describe('AttendancePage', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Güvenli Teslim & Çıkış/i)).toBeInTheDocument();
-      expect(screen.getByText('Zeynep Yılmaz')).toBeInTheDocument();
+      expect(screen.getAllByText('Zeynep Yılmaz').length).toBeGreaterThanOrEqual(1);
     });
   });
 

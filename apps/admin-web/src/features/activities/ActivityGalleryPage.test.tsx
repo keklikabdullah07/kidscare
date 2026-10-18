@@ -151,4 +151,28 @@ describe('ActivityGalleryPage', () => {
     expect(clickSpy).toHaveBeenCalled();
     clickSpy.mockRestore();
   });
+
+  it('renders classroom and date filter options', async () => {
+    mockFetchByUrl({
+      '/activities': () =>
+        new Response(JSON.stringify(fakeActivities), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+      '/classrooms': () =>
+        new Response(
+          JSON.stringify([
+            { id: 'c-1', name: 'Papatyalar Sınıfı', ageGroup: '3 Yaş' },
+            { id: 'c-2', name: 'Kelebekler', ageGroup: '4 Yaş' },
+          ]),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+    });
+
+    render(<ActivityGalleryPage />);
+
+    expect(await screen.findByText('Sulu Boya Atölyesi')).toBeInTheDocument();
+    expect(screen.getByLabelText('Sınıf Filtresi')).toBeInTheDocument();
+    expect(screen.getByLabelText('Etkinlik Tarihi Filtresi')).toBeInTheDocument();
+  });
 });

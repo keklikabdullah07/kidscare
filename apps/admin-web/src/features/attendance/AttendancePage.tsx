@@ -1,5 +1,11 @@
 import { useEffect, useState, useMemo, type JSX } from 'react';
-import type { Attendance, AttendanceStatus, Classroom, Student, User } from '@kidscare/shared-types';
+import type {
+  Attendance,
+  AttendanceStatus,
+  Classroom,
+  Student,
+  User,
+} from '@kidscare/shared-types';
 import {
   CheckCheck,
   Search,
@@ -35,6 +41,7 @@ import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { StudentContextBadges } from '../../components/ui';
 import { PrintPreviewModal, AttendanceSheetPrint } from '../../components/print';
 
 function formatTeacherName(email?: string): string {
@@ -54,7 +61,6 @@ function getTeacherDisplayName(teacher?: User | null): string {
   if (fullName) return `Öğrt. ${fullName}`;
   return formatTeacherName(teacher.email);
 }
-
 
 const STATUS_CONFIG: Record<
   AttendanceStatus,
@@ -129,7 +135,9 @@ export function AttendancePage(): JSX.Element {
   const [showMebPrint, setShowMebPrint] = useState(false);
   const [printClassroomId, setPrintClassroomId] = useState<string>('ALL');
   const [printYear, setPrintYear] = useState<number>(() => parseInt(selectedDate.slice(0, 4), 10));
-  const [printMonth, setPrintMonth] = useState<number>(() => parseInt(selectedDate.slice(5, 7), 10));
+  const [printMonth, setPrintMonth] = useState<number>(() =>
+    parseInt(selectedDate.slice(5, 7), 10),
+  );
   const [monthlyAttendances, setMonthlyAttendances] = useState<Attendance[]>([]);
   const [loadingMonthlyAtt, setLoadingMonthlyAtt] = useState(false);
 
@@ -141,7 +149,7 @@ export function AttendancePage(): JSX.Element {
       if (isTeacher && classrooms.length > 0) {
         const validClass = classrooms.some((c) => c.id === selectedClassroomId)
           ? selectedClassroomId
-          : classrooms[0]?.id ?? 'ALL';
+          : (classrooms[0]?.id ?? 'ALL');
         setPrintClassroomId(validClass);
       } else {
         setPrintClassroomId(selectedClassroomId);
@@ -200,7 +208,10 @@ export function AttendancePage(): JSX.Element {
   // Öğretmen ilk girdiğinde otomatik olarak kendi sınıfına odaklansın
   useEffect(() => {
     if (isTeacher && teacherClassrooms.length > 0) {
-      if (selectedClassroomId === 'ALL' || !teacherClassrooms.some((c) => c.id === selectedClassroomId)) {
+      if (
+        selectedClassroomId === 'ALL' ||
+        !teacherClassrooms.some((c) => c.id === selectedClassroomId)
+      ) {
         const firstClass = teacherClassrooms[0];
         if (firstClass) setSelectedClassroomId(firstClass.id);
       }
@@ -298,11 +309,15 @@ export function AttendancePage(): JSX.Element {
   }, [isTeacher, teacherClassrooms, students, selectedClassroomId]);
 
   const selectedClassroom = useMemo(() => {
-    return (isTeacher ? teacherClassrooms : classrooms).find((c) => c.id === selectedClassroomId) ?? null;
+    return (
+      (isTeacher ? teacherClassrooms : classrooms).find((c) => c.id === selectedClassroomId) ?? null
+    );
   }, [isTeacher, teacherClassrooms, classrooms, selectedClassroomId]);
 
   const printClassroom = useMemo(() => {
-    return (isTeacher ? teacherClassrooms : classrooms).find((c) => c.id === printClassroomId) ?? null;
+    return (
+      (isTeacher ? teacherClassrooms : classrooms).find((c) => c.id === printClassroomId) ?? null
+    );
   }, [isTeacher, teacherClassrooms, classrooms, printClassroomId]);
 
   const printScopedStudents = useMemo(() => {
@@ -656,7 +671,11 @@ export function AttendancePage(): JSX.Element {
                   </span>
                 </div>
                 <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                  Toplam <strong className="text-sm font-black text-slate-900 dark:text-white">{students.length}</strong> Öğrenci
+                  Toplam{' '}
+                  <strong className="text-sm font-black text-slate-900 dark:text-white">
+                    {students.length}
+                  </strong>{' '}
+                  Öğrenci
                 </div>
               </div>
 
@@ -697,9 +716,7 @@ export function AttendancePage(): JSX.Element {
                 <button
                   key={item.classroom.id}
                   type="button"
-                  onClick={() =>
-                    setSelectedClassroomId(isSelected ? 'ALL' : item.classroom.id)
-                  }
+                  onClick={() => setSelectedClassroomId(isSelected ? 'ALL' : item.classroom.id)}
                   className={`p-4 rounded-3xl border-2 text-left transition-all duration-150 ease-out flex flex-col justify-between cursor-pointer active:translate-y-[3px] active:shadow-none ${
                     isSelected
                       ? 'border-teal-600 dark:border-teal-500 bg-teal-50/70 dark:bg-teal-950/40 shadow-[0_4px_0_0_#0f766e,0_8px_20px_-2px_rgba(17,94,89,0.25)] ring-2 ring-teal-500/20'
@@ -731,13 +748,17 @@ export function AttendancePage(): JSX.Element {
                       ) : (
                         <GraduationCap
                           className={`w-3.5 h-3.5 shrink-0 ${
-                            item.assignedTeacher ? 'text-teal-700 dark:text-teal-400' : 'text-slate-400'
+                            item.assignedTeacher
+                              ? 'text-teal-700 dark:text-teal-400'
+                              : 'text-slate-400'
                           }`}
                         />
                       )}
                       <span
                         className="truncate font-semibold text-[10px]"
-                        title={item.assignedTeacher ? item.assignedTeacher.email : 'Öğretmen Atanmadı'}
+                        title={
+                          item.assignedTeacher ? item.assignedTeacher.email : 'Öğretmen Atanmadı'
+                        }
                       >
                         {getTeacherDisplayName(item.assignedTeacher)}
                       </span>
@@ -769,8 +790,8 @@ export function AttendancePage(): JSX.Element {
                             item.rate >= 80
                               ? 'bg-emerald-600 dark:bg-emerald-500'
                               : item.rate >= 50
-                              ? 'bg-amber-600 dark:bg-amber-500'
-                              : 'bg-rose-600 dark:bg-rose-500'
+                                ? 'bg-amber-600 dark:bg-amber-500'
+                                : 'bg-rose-600 dark:bg-rose-500'
                           }`}
                           style={{ width: `${item.rate}%` }}
                         />
@@ -812,7 +833,11 @@ export function AttendancePage(): JSX.Element {
                     </span>
                   </div>
                   <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                    Toplam <strong className="text-sm font-black text-slate-900 dark:text-white">{unassignedStudents.length}</strong> Öğrenci
+                    Toplam{' '}
+                    <strong className="text-sm font-black text-slate-900 dark:text-white">
+                      {unassignedStudents.length}
+                    </strong>{' '}
+                    Öğrenci
                   </div>
                 </div>
 
@@ -855,15 +880,15 @@ export function AttendancePage(): JSX.Element {
               selectedClassroom
                 ? `${selectedClassroom.name} Mevcudu`
                 : selectedClassroomId === 'UNASSIGNED'
-                ? 'Sınıfsızlar'
-                : 'Toplam Öğrenci'
+                  ? 'Sınıfsızlar'
+                  : 'Toplam Öğrenci'
             }
           >
             {selectedClassroom
               ? selectedClassroom.name
               : selectedClassroomId === 'UNASSIGNED'
-              ? 'Sınıfsızlar'
-              : 'Toplam Öğrenci'}
+                ? 'Sınıfsızlar'
+                : 'Toplam Öğrenci'}
           </p>
           <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{totalStudents}</p>
         </button>
@@ -971,13 +996,16 @@ export function AttendancePage(): JSX.Element {
                     : '';
                   return (
                     <option key={c.id} value={c.id}>
-                      {c.name}{suffix}
+                      {c.name}
+                      {suffix}
                     </option>
                   );
                 })}
                 {!isTeacher && unassignedStudents.length > 0 && (
                   <option value="UNASSIGNED">
-                    Sınıfsız Öğrenciler ({unassignedPresent} Geldi{unassignedExcused > 0 ? ` / ${unassignedExcused} İzinli` : ''} / {unassignedAbsent} Gelmedi)
+                    Sınıfsız Öğrenciler ({unassignedPresent} Geldi
+                    {unassignedExcused > 0 ? ` / ${unassignedExcused} İzinli` : ''} /{' '}
+                    {unassignedAbsent} Gelmedi)
                   </option>
                 )}
               </select>
@@ -1093,12 +1121,35 @@ export function AttendancePage(): JSX.Element {
                               >
                                 {student.firstName} {student.lastName}
                               </span>
-                              {classrooms.find((c) => c.id === student.classroomId) && (
-                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-lg border border-teal-200/80 dark:border-slate-700 shrink-0">
-                                  <School className="w-2.5 h-2.5" />
-                                  <span>{classrooms.find((c) => c.id === student.classroomId)?.name}</span>
-                                </span>
-                              )}
+                              {(() => {
+                                const cls = classrooms.find((c) => c.id === student.classroomId);
+                                const teacherAssignment = cls?.teachers?.[0];
+                                const teacher = teacherAssignment
+                                  ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+                                  : null;
+                                const teacherName = teacher
+                                  ? [teacher.firstName, teacher.lastName]
+                                      .filter(Boolean)
+                                      .join(' ')
+                                      .trim() || teacher.email
+                                  : undefined;
+                                const parentName =
+                                  student.passport?.motherName ||
+                                  student.passport?.fatherName ||
+                                  student.passport?.emergencyContacts?.[0]?.name;
+
+                                return (
+                                  <StudentContextBadges
+                                    classroomName={
+                                      selectedClassroomId === 'ALL' || !selectedClassroomId
+                                        ? cls?.name
+                                        : undefined
+                                    }
+                                    teacherName={teacherName}
+                                    parentName={parentName}
+                                  />
+                                );
+                              })()}
                             </div>
                             <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                               <span className="text-slate-600 dark:text-slate-300 text-[11px] shrink-0 font-medium">
@@ -1278,12 +1329,35 @@ export function AttendancePage(): JSX.Element {
                           >
                             {student.firstName} {student.lastName}
                           </h4>
-                          {classrooms.find((c) => c.id === student.classroomId) && (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-1.5 py-0.5 rounded-lg border border-teal-200/80 dark:border-slate-700 shrink-0">
-                              <School className="w-2.5 h-2.5" />
-                              <span>{classrooms.find((c) => c.id === student.classroomId)?.name}</span>
-                            </span>
-                          )}
+                          {(() => {
+                            const cls = classrooms.find((c) => c.id === student.classroomId);
+                            const teacherAssignment = cls?.teachers?.[0];
+                            const teacher = teacherAssignment
+                              ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+                              : null;
+                            const teacherName = teacher
+                              ? [teacher.firstName, teacher.lastName]
+                                  .filter(Boolean)
+                                  .join(' ')
+                                  .trim() || teacher.email
+                              : undefined;
+                            const parentName =
+                              student.passport?.motherName ||
+                              student.passport?.fatherName ||
+                              student.passport?.emergencyContacts?.[0]?.name;
+
+                            return (
+                              <StudentContextBadges
+                                classroomName={
+                                  selectedClassroomId === 'ALL' || !selectedClassroomId
+                                    ? cls?.name
+                                    : undefined
+                                }
+                                teacherName={teacherName}
+                                parentName={parentName}
+                              />
+                            );
+                          })()}
                         </div>
                         <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                           <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
@@ -1499,9 +1573,7 @@ export function AttendancePage(): JSX.Element {
                   <Clock className="w-3.5 h-3.5 animate-spin" /> Veriler güncelleniyor...
                 </span>
               ) : (
-                <span className="text-[11px]">
-                  {monthlyAttendances.length} yoklama kaydı hazır
-                </span>
+                <span className="text-[11px]">{monthlyAttendances.length} yoklama kaydı hazır</span>
               )}
             </div>
           </div>

@@ -23,7 +23,12 @@ import {
 } from 'lucide-react';
 import { ApiError } from '../../api/client';
 import { createStudent, deleteStudent, listStudents, updateStudent } from '../../api/students';
-import { assignTeacherToClassroom, createClassroom, listClassrooms, updateClassroom } from '../../api/classrooms';
+import {
+  assignTeacherToClassroom,
+  createClassroom,
+  listClassrooms,
+  updateClassroom,
+} from '../../api/classrooms';
 import { listUsers } from '../../api/users';
 import type { Classroom, User } from '@kidscare/shared-types';
 import { StudentPassportModal } from './StudentPassportModal';
@@ -90,7 +95,10 @@ export function StudentsPage(): JSX.Element {
 
   useEffect(() => {
     if (isTeacher && teacherClassrooms.length > 0) {
-      if (selectedClassroomId === 'ALL' || !teacherClassrooms.some((c) => c.id === selectedClassroomId)) {
+      if (
+        selectedClassroomId === 'ALL' ||
+        !teacherClassrooms.some((c) => c.id === selectedClassroomId)
+      ) {
         const firstClass = teacherClassrooms[0];
         if (firstClass) setSelectedClassroomId(firstClass.id);
       }
@@ -232,7 +240,9 @@ export function StudentsPage(): JSX.Element {
   // Statistics
   const totalCount = scopedStudents.length;
   const activeCount = scopedStudents.filter((s) => s.isActive).length;
-  const allergyCount = scopedStudents.filter((s) => (s.passport?.allergies?.length ?? 0) > 0).length;
+  const allergyCount = scopedStudents.filter(
+    (s) => (s.passport?.allergies?.length ?? 0) > 0,
+  ).length;
 
   return (
     <div className="space-y-6">
@@ -634,35 +644,61 @@ export function StudentsPage(): JSX.Element {
         <>
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredStudents.map((s) => (
-                <StudentCard
-                  key={s.id}
-                  student={s}
-                  classroomName={classrooms.find((c) => c.id === s.classroomId)?.name}
-                  onOpenPassport={() => setPassportStudent(s)}
-                  onOpenPickupContacts={() => setPickupContactsStudent(s)}
-                  onPrintReportCard={() => setReportCardStudent(s)}
-                  onEdit={() => setEditingStudent(s)}
-                  onDelete={() => void handleDelete(s.id, `${s.firstName} ${s.lastName}`)}
-                />
-              ))}
-            </div>
-          ) : (
-            <>
-              {/* Mobile Card List (Hidden on desktop) */}
-              <div className="md:hidden flex flex-col gap-4">
-                {filteredStudents.map((s) => (
+              {filteredStudents.map((s) => {
+                const cls = classrooms.find((c) => c.id === s.classroomId);
+                const teacherAssignment = cls?.teachers?.[0];
+                const teacher = teacherAssignment
+                  ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+                  : null;
+                const teacherName = teacher
+                  ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() ||
+                    teacher.email
+                  : undefined;
+
+                return (
                   <StudentCard
                     key={s.id}
                     student={s}
-                    classroomName={classrooms.find((c) => c.id === s.classroomId)?.name}
+                    classroomName={cls?.name}
+                    teacherName={teacherName}
                     onOpenPassport={() => setPassportStudent(s)}
                     onOpenPickupContacts={() => setPickupContactsStudent(s)}
                     onPrintReportCard={() => setReportCardStudent(s)}
                     onEdit={() => setEditingStudent(s)}
                     onDelete={() => void handleDelete(s.id, `${s.firstName} ${s.lastName}`)}
                   />
-                ))}
+                );
+              })}
+            </div>
+          ) : (
+            <>
+              {/* Mobile Card List (Hidden on desktop) */}
+              <div className="md:hidden flex flex-col gap-4">
+                {filteredStudents.map((s) => {
+                  const cls = classrooms.find((c) => c.id === s.classroomId);
+                  const teacherAssignment = cls?.teachers?.[0];
+                  const teacher = teacherAssignment
+                    ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+                    : null;
+                  const teacherName = teacher
+                    ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() ||
+                      teacher.email
+                    : undefined;
+
+                  return (
+                    <StudentCard
+                      key={s.id}
+                      student={s}
+                      classroomName={cls?.name}
+                      teacherName={teacherName}
+                      onOpenPassport={() => setPassportStudent(s)}
+                      onOpenPickupContacts={() => setPickupContactsStudent(s)}
+                      onPrintReportCard={() => setReportCardStudent(s)}
+                      onEdit={() => setEditingStudent(s)}
+                      onDelete={() => void handleDelete(s.id, `${s.firstName} ${s.lastName}`)}
+                    />
+                  );
+                })}
               </div>
 
               {/* Desktop Table View (Hidden on mobile) */}
@@ -687,7 +723,18 @@ export function StudentsPage(): JSX.Element {
                         const blood =
                           p?.bloodType && p.bloodType !== 'UNKNOWN' ? p.bloodType : null;
                         const primaryContact = p?.emergencyContacts?.[0];
-                        const cName = classrooms.find((c) => c.id === s.classroomId)?.name;
+                        const cls = classrooms.find((c) => c.id === s.classroomId);
+                        const cName = cls?.name;
+                        const teacherAssignment = cls?.teachers?.[0];
+                        const teacher = teacherAssignment
+                          ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+                          : null;
+                        const tName = teacher
+                          ? [teacher.firstName, teacher.lastName]
+                              .filter(Boolean)
+                              .join(' ')
+                              .trim() || teacher.email
+                          : undefined;
 
                         return (
                           <tr
@@ -713,6 +760,15 @@ export function StudentsPage(): JSX.Element {
                                         <School className="w-2.5 h-2.5" /> {cName}
                                       </span>
                                     )}
+                                    {tName && (
+                                      <span
+                                        className="inline-flex items-center gap-1 text-[10px] font-medium text-purple-800 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 px-2 py-0.5 rounded-lg border border-purple-200/80 dark:border-purple-800/40 shrink-0"
+                                        title={`Öğretmen: ${tName}`}
+                                      >
+                                        <GraduationCap className="w-2.5 h-2.5 text-purple-600 dark:text-purple-400" />{' '}
+                                        {tName}
+                                      </span>
+                                    )}
                                     {s.passport?.identityNumber && (
                                       <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded shrink-0">
                                         TC: {s.passport.identityNumber}
@@ -721,7 +777,12 @@ export function StudentsPage(): JSX.Element {
                                   </div>
                                   {(s.passport?.motherName || s.passport?.fatherName) && (
                                     <span className="text-[10px] text-teal-800 dark:text-teal-300 line-clamp-1 truncate max-w-[220px] block font-medium">
-                                      {[s.passport.motherName && `Anne: ${s.passport.motherName}`, s.passport.fatherName && `Baba: ${s.passport.fatherName}`].filter(Boolean).join(' • ')}
+                                      {[
+                                        s.passport.motherName && `Anne: ${s.passport.motherName}`,
+                                        s.passport.fatherName && `Baba: ${s.passport.fatherName}`,
+                                      ]
+                                        .filter(Boolean)
+                                        .join(' • ')}
                                     </span>
                                   )}
                                   {s.notes && (
@@ -762,9 +823,12 @@ export function StudentsPage(): JSX.Element {
                                     </span>
                                   </span>
                                 )}
-                                {!blood && !hasAllergy && (!p?.dietaryRestrictions || p.dietaryRestrictions.length === 0) && (
-                                  <span className="text-slate-400 text-xs font-medium">—</span>
-                                )}
+                                {!blood &&
+                                  !hasAllergy &&
+                                  (!p?.dietaryRestrictions ||
+                                    p.dietaryRestrictions.length === 0) && (
+                                    <span className="text-slate-400 text-xs font-medium">—</span>
+                                  )}
                               </div>
                             </td>
                             <td className="py-3.5 px-5 text-xs">
@@ -1076,6 +1140,7 @@ export function StudentsPage(): JSX.Element {
 function StudentCard({
   student,
   classroomName,
+  teacherName,
   onOpenPassport,
   onOpenPickupContacts,
   onPrintReportCard,
@@ -1084,6 +1149,7 @@ function StudentCard({
 }: {
   student: Student;
   classroomName?: string | undefined;
+  teacherName?: string | null | undefined;
   onOpenPassport: () => void;
   onOpenPickupContacts: () => void;
   onPrintReportCard: () => void;
@@ -1141,6 +1207,18 @@ function StudentCard({
                     </span>
                   </>
                 )}
+                {teacherName && (
+                  <>
+                    <span className="text-slate-300 dark:text-slate-700">•</span>
+                    <span
+                      className="inline-flex items-center gap-1 text-[10px] font-semibold text-purple-800 dark:text-purple-200 bg-purple-50 dark:bg-purple-950/50 px-2 py-0.5 rounded-lg border border-purple-200/80 dark:border-purple-800/60 truncate max-w-[130px]"
+                      title={`Öğretmen: ${teacherName}`}
+                    >
+                      <GraduationCap className="w-2.5 h-2.5 shrink-0 text-purple-600 dark:text-purple-400" />
+                      <span className="truncate">{teacherName}</span>
+                    </span>
+                  </>
+                )}
               </div>
               {(p?.identityNumber || p?.motherName || p?.fatherName) && (
                 <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex-wrap">
@@ -1151,7 +1229,12 @@ function StudentCard({
                   )}
                   {(p.motherName || p.fatherName) && (
                     <span className="text-[11px] font-medium text-teal-800 dark:text-teal-300">
-                      {[p.motherName && `Anne: ${p.motherName}`, p.fatherName && `Baba: ${p.fatherName}`].filter(Boolean).join(' • ')}
+                      {[
+                        p.motherName && `Anne: ${p.motherName}`,
+                        p.fatherName && `Baba: ${p.fatherName}`,
+                      ]
+                        .filter(Boolean)
+                        .join(' • ')}
                     </span>
                   )}
                 </div>
@@ -1722,9 +1805,7 @@ function ClassroomEditModal({
               <School className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                Sınıfı Düzenle
-              </h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Sınıfı Düzenle</h3>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Sınıf adı, yaş grubu ve sorumlu öğretmen bilgisini güncelleyin.
               </p>
@@ -1794,20 +1875,10 @@ function ClassroomEditModal({
           </div>
 
           <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5">
-            <TactileButton
-              type="button"
-              variant="secondary"
-              size="md"
-              onClick={onClose}
-            >
+            <TactileButton type="button" variant="secondary" size="md" onClick={onClose}>
               İptal
             </TactileButton>
-            <TactileButton
-              type="submit"
-              variant="teal"
-              size="md"
-              disabled={saving}
-            >
+            <TactileButton type="submit" variant="teal" size="md" disabled={saving}>
               <span>{saving ? 'Kaydediliyor…' : 'Güncelle'}</span>
             </TactileButton>
           </div>

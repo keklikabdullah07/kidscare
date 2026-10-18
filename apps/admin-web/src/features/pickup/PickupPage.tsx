@@ -26,6 +26,7 @@ import type {
   PickupEvent,
   PickupVerificationMethod,
   Student,
+  User as UserModel,
 } from '@kidscare/shared-types';
 import {
   listPickupAuthorizations,
@@ -37,6 +38,7 @@ import {
 } from '../../api/pickup';
 import { listStudents } from '../../api/students';
 import { listClassrooms } from '../../api/classrooms';
+import { listUsers } from '../../api/users';
 import { getParentChildrenOverview } from '../../api/parent';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
@@ -45,6 +47,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs } from '../../components/ui/TactileTabs';
+import { StudentContextBadges } from '../../components/ui/StudentContextBadges';
 
 const STATUS_LABEL: Record<PickupAuthorizationStatus, string> = {
   PENDING: 'Onay Bekliyor',
@@ -98,8 +101,7 @@ function getDateRangeForPreset(
   customEnd: string,
 ): { from?: string; to?: string } {
   const pad = (n: number) => String(n).padStart(2, '0');
-  const formatYMD = (d: Date) =>
-    `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const formatYMD = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
   if (preset === 'ALL') {
     return {};
@@ -159,6 +161,7 @@ export function PickupPage(): JSX.Element {
   const [allEvents, setAllEvents] = useState<PickupEvent[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [teachers, setTeachers] = useState<UserModel[]>([]);
   const [filter, setFilter] = useState<PickupAuthorizationStatus | 'ALL'>('PENDING');
   const [loading, setLoading] = useState(true);
   const [eventsLoading, setEventsLoading] = useState(false);
@@ -200,16 +203,18 @@ export function PickupPage(): JSX.Element {
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [authList, studentsList, classList, allEvList] = await Promise.all([
+      const [authList, studentsList, classList, allEvList, teachersList] = await Promise.all([
         listPickupAuthorizations(),
         listStudents().catch(() => []),
         listClassrooms().catch(() => []),
         listPickupEvents().catch(() => []),
+        listUsers('TEACHER').catch(() => []),
       ]);
       setAllAuthorizations(authList);
       setStudents(studentsList);
       setClassrooms(classList);
       setAllEvents(allEvList);
+      setTeachers(teachersList);
 
       if (studentsList.length > 0 && !handoverStudentId) {
         setHandoverStudentId(studentsList[0]?.id || '');
@@ -279,6 +284,15 @@ export function PickupPage(): JSX.Element {
     [teacherClassrooms],
   );
 
+  const displayClassrooms = isTeacher ? teacherClassrooms : classrooms;
+  const [selectedClassroomId, setSelectedClassroomId] = useState<string>('ALL');
+
+  useEffect(() => {
+    if (isTeacher && teacherClassrooms.length > 0) {
+      setSelectedClassroomId(teacherClassrooms[0]?.id || 'ALL');
+    }
+  }, [isTeacher, teacherClassrooms]);
+
   // Rol Bazlı Öğrenci & Veri İzolasyonu (Role Scoping)
   const scopedStudents = useMemo(() => {
     if (isParent) {
@@ -340,15 +354,33 @@ export function PickupPage(): JSX.Element {
 
   const totalEventsCount = scopedAllEvents.length;
 
-  // Filtrelenmiş yetkiler
+  // Filtrelenmiş yetkiler (Sınıf ve Durum Filtreli)
   const items = useMemo(() => {
-    if (filter === 'ALL') return scopedAuthorizations;
-    return scopedAuthorizations.filter((i) => i.status === filter);
-  }, [scopedAuthorizations, filter]);
+    let list =
+      filter === 'ALL'
+        ? scopedAuthorizations
+        : scopedAuthorizations.filter((i) => i.status === filter);
 
-  // Arama filtreli teslimat günlüğü
+    if (selectedClassroomId !== 'ALL') {
+      const classStudentIds = new Set(
+        students.filter((s) => s.classroomId === selectedClassroomId).map((s) => s.id),
+      );
+      list = list.filter((a) => classStudentIds.has(a.studentId));
+    }
+    return list;
+  }, [scopedAuthorizations, filter, selectedClassroomId, students]);
+
+  // Arama ve Sınıf filtreli teslimat günlüğü
   const filteredEvents = useMemo(() => {
-    return scopedEvents.filter((ev) => {
+    let list = scopedEvents;
+    if (selectedClassroomId !== 'ALL') {
+      const classStudentIds = new Set(
+        students.filter((s) => s.classroomId === selectedClassroomId).map((s) => s.id),
+      );
+      list = list.filter((e) => classStudentIds.has(e.studentId));
+    }
+
+    return list.filter((ev) => {
       if (!eventSearchQuery.trim()) return true;
       const q = eventSearchQuery.toLowerCase();
       const student = scopedStudents.find((s) => s.id === ev.studentId);
@@ -358,7 +390,7 @@ export function PickupPage(): JSX.Element {
       const note = (ev.note || '').toLowerCase();
       return sName.includes(q) || pName.includes(q) || phone.includes(q) || note.includes(q);
     });
-  }, [events, eventSearchQuery, students]);
+  }, [scopedEvents, eventSearchQuery, scopedStudents, selectedClassroomId, students]);
 
   async function review(id: string, status: 'APPROVED' | 'REJECTED'): Promise<void> {
     setBusyId(id);
@@ -695,6 +727,40 @@ export function PickupPage(): JSX.Element {
       {/* TAB 1: AUTHORIZATIONS */}
       {activeTab === 'AUTHORIZATIONS' && (
         <div className="space-y-4">
+          {/* Sınıf Filtresi Sekmeleri */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 py-1">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-1 shrink-0 flex items-center gap-1">
+              <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+              Sınıf:
+            </span>
+            {!isTeacher && (
+              <button
+                type="button"
+                onClick={() => setSelectedClassroomId('ALL')}
+                className={`px-3 py-1.5 text-xs font-bold shrink-0 rounded-xl transition cursor-pointer ${
+                  selectedClassroomId === 'ALL' ? 'btn-tactile-teal' : 'btn-tactile-secondary'
+                }`}
+              >
+                Tüm Sınıflar
+              </button>
+            )}
+            {displayClassrooms.map((cls) => {
+              const active = selectedClassroomId === cls.id;
+              return (
+                <button
+                  key={cls.id}
+                  type="button"
+                  onClick={() => setSelectedClassroomId(cls.id)}
+                  className={`px-3 py-1.5 text-xs font-bold shrink-0 rounded-xl transition cursor-pointer ${
+                    active ? 'btn-tactile-teal' : 'btn-tactile-secondary'
+                  }`}
+                >
+                  {cls.name}
+                </button>
+              );
+            })}
+          </div>
+
           {/* Status Filter Bar */}
           <div className="overflow-x-auto pb-1">
             <TactileTabs<'ALL' | PickupAuthorizationStatus>
@@ -733,6 +799,20 @@ export function PickupPage(): JSX.Element {
               {items.map((item) => {
                 const student = students.find((s) => s.id === item.studentId);
                 const contact = item.pickupContact;
+                const cls = classrooms.find((c) => c.id === student?.classroomId);
+                const teacherAssignment = cls?.teachers?.[0];
+                const teacher = teacherAssignment
+                  ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+                  : null;
+                const teacherName = teacher
+                  ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() ||
+                    teacher.email
+                  : null;
+                const parentName =
+                  student?.passport?.motherName ||
+                  student?.passport?.fatherName ||
+                  student?.passport?.emergencyContacts?.[0]?.name ||
+                  null;
 
                 return (
                   <div
@@ -751,6 +831,14 @@ export function PickupPage(): JSX.Element {
                               ? `${student.firstName} ${student.lastName}`
                               : `Öğrenci #${item.studentId.slice(0, 8)}`}
                           </h3>
+                          {student && (
+                            <StudentContextBadges
+                              className="mt-1"
+                              classroomName={cls?.name}
+                              teacherName={teacherName}
+                              parentName={parentName}
+                            />
+                          )}
                         </div>
 
                         <span
@@ -963,7 +1051,9 @@ export function PickupPage(): JSX.Element {
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Bitiş:</span>
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    Bitiş:
+                  </span>
                   <input
                     type="date"
                     value={eventEndDate}
@@ -1107,7 +1197,9 @@ export function PickupPage(): JSX.Element {
                             </span>
                           </td>
                           <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 text-[11px] max-w-xs truncate">
-                            {ev.note || <span className="text-slate-400 italic">Not girilmedi</span>}
+                            {ev.note || (
+                              <span className="text-slate-400 italic">Not girilmedi</span>
+                            )}
                           </td>
                         </tr>
                       );

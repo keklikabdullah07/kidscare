@@ -17,10 +17,12 @@ import type {
   ParentRequestType,
   Student,
   Classroom,
+  User as UserModel,
 } from '@kidscare/shared-types';
 import { createParentRequest, listParentRequests, resolveParentRequest } from '../../api/messaging';
 import { listStudents } from '../../api/students';
 import { listClassrooms } from '../../api/classrooms';
+import { listUsers } from '../../api/users';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { PromptModal } from '../../components/ui/PromptModal';
@@ -30,6 +32,7 @@ import { StatCard } from '../../components/ui/StatCard';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { StudentContextBadges } from '../../components/ui/StudentContextBadges';
 
 type TabKey = 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
@@ -59,6 +62,7 @@ export function ParentRequestsPage(): JSX.Element {
   const [requests, setRequests] = useState<ParentRequest[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [teachers, setTeachers] = useState<UserModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -124,14 +128,16 @@ export function ParentRequestsPage(): JSX.Element {
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes, classroomsRes] = await Promise.all([
+      const [list, studentsRes, classroomsRes, teachersRes] = await Promise.all([
         listParentRequests(),
         listStudents().catch(() => []),
         listClassrooms().catch(() => []),
+        listUsers('TEACHER').catch(() => []),
       ]);
       setRequests(list);
       setStudents(studentsRes);
       setClassrooms(classroomsRes);
+      setTeachers(teachersRes);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Liste yüklenemedi', 'error');
     } finally {
@@ -350,7 +356,9 @@ export function ParentRequestsPage(): JSX.Element {
               onChange={(e) => setSelectedStudentFilter(e.target.value)}
               className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl px-3 py-2 bg-white dark:bg-[#131B2E] text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs"
             >
-              <option value="">{isTeacher ? 'Sınıfımdaki Tüm Öğrenciler' : 'Tüm Öğrenciler'}</option>
+              <option value="">
+                {isTeacher ? 'Sınıfımdaki Tüm Öğrenciler' : 'Tüm Öğrenciler'}
+              </option>
               {scopedStudents.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.firstName} {s.lastName}
@@ -453,12 +461,39 @@ export function ParentRequestsPage(): JSX.Element {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 font-semibold">
-                  <User className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Öğrenci:</span>
-                  <span className="text-slate-900 dark:text-white font-bold">
-                    {studentName(r.studentId)}
-                  </span>
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 font-semibold">
+                    <User className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Öğrenci:</span>
+                    <span className="text-slate-900 dark:text-white font-bold">
+                      {studentName(r.studentId)}
+                    </span>
+                  </div>
+                  {(() => {
+                    const st = students.find((s) => s.id === r.studentId);
+                    const cls = classrooms.find((c) => c.id === st?.classroomId);
+                    const teacherAssignment = cls?.teachers?.[0];
+                    const teacher = teacherAssignment
+                      ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+                      : null;
+                    const teacherName = teacher
+                      ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() ||
+                        teacher.email
+                      : null;
+                    const parentName =
+                      st?.passport?.motherName ||
+                      st?.passport?.fatherName ||
+                      st?.passport?.emergencyContacts?.[0]?.name ||
+                      r.parent?.email ||
+                      null;
+                    return (
+                      <StudentContextBadges
+                        classroomName={cls?.name}
+                        teacherName={teacherName}
+                        parentName={parentName}
+                      />
+                    );
+                  })()}
                 </div>
               </div>
 

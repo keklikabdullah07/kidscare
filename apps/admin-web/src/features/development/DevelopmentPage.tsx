@@ -26,6 +26,7 @@ import { useToast } from '../../components/Toast';
 import { PrintPreviewModal, ReportCardPrint } from '../../components/print';
 import { listStudents } from '../../api/students';
 import { listClassrooms } from '../../api/classrooms';
+import { listUsers } from '../../api/users';
 import { listMediaFiles } from '../../api/media';
 import {
   listObservations,
@@ -43,6 +44,7 @@ import type {
   MediaFileItem,
   PortfolioItemDto,
   Student,
+  User as UserModel,
 } from '@kidscare/shared-types';
 import {
   Badge,
@@ -53,6 +55,7 @@ import {
   TactileButton,
   TactileTabs,
   type TactileTabItem,
+  StudentContextBadges,
 } from '../../components/ui';
 
 interface DomainMeta {
@@ -115,6 +118,7 @@ export function DevelopmentPage(): JSX.Element {
   const [activeTab, setActiveTab] = useState<TabKey>('observations');
   const [students, setStudents] = useState<Student[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [teachers, setTeachers] = useState<UserModel[]>([]);
   const [selectedStudentId, setSelectedStudentId] = useState<string>('');
   const [selectedDomain, setSelectedDomain] = useState<DevelopmentDomain | ''>('');
 
@@ -192,15 +196,37 @@ export function DevelopmentPage(): JSX.Element {
     setPortMediaUrls(portMediaUrls.filter((u) => u !== url));
   }
 
+  function getStudentContext(studentId?: string | null) {
+    if (!studentId) return { classroomName: null, teacherName: null, parentName: null };
+    const student = students.find((s) => s.id === studentId);
+    if (!student) return { classroomName: null, teacherName: null, parentName: null };
+    const cls = classrooms.find((c) => c.id === student.classroomId);
+    const teacherAssignment = cls?.teachers?.[0];
+    const teacher = teacherAssignment
+      ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+      : null;
+    const teacherName = teacher
+      ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() || teacher.email
+      : null;
+    const parentName =
+      student.passport?.motherName ||
+      student.passport?.fatherName ||
+      student.passport?.emergencyContacts?.[0]?.name ||
+      null;
+    return { classroomName: cls?.name ?? null, teacherName, parentName };
+  }
+
   useEffect(() => {
     async function init() {
       try {
-        const [studentList, classroomList] = await Promise.all([
+        const [studentList, classroomList, teacherList] = await Promise.all([
           listStudents().catch(() => []),
           listClassrooms().catch(() => []),
+          listUsers('TEACHER').catch(() => []),
         ]);
         setStudents(studentList);
         setClassrooms(classroomList);
+        setTeachers(teacherList);
       } catch (err) {
         console.error(err);
       }
@@ -693,25 +719,28 @@ export function DevelopmentPage(): JSX.Element {
                           </div>
                         </div>
 
-                        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                          <div className="flex items-center gap-1.5 min-w-0">
-                            <User className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400 shrink-0" />
-                            <span className="font-bold text-slate-800 dark:text-white truncate">
-                              {obs.student
-                                ? `${obs.student.firstName} ${obs.student.lastName}`
-                                : 'Öğrenci'}
-                            </span>
-                          </div>
+                        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <User className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400 shrink-0" />
+                              <span className="font-bold text-slate-800 dark:text-white truncate">
+                                {obs.student
+                                  ? `${obs.student.firstName} ${obs.student.lastName}`
+                                  : 'Öğrenci'}
+                              </span>
+                            </div>
 
-                          {obs.isParentVisible ? (
-                            <Badge variant="success" size="sm">
-                              <CheckCircle className="w-3 h-3 mr-1 inline" /> Veli Görür
-                            </Badge>
-                          ) : (
-                            <Badge variant="neutral" size="sm">
-                              <Lock className="w-3 h-3 mr-1 inline" /> Sadece Kurum
-                            </Badge>
-                          )}
+                            {obs.isParentVisible ? (
+                              <Badge variant="success" size="sm">
+                                <CheckCircle className="w-3 h-3 mr-1 inline" /> Veli Görür
+                              </Badge>
+                            ) : (
+                              <Badge variant="neutral" size="sm">
+                                <Lock className="w-3 h-3 mr-1 inline" /> Sadece Kurum
+                              </Badge>
+                            )}
+                          </div>
+                          <StudentContextBadges {...getStudentContext(obs.studentId)} />
                         </div>
                       </div>
                     );
@@ -771,15 +800,18 @@ export function DevelopmentPage(): JSX.Element {
                           )}
                         </div>
 
-                        <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                          <span className="font-bold text-slate-800 dark:text-white">
-                            {item.student
-                              ? `${item.student.firstName} ${item.student.lastName}`
-                              : 'Öğrenci'}
-                          </span>
-                          <span className="text-[11px]">
-                            {new Date(item.createdAt).toLocaleDateString('tr-TR')}
-                          </span>
+                        <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                            <span className="font-bold text-slate-800 dark:text-white">
+                              {item.student
+                                ? `${item.student.firstName} ${item.student.lastName}`
+                                : 'Öğrenci'}
+                            </span>
+                            <span className="text-[11px]">
+                              {new Date(item.createdAt).toLocaleDateString('tr-TR')}
+                            </span>
+                          </div>
+                          <StudentContextBadges {...getStudentContext(item.studentId)} />
                         </div>
                       </div>
                     </div>
@@ -1302,17 +1334,23 @@ export function DevelopmentPage(): JSX.Element {
           isOpen={showReportCardPrint}
           onClose={() => setShowReportCardPrint(false)}
           title={`Pedagojik Gelişim Raporu (Karne) — ${
-            (scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0])?.firstName ||
-            'Öğrenci'
+            (scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0])
+              ?.firstName || 'Öğrenci'
           } ${(scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0])?.lastName || ''}`}
           subtitle="2026-2027 Eğitim Öğretim Yılı • 6 Temel Pedagojik Gelişim Alanı"
           orientation="portrait"
         >
           {(scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0]) && (
             <ReportCardPrint
-              student={(scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0]) as Student}
+              student={
+                (scopedStudents.find((s) => s.id === selectedStudentId) ||
+                  scopedStudents[0]) as Student
+              }
               observations={scopedObservations}
-              passport={(scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0])?.passport}
+              passport={
+                (scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0])
+                  ?.passport
+              }
             />
           )}
         </PrintPreviewModal>
