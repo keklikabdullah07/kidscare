@@ -27,6 +27,9 @@ function mockFetchByUrl(handlers: Record<string, (init?: RequestInit) => Respons
     const path = new URL(url, 'http://localhost').pathname;
     const handler = handlers[path];
     if (handler) return Promise.resolve(handler(init));
+    if (path === '/classrooms' || path === '/users') {
+      return Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
+    }
     return Promise.resolve(new Response(JSON.stringify({ message: 'unhandled' }), { status: 500 }));
   });
 }
@@ -324,6 +327,53 @@ describe('MedicationPage', () => {
 
     expect(givenPayload).toMatchObject({
       note: 'Öğle arası 2 fıs verildi.',
+    });
+  });
+
+  it('renders regular medication badge, expired warning, and opens medication history modal', async () => {
+    mockFetchByUrl({
+      '/medication/records': () => new Response(JSON.stringify(fakeRecords), { status: 200 }),
+      '/students': () =>
+        new Response(
+          JSON.stringify([
+            {
+              ...fakeStudents[0],
+              passport: {
+                regularMedications: ['Ventolin İnhaler'],
+                chronicConditions: ['Astım'],
+                bloodType: 'A_POSITIVE',
+                allergies: ['Fıstık'],
+              },
+            },
+          ]),
+          { status: 200 },
+        ),
+      '/classrooms': () =>
+        new Response(JSON.stringify([{ id: 'c-1', name: 'Papatyalar Sınıfı' }]), { status: 200 }),
+    });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Calpol Şurup')).toBeInTheDocument();
+    });
+
+    // Süresi geçti / gecikmiş doz uyarısının varlığını kontrol et
+    expect(screen.getAllByText(/Süresi Geçti \/ Gecikmiş Doz/i).length).toBeGreaterThan(0);
+
+    // Düzenli / Kronik ilaç rozetini doğrula
+    expect(screen.getByText(/Düzenli \/ Kronik İlaç/i)).toBeInTheDocument();
+
+    // İlaç Geçmişi butonuna tıkla
+    const historyButtons = screen.getAllByRole('button', { name: /İlaç Geçmişi/i });
+    expect(historyButtons.length).toBeGreaterThan(0);
+    fireEvent.click(historyButtons[0]!);
+
+    // Modalın açıldığını ve detayları gösterdiğini doğrula
+    await waitFor(() => {
+      expect(screen.getByText('İlaç Geçmişi & Doz Kütüğü')).toBeInTheDocument();
+      expect(screen.getByText(/Geçmiş & Aktif İlaç Kayıtları/i)).toBeInTheDocument();
+      expect(screen.getByText('Astım')).toBeInTheDocument();
     });
   });
 });

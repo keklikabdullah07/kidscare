@@ -17,7 +17,6 @@ import {
   HeartPulse,
   Apple,
   ShieldCheck,
-  Printer,
   ShieldAlert,
   GraduationCap,
 } from 'lucide-react';
@@ -39,7 +38,8 @@ import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { PageHeader } from '../../components/ui/PageHeader';
-import { PrintPreviewModal, ReportCardPrint, EmergencyRosterPrint } from '../../components/print';
+import { PrintPreviewModal, EmergencyRosterPrint } from '../../components/print';
+import { getParentDropdownLabel, getTeacherDisplayName } from '../../utils/userDisplay';
 
 type Status = 'loading' | 'ready' | 'error';
 type ViewMode = 'grid' | 'table';
@@ -85,7 +85,6 @@ export function StudentsPage(): JSX.Element {
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [passportStudent, setPassportStudent] = useState<Student | null>(null);
   const [pickupContactsStudent, setPickupContactsStudent] = useState<Student | null>(null);
-  const [reportCardStudent, setReportCardStudent] = useState<Student | null>(null);
   const [showEmergencyRoster, setShowEmergencyRoster] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<FilterType>('all');
@@ -433,7 +432,9 @@ export function StudentsPage(): JSX.Element {
                         ? 'text-slate-700 dark:text-slate-200'
                         : 'text-slate-400 italic text-[10px]'
                     }`}
-                    title={assignedTeacher ? assignedTeacher.email : 'Öğretmen atanmadı'}
+                    title={
+                      assignedTeacher ? getTeacherDisplayName(assignedTeacher) : 'Öğretmen atanmadı'
+                    }
                   >
                     {getTeacherDisplayName(assignedTeacher)}
                   </span>
@@ -650,10 +651,7 @@ export function StudentsPage(): JSX.Element {
                 const teacher = teacherAssignment
                   ? teachers.find((u) => u.id === teacherAssignment.teacherId)
                   : null;
-                const teacherName = teacher
-                  ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() ||
-                    teacher.email
-                  : undefined;
+                const teacherName = teacher ? getTeacherDisplayName(teacher) : undefined;
 
                 return (
                   <StudentCard
@@ -663,7 +661,6 @@ export function StudentsPage(): JSX.Element {
                     teacherName={teacherName}
                     onOpenPassport={() => setPassportStudent(s)}
                     onOpenPickupContacts={() => setPickupContactsStudent(s)}
-                    onPrintReportCard={() => setReportCardStudent(s)}
                     onEdit={() => setEditingStudent(s)}
                     onDelete={() => void handleDelete(s.id, `${s.firstName} ${s.lastName}`)}
                   />
@@ -680,10 +677,7 @@ export function StudentsPage(): JSX.Element {
                   const teacher = teacherAssignment
                     ? teachers.find((u) => u.id === teacherAssignment.teacherId)
                     : null;
-                  const teacherName = teacher
-                    ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() ||
-                      teacher.email
-                    : undefined;
+                  const teacherName = teacher ? getTeacherDisplayName(teacher) : undefined;
 
                   return (
                     <StudentCard
@@ -693,7 +687,6 @@ export function StudentsPage(): JSX.Element {
                       teacherName={teacherName}
                       onOpenPassport={() => setPassportStudent(s)}
                       onOpenPickupContacts={() => setPickupContactsStudent(s)}
-                      onPrintReportCard={() => setReportCardStudent(s)}
                       onEdit={() => setEditingStudent(s)}
                       onDelete={() => void handleDelete(s.id, `${s.firstName} ${s.lastName}`)}
                     />
@@ -704,7 +697,7 @@ export function StudentsPage(): JSX.Element {
               {/* Desktop Table View (Hidden on mobile) */}
               <div className="hidden md:block bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="w-full min-w-[860px] text-sm">
                     <thead className="text-left text-slate-700 dark:text-slate-300 bg-[#FAF8F5] dark:bg-slate-900/80 border-b border-[#E8E2D5] dark:border-slate-800 text-xs uppercase tracking-wider font-bold">
                       <tr>
                         <th className="py-4 px-5">Ad Soyad</th>
@@ -729,12 +722,7 @@ export function StudentsPage(): JSX.Element {
                         const teacher = teacherAssignment
                           ? teachers.find((u) => u.id === teacherAssignment.teacherId)
                           : null;
-                        const tName = teacher
-                          ? [teacher.firstName, teacher.lastName]
-                              .filter(Boolean)
-                              .join(' ')
-                              .trim() || teacher.email
-                          : undefined;
+                        const tName = teacher ? getTeacherDisplayName(teacher) : undefined;
 
                         return (
                           <tr
@@ -831,16 +819,19 @@ export function StudentsPage(): JSX.Element {
                                   )}
                               </div>
                             </td>
-                            <td className="py-3.5 px-5 text-xs">
+                            <td className="py-3.5 px-5 text-xs whitespace-nowrap min-w-[170px]">
                               {primaryContact ? (
-                                <div className="flex items-center gap-1.5">
+                                <div className="flex flex-col gap-0.5">
                                   <a
                                     href={`tel:${primaryContact.phone}`}
-                                    className="text-teal-900 dark:text-teal-300 font-semibold hover:underline flex items-center gap-1"
+                                    className="text-teal-900 dark:text-teal-300 font-bold hover:underline inline-flex items-center gap-1.5"
                                   >
-                                    <Phone className="w-3.5 h-3.5 text-teal-700" />
-                                    {primaryContact.name} ({primaryContact.relationship})
+                                    <Phone className="w-3.5 h-3.5 text-teal-700 shrink-0" />
+                                    <span>{primaryContact.phone}</span>
                                   </a>
+                                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate max-w-[170px]">
+                                    {primaryContact.name} ({primaryContact.relationship})
+                                  </span>
                                 </div>
                               ) : (
                                 <span className="text-slate-400 text-xs">—</span>
@@ -858,15 +849,6 @@ export function StudentsPage(): JSX.Element {
                               </span>
                             </td>
                             <td className="py-3.5 px-5 text-right space-x-1.5 whitespace-nowrap">
-                              <TactileButton
-                                type="button"
-                                variant="secondary"
-                                onClick={() => setReportCardStudent(s)}
-                                className="px-3 py-1 text-xs"
-                                title="Dönem Sonu Pedagojik Karnesini Yazdır"
-                              >
-                                <Printer className="w-3.5 h-3.5 text-teal-700" /> Karne
-                              </TactileButton>
                               <TactileButton
                                 type="button"
                                 variant="secondary"
@@ -950,23 +932,6 @@ export function StudentsPage(): JSX.Element {
           student={pickupContactsStudent}
           onClose={() => setPickupContactsStudent(null)}
         />
-      )}
-
-      {/* Report Card Print Preview Modal */}
-      {reportCardStudent && (
-        <PrintPreviewModal
-          isOpen={!!reportCardStudent}
-          onClose={() => setReportCardStudent(null)}
-          title={`Pedagojik Gelişim Raporu (Karne) — ${reportCardStudent.firstName} ${reportCardStudent.lastName}`}
-          subtitle={`${classrooms.find((c) => c.id === reportCardStudent.classroomId)?.name || 'Sınıf'} • 2026-2027 Eğitim Öğretim Yılı`}
-          orientation="portrait"
-        >
-          <ReportCardPrint
-            student={reportCardStudent}
-            classroomName={classrooms.find((c) => c.id === reportCardStudent.classroomId)?.name}
-            passport={reportCardStudent.passport}
-          />
-        </PrintPreviewModal>
       )}
 
       {/* Emergency & Allergen Roster Print Preview Modal */}
@@ -1081,14 +1046,11 @@ export function StudentsPage(): JSX.Element {
                   className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
                 >
                   <option value="">Öğretmen Seçilmedi (Daha sonra atanabilir)</option>
-                  {teachers.map((t) => {
-                    const name = [t.firstName, t.lastName].filter(Boolean).join(' ').trim();
-                    return (
-                      <option key={t.id} value={t.id}>
-                        {name ? `${name} (${t.email})` : t.email}
-                      </option>
-                    );
-                  })}
+                  {teachers.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {getTeacherDisplayName(t)}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -1143,7 +1105,6 @@ function StudentCard({
   teacherName,
   onOpenPassport,
   onOpenPickupContacts,
-  onPrintReportCard,
   onEdit,
   onDelete,
 }: {
@@ -1152,7 +1113,6 @@ function StudentCard({
   teacherName?: string | null | undefined;
   onOpenPassport: () => void;
   onOpenPickupContacts: () => void;
-  onPrintReportCard: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }): JSX.Element {
@@ -1220,7 +1180,7 @@ function StudentCard({
                   </>
                 )}
               </div>
-              {(p?.identityNumber || p?.motherName || p?.fatherName) && (
+              {(p?.identityNumber || p?.motherName || p?.fatherName || p?.secondaryParentId) && (
                 <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex-wrap">
                   {p.identityNumber && (
                     <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-300 text-[10px]">
@@ -1235,6 +1195,11 @@ function StudentCard({
                       ]
                         .filter(Boolean)
                         .join(' • ')}
+                    </span>
+                  )}
+                  {p.secondaryParentId && (
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/40">
+                      👥 2 Veli Tanımlı
                     </span>
                   )}
                 </div>
@@ -1343,16 +1308,6 @@ function StudentCard({
         <TactileButton
           type="button"
           variant="secondary"
-          onClick={onPrintReportCard}
-          className="px-3.5 py-1.5 text-xs text-teal-900 dark:text-teal-200"
-          title="Dönem Sonu Pedagojik Karnesini Yazdır"
-        >
-          <Printer className="w-3.5 h-3.5 text-teal-700" />
-          <span>Karne</span>
-        </TactileButton>
-        <TactileButton
-          type="button"
-          variant="secondary"
           onClick={onOpenPickupContacts}
           className="px-3.5 py-1.5 text-xs text-amber-900 dark:text-amber-300"
         >
@@ -1404,6 +1359,9 @@ function StudentFormModal({
   const [notes, setNotes] = useState(initialStudent?.notes || '');
   const [isActive, setIsActive] = useState(initialStudent?.isActive ?? true);
   const [parentId, setParentId] = useState(initialStudent?.parentId ?? '');
+  const [secondaryParentId, setSecondaryParentId] = useState(
+    initialStudent?.passport?.secondaryParentId ?? '',
+  );
   const [classroomId, setClassroomId] = useState(initialStudent?.classroomId ?? '');
   const [identityNumber, setIdentityNumber] = useState(
     initialStudent?.passport?.identityNumber ?? '',
@@ -1448,6 +1406,7 @@ function StudentFormModal({
           ...(identityNumber.trim() ? { identityNumber: identityNumber.trim() } : {}),
           ...(motherName.trim() ? { motherName: motherName.trim() } : {}),
           ...(fatherName.trim() ? { fatherName: fatherName.trim() } : {}),
+          secondaryParentId: secondaryParentId || null,
         };
         const updated = await updateStudent(initialStudent.id, {
           firstName: firstName.trim(),
@@ -1463,7 +1422,7 @@ function StudentFormModal({
         onSaved(updated);
       } else {
         // Create
-        const payload: Parameters<typeof createStudent>[0] = {
+        const payload: Parameters<typeof createStudent>[0] & { secondaryParentId?: string } = {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           dateOfBirth,
@@ -1471,6 +1430,7 @@ function StudentFormModal({
         if (gender) payload.gender = gender;
         if (notes.trim()) payload.notes = notes.trim();
         if (parentId) payload.parentId = parentId;
+        if (secondaryParentId) payload.secondaryParentId = secondaryParentId;
         if (classroomId) payload.classroomId = classroomId;
         if (identityNumber.trim()) payload.identityNumber = identityNumber.trim();
         if (motherName.trim()) payload.motherName = motherName.trim();
@@ -1669,29 +1629,49 @@ function StudentFormModal({
             </select>
           </label>
 
-          <label className="block">
-            <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
-              Veli Hesabı
-            </span>
-            <select
-              value={parentId}
-              onChange={(e) => setParentId(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-white px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
-            >
-              <option value="">Veli atanmadı</option>
-              {parents.map((p) => {
-                const name = [p.firstName, p.lastName].filter(Boolean).join(' ').trim();
-                return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label className="block">
+              <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
+                1. Veli Hesabı (Birincil)
+              </span>
+              <select
+                value={parentId}
+                onChange={(e) => setParentId(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-white px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
+              >
+                <option value="">Veli atanmadı</option>
+                {parents.map((p) => (
                   <option key={p.id} value={p.id}>
-                    {name ? `${name} (${p.email})` : p.email}
+                    {getParentDropdownLabel(p)}
                   </option>
-                );
-              })}
-            </select>
-            <p className="text-[11px] text-slate-500 dark:text-slate-300 mt-1">
-              Veli hesabı yoksa önce Ekip & Veliler sayfasından oluşturabilirsiniz.
-            </p>
-          </label>
+                ))}
+              </select>
+            </label>
+
+            <label className="block">
+              <span className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
+                2. Veli Hesabı (İkincil / Eş)
+              </span>
+              <select
+                value={secondaryParentId}
+                onChange={(e) => setSecondaryParentId(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-white px-3 py-2 text-sm text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
+              >
+                <option value="">İkincil veli yok</option>
+                {parents
+                  .filter((p) => p.id !== parentId)
+                  .map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {getParentDropdownLabel(p)}
+                    </option>
+                  ))}
+              </select>
+            </label>
+          </div>
+          <p className="text-[11px] text-slate-500 dark:text-slate-300">
+            Her iki veli de KidsCare mobil uygulamasından öğrenci bilgilerini, karne ve
+            yoklamalarını anlık görebilir.
+          </p>
 
           {initialStudent && (
             <label className="flex items-center gap-2 pt-1 cursor-pointer">
@@ -1863,14 +1843,11 @@ function ClassroomEditModal({
               className="w-full rounded-2xl border border-[#DDD4C4] dark:border-slate-700 bg-[#FCFAF7] dark:bg-slate-900 px-3.5 py-2.5 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 shadow-2xs cursor-pointer"
             >
               <option value="">Öğretmen Seçilmedi</option>
-              {teachers.map((t) => {
-                const fullName = [t.firstName, t.lastName].filter(Boolean).join(' ').trim();
-                return (
-                  <option key={t.id} value={t.id}>
-                    {fullName ? `${fullName} (${t.email})` : t.email}
-                  </option>
-                );
-              })}
+              {teachers.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {getTeacherDisplayName(t)}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -1886,24 +1863,6 @@ function ClassroomEditModal({
       </div>
     </div>
   );
-}
-
-function formatTeacherName(email?: string): string {
-  if (!email) return 'Öğretmen Atanmadı';
-  const prefix = email.split('@')[0] || '';
-  const formatted = prefix
-    .split(/[._-]/)
-    .filter(Boolean)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-  return formatted ? `Öğrt. ${formatted}` : email;
-}
-
-function getTeacherDisplayName(teacher?: User | null): string {
-  if (!teacher) return 'Öğretmen Atanmadı';
-  const fullName = [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim();
-  if (fullName) return `Öğrt. ${fullName}`;
-  return formatTeacherName(teacher.email);
 }
 
 function byLastName(a: Student, b: Student): number {

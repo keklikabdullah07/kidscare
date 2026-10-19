@@ -36,9 +36,14 @@ export const emergencyContactSchema = z.object({
 });
 
 export const studentPassportSchema = z.object({
-  identityNumber: z.string().trim().max(11, 'TC Kimlik No en fazla 11 karakter olabilir').optional(),
+  identityNumber: z
+    .string()
+    .trim()
+    .max(11, 'TC Kimlik No en fazla 11 karakter olabilir')
+    .optional(),
   motherName: z.string().trim().max(100).optional(),
   fatherName: z.string().trim().max(100).optional(),
+  secondaryParentId: z.string().nullable().optional(),
   bloodType: bloodTypeSchema.default('UNKNOWN'),
   allergies: z.array(z.string().max(100)).default([]),
   dietaryRestrictions: z.array(z.string().max(100)).default([]),
@@ -52,6 +57,7 @@ export const studentPassportSchema = z.object({
 
 export const studentCreateSchema = z.object({
   parentId: z.string().nullable().optional(),
+  secondaryParentId: z.string().nullable().optional(),
   classroomId: z.string().nullable().optional(),
   firstName: z.string().min(1).max(64),
   lastName: z.string().min(1).max(64),
@@ -67,6 +73,7 @@ export const studentCreateSchema = z.object({
 export const studentUpdateSchema = z
   .object({
     parentId: z.string().nullable().optional(),
+    secondaryParentId: z.string().nullable().optional(),
     classroomId: z.string().nullable().optional(),
     firstName: z.string().min(1).max(64).optional(),
     lastName: z.string().min(1).max(64).optional(),

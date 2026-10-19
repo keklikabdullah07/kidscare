@@ -11,8 +11,6 @@ import {
   Search,
   Users,
   ShieldCheck,
-  ChevronLeft,
-  ChevronRight,
   LayoutGrid,
   List,
   CheckCircle2,
@@ -41,26 +39,9 @@ import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
-import { StudentContextBadges } from '../../components/ui';
+import { StudentContextBadges, TactileDateNavigator } from '../../components/ui';
 import { PrintPreviewModal, AttendanceSheetPrint } from '../../components/print';
-
-function formatTeacherName(email?: string): string {
-  if (!email) return 'Öğretmen Atanmadı';
-  const prefix = email.split('@')[0] ?? email;
-  const parts = prefix.split(/[._-]/).filter(Boolean);
-  if (parts.length === 0) return email;
-  const capitalized = parts
-    .map((p) => p.charAt(0).toLocaleUpperCase('tr-TR') + p.slice(1).toLocaleLowerCase('tr-TR'))
-    .join(' ');
-  return `Öğrt. ${capitalized}`;
-}
-
-function getTeacherDisplayName(teacher?: User | null): string {
-  if (!teacher) return 'Öğretmen Atanmadı';
-  const fullName = [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim();
-  if (fullName) return `Öğrt. ${fullName}`;
-  return formatTeacherName(teacher.email);
-}
+import { getTeacherDisplayName } from '../../utils/userDisplay';
 
 const STATUS_CONFIG: Record<
   AttendanceStatus,
@@ -246,15 +227,6 @@ export function AttendancePage(): JSX.Element {
   }
 
   useEffect(loadData, [selectedDate]);
-
-  function changeDay(delta: number): void {
-    const d = new Date(selectedDate);
-    d.setDate(d.getDate() + delta);
-    setSelectedDate(d.toISOString().slice(0, 10));
-  }
-
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const isToday = selectedDate === todayStr;
 
   async function handleQuickCheckIn(student: Student): Promise<void> {
     try {
@@ -556,43 +528,8 @@ export function AttendancePage(): JSX.Element {
         }
         actions={
           <div className="flex items-center gap-3 flex-wrap">
-            {/* Date Picker Control */}
-            <div className="flex items-center gap-1.5 bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 p-1.5 rounded-2xl shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)]">
-              <button
-                type="button"
-                onClick={() => changeDay(-1)}
-                className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#FAF8F5] dark:hover:bg-slate-800 transition cursor-pointer"
-                title="Önceki Gün"
-                aria-label="Önceki Gün"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="text-xs font-bold text-slate-800 dark:text-slate-100 bg-transparent px-2.5 py-1 outline-none cursor-pointer rounded-xl"
-              />
-              <button
-                type="button"
-                onClick={() => changeDay(1)}
-                className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#FAF8F5] dark:hover:bg-slate-800 transition cursor-pointer"
-                title="Sonraki Gün"
-                aria-label="Sonraki Gün"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-              {!isToday && (
-                <TactileButton
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setSelectedDate(todayStr)}
-                  className="ml-1"
-                >
-                  Bugün
-                </TactileButton>
-              )}
-            </div>
+            {/* Tactile Date Navigator */}
+            <TactileDateNavigator mode="day" value={selectedDate} onChange={setSelectedDate} />
 
             <TactileButton
               variant="secondary"
@@ -756,9 +693,7 @@ export function AttendancePage(): JSX.Element {
                       )}
                       <span
                         className="truncate font-semibold text-[10px]"
-                        title={
-                          item.assignedTeacher ? item.assignedTeacher.email : 'Öğretmen Atanmadı'
-                        }
+                        title={getTeacherDisplayName(item.assignedTeacher)}
                       >
                         {getTeacherDisplayName(item.assignedTeacher)}
                       </span>
@@ -1128,10 +1063,7 @@ export function AttendancePage(): JSX.Element {
                                   ? teachers.find((u) => u.id === teacherAssignment.teacherId)
                                   : null;
                                 const teacherName = teacher
-                                  ? [teacher.firstName, teacher.lastName]
-                                      .filter(Boolean)
-                                      .join(' ')
-                                      .trim() || teacher.email
+                                  ? getTeacherDisplayName(teacher)
                                   : undefined;
                                 const parentName =
                                   student.passport?.motherName ||
@@ -1336,10 +1268,7 @@ export function AttendancePage(): JSX.Element {
                               ? teachers.find((u) => u.id === teacherAssignment.teacherId)
                               : null;
                             const teacherName = teacher
-                              ? [teacher.firstName, teacher.lastName]
-                                  .filter(Boolean)
-                                  .join(' ')
-                                  .trim() || teacher.email
+                              ? getTeacherDisplayName(teacher)
                               : undefined;
                             const parentName =
                               student.passport?.motherName ||

@@ -13,6 +13,7 @@ import {
   Inbox,
 } from 'lucide-react';
 import type {
+  Classroom,
   Conversation,
   ConversationCategory,
   ConversationStatus,
@@ -28,15 +29,16 @@ import {
   sendMessage,
   updateConversationStatus,
 } from '../../api/messaging';
+import { listClassrooms } from '../../api/classrooms';
 import { listStudents } from '../../api/students';
 import { listUsers } from '../../api/users';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
+import { getUserDisplayName } from '../../utils/userDisplay';
 import {
   Badge,
   EmptyState,
   PageHeader,
-  StatCard,
   TactileButton,
   TactileTabs,
   type TactileTabItem,
@@ -67,6 +69,7 @@ export function MessagesPage(): JSX.Element {
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -91,19 +94,116 @@ export function MessagesPage(): JSX.Element {
   async function refreshList(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes, usersRes] = await Promise.all([
+      const [list, studentsRes, usersRes, classroomsRes] = await Promise.all([
         listConversations(),
         listStudents(),
         listUsers().catch(() => []),
+        listClassrooms().catch(() => []),
       ]);
       setConversations(list);
       setStudents(studentsRes);
       setUsers(usersRes);
+      setClassrooms(classroomsRes);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Sohbetler yüklenemedi', 'error');
     } finally {
       setLoading(false);
     }
+  }
+
+  /**
+   * Resolves a complete, human-friendly identity for a sender or creator:
+   * - Real Name (e.g. "Selin Yılmaz", "Öğrt. Zeynep Demir", "Kemal Demir")
+   * - Classroom or Child context (e.g. "Ada'nın Velisi", "Minik Adımlar Sınıfı", "Yönetici")
+   */
+  function getParticipantDisplay(
+    participant?: {
+      id?: string;
+      email?: string | null;
+      role?: string | null;
+      firstName?: string | null;
+      lastName?: string | null;
+    } | null,
+    studentId?: string | null,
+    options?: { isListSummary?: boolean },
+  ): { name: string; context: string; fullLabel: string } {
+    if (!participant) {
+      return { name: 'Kullanıcı', context: '', fullLabel: 'Kullanıcı' };
+    }
+
+    // Kullanıcı listesinden tam profil eşleşmesi yap
+    const fullUser = users.find((u) => u.id === participant.id) || participant;
+    const role = fullUser.role || participant.role;
+
+    // Gerçek ad ve soyadı belirle
+    const firstName = fullUser.firstName || participant.firstName || '';
+    const lastName = fullUser.lastName || participant.lastName || '';
+
+    // İlgili öğrenciyi bul (aktif sohbet veya veli ilişkisi üzerinden)
+    const linkedStudent =
+      students.find((s) => s.id === studentId) ||
+      students.find((s) => s.parentId === fullUser.id || s.parentId === participant.id);
+
+    let rawName = [firstName, lastName].filter(Boolean).join(' ').trim();
+
+    if (!rawName) {
+      if (role === 'PARENT' && linkedStudent?.passport?.motherName) {
+        rawName = linkedStudent.passport.motherName;
+      } else if (role === 'PARENT' && linkedStudent?.passport?.fatherName) {
+        rawName = linkedStudent.passport.fatherName;
+      } else {
+        rawName = getUserDisplayName(
+          fullUser,
+          role === 'PARENT' ? 'Veli' : role === 'TEACHER' ? 'Öğretmen' : 'Yönetici',
+        );
+      }
+    }
+
+    // Sınıfı belirle (öğrencinin sınıfı veya öğretmenin doğrudan sınıf ataması)
+    const targetClassroomId = linkedStudent?.classroomId;
+    const classroom =
+      classrooms.find((c) => c.id === targetClassroomId) ||
+      classrooms.find((c) =>
+        c.teachers?.some((t) => t.teacherId === fullUser.id || t.teacherId === participant.id),
+      );
+
+    let name = rawName;
+    let context: string;
+
+    if (role === 'PARENT') {
+      context = linkedStudent ? `${linkedStudent.firstName}'nın Velisi` : 'Veli';
+      if (options?.isListSummary && linkedStudent) {
+        context = 'Veli';
+      }
+    } else if (role === 'TEACHER') {
+      if (!name.startsWith('Öğrt.')) {
+        name = `Öğrt. ${name}`;
+      }
+      if (classroom) {
+        const clsName = classroom.name.endsWith('Sınıfı')
+          ? classroom.name
+          : `${classroom.name} Sınıfı`;
+        context = clsName;
+      } else {
+        context = 'Sınıf Öğretmeni';
+      }
+    } else if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+      context = 'Yönetici';
+    } else if (role === 'SERVICE_STAFF') {
+      context = 'Servis Görevlisi';
+    } else {
+      context = 'Kullanıcı';
+    }
+
+    // Jenerik isim tekrarını önle ("Veli (Veli)" veya "Öğretmen (Öğretmen)" olmasın)
+    const isGeneric =
+      name.toLowerCase() === 'veli' ||
+      name.toLowerCase() === 'öğretmen' ||
+      name.toLowerCase() === 'yönetici';
+
+    const fullLabel = isGeneric ? context || name : context ? `${name} (${context})` : name;
+
+    return { name, context, fullLabel };
   }
 
   async function loadThread(id: string): Promise<void> {
@@ -332,81 +432,6 @@ export function MessagesPage(): JSX.Element {
         }
       />
 
-      {/* Dokunsal KPI Özet Sayaçları (Tıklanabilir Sekme Geçişi) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab('ALL');
-            setSearchQuery('');
-          }}
-          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
-          aria-label="Tüm sohbetler sekmesine geç"
-        >
-          <StatCard
-            title="Toplam Sohbet"
-            value={totalCount}
-            subtitle="Tüm diyaloglar"
-            variant="blue"
-            icon={MessageSquare}
-          />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab('UNREAD');
-            setSearchQuery('');
-          }}
-          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
-          aria-label="Okunmamış mesajlar sekmesine geç"
-        >
-          <StatCard
-            title="Okunmamış"
-            value={unreadTotal}
-            subtitle="Yanıt bekleyen"
-            variant="amber"
-            icon={Inbox}
-          />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab('CRITICAL');
-            setSearchQuery('');
-          }}
-          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
-          aria-label="Acil ve sağlık mesajları sekmesine geç"
-        >
-          <StatCard
-            title="Acil & Sağlık"
-            value={criticalCount}
-            subtitle="Öncelikli konular"
-            variant="rose"
-            icon={AlertCircle}
-          />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab('CLOSED');
-            setSearchQuery('');
-          }}
-          className="text-left w-full cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
-          aria-label="Kapanan sohbetler sekmesine geç"
-        >
-          <StatCard
-            title="Kapananlar"
-            value={closedCount}
-            subtitle="Tamamlanan görüşmeler"
-            variant="emerald"
-            icon={CheckCircle2}
-          />
-        </button>
-      </div>
-
       {/* Evrensel Dokunsal Sekmeler & Arama */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <TactileTabs<TabKey> tabs={filterTabs} activeId={activeTab} onChange={setActiveTab} />
@@ -502,10 +527,14 @@ export function MessagesPage(): JSX.Element {
                                 👶 {c.student.firstName} {c.student.lastName}
                               </span>
                             )}
+                            {c.student && c.createdBy && <span>·</span>}
                             {c.createdBy && (
-                              <span>
-                                · {c.createdBy.email} (
-                                {c.createdBy.role === 'PARENT' ? 'Veli' : 'Öğretmen'})
+                              <span className="text-slate-600 dark:text-slate-300">
+                                {
+                                  getParticipantDisplay(c.createdBy, c.studentId || c.student?.id, {
+                                    isListSummary: true,
+                                  }).fullLabel
+                                }
                               </span>
                             )}
                           </div>
@@ -577,10 +606,15 @@ export function MessagesPage(): JSX.Element {
                           👶 {active.student.firstName} {active.student.lastName}
                         </span>
                       )}
+                      {active.student && active.createdBy && <span>·</span>}
                       {active.createdBy && (
-                        <span>
-                          · {active.createdBy.email} (
-                          {active.createdBy.role === 'PARENT' ? 'Veli' : 'Öğretmen'})
+                        <span className="text-slate-700 dark:text-slate-200 font-semibold">
+                          {
+                            getParticipantDisplay(
+                              active.createdBy,
+                              active.studentId || active.student?.id,
+                            ).fullLabel
+                          }
                         </span>
                       )}
                     </div>
@@ -608,11 +642,11 @@ export function MessagesPage(): JSX.Element {
                 ) : (
                   messages.map((m) => {
                     const isMine = m.senderId === meId;
-                    const senderLabel = isMine
-                      ? 'Siz'
-                      : m.sender
-                        ? `${m.sender.role === 'PARENT' ? 'Veli' : m.sender.role === 'TEACHER' ? 'Öğretmen' : 'Yönetici'} (${m.sender.email})`
-                        : 'Karşı Taraf';
+                    const participantInfo = getParticipantDisplay(
+                      m.sender,
+                      active?.studentId || active?.student?.id,
+                    );
+                    const senderLabel = isMine ? 'Siz' : participantInfo.fullLabel;
 
                     return (
                       <div
@@ -776,17 +810,14 @@ export function MessagesPage(): JSX.Element {
                   </option>
                   {users
                     .filter((u) => u.id !== meId)
-                    .map((u) => (
-                      <option key={u.id} value={u.id}>
-                        {u.email} (
-                        {u.role === 'PARENT'
-                          ? 'Veli'
-                          : u.role === 'TEACHER'
-                            ? 'Öğretmen'
-                            : 'Yönetici'}
-                        )
-                      </option>
-                    ))}
+                    .map((u) => {
+                      const info = getParticipantDisplay(u, cStudentId);
+                      return (
+                        <option key={u.id} value={u.id}>
+                          {info.fullLabel}
+                        </option>
+                      );
+                    })}
                 </select>
               </div>
 

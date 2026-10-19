@@ -43,9 +43,11 @@ export function ActivityGalleryPage(): JSX.Element {
 
   const displayClassrooms = isTeacher ? teacherClassrooms : classrooms;
 
-  // Filtreleme State'leri: Sınıf ve Tarih
+  // Filtreleme State'leri: Sınıf ve Tarih (Varsayılan: Bugünün Tarihi)
   const [selectedClassroom, setSelectedClassroom] = useState<string>('ALL');
-  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>(() =>
+    new Date().toISOString().slice(0, 10),
+  );
 
   useEffect(() => {
     if (isTeacher && teacherClassrooms.length > 0) {
@@ -303,7 +305,7 @@ export function ActivityGalleryPage(): JSX.Element {
         </div>
 
         {/* Filter Tags Toolbar */}
-        <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-[#DDD4C4]/50 dark:border-slate-800">
+        <div className="flex flex-wrap items-center gap-2 py-1.5 pt-2 border-t border-[#DDD4C4]/50 dark:border-slate-800">
           <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-1 shrink-0">
             Kategori:
           </span>

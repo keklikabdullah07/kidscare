@@ -48,6 +48,7 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs } from '../../components/ui/TactileTabs';
 import { StudentContextBadges } from '../../components/ui/StudentContextBadges';
+import { getTeacherDisplayName } from '../../utils/userDisplay';
 
 const STATUS_LABEL: Record<PickupAuthorizationStatus, string> = {
   PENDING: 'Onay Bekliyor',
@@ -158,7 +159,6 @@ export function PickupPage(): JSX.Element {
   const [activeTab, setActiveTab] = useState<'AUTHORIZATIONS' | 'EVENTS'>('AUTHORIZATIONS');
   const [allAuthorizations, setAllAuthorizations] = useState<PickupAuthorization[]>([]);
   const [events, setEvents] = useState<PickupEvent[]>([]);
-  const [allEvents, setAllEvents] = useState<PickupEvent[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [teachers, setTeachers] = useState<UserModel[]>([]);
@@ -203,17 +203,15 @@ export function PickupPage(): JSX.Element {
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [authList, studentsList, classList, allEvList, teachersList] = await Promise.all([
+      const [authList, studentsList, classList, teachersList] = await Promise.all([
         listPickupAuthorizations(),
         listStudents().catch(() => []),
         listClassrooms().catch(() => []),
-        listPickupEvents().catch(() => []),
         listUsers('TEACHER').catch(() => []),
       ]);
       setAllAuthorizations(authList);
       setStudents(studentsList);
       setClassrooms(classList);
-      setAllEvents(allEvList);
       setTeachers(teachersList);
 
       if (studentsList.length > 0 && !handoverStudentId) {
@@ -342,12 +340,7 @@ export function PickupPage(): JSX.Element {
     return events.filter((e) => scopedStudentIds.has(e.studentId));
   }, [isAdmin, events, scopedStudentIds]);
 
-  const scopedAllEvents = useMemo(() => {
-    if (isAdmin) return allEvents;
-    return allEvents.filter((e) => scopedStudentIds.has(e.studentId));
-  }, [isAdmin, allEvents, scopedStudentIds]);
-
-  // Sayaçlar (Dokunsal Özellik & KPI Kartları)
+  // Sayaçlar (Dokunsal Özellik & Sekme Rozetleri)
   const pendingCount = useMemo(
     () => scopedAuthorizations.filter((i) => i.status === 'PENDING').length,
     [scopedAuthorizations],
@@ -357,20 +350,6 @@ export function PickupPage(): JSX.Element {
     () => scopedAuthorizations.filter((i) => i.status === 'APPROVED').length,
     [scopedAuthorizations],
   );
-
-  const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
-
-  const todayEventsCount = useMemo(() => {
-    return scopedAllEvents.filter((e) => {
-      try {
-        return new Date(e.occurredAt).toISOString().slice(0, 10) === todayStr;
-      } catch {
-        return false;
-      }
-    }).length;
-  }, [scopedAllEvents, todayStr]);
-
-  const totalEventsCount = scopedAllEvents.length;
 
   // Filtrelenmiş yetkiler (Sınıf ve Durum Filtreli)
   const items = useMemo(() => {
@@ -533,6 +512,7 @@ export function PickupPage(): JSX.Element {
             : 'Öğrenci teslim alma yetkileri, veli talepleri ve gün sonu kapı teslimat günlüğü.'
         }
         icon={ShieldCheck}
+        colorTheme="teal"
         actions={
           <>
             {canOperate && (
@@ -578,202 +558,216 @@ export function PickupPage(): JSX.Element {
         }
       />
 
-      {/* Dokunsal Özellik & Güvenlik KPI Kartları */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab('AUTHORIZATIONS');
-            setFilter('PENDING');
-          }}
-          className={`rounded-3xl border-2 text-left p-4.5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
-            activeTab === 'AUTHORIZATIONS' && filter === 'PENDING'
-              ? 'border-amber-600 bg-amber-600 text-white shadow-[0_4px_0_0_#92400e,0_8px_20px_-2px_rgba(217,119,6,0.35)] font-bold'
-              : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-amber-900 dark:text-amber-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
-          }`}
-        >
-          <p
-            className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-              activeTab === 'AUTHORIZATIONS' && filter === 'PENDING'
-                ? 'text-amber-100'
-                : 'text-amber-800 dark:text-amber-300'
-            }`}
-          >
-            <Clock className="w-3.5 h-3.5" />
-            <span>Onay Bekleyenler</span>
-          </p>
-          <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{pendingCount}</p>
-          <p
-            className={`text-[11px] mt-1 font-medium truncate ${
-              activeTab === 'AUTHORIZATIONS' && filter === 'PENDING'
-                ? 'text-amber-100'
-                : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            Veli onay talepleri
-          </p>
-        </button>
+      {/* Bütünleşik Konsol Kartı (Entegre Sekmeler & Filtre Çubuğu) */}
+      <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-4 sm:p-5 shadow-2xs space-y-4">
+        {/* Üst Satır: Ana Sekmeler ve Sınıf Filtresi */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="overflow-x-auto pb-0.5">
+            <TactileTabs<'AUTHORIZATIONS' | 'EVENTS'>
+              tabs={[
+                {
+                  id: 'AUTHORIZATIONS',
+                  label: 'Teslimat Yetkileri',
+                  count: scopedAuthorizations.length,
+                  icon: Lock,
+                  activeVariant: 'teal',
+                },
+                {
+                  id: 'EVENTS',
+                  label: 'Teslimat Günlüğü & Kütük',
+                  count: scopedEvents.length,
+                  icon: History,
+                  activeVariant: 'teal',
+                },
+              ]}
+              activeId={activeTab}
+              onChange={setActiveTab}
+              ariaLabel="Teslimat Ana Sekmeleri"
+            />
+          </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab('AUTHORIZATIONS');
-            setFilter('APPROVED');
-          }}
-          className={`rounded-3xl border-2 text-left p-4.5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
-            activeTab === 'AUTHORIZATIONS' && filter === 'APPROVED'
-              ? 'border-emerald-700 bg-emerald-700 text-white shadow-[0_4px_0_0_#064e3b,0_8px_20px_-2px_rgba(5,150,105,0.35)] font-bold'
-              : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-emerald-900 dark:text-emerald-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
-          }`}
-        >
-          <p
-            className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-              activeTab === 'AUTHORIZATIONS' && filter === 'APPROVED'
-                ? 'text-emerald-100'
-                : 'text-emerald-800 dark:text-emerald-300'
-            }`}
-          >
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Yetkili / Onaylı</span>
-          </p>
-          <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{approvedCount}</p>
-          <p
-            className={`text-[11px] mt-1 font-medium truncate ${
-              activeTab === 'AUTHORIZATIONS' && filter === 'APPROVED'
-                ? 'text-emerald-100'
-                : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            Aktif teslim yetkilileri
-          </p>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab('EVENTS');
-            setEventDatePreset('TODAY');
-          }}
-          className={`rounded-3xl border-2 text-left p-4.5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
-            activeTab === 'EVENTS' && eventDatePreset === 'TODAY'
-              ? 'border-[#0f766e] bg-[#115e59] text-white shadow-[0_4px_0_0_#042f2e,0_8px_20px_-2px_rgba(17,94,89,0.35)] font-bold'
-              : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-teal-900 dark:text-teal-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
-          }`}
-        >
-          <p
-            className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-              activeTab === 'EVENTS' && eventDatePreset === 'TODAY'
-                ? 'text-teal-100'
-                : 'text-teal-800 dark:text-teal-300'
-            }`}
-          >
-            <UserCheck className="w-3.5 h-3.5" />
-            <span>Bugün Teslim Edilen</span>
-          </p>
-          <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{todayEventsCount}</p>
-          <p
-            className={`text-[11px] mt-1 font-medium truncate ${
-              activeTab === 'EVENTS' && eventDatePreset === 'TODAY'
-                ? 'text-teal-100'
-                : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            Bugün kapıdan çıkanlar
-          </p>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab('EVENTS');
-            setEventDatePreset('ALL');
-          }}
-          className={`rounded-3xl border-2 text-left p-4.5 transition-all duration-150 ease-out cursor-pointer active:translate-y-[3px] active:shadow-none ${
-            activeTab === 'EVENTS' && eventDatePreset === 'ALL'
-              ? 'border-indigo-800 bg-indigo-800 text-white shadow-[0_4px_0_0_#1e1b4b,0_8px_20px_-2px_rgba(67,56,202,0.35)] font-bold'
-              : 'border-[#DDD4C4] dark:border-slate-800/90 bg-white dark:bg-[#131B2E] text-indigo-900 dark:text-indigo-300 shadow-[0_4px_0_0_#D5CBB9,0_8px_20px_-2px_rgba(45,38,30,0.06)] dark:shadow-[0_4px_0_0_#1E293B,0_8px_20px_-2px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_0_0_#D5CBB9,0_14px_26px_-3px_rgba(45,38,30,0.10)] dark:hover:shadow-[0_6px_0_0_#1E293B,0_14px_26px_-3px_rgba(0,0,0,0.5)] hover:-translate-y-1'
-          }`}
-        >
-          <p
-            className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-              activeTab === 'EVENTS' && eventDatePreset === 'ALL'
-                ? 'text-indigo-100'
-                : 'text-indigo-800 dark:text-indigo-300'
-            }`}
-          >
-            <History className="w-3.5 h-3.5" />
-            <span>Kütük Arşivi</span>
-          </p>
-          <p className="text-3xl font-black mt-2 tracking-tight tabular-nums">{totalEventsCount}</p>
-          <p
-            className={`text-[11px] mt-1 font-medium truncate ${
-              activeTab === 'EVENTS' && eventDatePreset === 'ALL'
-                ? 'text-indigo-100'
-                : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            Resmi teslim kütük kayıtları
-          </p>
-        </button>
-      </div>
-
-      {/* Main Tabs */}
-      <div className="pb-3 border-b border-[#DDD4C4]/60 dark:border-slate-800 space-y-3">
-        <TactileTabs<'AUTHORIZATIONS' | 'EVENTS'>
-          tabs={[
-            {
-              id: 'AUTHORIZATIONS',
-              label: 'Teslimat Yetkileri',
-              count: items.length,
-              icon: Lock,
-              activeVariant: 'teal',
-            },
-            {
-              id: 'EVENTS',
-              label: 'Teslimat Günlüğü & Kütük',
-              count: filteredEvents.length,
-              icon: History,
-              activeVariant: 'teal',
-            },
-          ]}
-          activeId={activeTab}
-          onChange={setActiveTab}
-          ariaLabel="Teslimat Ana Sekmeleri"
-        />
-
-        {/* Ortak Sınıf Filtresi Sekmeleri (!isParent) */}
-        {!isParent && displayClassrooms.length > 0 && (
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 py-1">
-            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-1 shrink-0 flex items-center gap-1">
-              <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
-              Sınıf:
-            </span>
-            {!isTeacher && (
-              <button
-                type="button"
-                onClick={() => setSelectedClassroomId('ALL')}
-                className={`px-3 py-1.5 text-xs font-bold shrink-0 rounded-xl transition cursor-pointer ${
-                  selectedClassroomId === 'ALL' ? 'btn-tactile-teal' : 'btn-tactile-secondary'
-                }`}
+          {!isParent && displayClassrooms.length > 0 && (
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0 flex items-center gap-1">
+                <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                Sınıf:
+              </span>
+              <select
+                value={selectedClassroomId}
+                onChange={(e) => setSelectedClassroomId(e.target.value)}
+                className="text-xs font-bold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl px-3 py-1.5 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs cursor-pointer min-w-[180px]"
+                aria-label="Sınıf Filtresi"
               >
-                Tüm Sınıflar
-              </button>
-            )}
-            {displayClassrooms.map((cls) => {
-              const active = selectedClassroomId === cls.id;
-              return (
-                <button
-                  key={cls.id}
-                  type="button"
-                  onClick={() => setSelectedClassroomId(cls.id)}
-                  className={`px-3 py-1.5 text-xs font-bold shrink-0 rounded-xl transition cursor-pointer ${
-                    active ? 'btn-tactile-teal' : 'btn-tactile-secondary'
-                  }`}
+                {!isTeacher && <option value="ALL">🏫 Tüm Sınıflar & Kreş</option>}
+                {displayClassrooms.map((cls) => (
+                  <option key={cls.id} value={cls.id}>
+                    {cls.name} {cls.ageGroup ? `(${cls.ageGroup})` : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+
+        {/* Alt Satır: Sekmeye Özel Entegre Filtreler */}
+        {activeTab === 'AUTHORIZATIONS' ? (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="overflow-x-auto pb-0.5">
+              <TactileTabs<'ALL' | PickupAuthorizationStatus>
+                tabs={[
+                  { id: 'ALL', label: 'Tümü' },
+                  {
+                    id: 'PENDING',
+                    label: STATUS_LABEL['PENDING'],
+                    count: pendingCount,
+                    activeVariant: 'amber',
+                  },
+                  {
+                    id: 'APPROVED',
+                    label: STATUS_LABEL['APPROVED'],
+                    count: approvedCount,
+                    activeVariant: 'teal',
+                  },
+                  {
+                    id: 'REJECTED',
+                    label: STATUS_LABEL['REJECTED'],
+                    activeVariant: 'rose',
+                  },
+                ]}
+                activeId={filter}
+                onChange={setFilter}
+                ariaLabel="Yetki Durumu Filtresi"
+              />
+            </div>
+
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              Toplam{' '}
+              <strong className="text-slate-900 dark:text-white font-bold">{items.length}</strong>{' '}
+              yetkili listeleniyor
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3.5">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 flex-wrap">
+              {/* Tarih Presets */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 mr-1 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                  <span>Kütük Dönemi:</span>
+                </span>
+                {(
+                  [
+                    { id: 'TODAY', label: 'Bugün' },
+                    { id: 'YESTERDAY', label: 'Dün' },
+                    { id: 'LAST_7_DAYS', label: 'Son 7 Gün' },
+                    { id: 'THIS_MONTH', label: 'Bu Ay' },
+                    { id: 'ALL', label: 'Tüm Arşiv' },
+                    { id: 'CUSTOM', label: 'Özel Tarih' },
+                  ] as const
+                ).map((p) => {
+                  const isActive = eventDatePreset === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setEventDatePreset(p.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer active:translate-y-[2px] ${
+                        isActive
+                          ? 'bg-teal-700 text-white shadow-2xs font-extrabold'
+                          : 'bg-[#FCFAF7] dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-[#DDD4C4] dark:border-slate-800 hover:border-teal-400'
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Öğrenci Filtresi */}
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                  <span>Öğrenci:</span>
+                </span>
+                <select
+                  value={eventStudentFilter}
+                  onChange={(e) => setEventStudentFilter(e.target.value)}
+                  className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-2xl px-3 py-1.5 focus:outline-hidden shadow-2xs cursor-pointer"
                 >
-                  {cls.name}
+                  <option value="ALL">
+                    {isParent
+                      ? `Çocuklarım (${scopedStudents.length})`
+                      : selectedClassroomId !== 'ALL'
+                        ? `Sınıftaki Öğrenciler (${eventsScopedStudents.length})`
+                        : `Tüm Öğrenciler (${students.length})`}
+                  </option>
+                  {eventsScopedStudents.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.firstName} {s.lastName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Özel Tarih Seçiciler (Yalnızca 'CUSTOM' seçildiğinde açılır) */}
+            {eventDatePreset === 'CUSTOM' && (
+              <div className="flex items-center gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    Başlangıç:
+                  </span>
+                  <input
+                    type="date"
+                    value={eventStartDate}
+                    onChange={(e) => setEventStartDate(e.target.value)}
+                    className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-hidden shadow-2xs cursor-pointer"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    Bitiş:
+                  </span>
+                  <input
+                    type="date"
+                    value={eventEndDate}
+                    onChange={(e) => setEventEndDate(e.target.value)}
+                    className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-hidden shadow-2xs cursor-pointer"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void loadEventsForRange()}
+                  className="btn-tactile-teal px-3 py-1.5 text-xs font-bold"
+                >
+                  Filtreyi Uygula
                 </button>
-              );
-            })}
+              </div>
+            )}
+
+            {/* Arama Kutusu ve Sayaç */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+              <div className="relative flex-1 max-w-sm">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={eventSearchQuery}
+                  onChange={(e) => setEventSearchQuery(e.target.value)}
+                  placeholder="Teslim alan kişi, telefon veya güvenlik notu ara..."
+                  className="w-full pl-10 pr-3.5 py-2 bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 rounded-2xl text-xs font-medium text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-700 transition shadow-2xs"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                <span>
+                  Toplam{' '}
+                  <strong className="text-slate-900 dark:text-white font-bold">
+                    {filteredEvents.length}
+                  </strong>{' '}
+                  teslimat kütüğü kaydı listeleniyor
+                </span>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -781,26 +775,6 @@ export function PickupPage(): JSX.Element {
       {/* TAB 1: AUTHORIZATIONS */}
       {activeTab === 'AUTHORIZATIONS' && (
         <div className="space-y-4">
-          {/* Status Filter Bar */}
-          <div className="overflow-x-auto pb-1">
-            <TactileTabs<'ALL' | PickupAuthorizationStatus>
-              tabs={[
-                { id: 'ALL', label: 'Tümü' },
-                {
-                  id: 'PENDING',
-                  label: STATUS_LABEL['PENDING'],
-                  activeVariant: 'amber',
-                  badgeCls: 'bg-amber-100 text-amber-900 font-bold',
-                },
-                { id: 'APPROVED', label: STATUS_LABEL['APPROVED'], activeVariant: 'teal' },
-                { id: 'REJECTED', label: STATUS_LABEL['REJECTED'], activeVariant: 'rose' },
-              ]}
-              activeId={filter}
-              onChange={setFilter}
-              ariaLabel="Yetki Durumu Filtresi"
-            />
-          </div>
-
           {loading ? (
             <div className="py-20 text-center bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-3 border-teal-700 dark:border-teal-400 border-t-transparent mb-3" />
@@ -824,10 +798,7 @@ export function PickupPage(): JSX.Element {
                 const teacher = teacherAssignment
                   ? teachers.find((u) => u.id === teacherAssignment.teacherId)
                   : null;
-                const teacherName = teacher
-                  ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() ||
-                    teacher.email
-                  : null;
+                const teacherName = teacher ? getTeacherDisplayName(teacher) : null;
                 const parentName =
                   student?.passport?.motherName ||
                   student?.passport?.fatherName ||
@@ -992,130 +963,6 @@ export function PickupPage(): JSX.Element {
             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
               Kapıdan teslim edilen tüm öğrencilerin doğrulama ve geçmiş kütük arşivi.
             </span>
-          </div>
-
-          {/* Gelişmiş Tarih, Öğrenci ve Arama Filtre Çubuğu */}
-          <div className="bg-white dark:bg-[#131B2E] p-4.5 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] space-y-3.5">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 flex-wrap">
-              {/* Tarih Presets (Dönem Seçimi) */}
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 mr-1 flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
-                  <span>Kütük Dönemi:</span>
-                </span>
-                {(
-                  [
-                    { id: 'TODAY', label: 'Bugün' },
-                    { id: 'YESTERDAY', label: 'Dün' },
-                    { id: 'LAST_7_DAYS', label: 'Son 7 Gün' },
-                    { id: 'THIS_MONTH', label: 'Bu Ay' },
-                    { id: 'ALL', label: 'Tüm Arşiv' },
-                    { id: 'CUSTOM', label: 'Özel Tarih' },
-                  ] as const
-                ).map((p) => {
-                  const isActive = eventDatePreset === p.id;
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => setEventDatePreset(p.id)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer active:translate-y-[2px] ${
-                        isActive
-                          ? 'bg-teal-700 text-white shadow-2xs font-extrabold'
-                          : 'bg-[#FCFAF7] dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-[#DDD4C4] dark:border-slate-800 hover:border-teal-400'
-                      }`}
-                    >
-                      {p.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Öğrenci Filtresi */}
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
-                  <span>Öğrenci:</span>
-                </span>
-                <select
-                  value={eventStudentFilter}
-                  onChange={(e) => setEventStudentFilter(e.target.value)}
-                  className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-2xl px-3 py-2 focus:outline-hidden shadow-2xs cursor-pointer"
-                >
-                  <option value="ALL">
-                    {isParent
-                      ? `Çocuklarım (${scopedStudents.length})`
-                      : selectedClassroomId !== 'ALL'
-                        ? `Sınıftaki Öğrenciler (${eventsScopedStudents.length})`
-                        : `Tüm Öğrenciler (${students.length})`}
-                  </option>
-                  {eventsScopedStudents.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.firstName} {s.lastName}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Özel Tarih Seçiciler (Yalnızca 'CUSTOM' seçildiğinde açılır) */}
-            {eventDatePreset === 'CUSTOM' && (
-              <div className="flex items-center gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
-                    Başlangıç:
-                  </span>
-                  <input
-                    type="date"
-                    value={eventStartDate}
-                    onChange={(e) => setEventStartDate(e.target.value)}
-                    className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-hidden shadow-2xs cursor-pointer"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
-                    Bitiş:
-                  </span>
-                  <input
-                    type="date"
-                    value={eventEndDate}
-                    onChange={(e) => setEventEndDate(e.target.value)}
-                    className="bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-hidden shadow-2xs cursor-pointer"
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => void loadEventsForRange()}
-                  className="btn-tactile-teal px-3 py-1.5 text-xs font-bold"
-                >
-                  Filtreyi Uygula
-                </button>
-              </div>
-            )}
-
-            {/* Arama Kutusu ve Sayaç */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80">
-              <div className="relative flex-1 max-w-sm">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={eventSearchQuery}
-                  onChange={(e) => setEventSearchQuery(e.target.value)}
-                  placeholder="Teslim alan kişi, telefon veya güvenlik notu ara..."
-                  className="w-full pl-10 pr-3.5 py-2 bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 rounded-2xl text-xs font-medium text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-700 transition shadow-2xs"
-                />
-              </div>
-
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-                <span>
-                  Toplam{' '}
-                  <strong className="text-slate-900 dark:text-white font-bold">
-                    {filteredEvents.length}
-                  </strong>{' '}
-                  teslimat kütüğü kaydı listeleniyor
-                </span>
-              </div>
-            </div>
           </div>
 
           {eventsLoading ? (

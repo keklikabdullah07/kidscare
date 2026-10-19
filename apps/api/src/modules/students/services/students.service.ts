@@ -51,7 +51,6 @@ export class StudentsService {
     return rows.map((row) => Student.fromPrisma(row));
   }
 
-
   async findOne(tenantId: string, id: string): Promise<Student> {
     const found = await this.repo.findById(tenantId, id);
     if (!found) throw new NotFoundException(`Student ${id} not found`);
@@ -61,13 +60,21 @@ export class StudentsService {
   async findByParent(tenantId: string, parentUserId: string): Promise<Student[]> {
     const all = await this.repo.findMany(tenantId);
     return all
-      .filter((s) => s.isActive && s.parentId === parentUserId)
+      .filter((s) => {
+        if (!s.isActive) return false;
+        if (s.parentId === parentUserId) return true;
+        const pass = (s.passport as Record<string, unknown> | null) ?? {};
+        return pass['secondaryParentId'] === parentUserId;
+      })
       .map((s) => Student.fromPrisma(s));
   }
 
   async create(tenantId: string, input: StudentCreate): Promise<Student> {
     if (input.parentId) {
       await this.usersService.assertParentUser(tenantId, input.parentId);
+    }
+    if (input.secondaryParentId) {
+      await this.usersService.assertParentUser(tenantId, input.secondaryParentId);
     }
 
     const created = await this.repo.insert(tenantId, {
@@ -81,6 +88,9 @@ export class StudentsService {
         ...(input.identityNumber ? { identityNumber: input.identityNumber } : {}),
         ...(input.motherName ? { motherName: input.motherName } : {}),
         ...(input.fatherName ? { fatherName: input.fatherName } : {}),
+        ...(input.secondaryParentId !== undefined
+          ? { secondaryParentId: input.secondaryParentId }
+          : {}),
       },
       parentId: input.parentId ?? null,
       classroomId: input.classroomId ?? null,
@@ -93,14 +103,34 @@ export class StudentsService {
     const existing = await this.repo.findById(tenantId, id);
     if (!existing) throw new NotFoundException(`Student ${id} not found`);
 
+    if (input.secondaryParentId) {
+      await this.usersService.assertParentUser(tenantId, input.secondaryParentId);
+    }
+
     const data: Prisma.StudentUpdateInput = {};
     if (input.firstName !== undefined) data.firstName = input.firstName;
     if (input.lastName !== undefined) data.lastName = input.lastName;
     if (input.dateOfBirth !== undefined) data.dateOfBirth = new Date(input.dateOfBirth);
     if (input.gender !== undefined) data.gender = input.gender;
     if (input.notes !== undefined) data.notes = input.notes;
-    if (input.passport !== undefined)
-      data.passport = input.passport as unknown as Prisma.InputJsonValue;
+
+    // Merge passport if updated or if secondaryParentId is explicitly provided
+    if (input.passport !== undefined || input.secondaryParentId !== undefined) {
+      const existingPassport = (existing.passport as Record<string, unknown> | null) ?? {};
+      const newPassport =
+        input.passport !== undefined
+          ? ((input.passport as Record<string, unknown> | null) ?? {})
+          : existingPassport;
+
+      const mergedPassport = {
+        ...newPassport,
+        ...(input.secondaryParentId !== undefined
+          ? { secondaryParentId: input.secondaryParentId }
+          : {}),
+      };
+      data.passport = mergedPassport;
+    }
+
     if (input.isActive !== undefined) data.isActive = input.isActive;
     if (input.classroomId !== undefined) {
       if (input.classroomId) {

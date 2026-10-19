@@ -12,15 +12,29 @@ import {
   CheckCircle2,
   Calendar,
   Search,
-  AlertCircle,
 } from 'lucide-react';
-import type { Classroom, IncidentCategory, IncidentRecord, Student } from '@kidscare/shared-types';
+import type {
+  Classroom,
+  IncidentCategory,
+  IncidentRecord,
+  Student,
+  User,
+} from '@kidscare/shared-types';
 import { createIncident, listIncidents, updateIncident } from '../../api/incidents';
 import { listStudents } from '../../api/students';
 import { listClassrooms } from '../../api/classrooms';
+import { listUsers } from '../../api/users';
 import { useAuth } from '../auth/AuthContext';
 import { useToast } from '../../components/Toast';
-import { EmptyState, PageHeader, StatCard, TactileButton, TactileTabs, type TactileTabItem } from '../../components/ui';
+import {
+  EmptyState,
+  PageHeader,
+  TactileButton,
+  TactileTabs,
+  type TactileTabItem,
+} from '../../components/ui';
+import { StudentContextBadges } from '../../components/ui/StudentContextBadges';
+import { getParentDisplayName, getTeacherDisplayName } from '../../utils/userDisplay';
 
 type TabKey = 'ALL' | 'PENDING_PARENT' | 'INJURIES' | 'ILLNESS' | 'BEHAVIOR';
 
@@ -98,6 +112,8 @@ export function IncidentsPage(): JSX.Element {
   const [items, setItems] = useState<IncidentRecord[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [teachers, setTeachers] = useState<User[]>([]);
+  const [parents, setParents] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -110,6 +126,10 @@ export function IncidentsPage(): JSX.Element {
   const [activeTab, setActiveTab] = useState<TabKey>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStudentFilter, setSelectedStudentFilter] = useState('');
+  const [selectedClassroomId, setSelectedClassroomId] = useState<string>('ALL');
+  const [selectedDate, setSelectedDate] = useState<string>(() =>
+    new Date().toISOString().slice(0, 10),
+  );
 
   // Create form state
   const [fStudentId, setFStudentId] = useState('');
@@ -120,17 +140,44 @@ export function IncidentsPage(): JSX.Element {
   const [fParentNotified, setFParentNotified] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  function getStudentContext(studentId?: string | null, reportedById?: string | null) {
+    if (!studentId) return { classroomName: null, teacherName: null, parentName: null };
+    const student = students.find((s) => s.id === studentId);
+    if (!student) return { classroomName: null, teacherName: null, parentName: null };
+    const cls = classrooms.find((c) => c.id === student.classroomId);
+    const reporter = reportedById ? teachers.find((u) => u.id === reportedById) : null;
+    const teacherAssignment = cls?.teachers?.[0];
+    const classTeacher = teacherAssignment
+      ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+      : null;
+    const teacher = reporter || classTeacher;
+    const teacherName = teacher ? getTeacherDisplayName(teacher) : null;
+    const parentUser = student.parentId ? parents.find((u) => u.id === student.parentId) : null;
+    const parentUserFullName = parentUser ? getParentDisplayName(parentUser) : null;
+    const parentName =
+      parentUserFullName ||
+      student.passport?.motherName ||
+      student.passport?.fatherName ||
+      student.passport?.emergencyContacts?.[0]?.name ||
+      null;
+    return { classroomName: cls?.name ?? null, teacherName, parentName };
+  }
+
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes, classroomsRes] = await Promise.all([
+      const [list, studentsRes, classroomsRes, teachersRes, parentsRes] = await Promise.all([
         listIncidents(),
         listStudents().catch(() => []),
         listClassrooms().catch(() => []),
+        listUsers('TEACHER').catch(() => []),
+        listUsers('PARENT').catch(() => []),
       ]);
       setItems(list);
       setStudents(studentsRes);
       setClassrooms(classroomsRes);
+      setTeachers(teachersRes);
+      setParents(parentsRes);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Kayıtlar yüklenemedi', 'error');
     } finally {
@@ -201,7 +248,6 @@ export function IncidentsPage(): JSX.Element {
       ).length,
     [scopedItems],
   );
-  const notifiedCount = useMemo(() => scopedItems.filter((i) => i.parentNotified).length, [scopedItems]);
 
   // Filtered Items (Öğretmen için scopedItems üzerinden filtrelenir)
   const filteredItems = useMemo(() => {
@@ -222,7 +268,19 @@ export function IncidentsPage(): JSX.Element {
       // 2. Student filter
       if (selectedStudentFilter && i.studentId !== selectedStudentFilter) return false;
 
-      // 3. Search query filter
+      // 3. Classroom filter
+      if (selectedClassroomId !== 'ALL') {
+        const st = getStudent(i.studentId);
+        if (st?.classroomId !== selectedClassroomId) return false;
+      }
+
+      // 4. Date filter (if selected)
+      if (selectedDate) {
+        const itemDate = new Date(i.occurredAt).toISOString().slice(0, 10);
+        if (itemDate !== selectedDate) return false;
+      }
+
+      // 5. Search query filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const sName = studentName(i.studentId).toLowerCase();
@@ -241,7 +299,15 @@ export function IncidentsPage(): JSX.Element {
 
       return true;
     });
-  }, [scopedItems, activeTab, selectedStudentFilter, searchQuery, students]);
+  }, [
+    scopedItems,
+    activeTab,
+    selectedStudentFilter,
+    selectedClassroomId,
+    selectedDate,
+    searchQuery,
+    students,
+  ]);
 
   async function submitCreate(e: FormEvent): Promise<void> {
     e.preventDefault();
@@ -328,25 +394,6 @@ export function IncidentsPage(): JSX.Element {
         }
         icon={AlertTriangle}
         colorTheme="rose"
-        badges={
-          <>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 font-bold text-[11px] border border-slate-200 dark:border-slate-700">
-              {totalCount} Toplam Tutanak
-            </span>
-            {pendingNotificationCount > 0 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 font-bold text-[11px] border border-amber-300 dark:border-amber-700">
-                <AlertCircle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                {pendingNotificationCount} Veli Bildirimi Bekliyor
-              </span>
-            )}
-            {injuryCount > 0 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 font-bold text-[11px] border border-rose-300 dark:border-rose-700">
-                <Bandage className="w-3 h-3 text-rose-600 dark:text-rose-400" />
-                {injuryCount} Yaralanma / Revir
-              </span>
-            )}
-          </>
-        }
         actions={
           <>
             <TactileButton
@@ -369,46 +416,14 @@ export function IncidentsPage(): JSX.Element {
               title="Yeni Olay Tutanağı Kaydet"
             >
               <Plus className="w-4 h-4 text-rose-700 dark:text-rose-400" />
-              <span>+ Yeni Tutanak</span>
+              <span>Yeni Tutanak</span>
             </TactileButton>
           </>
         }
       />
 
-      {/* Dokunsal KPI Özet Sayaçları */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Toplam Tutanak"
-          value={totalCount}
-          subtitle="Tüm kayıtlı olaylar"
-          icon={FileText}
-          variant="blue"
-        />
-        <StatCard
-          title="Bildirim Bekleyenler"
-          value={pendingNotificationCount}
-          subtitle="Veliye henüz bildirilmemiş açık olaylar"
-          icon={AlertCircle}
-          variant="amber"
-        />
-        <StatCard
-          title="Düşme & Yaralanma"
-          value={injuryCount}
-          subtitle="Fiziksel müdahale gerektirenler"
-          icon={Bandage}
-          variant="rose"
-        />
-        <StatCard
-          title="Veliye Bildirildi"
-          value={notifiedCount}
-          subtitle="Ailesine iletilmiş kayıtlar"
-          icon={CheckCircle2}
-          variant="emerald"
-        />
-      </div>
-
-      {/* Arama, Filtreleme ve Sekmeler */}
-      <div className="bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl p-4 shadow-xs space-y-3.5">
+      {/* Bütünleşik Konsol Kartı (Sekmeler & Filtreler) */}
+      <div className="bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-2xs space-y-4">
         {/* Dokunsal Sekmeler (Kapsayıcı Ray & Tıklanabilir 3D Butonlar) */}
         <div className="overflow-x-auto pb-1 border-b border-slate-100 dark:border-slate-800">
           <TactileTabs
@@ -419,9 +434,9 @@ export function IncidentsPage(): JSX.Element {
           />
         </div>
 
-        {/* Arama & Öğrenci Filtresi */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="sm:col-span-2 relative">
+        {/* Arama, Sınıf ve Öğrenci Filtreleri */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div className="md:col-span-2 relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
@@ -434,9 +449,25 @@ export function IncidentsPage(): JSX.Element {
 
           <div>
             <select
+              value={selectedClassroomId}
+              onChange={(e) => setSelectedClassroomId(e.target.value)}
+              aria-label="Sınıf Filtresi"
+              className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 cursor-pointer font-medium"
+            >
+              <option value="ALL">🏫 Tüm Sınıflar</option>
+              {(isTeacher ? teacherClassrooms : classrooms).map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <select
               value={selectedStudentFilter}
               onChange={(e) => setSelectedStudentFilter(e.target.value)}
-              className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+              className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 cursor-pointer font-medium"
             >
               <option value="">
                 {isTeacher
@@ -449,6 +480,52 @@ export function IncidentsPage(): JSX.Element {
                 </option>
               ))}
             </select>
+          </div>
+        </div>
+
+        {/* Tarih Filtresi Çubuğu (Varsayılan: Bugün) */}
+        <div className="flex items-center gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800 flex-wrap">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300">
+            <Calendar className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+            <span>Tarih:</span>
+          </div>
+
+          <div className="relative">
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              aria-label="Olay Tarihi Filtresi"
+              className="text-xs px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-amber-500/20 cursor-pointer"
+            />
+          </div>
+
+          <TactileButton
+            type="button"
+            variant={selectedDate === new Date().toISOString().slice(0, 10) ? 'amber' : 'secondary'}
+            size="sm"
+            onClick={() => setSelectedDate(new Date().toISOString().slice(0, 10))}
+            title="Bugünün kayıtlarını göster"
+          >
+            Bugün
+          </TactileButton>
+
+          {selectedDate && (
+            <TactileButton
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => setSelectedDate('')}
+              title="Tüm tarihleri göster"
+            >
+              Tüm Tarihler
+            </TactileButton>
+          )}
+
+          <div className="ml-auto text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+            Gösterilen:{' '}
+            <strong className="text-slate-800 dark:text-slate-200">{filteredItems.length}</strong> /{' '}
+            {scopedItems.length} tutanak
           </div>
         </div>
       </div>
@@ -490,6 +567,7 @@ export function IncidentsPage(): JSX.Element {
             const meta = CATEGORY_META[i.category] ?? CATEGORY_META.DIGER;
             const CategoryIcon = meta.icon;
             const student = getStudent(i.studentId);
+            const context = getStudentContext(i.studentId, i.reportedById);
 
             return (
               <div
@@ -522,6 +600,13 @@ export function IncidentsPage(): JSX.Element {
                             {studentName(i.studentId)}
                           </span>
                         </div>
+                        {/* Sınıf, Öğretmen ve Veli Bağlamı */}
+                        <StudentContextBadges
+                          classroomName={context.classroomName}
+                          teacherName={context.teacherName}
+                          parentName={context.parentName}
+                          className="mt-1.5"
+                        />
                       </div>
                     </div>
 

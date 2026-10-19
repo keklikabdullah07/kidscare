@@ -15,6 +15,7 @@ export type StudentPassport = {
   identityNumber?: string | undefined;
   motherName?: string | undefined;
   fatherName?: string | undefined;
+  secondaryParentId?: string | null | undefined;
   bloodType: BloodType;
   allergies: string[];
   dietaryRestrictions: string[];

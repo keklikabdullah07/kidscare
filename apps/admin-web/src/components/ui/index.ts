@@ -5,5 +5,6 @@ export * from './EmptyState';
 export * from './StatCard';
 export * from './TactileButton';
 export * from './TactileTabs';
+export * from './TactileDateNavigator';
 export * from './MediaUrlField';
 export * from './StudentContextBadges';

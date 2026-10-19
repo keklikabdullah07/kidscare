@@ -34,6 +34,7 @@ import { TactileButton } from '../../components/ui/TactileButton';
 import { Badge } from '../../components/ui/Badge';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
+import { getParentDisplayName } from '../../utils/userDisplay';
 import type {
   BillingInvoice,
   CreateBillingPlanInput,
@@ -442,7 +443,9 @@ export function FinancePage(): JSX.Element {
           }
           actions={
             <div className="bg-[#FAF9F6] dark:bg-slate-900/80 border border-[#DDD4C4] dark:border-slate-800 px-4 py-2 rounded-2xl shrink-0 text-right">
-              <span className="text-[11px] font-bold text-slate-500 uppercase block">Kalan Toplam Borç</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase block">
+                Kalan Toplam Borç
+              </span>
               <div className="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400 mt-0.5">
                 {formatCurrency(totalRemaining)}
               </div>
@@ -741,10 +744,10 @@ export function FinancePage(): JSX.Element {
                           <span>Dönem: {inv.period}</span>
                           <span>•</span>
                           <span>Vade Tarihi: {dueDate.toLocaleDateString('tr-TR')}</span>
-                          {inv.student?.parent?.email && (
+                          {inv.student?.parent && (
                             <>
                               <span>•</span>
-                              <span>Veli: {inv.student.parent.email}</span>
+                              <span>Veli: {getParentDisplayName(inv.student.parent)}</span>
                             </>
                           )}
                         </div>

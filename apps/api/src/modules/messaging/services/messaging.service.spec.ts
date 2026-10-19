@@ -22,7 +22,13 @@ const baseConversation: ConversationRow = {
   updatedAt: new Date('2026-09-15T10:00:00Z'),
   participants: [{ userId: 'parent-1' }, { userId: 'admin-1' }],
   student: { id: 's-1', firstName: 'Ada', lastName: 'Yılmaz' },
-  createdBy: { id: 'parent-1', email: 'parent@demo.test', role: 'PARENT' },
+  createdBy: {
+    id: 'parent-1',
+    email: 'parent@demo.test',
+    role: 'PARENT',
+    firstName: 'Selin',
+    lastName: 'Yılmaz',
+  },
 };
 
 const baseMessage: MessageRow = {
@@ -34,7 +40,13 @@ const baseMessage: MessageRow = {
   isCritical: false,
   createdAt: new Date('2026-09-15T10:00:00Z'),
   updatedAt: new Date('2026-09-15T10:00:00Z'),
-  sender: { id: 'parent-1', email: 'parent@demo.test', role: 'PARENT' },
+  sender: {
+    id: 'parent-1',
+    email: 'parent@demo.test',
+    role: 'PARENT',
+    firstName: 'Selin',
+    lastName: 'Yılmaz',
+  },
 };
 
 const baseParentRequest: ParentRequestRow = {
@@ -52,7 +64,13 @@ const baseParentRequest: ParentRequestRow = {
   createdAt: new Date('2026-09-15T10:00:00Z'),
   updatedAt: new Date('2026-09-15T10:00:00Z'),
   student: { id: 's-1', firstName: 'Ada', lastName: 'Yılmaz' },
-  parent: { id: 'parent-1', email: 'parent@demo.test', role: 'PARENT' },
+  parent: {
+    id: 'parent-1',
+    email: 'parent@demo.test',
+    role: 'PARENT',
+    firstName: 'Selin',
+    lastName: 'Yılmaz',
+  },
 };
 
 describe('MessagingService', () => {

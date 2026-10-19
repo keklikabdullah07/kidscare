@@ -13,8 +13,15 @@ import {
   Check,
   Trash2,
   AlertTriangle,
+  History,
 } from 'lucide-react';
-import type { MedicationRecord, StandaloneMedicationStatus, Student } from '@kidscare/shared-types';
+import type {
+  Classroom,
+  MedicationRecord,
+  StandaloneMedicationStatus,
+  Student,
+  User,
+} from '@kidscare/shared-types';
 import {
   listMedicationRecords,
   createMedicationRecord,
@@ -25,6 +32,8 @@ import {
   deleteMedicationRecord,
 } from '../../api/medication';
 import { listStudents } from '../../api/students';
+import { listClassrooms } from '../../api/classrooms';
+import { listUsers } from '../../api/users';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { PromptModal } from '../../components/ui/PromptModal';
@@ -33,6 +42,9 @@ import { StatCard } from '../../components/ui/StatCard';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
 import { PageHeader } from '../../components/ui/PageHeader';
+import { StudentContextBadges } from '../../components/ui/StudentContextBadges';
+import { getParentDisplayName, getTeacherDisplayName } from '../../utils/userDisplay';
+import { MedicationHistoryModal } from './MedicationHistoryModal';
 
 type TabKey = 'ALL' | 'REQUESTED' | 'TODAY' | 'GIVEN' | 'ARCHIVED';
 
@@ -76,6 +88,9 @@ export function MedicationPage(): JSX.Element {
 
   const [records, setRecords] = useState<MedicationRecord[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [teachers, setTeachers] = useState<User[]>([]);
+  const [parents, setParents] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const { showToast } = useToast();
@@ -101,6 +116,7 @@ export function MedicationPage(): JSX.Element {
 
   // Modals state
   const [createOpen, setCreateOpen] = useState(false);
+  const [historyModalRecord, setHistoryModalRecord] = useState<MedicationRecord | null>(null);
   const [administerRecord, setAdministerRecord] = useState<MedicationRecord | null>(null);
   const [administerTime, setAdministerTime] = useState(toLocalDatetimeInput());
   const [administerNote, setAdministerNote] = useState('');
@@ -134,15 +150,42 @@ export function MedicationPage(): JSX.Element {
     medicationName: string;
   } | null>(null);
 
+  function getStudentContext(studentId?: string | null) {
+    if (!studentId) return { classroomName: null, teacherName: null, parentName: null };
+    const student = students.find((s) => s.id === studentId);
+    if (!student) return { classroomName: null, teacherName: null, parentName: null };
+    const cls = classrooms.find((c) => c.id === student.classroomId);
+    const teacherAssignment = cls?.teachers?.[0];
+    const teacher = teacherAssignment
+      ? teachers.find((u) => u.id === teacherAssignment.teacherId)
+      : null;
+    const teacherName = teacher ? getTeacherDisplayName(teacher) : null;
+    const parentUser = student.parentId ? parents.find((u) => u.id === student.parentId) : null;
+    const parentUserFullName = parentUser ? getParentDisplayName(parentUser) : null;
+    const parentName =
+      parentUserFullName ||
+      student.passport?.motherName ||
+      student.passport?.fatherName ||
+      student.passport?.emergencyContacts?.[0]?.name ||
+      null;
+    return { classroomName: cls?.name ?? null, teacherName, parentName };
+  }
+
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
-      const [list, studentsRes] = await Promise.all([
+      const [list, studentsRes, classroomsRes, teachersRes, parentsRes] = await Promise.all([
         listMedicationRecords(),
         listStudents().catch(() => []),
+        listClassrooms().catch(() => []),
+        listUsers('TEACHER').catch(() => []),
+        listUsers('PARENT').catch(() => []),
       ]);
       setRecords(list);
       setStudents(studentsRes);
+      setClassrooms(classroomsRes);
+      setTeachers(teachersRes);
+      setParents(parentsRes);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'İlaç listesi yüklenemedi', 'error');
     } finally {
@@ -184,7 +227,10 @@ export function MedicationPage(): JSX.Element {
     () => scopedRecords.filter((r) => r.status === 'APPROVED' || r.status === 'SCHEDULED').length,
     [scopedRecords],
   );
-  const givenCount = useMemo(() => scopedRecords.filter((r) => r.status === 'GIVEN').length, [scopedRecords]);
+  const givenCount = useMemo(
+    () => scopedRecords.filter((r) => r.status === 'GIVEN').length,
+    [scopedRecords],
+  );
   const archivedCount = useMemo(
     () => scopedRecords.filter((r) => r.status === 'SKIPPED' || r.status === 'REJECTED').length,
     [scopedRecords],
@@ -547,6 +593,16 @@ export function MedicationPage(): JSX.Element {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4.5">
           {filteredRecords.map((r) => {
             const student = getStudent(r.studentId);
+            const context = getStudentContext(r.studentId);
+            const regularMeds = student?.passport?.regularMedications || [];
+            const isRegularMed = regularMeds.some((m) =>
+              m.toLowerCase().includes(r.medicationName.toLowerCase()),
+            );
+            const isExpired =
+              r.scheduledAt &&
+              new Date(r.scheduledAt).getTime() < Date.now() &&
+              (r.status === 'REQUESTED' || r.status === 'APPROVED' || r.status === 'SCHEDULED');
+
             return (
               <div
                 key={r.id}
@@ -557,7 +613,7 @@ export function MedicationPage(): JSX.Element {
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       {/* Belirgin Öğrenci Rozeti */}
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-100/90 dark:bg-teal-900/60 text-teal-950 dark:text-teal-200 border border-teal-300 dark:border-teal-700 text-xs font-black mb-2 shadow-2xs">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-100/90 dark:bg-teal-900/60 text-teal-950 dark:text-teal-200 border border-teal-300 dark:border-teal-700 text-xs font-black mb-1.5 shadow-2xs">
                         <span>👶</span>
                         <span>
                           {r.student
@@ -566,6 +622,14 @@ export function MedicationPage(): JSX.Element {
                         </span>
                       </div>
 
+                      {/* Sınıf, Öğretmen ve Veli Bağlam Rozetleri */}
+                      <StudentContextBadges
+                        classroomName={context.classroomName}
+                        teacherName={context.teacherName}
+                        parentName={context.parentName}
+                        className="mb-2"
+                      />
+
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="text-base font-black text-slate-900 dark:text-white truncate">
                           {r.medicationName}
@@ -573,7 +637,20 @@ export function MedicationPage(): JSX.Element {
                         <span className="text-xs font-bold px-2 py-0.5 rounded-lg bg-teal-50 dark:bg-slate-800 text-teal-800 dark:text-teal-300 border border-teal-200/80 dark:border-slate-700">
                           {r.dosage}
                         </span>
+                        {isRegularMed && (
+                          <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/70 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 shadow-2xs">
+                            🔁 Düzenli / Kronik İlaç
+                          </span>
+                        )}
                       </div>
+
+                      {/* Süresi Dolan İlaç Uyarısı */}
+                      {isExpired && (
+                        <div className="flex items-center gap-1.5 mt-2 px-2.5 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-xs font-bold">
+                          <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+                          <span>⚠️ Süresi Geçti / Gecikmiş Doz: Planlanan saat aşıldı!</span>
+                        </div>
+                      )}
 
                       {/* Alerji & Ekstra Bilgi */}
                       <div className="flex items-center gap-1.5 mt-1">
@@ -739,6 +816,18 @@ export function MedicationPage(): JSX.Element {
                       <span>Sil</span>
                     </TactileButton>
                   )}
+
+                  {/* İlaç Geçmişi Modalı Açma Butonu */}
+                  <TactileButton
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setHistoryModalRecord(r)}
+                    title="Öğrencinin geçmiş ilaç dozlarını ve sağlık özetini görüntüleyin"
+                  >
+                    <History className="w-3.5 h-3.5" />
+                    <span>İlaç Geçmişi</span>
+                  </TactileButton>
                 </div>
               </div>
             );
@@ -1080,6 +1169,21 @@ export function MedicationPage(): JSX.Element {
             </div>
           </div>
         </div>
+      )}
+
+      {/* MODAL 4: İlaç Geçmişi ve Doz Kütüğü Modalı */}
+      {historyModalRecord && (
+        <MedicationHistoryModal
+          isOpen={!!historyModalRecord}
+          onClose={() => setHistoryModalRecord(null)}
+          student={getStudent(historyModalRecord.studentId) || null}
+          medicationRecord={historyModalRecord}
+          records={records}
+          classroomName={getStudentContext(historyModalRecord.studentId).classroomName}
+          teacherName={getStudentContext(historyModalRecord.studentId).teacherName}
+          parentName={getStudentContext(historyModalRecord.studentId).parentName}
+          teachers={teachers}
+        />
       )}
     </div>
   );

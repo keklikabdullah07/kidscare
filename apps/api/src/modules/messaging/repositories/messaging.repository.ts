@@ -18,7 +18,7 @@ export type ConversationRow = Prisma.ConversationGetPayload<{
     updatedAt: true;
     participants: { select: { userId: true } };
     student: { select: { id: true; firstName: true; lastName: true } };
-    createdBy: { select: { id: true; email: true; role: true } };
+    createdBy: { select: { id: true; email: true; role: true; firstName: true; lastName: true } };
   };
 }>;
 
@@ -32,7 +32,7 @@ export type MessageRow = Prisma.MessageGetPayload<{
     isCritical: true;
     createdAt: true;
     updatedAt: true;
-    sender: { select: { id: true; email: true; role: true } };
+    sender: { select: { id: true; email: true; role: true; firstName: true; lastName: true } };
   };
 }>;
 
@@ -52,7 +52,7 @@ export type ParentRequestRow = Prisma.ParentRequestGetPayload<{
     createdAt: true;
     updatedAt: true;
     student: { select: { id: true; firstName: true; lastName: true } };
-    parent: { select: { id: true; email: true; role: true } };
+    parent: { select: { id: true; email: true; role: true; firstName: true; lastName: true } };
   };
 }>;
 
@@ -70,7 +70,7 @@ const CONVERSATION_SELECT = {
   updatedAt: true,
   participants: { select: { userId: true } },
   student: { select: { id: true, firstName: true, lastName: true } },
-  createdBy: { select: { id: true, email: true, role: true } },
+  createdBy: { select: { id: true, email: true, role: true, firstName: true, lastName: true } },
 } as const;
 
 const MESSAGE_SELECT = {
@@ -82,7 +82,7 @@ const MESSAGE_SELECT = {
   isCritical: true,
   createdAt: true,
   updatedAt: true,
-  sender: { select: { id: true, email: true, role: true } },
+  sender: { select: { id: true, email: true, role: true, firstName: true, lastName: true } },
 } as const;
 
 const PARENT_REQUEST_SELECT = {
@@ -100,7 +100,7 @@ const PARENT_REQUEST_SELECT = {
   createdAt: true,
   updatedAt: true,
   student: { select: { id: true, firstName: true, lastName: true } },
-  parent: { select: { id: true, email: true, role: true } },
+  parent: { select: { id: true, email: true, role: true, firstName: true, lastName: true } },
 } as const;
 
 export interface IMessagingRepository {

@@ -26,6 +26,7 @@ import {
 import { listClassrooms } from '../../api/classrooms';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader, TactileButton } from '../../components/ui';
+import { getParentDisplayName } from '../../utils/userDisplay';
 import { PrintPreviewModal, EventRosterPrint } from '../../components/print';
 import type {
   Classroom,
@@ -74,7 +75,10 @@ export function EventsPage(): JSX.Element {
 
   useEffect(() => {
     if (isTeacher && teacherClassrooms.length > 0) {
-      if (selectedClassroomId === 'all' || !teacherClassrooms.some((c) => c.id === selectedClassroomId)) {
+      if (
+        selectedClassroomId === 'all' ||
+        !teacherClassrooms.some((c) => c.id === selectedClassroomId)
+      ) {
         const first = teacherClassrooms[0];
         if (first) setSelectedClassroomId(first.id);
       }
@@ -1258,7 +1262,7 @@ function EventRosterModal({
                           {r.student?.firstName} {r.student?.lastName}
                         </td>
                         <td className="py-2.5 px-3.5 text-slate-600 dark:text-slate-400">
-                          {r.parentUser?.email || '-'}
+                          {r.parentUser ? getParentDisplayName(r.parentUser) : '-'}
                         </td>
                         <td className="py-2.5 px-3.5">
                           <span

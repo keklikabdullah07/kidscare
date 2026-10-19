@@ -46,36 +46,38 @@ const fakeStudents = [
   },
 ];
 
+const todayIso = new Date().toISOString();
+
 const fakeIncidents = [
   {
     id: 'i-1',
     tenantId: 't-1',
     studentId: 's-1',
     category: 'DUSME',
-    occurredAt: '2026-09-15T10:00:00.000Z',
+    occurredAt: todayIso,
     description: 'Bahçede koşarken kayıp düştü',
     actionTaken: 'Dizine soğuk kompres ve yara bandı uygulandı',
     parentNotified: false,
     parentNotifiedAt: null,
     parentNotifiedById: null,
     reportedById: 'admin-1',
-    createdAt: '2026-09-15T10:00:00.000Z',
-    updatedAt: '2026-09-15T10:00:00.000Z',
+    createdAt: todayIso,
+    updatedAt: todayIso,
   },
   {
     id: 'i-2',
     tenantId: 't-1',
     studentId: 's-1',
     category: 'HASTALIK',
-    occurredAt: '2026-09-15T11:30:00.000Z',
+    occurredAt: todayIso,
     description: 'Ateş 38.2 ölçüldü, revire alındı',
     actionTaken: 'Ilık uygulama yapıldı, dinlendirildi',
     parentNotified: true,
-    parentNotifiedAt: '2026-09-15T11:45:00.000Z',
+    parentNotifiedAt: todayIso,
     parentNotifiedById: 'admin-1',
     reportedById: 'admin-1',
-    createdAt: '2026-09-15T11:30:00.000Z',
-    updatedAt: '2026-09-15T11:45:00.000Z',
+    createdAt: todayIso,
+    updatedAt: todayIso,
   },
 ];
 

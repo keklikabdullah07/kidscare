@@ -20,6 +20,8 @@ vi.mock('../auth/AuthContext', () => ({
   }),
 }));
 
+const todayDateIso = new Date().toISOString();
+
 const fakeActivities = [
   {
     id: 'act-1',
@@ -28,14 +30,14 @@ const fakeActivities = [
     title: 'Sulu Boya Atölyesi',
     description: 'Çocuklarla renkli resimler yaptık.',
     classroom: 'Papatyalar Sınıfı',
-    activityDate: '2026-10-04T09:00:00.000Z',
+    activityDate: todayDateIso,
     mediaUrls: [
       'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop',
     ],
     tags: ['Sanat', 'Resim'],
-    createdAt: '2026-10-04T09:00:00.000Z',
-    updatedAt: '2026-10-04T09:00:00.000Z',
+    createdAt: todayDateIso,
+    updatedAt: todayDateIso,
   },
 ];
 

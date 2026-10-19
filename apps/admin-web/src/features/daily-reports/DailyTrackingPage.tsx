@@ -13,8 +13,6 @@ import {
   Users,
   CheckCircle2,
   Clock,
-  ChevronLeft,
-  ChevronRight,
   Edit3,
   CheckCheck,
   X,
@@ -34,7 +32,7 @@ import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
-import { TactileButton } from '../../components/ui/TactileButton';
+import { TactileDateNavigator } from '../../components/ui';
 
 const MOOD_MAP: Record<StudentMood, { label: string; emoji: string; badgeClass: string }> = {
   HAPPY: {
@@ -233,15 +231,6 @@ export function DailyTrackingPage(): JSX.Element {
     };
   }, [selectedClassroomId, selectedDate]);
 
-  function changeDay(delta: number): void {
-    const d = new Date(selectedDate);
-    d.setDate(d.getDate() + delta);
-    setSelectedDate(d.toISOString().slice(0, 10));
-  }
-
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const isToday = selectedDate === todayStr;
-
   // Counts
   const totalStudents = students.length;
   const filledCount = students.filter((s) => !!reports[s.id]).length;
@@ -346,42 +335,7 @@ export function DailyTrackingPage(): JSX.Element {
         description="Öğrencilerin beslenme, uyku, tuvalet, ruh hali ve günlük öğretmen notlarını yönetin."
         icon={Sparkles}
         actions={
-          <div className="flex items-center gap-2 bg-white dark:bg-[#131B2E] border border-[#DDD4C4] dark:border-slate-800 p-1.5 rounded-2xl shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)]">
-            <button
-              type="button"
-              onClick={() => changeDay(-1)}
-              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-800 transition cursor-pointer"
-              title="Önceki Gün"
-              aria-label="Önceki Gün"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="text-xs font-bold text-slate-800 dark:text-slate-200 bg-transparent px-2 py-1 outline-none cursor-pointer rounded-xl"
-            />
-            <button
-              type="button"
-              onClick={() => changeDay(1)}
-              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-800 transition cursor-pointer"
-              title="Sonraki Gün"
-              aria-label="Sonraki Gün"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-            {!isToday && (
-              <TactileButton
-                variant="secondary"
-                size="sm"
-                onClick={() => setSelectedDate(todayStr)}
-                className="ml-1"
-              >
-                Bugün
-              </TactileButton>
-            )}
-          </div>
+          <TactileDateNavigator mode="day" value={selectedDate} onChange={setSelectedDate} />
         }
       />
 

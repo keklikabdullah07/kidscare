@@ -18,7 +18,13 @@ export type Conversation = {
   createdAt: string;
   updatedAt: string;
   student?: { id: string; firstName: string; lastName: string } | null;
-  createdBy?: { id: string; email: string; role: string } | null;
+  createdBy?: {
+    id: string;
+    email: string;
+    role: string;
+    firstName?: string | null;
+    lastName?: string | null;
+  } | null;
 };
 
 export type Message = {
@@ -30,7 +36,13 @@ export type Message = {
   isCritical: boolean;
   createdAt: string;
   updatedAt: string;
-  sender?: { id: string; email: string; role: string } | null;
+  sender?: {
+    id: string;
+    email: string;
+    role: string;
+    firstName?: string | null;
+    lastName?: string | null;
+  } | null;
 };
 
 export type ParentRequestType = 'IZIN' | 'BILGI_TALEP' | 'DEGISIKLIK' | 'DIGER';
@@ -51,5 +63,11 @@ export type ParentRequest = {
   createdAt: string;
   updatedAt: string;
   student?: { id: string; firstName: string; lastName: string } | null;
-  parent?: { id: string; email: string; role: string } | null;
+  parent?: {
+    id: string;
+    email: string;
+    role: string;
+    firstName?: string | null;
+    lastName?: string | null;
+  } | null;
 };

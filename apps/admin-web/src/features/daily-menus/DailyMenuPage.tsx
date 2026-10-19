@@ -3,8 +3,6 @@ import type { AllergenWarningSummary, Classroom, DailyMenu, Student } from '@kid
 import {
   Utensils,
   AlertTriangle,
-  ChevronLeft,
-  ChevronRight,
   Save,
   Trash2,
   Coffee,
@@ -31,7 +29,10 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { StatCard } from '../../components/ui/StatCard';
 import { TactileTabs } from '../../components/ui/TactileTabs';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { TactileDateNavigator } from '../../components/ui';
+import { WeeklyMenuView } from './WeeklyMenuView';
 
+type ViewMode = 'DAILY' | 'WEEKLY';
 type MealTab = 'ALL' | 'BREAKFAST' | 'LUNCH' | 'SNACK' | 'ALLERGENS';
 
 const MEAL_TABS: { id: MealTab; label: string; icon: typeof Utensils }[] = [
@@ -55,6 +56,7 @@ const COMMON_ALLERGENS = [
 
 export function DailyMenuPage(): JSX.Element {
   const { state: authState } = useAuth();
+  const [viewMode, setViewMode] = useState<ViewMode>('DAILY');
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [menu, setMenu] = useState<DailyMenu | null>(null);
   const [warnings, setWarnings] = useState<AllergenWarningSummary[]>([]);
@@ -81,9 +83,7 @@ export function DailyMenuPage(): JSX.Element {
 
   const teacherClassrooms = useMemo(() => {
     if (!isTeacher || !currentUserId) return [];
-    return classrooms.filter((c) =>
-      (c.teachers || []).some((t) => t.teacherId === currentUserId),
-    );
+    return classrooms.filter((c) => (c.teachers || []).some((t) => t.teacherId === currentUserId));
   }, [isTeacher, currentUserId, classrooms]);
 
   const teacherClassroomIds = useMemo(
@@ -153,15 +153,6 @@ export function DailyMenuPage(): JSX.Element {
   }
 
   useEffect(loadMenu, [selectedDate]);
-
-  function changeDay(delta: number): void {
-    const d = new Date(selectedDate);
-    d.setDate(d.getDate() + delta);
-    setSelectedDate(d.toISOString().slice(0, 10));
-  }
-
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const isToday = selectedDate === todayStr;
 
   function toggleAllergen(allergen: string): void {
     const clean = allergen.replace(/^[^\w\sğüşıöçĞÜŞİÖÇ]+/, '').trim();
@@ -274,40 +265,35 @@ export function DailyMenuPage(): JSX.Element {
           </span>
         }
         actions={
-          <div className="flex items-center gap-2 bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 p-1.5 rounded-2xl shadow-[0_4px_16px_-2px_rgba(20,32,54,0.06),0_2px_4px_-1px_rgba(20,32,54,0.03)]">
-            <button
-              type="button"
-              onClick={() => changeDay(-1)}
-              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-700/60 transition cursor-pointer"
-              title="Önceki Gün"
-              aria-label="Önceki Gün"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="text-xs font-bold text-slate-800 dark:text-white bg-transparent px-2 py-1 outline-none cursor-pointer rounded-xl"
-            />
-            <button
-              type="button"
-              onClick={() => changeDay(1)}
-              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-[#F9F7F3] dark:hover:bg-slate-700/60 transition cursor-pointer"
-              title="Sonraki Gün"
-              aria-label="Sonraki Gün"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-            {!isToday && (
-              <TactileButton
-                variant="secondary"
-                size="sm"
-                onClick={() => setSelectedDate(todayStr)}
-                className="ml-1"
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* View Mode Toggle: Daily vs Weekly */}
+            <div className="flex items-center bg-[#FAF9F6] dark:bg-slate-900 p-1 rounded-2xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => setViewMode('DAILY')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                  viewMode === 'DAILY'
+                    ? 'bg-amber-600 text-white shadow-2xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                }`}
               >
-                Bugün
-              </TactileButton>
+                📅 Günlük Menü
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('WEEKLY')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                  viewMode === 'WEEKLY'
+                    ? 'bg-amber-600 text-white shadow-2xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                }`}
+              >
+                🗓️ Haftalık Planlayıcı
+              </button>
+            </div>
+
+            {viewMode === 'DAILY' && (
+              <TactileDateNavigator mode="day" value={selectedDate} onChange={setSelectedDate} />
             )}
           </div>
         }
@@ -383,7 +369,8 @@ export function DailyMenuPage(): JSX.Element {
             </div>
             <div className="flex-1">
               <h3 className="text-sm font-bold text-amber-950 dark:text-amber-100">
-                Alerjen Riski Uyarısı {isTeacher ? '(Sorumlu Olduğunuz Sınıflar)' : ''} — {scopedWarnings.length} Öğrenci Etkileniyor!
+                Alerjen Riski Uyarısı {isTeacher ? '(Sorumlu Olduğunuz Sınıflar)' : ''} —{' '}
+                {scopedWarnings.length} Öğrenci Etkileniyor!
               </h3>
               <p className="text-xs text-amber-900 dark:text-amber-200/90 mt-1 font-medium">
                 Günün menüsündeki içerikler, aşağıdaki öğrencilerin sağlık pasaportundaki kayıtlı
@@ -410,7 +397,16 @@ export function DailyMenuPage(): JSX.Element {
         </div>
       )}
 
-      {loading ? (
+      {/* Weekly View or Daily View */}
+      {viewMode === 'WEEKLY' ? (
+        <WeeklyMenuView
+          initialDate={selectedDate}
+          onSelectDateToEdit={(date) => {
+            setSelectedDate(date);
+            setViewMode('DAILY');
+          }}
+        />
+      ) : loading ? (
         <div className="text-center py-16 bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)]">
           <div className="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin mb-3"></div>
           <p className="text-slate-600 dark:text-slate-300 text-sm font-medium">

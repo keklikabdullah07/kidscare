@@ -244,13 +244,12 @@ describe('PickupPage', () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByText('Tüm Sınıflar')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Papatyalar Sınıfı' })).toBeInTheDocument();
+      expect(screen.getByRole('combobox', { name: 'Sınıf Filtresi' })).toBeInTheDocument();
     });
 
-    // Sınıfa tıkla
-    const classBtn = screen.getByRole('button', { name: 'Papatyalar Sınıfı' });
-    await userEvent.click(classBtn);
+    // Sınıfı seç
+    const classSelect = screen.getByRole('combobox', { name: 'Sınıf Filtresi' });
+    await userEvent.selectOptions(classSelect, fakeClassrooms[0]!.id);
 
     // EVENTS sekmesine geç
     const eventsTab = screen.getByRole('tab', { name: /Teslimat Günlüğü & Kütük/i });

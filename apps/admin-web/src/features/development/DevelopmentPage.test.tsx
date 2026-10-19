@@ -97,7 +97,7 @@ vi.mock('../../api/development', () => ({
 }));
 
 describe('DevelopmentPage', () => {
-  it('renders development page with observation data and KPI stats', async () => {
+  it('renders development page with observation data and tactile tabs', async () => {
     render(
       <BrowserRouter>
         <DevelopmentPage />
@@ -108,10 +108,9 @@ describe('DevelopmentPage', () => {
       expect(screen.getByText(/Gelişim Hikâyesi & Öğrenci Portfolyosu/i)).toBeInTheDocument();
       expect(screen.getByText(/Cümle kurma/i)).toBeInTheDocument();
       expect(screen.getByText(/3-4 kelimelik tam cümleler kurabiliyor/i)).toBeInTheDocument();
-      expect(screen.getByText(/Toplam Gözlem/i)).toBeInTheDocument();
-      expect(screen.getByText(/Portfolyo Eseri/i)).toBeInTheDocument();
-      expect(screen.getByText(/Ev Etkinlikleri/i)).toBeInTheDocument();
-      expect(screen.getByText(/Veli Paylaşımı/i)).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /Pedagojik Gözlemler/i })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /Öğrenci Portfolyosu/i })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /Ev Etkinlik Havuzu/i })).toBeInTheDocument();
     });
   });
 
@@ -171,9 +170,9 @@ describe('DevelopmentPage', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Yunuslar Sınıfı')).toBeInTheDocument();
-      expect(screen.getByText('Ayşe Demir')).toBeInTheDocument();
-      expect(screen.getByText('Fatma Yılmaz')).toBeInTheDocument();
+      expect(screen.getAllByText('Yunuslar Sınıfı').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText(/Ayşe Demir/i)).toBeInTheDocument();
+      expect(screen.getByText(/Fatma Yılmaz/i)).toBeInTheDocument();
     });
   });
 });

@@ -33,6 +33,7 @@ import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { StudentContextBadges } from '../../components/ui/StudentContextBadges';
+import { getParentDisplayName, getTeacherDisplayName } from '../../utils/userDisplay';
 
 type TabKey = 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
@@ -67,6 +68,7 @@ export function ParentRequestsPage(): JSX.Element {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedClassroomFilter, setSelectedClassroomFilter] = useState('');
   const [selectedStudentFilter, setSelectedStudentFilter] = useState('');
   const [activeTab, setActiveTab] = useState<TabKey>('ALL');
 
@@ -101,12 +103,19 @@ export function ParentRequestsPage(): JSX.Element {
   );
 
   const scopedStudents = useMemo(() => {
-    if (!isTeacher) return students;
-    if (teacherClassroomIds.size > 0) {
-      return students.filter((s) => s.classroomId && teacherClassroomIds.has(s.classroomId));
+    let pool = students;
+    if (isTeacher) {
+      if (teacherClassroomIds.size > 0) {
+        pool = students.filter((s) => s.classroomId && teacherClassroomIds.has(s.classroomId));
+      } else {
+        pool = [];
+      }
     }
-    return [];
-  }, [isTeacher, students, teacherClassroomIds]);
+    if (selectedClassroomFilter) {
+      pool = pool.filter((s) => s.classroomId === selectedClassroomFilter);
+    }
+    return pool;
+  }, [isTeacher, students, teacherClassroomIds, selectedClassroomFilter]);
 
   const scopedStudentIds = useMemo(
     () => new Set(scopedStudents.map((s) => s.id)),
@@ -244,6 +253,12 @@ export function ParentRequestsPage(): JSX.Element {
       if (activeTab === 'APPROVED' && r.status !== 'APPROVED') return false;
       if (activeTab === 'REJECTED' && r.status !== 'REJECTED') return false;
 
+      // Sınıf filtresi
+      if (selectedClassroomFilter) {
+        const reqStudent = students.find((s) => s.id === r.studentId);
+        if (reqStudent?.classroomId !== selectedClassroomFilter) return false;
+      }
+
       // Öğrenci filtresi
       if (selectedStudentFilter && r.studentId !== selectedStudentFilter) return false;
 
@@ -349,6 +364,26 @@ export function ParentRequestsPage(): JSX.Element {
         <TactileTabs<TabKey> tabs={filterTabs} activeId={activeTab} onChange={setActiveTab} />
 
         <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+          {/* Sınıf Filtresi */}
+          <div className="relative min-w-[150px]">
+            <select
+              value={selectedClassroomFilter}
+              onChange={(e) => {
+                setSelectedClassroomFilter(e.target.value);
+                setSelectedStudentFilter('');
+              }}
+              className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl px-3 py-2 bg-white dark:bg-[#131B2E] text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs"
+              aria-label="Sınıf Filtresi"
+            >
+              <option value="">{isTeacher ? 'Tüm Sınıflarım' : '🏫 Tüm Sınıflar'}</option>
+              {(isTeacher ? teacherClassrooms : classrooms).map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Öğrenci Filtresi */}
           <div className="relative min-w-[160px]">
             <select
@@ -357,7 +392,11 @@ export function ParentRequestsPage(): JSX.Element {
               className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl px-3 py-2 bg-white dark:bg-[#131B2E] text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs"
             >
               <option value="">
-                {isTeacher ? 'Sınıfımdaki Tüm Öğrenciler' : 'Tüm Öğrenciler'}
+                {selectedClassroomFilter
+                  ? 'Sınıftaki Tüm Öğrenciler'
+                  : isTeacher
+                    ? 'Sınıfımdaki Tüm Öğrenciler'
+                    : 'Tüm Öğrenciler'}
               </option>
               {scopedStudents.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -476,16 +515,12 @@ export function ParentRequestsPage(): JSX.Element {
                     const teacher = teacherAssignment
                       ? teachers.find((u) => u.id === teacherAssignment.teacherId)
                       : null;
-                    const teacherName = teacher
-                      ? [teacher.firstName, teacher.lastName].filter(Boolean).join(' ').trim() ||
-                        teacher.email
-                      : null;
+                    const teacherName = teacher ? getTeacherDisplayName(teacher) : null;
                     const parentName =
                       st?.passport?.motherName ||
                       st?.passport?.fatherName ||
                       st?.passport?.emergencyContacts?.[0]?.name ||
-                      r.parent?.email ||
-                      null;
+                      (r.parent ? getParentDisplayName(r.parent) : null);
                     return (
                       <StudentContextBadges
                         classroomName={cls?.name}

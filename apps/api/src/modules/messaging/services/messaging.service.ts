@@ -226,6 +226,8 @@ export class MessagingService {
             id: row.createdBy.id,
             email: row.createdBy.email,
             role: row.createdBy.role,
+            firstName: row.createdBy.firstName,
+            lastName: row.createdBy.lastName,
           }
         : null,
     };
@@ -246,6 +248,8 @@ export class MessagingService {
             id: row.sender.id,
             email: row.sender.email,
             role: row.sender.role,
+            firstName: row.sender.firstName,
+            lastName: row.sender.lastName,
           }
         : null,
     };
@@ -278,6 +282,8 @@ export class MessagingService {
             id: row.parent.id,
             email: row.parent.email,
             role: row.parent.role,
+            firstName: row.parent.firstName,
+            lastName: row.parent.lastName,
           }
         : null,
     };
