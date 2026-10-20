@@ -17,6 +17,7 @@ apps/api/dist/
 apps/mobile/.expo/
 .cache/
 *.tsbuildinfo
+.eslintcache
 
 # Environment & local configs
 .env
