@@ -52,6 +52,16 @@ async function main() {
       $$;
     `);
 
+    // Clean up any incomplete/failed migration from a previous crash so deploy can retry cleanly
+    try {
+      await prisma.$executeRawUnsafe(`
+        DELETE FROM _prisma_migrations WHERE finished_at IS NULL;
+      `);
+      console.log('[ensure-roles] Cleaned up any incomplete migrations.');
+    } catch {
+      // ignore if _prisma_migrations does not exist yet
+    }
+
     console.log('[ensure-roles] Database roles verified successfully.');
   } catch (err) {
     console.warn('[ensure-roles] Note during role verification:', err);
