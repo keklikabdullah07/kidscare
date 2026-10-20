@@ -52,6 +52,7 @@ export class SurveysController {
     return this.service.createSurvey(user.tenantId, user.userId, dto);
   }
 
+  @Get('stats')
   @Get('stats/overview')
   @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
   async getStatsOverview(@CurrentUser() user: CurrentUserPayload): Promise<SurveyStatsOverviewDto> {
