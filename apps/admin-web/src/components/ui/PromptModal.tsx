@@ -4,15 +4,15 @@ import { X, AlertCircle, HelpCircle, CheckCircle2 } from 'lucide-react';
 export interface PromptModalProps {
   isOpen: boolean;
   title: string;
-  description?: string;
-  inputLabel?: string;
-  placeholder?: string;
-  defaultValue?: string;
-  confirmText?: string;
-  cancelText?: string;
-  requireInput?: boolean;
-  isTextarea?: boolean;
-  variant?: 'danger' | 'warning' | 'primary' | 'success';
+  description?: string | undefined;
+  inputLabel?: string | undefined;
+  placeholder?: string | undefined;
+  defaultValue?: string | undefined;
+  confirmText?: string | undefined;
+  cancelText?: string | undefined;
+  requireInput?: boolean | undefined;
+  isTextarea?: boolean | undefined;
+  variant?: 'danger' | 'warning' | 'primary' | 'success' | undefined;
   onConfirm: (value: string) => void;
   onCancel: () => void;
 }
@@ -178,9 +178,9 @@ export interface ConfirmModalProps {
   isOpen: boolean;
   title: string;
   description: string;
-  confirmText?: string;
-  cancelText?: string;
-  variant?: 'danger' | 'warning' | 'primary' | 'success';
+  confirmText?: string | undefined;
+  cancelText?: string | undefined;
+  variant?: 'danger' | 'warning' | 'primary' | 'success' | undefined;
   onConfirm: () => void;
   onCancel: () => void;
 }

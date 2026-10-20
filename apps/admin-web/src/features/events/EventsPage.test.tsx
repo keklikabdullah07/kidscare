@@ -237,9 +237,8 @@ describe('EventsPage', () => {
     expect(screen.getByText(/Geleneksel Türk el sanatları ebru çalışması/)).toBeInTheDocument();
   });
 
-  it('allows staff to cancel an event from the card', async () => {
+  it('allows staff to cancel an event from the card via ConfirmModal', async () => {
     const user = userEvent.setup();
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     mockUseAuth.mockReturnValue({
       state: {
         status: 'authenticated',
@@ -251,12 +250,16 @@ describe('EventsPage', () => {
     const cancelBtn = await screen.findByRole('button', { name: /İptal Et/i });
     await user.click(cancelBtn);
 
+    // ConfirmModal should appear
+    expect(screen.getByText('Geziyi İptal Etmek İstiyor Musunuz?')).toBeInTheDocument();
+    const modalConfirmBtn = screen.getByRole('button', { name: 'Evet, Geziyi İptal Et' });
+    await user.click(modalConfirmBtn);
+
     expect(consentsApi.cancelEventConsent).toHaveBeenCalledWith('consent-1');
   });
 
-  it('allows parent to cancel their previous permission', async () => {
+  it('allows parent to cancel their previous permission via ConfirmModal', async () => {
     const user = userEvent.setup();
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const parentEvent: EventConsent = {
       ...mockEvent,
       myResponse: {
@@ -284,6 +287,11 @@ describe('EventsPage', () => {
     });
     await user.click(cancelPermBtn);
 
+    // ConfirmModal should appear
+    expect(screen.getByText('Gezi İznini İptal Et')).toBeInTheDocument();
+    const modalConfirmBtn = screen.getByRole('button', { name: 'Evet, İznimi İptal Et' });
+    await user.click(modalConfirmBtn);
+
     expect(consentsApi.respondEventConsent).toHaveBeenCalledWith(
       'consent-1',
       expect.objectContaining({
@@ -293,9 +301,8 @@ describe('EventsPage', () => {
     );
   });
 
-  it('allows staff to cancel a student permission in roster modal', async () => {
+  it('allows staff to cancel a student permission in roster modal via ConfirmModal', async () => {
     const user = userEvent.setup();
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     mockUseAuth.mockReturnValue({
       state: {
         status: 'authenticated',
@@ -316,6 +323,11 @@ describe('EventsPage', () => {
     // In the roster table, Ada Yılmaz has decision APPROVED, should have İzni İptal Et button
     const cancelStudentBtn = await screen.findByRole('button', { name: 'İzni İptal Et' });
     await user.click(cancelStudentBtn);
+
+    // ConfirmModal should appear
+    expect(screen.getByText('Öğrenci İznini İptal Et')).toBeInTheDocument();
+    const modalConfirmBtn = screen.getByRole('button', { name: 'Evet, İzni İptal Et' });
+    await user.click(modalConfirmBtn);
 
     expect(consentsApi.respondEventConsent).toHaveBeenCalledWith(
       'consent-1',

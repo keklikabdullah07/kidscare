@@ -28,7 +28,7 @@ import {
 } from '../../api/consents';
 import { listClassrooms } from '../../api/classrooms';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { PageHeader, TactileButton } from '../../components/ui';
+import { PageHeader, TactileButton, ConfirmModal } from '../../components/ui';
 import { getParentDisplayName } from '../../utils/userDisplay';
 import { PrintPreviewModal, EventRosterPrint } from '../../components/print';
 import type {
@@ -198,11 +198,33 @@ export function EventsPage(): JSX.Element {
     setActionSuccess(`"${newWs.title}" atölyesi başarıyla eklendi.`);
   }
 
+  interface ConfirmDialogState {
+    isOpen: boolean;
+    title: string;
+    description: string;
+    confirmText?: string;
+    cancelText?: string;
+    variant?: 'danger' | 'warning' | 'primary' | 'success';
+    onConfirm: () => void | Promise<void>;
+  }
+
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState | null>(null);
+
   function handleDeleteWorkshop(id: string, title: string) {
-    if (!window.confirm(`"${title}" atölyesini silmek istediğinizden emin misiniz?`)) return;
-    const updated = workshops.filter((w) => w.id !== id);
-    saveWorkshops(updated);
-    setActionSuccess('Atölye başarıyla kaldırıldı.');
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Atölyeyi Sil',
+      description: `"${title}" atölyesini okul içi etkinlikler listesinden kaldırmak istediğinizden emin misiniz?`,
+      confirmText: 'Evet, Sil',
+      cancelText: 'Vazgeç',
+      variant: 'danger',
+      onConfirm: () => {
+        setConfirmDialog(null);
+        const updated = workshops.filter((w) => w.id !== id);
+        saveWorkshops(updated);
+        setActionSuccess('Atölye başarıyla kaldırıldı.');
+      },
+    });
   }
 
   // Parent response state
@@ -275,59 +297,73 @@ export function EventsPage(): JSX.Element {
     }
   }
 
-  async function handleCancelConsent(consent: EventConsent): Promise<void> {
-    const confirmMsg = `"${consent.title}" gezisini iptal etmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz. Veli onayları geçersiz sayılacak ve gezi "İptal Edildi" olarak işaretlenecektir.`;
-    if (!window.confirm(confirmMsg)) return;
-
-    try {
-      await cancelEventConsent(consent.id);
-      setActionSuccess(`"${consent.title}" gezisi başarıyla iptal edildi.`);
-      if (rosterConsent?.id === consent.id) {
-        setRosterConsent((prev) => (prev ? { ...prev, status: 'CANCELLED' } : null));
-      }
-      await loadData();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Gezi iptal edilirken hata oluştu.');
-    }
+  function handleCancelConsent(consent: EventConsent): void {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Geziyi İptal Etmek İstiyor Musunuz?',
+      description: `"${consent.title}" gezisi iptal edilecek, veli izinleri geçersiz kalacak ve yeni izin girişi kapatılacaktır. Bu işlem geri alınamaz.`,
+      confirmText: 'Evet, Geziyi İptal Et',
+      cancelText: 'Vazgeç',
+      variant: 'danger',
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          await cancelEventConsent(consent.id);
+          setActionSuccess(`"${consent.title}" gezisi başarıyla iptal edildi.`);
+          if (rosterConsent?.id === consent.id) {
+            setRosterConsent((prev) => (prev ? { ...prev, status: 'CANCELLED' } : null));
+          }
+          await loadData();
+        } catch (err: unknown) {
+          setError(err instanceof Error ? err.message : 'Gezi iptal edilirken hata oluştu.');
+        }
+      },
+    });
   }
 
-  async function handleUpdateStaffDecision(
+  function handleUpdateStaffDecision(
     consentId: string,
     studentId: string,
     decision: EventConsentDecision,
     studentName: string,
-  ): Promise<void> {
-    const actionText =
-      decision === 'DECLINED' ? 'katılım iznini iptal etmek' : 'izinli olarak kaydetmek';
-    if (
-      !window.confirm(`${studentName} adlı öğrencinin ${actionText} istediğinizden emin misiniz?`)
-    )
-      return;
-
-    try {
-      await respondEventConsent(consentId, {
-        studentId,
-        decision,
-        notes:
-          decision === 'DECLINED'
-            ? 'Yönetici/Öğretmen tarafından iptal edildi'
-            : 'Yönetici/Öğretmen tarafından izin verildi',
-      });
-      setActionSuccess(
-        decision === 'DECLINED'
-          ? `${studentName} için izin iptal edildi (Katılmayacak olarak güncellendi).`
-          : `${studentName} için gezi izni onaylandı.`,
-      );
-      if (rosterConsent?.id === consentId) {
-        const refreshed = await getEventConsent(consentId);
-        setRosterConsent(refreshed);
-      }
-      await loadData();
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : 'Öğrenci izin durumu güncellenirken hata oluştu.',
-      );
-    }
+  ): void {
+    const isDeclining = decision === 'DECLINED';
+    setConfirmDialog({
+      isOpen: true,
+      title: isDeclining ? 'Öğrenci İznini İptal Et' : 'Öğrenciye İzin Ver',
+      description: isDeclining
+        ? `${studentName} adlı öğrencinin bu geziye katılım iznini iptal etmek istediğinizden emin misiniz? Öğrenci etkinlik ve servis listesinden çıkarılacaktır.`
+        : `${studentName} adlı öğrencinin bu geziye katılımını onaylamak istediğinizden emin misiniz? Servis ve katılımcı listesine dahil edilecektir.`,
+      confirmText: isDeclining ? 'Evet, İzni İptal Et' : 'Evet, İzin Ver',
+      cancelText: 'Vazgeç',
+      variant: isDeclining ? 'danger' : 'success',
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          await respondEventConsent(consentId, {
+            studentId,
+            decision,
+            notes: isDeclining
+              ? 'Yönetici/Öğretmen tarafından iptal edildi'
+              : 'Yönetici/Öğretmen tarafından izin verildi',
+          });
+          setActionSuccess(
+            isDeclining
+              ? `${studentName} için izin iptal edildi (Katılmayacak olarak güncellendi).`
+              : `${studentName} için gezi izni onaylandı.`,
+          );
+          if (rosterConsent?.id === consentId) {
+            const refreshed = await getEventConsent(consentId);
+            setRosterConsent(refreshed);
+          }
+          await loadData();
+        } catch (err: unknown) {
+          setError(
+            err instanceof Error ? err.message : 'Öğrenci izin durumu güncellenirken hata oluştu.',
+          );
+        }
+      },
+    });
   }
 
   async function openRosterModal(consent: EventConsent): Promise<void> {
@@ -878,17 +914,23 @@ export function EventsPage(): JSX.Element {
                               type="button"
                               disabled={respondingId === consent.id}
                               onClick={() => {
-                                if (
-                                  window.confirm(
-                                    'Bu geziye verdiğiniz katılım iznini iptal etmek istediğinizden emin misiniz? Öğrenciniz servis ve etkinlik listesinden çıkarılacaktır.',
-                                  )
-                                ) {
-                                  void handleParentResponse(
-                                    consent,
-                                    'DECLINED',
-                                    'Veli izni iptal etti',
-                                  );
-                                }
+                                setConfirmDialog({
+                                  isOpen: true,
+                                  title: 'Gezi İznini İptal Et',
+                                  description:
+                                    'Çocuğunuzun bu geziye katılım iznini iptal etmek istediğinizden emin misiniz? Öğrenciniz servis ve etkinlik listesinden çıkarılacaktır.',
+                                  confirmText: 'Evet, İznimi İptal Et',
+                                  cancelText: 'Vazgeç',
+                                  variant: 'danger',
+                                  onConfirm: () => {
+                                    setConfirmDialog(null);
+                                    void handleParentResponse(
+                                      consent,
+                                      'DECLINED',
+                                      'Veli izni iptal etti',
+                                    );
+                                  },
+                                });
                               }}
                               className="px-3.5 py-2 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 dark:text-rose-300 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 transition-colors flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
                             >
@@ -1180,6 +1222,20 @@ export function EventsPage(): JSX.Element {
           onCreated={handleCreateWorkshop}
         />
       )}
+
+      {/* TACTILE CONFIRMATION POPUP MODAL (Replaces browser window.confirm) */}
+      {confirmDialog && confirmDialog.isOpen && (
+        <ConfirmModal
+          isOpen={confirmDialog.isOpen}
+          title={confirmDialog.title}
+          description={confirmDialog.description}
+          confirmText={confirmDialog.confirmText}
+          cancelText={confirmDialog.cancelText}
+          variant={confirmDialog.variant}
+          onConfirm={() => void confirmDialog.onConfirm()}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
     </div>
   );
 }
@@ -1412,13 +1468,13 @@ function EventRosterModal({
   consent: EventConsent;
   onClose: () => void;
   isLoading: boolean;
-  onCancelConsent?: (consent: EventConsent) => Promise<void>;
+  onCancelConsent?: (consent: EventConsent) => void | Promise<void>;
   onUpdateStaffDecision?: (
     consentId: string,
     studentId: string,
     decision: EventConsentDecision,
     studentName: string,
-  ) => Promise<void>;
+  ) => void | Promise<void>;
 }): JSX.Element {
   const [filter, setFilter] = useState<'ALL' | 'APPROVED' | 'DECLINED'>('ALL');
   const [search, setSearch] = useState('');
