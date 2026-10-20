@@ -192,4 +192,44 @@ describe('EventsPage', () => {
 
     expect(screen.getByText('Atatürk Arboretumu Gezisi')).toBeInTheDocument();
   });
+
+  it('allows staff to add a new in-school workshop via modal', async () => {
+    const user = userEvent.setup();
+    mockUseAuth.mockReturnValue({
+      state: {
+        status: 'authenticated',
+        user: { id: 'admin-1', role: 'ADMIN', tenantId: 't-1', email: 'admin@demo.test' },
+      },
+    });
+
+    render(<EventsPage />);
+
+    // Switch to Okul İçi Etkinlikler
+    const inSchoolTab = await screen.findByText('Okul İçi Etkinlikler & Atölyeler');
+    await user.click(inSchoolTab);
+
+    // Look for Yeni Atölye Ekle button
+    const addWorkshopBtn = screen.getByText('Yeni Atölye Ekle');
+    await user.click(addWorkshopBtn);
+
+    expect(screen.getByText('Yeni Okul İçi Atölye / Etkinlik Ekle')).toBeInTheDocument();
+
+    const titleInput = screen.getByPlaceholderText(
+      'Örn: 🎨 Ebru Sanatı Atölyesi veya 🔬 Yanardağ Deneyi',
+    );
+    await user.type(titleInput, '🎨 Ebru Sanatı Atölyesi');
+
+    const descInput = screen.getByPlaceholderText(
+      'Atölyenin amacı, çocuklara katacağı beceriler ve etkinlik süreci...',
+    );
+    await user.type(descInput, 'Geleneksel Türk el sanatları ebru çalışması.');
+
+    const submitBtn = screen.getByText('Atölyeyi Ekle');
+    await user.click(submitBtn);
+
+    // Modal should close and new workshop should appear
+    expect(screen.queryByText('Yeni Okul İçi Atölye / Etkinlik Ekle')).not.toBeInTheDocument();
+    expect(screen.getByText('🎨 Ebru Sanatı Atölyesi')).toBeInTheDocument();
+    expect(screen.getByText(/Geleneksel Türk el sanatları ebru çalışması/)).toBeInTheDocument();
+  });
 });

@@ -15,6 +15,7 @@ import {
   Bus,
   Sparkles,
   FileText,
+  Trash2,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import {
@@ -36,6 +37,70 @@ import type {
 } from '@kidscare/shared-types';
 
 export type EventCategoryTab = 'trips' | 'in_school' | 'forms';
+
+export interface InSchoolWorkshop {
+  id: string;
+  title: string;
+  category: string;
+  timing: string;
+  targetClassroom: string;
+  location: string;
+  instructor?: string | undefined;
+  requirements?: string | undefined;
+  description: string;
+  createdAt?: string | undefined;
+}
+
+const DEFAULT_WORKSHOPS: InSchoolWorkshop[] = [
+  {
+    id: 'ws-1',
+    title: '🎨 Kil & Çömlek Atölyesi Günü',
+    category: 'Sanat & Yaratıcılık',
+    timing: 'Bu Hafta',
+    targetClassroom: 'Tüm Sınıflar',
+    location: 'Etkinlik Salonu',
+    instructor: 'Görsel Sanatlar Öğretmeni',
+    requirements: 'Önlük gereklidir',
+    description:
+      'Çocuklarımızın motor becerilerini geliştiren, doğal kil hamuruyla heykeltıraşlık deneyimi.',
+  },
+  {
+    id: 'ws-2',
+    title: '🎭 İnteraktif Kukla Tiyatrosu',
+    category: 'Sahne Sanatları',
+    timing: 'Gelecek Hafta',
+    targetClassroom: 'Tüm Sınıflar',
+    location: 'Çok Amaçlı Salon',
+    instructor: 'Gezici Masal Kukla Ekibi',
+    requirements: 'Tüm Sınıflar Katılımlı',
+    description:
+      'Okulumuza konuk olan profesyonel tiyatro ekibiyle "Ormanın Neşeli Sakinleri" oyunu.',
+  },
+  {
+    id: 'ws-3',
+    title: '🎈 Çocuk Şenliği & Kostüm Partisi',
+    category: 'Özel Gün',
+    timing: '23 Nisan',
+    targetClassroom: 'Tüm Sınıflar',
+    location: 'Okul Bahçesi',
+    instructor: 'Okul Yönetimi & Öğretmenler',
+    requirements: 'Veli Katılımlı & Kostüm',
+    description:
+      'Müzikli dans gösterileri, yüz boyama ve bahçe oyun istasyonlarıyla büyük çocuk bayramı kutlaması.',
+  },
+  {
+    id: 'ws-4',
+    title: '🔬 Minik Mucitler Bilim & Yanardağ Deneyi',
+    category: 'Bilim & Doğa',
+    timing: 'Bu Cuma - 10:30',
+    targetClassroom: 'Büyük Yaş Grubu (5-6 Yaş)',
+    location: 'Fen & Doğa Köşesi',
+    instructor: 'Selin Öğretmen',
+    requirements: 'Deney Gözlüğü Okul Tarafından Sağlanır',
+    description:
+      'Zararsız karbonat ve sirke reaksiyonlarıyla yanardağ püskürmesini gözlemleme ve keşif etkinliği.',
+  },
+];
 
 export function EventsPage(): JSX.Element {
   const { state: authState } = useAuth();
@@ -89,6 +154,54 @@ export function EventsPage(): JSX.Element {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const [rosterConsent, setRosterConsent] = useState<EventConsent | null>(null);
   const [isLoadingRoster, setIsLoadingRoster] = useState<boolean>(false);
+
+  // In-School Workshops Management
+  const tenantId = authState.status === 'authenticated' ? authState.user.tenantId : 'default';
+  const workshopsStorageKey = `kidscare.workshops.${tenantId}`;
+
+  const [workshops, setWorkshops] = useState<InSchoolWorkshop[]>(() => {
+    try {
+      const saved = localStorage.getItem(workshopsStorageKey);
+      if (saved) {
+        const parsed: unknown = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed as InSchoolWorkshop[];
+      }
+    } catch {
+      // fallback
+    }
+    return DEFAULT_WORKSHOPS;
+  });
+
+  const [isCreateWorkshopModalOpen, setIsCreateWorkshopModalOpen] = useState<boolean>(false);
+  const [workshopCategoryFilter, setWorkshopCategoryFilter] = useState<string>('all');
+
+  const filteredWorkshops = useMemo(() => {
+    if (workshopCategoryFilter === 'all') return workshops;
+    return workshops.filter((w) => w.category === workshopCategoryFilter);
+  }, [workshops, workshopCategoryFilter]);
+
+  function saveWorkshops(updated: InSchoolWorkshop[]) {
+    setWorkshops(updated);
+    try {
+      localStorage.setItem(workshopsStorageKey, JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
+  }
+
+  function handleCreateWorkshop(newWs: InSchoolWorkshop) {
+    const updated = [newWs, ...workshops];
+    saveWorkshops(updated);
+    setIsCreateWorkshopModalOpen(false);
+    setActionSuccess(`"${newWs.title}" atölyesi başarıyla eklendi.`);
+  }
+
+  function handleDeleteWorkshop(id: string, title: string) {
+    if (!window.confirm(`"${title}" atölyesini silmek istediğinizden emin misiniz?`)) return;
+    const updated = workshops.filter((w) => w.id !== id);
+    saveWorkshops(updated);
+    setActionSuccess('Atölye başarıyla kaldırıldı.');
+  }
 
   // Parent response state
   const [respondingId, setRespondingId] = useState<string | null>(null);
@@ -202,7 +315,9 @@ export function EventsPage(): JSX.Element {
         badges={
           <>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/60 text-indigo-900 dark:text-indigo-300 font-bold text-[11px] border border-indigo-200/80 dark:border-indigo-800/60">
-              {consents.length} Kayıtlı Etkinlik
+              {categoryTab === 'in_school'
+                ? `${workshops.length} Kurum İçi Atölye`
+                : `${consents.length} Kayıtlı Etkinlik`}
             </span>
           </>
         }
@@ -218,6 +333,18 @@ export function EventsPage(): JSX.Element {
             >
               <Plus className="w-4 h-4 text-indigo-700 dark:text-indigo-400" />
               <span>Yeni Gezi / Etkinlik Oluştur</span>
+            </TactileButton>
+          ) : isStaff && categoryTab === 'in_school' ? (
+            <TactileButton
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsCreateWorkshopModalOpen(true)}
+              className="whitespace-nowrap text-purple-900 dark:text-purple-200 border-purple-300 dark:border-purple-700/80 hover:border-purple-400"
+              title="Yeni Okul İçi Atölye veya Etkinlik Ekle"
+            >
+              <Plus className="w-4 h-4 text-purple-700 dark:text-purple-400" />
+              <span>Yeni Atölye / Etkinlik Ekle</span>
             </TactileButton>
           ) : undefined
         }
@@ -252,6 +379,9 @@ export function EventsPage(): JSX.Element {
         >
           <Sparkles className="w-4 h-4 text-purple-400" />
           <span>Okul İçi Etkinlikler & Atölyeler</span>
+          <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-teal-800 text-teal-100 dark:bg-slate-800">
+            {workshops.length}
+          </span>
         </button>
 
         <button
@@ -668,7 +798,7 @@ export function EventsPage(): JSX.Element {
       {/* TAB 2: OKUL İÇİ ETKİNLİKLER & ATÖLYELER */}
       {categoryTab === 'in_school' && (
         <div className="space-y-6">
-          <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-4">
+          <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 p-6 shadow-2xs space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -680,72 +810,132 @@ export function EventsPage(): JSX.Element {
                   günleri ve kutlamalar
                 </p>
               </div>
-              <span className="px-3 py-1 text-xs font-bold rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60 self-start sm:self-auto">
-                Dış Servis Gerekmez
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
-              <div className="p-5 rounded-2xl bg-[#FCFAF7] dark:bg-[#0F172A] border border-[#DDD4C4] dark:border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300">
-                    Sanat & Yaratıcılık
-                  </span>
-                  <span className="text-xs text-slate-500">Bu Hafta</span>
-                </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                  🎨 Kil & Çömlek Atölyesi Günü
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Çocuklarımızın motor becerilerini geliştiren, doğal kil hamuruyla heykeltıraşlık
-                  deneyimi.
-                </p>
-                <div className="pt-2 text-[11px] text-teal-800 dark:text-teal-300 font-bold border-t border-[#DDD4C4]/50 dark:border-slate-800 flex justify-between">
-                  <span>📍 Etkinlik Salonu</span>
-                  <span>Önlük gereklidir</span>
-                </div>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-[#FCFAF7] dark:bg-[#0F172A] border border-[#DDD4C4] dark:border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-900 dark:text-purple-300">
-                    Sahne Sanatları
-                  </span>
-                  <span className="text-xs text-slate-500">Gelecek Hafta</span>
-                </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                  🎭 İnteraktif Kukla Tiyatrosu
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Okulumuza konuk olan profesyonel tiyatro ekibiyle "Ormanın Neşeli Sakinleri"
-                  oyunu.
-                </p>
-                <div className="pt-2 text-[11px] text-teal-800 dark:text-teal-300 font-bold border-t border-[#DDD4C4]/50 dark:border-slate-800 flex justify-between">
-                  <span>📍 Çok Amaçlı Salon</span>
-                  <span>Tüm Sınıflar</span>
-                </div>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-[#FCFAF7] dark:bg-[#0F172A] border border-[#DDD4C4] dark:border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300">
-                    Özel Gün
-                  </span>
-                  <span className="text-xs text-slate-500">23 Nisan</span>
-                </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                  🎈 Çocuk Şenliği & Kostüm Partisi
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Müzikli dans gösterileri, yüz boyama ve bahçe oyun istasyonlarıyla büyük çocuk
-                  bayramı.
-                </p>
-                <div className="pt-2 text-[11px] text-teal-800 dark:text-teal-300 font-bold border-t border-[#DDD4C4]/50 dark:border-slate-800 flex justify-between">
-                  <span>📍 Okul Bahçesi</span>
-                  <span>Veli Katılımlı</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 text-xs font-bold rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60 self-start sm:self-auto">
+                  Dış Servis Gerekmez
+                </span>
+                {isStaff && (
+                  <TactileButton
+                    type="button"
+                    variant="teal"
+                    size="sm"
+                    onClick={() => setIsCreateWorkshopModalOpen(true)}
+                    className="whitespace-nowrap"
+                    title="Yeni Atölye veya Etkinlik Planla"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Yeni Atölye Ekle</span>
+                  </TactileButton>
+                )}
               </div>
             </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-[#DDD4C4]/60 dark:border-slate-800">
+              {[
+                { id: 'all', label: 'Tüm Atölyeler' },
+                { id: 'Sanat & Yaratıcılık', label: '🎨 Sanat & Yaratıcılık' },
+                { id: 'Sahne Sanatları', label: '🎭 Sahne Sanatları' },
+                { id: 'Bilim & Doğa', label: '🔬 Bilim & Doğa' },
+                { id: 'Müzik & Ritim', label: '🎵 Müzik & Ritim' },
+                { id: 'Özel Gün', label: '🎈 Özel Gün & Kutlama' },
+                { id: 'Spor & Hareket', label: '⚽ Spor & Hareket' },
+              ].map((cat) => {
+                const active = workshopCategoryFilter === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setWorkshopCategoryFilter(cat.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      active
+                        ? 'bg-purple-700 text-white shadow-2xs'
+                        : 'bg-[#FCFAF7] dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-[#DDD4C4] dark:border-slate-700 hover:bg-purple-50 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Workshop Grid or EmptyState */}
+            {filteredWorkshops.length === 0 ? (
+              <EmptyState
+                icon={Sparkles}
+                title="Bu Kategoride Atölye Bulunmuyor"
+                description="Seçtiğiniz filtreye uygun okul içi etkinlik henüz planlanmadı."
+                action={
+                  isStaff ? (
+                    <TactileButton
+                      type="button"
+                      variant="teal"
+                      size="sm"
+                      onClick={() => setIsCreateWorkshopModalOpen(true)}
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>İlk Atölyeyi Ekle</span>
+                    </TactileButton>
+                  ) : undefined
+                }
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+                {filteredWorkshops.map((ws) => {
+                  return (
+                    <div
+                      key={ws.id}
+                      className="p-5 rounded-2xl bg-[#FCFAF7] dark:bg-[#0F172A] border border-[#DDD4C4] dark:border-slate-800 space-y-3 flex flex-col justify-between hover:shadow-xs transition-shadow"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-900 dark:text-purple-300">
+                            {ws.category}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs font-semibold text-slate-500">
+                              {ws.timing}
+                            </span>
+                            {isStaff && (
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteWorkshop(ws.id, ws.title)}
+                                className="p-1 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors ml-1 cursor-pointer"
+                                title="Atölyeyi Sil"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                            {ws.title}
+                          </h3>
+                          <span className="inline-block mt-1 text-[11px] font-medium text-purple-800 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded-md border border-purple-200/60 dark:border-purple-800/40">
+                            Hedef: {ws.targetClassroom}
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                          {ws.description}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 text-[11px] text-teal-800 dark:text-teal-300 font-bold border-t border-[#DDD4C4]/50 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                        <span>📍 {ws.location}</span>
+                        {ws.requirements && (
+                          <span className="text-slate-600 dark:text-slate-400 font-medium">
+                            {ws.requirements}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -849,6 +1039,15 @@ export function EventsPage(): JSX.Element {
           consent={rosterConsent}
           onClose={() => setRosterConsent(null)}
           isLoading={isLoadingRoster}
+        />
+      )}
+
+      {/* CREATE WORKSHOP MODAL (Staff only) */}
+      {isCreateWorkshopModalOpen && (
+        <CreateWorkshopModal
+          classrooms={classrooms}
+          onClose={() => setIsCreateWorkshopModalOpen(false)}
+          onCreated={handleCreateWorkshop}
         />
       )}
     </div>
@@ -1322,5 +1521,232 @@ function EventRosterModal({
         <EventRosterPrint consent={consent} responses={responses} />
       </PrintPreviewModal>
     </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// CREATE WORKSHOP MODAL (In-School Events & Workshops)
+// ---------------------------------------------------------------------------
+function CreateWorkshopModal({
+  classrooms,
+  onClose,
+  onCreated,
+}: {
+  classrooms: Classroom[];
+  onClose: () => void;
+  onCreated: (workshop: InSchoolWorkshop) => void;
+}): JSX.Element {
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('Sanat & Yaratıcılık');
+  const [targetClassroom, setTargetClassroom] = useState('Tüm Sınıflar');
+  const [timing, setTiming] = useState('Bu Hafta');
+  const [location, setLocation] = useState('Etkinlik Salonu');
+  const [instructor, setInstructor] = useState('');
+  const [requirements, setRequirements] = useState('');
+  const [description, setDescription] = useState('');
+  const [modalError, setModalError] = useState<string | null>(null);
+
+  function handleSubmit(e: React.FormEvent): void {
+    e.preventDefault();
+    if (!title.trim()) {
+      setModalError('Lütfen atölye veya etkinlik başlığını giriniz.');
+      return;
+    }
+    if (!description.trim()) {
+      setModalError('Lütfen atölye açıklamasını ve içeriğini belirtiniz.');
+      return;
+    }
+
+    const newWorkshop: InSchoolWorkshop = {
+      id: `ws-${Date.now()}`,
+      title: title.trim(),
+      category,
+      targetClassroom,
+      timing: timing.trim() || 'Yakında',
+      location: location.trim() || 'Etkinlik Salonu',
+      instructor: instructor.trim() || undefined,
+      requirements: requirements.trim() || undefined,
+      description: description.trim(),
+      createdAt: new Date().toISOString(),
+    };
+
+    onCreated(newWorkshop);
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+      <div className="bg-white dark:bg-[#131B2E] rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4">
+        <div className="flex items-center justify-between border-b border-[#DDD4C4]/60 dark:border-slate-800 pb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-900/60 text-purple-800 dark:text-purple-300 flex items-center justify-center">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              Yeni Okul İçi Atölye / Etkinlik Ekle
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {modalError && (
+          <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-300 rounded-xl text-xs text-rose-700 dark:text-rose-300 font-medium">
+            {modalError}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-3.5">
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+              Atölye / Etkinlik Başlığı *
+            </label>
+            <input
+              type="text"
+              required
+              placeholder="Örn: 🎨 Ebru Sanatı Atölyesi veya 🔬 Yanardağ Deneyi"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Kategori *
+              </label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+              >
+                <option value="Sanat & Yaratıcılık">🎨 Sanat & Yaratıcılık</option>
+                <option value="Sahne Sanatları">🎭 Sahne Sanatları</option>
+                <option value="Bilim & Doğa">🔬 Bilim & Doğa</option>
+                <option value="Müzik & Ritim">🎵 Müzik & Ritim</option>
+                <option value="Özel Gün">🎈 Özel Gün & Kutlama</option>
+                <option value="Spor & Hareket">⚽ Spor & Hareket</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Hedef Sınıf / Kitle
+              </label>
+              <select
+                value={targetClassroom}
+                onChange={(e) => setTargetClassroom(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+              >
+                <option value="Tüm Sınıflar">Tüm Sınıflar (Tüm Okul)</option>
+                {classrooms.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Etkinlik Zamanı / Tarih *
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="Örn: Bu Hafta Çarşamba, 25 Ekim 10:30"
+                value={timing}
+                onChange={(e) => setTiming(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Mekan / Lokasyon
+              </label>
+              <select
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+              >
+                <option value="Etkinlik Salonu">Etkinlik Salonu</option>
+                <option value="Çok Amaçlı Salon">Çok Amaçlı Salon</option>
+                <option value="Sanat Atölyesi">Sanat Atölyesi</option>
+                <option value="Okul Bahçesi">Okul Bahçesi</option>
+                <option value="Fen & Doğa Köşesi">Fen & Doğa Köşesi</option>
+                <option value="Sınıf İçi">Sınıf İçi</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Eğitmen / Sorumlu (İsteğe Bağlı)
+              </label>
+              <input
+                type="text"
+                placeholder="Örn: Görsel Sanatlar Öğretmeni"
+                value={instructor}
+                onChange={(e) => setInstructor(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Ön Koşul / Not (İsteğe Bağlı)
+              </label>
+              <input
+                type="text"
+                placeholder="Örn: Önlük gereklidir, Veli katılımlı"
+                value={requirements}
+                onChange={(e) => setRequirements(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+              Atölye Açıklaması & Kazanımlar *
+            </label>
+            <textarea
+              required
+              rows={3}
+              placeholder="Atölyenin amacı, çocuklara katacağı beceriler ve etkinlik süreci..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white resize-none"
+            />
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800">
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn-tactile-secondary px-4 py-2 text-xs font-bold cursor-pointer"
+            >
+              Vazgeç
+            </button>
+            <button
+              type="submit"
+              className="btn-tactile-teal px-5 py-2 text-xs font-bold cursor-pointer flex items-center gap-1.5"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Atölyeyi Ekle</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
