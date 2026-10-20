@@ -90,4 +90,21 @@ export class ConsentsController {
       body,
     );
   }
+
+  @Post(':id/cancel')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER')
+  @HttpCode(200)
+  async cancel(
+    @CurrentTenantId() tenantId: string,
+    @CurrentUser() user: CurrentUserPayload,
+    @Param('id') id: string,
+    @Body() body?: { reason?: string },
+  ): Promise<ConsentWithRelations> {
+    return this.consentsService.cancel(
+      tenantId,
+      { userId: user.userId, role: user.role },
+      id,
+      body?.reason,
+    );
+  }
 }

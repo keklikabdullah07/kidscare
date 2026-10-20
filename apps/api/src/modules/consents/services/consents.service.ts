@@ -170,4 +170,39 @@ export class ConsentsService {
 
     return response;
   }
+
+  async cancel(
+    tenantId: string,
+    user: { userId: string; role: string },
+    id: string,
+    reason?: string,
+  ): Promise<ConsentWithRelations> {
+    const consent = await this.repo.findById(tenantId, id);
+    if (!consent) {
+      throw new NotFoundException('Etkinlik izin formu bulunamadı');
+    }
+
+    if (consent.status === 'CANCELLED') {
+      throw new BadRequestException('Bu etkinlik zaten iptal edilmiş.');
+    }
+
+    if (!['SUPER_ADMIN', 'ADMIN', 'TEACHER'].includes(user.role)) {
+      throw new ForbiddenException('Bu etkinliği iptal etme yetkiniz yoktur.');
+    }
+
+    const updated = await this.repo.updateStatus(tenantId, id, 'CANCELLED');
+
+    if (this.notificationsService && consent.responses && consent.responses.length > 0) {
+      for (const resp of consent.responses) {
+        void this.notificationsService.notifyStudentParents(tenantId, resp.studentId, {
+          title: '🚫 Gezi İptal Edildi',
+          body: `"${consent.title}" gezisi iptal edilmiştir.${reason ? ` Açıklama: ${reason}` : ''}`,
+          type: 'SYSTEM',
+          data: { consentId: id, status: 'CANCELLED' },
+        });
+      }
+    }
+
+    return updated;
+  }
 }

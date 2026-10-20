@@ -129,4 +129,22 @@ export class ConsentsRepository {
       }),
     );
   }
+
+  async updateStatus(tenantId: string, id: string, status: string): Promise<ConsentWithRelations> {
+    return this.prisma.withTenant((client) =>
+      client.eventConsent.update({
+        where: { id, tenantId },
+        data: { status },
+        include: {
+          classroom: { select: { id: true, name: true } },
+          responses: {
+            include: {
+              student: { select: { id: true, firstName: true, lastName: true } },
+              parentUser: { select: { id: true, email: true } },
+            },
+          },
+        },
+      }),
+    );
+  }
 }

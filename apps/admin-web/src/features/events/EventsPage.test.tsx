@@ -58,6 +58,10 @@ describe('EventsPage', () => {
     vi.mocked(consentsApi.getEventConsent).mockResolvedValue(mockEvent);
     vi.mocked(consentsApi.createEventConsent).mockResolvedValue(mockEvent);
     vi.mocked(consentsApi.respondEventConsent).mockResolvedValue(mockEvent.responses![0]!);
+    vi.mocked(consentsApi.cancelEventConsent).mockResolvedValue({
+      ...mockEvent,
+      status: 'CANCELLED',
+    });
   });
 
   it('renders staff view with create button and event list', async () => {
@@ -231,5 +235,94 @@ describe('EventsPage', () => {
     expect(screen.queryByText('Yeni Okul İçi Atölye / Etkinlik Ekle')).not.toBeInTheDocument();
     expect(screen.getByText('🎨 Ebru Sanatı Atölyesi')).toBeInTheDocument();
     expect(screen.getByText(/Geleneksel Türk el sanatları ebru çalışması/)).toBeInTheDocument();
+  });
+
+  it('allows staff to cancel an event from the card', async () => {
+    const user = userEvent.setup();
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    mockUseAuth.mockReturnValue({
+      state: {
+        status: 'authenticated',
+        user: { id: 'admin-1', role: 'ADMIN', tenantId: 't-1', email: 'admin@demo.test' },
+      },
+    });
+
+    render(<EventsPage />);
+    const cancelBtn = await screen.findByRole('button', { name: /İptal Et/i });
+    await user.click(cancelBtn);
+
+    expect(consentsApi.cancelEventConsent).toHaveBeenCalledWith('consent-1');
+  });
+
+  it('allows parent to cancel their previous permission', async () => {
+    const user = userEvent.setup();
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const parentEvent: EventConsent = {
+      ...mockEvent,
+      myResponse: {
+        id: 'resp-1',
+        tenantId: 't-1',
+        consentId: 'consent-1',
+        studentId: 's-1',
+        parentUserId: 'parent-1',
+        decision: 'APPROVED',
+        respondedAt: new Date().toISOString(),
+      },
+    };
+    vi.mocked(consentsApi.getEventConsents).mockResolvedValue([parentEvent]);
+
+    mockUseAuth.mockReturnValue({
+      state: {
+        status: 'authenticated',
+        user: { id: 'parent-1', role: 'PARENT', tenantId: 't-1', email: 'parent@demo.test' },
+      },
+    });
+
+    render(<EventsPage />);
+    const cancelPermBtn = await screen.findByRole('button', {
+      name: /İzni İptal Et \(Katılmayacak\)/i,
+    });
+    await user.click(cancelPermBtn);
+
+    expect(consentsApi.respondEventConsent).toHaveBeenCalledWith(
+      'consent-1',
+      expect.objectContaining({
+        studentId: 's-1',
+        decision: 'DECLINED',
+      }),
+    );
+  });
+
+  it('allows staff to cancel a student permission in roster modal', async () => {
+    const user = userEvent.setup();
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    mockUseAuth.mockReturnValue({
+      state: {
+        status: 'authenticated',
+        user: { id: 'teacher-1', role: 'TEACHER', tenantId: 't-1', email: 'teacher@demo.test' },
+      },
+    });
+
+    render(<EventsPage />);
+    const rosterBtn = await screen.findByText('Servis & Katılımcı Listesi');
+    await user.click(rosterBtn);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', { name: /Servis & Katılımcı Listesi/ }),
+      ).toBeInTheDocument();
+    });
+
+    // In the roster table, Ada Yılmaz has decision APPROVED, should have İzni İptal Et button
+    const cancelStudentBtn = await screen.findByRole('button', { name: 'İzni İptal Et' });
+    await user.click(cancelStudentBtn);
+
+    expect(consentsApi.respondEventConsent).toHaveBeenCalledWith(
+      'consent-1',
+      expect.objectContaining({
+        studentId: 's-1',
+        decision: 'DECLINED',
+      }),
+    );
   });
 });

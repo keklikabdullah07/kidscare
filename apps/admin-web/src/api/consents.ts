@@ -40,3 +40,10 @@ export async function respondEventConsent(
     },
   );
 }
+
+export async function cancelEventConsent(id: string, reason?: string): Promise<EventConsent> {
+  return apiFetch<EventConsent>(`/events/consents/${encodeURIComponent(id)}/cancel`, {
+    method: 'POST',
+    body: JSON.stringify({ reason }),
+  });
+}

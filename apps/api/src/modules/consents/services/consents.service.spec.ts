@@ -36,6 +36,7 @@ describe('ConsentsService', () => {
       findAll: jest.fn(),
       findById: jest.fn(),
       respond: jest.fn(),
+      updateStatus: jest.fn(),
     } as unknown as jest.Mocked<ConsentsRepository>;
 
     studentsService = {
@@ -135,6 +136,43 @@ describe('ConsentsService', () => {
           decision: 'APPROVED',
         }),
       );
+    });
+  });
+
+  describe('cancel', () => {
+    it('cancels trip consent for staff member', async () => {
+      repo.findById.mockResolvedValue({
+        id: 'consent-1',
+        title: 'Hayvanat Bahçesi',
+        status: 'ACTIVE',
+        responses: [],
+      } as unknown as ConsentWithRelations);
+
+      repo.updateStatus.mockResolvedValue({
+        id: 'consent-1',
+        title: 'Hayvanat Bahçesi',
+        status: 'CANCELLED',
+      } as unknown as ConsentWithRelations);
+
+      const res = await service.cancel(
+        't-1',
+        { userId: 'teacher-1', role: 'TEACHER' },
+        'consent-1',
+      );
+
+      expect(res.status).toBe('CANCELLED');
+      expect(repo.updateStatus).toHaveBeenCalledWith('t-1', 'consent-1', 'CANCELLED');
+    });
+
+    it('throws ForbiddenException if parent tries to cancel trip', async () => {
+      repo.findById.mockResolvedValue({
+        id: 'consent-1',
+        status: 'ACTIVE',
+      } as unknown as ConsentWithRelations);
+
+      await expect(
+        service.cancel('t-1', { userId: 'parent-1', role: 'PARENT' }, 'consent-1'),
+      ).rejects.toThrow('Bu etkinliği iptal etme yetkiniz yoktur.');
     });
   });
 });

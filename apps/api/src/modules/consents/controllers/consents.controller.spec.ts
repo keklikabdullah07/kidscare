@@ -17,6 +17,7 @@ describe('ConsentsController', () => {
       findAll: jest.fn(),
       findOne: jest.fn(),
       respond: jest.fn(),
+      cancel: jest.fn(),
     } as unknown as jest.Mocked<ConsentsService>;
 
     controller = new ConsentsController(service);
@@ -85,6 +86,28 @@ describe('ConsentsController', () => {
           studentId: 'student-1',
           decision: 'APPROVED',
         }),
+      );
+    });
+  });
+
+  describe('cancel', () => {
+    it('cancels consent by staff', async () => {
+      service.cancel.mockResolvedValue({
+        id: 'consent-1',
+        status: 'CANCELLED',
+      } as unknown as ConsentWithRelations);
+      const user: CurrentUserPayload = {
+        userId: 'admin-1',
+        role: 'ADMIN',
+        tenantId: 't-1',
+      };
+      const res = await controller.cancel('t-1', user, 'consent-1', { reason: 'Hava durumu' });
+      expect(res.status).toBe('CANCELLED');
+      expect(service.cancel).toHaveBeenCalledWith(
+        't-1',
+        { userId: 'admin-1', role: 'ADMIN' },
+        'consent-1',
+        'Hava durumu',
       );
     });
   });

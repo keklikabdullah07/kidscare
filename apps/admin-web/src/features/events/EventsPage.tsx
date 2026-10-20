@@ -16,6 +16,7 @@ import {
   Sparkles,
   FileText,
   Trash2,
+  Ban,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import {
@@ -23,6 +24,7 @@ import {
   getEventConsent,
   createEventConsent,
   respondEventConsent,
+  cancelEventConsent,
 } from '../../api/consents';
 import { listClassrooms } from '../../api/classrooms';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -236,11 +238,11 @@ export function EventsPage(): JSX.Element {
   async function handleParentResponse(
     consent: EventConsent,
     decision: EventConsentDecision,
+    customNote?: string,
   ): Promise<void> {
     const studentId =
       consent.myResponse?.studentId || (consent.responses && consent.responses[0]?.studentId);
     if (!studentId) {
-      // In parent view, studentId will be auto-resolved from first student if not present
       setError('Öğrenci kimliği belirlenemedi.');
       return;
     }
@@ -248,7 +250,7 @@ export function EventsPage(): JSX.Element {
     setRespondingId(consent.id);
     setActionSuccess(null);
     try {
-      const note = responseNotes[consent.id]?.trim();
+      const note = customNote || responseNotes[consent.id]?.trim();
       const payload: {
         studentId: string;
         decision: EventConsentDecision;
@@ -263,13 +265,68 @@ export function EventsPage(): JSX.Element {
       setActionSuccess(
         decision === 'APPROVED'
           ? 'Gezi izniniz başarıyla onaylandı. Servis ve etkinlik listesine eklendiniz.'
-          : 'Geziye katılmayacağınız kreş yönetimine iletildi.',
+          : 'Gezi katılım izniniz iptal edildi (Katılmayacak olarak kaydedildi).',
       );
       await loadData();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'İzin yanıtı iletilirken hata oluştu.');
     } finally {
       setRespondingId(null);
+    }
+  }
+
+  async function handleCancelConsent(consent: EventConsent): Promise<void> {
+    const confirmMsg = `"${consent.title}" gezisini iptal etmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz. Veli onayları geçersiz sayılacak ve gezi "İptal Edildi" olarak işaretlenecektir.`;
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      await cancelEventConsent(consent.id);
+      setActionSuccess(`"${consent.title}" gezisi başarıyla iptal edildi.`);
+      if (rosterConsent?.id === consent.id) {
+        setRosterConsent((prev) => (prev ? { ...prev, status: 'CANCELLED' } : null));
+      }
+      await loadData();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Gezi iptal edilirken hata oluştu.');
+    }
+  }
+
+  async function handleUpdateStaffDecision(
+    consentId: string,
+    studentId: string,
+    decision: EventConsentDecision,
+    studentName: string,
+  ): Promise<void> {
+    const actionText =
+      decision === 'DECLINED' ? 'katılım iznini iptal etmek' : 'izinli olarak kaydetmek';
+    if (
+      !window.confirm(`${studentName} adlı öğrencinin ${actionText} istediğinizden emin misiniz?`)
+    )
+      return;
+
+    try {
+      await respondEventConsent(consentId, {
+        studentId,
+        decision,
+        notes:
+          decision === 'DECLINED'
+            ? 'Yönetici/Öğretmen tarafından iptal edildi'
+            : 'Yönetici/Öğretmen tarafından izin verildi',
+      });
+      setActionSuccess(
+        decision === 'DECLINED'
+          ? `${studentName} için izin iptal edildi (Katılmayacak olarak güncellendi).`
+          : `${studentName} için gezi izni onaylandı.`,
+      );
+      if (rosterConsent?.id === consentId) {
+        const refreshed = await getEventConsent(consentId);
+        setRosterConsent(refreshed);
+      }
+      await loadData();
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : 'Öğrenci izin durumu güncellenirken hata oluştu.',
+      );
     }
   }
 
@@ -563,10 +620,16 @@ export function EventsPage(): JSX.Element {
                             className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${
                               consent.status === 'ACTIVE'
                                 ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300'
-                                : 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                                : consent.status === 'CANCELLED'
+                                  ? 'bg-rose-50 text-rose-800 border-rose-300 dark:bg-rose-950/60 dark:text-rose-300'
+                                  : 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300'
                             }`}
                           >
-                            {consent.status === 'ACTIVE' ? 'Aktif' : consent.status}
+                            {consent.status === 'ACTIVE'
+                              ? 'Aktif'
+                              : consent.status === 'CANCELLED'
+                                ? 'İptal Edildi'
+                                : consent.status}
                           </span>
                         </div>
 
@@ -607,7 +670,7 @@ export function EventsPage(): JSX.Element {
                               style={{
                                 width: `${
                                   totalResponses > 0 ? (approvedCount / totalResponses) * 100 : 0
-                                }%`,
+                                }`,
                               }}
                               className="bg-emerald-500 h-full transition-all"
                             />
@@ -615,7 +678,7 @@ export function EventsPage(): JSX.Element {
                               style={{
                                 width: `${
                                   totalResponses > 0 ? (declinedCount / totalResponses) * 100 : 0
-                                }%`,
+                                }`,
                               }}
                               className="bg-rose-500 h-full transition-all"
                             />
@@ -626,15 +689,26 @@ export function EventsPage(): JSX.Element {
                         </div>
                       </div>
 
-                      <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800">
+                      <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => void openRosterModal(consent)}
-                          className="w-full btn-tactile-secondary py-2 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
+                          className="flex-1 btn-tactile-secondary py-2 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
                         >
                           <Users className="w-3.5 h-3.5" />
                           <span>Servis & Katılımcı Listesi</span>
                         </button>
+                        {consent.status === 'ACTIVE' && (
+                          <button
+                            type="button"
+                            onClick={() => void handleCancelConsent(consent)}
+                            title="Geziyi İptal Et"
+                            className="px-3 py-2 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-800 transition-colors cursor-pointer flex items-center gap-1.5 shrink-0"
+                          >
+                            <Ban className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                            <span>İptal Et</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
@@ -786,6 +860,60 @@ export function EventsPage(): JSX.Element {
                           <span>{consent.myResponse.notes}</span>
                         </div>
                       )}
+
+                      {consent.status === 'CANCELLED' ? (
+                        <div className="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-xs text-rose-800 dark:text-rose-200 flex items-center gap-2 font-medium">
+                          <Ban className="w-4 h-4 shrink-0 text-rose-600" />
+                          <span>Bu gezi kreş yönetimi / öğretmen tarafından iptal edilmiştir.</span>
+                        </div>
+                      ) : hasResponded && consent.status === 'ACTIVE' ? (
+                        <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-[#DDD4C4]/60 dark:border-slate-800">
+                          <span className="text-[11px] text-slate-500">
+                            {isApproved
+                              ? 'Fikriniz değiştiyse katılım iznini geri çekebilirsiniz:'
+                              : 'Fikriniz değiştiyse geziye katılım izni verebilirsiniz:'}
+                          </span>
+                          {isApproved ? (
+                            <button
+                              type="button"
+                              disabled={respondingId === consent.id}
+                              onClick={() => {
+                                if (
+                                  window.confirm(
+                                    'Bu geziye verdiğiniz katılım iznini iptal etmek istediğinizden emin misiniz? Öğrenciniz servis ve etkinlik listesinden çıkarılacaktır.',
+                                  )
+                                ) {
+                                  void handleParentResponse(
+                                    consent,
+                                    'DECLINED',
+                                    'Veli izni iptal etti',
+                                  );
+                                }
+                              }}
+                              className="px-3.5 py-2 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 dark:text-rose-300 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 transition-colors flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
+                            >
+                              <Ban className="w-3.5 h-3.5" />
+                              <span>İzni İptal Et (Katılmayacak)</span>
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              disabled={respondingId === consent.id}
+                              onClick={() => {
+                                void handleParentResponse(
+                                  consent,
+                                  'APPROVED',
+                                  'Veli izni onayladı',
+                                );
+                              }}
+                              className="px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 dark:text-emerald-300 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 transition-colors flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span>Fikrimi Değiştirdim: İzin Ver</span>
+                            </button>
+                          )}
+                        </div>
+                      ) : null}
                     </div>
                   );
                 },
@@ -1039,6 +1167,8 @@ export function EventsPage(): JSX.Element {
           consent={rosterConsent}
           onClose={() => setRosterConsent(null)}
           isLoading={isLoadingRoster}
+          onCancelConsent={handleCancelConsent}
+          onUpdateStaffDecision={handleUpdateStaffDecision}
         />
       )}
 
@@ -1276,10 +1406,19 @@ function EventRosterModal({
   consent,
   onClose,
   isLoading,
+  onCancelConsent,
+  onUpdateStaffDecision,
 }: {
   consent: EventConsent;
   onClose: () => void;
   isLoading: boolean;
+  onCancelConsent?: (consent: EventConsent) => Promise<void>;
+  onUpdateStaffDecision?: (
+    consentId: string,
+    studentId: string,
+    decision: EventConsentDecision,
+    studentName: string,
+  ) => Promise<void>;
 }): JSX.Element {
   const [filter, setFilter] = useState<'ALL' | 'APPROVED' | 'DECLINED'>('ALL');
   const [search, setSearch] = useState('');
@@ -1332,6 +1471,22 @@ function EventRosterModal({
               </p>
             </div>
             <div className="flex items-center gap-2">
+              {consent.status === 'ACTIVE' && onCancelConsent && (
+                <button
+                  type="button"
+                  onClick={() => void onCancelConsent(consent)}
+                  className="py-1.5 px-3 text-xs font-bold flex items-center gap-1.5 cursor-pointer text-rose-700 dark:text-rose-300 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 rounded-xl transition-colors"
+                >
+                  <Ban className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                  <span>Geziyi İptal Et</span>
+                </button>
+              )}
+              {consent.status === 'CANCELLED' && (
+                <span className="px-3 py-1 text-xs font-bold rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-300 flex items-center gap-1.5">
+                  <Ban className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                  <span>Bu Gezi İptal Edilmiştir</span>
+                </span>
+              )}
               <button
                 type="button"
                 onClick={handlePrint}
@@ -1446,6 +1601,7 @@ function EventRosterModal({
                     <th className="py-2.5 px-3.5 font-bold">İzin Durumu</th>
                     <th className="py-2.5 px-3.5 font-bold">Veli Notu</th>
                     <th className="py-2.5 px-3.5 font-bold">Yanıt Tarihi</th>
+                    <th className="py-2.5 px-3.5 font-bold text-right">İşlem</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#DDD4C4]/40 dark:divide-slate-800">
@@ -1500,6 +1656,45 @@ function EventRosterModal({
                             hour: '2-digit',
                             minute: '2-digit',
                           })}
+                        </td>
+                        <td className="py-2.5 px-3.5 text-right">
+                          {consent.status === 'ACTIVE' && onUpdateStaffDecision ? (
+                            isApproved ? (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  void onUpdateStaffDecision(
+                                    consent.id,
+                                    r.studentId,
+                                    'DECLINED',
+                                    `${r.student?.firstName || ''} ${r.student?.lastName || ''}`,
+                                  )
+                                }
+                                className="px-2.5 py-1 rounded-lg text-[11px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 dark:text-rose-300 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 transition-colors cursor-pointer"
+                                title="Velinin talebiyle veya mazeret nedeniyle bu öğrencinin iznini iptal et"
+                              >
+                                İzni İptal Et
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  void onUpdateStaffDecision(
+                                    consent.id,
+                                    r.studentId,
+                                    'APPROVED',
+                                    `${r.student?.firstName || ''} ${r.student?.lastName || ''}`,
+                                  )
+                                }
+                                className="px-2.5 py-1 rounded-lg text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 dark:text-emerald-300 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 transition-colors cursor-pointer"
+                                title="Öğrenciye izin ver (Servis listesine ekle)"
+                              >
+                                İzin Verildi Yap
+                              </button>
+                            )
+                          ) : (
+                            <span className="text-[11px] text-slate-400">-</span>
+                          )}
                         </td>
                       </tr>
                     );
