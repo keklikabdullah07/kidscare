@@ -27,6 +27,11 @@ export class StudentsService {
   }
 
   async findAll(tenantId: string, user?: CurrentUserPayload): Promise<Student[]> {
+    // Veli rolü için yalnızca velinin kendi çocukları döner
+    if (user?.role === 'PARENT') {
+      return this.findByParent(tenantId, user.userId);
+    }
+
     // Madde 21: Öğretmen rolü için sadece atandığı sınıfların öğrencileri izole edilir
     if (user?.role === 'TEACHER') {
       const classroomIds = await this.getTeacherClassroomIds(tenantId, user.userId);

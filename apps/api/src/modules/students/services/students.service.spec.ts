@@ -77,6 +77,28 @@ describe('StudentsService', () => {
       expect(result).toHaveLength(1);
       expect(repo.findMany).toHaveBeenCalledWith('t-1', { classroomIds: ['class-1'] });
     });
+
+    it('returns only own children when role is PARENT', async () => {
+      const parentChild: PrismaStudent = { ...mockStudent, id: 's-1', parentId: 'parent-1' };
+      const otherChild: PrismaStudent = {
+        ...mockStudent,
+        id: 's-2',
+        parentId: 'other-parent',
+        firstName: 'Zeynep',
+        lastName: 'Demir',
+      };
+      repo.findMany.mockResolvedValue([parentChild, otherChild]);
+
+      const result = await service.findAll('t-1', {
+        userId: 'parent-1',
+        tenantId: 't-1',
+        role: 'PARENT',
+      });
+
+      expect(result).toHaveLength(1);
+      expect(result[0]?.id).toBe('s-1');
+      expect(result[0]?.firstName).toBe('Ada');
+    });
   });
 
   describe('findOne', () => {

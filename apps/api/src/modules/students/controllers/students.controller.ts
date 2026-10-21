@@ -40,6 +40,7 @@ export class StudentsController {
   constructor(@Inject(StudentsService) private readonly studentsService: StudentsService) {}
 
   @Get()
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF')
   async findAll(
     @CurrentTenantId() tenantId: string,
     @CurrentUser() user: CurrentUserPayload,
@@ -58,7 +59,10 @@ export class StudentsController {
     const row = await this.studentsService.findOne(tenantId, id);
     let teacherClassroomIds: string[] | undefined;
     if (user.role === 'TEACHER') {
-      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(
+        tenantId,
+        user.userId,
+      );
     }
     assertStudentVisibleToUser(row, user.role, user.userId, teacherClassroomIds);
     return this.toResponse(row);
@@ -74,7 +78,10 @@ export class StudentsController {
     const row = await this.studentsService.findOne(tenantId, id);
     let teacherClassroomIds: string[] | undefined;
     if (user.role === 'TEACHER') {
-      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(tenantId, user.userId);
+      teacherClassroomIds = await this.studentsService.getTeacherClassroomIds(
+        tenantId,
+        user.userId,
+      );
     }
     assertStudentVisibleToUser(row, user.role, user.userId, teacherClassroomIds);
     return this.studentsService.getPassport(tenantId, id);
