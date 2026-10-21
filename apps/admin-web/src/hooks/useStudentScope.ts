@@ -22,6 +22,11 @@ export interface UseStudentScopeResult {
   showStudentFilter: boolean;
   activeChild?: Student | null;
   refresh: () => Promise<void>;
+  // Adaptive scope (Spec 0062):
+  hasMultipleClassrooms: boolean;
+  singleClassroom: Classroom | null;
+  hasMultipleChildren: boolean;
+  singleChild: Student | null;
 }
 
 export function useStudentScope(): UseStudentScopeResult {
@@ -133,11 +138,23 @@ export function useStudentScope(): UseStudentScopeResult {
     selectedClassroomId,
   ]);
 
-  const showClassroomFilter = !isParent && availableClassrooms.length > 0;
+  const showClassroomFilter = isStaff || (isTeacher && availableClassrooms.length > 1);
   const showStudentFilter = isParent ? availableStudents.length > 1 : true;
   const activeChild = isParent
     ? (availableStudents.find((s) => s.id === selectedStudentId) ?? availableStudents[0] ?? null)
     : null;
+
+  // Adaptive scope (Spec 0062):
+  // Çok sınıf: yalnızca birden fazla sınıf varsa (veli hariç — veli sınıf görmez)
+  const hasMultipleClassrooms = isParent ? false : availableClassrooms.length > 1;
+  // Tek sınıf rozeti: öğretmen/staff için (veli hariç) ve yalnızca 1 sınıf varsa
+  const singleClassroom =
+    !isParent && availableClassrooms.length === 1 ? (availableClassrooms[0] ?? null) : null;
+
+  // Çok çocuk: yalnızca veli ise ve birden fazla çocuk varsa
+  const hasMultipleChildren = isParent && availableStudents.length > 1;
+  const singleChild =
+    isParent && availableStudents.length === 1 ? (availableStudents[0] ?? null) : null;
 
   return {
     role,
@@ -157,5 +174,9 @@ export function useStudentScope(): UseStudentScopeResult {
     showStudentFilter,
     activeChild,
     refresh: load,
+    hasMultipleClassrooms,
+    singleClassroom,
+    hasMultipleChildren,
+    singleChild,
   };
 }
