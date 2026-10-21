@@ -8,3 +8,4 @@ export * from './TactileTabs';
 export * from './TactileDateNavigator';
 export * from './MediaUrlField';
 export * from './StudentContextBadges';
+export * from './AdaptiveScopeBadge';
