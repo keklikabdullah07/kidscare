@@ -83,4 +83,63 @@ describe('DailyMenuPage (Parent)', () => {
     });
     expect(screen.getByText(/Mercimek Çorbası/i)).toBeInTheDocument();
   });
+
+  it('only shows allergen warnings matching PARENT own child', async () => {
+    mockFetchByUrl({
+      '/daily-menus': () =>
+        new Response(
+          JSON.stringify({
+            menu: fakeMenuResponse.menu,
+            allergenWarnings: [
+              {
+                studentId: 's-1',
+                studentName: 'Ada Yılmaz',
+                matchedAllergens: ['Fıstık'],
+              },
+              {
+                studentId: 's-2',
+                studentName: 'Zeynep Demir',
+                matchedAllergens: ['Laktoz'],
+              },
+            ],
+          }),
+          { status: 200 },
+        ),
+      '/students': () =>
+        new Response(
+          JSON.stringify([
+            {
+              id: 's-1',
+              tenantId: 't-1',
+              firstName: 'Ada',
+              lastName: 'Yılmaz',
+              parentId: 'parent-1',
+              classroomId: 'cls-1',
+              createdAt: '2023-09-01T00:00:00.000Z',
+              updatedAt: '2023-09-01T00:00:00.000Z',
+            },
+            {
+              id: 's-2',
+              tenantId: 't-1',
+              firstName: 'Zeynep',
+              lastName: 'Demir',
+              parentId: 'parent-2',
+              classroomId: 'cls-1',
+              createdAt: '2023-09-01T00:00:00.000Z',
+              updatedAt: '2023-09-01T00:00:00.000Z',
+            },
+          ]),
+          { status: 200 },
+        ),
+      '/classrooms': () => new Response(JSON.stringify([]), { status: 200 }),
+    });
+
+    render(<DailyMenuPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Ada Yılmaz/i)).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText(/Zeynep Demir/i)).not.toBeInTheDocument();
+  });
 });

@@ -68,10 +68,11 @@ export function DailyMenuPage(): JSX.Element {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
+  const isParent = authState.status === 'authenticated' && authState.user.role === 'PARENT';
   const currentUserId = authState.status === 'authenticated' ? authState.user.id : null;
 
   useEffect(() => {
-    if (isTeacher) {
+    if (isTeacher || isParent) {
       Promise.all([listClassrooms(), listStudents()])
         .then(([cList, sList]) => {
           setClassrooms(cList);
@@ -79,7 +80,7 @@ export function DailyMenuPage(): JSX.Element {
         })
         .catch(() => {});
     }
-  }, [isTeacher]);
+  }, [isTeacher, isParent]);
 
   const teacherClassrooms = useMemo(() => {
     if (!isTeacher || !currentUserId) return [];
@@ -100,10 +101,28 @@ export function DailyMenuPage(): JSX.Element {
     );
   }, [isTeacher, students, teacherClassroomIds]);
 
+  // Veli için yalnızca velinin kendi çocukları (parentId veya passport.secondaryParentId eşleşmesi)
+  const parentStudentIds = useMemo(() => {
+    if (!isParent || !currentUserId) return null;
+    return new Set(
+      students
+        .filter((s) => {
+          if (s.parentId === currentUserId) return true;
+          const pass = s.passport as Record<string, unknown> | null | undefined;
+          return pass?.['secondaryParentId'] === currentUserId;
+        })
+        .map((s) => s.id),
+    );
+  }, [isParent, currentUserId, students]);
+
   const scopedWarnings = useMemo(() => {
+    if (isParent) {
+      if (!parentStudentIds) return [];
+      return warnings.filter((w) => parentStudentIds.has(w.studentId));
+    }
     if (!isTeacher || !teacherStudentIds) return warnings;
     return warnings.filter((w) => teacherStudentIds.has(w.studentId));
-  }, [isTeacher, warnings, teacherStudentIds]);
+  }, [isParent, isTeacher, warnings, teacherStudentIds, parentStudentIds]);
 
   const canEdit =
     authState.status === 'authenticated' &&
