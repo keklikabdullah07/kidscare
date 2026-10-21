@@ -7,8 +7,6 @@ import {
   Clock,
   RotateCw,
   Search,
-  Calendar,
-  AlertCircle,
   FileText,
   Check,
   Trash2,
@@ -38,7 +36,6 @@ import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { PromptModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { StatCard } from '../../components/ui/StatCard';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
 import { PageHeader } from '../../components/ui/PageHeader';
@@ -515,38 +512,6 @@ export function MedicationPage(): JSX.Element {
           </>
         }
       />
-
-      {/* Dokunsal KPI Özet Sayaçları */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Onay Bekleyenler"
-          value={pendingCount}
-          subtitle="İnceleme gereken veli talepleri"
-          icon={AlertCircle}
-          variant="amber"
-        />
-        <StatCard
-          title="Günün Planları"
-          value={todayPlanCount}
-          subtitle="Verilecek onaylı/planlı dozlar"
-          icon={Calendar}
-          variant="blue"
-        />
-        <StatCard
-          title="Tamamlanan / Verilen"
-          value={givenCount}
-          subtitle="Bugün başarıyla uygulananlar"
-          icon={CheckCircle2}
-          variant="emerald"
-        />
-        <StatCard
-          title="Atlanan / Reddedilen"
-          value={archivedCount}
-          subtitle="Verilemeyen veya iptal kayıtlar"
-          icon={XCircle}
-          variant="rose"
-        />
-      </div>
 
       {/* Arama, Filtreleme ve Sekmeler */}
       <div className="bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl p-4 shadow-xs space-y-3.5">

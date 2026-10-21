@@ -672,45 +672,47 @@ export function SurveysPage(): JSX.Element {
         </div>
       )}
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Aktif Anketler"
-          value={stats.activeSurveys}
-          subtitle="Şu an oylamaya açık"
-          icon={Vote}
-          variant="teal"
-        />
-        <StatCard
-          title="Toplam Veli Yanıtı"
-          value={stats.totalResponses}
-          subtitle="Toplanan toplam oy sayısı"
-          icon={Users}
-          variant="amber"
-        />
-        <StatCard
-          title="Memnuniyet Skoru"
-          value={
-            stats.averageSatisfactionScore > 0
-              ? `${(stats.averageSatisfactionScore / 20).toFixed(1)} / 5.0`
-              : '—'
-          }
-          subtitle={
-            stats.averageSatisfactionScore > 0
-              ? `%${stats.averageSatisfactionScore} genel memnuniyet`
-              : 'Puanlama bekleniyor'
-          }
-          icon={Star}
-          variant="amber"
-        />
-        <StatCard
-          title="Toplam Anket"
-          value={stats.totalSurveys}
-          subtitle="Oluşturulan tüm anketler"
-          icon={CheckCircle2}
-          variant="teal"
-        />
-      </div>
+      {/* KPI Cards (Yalnızca Yönetici ve Personel için; Veli iç metrikleri görmez) */}
+      {!isParent && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard
+            title="Aktif Anketler"
+            value={stats.activeSurveys}
+            subtitle="Şu an oylamaya açık"
+            icon={Vote}
+            variant="teal"
+          />
+          <StatCard
+            title="Toplam Veli Yanıtı"
+            value={stats.totalResponses}
+            subtitle="Toplanan toplam oy sayısı"
+            icon={Users}
+            variant="amber"
+          />
+          <StatCard
+            title="Memnuniyet Skoru"
+            value={
+              stats.averageSatisfactionScore > 0
+                ? `${(stats.averageSatisfactionScore / 20).toFixed(1)} / 5.0`
+                : '—'
+            }
+            subtitle={
+              stats.averageSatisfactionScore > 0
+                ? `%${stats.averageSatisfactionScore} genel memnuniyet`
+                : 'Puanlama bekleniyor'
+            }
+            icon={Star}
+            variant="amber"
+          />
+          <StatCard
+            title="Toplam Anket"
+            value={stats.totalSurveys}
+            subtitle="Oluşturulan tüm anketler"
+            icon={CheckCircle2}
+            variant="teal"
+          />
+        </div>
+      )}
 
       {/* Main Tabs Navigation */}
       <TactileTabs<'active' | 'create' | 'closed'>
@@ -736,22 +738,24 @@ export function SurveysPage(): JSX.Element {
               <Filter className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
             </div>
 
-            <div className="flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-stone-400 shrink-0" />
-              <select
-                aria-label="Sınıf filtrele"
-                value={filterClassroomId}
-                onChange={(e) => setFilterClassroomId(e.target.value)}
-                className="text-xs bg-stone-50 dark:bg-slate-900 border border-stone-300 dark:border-slate-700 rounded-lg px-3 py-2 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-              >
-                <option value="">Tüm Kreş / Tüm Sınıflar</option>
-                {classrooms.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {!isParent && (
+              <div className="flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-stone-400 shrink-0" />
+                <select
+                  aria-label="Sınıf filtrele"
+                  value={filterClassroomId}
+                  onChange={(e) => setFilterClassroomId(e.target.value)}
+                  className="text-xs bg-stone-50 dark:bg-slate-900 border border-stone-300 dark:border-slate-700 rounded-lg px-3 py-2 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                >
+                  <option value="">Tüm Kreş / Tüm Sınıflar</option>
+                  {classrooms.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
           {/* Surveys Cards Grid */}

@@ -132,7 +132,7 @@ describe('MedicationPage', () => {
     expect(screen.getByText('İlacı Ver')).toBeInTheDocument();
   });
 
-  it('renders KPI cards and search filter', async () => {
+  it('renders tabs and search filter', async () => {
     mockFetchByUrl({
       '/medication/records': () => new Response(JSON.stringify(fakeRecords), { status: 200 }),
       '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
@@ -144,8 +144,8 @@ describe('MedicationPage', () => {
       expect(screen.getAllByText('Onay Bekleyenler').length).toBeGreaterThan(0);
     });
 
-    expect(screen.getByText('Günün Planları')).toBeInTheDocument();
-    expect(screen.getByText('Tamamlanan / Verilen')).toBeInTheDocument();
+    expect(screen.getByText('Günün İlaçları')).toBeInTheDocument();
+    expect(screen.getByText('Verilenler')).toBeInTheDocument();
 
     const searchInput = screen.getByPlaceholderText('İlaç adı, talimat veya öğrenci ara...');
     expect(searchInput).toBeInTheDocument();
