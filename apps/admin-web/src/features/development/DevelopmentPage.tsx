@@ -162,6 +162,7 @@ export function DevelopmentPage(): JSX.Element {
   });
 
   const isTeacher = state.status === 'authenticated' && state.user.role === 'TEACHER';
+  const isParent = state.status === 'authenticated' && state.user.role === 'PARENT';
   const currentUserId = state.status === 'authenticated' ? state.user.id : null;
 
   const canEdit =
@@ -283,6 +284,10 @@ export function DevelopmentPage(): JSX.Element {
     if (isTeacher) {
       list = list.filter((o) => scopedStudentIds.has(o.studentId));
     }
+    if (isParent) {
+      // Veli yalnızca veliye açık kayıtları görür; başka öğrenci varlığı/asla sızmaz
+      list = list.filter((o) => scopedStudentIds.has(o.studentId) && o.isParentVisible);
+    }
     if (selectedClassroomId) {
       list = list.filter((o) => {
         const st = students.find((s) => s.id === o.studentId);
@@ -290,12 +295,15 @@ export function DevelopmentPage(): JSX.Element {
       });
     }
     return list;
-  }, [isTeacher, observations, scopedStudentIds, selectedClassroomId, students]);
+  }, [isTeacher, isParent, observations, scopedStudentIds, selectedClassroomId, students]);
 
   const scopedPortfolioItems = useMemo(() => {
     let list = portfolioItems;
     if (isTeacher) {
       list = list.filter((p) => scopedStudentIds.has(p.studentId));
+    }
+    if (isParent) {
+      list = list.filter((p) => scopedStudentIds.has(p.studentId) && p.isParentVisible);
     }
     if (selectedClassroomId) {
       list = list.filter((p) => {
@@ -304,7 +312,7 @@ export function DevelopmentPage(): JSX.Element {
       });
     }
     return list;
-  }, [isTeacher, portfolioItems, scopedStudentIds, selectedClassroomId, students]);
+  }, [isTeacher, isParent, portfolioItems, scopedStudentIds, selectedClassroomId, students]);
 
   async function loadData() {
     setLoading(true);
@@ -554,9 +562,19 @@ export function DevelopmentPage(): JSX.Element {
         {/* Alt Satır: Sınıf, Öğrenci ve Gelişim Alanı Filtreleri */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
-            {activeTab !== 'activities' && (
+            {isParent &&
+              activeTab !== 'activities' &&
+              scopedStudents.length > 0 &&
+              scopedStudents[0] && (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 dark:bg-teal-950/40 border border-teal-300 dark:border-teal-700/60 rounded-2xl">
+                  <span className="text-xs font-bold text-teal-800 dark:text-teal-300">
+                    Öğrenci: {scopedStudents[0].firstName} {scopedStudents[0].lastName}
+                  </span>
+                </div>
+              )}
+            {activeTab !== 'activities' && !isParent && (
               <>
-                {/* Sınıf Filtresi */}
+                {/* Sınıf Filtresi - Veli rolünde gizli */}
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0">
                     Sınıf:

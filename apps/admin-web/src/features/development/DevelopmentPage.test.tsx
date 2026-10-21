@@ -1,11 +1,16 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { DevelopmentPage } from './DevelopmentPage';
 
+const mockUseAuth = vi.fn();
 vi.mock('../auth/AuthContext', () => ({
-  useAuth: () => ({
+  useAuth: () => mockUseAuth(),
+}));
+
+beforeEach(() => {
+  mockUseAuth.mockReturnValue({
     state: {
       status: 'authenticated',
       user: {
@@ -15,8 +20,8 @@ vi.mock('../auth/AuthContext', () => ({
         tenantId: 'demo',
       },
     },
-  }),
-}));
+  });
+});
 
 vi.mock('../../api/media', () => ({
   listMediaFiles: vi.fn().mockResolvedValue([
@@ -174,5 +179,34 @@ describe('DevelopmentPage', () => {
       expect(screen.getByText(/Ayşe Demir/i)).toBeInTheDocument();
       expect(screen.getByText(/Fatma Yılmaz/i)).toBeInTheDocument();
     });
+  });
+
+  it('does not render Sınıf dropdown for PARENT and hides Gözlem Ekle button', async () => {
+    mockUseAuth.mockReturnValue({
+      state: {
+        status: 'authenticated',
+        user: {
+          id: 'parent-1',
+          email: 'parent@demo.test',
+          role: 'PARENT',
+          tenantId: 'demo',
+        },
+      },
+    });
+
+    render(
+      <BrowserRouter>
+        <DevelopmentPage />
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Gelişim Hikâyesi & Öğrenci Portfolyosu/i)).toBeInTheDocument();
+    });
+
+    expect(screen.queryByLabelText('Sınıf Seç')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Gözlem Ekle/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Çalışma Ekle/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Etkinlik Önerisi/i })).not.toBeInTheDocument();
   });
 });
