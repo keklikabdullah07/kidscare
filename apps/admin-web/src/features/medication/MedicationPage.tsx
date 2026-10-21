@@ -96,18 +96,50 @@ export function MedicationPage(): JSX.Element {
   const { showToast } = useToast();
 
   const isTeacher = role === 'TEACHER';
-  const scopedStudents = students;
+  const isParent = role === 'PARENT';
+  const currentUserId = state.status === 'authenticated' ? state.user.id : null;
+
+  // Öğretmenin sorumlu olduğu sınıfların kümesi (TEACHER için)
+  const teacherClassroomIds = useMemo(() => {
+    if (!isTeacher || !currentUserId) return new Set<string>();
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    return new Set(assigned.map((c) => c.id));
+  }, [isTeacher, currentUserId, classrooms]);
+
+  const scopedStudents = useMemo(() => {
+    if (isParent) {
+      if (!currentUserId) return [];
+      return students.filter((s) => {
+        if (s.parentId === currentUserId) return true;
+        const pass = s.passport as Record<string, unknown> | null | undefined;
+        return pass?.['secondaryParentId'] === currentUserId;
+      });
+    }
+    if (isTeacher) {
+      if (teacherClassroomIds.size === 0) return [];
+      return students.filter(
+        (s) => s.classroomId != null && teacherClassroomIds.has(s.classroomId),
+      );
+    }
+    return students;
+  }, [isParent, isTeacher, students, currentUserId, teacherClassroomIds]);
+
   const scopedStudentIds = useMemo(
     () => new Set(scopedStudents.map((s) => s.id)),
     [scopedStudents],
   );
 
   const scopedRecords = useMemo(() => {
+    if (isParent) {
+      return records.filter((r) => scopedStudentIds.has(r.studentId));
+    }
     if (isTeacher) {
       return records.filter((r) => scopedStudentIds.has(r.studentId));
     }
     return records;
-  }, [isTeacher, records, scopedStudentIds]);
+  }, [isParent, isTeacher, records, scopedStudentIds]);
 
   // Tab & Filters
   const [activeTab, setActiveTab] = useState<TabKey>('ALL');
