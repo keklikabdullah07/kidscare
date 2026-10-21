@@ -203,6 +203,8 @@ export function SurveysPage(): JSX.Element {
   const { state: authState } = useAuth();
   const userRole = 'user' in authState && authState.user ? authState.user.role : 'PARENT';
   const isParent = userRole === 'PARENT';
+  const isTeacher = userRole === 'TEACHER';
+  const currentUserId = 'user' in authState && authState.user ? authState.user.id : null;
   const canManage = userRole === 'SUPER_ADMIN' || userRole === 'ADMIN' || userRole === 'TEACHER';
 
   // Stats state
@@ -221,6 +223,20 @@ export function SurveysPage(): JSX.Element {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successToast, setSuccessToast] = useState<string | null>(null);
 
+  // Öğretmen için sadece kendi sınıfları izole edilir
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher) return classrooms;
+    if (!currentUserId) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    return [];
+  }, [isTeacher, classrooms, currentUserId]);
+
+  const displayClassrooms = isTeacher ? teacherClassrooms : classrooms;
+
   // Tab & Filters
   const [activeTab, setActiveTab] = useState<'active' | 'create' | 'closed'>('active');
   const [filterClassroomId, setFilterClassroomId] = useState<string>('');
@@ -238,10 +254,12 @@ export function SurveysPage(): JSX.Element {
     Record<string, { rating?: number; selectedOptions?: string[]; text?: string }>
   >({});
 
-  // Survey Creation Form
+  // Survey Creation Form — Öğretmen için otomatik olarak CLASSROOM kilitlenir
   const [newTitle, setNewTitle] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
-  const [newTargetType, setNewTargetType] = useState<SurveyTargetType>('ALL_DAYCARE');
+  const [newTargetType, setNewTargetType] = useState<SurveyTargetType>(() =>
+    isTeacher ? 'CLASSROOM' : 'ALL_DAYCARE',
+  );
   const [newClassroomId, setNewClassroomId] = useState<string>('');
   const [newIsAnonymous, setNewIsAnonymous] = useState<boolean>(false);
   const [newExpiresAt, setNewExpiresAt] = useState<string>('');
@@ -450,11 +468,18 @@ export function SurveysPage(): JSX.Element {
     setIsSubmitting(true);
     setErrorMsg(null);
     try {
+      const effectiveTargetType = isTeacher ? 'CLASSROOM' : newTargetType;
+      const effectiveClassroomId = isTeacher
+        ? newClassroomId || displayClassrooms[0]?.id
+        : effectiveTargetType === 'CLASSROOM'
+          ? newClassroomId
+          : undefined;
+
       const payload: CreateSurveyDto = {
         title: newTitle.trim(),
         description: newDescription.trim() || undefined,
-        targetType: newTargetType,
-        targetClassroomId: newTargetType === 'CLASSROOM' ? newClassroomId : undefined,
+        targetType: effectiveTargetType,
+        targetClassroomId: effectiveClassroomId,
         isAnonymous: newIsAnonymous,
         expiresAt: newExpiresAt ? new Date(newExpiresAt).toISOString() : undefined,
         questions: newQuestions.map((q, idx) => ({
@@ -738,22 +763,28 @@ export function SurveysPage(): JSX.Element {
               <Filter className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
             </div>
 
-            {!isParent && (
+            {!isParent && displayClassrooms.length > 0 && (
               <div className="flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-stone-400 shrink-0" />
-                <select
-                  aria-label="Sınıf filtrele"
-                  value={filterClassroomId}
-                  onChange={(e) => setFilterClassroomId(e.target.value)}
-                  className="text-xs bg-stone-50 dark:bg-slate-900 border border-stone-300 dark:border-slate-700 rounded-lg px-3 py-2 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-                >
-                  <option value="">Tüm Kreş / Tüm Sınıflar</option>
-                  {classrooms.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
+                {isTeacher && displayClassrooms.length === 1 ? (
+                  <span className="text-xs font-bold bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-200 border border-teal-300 dark:border-teal-800 px-3 py-1.5 rounded-lg shadow-2xs">
+                    🔒 {displayClassrooms[0]?.name}
+                  </span>
+                ) : (
+                  <select
+                    aria-label="Sınıf filtrele"
+                    value={filterClassroomId}
+                    onChange={(e) => setFilterClassroomId(e.target.value)}
+                    className="text-xs bg-stone-50 dark:bg-slate-900 border border-stone-300 dark:border-slate-700 rounded-lg px-3 py-2 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  >
+                    {!isTeacher && <option value="">Tüm Kreş / Tüm Sınıflar</option>}
+                    {displayClassrooms.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             )}
           </div>
@@ -1015,35 +1046,51 @@ export function SurveysPage(): JSX.Element {
                 <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
                   Hedef Kitle (Kapsam)
                 </label>
-                <select
-                  value={newTargetType}
-                  onChange={(e) => setNewTargetType(e.target.value as SurveyTargetType)}
-                  className="w-full text-sm bg-stone-50 dark:bg-slate-900 border border-stone-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-                >
-                  <option value="ALL_DAYCARE">Tüm Kreş Velileri</option>
-                  <option value="CLASSROOM">Belirli Bir Sınıf</option>
-                </select>
+                {isTeacher ? (
+                  <div className="w-full text-xs font-bold bg-teal-50 dark:bg-teal-950/40 border-2 border-teal-200 dark:border-teal-800 rounded-xl px-3 py-2.5 text-teal-900 dark:text-teal-200 flex items-center justify-between">
+                    <span>🏫 Yalnızca Sorumlu Olduğunuz Sınıf</span>
+                    <span className="text-[10px] font-semibold text-teal-700 dark:text-teal-400">
+                      (Öğretmen İzolasyonu)
+                    </span>
+                  </div>
+                ) : (
+                  <select
+                    value={newTargetType}
+                    onChange={(e) => setNewTargetType(e.target.value as SurveyTargetType)}
+                    className="w-full text-sm bg-stone-50 dark:bg-slate-900 border border-stone-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  >
+                    <option value="ALL_DAYCARE">Tüm Kreş Velileri</option>
+                    <option value="CLASSROOM">Belirli Bir Sınıf</option>
+                  </select>
+                )}
               </div>
 
               {/* Classroom picker if CLASSROOM */}
-              {newTargetType === 'CLASSROOM' && (
+              {(newTargetType === 'CLASSROOM' || isTeacher) && (
                 <div>
                   <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
                     Hedef Sınıf <span className="text-rose-500">*</span>
                   </label>
-                  <select
-                    value={newClassroomId}
-                    onChange={(e) => setNewClassroomId(e.target.value)}
-                    required
-                    className="w-full text-sm bg-stone-50 dark:bg-slate-900 border border-stone-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-                  >
-                    <option value="">Sınıf Seçiniz</option>
-                    {classrooms.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
+                  {isTeacher && displayClassrooms.length === 1 ? (
+                    <div className="w-full text-xs font-bold bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700 rounded-xl px-3 py-2.5 text-slate-800 dark:text-slate-100 flex items-center justify-between">
+                      <span>🔒 {displayClassrooms[0]?.name}</span>
+                      <span className="text-[10px] text-slate-500 font-medium">Sınıfınız</span>
+                    </div>
+                  ) : (
+                    <select
+                      value={newClassroomId}
+                      onChange={(e) => setNewClassroomId(e.target.value)}
+                      required
+                      className="w-full text-sm bg-stone-50 dark:bg-slate-900 border border-stone-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    >
+                      <option value="">Sınıf Seçiniz</option>
+                      {displayClassrooms.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
               )}
 
