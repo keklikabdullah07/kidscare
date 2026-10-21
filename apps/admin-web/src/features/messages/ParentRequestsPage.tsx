@@ -8,7 +8,6 @@ import {
   Search,
   Clock,
   User,
-  Inbox,
   X,
 } from 'lucide-react';
 import type {
@@ -30,7 +29,6 @@ import { AdaptiveScopeBadge } from '../../components/ui/AdaptiveScopeBadge';
 import { PromptModal } from '../../components/ui/PromptModal';
 import { Badge } from '../../components/ui/Badge';
 import { PageHeader } from '../../components/ui/PageHeader';
-import { StatCard } from '../../components/ui/StatCard';
 import { TactileButton } from '../../components/ui/TactileButton';
 import { TactileTabs, type TactileTabItem } from '../../components/ui/TactileTabs';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -315,61 +313,6 @@ export function ParentRequestsPage(): JSX.Element {
           </>
         }
       />
-
-      {/* 4 Adet Dokunsal KPI Kartı */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="TOPLAM TALEP"
-          value={totalCount}
-          subtitle="Tüm başvurular"
-          icon={Inbox}
-          onClick={() => {
-            setActiveTab('ALL');
-            setSearchQuery('');
-            setSelectedStudentFilter('');
-          }}
-          className="cursor-pointer"
-        />
-
-        <StatCard
-          title="BEKLEYENLER"
-          value={pendingCount}
-          subtitle="İnceleme bekliyor"
-          icon={Clock}
-          variant="amber"
-          onClick={() => {
-            setActiveTab('PENDING');
-            setSearchQuery('');
-          }}
-          className="cursor-pointer"
-        />
-
-        <StatCard
-          title="ONAYLANANLAR"
-          value={approvedCount}
-          subtitle="Uygun görülenler"
-          icon={CheckCircle2}
-          variant="teal"
-          onClick={() => {
-            setActiveTab('APPROVED');
-            setSearchQuery('');
-          }}
-          className="cursor-pointer"
-        />
-
-        <StatCard
-          title="REDDEDİLENLER"
-          value={rejectedCount}
-          subtitle="Reddedilen başvurular"
-          icon={XCircle}
-          variant="rose"
-          onClick={() => {
-            setActiveTab('REJECTED');
-            setSearchQuery('');
-          }}
-          className="cursor-pointer"
-        />
-      </div>
 
       {/* Sekmeler & Filtreleme Barı */}
       <div className="bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-2xs space-y-4">
