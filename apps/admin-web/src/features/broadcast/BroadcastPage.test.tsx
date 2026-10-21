@@ -151,4 +151,20 @@ describe('BroadcastPage', () => {
 
     expect(screen.getByText('Lütfen başlık ve mesaj içeriğini doldurunuz.')).toBeInTheDocument();
   });
+
+  it('isolates target audience for TEACHER role and hides ALL_DAYCARE and TEACHERS_ONLY', async () => {
+    mockUseAuth.mockReturnValue({
+      user: { id: 'u-teacher', email: 'teacher@demo.test', role: 'TEACHER' },
+    });
+
+    render(<BroadcastPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Sınıf Bazlı')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Öğrenci Bazlı')).toBeInTheDocument();
+    expect(screen.queryByText('Tüm Kreş')).not.toBeInTheDocument();
+    expect(screen.queryByText('Öğretmenler')).not.toBeInTheDocument();
+  });
 });

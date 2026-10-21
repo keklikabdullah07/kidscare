@@ -11,8 +11,6 @@ import {
   Sparkles,
   Search,
   Users,
-  CheckCircle2,
-  Clock,
   Edit3,
   CheckCheck,
   X,
@@ -420,119 +418,6 @@ export function DailyTrackingPage(): JSX.Element {
         </div>
       )}
 
-      {/* Progress / KPI Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <button
-          type="button"
-          onClick={() => setFilterType('all')}
-          className={`p-5 rounded-3xl border-2 text-left transition-all duration-150 cursor-pointer flex items-center justify-between active:translate-y-[3px] active:shadow-none ${
-            filterType === 'all'
-              ? 'border-teal-700 bg-teal-700 text-white shadow-[0_4px_0_0_#042f2e,0_8px_20px_-3px_rgba(15,118,110,0.3)]'
-              : 'border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.06)] hover:-translate-y-1 hover:border-[#b8ad9b]'
-          }`}
-        >
-          <div>
-            <p
-              className={`text-xs font-bold uppercase tracking-wider ${
-                filterType === 'all' ? 'text-teal-100' : 'text-slate-600 dark:text-slate-300'
-              }`}
-            >
-              Toplam Öğrenci
-            </p>
-            <p
-              className={`text-3xl font-black mt-1 tracking-tight tabular-nums ${
-                filterType === 'all' ? 'text-white' : 'text-slate-900 dark:text-white'
-              }`}
-            >
-              {totalStudents}
-            </p>
-          </div>
-          <div
-            className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold shadow-2xs ${
-              filterType === 'all'
-                ? 'bg-teal-800 text-white border border-teal-500/50'
-                : 'bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/60'
-            }`}
-          >
-            <Users className="w-5 h-5" />
-          </div>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setFilterType(filterType === 'filled' ? 'all' : 'filled')}
-          className={`p-5 rounded-3xl border-2 text-left transition-all duration-150 cursor-pointer flex items-center justify-between active:translate-y-[3px] active:shadow-none ${
-            filterType === 'filled'
-              ? 'border-emerald-700 bg-emerald-600 text-white shadow-[0_4px_0_0_#064e3b,0_8px_20px_-3px_rgba(5,150,105,0.3)]'
-              : 'border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.06)] hover:-translate-y-1 hover:border-emerald-500/50'
-          }`}
-        >
-          <div>
-            <p
-              className={`text-xs font-bold uppercase tracking-wider ${
-                filterType === 'filled'
-                  ? 'text-emerald-100'
-                  : 'text-emerald-800 dark:text-emerald-300'
-              }`}
-            >
-              Karnesi Girilenler
-            </p>
-            <p
-              className={`text-3xl font-black mt-1 tracking-tight tabular-nums ${
-                filterType === 'filled' ? 'text-white' : 'text-slate-900 dark:text-emerald-200'
-              }`}
-            >
-              {filledCount}
-            </p>
-          </div>
-          <div
-            className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold shadow-2xs ${
-              filterType === 'filled'
-                ? 'bg-emerald-700/80 text-white border border-emerald-400/40'
-                : 'bg-emerald-50 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-            }`}
-          >
-            <CheckCircle2 className="w-5 h-5" />
-          </div>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setFilterType(filterType === 'pending' ? 'all' : 'pending')}
-          className={`p-5 rounded-3xl border-2 text-left transition-all duration-150 cursor-pointer flex items-center justify-between active:translate-y-[3px] active:shadow-none ${
-            filterType === 'pending'
-              ? 'border-amber-700 bg-amber-600 text-white shadow-[0_4px_0_0_#78350f,0_8px_20px_-3px_rgba(217,119,6,0.3)]'
-              : 'border-[#DDD4C4] dark:border-slate-700/80 bg-white dark:bg-[#131B2E] shadow-[0_4px_0_0_#D5CBB9,0_6px_14px_rgba(45,38,30,0.06)] hover:-translate-y-1 hover:border-amber-500/50'
-          }`}
-        >
-          <div>
-            <p
-              className={`text-xs font-bold uppercase tracking-wider ${
-                filterType === 'pending' ? 'text-amber-100' : 'text-amber-800 dark:text-amber-300'
-              }`}
-            >
-              Karne Bekleyenler
-            </p>
-            <p
-              className={`text-3xl font-black mt-1 tracking-tight tabular-nums ${
-                filterType === 'pending' ? 'text-white' : 'text-slate-900 dark:text-amber-200'
-              }`}
-            >
-              {pendingCount}
-            </p>
-          </div>
-          <div
-            className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold shadow-2xs ${
-              filterType === 'pending'
-                ? 'bg-amber-700/80 text-white border border-amber-400/40'
-                : 'bg-amber-50 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
-            }`}
-          >
-            <Clock className="w-5 h-5" />
-          </div>
-        </button>
-      </div>
-
       {/* Bulk Operations Toolbar */}
       {selectedClassroomId && students.length > 0 && (
         <div className="bg-white dark:bg-[#131B2E] rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] overflow-hidden">
@@ -741,26 +626,26 @@ export function DailyTrackingPage(): JSX.Element {
         </div>
       )}
 
-      {/* Filter & Search Toolbar */}
-      <div className="bg-white dark:bg-[#131B2E] p-4.5 rounded-3xl border border-[#DDD4C4] dark:border-slate-800 shadow-[0_6px_20px_-3px_rgba(20,32,54,0.08),0_2px_6px_-1px_rgba(20,32,54,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+      {/* Filter & Search Toolbar (Bütünleşik Konsol Kartı) */}
+      <div className="bg-white dark:bg-[#131B2E] p-4 sm:p-5 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
         <div className="relative flex-1 max-w-sm">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Öğrenci adı ile filtrele..."
-            className="w-full pl-10 pr-3.5 py-2.5 bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 rounded-2xl text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-700 dark:focus:ring-amber-500/20 dark:focus:border-amber-500 transition shadow-2xs"
+            className="w-full pl-10 pr-3.5 py-2 bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl text-xs font-semibold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-teal-700 shadow-2xs transition"
           />
         </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto bg-[#FCFAF7] dark:bg-slate-900 p-1 rounded-2xl border border-[#DDD4C4] dark:border-slate-700 shadow-2xs">
+        <div className="flex items-center gap-1.5 overflow-x-auto bg-[#FCFAF7] dark:bg-slate-900 p-1.5 rounded-2xl border-2 border-[#DDD4C4] dark:border-slate-700/80 shadow-2xs">
           <button
             type="button"
             onClick={() => setFilterType('all')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
               filterType === 'all'
-                ? 'bg-teal-700 text-white dark:bg-teal-600 shadow-2xs'
+                ? 'bg-teal-700 text-white shadow-2xs'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
             }`}
           >
@@ -769,7 +654,7 @@ export function DailyTrackingPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setFilterType('filled')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
               filterType === 'filled'
                 ? 'bg-emerald-600 text-white shadow-2xs'
                 : 'text-emerald-800 dark:text-emerald-400 hover:bg-emerald-100/50'
@@ -780,7 +665,7 @@ export function DailyTrackingPage(): JSX.Element {
           <button
             type="button"
             onClick={() => setFilterType('pending')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
               filterType === 'pending'
                 ? 'bg-amber-600 text-white shadow-2xs'
                 : 'text-amber-800 dark:text-amber-400 hover:bg-amber-100/50'

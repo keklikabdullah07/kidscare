@@ -19,6 +19,7 @@ import {
   UserCheck,
 } from 'lucide-react';
 import { StatCard, TactileButton, Badge, EmptyState } from '../../components/ui';
+import { useAuth } from '../auth/AuthContext';
 import { listClassrooms } from '../../api/classrooms';
 import { listStudents } from '../../api/students';
 import { fetchBroadcastStats, fetchBroadcastHistory, sendBroadcast } from '../../api/broadcast';
@@ -99,6 +100,14 @@ const QUICK_TEMPLATES: QuickTemplate[] = [
 ];
 
 export function BroadcastPage(): JSX.Element {
+  const authContext = useAuth();
+  const authUser =
+    authContext.state?.status === 'authenticated'
+      ? authContext.state.user
+      : ((authContext as unknown as { user?: { id: string; role: string } }).user ?? null);
+  const isTeacher = authUser?.role === 'TEACHER';
+  const currentUserId = authUser?.id ?? null;
+
   const [activeTab, setActiveTab] = useState<'send' | 'history'>('send');
 
   // Stats
@@ -118,7 +127,9 @@ export function BroadcastPage(): JSX.Element {
   // Form State
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [targetType, setTargetType] = useState<BroadcastTargetType>('ALL_DAYCARE');
+  const [targetType, setTargetType] = useState<BroadcastTargetType>(() =>
+    isTeacher ? 'CLASSROOM' : 'ALL_DAYCARE',
+  );
   const [targetClassroomId, setTargetClassroomId] = useState<string>('');
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
   const [studentSearch, setStudentSearch] = useState('');
@@ -133,6 +144,27 @@ export function BroadcastPage(): JSX.Element {
 
   // Confirmation modal
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  // Öğretmen için sadece kendi sınıfları ve öğrencileri
+  const teacherClassrooms = useMemo(() => {
+    if (!isTeacher) return classrooms;
+    if (!currentUserId) return [];
+    const assigned = classrooms.filter((cls) =>
+      cls.teachers?.some((t) => t.teacherId === currentUserId),
+    );
+    if (assigned.length > 0) return assigned;
+    if (classrooms.length === 1) return classrooms;
+    return [];
+  }, [isTeacher, classrooms, currentUserId]);
+
+  const displayClassrooms = isTeacher ? teacherClassrooms : classrooms;
+
+  const displayStudents = useMemo(() => {
+    if (!isTeacher) return students;
+    if (teacherClassrooms.length === 0) return [];
+    const teacherClassIds = new Set(teacherClassrooms.map((c) => c.id));
+    return students.filter((s) => s.classroomId && teacherClassIds.has(s.classroomId));
+  }, [isTeacher, teacherClassrooms, students]);
 
   // Initial load
   const loadData = async () => {
@@ -152,9 +184,6 @@ export function BroadcastPage(): JSX.Element {
       setHistory(historyRes);
       setClassrooms(classroomsRes);
       setStudents(studentsRes);
-      if (classroomsRes.length > 0 && !targetClassroomId) {
-        setTargetClassroomId(classroomsRes[0]!.id);
-      }
     } catch {
       // quiet fail on initial load
     }
@@ -164,12 +193,27 @@ export function BroadcastPage(): JSX.Element {
     void loadData();
   }, []);
 
+  // Sınıf seçimi otomatik ayarı
+  useEffect(() => {
+    if (displayClassrooms.length > 0 && !targetClassroomId) {
+      setTargetClassroomId(displayClassrooms[0]!.id);
+    }
+  }, [displayClassrooms, targetClassroomId]);
+
+  // Öğretmen için zorunlu hedef kitle kontrolü
+  useEffect(() => {
+    if (isTeacher && (targetType === 'ALL_DAYCARE' || targetType === 'TEACHERS_ONLY')) {
+      setTargetType('CLASSROOM');
+    }
+  }, [isTeacher, targetType]);
+
   // Filtered students for multi-select
   const filteredStudents = useMemo(() => {
-    if (!studentSearch.trim()) return students;
+    const list = displayStudents;
+    if (!studentSearch.trim()) return list;
     const query = studentSearch.toLowerCase();
-    return students.filter((s) => `${s.firstName} ${s.lastName}`.toLowerCase().includes(query));
-  }, [students, studentSearch]);
+    return list.filter((s) => `${s.firstName} ${s.lastName}`.toLowerCase().includes(query));
+  }, [displayStudents, studentSearch]);
 
   // Target label for preview
   const targetLabel = useMemo(() => {
@@ -425,22 +469,26 @@ export function BroadcastPage(): JSX.Element {
                 <label className="mb-2 block text-xs font-bold tracking-wider text-slate-600 uppercase dark:text-slate-400">
                   1. Hedef Kitle Seçimi
                 </label>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  <button
-                    type="button"
-                    onClick={() => setTargetType('ALL_DAYCARE')}
-                    className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition-all ${
-                      targetType === 'ALL_DAYCARE'
-                        ? 'border-teal-600 bg-teal-50/80 text-teal-900 shadow-xs dark:border-teal-500 dark:bg-teal-950/50 dark:text-teal-200'
-                        : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400'
-                    }`}
-                  >
-                    <Building2 className="mb-1.5 h-5 w-5" />
-                    <span className="text-xs font-bold">Tüm Kreş</span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                      Veli & Öğretmen
-                    </span>
-                  </button>
+                <div
+                  className={`grid gap-2 ${isTeacher ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-4'}`}
+                >
+                  {!isTeacher && (
+                    <button
+                      type="button"
+                      onClick={() => setTargetType('ALL_DAYCARE')}
+                      className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition-all ${
+                        targetType === 'ALL_DAYCARE'
+                          ? 'border-teal-600 bg-teal-50/80 text-teal-900 shadow-xs dark:border-teal-500 dark:bg-teal-950/50 dark:text-teal-200'
+                          : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400'
+                      }`}
+                    >
+                      <Building2 className="mb-1.5 h-5 w-5" />
+                      <span className="text-xs font-bold">Tüm Kreş</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                        Veli & Öğretmen
+                      </span>
+                    </button>
+                  )}
 
                   <button
                     type="button"
@@ -454,7 +502,7 @@ export function BroadcastPage(): JSX.Element {
                     <GraduationCap className="mb-1.5 h-5 w-5" />
                     <span className="text-xs font-bold">Sınıf Bazlı</span>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                      Seçili sınıf velileri
+                      {isTeacher ? 'Sorumlu olduğunuz sınıf' : 'Seçili sınıf velileri'}
                     </span>
                   </button>
 
@@ -476,21 +524,23 @@ export function BroadcastPage(): JSX.Element {
                     </span>
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setTargetType('TEACHERS_ONLY')}
-                    className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition-all ${
-                      targetType === 'TEACHERS_ONLY'
-                        ? 'border-teal-600 bg-teal-50/80 text-teal-900 shadow-xs dark:border-teal-500 dark:bg-teal-950/50 dark:text-teal-200'
-                        : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400'
-                    }`}
-                  >
-                    <UserCheck className="mb-1.5 h-5 w-5" />
-                    <span className="text-xs font-bold">Öğretmenler</span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                      Sadece eğitim kadrosu
-                    </span>
-                  </button>
+                  {!isTeacher && (
+                    <button
+                      type="button"
+                      onClick={() => setTargetType('TEACHERS_ONLY')}
+                      className={`flex flex-col items-center justify-center rounded-xl border p-3 text-center transition-all ${
+                        targetType === 'TEACHERS_ONLY'
+                          ? 'border-teal-600 bg-teal-50/80 text-teal-900 shadow-xs dark:border-teal-500 dark:bg-teal-950/50 dark:text-teal-200'
+                          : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400'
+                      }`}
+                    >
+                      <UserCheck className="mb-1.5 h-5 w-5" />
+                      <span className="text-xs font-bold">Öğretmenler</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                        Sadece eğitim kadrosu
+                      </span>
+                    </button>
+                  )}
                 </div>
 
                 {/* Sub-selectors */}
@@ -504,7 +554,7 @@ export function BroadcastPage(): JSX.Element {
                       onChange={(e) => setTargetClassroomId(e.target.value)}
                       className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 focus:border-teal-600 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                     >
-                      {classrooms.map((cls) => (
+                      {displayClassrooms.map((cls) => (
                         <option key={cls.id} value={cls.id}>
                           {cls.name} (
                           {cls.studentCount
