@@ -372,79 +372,86 @@ export function ParentRequestsPage(): JSX.Element {
       </div>
 
       {/* Sekmeler & Filtreleme Barı */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <TactileTabs<TabKey> tabs={filterTabs} activeId={activeTab} onChange={setActiveTab} />
+      <div className="bg-white dark:bg-[#131B2E] border-2 border-[#DDD4C4] dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-2xs space-y-4">
+        {/* Üst Satır: Dokunsal Sekmeler */}
+        <div className="overflow-x-auto pb-1 border-b border-slate-100 dark:border-slate-800">
+          <TactileTabs<TabKey> tabs={filterTabs} activeId={activeTab} onChange={setActiveTab} />
+        </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
-          {/* Sınıf Filtresi — akıllı adaptif (Spec 0062) */}
-          {scopeShowClassroomFilter ? (
-            <div className="relative min-w-[150px]">
-              <select
-                value={selectedClassroomFilter}
-                onChange={(e) => {
-                  setSelectedClassroomFilter(e.target.value);
-                  setSelectedStudentFilter('');
-                }}
-                className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl px-3 py-2 bg-white dark:bg-[#131B2E] text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs"
-                aria-label="Sınıf Filtresi"
-              >
-                <option value="">🏫 Tüm Sınıflar</option>
-                {(isTeacher ? teacherClassrooms : scopeAvailableClassrooms).map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
+        {/* Alt Satır: Sınıf/Öğrenci Filtreleri ve Arama */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Sınıf Filtresi — akıllı adaptif (Spec 0062 + 0063) */}
+            {scopeShowClassroomFilter ? (
+              <div className="relative min-w-[150px]">
+                <select
+                  value={selectedClassroomFilter}
+                  onChange={(e) => {
+                    setSelectedClassroomFilter(e.target.value);
+                    setSelectedStudentFilter('');
+                  }}
+                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl px-3 py-2 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs cursor-pointer"
+                  aria-label="Sınıf Filtresi"
+                >
+                  <option value="">🏫 Tüm Sınıflar</option>
+                  {(isTeacher ? teacherClassrooms : scopeAvailableClassrooms).map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : singleClassroom ? (
+              <AdaptiveScopeBadge
+                type="classroom"
+                label={singleClassroom.name}
+                subLabel="Sınıfınız"
+              />
+            ) : null}
+
+            {/* Öğrenci Filtresi — akıllı adaptif (Spec 0062 + 0063) */}
+            {scopeShowStudentFilter ? (
+              <div className="relative min-w-[160px]">
+                <select
+                  value={selectedStudentFilter}
+                  onChange={(e) => setSelectedStudentFilter(e.target.value)}
+                  className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl px-3 py-2 bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs cursor-pointer"
+                  aria-label="Öğrenci Filtresi"
+                >
+                  <option value="">
+                    {selectedClassroomFilter
+                      ? 'Sınıftaki Tüm Öğrenciler'
+                      : isTeacher
+                        ? 'Sınıfımdaki Tüm Öğrenciler'
+                        : 'Tüm Öğrenciler'}
                   </option>
-                ))}
-              </select>
-            </div>
-          ) : singleClassroom ? (
-            <AdaptiveScopeBadge
-              type="classroom"
-              label={singleClassroom.name}
-              subLabel="Sınıfınız"
-            />
-          ) : null}
-
-          {/* Öğrenci Filtresi — akıllı adaptif (Spec 0062) */}
-          {scopeShowStudentFilter ? (
-            <div className="relative min-w-[160px]">
-              <select
-                value={selectedStudentFilter}
-                onChange={(e) => setSelectedStudentFilter(e.target.value)}
-                className="w-full text-xs font-semibold border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl px-3 py-2 bg-white dark:bg-[#131B2E] text-slate-800 dark:text-white focus:outline-none focus:border-teal-700 shadow-2xs"
-                aria-label="Öğrenci Filtresi"
-              >
-                <option value="">
-                  {selectedClassroomFilter
-                    ? 'Sınıftaki Tüm Öğrenciler'
-                    : isTeacher
-                      ? 'Sınıfımdaki Tüm Öğrenciler'
-                      : 'Tüm Öğrenciler'}
-                </option>
-                {(scopeAvailableStudents.length > 0 ? scopeAvailableStudents : scopedStudents).map(
-                  (s) => (
+                  {(scopeAvailableStudents.length > 0
+                    ? scopeAvailableStudents
+                    : scopedStudents
+                  ).map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.firstName} {s.lastName}
                     </option>
-                  ),
-                )}
-              </select>
-            </div>
-          ) : singleChild ? (
-            <AdaptiveScopeBadge
-              type="student"
-              label={`${singleChild.firstName} ${singleChild.lastName}`}
-            />
-          ) : null}
+                  ))}
+                </select>
+              </div>
+            ) : singleChild ? (
+              <AdaptiveScopeBadge
+                type="student"
+                label={`${singleChild.firstName} ${singleChild.lastName}`}
+              />
+            ) : null}
+          </div>
 
           {/* Arama Inputu */}
-          <div className="relative flex-1 sm:w-64">
+          <div className="relative w-full sm:w-72">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Talep veya öğrenci ara..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs font-semibold pl-9 pr-3.5 py-2 border-2 border-[#DDD4C4] dark:border-slate-700 rounded-2xl bg-white dark:bg-[#131B2E] text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-teal-700 shadow-2xs transition"
+              className="w-full text-xs font-semibold pl-9 pr-8 py-2 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl bg-[#FCFAF7] dark:bg-slate-900 text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-teal-700 shadow-2xs transition"
             />
             {searchQuery && (
               <button
