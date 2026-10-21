@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo, type JSX } from 'react';
-import type { ActivityPost, Classroom, MediaFileItem } from '@kidscare/shared-types';
+import type { ActivityPost, Classroom, MediaFileItem, Student } from '@kidscare/shared-types';
 import { Camera, Plus, Trash2, Calendar, X, Sparkles, School, Check } from 'lucide-react';
 import { getActivities, createActivity, deleteActivity } from '../../api/activities';
 import { listClassrooms } from '../../api/classrooms';
 import { listMediaFiles } from '../../api/media';
+import { listStudents } from '../../api/students';
 import { useToast } from '../../components/Toast';
 import { useAuth } from '../auth/AuthContext';
 import { ConfirmModal } from '../../components/ui/PromptModal';
@@ -19,6 +20,7 @@ export function ActivityGalleryPage(): JSX.Element {
   const { state: authState } = useAuth();
   const [posts, setPosts] = useState<ActivityPost[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState('Hepsi');
@@ -26,6 +28,7 @@ export function ActivityGalleryPage(): JSX.Element {
   const [activeLightboxFile, setActiveLightboxFile] = useState<MediaFileItem | null>(null);
 
   const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
+  const isParent = authState.status === 'authenticated' && authState.user.role === 'PARENT';
   const currentUserId = authState.status === 'authenticated' ? authState.user.id : null;
   const canEdit = authState.status === 'authenticated' && authState.user.role !== 'PARENT';
 
@@ -40,6 +43,26 @@ export function ActivityGalleryPage(): JSX.Element {
     if (classrooms.length === 1) return classrooms;
     return [];
   }, [isTeacher, currentUserId, classrooms]);
+
+  // Veli için: velinin çocuğunun sınıf isimlerinin kümesi (Büyük/küçük harf duyarsız)
+  const parentClassroomNames = useMemo(() => {
+    if (!isParent || !currentUserId) return null;
+    const childClassroomIds = new Set(
+      students
+        .filter((s) => {
+          if (s.parentId === currentUserId) return true;
+          const pass = s.passport as Record<string, unknown> | null | undefined;
+          return pass?.['secondaryParentId'] === currentUserId;
+        })
+        .map((s) => s.classroomId)
+        .filter((id): id is string => Boolean(id)),
+    );
+    const names = new Set<string>();
+    classrooms.forEach((cls) => {
+      if (childClassroomIds.has(cls.id)) names.add(cls.name.toLowerCase());
+    });
+    return names;
+  }, [isParent, currentUserId, students, classrooms]);
 
   const displayClassrooms = isTeacher ? teacherClassrooms : classrooms;
 
@@ -73,6 +96,13 @@ export function ActivityGalleryPage(): JSX.Element {
   // Filtrelenmiş Post Listesi (Tag + Sınıf + Tarih + Öğretmen İzolasyonu)
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
+      // Veli için: sadece kendi çocuğunun sınıfı + tüm kreş (classroom=null)
+      if (isParent) {
+        if (post.classroom == null || post.classroom === '') return true; // Tüm Kreş
+        if (!parentClassroomNames) return false;
+        return parentClassroomNames.has((post.classroom || '').toLowerCase());
+      }
+
       // Öğretmen için katı sınıf kısıtlaması
       if (isTeacher && teacherClassrooms.length > 0) {
         const allowed = teacherClassrooms.some(
@@ -97,7 +127,15 @@ export function ActivityGalleryPage(): JSX.Element {
 
       return true;
     });
-  }, [posts, isTeacher, teacherClassrooms, selectedClassroom, selectedDate]);
+  }, [
+    posts,
+    isParent,
+    isTeacher,
+    teacherClassrooms,
+    parentClassroomNames,
+    selectedClassroom,
+    selectedDate,
+  ]);
 
   const { showToast } = useToast();
 
@@ -107,10 +145,12 @@ export function ActivityGalleryPage(): JSX.Element {
     Promise.all([
       getActivities({ tag: selectedTag === 'Hepsi' ? undefined : selectedTag }),
       listClassrooms().catch(() => []),
+      isParent ? listStudents().catch(() => []) : Promise.resolve([] as Student[]),
     ])
-      .then(([data, classList]) => {
+      .then(([data, classList, stList]) => {
         setPosts(data);
         setClassrooms(classList);
+        setStudents(stList);
         setLoading(false);
       })
       .catch((err: unknown) => {
