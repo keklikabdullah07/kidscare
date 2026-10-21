@@ -25,6 +25,8 @@ import { listStudents } from '../../api/students';
 import { listClassrooms } from '../../api/classrooms';
 import { listUsers } from '../../api/users';
 import { useAuth } from '../auth/AuthContext';
+import { useStudentScope } from '../../hooks/useStudentScope';
+import { AdaptiveScopeBadge } from '../../components/ui/AdaptiveScopeBadge';
 import { useToast } from '../../components/Toast';
 import {
   EmptyState,
@@ -121,6 +123,9 @@ export function IncidentsPage(): JSX.Element {
 
   const isTeacher = authState.status === 'authenticated' && authState.user.role === 'TEACHER';
   const currentUserId = authState.status === 'authenticated' ? authState.user.id : null;
+
+  // Spec 0062: akıllı adaptif kapsam (tek sınıflı öğretmen için rozet)
+  const { singleClassroom, showClassroomFilter: scopeShowClassroomFilter } = useStudentScope();
 
   // Tab & Filter state
   const [activeTab, setActiveTab] = useState<TabKey>('ALL');
@@ -448,19 +453,27 @@ export function IncidentsPage(): JSX.Element {
           </div>
 
           <div>
-            <select
-              value={selectedClassroomId}
-              onChange={(e) => setSelectedClassroomId(e.target.value)}
-              aria-label="Sınıf Filtresi"
-              className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 cursor-pointer font-medium"
-            >
-              <option value="ALL">🏫 Tüm Sınıflar</option>
-              {(isTeacher ? teacherClassrooms : classrooms).map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+            {scopeShowClassroomFilter ? (
+              <select
+                value={selectedClassroomId}
+                onChange={(e) => setSelectedClassroomId(e.target.value)}
+                aria-label="Sınıf Filtresi"
+                className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 cursor-pointer font-medium"
+              >
+                <option value="ALL">🏫 Tüm Sınıflar</option>
+                {(isTeacher ? teacherClassrooms : classrooms).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            ) : singleClassroom ? (
+              <AdaptiveScopeBadge
+                type="classroom"
+                label={singleClassroom.name}
+                subLabel="Sınıfınız"
+              />
+            ) : null}
           </div>
 
           <div>
