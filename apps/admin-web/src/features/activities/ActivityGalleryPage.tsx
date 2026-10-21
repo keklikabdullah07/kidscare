@@ -11,6 +11,7 @@ import { ConfirmModal } from '../../components/ui/PromptModal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TactileButton } from '../../components/ui/TactileButton';
+import { AdaptiveScopeBadge } from '../../components/ui/AdaptiveScopeBadge';
 import { MediaUrlField } from '../../components/ui/MediaUrlField';
 import { LightboxModal } from '../gallery/LightboxModal';
 
@@ -290,33 +291,36 @@ export function ActivityGalleryPage(): JSX.Element {
       {/* Toolbar: Sınıf, Tarih ve Etiket Filtreleri */}
       <div className="bg-white dark:bg-[#131B2E] p-3.5 sm:p-4 rounded-2xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          {/* Sınıf Filtresi */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1 shrink-0">
-              <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
-              Sınıf:
-            </span>
-            {isTeacher && teacherClassrooms.length === 1 ? (
-              <span className="px-3 py-1 text-xs font-bold rounded-lg bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-300 dark:border-teal-800 flex items-center gap-1.5 shadow-2xs">
-                <span>🔒 {teacherClassrooms[0]?.name}</span>
-                <span className="text-[10px] opacity-75 font-normal">(Sınıfınız)</span>
+          {/* Sınıf Filtresi — Sadece personel (ADMIN/STAFF/TEACHER) ve birden fazla sınıfı olan öğretmenler için; Veli asla tüm kreş sınıflarını görmez */}
+          {!isParent && displayClassrooms.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1 shrink-0">
+                <School className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                Sınıf:
               </span>
-            ) : (
-              <select
-                aria-label="Sınıf Filtresi"
-                value={selectedClassroom}
-                onChange={(e) => setSelectedClassroom(e.target.value)}
-                className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 shadow-2xs"
-              >
-                {!isTeacher && <option value="ALL">🏫 Tüm Sınıflar & Kreş</option>}
-                {displayClassrooms.map((cls) => (
-                  <option key={cls.id} value={cls.name}>
-                    {cls.name} ({cls.ageGroup || 'Kreş'})
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
+              {isTeacher && teacherClassrooms.length === 1 ? (
+                <AdaptiveScopeBadge
+                  type="classroom"
+                  label={teacherClassrooms[0]?.name ?? ''}
+                  subLabel="Sınıfınız"
+                />
+              ) : (
+                <select
+                  aria-label="Sınıf Filtresi"
+                  value={selectedClassroom}
+                  onChange={(e) => setSelectedClassroom(e.target.value)}
+                  className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#FCFAF7] dark:bg-slate-900 border border-[#DDD4C4] dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 shadow-2xs"
+                >
+                  {!isTeacher && <option value="ALL">🏫 Tüm Sınıflar & Kreş</option>}
+                  {displayClassrooms.map((cls) => (
+                    <option key={cls.id} value={cls.name}>
+                      {cls.name} ({cls.ageGroup || 'Kreş'})
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+          )}
 
           {/* Tarih Filtresi */}
           <div className="flex items-center gap-2">
