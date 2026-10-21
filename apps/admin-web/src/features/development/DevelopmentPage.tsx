@@ -22,6 +22,8 @@ import {
   Printer,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
+import { useStudentScope } from '../../hooks/useStudentScope';
+import { AdaptiveScopeBadge } from '../../components/ui/AdaptiveScopeBadge';
 import { useToast } from '../../components/Toast';
 import { PrintPreviewModal, ReportCardPrint } from '../../components/print';
 import { listStudents } from '../../api/students';
@@ -164,6 +166,13 @@ export function DevelopmentPage(): JSX.Element {
   const isTeacher = state.status === 'authenticated' && state.user.role === 'TEACHER';
   const isParent = state.status === 'authenticated' && state.user.role === 'PARENT';
   const currentUserId = state.status === 'authenticated' ? state.user.id : null;
+
+  // Spec 0062: akıllı adaptif kapsam — tek sınıflı öğretmen için rozet
+  const {
+    availableClassrooms: scopeAvailableClassrooms,
+    showClassroomFilter: scopeShowClassroomFilter,
+    singleClassroom,
+  } = useStudentScope();
 
   const canEdit =
     state.status === 'authenticated' &&
@@ -574,28 +583,36 @@ export function DevelopmentPage(): JSX.Element {
               )}
             {activeTab !== 'activities' && !isParent && (
               <>
-                {/* Sınıf Filtresi - Veli rolünde gizli */}
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0">
-                    Sınıf:
-                  </span>
-                  <select
-                    aria-label="Sınıf Seç"
-                    value={selectedClassroomId}
-                    onChange={(e) => {
-                      setSelectedClassroomId(e.target.value);
-                      setSelectedStudentId('');
-                    }}
-                    className="bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl text-xs font-bold px-3 py-2 text-slate-800 dark:text-white shadow-2xs focus:border-teal-700 focus:outline-none transition cursor-pointer min-w-[150px]"
-                  >
-                    <option value="">{isTeacher ? 'Tüm Sınıflarım' : '🏫 Tüm Sınıflar'}</option>
-                    {(isTeacher ? teacherClassrooms : classrooms).map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {/* Sınıf Filtresi — akıllı adaptif (Spec 0062) */}
+                {scopeShowClassroomFilter ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0">
+                      Sınıf:
+                    </span>
+                    <select
+                      aria-label="Sınıf Seç"
+                      value={selectedClassroomId}
+                      onChange={(e) => {
+                        setSelectedClassroomId(e.target.value);
+                        setSelectedStudentId('');
+                      }}
+                      className="bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl text-xs font-bold px-3 py-2 text-slate-800 dark:text-white shadow-2xs focus:border-teal-700 focus:outline-none transition cursor-pointer min-w-[150px]"
+                    >
+                      <option value="">{isTeacher ? 'Tüm Sınıflarım' : '🏫 Tüm Sınıflar'}</option>
+                      {(isTeacher ? teacherClassrooms : scopeAvailableClassrooms).map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : singleClassroom ? (
+                  <AdaptiveScopeBadge
+                    type="classroom"
+                    label={singleClassroom.name}
+                    subLabel="Sınıfınız"
+                  />
+                ) : null}
 
                 {/* Öğrenci Filtresi */}
                 <div className="flex items-center gap-2">

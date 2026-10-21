@@ -209,4 +209,21 @@ describe('DevelopmentPage', () => {
     expect(screen.queryByRole('button', { name: /Çalışma Ekle/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Etkinlik Önerisi/i })).not.toBeInTheDocument();
   });
+
+  it('replaces Sınıf select with AdaptiveScopeBadge for TEACHER with 1 classroom (Spec 0062)', async () => {
+    // teacher-1 zaten tek sınıfa (Yunuslar) atanmış — mevcut top-level mock yeterli
+    render(
+      <BrowserRouter>
+        <DevelopmentPage />
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Gelişim Hikâyesi & Öğrenci Portfolyosu/i)).toBeInTheDocument();
+    });
+
+    // Tek sınıflı öğretmen için select yok, scope-badge var
+    expect(screen.queryByLabelText('Sınıf Seç')).not.toBeInTheDocument();
+    expect(await screen.findByTestId('scope-badge-classroom')).toBeInTheDocument();
+  });
 });
