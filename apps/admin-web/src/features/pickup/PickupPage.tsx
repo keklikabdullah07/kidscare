@@ -101,49 +101,56 @@ function getDateRangeForPreset(
   customStart: string,
   customEnd: string,
 ): { from?: string; to?: string } {
-  const pad = (n: number) => String(n).padStart(2, '0');
-  const formatYMD = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-
   if (preset === 'ALL') {
     return {};
   }
   const now = new Date();
   if (preset === 'TODAY') {
-    const today = formatYMD(now);
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
     return {
-      from: `${today}T00:00:00.000Z`,
-      to: `${today}T23:59:59.999Z`,
+      from: start.toISOString(),
+      to: end.toISOString(),
     };
   }
   if (preset === 'YESTERDAY') {
-    const y = new Date(now);
-    y.setDate(y.getDate() - 1);
-    const yStr = formatYMD(y);
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 0, 0, 0, 0);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59, 999);
     return {
-      from: `${yStr}T00:00:00.000Z`,
-      to: `${yStr}T23:59:59.999Z`,
+      from: start.toISOString(),
+      to: end.toISOString(),
     };
   }
   if (preset === 'LAST_7_DAYS') {
-    const start = new Date(now);
-    start.setDate(start.getDate() - 6);
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6, 0, 0, 0, 0);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
     return {
-      from: `${formatYMD(start)}T00:00:00.000Z`,
-      to: `${formatYMD(now)}T23:59:59.999Z`,
+      from: start.toISOString(),
+      to: end.toISOString(),
     };
   }
   if (preset === 'THIS_MONTH') {
-    const start = new Date(now.getFullYear(), now.getMonth(), 1);
-    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const start = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
     return {
-      from: `${formatYMD(start)}T00:00:00.000Z`,
-      to: `${formatYMD(end)}T23:59:59.999Z`,
+      from: start.toISOString(),
+      to: end.toISOString(),
     };
   }
   if (preset === 'CUSTOM') {
     const range: { from?: string; to?: string } = {};
-    if (customStart) range.from = `${customStart}T00:00:00.000Z`;
-    if (customEnd) range.to = `${customEnd}T23:59:59.999Z`;
+    if (customStart) {
+      const [y, m, d] = customStart.split('-').map(Number);
+      if (y && m && d) {
+        range.from = new Date(y, m - 1, d, 0, 0, 0, 0).toISOString();
+      }
+    }
+    if (customEnd) {
+      const [y, m, d] = customEnd.split('-').map(Number);
+      if (y && m && d) {
+        range.to = new Date(y, m - 1, d, 23, 59, 59, 999).toISOString();
+      }
+    }
     return range;
   }
   return {};
@@ -200,6 +207,21 @@ export function PickupPage(): JSX.Element {
 
   const { showToast } = useToast();
 
+  // Geçmiş veya seçilen kapsamdaki kütükleri yükle
+  async function loadEventsForRange(): Promise<void> {
+    setEventsLoading(true);
+    try {
+      const range = getDateRangeForPreset(eventDatePreset, eventStartDate, eventEndDate);
+      const studentParam = eventStudentFilter !== 'ALL' ? eventStudentFilter : undefined;
+      const res = await listPickupEvents(studentParam, range.from, range.to);
+      setEvents(res);
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : 'Kütük kayıtları yüklenemedi', 'error');
+    } finally {
+      setEventsLoading(false);
+    }
+  }
+
   async function refresh(): Promise<void> {
     setLoading(true);
     try {
@@ -218,6 +240,8 @@ export function PickupPage(): JSX.Element {
         setHandoverStudentId(studentsList[0]?.id || '');
         setNewStudentId(studentsList[0]?.id || '');
       }
+
+      await loadEventsForRange();
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Veriler yüklenemedi', 'error');
     } finally {
@@ -228,21 +252,6 @@ export function PickupPage(): JSX.Element {
   useEffect(() => {
     void refresh();
   }, []);
-
-  // Geçmiş veya seçilen kapsamdaki kütükleri yükle
-  async function loadEventsForRange(): Promise<void> {
-    setEventsLoading(true);
-    try {
-      const range = getDateRangeForPreset(eventDatePreset, eventStartDate, eventEndDate);
-      const studentParam = eventStudentFilter !== 'ALL' ? eventStudentFilter : undefined;
-      const res = await listPickupEvents(studentParam, range.from, range.to);
-      setEvents(res);
-    } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : 'Kütük kayıtları yüklenemedi', 'error');
-    } finally {
-      setEventsLoading(false);
-    }
-  }
 
   useEffect(() => {
     void loadEventsForRange();
@@ -350,6 +359,20 @@ export function PickupPage(): JSX.Element {
     () => scopedAuthorizations.filter((i) => i.status === 'APPROVED').length,
     [scopedAuthorizations],
   );
+
+  // Günlük teslimat haritası (Öğrencinin bugün teslim edilip edilmediği)
+  const todayHandoverMap = useMemo(() => {
+    const map = new Map<string, PickupEvent>();
+    const todayStr = new Date().toDateString();
+    for (const ev of events) {
+      if (new Date(ev.occurredAt).toDateString() === todayStr) {
+        if (!map.has(ev.studentId)) {
+          map.set(ev.studentId, ev);
+        }
+      }
+    }
+    return map;
+  }, [events]);
 
   // Filtrelenmiş yetkiler (Sınıf ve Durum Filtreli)
   const items = useMemo(() => {
@@ -927,15 +950,88 @@ export function PickupPage(): JSX.Element {
                           </TactileButton>
                         </>
                       ) : item.status === 'APPROVED' ? (
-                        <TactileButton
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => startHandoverFromAuth(item)}
-                          className="w-full"
-                        >
-                          <UserCheck className="w-3.5 h-3.5" />
-                          <span>Öğrenciyi Teslim Et</span>
-                        </TactileButton>
+                        (() => {
+                          const todayDelivery = todayHandoverMap.get(item.studentId);
+
+                          // Veli Portalı: Asla "Öğrenciyi Teslim Et" butonu çıkmaz!
+                          if (isParent) {
+                            if (todayDelivery) {
+                              return (
+                                <div className="w-full p-2.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700/60 flex items-center justify-between text-xs">
+                                  <div className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300 font-bold">
+                                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                    <span>
+                                      Bugün Teslim Alındı (
+                                      {new Date(todayDelivery.occurredAt).toLocaleTimeString(
+                                        'tr-TR',
+                                        {
+                                          hour: '2-digit',
+                                          minute: '2-digit',
+                                        },
+                                      )}
+                                      )
+                                    </span>
+                                  </div>
+                                  <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium truncate max-w-[120px]">
+                                    {todayDelivery.pickupPersonName}
+                                  </span>
+                                </div>
+                              );
+                            }
+                            return (
+                              <div className="w-full py-2 px-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5">
+                                <ShieldCheck className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                                <span>Okul Çıkışında Teslim Almaya Yetkili</span>
+                              </div>
+                            );
+                          }
+
+                          // Öğretmen / Admin Portalı:
+                          if (todayDelivery) {
+                            return (
+                              <div className="space-y-1.5 w-full">
+                                <div className="w-full p-2.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700/60 flex items-center justify-between text-xs">
+                                  <div className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300 font-bold">
+                                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                    <span>
+                                      Bugün Teslim Edildi (
+                                      {new Date(todayDelivery.occurredAt).toLocaleTimeString(
+                                        'tr-TR',
+                                        {
+                                          hour: '2-digit',
+                                          minute: '2-digit',
+                                        },
+                                      )}
+                                      )
+                                    </span>
+                                  </div>
+                                  <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium truncate max-w-[120px]">
+                                    {todayDelivery.pickupPersonName}
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => startHandoverFromAuth(item)}
+                                  className="w-full text-center text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold cursor-pointer py-0.5 transition"
+                                >
+                                  Tekrar / Ek Teslimat Kaydı Gir
+                                </button>
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <TactileButton
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => startHandoverFromAuth(item)}
+                              className="w-full"
+                            >
+                              <UserCheck className="w-3.5 h-3.5" />
+                              <span>Öğrenciyi Teslim Et</span>
+                            </TactileButton>
+                          );
+                        })()
                       ) : (
                         <div className="w-full text-center text-[11px] font-semibold text-slate-400 py-1">
                           Talep sonlandı
@@ -1101,11 +1197,11 @@ export function PickupPage(): JSX.Element {
 
       {/* HANDOVER MODAL ("Öğrenciyi Teslim Et") */}
       {isHandoverOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white dark:bg-[#131B2E] w-full max-w-lg rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-xl overflow-hidden animate-in fade-in zoom-in-95">
-            <div className="p-5 border-b border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-lg rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-xl max-h-[90vh] flex flex-col overflow-hidden my-auto animate-in fade-in zoom-in-95">
+            <div className="p-4 sm:p-5 border-b border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold">
+                <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold shrink-0">
                   <UserCheck className="w-5 h-5" />
                 </div>
                 <div>
@@ -1120,13 +1216,16 @@ export function PickupPage(): JSX.Element {
               <button
                 type="button"
                 onClick={() => setIsHandoverOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer p-1"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={(e) => void submitHandover(e)} className="p-5 space-y-4">
+            <form
+              onSubmit={(e) => void submitHandover(e)}
+              className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1"
+            >
               {/* Student Selector */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
@@ -1329,7 +1428,7 @@ export function PickupPage(): JSX.Element {
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5 shrink-0 sticky bottom-0 bg-white dark:bg-[#131B2E] pb-1">
                 <TactileButton
                   type="button"
                   variant="secondary"
@@ -1350,11 +1449,11 @@ export function PickupPage(): JSX.Element {
 
       {/* ADD CONTACT MODAL ("Yeni Yetkili Ekle") */}
       {isAddContactOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white dark:bg-[#131B2E] w-full max-w-lg rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-xl overflow-hidden animate-in fade-in zoom-in-95">
-            <div className="p-5 border-b border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white dark:bg-[#131B2E] w-full max-w-lg rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-xl max-h-[90vh] flex flex-col overflow-hidden my-auto animate-in fade-in zoom-in-95">
+            <div className="p-4 sm:p-5 border-b border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold">
+                <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold shrink-0">
                   <Plus className="w-5 h-5" />
                 </div>
                 <div>
@@ -1369,13 +1468,16 @@ export function PickupPage(): JSX.Element {
               <button
                 type="button"
                 onClick={() => setIsAddContactOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer p-1"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={(e) => void submitAddContact(e)} className="p-5 space-y-4">
+            <form
+              onSubmit={(e) => void submitAddContact(e)}
+              className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1"
+            >
               {/* Student */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
@@ -1498,7 +1600,7 @@ export function PickupPage(): JSX.Element {
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#DDD4C4]/60 dark:border-slate-800 flex items-center justify-end gap-2.5 shrink-0 sticky bottom-0 bg-white dark:bg-[#131B2E] pb-1">
                 <TactileButton
                   type="button"
                   variant="secondary"

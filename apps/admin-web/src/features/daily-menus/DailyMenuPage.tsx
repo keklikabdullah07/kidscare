@@ -54,10 +54,18 @@ const COMMON_ALLERGENS = [
   'Bal',
 ];
 
+function getTodayISODate(): string {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
 export function DailyMenuPage(): JSX.Element {
   const { state: authState } = useAuth();
   const [viewMode, setViewMode] = useState<ViewMode>('DAILY');
-  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState<string>(getTodayISODate);
   const [menu, setMenu] = useState<DailyMenu | null>(null);
   const [warnings, setWarnings] = useState<AllergenWarningSummary[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);

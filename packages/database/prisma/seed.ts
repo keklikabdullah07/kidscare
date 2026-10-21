@@ -121,16 +121,76 @@ async function main() {
 
       // 10 Öğretmen Verisi
       const teacherDefs = [
-        { email: 'teacher@demo.test', first: 'Zeynep', last: 'Demir', phone: '05551000001', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150' },
-        { email: 'teacher2@demo.test', first: 'Elif', last: 'Kaya', phone: '05551000002', photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150' },
-        { email: 'teacher3@demo.test', first: 'Fatma', last: 'Çelik', phone: '05551000003', photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150' },
-        { email: 'teacher4@demo.test', first: 'Merve', last: 'Aydın', phone: '05551000004', photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150' },
-        { email: 'teacher5@demo.test', first: 'Burcu', last: 'Özdemir', phone: '05551000005', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
-        { email: 'teacher6@demo.test', first: 'Selin', last: 'Arslan', phone: '05551000006', photo: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150' },
-        { email: 'teacher7@demo.test', first: 'Sinem', last: 'Kurt', phone: '05551000007', photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150' },
-        { email: 'teacher8@demo.test', first: 'Duygu', last: 'Polat', phone: '05551000008', photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150' },
-        { email: 'teacher9@demo.test', first: 'Büşra', last: 'Şahin', phone: '05551000009', photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150' },
-        { email: 'teacher10@demo.test', first: 'Esra', last: 'Koç', phone: '05551000010', photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
+        {
+          email: 'teacher@demo.test',
+          first: 'Zeynep',
+          last: 'Demir',
+          phone: '05551000001',
+          photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150',
+        },
+        {
+          email: 'teacher2@demo.test',
+          first: 'Elif',
+          last: 'Kaya',
+          phone: '05551000002',
+          photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150',
+        },
+        {
+          email: 'teacher3@demo.test',
+          first: 'Fatma',
+          last: 'Çelik',
+          phone: '05551000003',
+          photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150',
+        },
+        {
+          email: 'teacher4@demo.test',
+          first: 'Merve',
+          last: 'Aydın',
+          phone: '05551000004',
+          photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
+        },
+        {
+          email: 'teacher5@demo.test',
+          first: 'Burcu',
+          last: 'Özdemir',
+          phone: '05551000005',
+          photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+        },
+        {
+          email: 'teacher6@demo.test',
+          first: 'Selin',
+          last: 'Arslan',
+          phone: '05551000006',
+          photo: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
+        },
+        {
+          email: 'teacher7@demo.test',
+          first: 'Sinem',
+          last: 'Kurt',
+          phone: '05551000007',
+          photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150',
+        },
+        {
+          email: 'teacher8@demo.test',
+          first: 'Duygu',
+          last: 'Polat',
+          phone: '05551000008',
+          photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150',
+        },
+        {
+          email: 'teacher9@demo.test',
+          first: 'Büşra',
+          last: 'Şahin',
+          phone: '05551000009',
+          photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150',
+        },
+        {
+          email: 'teacher10@demo.test',
+          first: 'Esra',
+          last: 'Koç',
+          phone: '05551000010',
+          photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+        },
       ];
 
       const teacherUsers = [];
@@ -743,7 +803,8 @@ async function main() {
             activityAmount: 1000,
             discountPercent: i === 3 ? 10 : 0,
             dueDayOfMonth: 5,
-            notes: item.service > 0 ? 'Eğitim + Servis + Etkinlik dahil' : 'Eğitim + Etkinlik dahil',
+            notes:
+              item.service > 0 ? 'Eğitim + Servis + Etkinlik dahil' : 'Eğitim + Etkinlik dahil',
             isActive: true,
           },
         });
@@ -973,7 +1034,14 @@ async function main() {
               tenantId: tenant.id,
               studentId: st.id,
               date: rDate,
-              mood: sIdx % 4 === 0 ? 'ENERGETIC' : sIdx % 4 === 1 ? 'HAPPY' : sIdx % 4 === 2 ? 'CALM' : 'HAPPY',
+              mood:
+                sIdx % 4 === 0
+                  ? 'ENERGETIC'
+                  : sIdx % 4 === 1
+                    ? 'HAPPY'
+                    : sIdx % 4 === 2
+                      ? 'CALM'
+                      : 'HAPPY',
               meals: {
                 breakfast: sIdx % 5 === 0 ? 'HALF' : 'ALL',
                 lunch: sIdx % 6 === 0 ? 'HALF' : 'ALL',
@@ -1008,8 +1076,18 @@ async function main() {
       const weeklyMenus = [
         {
           date: new Date(Date.UTC(2026, 9, 12)),
-          breakfast: ['Köy Yumurtalı Menemen', 'Beyaz Peynir', 'Yeşil Zeytin', 'Papatya Çayı & Bal'],
-          lunch: ['Geleneksel Yayla Çorbası', 'Fırında İzmir Köfte', 'Sebzeli Bulgur Pilavı', 'Ev Yapımı Yayık Ayranı'],
+          breakfast: [
+            'Köy Yumurtalı Menemen',
+            'Beyaz Peynir',
+            'Yeşil Zeytin',
+            'Papatya Çayı & Bal',
+          ],
+          lunch: [
+            'Geleneksel Yayla Çorbası',
+            'Fırında İzmir Köfte',
+            'Sebzeli Bulgur Pilavı',
+            'Ev Yapımı Yayık Ayranı',
+          ],
           snack: ['Fırın Sütlaç', 'Mevsim Mandalinası'],
           allergens: ['Süt Ürünü', 'Gluten', 'Yumurta'],
           calories: 870,
@@ -1018,7 +1096,12 @@ async function main() {
         {
           date: new Date(Date.UTC(2026, 9, 13)),
           breakfast: ['Taze Kaşarlı Tost', 'Salatalık Dilimleri', 'Siyah Zeytin', 'Ihlamur'],
-          lunch: ['Sarı Mercimek Çorbası', 'Tavuklu Taze Bezelye Yemeği', 'Arpa Şehriyeli Pirinç Pilavı', 'Havuçlu Mor Lahana Salatası'],
+          lunch: [
+            'Sarı Mercimek Çorbası',
+            'Tavuklu Taze Bezelye Yemeği',
+            'Arpa Şehriyeli Pirinç Pilavı',
+            'Havuçlu Mor Lahana Salatası',
+          ],
           snack: ['Elmalı Cevizli Tarçınlı Kek', 'Taze Süt'],
           allergens: ['Gluten', 'Süt Ürünü', 'Ceviz'],
           calories: 890,
@@ -1027,7 +1110,12 @@ async function main() {
         {
           date: new Date(Date.UTC(2026, 9, 14)),
           breakfast: ['Haşlanmış Yumurta', 'Kaşar Peyniri', 'Cherry Domates', 'Kuşburnu Çayı'],
-          lunch: ['Geleneksel Ev Tarhanası', 'Kıymalı Ispanak Yemeği', 'Ev Yapımı Yoğurt', 'Fırınlanmış Makarna'],
+          lunch: [
+            'Geleneksel Ev Tarhanası',
+            'Kıymalı Ispanak Yemeği',
+            'Ev Yapımı Yoğurt',
+            'Fırınlanmış Makarna',
+          ],
           snack: ['Peynirli Ev Poğaçası', 'Amasya Elması Dilimleri'],
           allergens: ['Gluten', 'Süt Ürünü', 'Yumurta'],
           calories: 850,
@@ -1036,7 +1124,12 @@ async function main() {
         {
           date: new Date(Date.UTC(2026, 9, 15)),
           breakfast: ['Krep & Doğal Çilek Reçeli', 'Tulum Peyniri', 'Yeşil Zeytin', 'Süt'],
-          lunch: ['Ezogelin Çorbası', 'Fırında Levrek Buğulama', 'Fırın Elma Dilim Patates', 'Mevsim Yeşillikleri Salatası'],
+          lunch: [
+            'Ezogelin Çorbası',
+            'Fırında Levrek Buğulama',
+            'Fırın Elma Dilim Patates',
+            'Mevsim Yeşillikleri Salatası',
+          ],
           snack: ['Tahin Helvası & Fındıksız Kuru Üzüm', 'Taze Portakal Suyu'],
           allergens: ['Balık', 'Susam', 'Gluten', 'Süt Ürünü'],
           calories: 910,
@@ -1044,7 +1137,12 @@ async function main() {
         },
         {
           date: new Date(Date.UTC(2026, 9, 16)),
-          breakfast: ['Fırında Kaşarlı Ekmek Dilimleri', 'Siyah Zeytin', 'Mevsim Yeşillikleri', 'Taze Sıkılmış Portakal Suyu'],
+          breakfast: [
+            'Fırında Kaşarlı Ekmek Dilimleri',
+            'Siyah Zeytin',
+            'Mevsim Yeşillikleri',
+            'Taze Sıkılmış Portakal Suyu',
+          ],
           lunch: ['Sebzeli Şehriye Çorbası', 'Köy Tavuğu Sote', 'Bulgur Pilavı', 'Mevsim Salata'],
           snack: ['Ev Yapımı Yoğurt & Muz Dilimleri'],
           allergens: ['Süt Ürünü', 'Gluten'],
@@ -1053,8 +1151,18 @@ async function main() {
         },
         {
           date: new Date(Date.UTC(2026, 9, 17)),
-          breakfast: ['Organik Haşlanmış Köy Yumurtası', 'Ezine Beyaz Peyniri', 'Çengelköy Salatalığı & Cherry Domates', 'Ihlamur & Bal'],
-          lunch: ['Geleneksel Süzme Mercimek Çorbası', 'Fırında Anne Köftesi & Elma Dilim Patates', 'Şehriyeli Yayla Pirinç Pilavı', 'Ev Yapımı Yayık Ayranı'],
+          breakfast: [
+            'Organik Haşlanmış Köy Yumurtası',
+            'Ezine Beyaz Peyniri',
+            'Çengelköy Salatalığı & Cherry Domates',
+            'Ihlamur & Bal',
+          ],
+          lunch: [
+            'Geleneksel Süzme Mercimek Çorbası',
+            'Fırında Anne Köftesi & Elma Dilim Patates',
+            'Şehriyeli Yayla Pirinç Pilavı',
+            'Ev Yapımı Yayık Ayranı',
+          ],
           snack: ['Fırından Yeni Çıkmış Havuçlu Kek', 'Mevsim Meyvesi (Amasya Elması)'],
           allergens: ['Yumurta', 'Süt Ürünü', 'Gluten'],
           calories: 890,
@@ -1174,7 +1282,8 @@ async function main() {
           category: 'DUSME',
           occurredAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
           description: 'Bahçe oyununda koşarken dizini hafifçe çim zemine çarptı.',
-          actionTaken: 'Revirde antiseptik sprey ile temizlendi, soğuk kompres ve yara bandı uygulandı.',
+          actionTaken:
+            'Revirde antiseptik sprey ile temizlendi, soğuk kompres ve yara bandı uygulandı.',
           parentNotified: true,
           parentNotifiedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 + 15 * 60 * 1000),
           parentNotifiedById: teacherUsers[0].id,
@@ -1203,8 +1312,10 @@ async function main() {
           studentId: createdStudents[1].id, // Mert Kaya
           category: 'YARALANMA',
           occurredAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          description: 'Etkinlik masasında el işi kağıdının kenarı sol işaret parmağını hafifçe kesti.',
-          actionTaken: 'Sabunlu suyla yıkandı, antiseptik sürüldü ve sevimli figürlü yara bandı yapıştırıldı.',
+          description:
+            'Etkinlik masasında el işi kağıdının kenarı sol işaret parmağını hafifçe kesti.',
+          actionTaken:
+            'Sabunlu suyla yıkandı, antiseptik sürüldü ve sevimli figürlü yara bandı yapıştırıldı.',
           parentNotified: true,
           parentNotifiedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 20 * 60 * 1000),
           parentNotifiedById: teacherUsers[0].id,
@@ -1219,7 +1330,8 @@ async function main() {
           category: 'KAZA',
           occurredAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
           description: 'Yemekhaneye inerken basamağın kenarına takılıp bileğini hafifçe burktu.',
-          actionTaken: 'Revirde buz kompresi uygulandı, dinlendirildi, yürümesinde aksama gözlenmedi.',
+          actionTaken:
+            'Revirde buz kompresi uygulandı, dinlendirildi, yürümesinde aksama gözlenmedi.',
           parentNotified: true,
           parentNotifiedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000 + 10 * 60 * 1000),
           parentNotifiedById: teacherUsers[8].id,
@@ -1234,7 +1346,8 @@ async function main() {
           category: 'DAVRANIS',
           occurredAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
           description: 'Blok inşa köşesinde arkadaşıyla aynı ahşap parça için anlaşmazlık yaşadı.',
-          actionTaken: 'Öğretmen rehberliğinde duygu çemberi yapıldı, sırayla oynama kuralı hatırlatıldı ve barış sağlandı.',
+          actionTaken:
+            'Öğretmen rehberliğinde duygu çemberi yapıldı, sırayla oynama kuralı hatırlatıldı ve barış sağlandı.',
           parentNotified: true,
           parentNotifiedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000),
           parentNotifiedById: teacherUsers[7].id,
@@ -1429,6 +1542,68 @@ async function main() {
       }
 
       // =========================================================================
+      // K2. EV ETKİNLİK ÖNERİLERİ (HomeActivitySuggestion - 6 Örnek Etkinlik)
+      // =========================================================================
+      console.log('💡 Ev Etkinlik Önerileri (HomeActivitySuggestion) ekleniyor...');
+
+      const homeActivitiesDefs = [
+        {
+          domain: 'BILISSEL' as const,
+          ageGroup: '4-5 Yaş',
+          title: '🔍 Ev İçi Doğa & Nesne Sınıflandırma',
+          description:
+            'Evinizdeki farklı doku, renk ve büyüklükteki nesneleri (düğme, yaprak, tahta kaşık) toplayıp çocuğunuzla birlikte boyut ve rengine göre sepetlere eşleyin.',
+        },
+        {
+          domain: 'DIL' as const,
+          ageGroup: '4-5 Yaş',
+          title: '📖 Resimlerle Masal Tamamlama Oyunu',
+          description:
+            'Bir masal kitabını okurken son sayfaya gelmeden durun. Çocuğunuzdan hikayenin sonunu kendi hayal gücüyle anlatmasını isteyin.',
+        },
+        {
+          domain: 'MOTOR' as const,
+          ageGroup: '3-4 Yaş',
+          title: '🧶 İpten Lazer Parkuru (Kaba Motor)',
+          description:
+            'Koridorda iki duvar arasına renkli ipler bağlayarak eğlenceli bir engelli parkur hazırlayın. Çocuğunuz iplere dokunmadan altından ve üstünden geçsin.',
+        },
+        {
+          domain: 'SOSYAL_DUYGUSAL' as const,
+          ageGroup: '4-5 Yaş',
+          title: '🎭 Duygu Aynası ve Yüz İfadeleri',
+          description:
+            'Ayna karşısına geçip mutlu, şaşkın, üzgün ve heyecanlı yüz ifadeleri yapın. Bugün kendisini hangi duyguya daha yakın hissettiğini konuşun.',
+        },
+        {
+          domain: 'OZ_BAKIM' as const,
+          ageGroup: '3-4 Yaş',
+          title: '🧦 Renkli Çorap Eşleme ve Katlama',
+          description:
+            'Yıkanmış renkli çorapları ortaya koyun. Eşlerini bulup iç içe katlamasını destekleyin, el-göz koordinasyonu ve sorumluluk bilincini pekiştirin.',
+        },
+        {
+          domain: 'SANAT' as const,
+          ageGroup: '4-5 Yaş',
+          title: '🍃 Doğal Malzemelerle Sonbahar Kolajı',
+          description:
+            'Bahçeden toplanan yaprak, dal ve kozalakları kağıt üzerine yapıştırarak eğlenceli bir doğa resmi oluşturun.',
+        },
+      ];
+
+      for (const h of homeActivitiesDefs) {
+        await tx.homeActivitySuggestion.create({
+          data: {
+            tenantId: tenant.id,
+            domain: h.domain,
+            ageGroup: h.ageGroup,
+            title: h.title,
+            description: h.description,
+          },
+        });
+      }
+
+      // =========================================================================
       // L. ETKİNLİK GALERİSİ PAYLAŞIMLARI (ActivityPost - 4 Post)
       // =========================================================================
       console.log('📸 Galeri Etkinlik Paylaşımları ekleniyor...');
@@ -1438,7 +1613,8 @@ async function main() {
           tenantId: tenant.id,
           authorId: teacherUsers[0].id,
           title: '🎨 Minik Adımlar Sonbahar Sanat Sergisi',
-          description: 'Çocuklarımız topladıkları sonbahar yapraklarıyla rengarenk baskılar yaptılar!',
+          description:
+            'Çocuklarımız topladıkları sonbahar yapraklarıyla rengarenk baskılar yaptılar!',
           classroom: classrooms[0].name,
           activityDate: new Date(Date.now() - 24 * 60 * 60 * 1000),
           tags: ['Sanat', 'Sonbahar', 'Yaratıcılık'],
@@ -1466,7 +1642,8 @@ async function main() {
           tenantId: tenant.id,
           authorId: teacherUsers[1].id,
           title: '🥖 Minik Şefler Ekmek ve Kurabiye Atölyesi',
-          description: 'Önlüklerimizi taktık, organik un ve zeytinyağı ile kendi ekmek hamurumuzu yoğurduk!',
+          description:
+            'Önlüklerimizi taktık, organik un ve zeytinyağı ile kendi ekmek hamurumuzu yoğurduk!',
           classroom: classrooms[1].name,
           activityDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
           tags: ['Mutfak Atölyesi', 'Duyu', 'İnce Motor'],
@@ -1480,7 +1657,8 @@ async function main() {
           tenantId: tenant.id,
           authorId: teacherUsers[6].id,
           title: '🎵 Orff Çalgıları ile Ritim ve Dans Günü',
-          description: 'Ksilofon, tef ve marakaslarla doğaçlama ritim orkestrası kurduk, çok eğlendik.',
+          description:
+            'Ksilofon, tef ve marakaslarla doğaçlama ritim orkestrası kurduk, çok eğlendik.',
           classroom: classrooms[6].name,
           activityDate: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
           tags: ['Müzik', 'Orff', 'Ritim'],
@@ -1518,7 +1696,12 @@ async function main() {
             studentId: createdStudents[i].id,
             parentUserId: createdParents[i].id,
             decision: i === 4 || i === 11 ? 'DECLINED' : 'APPROVED',
-            notes: i === 4 ? 'O tarihte şehir dışında olacağız' : i === 11 ? 'Doktor kontrolü nedeniyle katılamayacak' : 'Katılımı onaylıyorum',
+            notes:
+              i === 4
+                ? 'O tarihte şehir dışında olacağız'
+                : i === 11
+                  ? 'Doktor kontrolü nedeniyle katılamayacak'
+                  : 'Katılımı onaylıyorum',
           },
         });
       }
@@ -1531,7 +1714,8 @@ async function main() {
           eventDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
           location: 'AKM Çocuk Sahnesi, Taksim / İstanbul',
           price: 180,
-          description: 'MEB onaylı tiyatro oyununda dostluk ve paylaşma teması işlenecektir. Servis okulumuzdan kalkacaktır.',
+          description:
+            'MEB onaylı tiyatro oyununda dostluk ve paylaşma teması işlenecektir. Servis okulumuzdan kalkacaktır.',
           deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
           status: 'ACTIVE',
           createdById: admin1.id,
@@ -1642,7 +1826,8 @@ async function main() {
           requestedById: createdParents[4].id,
           approvedById: teacherUsers[2].id,
           administeredById: null,
-          skipReason: 'Öğrenci arabada derin uyuduğu ve huzursuzlanmaması için öğle uykusunda atlandı, veliye bilgi verildi.',
+          skipReason:
+            'Öğrenci arabada derin uyuduğu ve huzursuzlanmaması için öğle uykusunda atlandı, veliye bilgi verildi.',
         },
       });
 
@@ -1667,7 +1852,9 @@ async function main() {
       // =========================================================================
       // O. TESLİMAT GÜVENLİĞİ: YETKİ BELGELERİ VE TESLİM TUTANAKLARI
       // =========================================================================
-      console.log('🛡️ Teslimat İzinleri (PickupAuthorization) ve Olayları (PickupEvent) ekleniyor...');
+      console.log(
+        '🛡️ Teslimat İzinleri (PickupAuthorization) ve Olayları (PickupEvent) ekleniyor...',
+      );
 
       const adaContacts = createdPickupContactsMap.get(createdStudents[0].id) || [];
       const mertContacts = createdPickupContactsMap.get(createdStudents[1].id) || [];
@@ -1884,7 +2071,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv1.id,
           senderId: createdParents[0].id,
-          content: 'Merhaba Zeynep Öğretmenim, Ada nın alerji damlasını çantasına koydum. Sabah kahvaltıdan sonra 5 damla verebilir misiniz?',
+          content:
+            'Merhaba Zeynep Öğretmenim, Ada nın alerji damlasını çantasına koydum. Sabah kahvaltıdan sonra 5 damla verebilir misiniz?',
           createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
         },
       });
@@ -1893,7 +2081,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv1.id,
           senderId: teacherUsers[0].id,
-          content: 'Merhaba Selin Hanım, damlayı teslim aldım. Kahvaltı sonrası meyve suyuyla birlikte verdim, hiç zorlanmadı.',
+          content:
+            'Merhaba Selin Hanım, damlayı teslim aldım. Kahvaltı sonrası meyve suyuyla birlikte verdim, hiç zorlanmadı.',
           createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
         },
       });
@@ -1951,7 +2140,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv2.id,
           senderId: teacherUsers[0].id,
-          content: 'İyi günler Derya Hanım, yarın bahçe etkinliğimizde su birikintisi gözlemi yapacağız. Mert in yedek yağmurluğunu gönderebilirseniz çok seviniriz.',
+          content:
+            'İyi günler Derya Hanım, yarın bahçe etkinliğimizde su birikintisi gözlemi yapacağız. Mert in yedek yağmurluğunu gönderebilirseniz çok seviniriz.',
           createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
         },
       });
@@ -1960,7 +2150,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv2.id,
           senderId: createdParents[1].id,
-          content: 'Harika bir fikir Zeynep Öğretmenim, sarı yağmurluğu ve çizmelerini çantasına ekliyorum.',
+          content:
+            'Harika bir fikir Zeynep Öğretmenim, sarı yağmurluğu ve çizmelerini çantasına ekliyorum.',
           createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
         },
       });
@@ -1991,7 +2182,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv3.id,
           senderId: createdParents[3].id,
-          content: 'Ayşe Hanım merhaba, Can ın Ekim ayı eğitim ve servis aidatını EFT ile gönderdim. Dekont numarasını açıklama kısmına ekledim.',
+          content:
+            'Ayşe Hanım merhaba, Can ın Ekim ayı eğitim ve servis aidatını EFT ile gönderdim. Dekont numarasını açıklama kısmına ekledim.',
           createdAt: new Date(Date.now() - 26 * 60 * 60 * 1000),
         },
       });
@@ -2000,7 +2192,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv3.id,
           senderId: admin1.id,
-          content: 'Merhaba Ebru Hanım, ödemeniz muhasebe kayıtlarımıza ulaştı ve faturanız ödendi olarak güncellendi. Teşekkür ederiz.',
+          content:
+            'Merhaba Ebru Hanım, ödemeniz muhasebe kayıtlarımıza ulaştı ve faturanız ödendi olarak güncellendi. Teşekkür ederiz.',
           createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
         },
       });
@@ -2032,7 +2225,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv4.id,
           senderId: createdParents[16].id,
-          content: 'Büşra Öğretmenim, Arboretum gezisi için izin formunu doldurdum. Yanına sırt çantasıyla matara koymamız yeterli midir?',
+          content:
+            'Büşra Öğretmenim, Arboretum gezisi için izin formunu doldurdum. Yanına sırt çantasıyla matara koymamız yeterli midir?',
           createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
         },
       });
@@ -2041,7 +2235,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv4.id,
           senderId: teacherUsers[8].id,
-          content: 'Evet Yasemin Hanım, spor ayakkabı ve su matarası yeterlidir. Atıştırmalıklar okulumuz tarafından karşılanacaktır.',
+          content:
+            'Evet Yasemin Hanım, spor ayakkabı ve su matarası yeterlidir. Atıştırmalıklar okulumuz tarafından karşılanacaktır.',
           createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
         },
       });
@@ -2072,7 +2267,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv5.id,
           senderId: createdParents[2].id,
-          content: 'Kemal Bey iyi günler, Zeynep i akşam teyzesi Merve Hanım alacak. Sistemden izin tanımladım, kontrol edebilir misiniz?',
+          content:
+            'Kemal Bey iyi günler, Zeynep i akşam teyzesi Merve Hanım alacak. Sistemden izin tanımladım, kontrol edebilir misiniz?',
           createdAt: new Date(Date.now() - 14 * 60 * 60 * 1000),
         },
       });
@@ -2081,7 +2277,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv5.id,
           senderId: admin2.id,
-          content: 'Gamze Hanım merhaba, teslimat izniniz onaylanmış ve nöbetçi öğretmenimize bilgi iletilmiştir.',
+          content:
+            'Gamze Hanım merhaba, teslimat izniniz onaylanmış ve nöbetçi öğretmenimize bilgi iletilmiştir.',
           createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
         },
       });
@@ -2115,7 +2312,8 @@ async function main() {
           tenantId: tenant.id,
           conversationId: conv6.id,
           senderId: admin2.id,
-          content: 'Değerli Velilerimiz, 25 Ekim Cumartesi günü saat 11:00 de okulumuz konferans salonunda Güz Dönemi Veli Bilgilendirme Toplantısı ve Çocuk Gelişiminde Sınırlar konulu uzman pedagog seminerimiz gerçekleştirilecektir. Katılımınızı önemle rica ederiz.',
+          content:
+            'Değerli Velilerimiz, 25 Ekim Cumartesi günü saat 11:00 de okulumuz konferans salonunda Güz Dönemi Veli Bilgilendirme Toplantısı ve Çocuk Gelişiminde Sınırlar konulu uzman pedagog seminerimiz gerçekleştirilecektir. Katılımınızı önemle rica ederiz.',
           isCritical: true,
           createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
         },

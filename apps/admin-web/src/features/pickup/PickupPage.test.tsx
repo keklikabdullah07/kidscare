@@ -3,15 +3,19 @@ import userEvent from '@testing-library/user-event';
 import { PickupPage } from './PickupPage';
 import { ToastProvider } from '../../components/Toast';
 
+const authMock = vi.hoisted(() => ({
+  role: 'ADMIN',
+}));
+
 vi.mock('../auth/AuthContext', () => ({
   useAuth: () => ({
     state: {
       status: 'authenticated',
       user: {
-        id: 'admin-1',
+        id: authMock.role === 'PARENT' ? 'parent-1' : 'admin-1',
         tenantId: 't-1',
-        email: 'admin@demo.test',
-        role: 'ADMIN',
+        email: authMock.role === 'PARENT' ? 'parent@demo.test' : 'admin@demo.test',
+        role: authMock.role,
       },
       token: 'test-jwt',
     },
@@ -110,6 +114,7 @@ function renderPage() {
 
 describe('PickupPage', () => {
   beforeEach(() => {
+    authMock.role = 'ADMIN';
     localStorage.setItem('kidscare.token', 'test-jwt');
   });
 
@@ -260,5 +265,81 @@ describe('PickupPage', () => {
       expect(screen.getByText('Ahmet Yılmaz')).toBeInTheDocument();
       expect(screen.getByText('Sınıftaki Öğrenciler (1)')).toBeInTheDocument();
     });
+  });
+
+  it('renders authorized badge for PARENT and hides Öğrenciyi Teslim Et button', async () => {
+    authMock.role = 'PARENT';
+    const approvedAuth = [
+      {
+        ...fakeAuthorizations[0],
+        status: 'APPROVED',
+      },
+    ];
+
+    mockFetchByUrl({
+      '/pickup/authorizations': () => new Response(JSON.stringify(approvedAuth), { status: 200 }),
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+      '/parent/children': () =>
+        new Response(JSON.stringify([{ student: fakeStudents[0] }]), { status: 200 }),
+      '/pickup/events': () => new Response(JSON.stringify([]), { status: 200 }),
+    });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Güvenlik & Teslimat Kontrolü')).toBeInTheDocument();
+    });
+
+    // Onaylananlar sekmesine geç
+    const approvedTab = screen.getByRole('tab', { name: /Yetkili \/ Onaylı/i });
+    await userEvent.click(approvedTab);
+
+    // Veli ekranında onaylı kartta "Okul Çıkışında Teslim Almaya Yetkili" görünmeli
+    expect(await screen.findByText('Okul Çıkışında Teslim Almaya Yetkili')).toBeInTheDocument();
+
+    // Veli ekranında ASLA "Öğrenciyi Teslim Et" butonu olmamalı!
+    expect(screen.queryByRole('button', { name: /Öğrenciyi Teslim Et/i })).not.toBeInTheDocument();
+  });
+
+  it('displays "Bugün Teslim Edildi" badge when student was already handed over today', async () => {
+    authMock.role = 'TEACHER';
+    const approvedAuth = [
+      {
+        ...fakeAuthorizations[0],
+        status: 'APPROVED',
+      },
+    ];
+
+    const todayEvent = {
+      id: 'pe-today-1',
+      tenantId: 't-1',
+      studentId: 's-1',
+      pickupPersonName: 'Ahmet Yılmaz',
+      pickupPersonPhone: '0555 111 2233',
+      verificationMethod: 'ID_CHECK',
+      verifiedByUserId: 'teacher-1',
+      occurredAt: new Date().toISOString(),
+      note: 'Öğrenci teslim edildi.',
+    };
+
+    mockFetchByUrl({
+      '/pickup/authorizations': () => new Response(JSON.stringify(approvedAuth), { status: 200 }),
+      '/students': () => new Response(JSON.stringify(fakeStudents), { status: 200 }),
+      '/classrooms': () => new Response(JSON.stringify(fakeClassrooms), { status: 200 }),
+      '/pickup/events': () => new Response(JSON.stringify([todayEvent]), { status: 200 }),
+    });
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Güvenlik & Teslimat Kontrolü')).toBeInTheDocument();
+    });
+
+    // Onaylananlar sekmesine geç
+    const approvedTab = screen.getByRole('tab', { name: /Yetkili \/ Onaylı/i });
+    await userEvent.click(approvedTab);
+
+    // Bugün teslim edilmiş rozeti görünmeli
+    expect(await screen.findByText(/Bugün Teslim Edildi/i)).toBeInTheDocument();
   });
 });

@@ -226,4 +226,34 @@ describe('DevelopmentPage', () => {
     expect(screen.queryByLabelText('Sınıf Seç')).not.toBeInTheDocument();
     expect(await screen.findByTestId('scope-badge-classroom')).toBeInTheDocument();
   });
+
+  it('renders student badge for PARENT in Ev Etkinlik Havuzu tab and provides curated activities', async () => {
+    const user = userEvent.setup();
+    mockUseAuth.mockReturnValue({
+      state: {
+        status: 'authenticated',
+        user: {
+          id: 'parent-1',
+          email: 'parent@demo.test',
+          role: 'PARENT',
+          tenantId: 'demo',
+        },
+      },
+    });
+
+    render(
+      <BrowserRouter>
+        <DevelopmentPage />
+      </BrowserRouter>,
+    );
+
+    const activitiesTab = screen.getByRole('tab', { name: /Ev Etkinlik Havuzu/i });
+    await user.click(activitiesTab);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Öğrenci: Ali Yılmaz/i)).toBeInTheDocument();
+      expect(screen.getByText(/Ev İçi Doğa & Nesne Sınıflandırma/i)).toBeInTheDocument();
+      expect(screen.getByLabelText('Yaş Grubu Seç')).toBeInTheDocument();
+    });
+  });
 });

@@ -112,6 +112,86 @@ const DOMAIN_LABELS: Record<DevelopmentDomain, DomainMeta> = {
   },
 };
 
+const CURATED_ACTIVITIES: HomeActivitySuggestionDto[] = [
+  {
+    id: 'curated-1',
+    tenantId: '',
+    domain: 'BILISSEL',
+    ageGroup: '4-5 Yaş',
+    title: '🔍 Ev İçi Doğa & Nesne Sınıflandırma',
+    description:
+      'Evinizdeki farklı doku, renk ve büyüklükteki nesneleri (düğme, yaprak, tahta kaşık) toplayıp çocuğunuzla birlikte boyut ve rengine göre sepetlere eşleyin.',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'curated-2',
+    tenantId: '',
+    domain: 'DIL',
+    ageGroup: '4-5 Yaş',
+    title: '📖 Resimlerle Masal Tamamlama Oyunu',
+    description:
+      'Bir masal kitabını okurken son sayfaya gelmeden durun. Çocuğunuzdan hikayenin sonunu kendi hayal gücüyle anlatmasını isteyin.',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'curated-3',
+    tenantId: '',
+    domain: 'MOTOR',
+    ageGroup: '3-4 Yaş',
+    title: '🧶 İpten Lazer Parkuru (Kaba Motor)',
+    description:
+      'Koridorda iki duvar arasına renkli ipler bağlayarak eğlenceli bir engelli parkur hazırlayın. Çocuğunuz iplere dokunmadan altından ve üstünden geçsin.',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'curated-4',
+    tenantId: '',
+    domain: 'SOSYAL_DUYGUSAL',
+    ageGroup: '4-5 Yaş',
+    title: '🎭 Duygu Aynası ve Yüz İfadeleri',
+    description:
+      'Ayna karşısına geçip mutlu, şaşkın, üzgün ve heyecanlı yüz ifadeleri yapın. Bugün kendisini hangi duyguya daha yakın hissettiğini konuşun.',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'curated-5',
+    tenantId: '',
+    domain: 'OZ_BAKIM',
+    ageGroup: '3-4 Yaş',
+    title: '🧦 Renkli Çorap Eşleme ve Katlama',
+    description:
+      'Yıkanmış renkli çorapları ortaya koyun. Eşlerini bulup iç içe katlamasını destekleyin, el-göz koordinasyonu ve sorumluluk bilincini pekiştirin.',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'curated-6',
+    tenantId: '',
+    domain: 'SANAT',
+    ageGroup: '4-5 Yaş',
+    title: '🍃 Doğal Malzemelerle Sonbahar Kolajı',
+    description:
+      'Bahçeden toplanan yaprak, dal ve kozalakları kağıt üzerine yapıştırarak eğlenceli bir doğa resmi oluşturun.',
+    createdAt: new Date().toISOString(),
+  },
+];
+
+function getStudentAgeGroup(dateOfBirth?: string | null): string {
+  if (!dateOfBirth) return '';
+  const birth = new Date(dateOfBirth);
+  if (isNaN(birth.getTime())) return '';
+  const now = new Date();
+  let years = now.getFullYear() - birth.getFullYear();
+  const m = now.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) {
+    years--;
+  }
+  if (years < 3) return '0-2 Yaş';
+  if (years === 3) return '3-4 Yaş';
+  if (years === 4) return '4-5 Yaş';
+  if (years >= 5) return '5-6 Yaş';
+  return `${years} Yaş`;
+}
+
 type TabKey = 'observations' | 'portfolio' | 'activities';
 
 export function DevelopmentPage(): JSX.Element {
@@ -125,6 +205,7 @@ export function DevelopmentPage(): JSX.Element {
   const [selectedStudentId, setSelectedStudentId] = useState<string>('');
   const [selectedClassroomId, setSelectedClassroomId] = useState<string>('');
   const [selectedDomain, setSelectedDomain] = useState<DevelopmentDomain | ''>('');
+  const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('');
 
   const [observations, setObservations] = useState<DevelopmentObservationDto[]>([]);
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItemDto[]>([]);
@@ -288,14 +369,25 @@ export function DevelopmentPage(): JSX.Element {
     [scopedStudents],
   );
 
+  // Aktif Veli Öğrencisi (Seçilmiş öğrenci veya ilk öğrenci)
+  const activeStudent = useMemo(() => {
+    if (selectedStudentId) {
+      return scopedStudents.find((s) => s.id === selectedStudentId) || scopedStudents[0] || null;
+    }
+    return scopedStudents[0] || null;
+  }, [scopedStudents, selectedStudentId]);
+
   const scopedObservations = useMemo(() => {
     let list = observations;
     if (isTeacher) {
       list = list.filter((o) => scopedStudentIds.has(o.studentId));
     }
     if (isParent) {
-      // Veli yalnızca veliye açık kayıtları görür; başka öğrenci varlığı/asla sızmaz
+      // Veli yalnızca veliye açık kayıtları görür; başka öğrenci varlığı asla sızmaz
       list = list.filter((o) => scopedStudentIds.has(o.studentId) && o.isParentVisible);
+      if (activeStudent) {
+        list = list.filter((o) => o.studentId === activeStudent.id);
+      }
     }
     if (selectedClassroomId) {
       list = list.filter((o) => {
@@ -304,7 +396,15 @@ export function DevelopmentPage(): JSX.Element {
       });
     }
     return list;
-  }, [isTeacher, isParent, observations, scopedStudentIds, selectedClassroomId, students]);
+  }, [
+    isTeacher,
+    isParent,
+    observations,
+    scopedStudentIds,
+    activeStudent,
+    selectedClassroomId,
+    students,
+  ]);
 
   const scopedPortfolioItems = useMemo(() => {
     let list = portfolioItems;
@@ -313,6 +413,9 @@ export function DevelopmentPage(): JSX.Element {
     }
     if (isParent) {
       list = list.filter((p) => scopedStudentIds.has(p.studentId) && p.isParentVisible);
+      if (activeStudent) {
+        list = list.filter((p) => p.studentId === activeStudent.id);
+      }
     }
     if (selectedClassroomId) {
       list = list.filter((p) => {
@@ -321,7 +424,15 @@ export function DevelopmentPage(): JSX.Element {
       });
     }
     return list;
-  }, [isTeacher, isParent, portfolioItems, scopedStudentIds, selectedClassroomId, students]);
+  }, [
+    isTeacher,
+    isParent,
+    portfolioItems,
+    scopedStudentIds,
+    activeStudent,
+    selectedClassroomId,
+    students,
+  ]);
 
   async function loadData() {
     setLoading(true);
@@ -447,6 +558,16 @@ export function DevelopmentPage(): JSX.Element {
     }
   }
 
+  // Ev Etkinlik Havuzu: Veritabanında kayıt yoksa pedagojik örnek havuz ile desteklenir
+  const displayActivities = useMemo(() => {
+    const list = activities.length > 0 ? activities : CURATED_ACTIVITIES;
+    return list.filter((act) => {
+      const matchDomain = !selectedDomain || act.domain === selectedDomain;
+      const matchAge = !selectedAgeGroup || act.ageGroup === selectedAgeGroup;
+      return matchDomain && matchAge;
+    });
+  }, [activities, selectedDomain, selectedAgeGroup]);
+
   const tabs = useMemo<TactileTabItem<TabKey>[]>(
     () => [
       {
@@ -467,11 +588,11 @@ export function DevelopmentPage(): JSX.Element {
         id: 'activities',
         label: 'Ev Etkinlik Havuzu',
         icon: Lightbulb,
-        count: activities.length,
+        count: displayActivities.length,
         activeVariant: 'sky',
       },
     ],
-    [scopedObservations.length, scopedPortfolioItems.length, activities.length],
+    [scopedObservations.length, scopedPortfolioItems.length, displayActivities.length],
   );
 
   return (
@@ -571,16 +692,41 @@ export function DevelopmentPage(): JSX.Element {
         {/* Alt Satır: Sınıf, Öğrenci ve Gelişim Alanı Filtreleri */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
+            {/* Veli Öğrenci Bağlamı — 3 Sekmede de Aktif & Çoklu Çocuk Destekli */}
             {isParent &&
-              activeTab !== 'activities' &&
               scopedStudents.length > 0 &&
-              scopedStudents[0] && (
+              (scopedStudents.length > 1 ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0">
+                    Öğrenci:
+                  </span>
+                  <select
+                    aria-label="Öğrenci Seç"
+                    value={activeStudent?.id || ''}
+                    onChange={(e) => setSelectedStudentId(e.target.value)}
+                    className="bg-[#FCFAF7] dark:bg-slate-900 border-2 border-teal-300 dark:border-teal-700/80 rounded-2xl text-xs font-bold px-3 py-2 text-teal-900 dark:text-teal-200 shadow-2xs focus:border-teal-700 focus:outline-none transition cursor-pointer"
+                  >
+                    {scopedStudents.map((s) => {
+                      const age = getStudentAgeGroup(s.dateOfBirth);
+                      return (
+                        <option key={s.id} value={s.id}>
+                          {s.firstName} {s.lastName} {age ? `(${age})` : ''}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              ) : activeStudent ? (
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 dark:bg-teal-950/40 border border-teal-300 dark:border-teal-700/60 rounded-2xl">
+                  <User className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
                   <span className="text-xs font-bold text-teal-800 dark:text-teal-300">
-                    Öğrenci: {scopedStudents[0].firstName} {scopedStudents[0].lastName}
+                    Öğrenci: {activeStudent.firstName} {activeStudent.lastName}
+                    {getStudentAgeGroup(activeStudent.dateOfBirth)
+                      ? ` (${getStudentAgeGroup(activeStudent.dateOfBirth)})`
+                      : ''}
                   </span>
                 </div>
-              )}
+              ) : null)}
             {activeTab !== 'activities' && !isParent && (
               <>
                 {/* Sınıf Filtresi — akıllı adaptif (Spec 0062) */}
@@ -662,6 +808,27 @@ export function DevelopmentPage(): JSX.Element {
                 </select>
               </div>
             )}
+
+            {/* Yaş Grubu Filtresi (Ev Etkinlik Havuzu sekmesinde) */}
+            {activeTab === 'activities' && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider shrink-0">
+                  Yaş:
+                </span>
+                <select
+                  aria-label="Yaş Grubu Seç"
+                  value={selectedAgeGroup}
+                  onChange={(e) => setSelectedAgeGroup(e.target.value)}
+                  className="bg-[#FCFAF7] dark:bg-slate-900 border-2 border-[#DDD4C4] dark:border-slate-700/80 rounded-2xl text-xs font-bold px-3 py-2 text-slate-800 dark:text-white shadow-2xs focus:border-teal-700 focus:outline-none transition cursor-pointer"
+                >
+                  <option value="">Tüm Yaşlar</option>
+                  <option value="0-2 Yaş">0-2 Yaş</option>
+                  <option value="3-4 Yaş">3-4 Yaş</option>
+                  <option value="4-5 Yaş">4-5 Yaş</option>
+                  <option value="5-6 Yaş">5-6 Yaş</option>
+                </select>
+              </div>
+            )}
           </div>
 
           {/* Liste Kayıt Sayacı */}
@@ -688,7 +855,7 @@ export function DevelopmentPage(): JSX.Element {
               <span>
                 Toplam{' '}
                 <strong className="text-slate-900 dark:text-white font-bold">
-                  {activities.length}
+                  {displayActivities.length}
                 </strong>{' '}
                 etkinlik listeleniyor
               </span>
@@ -861,22 +1028,33 @@ export function DevelopmentPage(): JSX.Element {
           {/* TAB 3: Ev Etkinlik Havuzu */}
           {activeTab === 'activities' && (
             <div className="space-y-4">
-              {activities.length === 0 ? (
+              {displayActivities.length === 0 ? (
                 <EmptyState
                   icon={Lightbulb}
-                  title="Henüz ev etkinliği önerisi eklenmemiş"
-                  description="Velilerin evde çocuklarıyla yapabileceği gelişimsel aktiviteler eklemek için 'Etkinlik Önerisi Ekle' butonunu kullanabilirsiniz."
+                  title="Filtreye uygun ev etkinliği bulunamadı"
+                  description="Farklı bir gelişim alanı veya yaş grubu seçebilir ya da yeni bir etkinlik önerisi ekleyebilirsiniz."
                 />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {activities.map((act) => {
+                  {displayActivities.map((act) => {
                     const domainInfo = DOMAIN_LABELS[act.domain];
                     const DomainIcon = domainInfo?.icon ?? Award;
+                    const studentAge =
+                      isParent && activeStudent
+                        ? getStudentAgeGroup(activeStudent.dateOfBirth)
+                        : '';
+                    const isRecommendedForStudent = Boolean(
+                      studentAge && act.ageGroup && act.ageGroup === studentAge,
+                    );
 
                     return (
                       <div
                         key={act.id}
-                        className="bg-white dark:bg-[#131B2E] p-5 rounded-3xl border-2 border-[#DDD4C4] dark:border-slate-800 shadow-2xs flex flex-col justify-between space-y-3.5 hover:border-sky-600/50 dark:hover:border-sky-500/50 transition-all"
+                        className={`bg-white dark:bg-[#131B2E] p-5 rounded-3xl border-2 shadow-2xs flex flex-col justify-between space-y-3.5 transition-all ${
+                          isRecommendedForStudent
+                            ? 'border-sky-400 dark:border-sky-500/80 ring-2 ring-sky-300/40 dark:ring-sky-600/30'
+                            : 'border-[#DDD4C4] dark:border-slate-800 hover:border-sky-600/50 dark:hover:border-sky-500/50'
+                        }`}
                       >
                         <div className="space-y-2.5">
                           <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -886,11 +1064,19 @@ export function DevelopmentPage(): JSX.Element {
                               <DomainIcon className="w-3 h-3" />
                               {domainInfo.label}
                             </span>
-                            {act.ageGroup && (
-                              <span className="text-[10px] font-extrabold bg-[#FCFAF7] dark:bg-slate-900 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-full border border-[#DDD4C4] dark:border-slate-700">
-                                {act.ageGroup}
-                              </span>
-                            )}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              {act.ageGroup && (
+                                <span className="text-[10px] font-extrabold bg-[#FCFAF7] dark:bg-slate-900 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-full border border-[#DDD4C4] dark:border-slate-700">
+                                  {act.ageGroup}
+                                </span>
+                              )}
+                              {isRecommendedForStudent && (
+                                <span className="text-[10px] font-extrabold bg-sky-100 dark:bg-sky-950/70 text-sky-800 dark:text-sky-300 px-2 py-0.5 rounded-full border border-sky-300 dark:border-sky-700/80 flex items-center gap-1">
+                                  <Sparkles className="w-2.5 h-2.5 text-sky-600 dark:text-sky-400" />
+                                  <span>{activeStudent?.firstName} İçin Öneri</span>
+                                </span>
+                              )}
+                            </div>
                           </div>
 
                           <h4 className="font-bold text-slate-900 dark:text-white text-sm">
@@ -904,8 +1090,15 @@ export function DevelopmentPage(): JSX.Element {
                           </div>
                         </div>
 
-                        <div className="text-[11px] text-slate-400 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
-                          Öneri Tarihi: {new Date(act.createdAt).toLocaleDateString('tr-TR')}
+                        <div className="text-[11px] text-slate-400 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                          <span>
+                            Öneri Tarihi: {new Date(act.createdAt).toLocaleDateString('tr-TR')}
+                          </span>
+                          {act.id.startsWith('curated-') && (
+                            <span className="text-[10px] font-bold text-teal-700 dark:text-teal-400">
+                              ⭐ Pedagojik Havuz
+                            </span>
+                          )}
                         </div>
                       </div>
                     );

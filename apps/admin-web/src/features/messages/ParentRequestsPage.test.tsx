@@ -20,10 +20,16 @@ function mockFetchByUrl(handlers: Record<string, () => Response>) {
   return vi.spyOn(global, 'fetch').mockImplementation((...args: unknown[]) => {
     const [input] = args as [string | URL | Request];
     const url = input instanceof globalThis.Request ? input.url : String(input);
-    const path = new URL(url, 'http://localhost').pathname;
-    const handler = handlers[path];
+    const rawPath = new URL(url, 'http://localhost').pathname;
+    const path = rawPath.replace(/^\/api/, '');
+    const handler = handlers[path] || handlers[rawPath];
     if (handler) return Promise.resolve(handler());
-    return Promise.resolve(new Response(JSON.stringify({ message: 'unhandled' }), { status: 500 }));
+    return Promise.resolve(
+      new Response(JSON.stringify([]), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    );
   });
 }
 
@@ -87,10 +93,10 @@ describe('ParentRequestsPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Cuma Günü İzin')).toBeInTheDocument();
-      expect(screen.getByText('TOPLAM TALEP')).toBeInTheDocument();
-      expect(screen.getByText('BEKLEYENLER')).toBeInTheDocument();
-      expect(screen.getByText('ONAYLANANLAR')).toBeInTheDocument();
-      expect(screen.getByText('REDDEDİLENLER')).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /Tüm Talepler/i })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /Bekleyenler/i })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /Onaylananlar/i })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /Reddedilenler/i })).toBeInTheDocument();
     });
 
     expect(screen.getByText('Veli Talepleri')).toBeInTheDocument();
