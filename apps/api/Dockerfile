@@ -13,8 +13,8 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json ./
 COPY packages/ ./packages/
 COPY apps/api/ ./apps/api/
 
-# Install full dependencies
-RUN pnpm install --frozen-lockfile
+# Install dependencies (scoped to api, excludes heavy mobile/react-native)
+RUN pnpm install --frozen-lockfile --filter @kidscare/api...
 
 # Generate Prisma Client
 RUN pnpm --filter @kidscare/database prisma generate

@@ -13,9 +13,10 @@ COPY apps/admin-web/ ./apps/admin-web/
 ARG VITE_API_URL
 ENV VITE_API_URL=${VITE_API_URL}
 
-# Install dependencies and build
-RUN pnpm install --frozen-lockfile
+# Install dependencies and build (scoped to admin-web, excludes heavy mobile/react-native)
+RUN pnpm install --frozen-lockfile --filter @kidscare/admin-web...
 RUN pnpm --filter @kidscare/admin-web build
+RUN rm -rf /root/.local/share/pnpm/store /root/.cache /tmp/*
 
 # Stage 2: Serve with lightweight Nginx
 FROM nginx:alpine AS runner
