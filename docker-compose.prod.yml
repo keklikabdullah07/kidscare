@@ -1,8 +1,15 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   postgres:
     image: postgres:16-alpine
     container_name: kidscare-postgres
     restart: always
+    logging: *default-logging
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kidscare_secure_pass_2026}
@@ -20,6 +27,7 @@ services:
     image: redis:7-alpine
     container_name: kidscare-redis
     restart: always
+    logging: *default-logging
     volumes:
       - redis_data:/data
     healthcheck:
@@ -34,6 +42,7 @@ services:
       dockerfile: apps/api/Dockerfile
     container_name: kidscare-api
     restart: always
+    logging: *default-logging
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,6 +70,7 @@ services:
         VITE_API_URL: ${VITE_API_URL:-/api}
     container_name: kidscare-web
     restart: always
+    logging: *default-logging
     depends_on:
       - api
     expose:
@@ -71,3 +81,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+
