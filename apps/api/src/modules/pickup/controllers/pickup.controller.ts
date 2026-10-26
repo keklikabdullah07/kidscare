@@ -120,7 +120,7 @@ export class PickupController {
 
   // ===== Events =====
   @Get('events')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'SERVICE_STAFF')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'SERVICE_STAFF')
   async listEvents(
     @CurrentTenantId() tenantId: string,
     @CurrentUser() user: CurrentUserPayload,
