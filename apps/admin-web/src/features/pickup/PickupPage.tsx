@@ -508,7 +508,9 @@ export function PickupPage(): JSX.Element {
       await createPickupAuthorization({
         studentId: newStudentId,
         pickupContactId: contact.id,
-        note: 'Yönetim tarafından doğrudan tanımlandı.',
+        note: isParent
+          ? 'Veli tarafından talep edildi.'
+          : 'Yönetim tarafından doğrudan tanımlandı.',
       });
 
       showToast('Yeni teslimatçı yetkilendirildi! 🛡️', 'success');
@@ -539,33 +541,36 @@ export function PickupPage(): JSX.Element {
         actions={
           <>
             {canOperate && (
-              <>
-                <TactileButton
-                  variant="teal"
-                  size="md"
-                  onClick={() => {
-                    setHandoverPersonName('');
-                    setHandoverPersonPhone('');
-                    setHandoverContactId(undefined);
-                    setHandoverAuthId(undefined);
-                    setHandoverNote('');
-                    setIsHandoverOpen(true);
-                  }}
-                >
-                  <UserCheck className="w-4 h-4" />
-                  <span>Öğrenciyi Teslim Et</span>
-                </TactileButton>
-
-                <TactileButton
-                  variant="secondary"
-                  size="md"
-                  onClick={() => setIsAddContactOpen(true)}
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Yeni Yetkili Ekle</span>
-                </TactileButton>
-              </>
+              <TactileButton
+                variant="teal"
+                size="md"
+                onClick={() => {
+                  setHandoverPersonName('');
+                  setHandoverPersonPhone('');
+                  setHandoverContactId(undefined);
+                  setHandoverAuthId(undefined);
+                  setHandoverNote('');
+                  setIsHandoverOpen(true);
+                }}
+              >
+                <UserCheck className="w-4 h-4" />
+                <span>Öğrenciyi Teslim Et</span>
+              </TactileButton>
             )}
+
+            <TactileButton
+              variant={isParent ? 'teal' : 'secondary'}
+              size="md"
+              onClick={() => {
+                if (scopedStudents.length > 0 && !newStudentId) {
+                  setNewStudentId(scopedStudents[0]?.id || '');
+                }
+                setIsAddContactOpen(true);
+              }}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Yeni Yetkili Ekle</span>
+            </TactileButton>
 
             <TactileButton
               variant="secondary"
@@ -810,6 +815,21 @@ export function PickupPage(): JSX.Element {
               icon={ShieldCheck}
               title="Bu filtrede teslim yetkisi kaydı bulunamadı."
               description="Velilerin öğrenci teslimatı için yetkilendirdiği kişiler ve onay talepleri burada listelenir."
+              action={
+                <TactileButton
+                  variant="teal"
+                  size="sm"
+                  onClick={() => {
+                    if (scopedStudents.length > 0 && !newStudentId) {
+                      setNewStudentId(scopedStudents[0]?.id || '');
+                    }
+                    setIsAddContactOpen(true);
+                  }}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Yeni Yetkili Ekle</span>
+                </TactileButton>
+              }
             />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
